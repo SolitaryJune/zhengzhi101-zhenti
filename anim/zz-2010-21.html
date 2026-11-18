@@ -1,8 +1,83 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-21 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-21</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-21 马克思主义中国化的原因 · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：为什么“能够”中国化',
+    cls: 'key', sc: 'step', tag: '审题',
+    body: '<p>中国革命、建设和改革的实践证明：运用马克思主义指导实践，必须实现马克思主义中国化。</p><p>题问“能够中国化的原因”——考点：<b>马克思主义中国化的依据</b>。两端到位才成立：理论肯“落”、中国能“接”、实践在“要”。</p>' },
+  { t: '机制先行：三个支点缺一不可',
+    cls: 'key', sc: 'shift', tag: '机制',
+    log: '先立框架：理论的要求、文化的土壤、实践的需要',
+    body: '<p><b>支点一（理论的要求）</b>：马克思主义不是教条而是行动指南，本身要求同各国实际结合；</p><p><b>支点二（文化的土壤）</b>：与中华民族优秀文化相融，扎得下根；</p><p><b>支点三（实践的需要）</b>：中国的问题呼唤科学理论指导。</p>' },
+  { t: '选项 A：马克思主义理论的内在要求 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A',
+    body: '<p>它提供的是<b>立场、观点、方法</b>，不是包治百病的现成药方——具体化是理论自身的内在要求。</p><p>A 对。</p>' },
+  { t: '选项 B：与中华民族优秀文化相融 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 B',
+    body: '<p>相融性使马克思主义能被中国文化接住、化开，从外来学说变成中国自己的理论。</p><p>这是“能化”的文化土壤。B 对。</p>' },
+  { t: '选项 C：中国实践需要马克思主义指导 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C',
+    body: '<p>革命、建设和改革中的问题需要科学理论来回答——实践的需要是最直接的动力。</p><p>题干“中国革命、建设和改革的实践证明”正对应此点。C 对。</p>' },
+  { t: '选项 D：提供了现实的发展模式 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 D',
+    body: '<p>错在“现成模式”：马克思主义给的是<b>指南针</b>，不是现成地图。</p><p>若真有现成模式，“结合实际”就多余，“中国化”这个命题本身就被取消了——恰是教条主义的病根。D 错。</p>' },
+  { t: '结论：ABC',
+    cls: 'good', sc: 'done', tag: '结论',
+    body: '<p>答案 <b>ABC</b>：理论要落地（A）· 文化有土壤（B）· 实践有需要（C）。</p><p>排除的 D 把“提供指导”偷换成“提供图纸”。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2010·21】马克思主义能够中国化的原因（多选）',
+  subtitle: '考点：马克思主义中国化 · 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: '记忆锚点：<b>理论要落地（要求）、文化有土壤（相融）、实践有需要（呼唤）——三样都齐，唯独没有“现成图纸”</b>。D 的误区：把“提供立场观点方法”说成“提供现成发展模式”。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：马克思主义为什么"能够"中国化</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——"能化"需要三个支点</h3>
+<p>"马克思主义中国化"能成立，不是一厢情愿：理论这一端肯"落"、中国文化能"接"、中国实践在"要"。三个支点缺一不可：</p>
+<table><thead><tr><th>支点</th><th>内容</th><th>关键词</th></tr></thead><tbody><tr><td>理论的要求</td><td>马克思主义不是教条而是行动指南，本身要求同各国具体实际相结合</td><td>内在要求</td></tr><tr><td>文化的土壤</td><td>与中华民族优秀文化具有相融性，能被中国文化接住、化开</td><td>相融性</td></tr><tr><td>实践的需要</td><td>中国革命、建设和改革需要科学理论指导</td><td>实践需要</td></tr></tbody></table>
+<h3>逐项对号入座</h3>
+<ul><li><strong>A 对</strong>：理论本身的内在要求——它提供的是立场、观点、方法，天然要求具体化，这是"能够中国化"的前提。</li><li><strong>B 对</strong>：文化土壤——相融性使马克思主义在中国扎得下根、化得开来。</li><li><strong>C 对</strong>：实践需要——中国的问题呼唤科学理论，这是最直接的动力。</li><li><strong>D 错</strong>：说它"提供了现实的发展模式"——错在"现成模式"。马克思主义给的是指南针，不是现成地图；把某种做法当"现实的发展模式"照搬，恰是教条主义的病根，也是马克思主义自己反对的。它提供立场观点方法，不提供现成发展模式。</li></ul>
+<h3>为什么 D 最有迷惑性</h3>
+<p>D 语气是"夸"——说它提供了发展模式。但若真有现成模式，"结合实际"就多余了，"中国化"这个命题本身就被取消了。选 D 的人是把"提供指导"偷换成了"提供图纸"。</p>
+<blockquote>记忆锚点：理论要落地（要求）、文化有土壤（相融）、实践有需要（呼唤）——三样都齐，唯独没有"现成图纸"。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

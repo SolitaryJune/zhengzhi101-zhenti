@@ -1,8 +1,96 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2025-29 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2025-29</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2025-29 · 南方谈话的重要论断（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼', count: 0,
+    title: '审题眼：1992.1.18–2.21，武昌—深圳—珠海—上海',
+    body: '<p>邓小平南方谈话，回答一个总问题：<b>改革开放要不要继续、往哪儿继续</b>。</p><p>解题判据：<b>每个论断配一个"出场场合"</b>——论断与 1992 对不上号的就排除。考点：南方谈话论断清单。</p>' },
+  { cls: 'key', tag: '机制先行', count: 0,
+    title: '机制先行：谈话论断的三组清单',
+    body: '<ul><li><b>解放生产力组</b>——革命是解放生产力，改革也是解放生产力（开篇定调）；</li><li><b>计划与市场组</b>——计划多一点还是市场多一点，不是社会主义与资本主义的本质区别；</li><li><b>坚持与两手抓组</b>——整个改革开放过程中必须始终注意坚持四项基本原则。</li></ul><p>社会主义本质论、"三个有利于"、发展才是硬道理都出自同一次谈话。唯一的错项 B 是从 1982 年"借调"来的。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true }, count: 1,
+    title: '选项 A："革命是解放生产力，改革也是解放生产力" —— 对',
+    body: '<p>谈话<b>开篇定调之句</b>：推翻旧制度是解放生产力，改革（体制的自我调整）同样是解放生产力。</p><p>把"改革"也定位成解放生产力，正是这次谈话的新突破。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true }, count: 2,
+    title: '选项 C："计划一点还是市场多一点，不是社会主义与资本主义的本质区别" —— 对',
+    body: '<p>谈话<b>核心论断</b>：计划和市场都是经济手段，不是判定社会制度属性的标尺。</p><p>直接破除"计划经济=社会主义"的旧观念，为社会主义市场经济体制扫清理论障碍。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true }, count: 3,
+    title: '选项 D："在整个改革开放的过程中，必须始终注意坚持四项基本原则" —— 对',
+    body: '<p>谈话原文——改革开放越深入，越要坚持四项基本原则、反对资产阶级自由化。</p><p>一手抓改革开放、一手抓坚持基本原则，<b>"两手抓、两手都要硬"</b>的坚持面。</p>' },
+  { cls: 'bad', tag: 'B 排除', ribbon: { k: 2, ok: false }, count: 3,
+    title: '选项 B："走自己的道路，建设有中国特色的社会主义" —— 错（场合）',
+    body: '<p>论断完全正确，但出场场合是 <b>1982 年 9 月党的十二大开幕词</b>："把马克思主义的普遍真理同我国的具体实际结合起来，走自己的道路……这就是我们总结长期历史经验得出的基本结论。"</p><p>比南方谈话早整整十年——论断对、场合错，史实题里照样出局。</p>' },
+  { cls: 'key', tag: '陷阱对比', count: 3,
+    title: 'B 为什么最容易误选：论断名声大，场合被忽略',
+    body: '<ul><li>"中国特色社会主义"与邓小平绑定太紧，考生顺手往南方谈话里装；</li><li>对策：给论断配"场合卡"——<b>十二大开幕词（1982）</b>：走自己的道路；<b>十三大（1987）</b>：初级阶段理论、基本路线、"三步走"；<b>南方谈话（1992）</b>：解放生产力、计划市场论、本质论、"三个有利于"、发展才是硬道理、坚持四项基本原则；</li><li>凡"重要论断有（哪些）"型题目，<b>场合是第一判据</b>。</li></ul>' },
+  { cls: 'good', tag: '结论', count: 3,
+    title: '收束：答案 ACD',
+    body: '<p>答案 <b>ACD</b>：解放生产力（A）+ 计划市场非本质区别（C）+ 坚持四项基本原则（D）。</p><p>B 归位：十二大开幕词（1982），不是南方谈话。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    count: s.count,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2025·29】南方谈话：论断要配场合（多选）',
+  subtitle: '考点：邓小平南方谈话论断清单 · 论断与出场场合配对 · 选项逐项推演',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已确认正确项',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '<b>南方谈话四件套</b>：革命是解放生产力、改革也是解放生产力（A）；计划多一点还是市场多一点，不是社会主义与资本主义的本质区别（C）；始终坚持四项基本原则（D）；发展才是硬道理。<br>"走自己的道路，建设有中国特色的社会主义"出自十二大开幕词（1982，B 反）。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：南方谈话论断清单——给每个论断配一张"场合卡"</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——史实题的判据是"论断 + 出场场合"</h3>
+<p>1992 年 1 月 18 日至 2 月 21 日，邓小平先后视察武昌、深圳、珠海、上海等地，发表南方谈话。谈话回答的是一个总问题：改革开放要不要继续、往哪儿继续。核心论断可归成三组：</p>
+<ol><li><strong>解放生产力组</strong>："革命是解放生产力，改革也是解放生产力"——把改革开放从"发展生产力的手段"提升到"解放生产力"的高度，这是谈话的开篇定调之句；</li><li><strong>计划与市场组</strong>："计划一点还是市场多一点，不是社会主义与资本主义的本质区别"——破除把计划经济等同于社会主义的旧观念，为社会主义市场经济体制扫清理论障碍；社会主义本质论、"三个有利于"标准、发展才是硬道理，都出自同一次谈话；</li><li><strong>坚持与两手抓组</strong>："在整个改革开放的过程中，必须始终注意坚持四项基本原则"——改革开放越深入，越要坚持四项基本原则、反对资产阶级自由化，一手抓改革开放、一手抓坚持基本原则。</li></ol>
+<p>于是本题的判据只有一条：<strong>每个论断配一个出场场合</strong>。论断本身再正确，出场场合配不上 1992 年南方谈话，就是错项。</p>
+<h3>第 1 步：A、C、D 逐项对号</h3>
+<ul><li><strong>A "革命是解放生产力，改革也是解放生产力"</strong> ✅：第 1 组，谈话开篇定调——推翻旧制度是解放生产力，改革（体制的自我调整）同样是解放生产力。把<strong>改革</strong>也定位成"解放生产力"，正是这次谈话的新突破；</li><li><strong>C "计划一点还是市场多一点，不是社会主义与资本主义的本质区别"</strong> ✅：第 2 组核心论断——计划和市场都是经济手段，不是判定社会制度属性的标尺；</li><li><strong>D "在整个改革开放的过程中，必须始终注意坚持四项基本原则"</strong> ✅：第 3 组原文——谈话的"坚持"面，"两手抓、两手都要硬"。</li></ul>
+<h3>第 2 步：为什么 B 错——它的出场场合是 1982 年十二大</h3>
+<p>"走自己的道路，建设有中国特色的社会主义"出自 <strong>1982 年 9 月党的十二大开幕词</strong>："把马克思主义的普遍真理同我国的具体实际结合起来，走自己的道路，建设有中国特色的社会主义，这就是我们总结长期历史经验得出的基本结论。"这是"中国特色社会主义"命题的奠基性提出，比南方谈话早整整十年。B 的论断完全正确，错就错在<strong>场合</strong>——史实题里，配错场合与内容出错同样出局。</p>
+<h3>第 3 步：预判追问——为什么 B 恰恰最容易误选</h3>
+<p>因为"建设有中国特色的社会主义"与邓小平绑定太紧，考生默认"邓小平的名言都往南方谈话里装"。对策是给关键论断各做一张场合卡：</p>
+<table><thead><tr><th>场合</th><th>标志论断</th></tr></thead><tbody><tr><td>十二大开幕词（1982）</td><td>走自己的道路，建设有中国特色的社会主义</td></tr><tr><td>十三大（1987）</td><td>社会主义初级阶段理论、党的基本路线、"三步走"</td></tr><tr><td>南方谈话（1992）</td><td>解放生产力论、计划市场论、社会主义本质论、"三个有利于"、发展才是硬道理、坚持四项基本原则</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：只认论断不认场合。凡"重要论断有（哪些）"型题目，第一判据永远是场合；</li><li><strong>漏选 A</strong>：以为"革命是解放生产力"是早年的话。恰好相反——把改革也定位为解放生产力，正是南方谈话的突破点；</li><li><strong>漏选 D</strong>：只记得南方谈话说改革开放，忘了它同时强调坚持四项基本原则、"两手抓"。</li></ul>
+<blockquote>记忆锚点：南方谈话清单——<strong>解放生产力（A）、计划市场非本质区别（C）、坚持四项基本原则（D）、发展才是硬道理</strong>；"走自己的道路，建设有中国特色的社会主义"归十二大开幕词（1982，B 反）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,89 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-24 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-24</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-24 · 统筹区域发展的四个利好（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML = sn.html）。
+   政治站不用 KaTeX，全部为普通文本；只引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼', log: '"有利于"型题目：先想原则的反面，好处就站在反面消失的地方。',
+    title: '审题眼：从反面找利好',
+    body: '<p>题干问：坚持统筹区域发展、促进区域协调发展这一原则<b>有利于</b>什么。先想反面——区域不统筹时：要素流不动、优势对不上、需求起不来、差距越拉越大。原则解开这四个结，利好就从结点处一个个冒出来。</p>' },
+  { cls: 'key', tag: '立机制', log: '四个选项不是并列，是一条因果链：D 是因，B、A 是果，C 是目的。',
+    title: '机制先行：一条因果链',
+    body: '<ul><li><b>机制</b>：打破壁垒，要素合理流动配置（D）；</li><li><b>格局</b>：优势互补、共同发展（B）；</li><li><b>增长</b>：内需释放、经济增长（A）；</li><li><b>公平</b>：成果共享（C）。</li></ul><p>四个侧面对应四个选项，全在一条链上。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true }, log: '链条起点 D：统筹的直接手段是打破壁垒、让要素流动起来。',
+    title: '链条起点：D 生产要素在区域间合理流动和配置 —— 对',
+    body: '<p>统筹的<b>直接手段</b>：打破区域壁垒，让劳动力、资本、技术按效率与需要流动。没有 D，后面什么都推不出来。</p><p>D 对——别把它当"技术细节"排除，它是整条链的操作层。</p>' },
+  { cls: 'good', tag: 'B 入选', ribbon: { k: 2, ok: true }, log: '要素流动推出格局：资金技术与资源劳力市场对接。',
+    title: '链条一环：B 区域间优势互补，促进经济共同发展 —— 对',
+    body: '<p>要素流动的结果：发达地区的技术、资金与欠发达地区的资源、劳动力、市场对接，形成分工协作格局——"协调"最直接的含义。</p><p>B 对。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true }, log: '格局推出增长：欠发达地区需求释放，就是全国的内需空间。',
+    title: '链条一环：A 扩大内需，拉动经济增长 —— 对',
+    body: '<p>落后地区收入与基础设施改善，沉睡的消费与投资需求被释放——区域协调本身就是<b>需求侧</b>的新的增长空间。</p><p>A 对——不要以为它跟"区域"无关。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true }, log: '链条终点 C：缩小差距、共享成果是政策目的。',
+    title: '链条终点：C 不同区域人民共享改革发展成果 —— 对',
+    body: '<p>协调发展是共同富裕在空间维度上的要求：缩小区域差距，让发展成果不再集中于少数地区——这是政策<b>目的</b>，不是空话。</p><p>C 对。</p>' },
+  { cls: 'key', tag: '排陷阱', log: '自检两招：反面检验 + 防住"平均主义"误解。',
+    title: '易错点：两处常见犹豫',
+    body: '<p><b>只选 B、D</b>：漏了 A 的需求侧意义与 C 的目的性——四项全在链条上。</p><p><b>把统筹当成平均主义</b>：统筹是差距趋小、要素合理流动，不是抹平差异齐步走；理解偏了容易错杀 C。</p><p>反面自检：不统筹区域，四个好处是不是都拿不到？都是 → 全选。</p>' },
+  { cls: 'good', tag: '结论', log: '收束：一条因果链串起 ABCD。',
+    title: '收束：答案 ABCD',
+    body: '<p>答案 <b>ABCD</b>：要素流动是机制（D）→ 优势互补是格局（B）→ 扩大内需是增长（A）→ 共享成果是公平（C）。</p><p>一条因果链串起四个利好。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2013·24】区域协调的一条因果链（多选）',
+  subtitle: '考点：统筹区域发展 · 因果链分析 · "有利于"型全选',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带按 A–D 的入选情况逐个点亮。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '<b>一条因果链串起四个利好</b>：生产要素合理流动（D）→ 优势互补共同发展（B）→ 扩大内需拉动增长（A）→ 不同区域共享成果（C）。<br>反面检验：不统筹区域，这四个好处一个都拿不到。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：统筹区域发展"有利于"什么——一条因果链串起四个利好</h2>
+<p>答案：<strong>ABCD</strong>（全选）。</p>
+<h3>第一步：先立机制——从原则的反面找它的用处</h3>
+<p>"有利于"型题目的判法：<strong>先想清楚原则的反面</strong>，好处就站在反面消失掉的地方。区域发展不统筹时会发生什么？生产要素流不动、区域间优势对不上、落后地区需求起不来、地区差距越拉越大。统筹区域发展正是同时解开这四个结，所以它的利好必然覆盖<strong>机制、格局、增长、公平</strong>四个侧面。</p>
+<h3>第二步：四个选项放进因果链</h3>
+<p>四个选项不是并列关系，而是一条因果链：</p>
+<table><thead><tr><th>顺序</th><th>选项</th><th>在因果链中的位置</th></tr></thead><tbody><tr><td>① 机制</td><td>D 生产要素在区域间合理流动和配置</td><td>统筹的直接手段：打破区域壁垒，劳动力、资本、技术按效率与需要流动</td></tr><tr><td>② 格局</td><td>B 区域间优势互补，促进经济共同发展</td><td>要素流动的结果：发达地区的资金技术与欠发达地区的资源、劳动力、市场对接</td></tr><tr><td>③ 增长</td><td>A 扩大内需，拉动经济增长</td><td>格局的结果：落后地区收入与基础设施改善，沉睡的消费与投资需求被释放</td></tr><tr><td>④ 公平</td><td>C 不同区域人民共享改革发展成果</td><td>整个过程的目的：缩小区域差距，成果不再集中于少数地区</td></tr></tbody></table>
+<p><strong>D 是因，B、A 是果，C 是目的</strong>——四项全在链条上，全选成立。</p>
+<h3>易错点</h3>
+<ul><li><strong>只选 B、D（把 A 当"无关"）</strong>：误解在把统筹区域发展只当"区域间的分工问题"。区域协调同时是<strong>需求侧</strong>的事——欠发达地区收入提高、基础设施补齐，释放的就是全国的内需和增长空间。</li><li><strong>把 D 当干扰项（"太技术性"）</strong>：要素流动不是技术细节，而是整个原则的<strong>操作层含义</strong>——没有 D，B 的"优势互补"和 A 的"扩大内需"都没有实现途径。</li><li><strong>把统筹理解成"平均主义、同步富裕"</strong>：统筹是让差距<strong>趋于缩小</strong>、要素<strong>合理流动</strong>，不是抹平差异、齐步走；理解偏了反而容易怀疑 C。</li><li><strong>反向漏选 C（"共享成果太口号化"）</strong>：区域协调发展是共同富裕在空间维度上的要求，C 是政策目的，不是空话。</li></ul>
+<blockquote>记忆锚点：区域协调四利好一条链——<strong>要素流动是机制（D）→ 优势互补是格局（B）→ 扩大内需是增长（A）→ 共享成果是公平（C）</strong>；自检法：把每个选项放回反面——不统筹区域，这四个好处是不是都拿不到。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

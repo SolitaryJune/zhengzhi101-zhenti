@@ -1,8 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-02 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-02</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·02 「月食党」与「革命党」：社会规律的实现方式</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 模板：anim_concept（概念/推理链卡片，政治站无 KaTeX 版）· 只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>题眼：不会有人组织「<b>月食党</b>」，但要革命必须组织「<b>革命党</b>」。问的是社会规律与自然规律「有所不同」的那一点——考点：<b>自然规律与社会规律的区别</b>。</p>",
+    "log": "月食不用组织，革命必须组织——差在哪"
+  },
+  {
+    "title": "先立机制：同客观，不同实现方式",
+    "cls": "key",
+    "body": "<p>两者<b>同</b>在客观性：都不以人的意志为转移、都可重复。<b>不同</b>在实现方式：自然规律实现于自然界<b>盲目的、自发的</b>相互作用，无需人参与；社会规律只存在于人的实践中，必须通过<b>人的有意识、有目的的活动</b>实现。</p>",
+    "log": "区别不在客观性，在实现方式"
+  },
+  {
+    "title": "两个半句对号：月食靠天，革命靠人",
+    "cls": "key",
+    "body": "<p>月食由天体运行规律<b>自发</b>实现，组织「月食党」毫无作用；社会革命的规律只能<b>借人的自觉活动</b>展开，所以必须有革命党把群众的意识与行动组织起来。题干对比恰好落在实现方式这一条上。</p>",
+    "log": "自然规律自发实现，社会规律靠人的自觉活动"
+  },
+  {
+    "title": "A：社会规律同样可重复",
+    "cls": "bad",
+    "body": "<p>「不具有重复性」错：历史事件不可重来，但事件背后的<b>规律</b>反复起作用（如生产关系一定要适合生产力状况）。<b>A 错误</b>。</p>",
+    "ribbon": { "k": 1, "ok": false },
+    "log": "事件一次性≠规律无重复性 → A 不选"
+  },
+  {
+    "title": "B：不由任何人的意志决定",
+    "cls": "bad",
+    "body": "<p>「由多数人的意志决定」是<b>唯意志论</b>：社会规律形成于无数个人意志相互作用的「历史合力」，但不由意志决定，依然客观。<b>B 错误</b>。</p>",
+    "ribbon": { "k": 2, "ok": false },
+    "log": "靠人的活动≠由人的意志决定 → B 不选"
+  },
+  {
+    "title": "C：借人的有意识的活动实现",
+    "cls": "good",
+    "body": "<p>这正是与自然规律的差别所在：社会规律的实现<b>离不开人的有意识、有目的的活动</b>——所以要组织革命党。<b>C 正确</b>。</p>",
+    "ribbon": { "k": 3, "ok": true },
+    "log": "实现方式之别 → 选 C"
+  },
+  {
+    "title": "D：无「更易认识」之比较",
+    "cls": "bad",
+    "body": "<p>题问「实现方式」的区别，不是认识难易；原理上也没有「社会规律比自然规律更易于认识」的说法。<b>D 错误</b>。</p>",
+    "ribbon": { "k": 4, "ok": false },
+    "log": "答非所问，无此比较 → D 不选"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>C</b>：社会规律<b>通过人的有意识的活动实现</b>。记忆锚点：两种规律<b>同客观、同可重复</b>，唯独实现方式不同——自然自发，社会靠人的自觉活动。</p>",
+    "log": "锁定 C：社会规律借人的有意识活动实现"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "「月食党」与「革命党」：社会规律与自然规律之别",
+  subtitle: "考点：自然规律与社会规律 · 方法：先立「同/异」两栏模型，再对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 C",
+    html: "记忆锚点：社会规律与自然规律<b>同客观、同可重复</b>，唯独<b>实现方式</b>不同——自然规律自发实现，社会规律<b>通过人的有意识的活动</b>实现。A 错在否定重复性，B 错在唯意志论。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：为什么没有「月食党」，却必须有「革命党」</h2>
+<p>答案：<strong>C（通过人的有意识的活动实现的）</strong>。</p>
+<h3>第 0 步：先立机制——两种规律的「同」与「不同」</h3>
+<p>先说「同」：社会规律与自然规律<strong>都是客观规律</strong>——都不以人的意志为转移，都具有稳定性、可重复性，人的活动可以影响其作用的范围与后果，却改变不了规律本身。所以区别<strong>不在客观性上</strong>，而在<strong>存在与实现的方式</strong>上：</p>
+<table><thead><tr><th></th><th>自然规律</th><th>社会规律</th></tr></thead><tbody><tr><td>存在于</td><td>自然界的物质相互作用之中</td><td>人的实践活动之中</td></tr><tr><td>如何实现</td><td>盲目的、自发的相互作用，无需人参与</td><td>必须通过<strong>人的有意识、有目的的活动</strong>实现</td></tr></tbody></table>
+<p>普列汉诺夫的对比正落在这一条上，两个半句各对应一边：</p>
+<ul><li><strong>为什么不会有「月食党」</strong>：月食由天体运行规律自发实现，人的组织、鼓动、阻拦对它毫无作用——自然规律<strong>无需人参与</strong>就照样起作用；</li><li><strong>为什么必须有「革命党」</strong>：社会规律只存在于人的活动中，社会革命的规律只能<strong>借人的自觉活动展开</strong>——没有革命党把群众的意识与行动组织起来，变革不会自动发生。</li></ul>
+<h3>第 1 步：题问对位</h3>
+<p>题问社会规律与自然规律「有所不同」的那一点 → 实现方式之别 → <strong>通过人的有意识的活动实现的</strong> → 选 C。</p>
+<h3>第 2 步：干扰项各自错在哪</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>错因</th></tr></thead><tbody><tr><td>A 不具有重复性的客观规律</td><td>❌</td><td>错在「不具有重复性」：历史事件不可重来，但事件背后的<strong>规律</strong>反复起作用（如生产关系一定要适合生产力状况），重复性并未被取消</td></tr><tr><td>B 由多数人的意志决定</td><td>❌</td><td>唯意志论：社会规律形成于无数个人意志相互作用成的「历史合力」，但不由任何人（哪怕多数人）的意志决定，仍然客观</td></tr><tr><td>D 比自然规律更易于认识</td><td>❌</td><td>题问「实现方式」之别，不是认识难易之别；原理上也讲不出「社会规律更易认识」</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 B（觉得革命靠群众＝由多数人意志决定）</strong>：把「要靠人的活动」偷换成「由人的意志决定」——前者是<strong>实现方式</strong>，后者是<strong>决定者</strong>；社会规律恰恰不以任何人的意志为转移。</li><li><strong>选 A（把「历史一次性」当成「规律无重复性」）</strong>：历史事件一次性 ≠ 规律无重复性，这是本题最常见的概念滑动。</li></ul>
+<blockquote>记忆锚点：两种规律<strong>同客观、同可重复</strong>，唯独实现方式不同——自然规律自发实现，社会规律<strong>借人的有意识的活动</strong>实现；「月食党」不存在，「革命党」必须有。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

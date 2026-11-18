@@ -1,8 +1,118 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-16 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-16</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·16 2020 年服贸会的主题</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），
+     模板复制自 408 tools/anim_concept_template.html，只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼',
+    cls: 'key',
+    body: '<p>2020 年 9 月 4—9 日，中国国际<b>服务贸易</b>交易会在北京举办——疫情以来我国<b>线下</b>举办的第一场重大国际经贸活动。问本届<b>主题</b>：时政原话题，考「场合特征词 → 原话」对号。</p>',
+    log: '审题：时政主题词题，找原话'
+  },
+  {
+    title: '立方法：拆场合特征词',
+    cls: 'key',
+    body: '<p>主题与场合绑定：<b>「服务」贸易</b>交易会 → 主题里必点「<b>全球服务</b>」；疫情下为世界经济注入动力、惠及世界 → 对应「<b>互惠共享</b>」。两词合体＝主题原话。主题是<b>固定原话</b>，不是自由造句。</p>',
+    log: '拆词：服务→全球服务；惠及世界→互惠共享'
+  },
+  {
+    title: 'B：主题原话',
+    cls: 'good',
+    ribbon: { k: 2, ok: true },
+    body: '<p>「<b>全球服务 互惠共享</b>」＝2020 年服贸会主题原话——「服务」＋「互惠共享」双命中。<b>B 正确</b>。</p>',
+    log: 'B 命中：原话对号'
+  },
+  {
+    title: 'A：泛化口号',
+    cls: 'bad',
+    ribbon: { k: 1, ok: false },
+    body: '<p>「齐心协力 携手前行」＝泛化的团结类口号，没有点中「服务」这一场合特征词——放哪场活动都成立，恰恰说明它不是主题。<b>A 错误</b>。</p>',
+    log: 'A 泛化口号 → 排除'
+  },
+  {
+    title: 'C：场合错位',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>「文化融合 创新发展」是<b>文化类</b>场合的常见主题词，与服务贸易不对应——场合特征词对不上。<b>C 错误</b>。</p>',
+    log: 'C 文化类场合串门 → 排除'
+  },
+  {
+    title: 'D：泛用口号',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>「开放包容 团结合作」＝开放合作类泛用口号（进博会等场合也用类似表述）。服贸会确实体现开放，主题里却没有「开放」二字——「听起来都对」的正是干扰项。<b>D 错误</b>。</p>',
+    log: 'D 拿「开放」当万能答案 → 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>B</b>。记忆锚点：2020 服贸会主题＝<b>全球服务 互惠共享</b>；时政主题词题的方法——抓场合特征词（服务→全球服务、惠及世界→互惠共享）对号，泛用口号是干扰；认准「2020 年＋服贸会」，别把别场主题搬过来。</p>',
+    log: '锁定 B：全球服务 互惠共享'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || (i === 0 ? '审题' : (last ? '结论' : '分析')),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '2020 年服贸会的主题',
+  subtitle: '考点：中国国际服务贸易交易会 · 方法：场合特征词 → 原话对号',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」先拆特征词，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '2020 年服贸会主题＝<b>全球服务 互惠共享</b>。记忆锚点：抓场合特征词「服务」对号；「齐心协力」「开放包容」类<b>泛用口号是典型干扰项</b>；认准「2020 年＋服贸会」组合，别把别场主题搬过来。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：2020 年服贸会的主题——时政「原话对号」题</h2>
+<p>答案：<strong>B（全球服务 互惠共享）</strong>。</p>
+<h3>第 0 步：先立方法——时政主题词题考「场合特征词 → 原话」</h3>
+<p>服贸会＝中国国际服务贸易交易会，2020 年 9 月 4 日至 9 日在北京举办，是新冠疫情发生以来我国<strong>线下举办的第一场重大国际经贸活动</strong>。这类题没有推理链，考的是<strong>主题与场合的绑定</strong>：先把题面拆成场合特征词，再到选项里找同义原话——</p>
+<ul><li>「<strong>服务</strong>贸易」交易会 → 主题里必有点题的「<strong>全球服务</strong>」；</li><li>疫情下为世界经济注入中国动力、惠及世界 → 对应「<strong>互惠共享</strong>」。</li></ul>
+<p>两词合起来正是 2020 年服贸会主题原话：<strong>全球服务 互惠共享</strong>。主题是固定原话，不是自由造句——「听起来放哪都对」的口号反而要警惕。</p>
+<h3>第 1 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>病根</th></tr></thead><tbody><tr><td>A 齐心协力 携手前行</td><td>❌</td><td>泛化的团结类口号，没有点中「服务」这一场合特征词</td></tr><tr><td>B 全球服务 互惠共享</td><td>✅</td><td>2020 年服贸会主题原话——「服务」＋「互惠共享」双命中</td></tr><tr><td>C 文化融合 创新发展</td><td>❌</td><td>文化类场合的常见主题词，与服务贸易不对应</td></tr><tr><td>D 开放包容 团结合作</td><td>❌</td><td>开放合作类泛用口号（进博会等场合也用类似表述），非本届主题</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 D（最常见：拿「开放」当万能答案）</strong>：服贸会确实体现开放，主题里却没有「开放」二字。时政主题词题里，「听起来都对」的通用口号恰恰是命题人设的干扰项。</li><li><strong>主题混届 / 混会</strong>：不同届次、不同展会（服贸会、进博会、广交会）主题各不相同；认准「<strong>2020 年 ＋ 服贸会</strong>」这一组合，别把别场主题搬过来。</li></ul>
+<blockquote>记忆锚点：2020 服贸会主题＝<strong>全球服务 互惠共享</strong>；时政主题词题的方法——抓场合特征词（服务→全球服务、惠及世界→互惠共享）对号，泛用口号是干扰。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

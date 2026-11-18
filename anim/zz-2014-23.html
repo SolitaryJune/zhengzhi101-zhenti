@@ -1,8 +1,90 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-23 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-23</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2014-23 · 两山论三层递进：生态与经济怎么摆（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261117a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261117a"></script>
+<script>
+/* ================== 题目专属区域（依据 zz-2014-23 题干与 refAnalysis 编写） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：三句话是一个递进结构，不是一个口号',
+    body: '<p>题眼：习近平三句「两山论」——「既要…也要」「宁要…不要」「绿水青山<b>就是</b>金山银山」。考点：<b>生态文明建设与经济建设的关系</b>。多选题，先把三句话拆成三层模型，再对号入座。</p>' },
+  { tag: '机制·三层', cls: 'key', title: '机制：三句话各管一层',
+    body: '<p>第一层「既要…也要」＝平常时期<b>两者都要</b>（统筹协调）；第二层「宁要…不要」＝冲突时<b>生态优先</b>（取舍规则、排序）；第三层「就是」＝生态本身即财富、<b>可以转化</b>（等号）。没有任何一句说「只要生态、不要经济」。</p>' },
+  { tag: '机制·底座', cls: 'key', title: '底座：保护生态环境就是保护生产力',
+    body: '<p>底层原理：<b>保护生态环境就是保护生产力，改善生态环境就是发展生产力</b>。生态不是经济的对立面，而是它的自然基础——资源从绿水青山来、承载力靠绿水青山撑。正因为生态是生产力要素、且有转化通道，「就是」二字才立得住。</p>' },
+  { tag: 'A', cls: 'good', k: 1, pick: true, title: 'A 应协调发展 → 第一层「既要也要」',
+    body: '<p>「既要绿水青山，也要金山银山」——生态与经济统筹兼顾、协调发展，不是二选一。<b>入选</b> ✅。</p>' },
+  { tag: 'B', cls: 'bad', k: 2, pick: false, title: 'B 可以取代经济建设 → 把排序读成取代',
+    body: '<p>「宁要绿水青山」是<b>冲突情景下的优先级排序</b>，不是平时状态的取消经济建设；读成「取代」，就与第一句「既要…也要」自相矛盾。<b>不选</b> ✗。</p>' },
+  { tag: 'C', cls: 'good', k: 3, pick: true, title: 'C 生态是经济发展的重要基础 → 底座原理',
+    body: '<p>生态环境是<b>生产力要素</b>、是经济发展的自然基础；坏了它，金山银山也守不住。<b>入选</b> ✅。</p>' },
+  { tag: 'D', cls: 'good', k: 4, pick: true, title: 'D 生态优势可转化为经济优势 → 「就是」的等号',
+    body: '<p>「就是」点破转化通道：生态旅游、绿色产业、生态品牌溢价——绿水青山能变现为金山银山。<b>入选</b> ✅。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：都要（A）＋基础（C）＋转化（D）',
+    body: '<p>三句话三层——都要、优先、就是；A、C、D 各得一层，B 是把「排序」曲解成「取代」的干扰项。<b>答案 ACD。</b></p>' },
+];
+
+var nJudge = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nJudge++;
+  var sn = {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag,
+    log: s.title,
+    count: nJudge,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, (x.tag ? x.tag + ' · ' : '') + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: !!s.pick };
+  return sn;
+});
+
+AW.init({
+  title: 'zz-2014-23 · 两山论三层递进：生态与经济怎么摆',
+  subtitle: '2014 年第 23 题（多选）· 考点：生态文明建设与经济建设的关系 · 三层模型对号入座',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先拆三句话的三层模型，再逐项对号入座。',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '记忆锚点：两山三层——<b>都要（A 协调）、优先（排序≠取代）、就是（C 基础＋D 转化）</b>。「宁要」只是冲突时的取舍规则，读成 B 的「取代」就与「既要…也要」自相矛盾；凡说「取代、替代」即错。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：两山论三层递进——生态与经济怎么摆</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——三句话是一个递进结构，不是一个口号</h3>
+<p>"两山论"最忌当成一句笼统口号去套选项。把它拆开，三句话各管一层，构成完整的"生态—经济"关系模型：</p>
+<table><thead><tr><th>原话</th><th>回答的问题</th><th>提炼</th></tr></thead><tbody><tr><td>既要绿水青山，也要金山银山</td><td>平常时期怎么摆？</td><td>两者都要——统筹协调，不是二选一</td></tr><tr><td>宁要绿水青山，不要金山银山</td><td>冲突时怎么摆？</td><td>生态优先——这是取舍规则（排序）</td></tr><tr><td>绿水青山就是金山银山</td><td>两者什么关系？</td><td>生态本身即财富——可以转化（等号）</td></tr></tbody></table>
+<p>支撑这个模型的底层原理是：<strong>保护生态环境就是保护生产力，改善生态环境就是发展生产力</strong>。生态环境不是经济发展的对立面，而是它的自然基础——资源从绿水青山来，环境承载力靠绿水青山撑，绿水青山本身就是生产力的构成要素。正因为生态是生产力的要素、且存在现成的转化通道，第三句的"就是"二字才立得住。</p>
+<h3>第 1 步：拿三层模型对号入座</h3>
+<ul><li><strong>A 生态文明建设应与经济建设协调发展</strong> ✅：直接对应第一层"既要…也要"——统筹兼顾、协调发展，不是二选一。</li><li><strong>C 生态环境是经济发展的重要基础</strong> ✅：对应底层原理——生态环境是生产力要素、是经济发展的自然基础；坏了它，金山银山也守不住。</li><li><strong>D 生态优势可以转化为经济优势</strong> ✅：对应第三层"就是"——转化通道是现成的：生态旅游、绿色产业、生态品牌溢价，绿水青山能变现为金山银山。</li><li><strong>B 生态文明建设可以取代经济建设</strong> ❌：三句话里没有一句支持"取代"。第二句"宁要…不要…"是<strong>冲突情景下的优先级排序</strong>，不是平时状态的取消经济建设；若读成"取代"，就与第一句"既要…也要"自相矛盾。</li></ul>
+<h3>第 2 步：预判「为什么"宁要"推不出"取代"」</h3>
+<p>这是本题唯一的排除点，值得多说一句。"宁要 A 不要 B"是<strong>当 A、B 不可兼得时</strong>的取舍规则——它预设的背景恰恰是平时"两者都要"（第一句）；排序解决的是冲突时"先保谁"，而不是"要不要 B"。把条件句读成全称句（任何时候都不要经济），就把"优先"曲解成了"取代"——这正是 B 的全部迷惑力所在。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：把"宁要绿水青山"绝对化。三句话是"目标（都要）—规则（优先）—关系（就是）"的完整结构，抽掉语境、单拎一句推极端结论，必错。</li><li><strong>漏选 D</strong>：把"就是"读成简单修辞。它说的是转化通道的实在性——生态价值可以通过产业与市场变现，这正是 D 的依据。</li></ul>
+<blockquote>记忆锚点：两山三层——<strong>都要（A 协调）、优先（排序≠取代）、就是（C 基础＋D 转化）</strong>；凡说"取代、替代"即错。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

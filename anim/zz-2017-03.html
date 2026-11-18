@@ -1,8 +1,120 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-03 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-03</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2017-03 生产价格 = 成本价格 + 平均利润</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画（计算推演卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：三个数，求"生产价格"',
+    cls: 'key',
+    body: '<p>题干数据：生产资料价值 <b>c = 15 万</b>，工资 <b>v = 5 万</b>，平均利润率 <b>10%</b>，求自由竞争条件下的生产价格。考点锁定：<b>生产价格 = 成本价格 + 平均利润</b>。</p>',
+    log: 'c=15 万，v=5 万，平均利润率 10%，求生产价格' },
+  { title: '先立机制：利润率"平均化"之后，商品按生产价格卖',
+    cls: 'key',
+    body: '<p>自由竞争下资本在部门间自由转移，各部门利润率<b>平均化</b>，商品不再按价值（c+v+m）卖，改按生产价格卖。生成链三步：① 成本价格 <b>k = c + v</b>；② 平均利润 <b>p = k × 平均利润率</b>——10% 乘的是 <b>k 整体</b>，不能只乘 c 或只乘 v；③ <b>生产价格 = k + p</b>。</p>',
+    log: '公式链：k=c+v，p=k×10%，生产价格=k+p' },
+  { title: '第 1 算：成本价格 k',
+    cls: 'step',
+    body: '<p>k = c + v = 15 万 + 5 万 = <b>20 万元</b>。成本价格就是生产上实际耗费的资本——花掉的生产资料加上付出去的工资。</p>',
+    log: 'k = 15 + 5 = 20 万元' },
+  { title: '第 2 算：平均利润 p',
+    cls: 'step',
+    body: '<p>p = k × 平均利润率 = 20 万 × 10% = <b>2 万元</b>。盯住乘数：10% 乘的是全部成本价格 20 万，不是其中的某一块。</p>',
+    log: 'p = 20 × 10% = 2 万元' },
+  { title: '追问：为什么没给剩余价值 m 也能算？',
+    cls: 'key',
+    body: '<p>因为生产价格公式里<b>不含该企业实际榨取的 m</b>——平均利润由"平均利润率 × 成本价格"决定，是企业按资本量<b>分到</b>的份额，不是它自己<b>创造</b>的剩余价值。这正是平均利润理论的要点：利润的来源与利润的取得分开了。</p>',
+    log: '平均利润 = 分到的份额，与实际榨取的 m 无关' },
+  { title: '第 3 算：生产价格 = k + p',
+    cls: 'step',
+    body: '<p>生产价格 = 20 万 + 2 万 = <b>22 万元</b>。往下核对四个选项——三个错数各对应一种"拆着乘"的算法。</p>',
+    log: '20 + 2 = 22 万元' },
+  { title: '选项 A：20 万——只算成本，忘了加利润',
+    cls: 'bad',
+    body: '<p>20 万恰是成本价格 k 本身：只走了第 1 步，把"成本价格"当成了"生产价格"，漏掉平均利润。<b>A 排除。</b></p>',
+    log: '只算成本没加利润 → A 排除' },
+  { title: '选项 B：20.5 万——10% 只乘了工资',
+    cls: 'bad',
+    body: '<p>5 × 10% = 0.5 万，20 + 0.5 = 20.5 万：把利润率乘数只落在可变资本 v 上。误以为利润只来自工资——利润率是对<b>全部垫付资本</b>而言的（剩余价值率 m/v 才只对 v）。<b>B 排除。</b></p>',
+    log: '只乘 v 得 0.5 万 → B 排除' },
+  { title: '选项 C：21.5 万——10% 只乘了生产资料',
+    cls: 'bad',
+    body: '<p>15 × 10% = 1.5 万，20 + 1.5 = 21.5 万：把乘数只落在生产资料 c 上，物化劳动那一半。分母还是拆错了。<b>C 排除。</b></p>',
+    log: '只乘 c 得 1.5 万 → C 排除' },
+  { title: '选项 D：22 万——k 整体乘 10%，命中',
+    cls: 'good',
+    body: '<p>k = 20 万整体 × 10% = 2 万，20 + 2 = <b>22 万元</b>——正是 D。三步公式链一步不拆。<b>D 正确。</b></p>',
+    log: 'k 整体乘 10%，22 万 → D 正确' },
+  { title: '结论：D',
+    cls: 'good',
+    body: '<p>公式链 k = c + v → p = k × 10% → 生产价格 = k + p = 20 + 2 = <b>22 万</b>。A 漏加利润，B、C 各把 10% 拆着乘了一半。答案选 <b>D</b>。</p>',
+    log: '锁定 D：生产价格 22 万元' },
+];
+
+var optSnap = { 6: 1, 7: 2, 8: 3, 9: 4 }; // 选项卡片对应序号带 1~4（A~D）
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var k = optSnap[i] || 0;
+  var isGood = s.cls === 'good';
+  return {
+    cls: last ? 'done' : (isGood ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: i === 0 ? '审题' : (i === 1 ? '机制' : (last ? '结论' : (k ? '选项 ' + 'ABCD'[k - 1] : '计算'))),
+    log: s.log || s.title,
+    count: i,
+    ribbon: k ? { k: k, ok: isGood } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2017·03】生产价格 = 成本价格 + 平均利润',
+  subtitle: '考点：平均利润与生产价格 · 方法：k=c+v → p=k×10% → k+p，乘数盯死 k 整体',
+  counterLabel: '步骤',
+  ribbonTitle: '选项判定（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步推演：先立公式链，再三步代入计算，最后逐项核对选项。',
+  snaps: snaps,
+  result: {
+    big: '答案 D（22 万元）',
+    html: '记忆锚点：<b>k = c + v</b>；<b>p = k × 平均利润率</b>；<b>生产价格 = k + p</b> = 20 + 2 = <b>22 万</b>。10% 乘的是 k 整体，分母不能拆——A 漏加利润，B 只乘工资（20.5），C 只乘生产资料（21.5）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：生产价格 = 成本价格 + 平均利润</h2>
+<p>答案：<strong>D（22 万元）</strong>。</p>
+<h3>第 0 步：先立机制——自由竞争下，商品按生产价格卖</h3>
+<p>题干三个数：生产资料价值 c = 15 万，工资（可变资本）v = 5 万，平均利润率 10%。求"自由竞争条件下"的生产价格——这个限定词就是机制入口：自由竞争使资本在部门间自由转移，利润率低的部门资本流出、高的部门资本涌入，各部门利润率<strong>平均化</strong>。平均化之后，商品不再按价值（c+v+m）出卖，改按<strong>生产价格</strong>出卖。生成链三步：</p>
+<ol><li><strong>成本价格 k = c + v</strong>：生产上实际耗费的资本——生产资料转移价值加上付出去的工资；</li><li><strong>平均利润 p = k × 平均利润率</strong>：利润平均化后"等量资本得等量利润"，10% 乘的是<strong>全部预付资本 k</strong>，不能只乘 c 或只乘 v；</li><li><strong>生产价格 = k + p</strong>。</li></ol>
+<h3>第 1 步：三步代入</h3>
+<table><thead><tr><th>步骤</th><th>算式</th><th>结果</th></tr></thead><tbody><tr><td>成本价格</td><td>k = 15 万 + 5 万</td><td>20 万元</td></tr><tr><td>平均利润</td><td>p = 20 万 × 10%</td><td>2 万元</td></tr><tr><td>生产价格</td><td>k + p = 20 万 + 2 万</td><td><strong>22 万元</strong></td></tr></tbody></table>
+<h3>第 2 步：预判追问——两个最容易问的"为什么"</h3>
+<ul><li><strong>为什么 10% 乘的是 k 整体（20 万），而不是可变资本 v（5 万）？</strong> 因为这里用的是<strong>利润率</strong>而非剩余价值率：利润率 p′ = m ÷ (c+v)，是对全部预付资本而言的增殖程度；剩余价值率 m′ = m ÷ v 才只对 v、反映剥削程度。利润平均化后按"等量资本得等量利润"分配，分母必须是 c+v 整体。</li><li><strong>为什么题干没给剩余价值 m，也能算出生产价格？</strong> 因为生产价格公式里根本不含该企业实际榨取的 m——平均利润由"平均利润率 × 成本价格"决定，是这个企业按资本量<strong>分到</strong>的利润份额，不是它自己<strong>创造</strong>的剩余价值。这正是平均利润理论的要点：利润的来源（本部门工人创造的 m）与利润的取得（按资本量均分）分开了。</li></ul>
+<h3>第 3 步：干扰项归因——三个错答各自"乘漏了谁"</h3>
+<table><thead><tr><th>选项</th><th>数值从哪来</th><th>对应的误解</th></tr></thead><tbody><tr><td>A 20 万</td><td>恰是成本价格 k 本身</td><td>只走第 1 步，把"成本价格"当"生产价格"，漏加平均利润</td></tr><tr><td>B 20.5 万</td><td>5 × 10% = 0.5，20 + 0.5</td><td>把 10% 只乘可变资本 v——利润率是对全部预付资本而言的，不是只对工资</td></tr><tr><td>C 21.5 万</td><td>15 × 10% = 1.5，20 + 1.5</td><td>把 10% 只乘生产资料 c——乘数分母被拆成一半</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li>题干"市场的平均利润为 10%"要读成"平均利润率 10%"，作用对象是 k 整体。看到"工资"就想只乘 v、看到"生产资料"就想只乘 c，正是命题人预设的两个坑。</li><li>记不清公式时先背结构："生产价格 = 成本价格 + 平均利润"；成本价格 = c + v，平均利润率的分母不能拆。</li></ul>
+<blockquote>记忆锚点：<strong>k = c + v；p = k × 平均利润率；生产价格 = k + p</strong> = 20 + 2 = 22 万。10% 乘的是 k 整体，分母不能拆。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,154 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-10 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-10</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2026·10 鸦片战争后最主要的社会转折</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行格子（链条、方向格用）
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：「最主要的表现」→ 找总开关",
+    "cls": "key",
+    "tag": "审题",
+    "log": "题眼：鸦片战争后中国社会发生的最主要转折是什么",
+    "body": "<p>「最主要的表现」类题目不能看见具体变化就选——要找的是<b>统领全局的总判断</b>。近代史共用一把钥匙：先立「社会性质 → 主要矛盾 → 革命任务」的传导链，看哪个选项按动了链条第一环。</p>"
+  },
+  {
+    "title": "先立机制：总开关链条",
+    "cls": "key",
+    "tag": "机制",
+    "log": "社会性质决定主要矛盾，主要矛盾决定革命任务",
+    "body": cells([
+      {"t": "社会性质<br><b>总开关</b>", "c": "good", "l": "第一环"},
+      {"t": "主要矛盾", "c": "", "l": "第二环"},
+      {"t": "革命任务", "c": "", "l": "第三环"}
+    ]) + "<p>「最主要」的表现必然落在<b>第一环</b>：它一动，后面两环全跟着动。所以先检查：鸦片战争后，中国的社会性质变没变？</p>"
+  },
+  {
+    "title": "史实检验：两个方向同时改写中国社会",
+    "cls": "key",
+    "tag": "机制",
+    "log": "独立 → 半殖民地；封建 → 半封建",
+    "body": cells([
+      {"t": "独立国家<br>→ 半殖民地", "c": "shift", "l": "主权被破坏"},
+      {"t": "封建社会<br>→ 半封建", "c": "shift", "l": "自然经济解体"}
+    ]) + "<p>列强借《南京条约》等不平等条约攫取割地、赔款、协定关税、领事裁判权等特权：主权与领土完整被破坏但政权形式尚存（半殖民地）；自然经济逐步解体、资本主义因素产生但封建土地所有制仍占主导（半封建）。合起来：由<b>独立的封建社会</b>逐步沦为<b>半殖民地半封建社会</b>。</p>"
+  },
+  {
+    "title": "连锁反应：性质一变，后面全变",
+    "cls": "key",
+    "tag": "机制",
+    "log": "两对主要矛盾、反帝反封建任务随之确立",
+    "body": "<p>社会性质变化为什么「最主要」？因为它是<b>总根源</b>：主要矛盾扩展为<b>帝国主义与中华民族、封建主义与人民大众</b>两对矛盾；革命任务随之变为<b>反帝反封建</b>；阶级关系、革命面貌全部改写。其余选项都是这个总变化派生出的局部现象。</p>"
+  },
+  {
+    "title": "A 排除：成分 ≠ 总判断",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "资本主义因素只是「半封建」侧面的成分之一 → A 排除",
+    "ribbon": {"k": 1, "ok": false},
+    "body": "<p><b>中国出现资本主义因素</b>最「看得见」，但它只是「半封建」侧面的一个组成部分——是总变化的一部分，不是总判断本身。「最主要」要求统领全局的定性。<b>A 错误</b>。</p>"
+  },
+  {
+    "title": "C 排除：战败不会让旧阶级立刻退场",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "封建土地制度延续到土地改革完成才废除 → C 排除",
+    "ribbon": {"k": 3, "ok": false},
+    "body": "<p><b>地主阶级退出历史舞台</b>不符合史实：封建土地所有制延续到新中国成立后的土地改革完成（1952 年底）才被废除，地主阶级的退出是后来革命完成的成果，不是鸦片战争的直接结果。<b>C 错误</b>。</p>"
+  },
+  {
+    "title": "D 排除：时间在后、分量不足",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "洋务派与顽固派分化是 19 世纪 60 年代起的事 → D 排除",
+    "ribbon": {"k": 4, "ok": false},
+    "body": "<p><b>清政府集团出现分化</b>（洋务派与顽固派）确有其事，但发生在题干所述时间之后的 19 世纪 60 年代，且属统治集团内部人事变化——时间在后、分量不足，够不上「最主要」。<b>D 错误</b>。</p>"
+  },
+  {
+    "title": "B 对号：社会性质发生变化",
+    "cls": "good",
+    "tag": "命中",
+    "log": "半殖民地半封建化＝总根源 → B 正确",
+    "ribbon": {"k": 2, "ok": true},
+    "body": "<p><b>中国社会性质发生变化</b>——由独立的封建社会逐步沦为半殖民地半封建社会——正是第 3、4 步检验出的总根源：它决定主要矛盾与革命任务，是「最主要的表现」。<b>B 正确</b>。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "tag": "结论",
+    "log": "锁定 B：中国社会性质发生变化",
+    "body": "<p>答案 <b>B</b>。记忆锚点：判断近代史转折先看总开关——鸦片战争 → 独立封建社会 → <b>半殖民地半封建社会</b> → 主要矛盾、革命任务随之全变。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'))),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  "title": "政治 2026·10 鸦片战争后最主要的社会转折",
+  "subtitle": "考点：近代中国社会性质 · 方法：先立「性质 → 矛盾 → 任务」总开关链条再对号",
+  "counterLabel": "推理步",
+  "ribbonTitle": "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  "intro": "点击「▶ 播放」逐步展开推理链。",
+  "snaps": snaps,
+  "result": {
+    "big": "答案 B",
+    "html": "记忆锚点：近代史判断题先看<b>社会性质总开关</b>：鸦片战争 → 独立封建社会 → <b>半殖民地半封建社会</b> → 主要矛盾（帝国主义与中华民族、封建主义与人民大众）、革命任务（反帝反封建）随之全变。选 <b>B</b>。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：鸦片战争后「最主要的表现」是什么</h2>
+<p>答案：<strong>B（中国社会性质发生变化）</strong>。</p>
+<h3>第 0 步：先立机制——抓住近代史的总开关</h3>
+<p>近代史的分析共用一把钥匙：<strong>社会性质决定主要矛盾，主要矛盾决定革命任务</strong>。所以问一场历史转折「最主要的表现」，就看哪个变化按动了「社会性质」这个总开关——只有它能牵动后面的一切。鸦片战争清政府战败后，列强借《南京条约》等一批不平等条约攫取割地、赔款、协定关税、领事裁判权等特权，从两个方向改写了中国社会：</p>
+<table><thead><tr><th>方向</th><th>变化</th><th>依据</th></tr></thead><tbody><tr><td>独立 → 半殖民地</td><td>主权与领土完整被破坏，但形式上仍保有政权</td><td>割地、赔款、协定关税、领事裁判权等特权</td></tr><tr><td>封建 → 半封建</td><td>自然经济逐步解体，资本主义因素产生发展，但封建土地所有制仍占主导</td><td>五口通商后洋货涌入、新式生产方式出现</td></tr></tbody></table>
+<p>两个「半」合起来：中国由<strong>独立的封建社会</strong>逐步沦为<strong>半殖民地半封建社会</strong>——社会性质变了。</p>
+<h3>第 1 步：为什么「最主要」落在社会性质上</h3>
+<p>社会性质一变，连锁反应全部跟着动：主要矛盾从地主阶级与农民的矛盾，扩展为<strong>帝国主义与中华民族、封建主义与人民大众</strong>两对矛盾；革命任务随之变为<strong>反帝反封建</strong>；阶级关系、革命面貌、革命对象全部改写。换言之，其余选项里的变化都是从「社会性质变化」这个总根源派生出来的局部现象——派生项再具体，也当不了总判断。</p>
+<h3>第 2 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因</th></tr></thead><tbody><tr><td>A 中国出现资本主义因素</td><td>❌</td><td>「半封建」侧面的成分之一，是总变化的一部分而非总判断</td></tr><tr><td>B 中国社会性质发生变化</td><td>✅</td><td>半殖民地半封建化——决定主要矛盾与革命任务的总根源</td></tr><tr><td>C 地主阶级退出历史舞台</td><td>❌</td><td>不实：封建土地制度延续到 1952 年底土地改革完成才被废除</td></tr><tr><td>D 清政府集团出现分化</td><td>❌</td><td>洋务派与顽固派的分化是 19 世纪 60 年代起的过程，时间在后、分量不足</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 A（具体现象先入为主）</strong>：资本主义因素出现最「看得见」，但「最主要」要求统领全局的定性——成分不等于总判断。</li><li><strong>选 C（战败即旧阶级退场的想当然）</strong>：一场战争的失败不会让地主阶级立刻退场，它的退出是后来新民主主义革命完成后的成果。</li><li><strong>选 D（确有其事就选它）</strong>：统治集团分化确有其事，但发生在题干所述时间之后，且属集团内部人事变化，够不上「最主要」。</li></ul>
+<blockquote>记忆锚点：判断近代史转折先看总开关——鸦片战争 → 独立封建社会 → 半殖民地半封建社会 → 主要矛盾、革命任务随之全变。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

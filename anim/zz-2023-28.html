@@ -1,8 +1,125 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-28 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-28</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·28 《反对本本主义》：对症教条主义，开出调查研究</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站（无 KaTeX）概念/推理链版：引擎 + 推理卡片累积展开，只改题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  {
+    "title": "审题眼：1930.5，对症「拿本本来」",
+    "cls": "key",
+    "body": "<p>1930 年 5 月，土地革命战争时期，红军中的教条主义＝开口闭口「拿本本来」：上了书的就对，照上级指示就行。毛泽东写《反对本本主义》对症下药——问文中提出了哪些<b>重要思想</b>。</p>",
+    "log": "先看病：教条主义错在以本本代实际"
+  },
+  {
+    "title": "先立机制：药方两步走",
+    "cls": "key",
+    "body": "<p>对症逻辑：真理的来源不是本本而是<b>实际</b>，获取实际的途径是<b>调查研究</b>。由此生长出两大思想——一句讲<b>认识从哪里来</b>（C），一句讲<b>中国问题由谁来解</b>（D）。</p>",
+    "log": "药方：调查即认识之源 + 中国同志解中国题"
+  },
+  {
+    "title": "C：没有调查，没有发言权 → 入选",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p>全篇<b>第一论断</b>、反对本本主义的旗帜：发言权以掌握实际情况为前提——「调查就像十月怀胎，解决问题就像一朝分娩」。<b>入选</b>（认识论层面）。</p>",
+    "log": "C 认识论：调查是认识之源 ✓"
+  },
+  {
+    "title": "D：胜利要靠中国同志了解中国情况 → 入选",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>著作的核心结论：中国的问题不能靠本本、靠外国经验，要靠<b>中国同志自己调查国情</b>、独立自主地解决——独立自主思想的先声。<b>入选</b>（革命道路层面）。</p>",
+    "log": "D 革命道路：独立自主的先声 ✓"
+  },
+  {
+    "title": "A：关心群众生活，注意工作方法 → 不选",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>名句错配：A 出自 <b>1934 年</b>《关心群众生活，注意工作方法》（第二次全国苏维埃代表大会报告），比本篇晚四年——「群众工作方法」与「反对教条主义」是两个论域。<b>不选</b>。</p>",
+    "log": "A 跨文献搬真话 ✗（1934≠1930）"
+  },
+  {
+    "title": "B：城市工作与根据地工作同等重要 → 不选",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>也是名句错配：「城市工作提到与根据地工作同等重要的地位」属<b>抗战后期的城市工作部署</b>（1944 年前后），与本篇相隔十余年、主题不同。<b>不选</b>。</p>",
+    "log": "B 跨时期搬部署 ✗"
+  },
+  {
+    "title": "追问预答：A 为什么这么诱人？",
+    "cls": "key",
+    "body": "<p>因为两篇都是土地革命时期的毛著、都连着群众——干扰项<b>不造新话，专搬真句</b>。识别办法：给名句建「出处档案」，校验<b>出处与年份</b>：名字对、话也对、出处错，即排除。</p>",
+    "log": "名句先核出处与年份"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>CD</b>。记忆锚点：《反对本本主义》（1930.5）两句＝<b>没有调查没有发言权＋革命胜利靠中国同志了解中国情况</b>；A＝1934 名句错配，B＝抗战后期部署错配。</p>",
+    "log": "锁定 CD"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "《反对本本主义》：对症教条主义，开出调查研究",
+  subtitle: "考点：毛泽东思想 · 方法：先立「药方逻辑」，再用出处档案排查名句错配",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 CD",
+    html: "《反对本本主义》（1930 年 5 月）两大思想：没有调查，没有发言权（C，认识论——调查是认识之源）；中国革命斗争的胜利要靠中国同志了解中国情况（D，革命道路——独立自主思想的先声）。A「关心群众生活，注意工作方法」出自 1934 年同名报告；B「城市工作与根据地工作同等重要」属抗战后期部署——都是真话错配，名句先核出处与年份。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：《反对本本主义》——对症教条主义，开出调查研究</h2>
+<p>答案：<strong>CD</strong>。</p>
+<h3>第 0 步：先立机制——文章对症什么病，就提什么思想</h3>
+<p>1930 年 5 月，红军里的教条主义表现为开口闭口「拿本本来」：以为上了书的就对、照上级指示就行。毛泽东对症下药，药方逻辑是两步——<strong>真理的来源不是本本而是实际，获取实际的途径是调查研究</strong>。由此生长出的两个核心思想正是本题答案：</p>
+<table><thead><tr><th>思想</th><th>层面</th><th>含义</th></tr></thead><tbody><tr><td>C 没有调查，没有发言权</td><td>认识论</td><td>发言权以掌握实际情况为前提：调查是认识之源，「调查就像十月怀胎，解决问题就像一朝分娩」</td></tr><tr><td>D 中国革命斗争的胜利要靠中国同志了解中国情况</td><td>革命道路</td><td>中国的问题不能靠本本、靠外国经验，要靠中国同志自己调查国情、独立自主地解决</td></tr></tbody></table>
+<p>一句讲<strong>认识从哪里来</strong>，一句讲<strong>中国问题由谁来解</strong>——实事求是思想路线与独立自主思想的雏形都在这篇著作里。</p>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 关心群众生活，注意工作方法</td><td>❌</td><td>出自 1934 年《关心群众生活，注意工作方法》，比本篇晚四年</td></tr><tr><td>B 把城市工作和根据地工作提到同等重要的地位</td><td>❌</td><td>属于抗战后期党的城市工作部署（1944 年前后），时间、主题都不对本篇</td></tr><tr><td>C 没有调查，没有发言权</td><td>✅</td><td>全篇第一论断，反对本本主义的旗帜</td></tr><tr><td>D 中国革命斗争的胜利要靠中国同志了解中国情况</td><td>✅</td><td>著作的核心结论，独立自主思想的先声</td></tr></tbody></table>
+<h3>第 2 步：A、B 的手法——「名句错配」，不造新话只搬旧句</h3>
+<p>这两项的干扰手法是<strong>跨文献搬运</strong>：句子本身都是毛泽东的真话，只是出处不是《反对本本主义》。识别办法是给名句建「出处档案」：</p>
+<ul><li><code>没有调查，没有发言权</code>、<code>中国革命斗争的胜利要靠中国同志了解中国情况</code> → <strong>1930《反对本本主义》</strong>；</li><li><code>关心群众生活，注意工作方法</code> → <strong>1934 年同名报告</strong>（第二次全国苏维埃代表大会）；</li><li>「城市工作与根据地工作提到同等重要地位」 → <strong>抗战后期的城市工作部署</strong>，与本篇相隔十余年。</li></ul>
+<p>追问预答：为什么 A 这么容易误选？因为两篇都是土地革命时期的毛著、主题都连着群众路线——但「群众工作方法」与「反对教条主义」是两个论域，年份也对不上（1930 vs 1934）。<strong>名字对、话也对、出处错</strong>——校验出处与年份即可排除。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 A</strong>：只记得「毛泽东说过」，没核对时间与文献——本篇在 1930 年，A 出自 1934 年。</li><li><strong>选 B</strong>：被「根据地工作」字样勾住——土地革命战争时期确有根据地问题，但「城市与根据地同等重要」不是本篇内容，那是后来的部署。</li><li><strong>漏选 D</strong>：只勾了最出名的 C，忽略 D 与 C 是同篇配套的两句——一个认识论、一个革命道路。</li></ul>
+<blockquote>记忆锚点：《反对本本主义》（1930.5）两句＝<strong>没有调查没有发言权＋革命胜利靠中国同志了解中国情况</strong>；A 是 1934 年名句错配，B 是抗战后期部署错配——名句先核出处与年份。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

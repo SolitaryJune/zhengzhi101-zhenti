@@ -1,8 +1,132 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2016-28 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2016-28</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2016·28 《青年杂志》与新文化运动的历史意义</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "时间线：运动在思想史链条上的位置",
+    "cls": "key",
+    "log": "1915 创刊 → 两面大旗 → 五四酝酿",
+    "body": "<p><b>1915-9</b> 陈独秀在上海创办《青年杂志》（次年改《新青年》）——运动兴起标志；两面大旗=<b>民主（德先生）、科学（赛先生）</b>；阵地=《新青年》＋北京大学；内容=提倡民主反对专制、提倡科学反对迷信、提倡新道德反对旧礼教、提倡新文学反对旧文学；后续为 1919 五四运动准备思想土壤。</p>"
+  },
+  {
+    "title": "先立机制：意义=它真正改变了什么",
+    "cls": "key",
+    "log": "机制：启蒙→解放→开路",
+    "body": "<p>三步递进：<b>启蒙</b>（把「人」从旧礼教纲常里唤醒）→ <b>思想解放</b>（青年一代思想空前活跃、各种新思潮竞起）→ <b>开路</b>（思想闸门打开，各种主义涌入比较鉴别，为先进分子选择马克思主义铺路）。判断「意义」就是沿这条链对号。</p>"
+  },
+  {
+    "title": "A：一次前所未有的启蒙运动",
+    "cls": "good",
+    "ribbon": {
+      "k": 1,
+      "ok": true
+    },
+    "log": "链条第一步：启蒙 → A 对",
+    "body": "<p>以前所未有的姿态正面冲击封建主义思想——教材定位：<b>中国历史上一次前所未有的启蒙运动</b>。<b>A 正确</b>。</p>"
+  },
+  {
+    "title": "B：掀起思想解放的潮流",
+    "cls": "good",
+    "ribbon": {
+      "k": 2,
+      "ok": true
+    },
+    "log": "链条第二步：解放 → B 对",
+    "body": "<p>批判锋芒所及，社会上掀起<b>思想解放的潮流</b>——规范表述。<b>B 正确</b>。</p>"
+  },
+  {
+    "title": "C：为马克思主义传播创造有利条件",
+    "cls": "good",
+    "ribbon": {
+      "k": 3,
+      "ok": true
+    },
+    "log": "链条第三步：开路 → C 对",
+    "body": "<p>运动最深远的一层意义：各种主义涌入比较、鉴别，<b>为马克思主义在中国的传播创造了有利条件</b>。<b>C 正确</b>。</p>"
+  },
+  {
+    "title": "D：彻底否定了孔学的历史作用",
+    "cls": "bad",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "log": "「彻底」是红灯 → D 不选",
+    "body": "<p>两层理由：①史实层——批判聚焦<b>孔学作为统治工具不适应现代生活</b>，并非抹杀孔子历史地位，运动领袖对孔学的否定是有条件的、理性的；②教材层——纲要明确新文化运动<b>有其历史局限</b>，而「彻底否定孔学历史作用」恰是不实之词。<b>D 错误</b>。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "log": "锁定 ABC",
+    "body": "<p>答案 <b>ABC</b>：意义三顶帽=启蒙＋解放＋开路。答题框架=「意义三顶帽＋局限若干条」（未与群众运动结合、未正面提出反帝等）——D 属伪造的「意义」。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "《青年杂志》与新文化运动的历史意义",
+  subtitle: "考点：新文化运动 · 意义与局限 · 多选（时间线）",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: "记忆锚点：意义=<b>前所未有的启蒙（A）+思想解放潮流（B）+为马克思主义传播开路（C）</b>；批判孔学≠<b>彻底否定</b>孔学——「彻底」二字是红灯（D）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：新文化运动的历史意义——以及它「没有」做到什么</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立时间线——运动在思想史链条上的位置</h3>
+<ul><li><strong>1915 年 9 月</strong>：陈独秀在上海创办《青年杂志》（次年改名《新青年》）——新文化运动<strong>兴起</strong>的标志；</li><li><strong>两面大旗</strong>：民主（德先生）与科学（赛先生），主阵地是《新青年》与北京大学；</li><li><strong>基本内容</strong>：提倡民主、反对专制；提倡科学、反对迷信盲从；提倡新道德、反对旧道德（批判以孔子之道为代表的旧礼教）；提倡新文学、反对旧文学（文学革命）；</li><li><strong>后续</strong>：为 1919 年五四运动准备了思想土壤，也为<strong>马克思主义在中国的传播</strong>打开了门。</li></ul>
+<p>判断"历史意义"，就是看它在这条链条上<strong>真正改变了什么</strong>。</p>
+<h3>第 1 步：三个选项为什么对</h3>
+<ul><li><strong>A 中国历史上一次前所未有的启蒙运动</strong> ✅：以前所未有的姿态正面冲击封建主义思想——把"人"从旧礼教的纲常里唤醒，启蒙性质是教材定位。</li><li><strong>B 在社会上掀起了一股思想解放的潮流</strong> ✅：批判锋芒所及，青年一代思想空前活跃，各种新思潮竞起——"思想解放的潮流"是规范表述。</li><li><strong>C 为马克思主义在中国的传播创造了有利条件</strong> ✅：思想闸门一旦打开，各种主义涌入比较、鉴别，恰恰为先进分子后来选择马克思主义<strong>铺了路</strong>——运动的深远意义正在于此。</li></ul>
+<h3>第 2 步：D 为什么错——「批判孔学」≠「彻底否定孔学」</h3>
+<p>新文化运动确实把矛头指向旧礼教、旧道德，但<strong>没有</strong>"彻底否定孔学的历史作用"。两层理由：</p>
+<ul><li>史实层：批判聚焦的是<strong>孔学作为统治工具不能适应现代生活</strong>，而非抹杀孔子在历史上的地位；运动领袖对孔学的否定是有条件的、理性的，并非全盘反传统（当时也有"整理国故"等主张）。</li><li>教材层：《中国近现代史纲要》明确指出，早期新文化运动<strong>有其历史局限</strong>（未与群众运动结合、未正面提出反帝任务等），而"彻底否定孔学历史作用"恰是命题人加给它的不实之词——程度词"彻底"在史实题里基本是红灯。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 D</strong>：把"猛烈批判旧礼教"放大成"彻底否定孔学"。判别法：凡"彻底""完全""全盘"式表述，先查教材有没有原话背书。</li><li><strong>漏选 C</strong>：只看到运动的"反封建"一面，忽略它对后续马克思主义传播的<strong>铺垫</strong>作用——这是意义题里最常考的一层。</li><li><strong>意义与局限混答</strong>：答题框架是"意义三顶帽（启蒙、解放、开路）＋局限若干条"，D 属于伪造的"意义"。</li></ul>
+<blockquote>记忆锚点：意义=<strong>前所未有的启蒙（A）+思想解放潮流（B）+为马克思主义传播开路（C）</strong>；批判孔学≠彻底否定孔学——"彻底"二字是红灯。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

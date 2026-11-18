@@ -1,8 +1,104 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2019-22 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2019-22</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2019-22 主要矛盾变化为什么没有改变初级阶段判断 · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画：只依据本题题干与选项，全中文，自包含，无外部请求 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域 ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: '审题：一个“变”，一个“没变”，问的是依据',
+    cls: 'key', sc: 'step', tag: '审题',
+    log: '主要矛盾变了，但所处历史阶段的判断没变——找的是“没变”的依据',
+    body: '<p><b>变</b>：社会主要矛盾转化为“人民日益增长的美好生活需要和不平衡不充分的发展之间的矛盾”。</p><p><b>没变</b>：对我国社会主义所处历史阶段的判断（仍处于初级阶段）。题问：为什么没变？依据是什么？</p>' },
+  { t: '机制：两条线索各归各——阶段看国情，矛盾看供需',
+    cls: 'key', sc: 'shift', tag: '机制',
+    log: '立机制：阶段判断由基本国情决定，主要矛盾由供需对比决定——分工不同',
+    body: '<p>所处历史阶段 ← 由<b>基本国情</b>决定：生产力总体落后、发展总体不平衡不充分；主要矛盾 ← 由<b>供需对比</b>决定：人民需要 vs 发展供给。</p><p>矛盾的变化发生在初级阶段<b>内部</b>：变是阶段内的量变，不是阶段的更替。所以“没变的依据”只能到<b>国情底色没变</b>里找——这就是筛选项的总标准。</p>' },
+  { t: '选项 A：仍是世界上最大的发展中国家 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A', ribbon: {k: 1, ok: true},
+    log: 'A 对号：国际比较维度的底色——人均水平与发展质量决定地位没变',
+    body: '<p>国际比较维度：人均水平、发展质量决定了“<b>最大发展中国家</b>”的帽子还没摘。</p><p>它说明的是我国自身的<b>发展水平与地位</b>（国情的一部分）——底色没变，<b>A 对</b>。</p>' },
+  { t: '选项 B：仍面临极其复杂的国际环境 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 B', ribbon: {k: 2, ok: false},
+    log: 'B 排除：国际环境是外部条件，回答不了“我国处于什么历史阶段”',
+    body: '<p>国际环境影响的是<b>机遇与挑战</b>，是外部处境；阶段判断的依据是<b>国内基本国情</b>。</p><p>B 说的是“外面乱不乱”，不是“我们在哪个阶段”——外部归因，<b>B 错</b>。</p>' },
+  { t: '选项 C：总体上仍处于不发达阶段 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C', ribbon: {k: 3, ok: true},
+    log: 'C 对号：基本国情最直接的表述——不发达就是初级阶段的底色',
+    body: '<p>“总体上仍处于<b>不发达阶段</b>”是基本国情维度最直接的表述。</p><p>生产力总量状态没实现质变，初级阶段的底色就在——<b>C 对</b>。</p>' },
+  { t: '选项 D：矛盾变化只是初级阶段内的变化 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 D', ribbon: {k: 4, ok: true},
+    log: 'D 对号：直接点明“变中有定”——矛盾在变，阶段没变',
+    body: '<p>D 正面说破关系：主要矛盾的变化<b>只是</b>社会主义初级阶段这个历史阶段中的变化。</p><p>矛盾在变、阶段没变，变化发生在阶段之内——<b>D 对</b>，四个选项里最贴题干问法的一项。</p>' },
+  { t: '追问：需要升级了，为什么还不算走出初级阶段？',
+    cls: 'key', sc: 'shift', tag: '追问',
+    log: '答疑：需要升级≠生产力质变；“不平衡不充分”恰说明不发达仍是现实',
+    body: '<p>“美好生活需要”说的是<b>愿望层次</b>在提高；判断历史阶段看的是<b>生产力与国情的总量状态</b>。</p><p>需要升级不等于生产力实现质变；供给侧“不平衡不充分”恰恰说明发展仍是第一要务——矛盾转化改写的是<b>任务重点</b>，改写不了<b>所处阶段</b>。</p>' },
+  { t: '结论：ACD',
+    cls: 'good', sc: 'done', tag: '结论',
+    log: '汇总：两个“没有变”＋一个“变中有定”；国际环境是外部归因——答案 ACD',
+    body: '<p>答案 <b>ACD</b>：最大发展中国家（A）· 总体不发达（C）· 变中有定（D）。</p><p>两个“没有变”＋一个“变中有定”；国际环境是外部条件，不是阶段判断的依据（B 错）。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2019·22】主要矛盾变化没有改变初级阶段判断的依据（多选）',
+  subtitle: '考点：社会主要矛盾与基本国情 · 方法：阶段看国情，矛盾看供需——分线对号',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先立“变与不变”的机制，再逐项检验谁能作依据。',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '记忆锚点：两个“没有变”（<b>A 最大发展中国家、C 总体不发达</b>）＋一个“变中有定”（<b>D 矛盾变化只是初级阶段内的变化</b>）；国际环境是外部条件，不是阶段判断的依据（<b>B 错</b>）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：主要矛盾"变了"，为什么初级阶段的判断"没变"</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——"变"与"不变"各由什么决定</h3>
+<p>先把两条线索的分工摆清楚，再谈"依据"：</p>
+<table><thead><tr><th>线索</th><th>由什么决定</th><th>现在的状态</th></tr></thead><tbody><tr><td>所处历史阶段（初级阶段）</td><td><strong>基本国情</strong>：生产力总体落后、发展总体不平衡不充分</td><td>没有"变出"初级阶段</td></tr><tr><td>社会主要矛盾</td><td>人民需要与发展（供给）的供需对比</td><td>已转化为"美好生活需要和不平衡不充分的发展之间的矛盾"</td></tr></tbody></table>
+<p>主要矛盾的变化发生在初级阶段这个<strong>大阶段内部</strong>，是量变、是阶段性特征的深化——"变"是阶段内的变，不是阶段本身的更替。所以"为什么没变"的依据只能到<strong>国情底色没变</strong>里去找：凡是说明"底色没变"的表述配作依据，说明"外部处境"的表述不配。这就是筛选项的总标准。</p>
+<h3>第 1 步：A~D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>依据</th></tr></thead><tbody><tr><td>A 仍然是世界上最大的发展中国家</td><td>✅</td><td>国际比较维度的底色：人均水平、发展质量决定了"最大发展中国家"的帽子还没摘——阶段没变</td></tr><tr><td>B 仍然面临极其复杂的国际环境</td><td>❌</td><td>国际环境是<strong>外部条件</strong>，影响的是机遇与挑战，回答不了"我国处于什么历史阶段"；阶段判断的依据是<strong>国内基本国情</strong></td></tr><tr><td>C 总体上仍处于不发达阶段</td><td>✅</td><td>基本国情维度最直接的表述，正是初级阶段的底色本身</td></tr><tr><td>D 主要矛盾的变化只是社会主义初级阶段这个历史阶段中的变化</td><td>✅</td><td>直接点明关系：矛盾在<strong>变</strong>，阶段<strong>没变</strong>，变化发生在阶段之内</td></tr></tbody></table>
+<p>→ A、C、D 成立，B 排除，选 <strong>ACD</strong>。</p>
+<h3>第 2 步：预判追问——需要升级了，为什么还不算走出初级阶段？</h3>
+<p>"人民日益增长的美好生活需要"说的是<strong>愿望层次</strong>在提高，而判断历史阶段看的是<strong>生产力与国情的总量状态</strong>。需要升级不等于生产力实现质变；供给侧"不平衡不充分"恰恰说明发展仍是第一要务、不发达仍是现实。所以矛盾的转化改写的只是"主要任务的重点"，改写不了"处在什么阶段"——这正是"变与不变"背后的机理。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>："国际环境极其复杂"事实感很强，考生容易顺手圈进来。判断标准只有一条：它说明的是<strong>国情底色</strong>还是<strong>外部处境</strong>——只有前者支撑"初级阶段没变"。B 描述的是外部处境，与阶段判断无涉，这是四个选项里唯一的"外部归因"干扰项。</li><li><strong>漏选 D</strong>：以为 D 只是"重复题干"。其实 D 恰是"变中有定"关系的直接表述，把题干问的"没有改变的依据"正面说破了，是四个选项里最贴问法的一项。</li><li><strong>误把 A 理解为"国际比较就是国际环境"</strong>：A 虽然是国际比较维度，但它说的是我国自身的<strong>发展水平和地位</strong>（国情的一部分），不是外部环境本身——与 B 有本质区别。</li></ul>
+<blockquote>记忆锚点：两个"没有变"（最大发展中国家 A、总体不发达 C）＋ 一个"变中有定"（D：矛盾变化只是初级阶段内的变化）；国际环境是外部条件，不是阶段判断的依据（B 错）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

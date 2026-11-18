@@ -1,8 +1,102 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-20 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-20</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2026-20 · 科学审美：感性理性与非理性因素（2026 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：一句话材料踩中"两块地盘"',
+    cls: 'key',
+    body: '<p>材料链：原理有结构 → 结构"有美和妙" → 各人<b>感受</b>不同、<b>了解</b>不同 → 发展出独特方向、方法、<b>风格</b>。"感受＋了解"→ 感性与理性同台（B）；"发展出方向方法风格"→ 审美在驱动（D）。设问问的正是这套机制怎么显形。</p>' },
+  { title: '先立机制：理性因素与非理性因素的分工',
+    cls: '',
+    body: '<p><b>理性因素</b>（概念、推理、逻辑）：把握本质规律——认识的"方向盘＋地图"；<b>非理性因素</b>（情感、意志、直觉、想象）：激活、驱动、控制认识活动——"发动机"，不起决定作用。感性认识与理性认识互相渗透，真实的认识活动两个一起上。</p>' },
+  { title: '逐项分析 A：感性认识起"决定性"？',
+    cls: 'bad',
+    ribbon: {k:1, ok:false},
+    body: '<p>A："感性认识在认识过程中起<b>决定性</b>作用。"论基础，<b>实践</b>才是基础；论深度，把握本质靠<b>理性认识</b>，感性只是起点。材料里审美的实际身份是"驱动研究方向"——A 把"激活驱动"拔高一格成"决定"，张冠李戴。❌ 不选。</p>' },
+  { title: '逐项分析 B：思维创新包含感性＋理性',
+    cls: 'good',
+    ribbon: {k:2, ok:true},
+    body: '<p>B：科研中的思维创新<b>包含</b>感性认识和理性认识。材料双词同句："对美和妙的地方的<b>感受</b>"（感性体验）＋"不同的<b>了解</b>"（理性把握）——一句话里两班人马同台，创新是合奏不是独唱。✅ 选。</p>' },
+  { title: '逐项分析 C：审美"最能"反映本质规律？',
+    cls: 'bad',
+    ribbon: {k:3, ok:false},
+    body: '<p>C：审美活动"<b>最能</b>反映客观事物的本质和规律"。分工图上，把握本质规律是<b>理性认识（抽象思维）</b>的职能；审美以形象体验为特征，可启发洞察但拿不到"最能"的头衔。A、C 是同一错误两版本：把感性/审美抬到够不着的高度。❌ 不选。</p>' },
+  { title: '逐项分析 D：非理性因素激活、驱动',
+    cls: 'good',
+    ribbon: {k:4, ok:true},
+    body: '<p>D：非理性因素对认识活动具有<b>激活、驱动、控制</b>作用。审美情感没有直接产出定理，却让"每位工作者发展出独特的研究方向和方法"——点燃课题、牵引路线、塑造风格。杨振宁谈科学美＝教科书案例。✅ 选。</p>' },
+  { title: '对号入座汇总',
+    cls: '',
+    body: '<p>A ❌ "决定性"扣错帽；B ✅ 感性＋理性合奏；C ❌ "最能"越位；D ✅ 激活驱动。→ 答案 <b>BD</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>BD</b>。科学审美内容上是感性体验＋理性把握（B），作用上是激活驱动（D）；"决定性"（A 反）与"最能反映本质"（C 反）都是把非理性因素抬过了头。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2026-20 科学美：感性理性同台，非理性驱动',
+  subtitle: '考点：理性因素与非理性因素 · 感性认识与理性认识 —— 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 BD',
+    html: '<b>B</b>：思维创新包含感性认识和理性认识——"感受"（感性）＋"了解"（理性）同在材料一句里。<br><b>D</b>：非理性因素激活、驱动认识活动——审美情感点燃课题、塑造风格。<br><br><b>干扰项：</b>A"感性起决定性"扣错帽（基础是实践、本质靠理性）；C"最能反映本质规律"是理性认识的职能，审美拿不到最高级头衔。<br><br><b>记忆锚点：</b>审美＝发动机不是方向盘；见"决定性/最能"先查职能归属。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：科学审美中的感性理性与非理性因素</h2>
+<p>答案：<strong>BD</strong>。</p>
+<h3>第 0 步：先立机制——认识过程里"两班人马"的分工</h3>
+<p>先在头脑里装好认识论的分工图，再看材料：</p>
+<ul><li><strong>理性因素</strong>：概念、判断、推理、逻辑——负责<strong>把握本质和规律</strong>，是认识的高级阶段；</li><li><strong>非理性因素</strong>：情感、意志、欲望、直觉、灵感、想象——<strong>不起决定作用</strong>，但对认识活动具有<strong>激活、驱动、控制</strong>作用，是发动机不是方向盘；</li><li><strong>感性认识与理性认识</strong>：感性（感觉、知觉、表象）是起点，理性（概念、推理）把握本质，二者互相渗透——真实的认识活动从来是<strong>两个一起上</strong>。</li></ul>
+<p>杨振宁这段话恰好同时踩中两块地盘：对"美和妙"的<strong>感受</strong>是感性体验＋审美情感（非理性因素），对"结构"的<strong>了解</strong>是理性把握。设问"科学审美影响研究视角表明"，问的就是这套机制怎么在材料里显形。</p>
+<h3>第 1 步：B 对——思维创新包含感性认识和理性认识</h3>
+<p>细读材料："对结构的不同的<strong>美和妙的地方的感受</strong>"——感受是感性的；"<strong>不同的了解</strong>"——了解结构是理性的；"发展出他自己独特的研究方向和研究方法"——思维创新的产出。一句话里感性与理性同台：科学家的创新既靠对美的直觉体验，也靠对结构的理性理解，二者缺一不可。B 说"包含"两者，判断准确。</p>
+<h3>第 2 步：D 对——非理性因素的激活、驱动作用</h3>
+<p>审美情感属于情感、直觉这类<strong>非理性因素</strong>。它在材料里干了什么？没有直接产出一条定理，却让"每位工作者发展出自己独特的研究方向和研究方法"——<strong>点燃课题、牵引路线、塑造风格</strong>。这正是教材对非理性因素的定位：对认识活动具有激活、驱动和控制作用。杨振宁谈科学美，就是"非理性因素激活驱动认识"的教科书案例。</p>
+<h3>第 3 步：A 为什么错——"决定性"的帽子扣错了脑袋</h3>
+<p>A 说感性认识在认识过程中起<strong>决定性</strong>作用。两处错：</p>
+<ol><li>论基础，<strong>实践</strong>才是认识的基础；论把握对象，<strong>理性认识</strong>才能抓住本质规律，感性认识只是认识的起点、有待上升到理性。感性从来顶不起"决定性"。</li><li>材料里审美感受的实际身份是"驱动研究方向"（对应 D 的作用），A 把"激活驱动"拔高一格说成"决定"，作用就张冠李戴了。</li></ol>
+<h3>第 4 步：C 为什么错——"最能反映本质规律"是理性认识的专利</h3>
+<p>C 说审美活动<strong>最能</strong>反映客观事物的本质和规律。分工图上，把握本质与规律是<strong>理性认识（抽象思维）</strong>的职能；审美以形象、体验为特征，可以启发洞察（比如对称性指引物理发现），但"最能"这个最高级头衔它拿不到——那是把审美的辅助作用夸成了主渠道。注意 A、C 是同一个错误的两个版本：<strong>把感性/审美的地位抬到它够不着的高度</strong>。</p>
+<h3>第 5 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>机制对号</th></tr></thead><tbody><tr><td>A 感性认识起决定性作用</td><td>❌</td><td>基础是实践；本质规律靠理性；"决定性"扣错帽</td></tr><tr><td>B 思维创新包含感性＋理性认识</td><td>✅</td><td>"感受"（感性）＋"了解"（理性）同台</td></tr><tr><td>C 审美最能反映本质规律</td><td>❌</td><td>把握本质规律是理性认识的职能</td></tr><tr><td>D 非理性因素激活、驱动认识</td><td>✅</td><td>审美情感点燃方向、牵引风格</td></tr></tbody></table>
+<p>→ 选 <strong>BD</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：看到"美妙的感受"顺手就选。感受的真实作用是激活驱动（D），不是决定——凡"决定性"先查它是不是该归实践或理性认识。</li><li><strong>误选 C</strong>：被"科学美很有价值"的正能量叙事带跑。凡"最能""决定性"这类<strong>最高级断言</strong>，先问职能归属：把握本质规律是理性认识的专利。</li><li><strong>漏选 B</strong>：只盯着"感受"以为纯感性，漏读"不同的<strong>了解</strong>"——理性成分就藏在材料原句里。</li></ul>
+<blockquote>记忆锚点：科学审美<strong>内容上是感性体验＋理性把握（B）</strong>，<strong>作用上是激活驱动（D）</strong>；"决定性"（A 反）与"最能反映本质"（C 反）都是把非理性因素抬过了头。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

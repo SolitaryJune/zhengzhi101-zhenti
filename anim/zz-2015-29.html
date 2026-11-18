@@ -1,8 +1,98 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-29 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-29</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2015-29 "错误的毛泽东思想"错在哪 · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：拆这句话的预设',
+    cls: 'key', sc: 'step', tag: '审题',
+    body: '<p>1976 年邓小平引"有些同志"的话："我们只拥护<b>\'正确的毛泽东思想\'</b>，而不拥护<b>\'错误的毛泽东思想\'</b>。这种说法也是有错误的。"</p><p>病在预设：它默认存在"错误的毛泽东思想"——先立机制看这个预设错在哪。</p>',
+    log: '病根：预设存在"错误的毛泽东思想"' },
+  { t: '机制卡：毛泽东思想 ≠ 毛泽东的思想',
+    cls: 'key', sc: 'shift', tag: '机制',
+    body: '<p><b>毛泽东思想</b>：马列主义在中国的运用和发展，是被实践证明了的<b>正确的</b>理论原则和经验总结，是<b>党的集体智慧</b>的结晶——本身是科学体系，不存在"错误的毛泽东思想"；</p><p><b>毛泽东的思想</b>：毛泽东个人的全部思想——既含构成毛泽东思想的部分，也含<b>晚年错误</b>。</p><p>为什么按定义就不存在"错误的毛泽东思想"？"被实践证明了的<b>正确的</b>"这个定语，把错误内容挡在门外——所以"完整、准确"地坚持毛泽东思想，恰恰要求把晚年错误排除在外。</p>',
+    log: '科学体系无"错误"；晚年错误属于个人思想' },
+  { t: '选项 A：没把毛泽东思想与毛泽东的思想区分开 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A', ribbon: { k: 1, ok: true },
+    body: '<p>病根之一：把"毛泽东个人的思想（含晚年错误）"与"党的科学理论"混为一谈——概念层面混淆，才造出"错误的毛泽东思想"这个不存在的东西。</p><p><b>A 对</b>。</p>',
+    log: '概念混淆是病根之一 → A 选' },
+  { t: '选项 C：没把晚年错误与科学体系区分开 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C', ribbon: { k: 3, ok: true },
+    body: '<p>病根之二：毛泽东<b>晚年错误不属于毛泽东思想的科学体系</b>——坚持毛泽东思想与纠正晚年错误不但不矛盾，还是同一件事的两面。</p><p><b>C 对</b>。</p>',
+    log: '晚年错误不进科学体系 → C 选' },
+  { t: '选项 B：没与中特理论区分开 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 B', ribbon: { k: 2, ok: false },
+    body: '<p>引文讨论的是"毛泽东思想有没有错误"，毛病出在<b>"毛泽东思想 / 毛泽东的思想"之间</b>，不在两个理论体系之间——与中特理论无涉，答非所问。</p><p><b>B 不选</b>。</p>',
+    log: '引文不涉中特理论 → B 不选' },
+  { t: '选项 D：没区分毛泽东与其他领导人的贡献 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 D', ribbon: { k: 4, ok: false },
+    body: '<p>集体智慧是毛泽东思想的<b>属性</b>，但这句错话错在"把错误算进毛泽东思想"，不在贡献归属——方向偏了。</p><p><b>D 不选</b>。</p>',
+    log: '错不在贡献归属 → D 不选' },
+  { t: '结论：AC',
+    cls: 'good', sc: 'done', tag: '结论',
+    body: '<p>答案 <b>AC</b>：概念层面（A）与体系层面（C）——同一病根的两个侧面，两个都选才算挖全。</p><p>排除 B、D：一个答非所问，一个方向偏了。</p>',
+    log: '锁定 AC：两个"没区分"挖全病根' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2015·29】"只拥护正确的毛泽东思想"错在哪（多选）',
+  subtitle: '考点：毛泽东思想的科学体系 · 先立"两个概念"机制再对号',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先切开"毛泽东思想 / 毛泽东的思想"，再逐项诊断。',
+  snaps: snaps,
+  result: {
+    big: '答案 AC',
+    html: '记忆锚点：毛泽东思想是<b>科学的体系、集体的结晶</b>，无"错误"可言；错在两个"没区分"——<b>毛泽东思想与毛泽东的思想（A）</b>、<b>晚年错误与科学体系（C）</b>。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解："错误的毛泽东思想"——这句话错在哪两个"没区分"</h2>
+<p>答案：<strong>AC</strong>。</p>
+<h3>第 0 步：先立机制——两个概念必须切开</h3>
+<p>毛泽东思想不等于毛泽东的思想，这是党史评价体系里的关键一剖：</p>
+<ul><li><strong>毛泽东思想</strong>：马克思列宁主义在中国的运用和发展，是被实践证明了的关于中国革命和建设的<strong>正确的</strong>理论原则和经验总结，是<strong>党的集体智慧</strong>的结晶——它本身就是一个科学体系，根本不存在"错误的毛泽东思想"。</li><li><strong>毛泽东的思想</strong>：毛泽东个人的全部思想，既有被实践证明正确、构成毛泽东思想的部分，也包含他<strong>晚年犯的错误</strong>。</li></ul>
+<p>邓小平批评的"有些同志"说"只拥护正确的毛泽东思想，而不拥护错误的毛泽东思想"——这句话预设了存在"错误的毛泽东思想"，等于把晚年错误塞进了毛泽东思想的科学体系，混淆了上述两个概念。</p>
+<p>先把最可能追问的"为什么"答掉：<strong>为什么"错误的毛泽东思想"按定义就不存在？</strong> 因为"被实践证明了的正确的"这一定语就写在毛泽东思想的定义里——凡被实践证明是错误的内容，定义上就进不了毛泽东思想，只能归入"毛泽东个人的思想"中的错误部分。所以"完整、准确地坚持毛泽东思想"，恰恰要求把晚年错误排除在外——坚持毛泽东思想与纠正晚年错误不但不矛盾，还是同一件事的两面。</p>
+<h3>第 1 步：对号入座</h3>
+<ul><li><strong>A 没有把毛泽东思想与毛泽东的思想区分开来</strong> ✅：病根之一——把"毛泽东个人的思想（含晚年错误）"与"党的科学理论"混为一谈，才造出"错误的毛泽东思想"这个不存在的东西。</li><li><strong>B 没有把毛泽东思想与有中国特色的社会主义理论区分开来</strong> ❌：引文讨论的是"毛泽东思想有没有错误"，与中特理论无关——混淆发生在"毛泽东思想 / 毛泽东的思想"之间，不是两个理论体系之间。</li><li><strong>C 没有把毛泽东晚年的错误与毛泽东思想的科学体系区分开来</strong> ✅：病根之二——晚年错误不属于毛泽东思想的科学体系；坚持毛泽东思想与纠正晚年错误不但不矛盾，而且是同一件事的两面。</li><li><strong>D 没有把毛泽东与党的其他领导人对毛泽东思想的贡献区分开来</strong> ❌：集体智慧是毛泽东思想的属性，但这句话错在"把错误算进毛泽东思想"，不在贡献归属——答非所问。</li></ul>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 B</strong>：看见"两个理论的关系"就联想。先看引文在说什么——通篇是"毛泽东思想"内部有无"错误"的问题。</li><li><strong>误选 D</strong>：把"坚持毛泽东思想"误解成"肯定毛泽东的一切（含晚年错误）"，再去"区分贡献归属"兜圈子。引文的病灶是"把错误算进毛泽东思想"，不在贡献归属——集体智慧是毛泽东思想的属性，改变不了这一点。</li><li><strong>只选 A 漏 C（或反之）</strong>：A 与 C 是同一病根的两个侧面——概念层面（毛泽东思想不等于毛泽东的思想）与体系层面（晚年错误不进入科学体系）——两个都选才算把病根挖全。</li></ul>
+<blockquote>记忆锚点：毛泽东思想是<strong>科学的体系、集体的结晶</strong>，无"错误"可言；错在两个"没区分"——<strong>毛泽东思想与毛泽东的思想（A）、晚年错误与科学体系（C）</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

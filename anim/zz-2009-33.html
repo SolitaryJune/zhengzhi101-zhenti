@@ -1,8 +1,87 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-33 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-33</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2009-33 · 北京奥运三大理念的层级判定</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261117a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261117a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：问的是"理念"，先立准靶子',
+    body: '<p>题干锁定 2008 年 8 月 8 日至 24 日第 29 届北京奥运会，问中国提出的<b>本届奥运会理念</b>。"理念"＝定义"办一届什么样的奥运会"的官方固定提法——不是临场口号，先找<b>有出处的组合</b>，再逐项对号。</p>' },
+  { tag: '溯源', cls: 'key', title: '溯源：三大理念从申办承诺来',
+    body: '<p><b>2001 年</b>北京申办 2008 年奥运会时，向国际奥委会郑重承诺：<b>绿色奥运、科技奥运、人文奥运</b>。2008 年成功举办、兑现承诺——题干"认真履行了对国际社会的郑重承诺"说的就是它。固定组合锁定，四个选项各归各位。</p>' },
+  { tag: 'A ✗', cls: 'bad', k: 1, pick: false, title: 'A "平安奥运"——不在理念清单里',
+    body: '<p>2008 年语境里它出现频率极高，但属<b>筹办期间的工作目标和安保保障要求</b>（落实层面），不是申办时承诺、定义奥运会性质的<b>理念</b>（理念层面）。<b>排除</b>。</p>' },
+  { tag: 'B ✓', cls: 'good', k: 2, pick: true, title: 'B "绿色奥运"——入选',
+    body: '<p>三大理念之一：把<b>生态环保</b>贯穿筹办全程——场馆建设、能源利用、交通组织都体现可持续发展。</p>' },
+  { tag: 'C ✓', cls: 'good', k: 3, pick: true, title: 'C "科技奥运"——入选',
+    body: '<p>三大理念之一：以<b>科技进步</b>支撑奥运会——场馆设施、信息传播展现中国科技创新能力。</p>' },
+  { tag: 'D ✓', cls: 'good', k: 4, pick: true, title: 'D "人文奥运"——入选',
+    body: '<p>三大理念之一：传播<b>中华文化</b>、促进中外文化交流与人的和谐发展——彰显中国和世界追求人类共同进步的共同梦想。</p>' },
+  { tag: '结论', cls: 'good', title: '结论：理念 = 绿色 + 科技 + 人文',
+    body: '<p><b>答案 BCD</b>。判别标准：看是否属于官方承诺的<b>固定组合</b>，不看提法出现得多不多——"平安奥运"高频出现也在组合之外。</p>' },
+];
+
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'shift')),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+
+AW.init({
+  title: 'zz-2009-33 · 中国提出的北京奥运会理念',
+  subtitle: '2009 年第 33 题（多选）· 考点：北京奥运三大理念 · 理念与工作要求的两层区分',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先溯源申办承诺锁定固定组合，再逐项判定 A–D。',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '北京奥运三大理念 = <b>绿色奥运 + 科技奥运 + 人文奥运</b>（2001 年申办承诺，贯穿申办—筹备—举办全过程）。<br>"平安奥运"（A）是筹办期间的<b>工作目标和安保保障要求</b>，属落实层面，不在理念清单里——判别看固定组合，不看出现频率。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：北京奥运三大理念的"层级判定"</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——"理念"不是随口口号，是有出处的官方固定组合</h3>
+<p>识记题最怕"哪个词眼熟选哪个"，先把"理念"这个词在奥运语境里的含义立准：它指<strong>定义"办一届什么样的奥运会"的那套官方固定提法</strong>，有明确的出处和生效时段——<strong>2001 年北京申办 2008 年奥运会时</strong>，中国向国际奥委会郑重承诺的<strong>"绿色奥运、科技奥运、人文奥运"</strong>三大理念。这套组合从申办、筹备贯穿到 2008 年 8 月 8 日至 24 日的举办全程；题干说中国"认真履行了对国际社会的郑重承诺"，履行的正是它。只要锁定这个三位一体的组合，四个选项各归各位。</p>
+<h3>第 1 步：四个选项对号入座</h3>
+<table><thead><tr><th>选项</th><th>是否三大理念</th><th>内涵指向</th></tr></thead><tbody><tr><td>A 平安奥运</td><td>❌</td><td>筹办期间的工作目标与安保保障要求，属<strong>落实层面</strong></td></tr><tr><td>B 绿色奥运</td><td>✅</td><td>生态环保：场馆建设、能源交通贯彻可持续发展</td></tr><tr><td>C 科技奥运</td><td>✅</td><td>科技支撑：场馆技术、信息服务展现创新能力</td></tr><tr><td>D 人文奥运</td><td>✅</td><td>文化交流与人的发展：传播中华文明、促进中外交流与人的和谐</td></tr></tbody></table>
+<p>B、C、D 正是申办承诺的组合原句，选 <strong>BCD</strong>。</p>
+<h3>为什么"平安奥运"不算（唯一排除点，值得多说一句）</h3>
+<p>"平安奥运"在 2008 年的语境里出现频率极高，最容易混进答案。但它属于另一个层级：它是筹办期间提出的<strong>工作目标和安保保障要求</strong>，服务于"举办一届有特色、高水平的奥运会"这个总目标，是<strong>怎么把奥运办好</strong>的落实层面的事；而绿色、科技、人文是申办时承诺、定义<strong>办一届什么样的奥运会</strong>的理念层面的事。题目问"理念"，层级对不上，A 排除。由此得到判别标准：<strong>看是否属于官方承诺的固定组合，不看提法出现得多不多</strong>。</p>
+<h3>易错点：每个干扰方向对应哪种误解</h3>
+<ul><li><strong>把"提得多的口号"当"理念" → 误选 A</strong>：2008 年安保语境下"平安奥运"的宣传铺天盖地，政治上也完全正确，但不在三大理念清单里——识记题认官方固定组合，不认"听起来像"。</li><li><strong>漏选 D（只选 BC）</strong>："人文奥运"内涵最抽象，有人觉得它不像并列口号而漏掉。三大理念是一体的，缺一即错。</li><li><strong>多选题漏选即失分</strong>：本题 2 分多选，BCD 任何一项漏掉就拿不到分——四个字母逐个过完再落笔。</li></ul>
+<blockquote>记忆锚点：北京奥运三大理念 = <strong>绿色 + 科技 + 人文</strong>（2001 年申办承诺，贯穿申办—筹备—举办全过程）；"平安奥运"是安保工作要求，不是理念。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

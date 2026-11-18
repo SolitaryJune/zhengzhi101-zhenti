@@ -1,8 +1,119 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-23 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-23</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2024-23 · 经济长期向好基本面的四大支撑</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（概念模板 · 逐项对号推演） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：基本面判断法——看结构，不看单一指标",
+    "cls": "key",
+    "body": "<p>「长期向好的基本面没有变也不会变」，凭据不是某一项指标漂亮，而是<b>支撑结构完整</b>：有人买（需求）、有人造（供给）、有制度对接双方（体制）、有人推动升级（人才）。官方标准表述正是这四条优势。做法：让题干数据逐条「作证」，看四个选项是否各占一个侧面。</p>",
+    "log": "四支柱：需求·供给·体制·人才"
+  },
+  {
+    "title": "A. 超大规模市场的需求优势——入选",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p>需求侧：内需纵深大。题干 <b>GDP 同比增 5.2%、我国仍是全球增长最大引擎</b>——总量增长由需求撑起，正是超大规模市场在作证。<b>符合 → 入选</b>。</p>",
+    "log": "GDP 5.2% 为需求作证 ✓"
+  },
+  {
+    "title": "B. 产业体系配套完整的供给优势——入选",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p>供给侧：链条齐全、配套完整。题干 <b>前 10 个月社会物流总额增 4.9%，物流需求恢复向好、行业提质升级加速</b>——只有产业链完整、循环通畅，物流才谈得上提质升级。<b>符合 → 入选</b>。</p>",
+    "log": "物流 4.9% 为供给作证 ✓"
+  },
+  {
+    "title": "C. 社会主义市场经济的体制优势——入选",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p>制度层：<b>有效市场＋有为政府</b>。题干 <b>居民人均可支配收入实际增 5.9%</b>，跑赢 GDP 的 5.2%——增长能转化为民生，靠的是市场效率与政府调节的结合。C 还是 A、B 得以发挥的<b>前提</b>。<b>符合 → 入选</b>。</p>",
+    "log": "收入 5.9%＞GDP，体制在转化 ✓"
+  },
+  {
+    "title": "D. 大量高素质劳动者和企业家的人才优势——入选",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>人才层：注意措辞是<b>「高素质」</b>劳动者和企业家——质量红利而非数量红利。题干 <b>高技术产业投资增 11.4%</b>，创新投资敢加码，背后是「有人干得成」。<b>符合 → 入选</b>。</p>",
+    "log": "高技术投资 11.4% 为人才作证 ✓"
+  },
+  {
+    "title": "结构检查：四个侧面互不重复 → 全对型多选",
+    "cls": "key",
+    "body": "<p>A 站需求、B 站供给、C 站制度、D 站人才——<b>各占一个侧面、互不重复</b>，且全是正面标准提法，没有干扰项可言。这是「全对型」多选的典型结构：判断方法就是看侧面是否互不重叠。</p>",
+    "log": "四侧面互不重叠 → 全选"
+  },
+  {
+    "title": "结论与防漏选",
+    "cls": "good",
+    "body": "<p><b>答案 ABCD。</b>两个常见漏选：漏 C——把体制优势当空话，没有「有效市场＋有为政府」，大市场变不成现实增长；漏 D——只看「人口」看不到「人才」，高技术投资增长的人力来源正是高素质劳动者。</p>",
+    "log": "锁定 ABCD：四足鼎立"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'))),
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "zz-2024-23 经济长期向好基本面的四大支撑",
+  subtitle: "考点：高质量发展 · 方法：让题干数据逐条「作证」，检查侧面是否互不重复",
+  counterLabel: '已对号',
+  ribbonTitle: '选项判定（1=A · 2=B · 3=C · 4=D；✓ 入选）',
+  intro: '点击「▶ 播放」：先立「基本面看支撑结构」，再让数据逐条作证。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABCD",
+    html: "长期向好四大优势 = <b>需求（大市场）＋供给（全产业）＋体制（有效市场＋有为政府）＋人才（高素质劳动者和企业家）</b>，四足鼎立缺一不可。题干数据一一对号：GDP 5.2%→A、物流 4.9%→B、收入 5.9%→C、高技术投资 11.4%→D。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：经济长期向好基本面的四大支撑（需求·供给·体制·人才）</h2>
+<p>答案：<strong>ABCD</strong>（全选）。</p>
+<h3>第一步：先立机制——"基本面"判断法：看支撑结构，不看单一指标</h3>
+<p>"我国经济长期向好的基本面没有变也不会变"，凭据不是某一项指标漂亮，而是<strong>支撑结构完整</strong>。一个经济体要长期向好，必须同时具备四样东西：有人买（需求）、有人造（供给）、有制度把买卖双方对接起来（体制）、有人能推动升级（人才）。官方对"基本面"的标准表述正是这四条优势——它们各站一个侧面，互不重复、互相支撑。做题方法随之确定：把题干里的每一个数据当"证人"，看它分别为哪一条优势作证；若四个选项各占一个侧面且都是正面提法，就是"全对型"多选。</p>
+<h3>第二步：让题干数据逐条"作证"</h3>
+<table><thead><tr><th>优势</th><th>机制</th><th>题干数据落点</th></tr></thead><tbody><tr><td>A 需求优势</td><td>超大规模市场，内需纵深大</td><td>GDP 同比增 5.2%，我国仍是全球增长最大引擎——总量增长由需求撑起</td></tr><tr><td>B 供给优势</td><td>产业体系配套完整，链条齐全</td><td>前 10 个月社会物流总额增 4.9%，"物流需求恢复向好、行业提质升级"——只有产业链完整、循环通畅，物流才谈得上提质升级</td></tr><tr><td>C 体制优势</td><td>社会主义市场经济：有效市场＋有为政府</td><td>居民人均可支配收入实际增 5.9%，跑赢 GDP 的 5.2%——增长能转化为民生，靠市场效率与政府调节的结合</td></tr><tr><td>D 人才优势</td><td>大量高素质劳动者和企业家</td><td>高技术产业投资增 11.4%——创新投资敢于加码，背后是"有人干得成"</td></tr></tbody></table>
+<p>四个落点分别落在需求、供给、制度、人才四个不同侧面，没有两个选项共用一个侧面——这是"全对型"多选的典型结构。</p>
+<h3>第三步：逐项确认（每项都是标准提法）</h3>
+<ul><li><strong>A 超大规模市场的需求优势</strong> ✅：标准提法，需求侧，由 GDP 5.2% 与"全球增长最大引擎"作证。</li><li><strong>B 产业体系配套完整的供给优势</strong> ✅：标准提法，供给侧，由物流总额 4.9% 与循环通畅作证。</li><li><strong>C 社会主义市场经济的体制优势</strong> ✅：制度层，且是 A、B 得以发挥的<strong>前提</strong>——市场有效配置资源、政府补市场之不足，大市场与全产业才能变成现实增长。</li><li><strong>D 大量高素质劳动者和企业家的人才优势</strong> ✅：人才层，措辞是"高素质"，指向质量红利而非数量红利。</li></ul>
+<p>→ 选 <strong>ABCD</strong>。</p>
+<h3>易错点：每种漏选对应哪种误解</h3>
+<ul><li><strong>只挑自己最熟的一项（如 A）</strong>：把多选当单选做。判断办法：四个选项若分站互不重复的侧面（需求／供给／体制／人才），且都是正面标准提法，则无干扰项可言——全选。</li><li><strong>漏 C，把"体制优势"当空话</strong>：C 不是挂在墙上的口号，而是另外三项的制度前提。没有"有效市场＋有为政府"，超大规模市场变不成现实需求，完整产业体系也未必自动指向高质量。</li><li><strong>漏 D，只看"人口"看不到"人才"</strong>：D 的措辞是"高素质劳动者和企业家"。人口数量红利在消退，人才质量红利在上升——高技术产业投资增长 11.4% 的人力来源正在于此。</li></ul>
+<blockquote>记忆锚点：长期向好四大优势 = <strong>需求（大市场）＋供给（全产业）＋体制（有效市场＋有为政府）＋人才（高素质劳动者和企业家）</strong>——四足鼎立，缺一角"基本面"就立不住。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

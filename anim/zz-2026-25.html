@@ -1,8 +1,100 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-25 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-25</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2026-25 · 《民营经济促进法》的三个"第一次"（2026 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：立法意义从三个层面数',
+    cls: 'key',
+    body: '<p>2025 年 5 月 20 日施行《民营经济促进法》。一部法律的意义从三处找：①<b>立法地位</b>（第一部？基础性？）→ A；②<b>哪些方针第一次入法</b> → B、D；③<b>它管什么不管什么</b> → 排除张冠李戴的 C。</p>' },
+  { title: '先立机制：从"政策散见"到"专门立法"',
+    cls: '',
+    body: '<p>此前民营经济规范散见于宪法条款、政策文件、单行法规——没有一部<b>专门、基础性</b>的法律。本法把民营经济"重要基础、生力军"的地位用法律形式固定下来。记忆口诀：<b>一部、两摇、长期</b>。</p>' },
+  { title: '逐项分析 A：第一部基础性法律',
+    cls: 'good',
+    ribbon: {k:1, ok:true},
+    body: '<p>A："是第一部专门关于民营经济法律发展的基础性法律。"填补专门立法空白，民营经济地位<b>法定化</b>——立法意义之本。✅ 选。</p>' },
+  { title: '逐项分析 B："两个毫不动摇"入法',
+    cls: 'good',
+    ribbon: {k:2, ok:true},
+    body: '<p>B："第一次将毫不动摇巩固和发展公有制经济，毫不动摇鼓励、支持和引导非公有制经济写入法律。"基本经济制度从<b>政策承诺</b>上升为<b>法定原则</b>，回应"民营企业地位会不会变"的疑虑。✅ 选。</p>' },
+  { title: '逐项分析 C：外商独资？张冠李戴',
+    cls: 'bad',
+    ribbon: {k:3, ok:false},
+    body: '<p>C："第一次明确外商独资经济的法律地位。"双重错位：①外商投资早有<b>《外商投资法》</b>（2020 年施行，负面清单制度）；②外商独资<b>不属于民营经济范畴</b>（民营经济是内资概念）。句式同构但对象错了。❌ 不选。</p>' },
+  { title: '逐项分析 D：长期方针入法',
+    cls: 'good',
+    ribbon: {k:4, ok:true},
+    body: '<p>D："第一次在法律中规定促进民营经济持续、健康、高质量发展是国家长期坚持的重大方针政策。"关键词"长期坚持"——政策稳定性、连续性<b>法定化</b>，给经营主体吃定心丸。✅ 选。</p>' },
+  { title: '对号入座汇总',
+    cls: '',
+    body: '<p>A ✅ 一部；B ✅ 两摇；C ❌ 《外商投资法》的领域且外资 ≠ 民营；D ✅ 长期。→ 答案 <b>ABD</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>ABD</b>。三个第一次：第一部（A）、两摇入法（B）、长期方针入法（D）；外商独资是别人家的地盘（C 反）。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2026-25 《民营经济促进法》的意义',
+  subtitle: '考点：民营经济促进法 · 两个毫不动摇 · 专门立法的意义 —— 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABD',
+    html: '<b>A</b> 第一部专门关于民营经济发展的基础性法律；<b>B</b> 第一次将"两个毫不动摇"写入法律；<b>D</b> 第一次在法律中规定促进民营经济持续、健康、高质量发展是国家长期坚持的重大方针政策。<br><br><b>干扰项：</b>C"首次明确外商独资经济的法律地位"——双重错位：对象是《外商投资法》，且外资不属于民营经济。<br><br><b>记忆锚点：</b>一部、两摇、长期；同构句式必核对象。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：《民营经济促进法》的"三个第一次"</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——一部法律的"意义"从哪里数</h3>
+<p>《民营经济促进法》自 2025 年 5 月 20 日起施行，是我国<strong>第一部专门关于民营经济发展的基础性法律</strong>。一部立法的意义，通常从三个层面数：</p>
+<ol><li><strong>立法地位</strong>：是不是"第一部"、是不是基础性 → A；</li><li><strong>原则入法</strong>：哪些重大方针<strong>第一次</strong>被写进法律 → B、D；</li><li><strong>与其他法律的关系</strong>：它管什么、不管什么 → 排除张冠李戴的 C。</li></ol>
+<h3>第 1 步：A 对——"第一部基础性法律"是立法意义之本</h3>
+<p>此前民营经济的相关规范散见于宪法条文（"非公有制经济"条款）、政策文件与单行法规，始终没有一部<strong>专门、基础性</strong>的法律。《民营经济促进法》补上这一空白，把民营经济"重要基础""生力军""中国式现代化建设重要力量"的地位以法律形式固定下来——"第一部专门关于民营经济发展的基础性法律"即其头号意义。</p>
+<h3>第 2 步：B 对——"两个毫不动摇"第一次入法</h3>
+<p>"毫不动摇巩固和发展公有制经济，毫不动摇鼓励、支持、引导非公有制经济发展"此前主要作为<strong>方针政策</strong>存在，本法第一次将"两个毫不动摇"<strong>写入法律</strong>，使坚持基本经济制度从政策承诺上升为法定原则——这正面回应了社会上"民营企业地位会不会变"的疑虑。</p>
+<h3>第 3 步：D 对——"长期坚持的重大方针"第一次入法</h3>
+<p>本法第一次在法律中规定<strong>促进民营经济持续、健康、高质量发展是国家长期坚持的重大方针政策</strong>。关键词是"长期坚持"：把政策的稳定性、连续性写进法律，等于给经营主体吃下"定心丸"，也是"意义"层面最实质的一条。</p>
+<h3>第 4 步：C 为什么错——张冠李戴到别人头上</h3>
+<p>C 说"第一次明确外商独资经济的法律地位"。追问：外商独资归谁管？外商投资领域已有<strong>《外商投资法》</strong>（2020 年施行，确立准入前国民待遇加负面清单制度）；而且<strong>外商独资不属于民营经济范畴</strong>——民营经济是内资概念（私营企业、个体工商户、民营混合所有制企业等）。C 的错误是双重错位：法律对象错位（不是这部法）+ 经济范畴错位（不是民营经济）。</p>
+<h3>第 5 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对号处</th></tr></thead><tbody><tr><td>A 第一部专门基础性法律</td><td>✅</td><td>填补专门立法空白</td></tr><tr><td>B "两个毫不动摇"首次入法</td><td>✅</td><td>基本经济制度从政策升为法律</td></tr><tr><td>C 首次明确外商独资法律地位</td><td>❌</td><td>那是《外商投资法》的领域，且外资 ≠ 民营</td></tr><tr><td>D 长期方针首次入法</td><td>✅</td><td>"持续、健康、高质量发展"法定化</td></tr></tbody></table>
+<p>→ 选 <strong>ABD</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：看到"第一次明确……法律地位"与 A、B、D 句式同构就顺手选上。同构句式正是出题人布置的陷阱氛围，必须核对<strong>对象</strong>是否同一部法、同一个范畴。</li><li><strong>漏选 B、D</strong>：只记得"第一部法律"（A），对两个"第一次"记忆不牢。口诀：<strong>一部（A）、两摇（B）、长期（D）</strong>。</li><li><strong>范畴混淆</strong>：民营经济 ≠ 非公有制经济的全部外延，更不包括外商独资——外资另有《外商投资法》体系。</li></ul>
+<blockquote>记忆锚点：《民营经济促进法》三个第一次——<strong>第一部基础性专门法律（A）、两个毫不动摇入法（B）、长期方针入法（D）</strong>；外商独资归《外商投资法》管（C 反）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

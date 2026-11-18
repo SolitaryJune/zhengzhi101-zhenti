@@ -1,8 +1,121 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-01 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-01</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-01 · 静止是运动的衡量尺度</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 推理链：每一步的完整内容（引擎按步数截取显示；s.cls: key=关键/good=正确/bad=排除） */
+var STEPS = [
+  {
+    "cls": "key",
+    "tag": "审题眼",
+    "title": "审题眼：对联里动与静对举",
+    "body": "<p>上联“舟<b>行</b>洲<b>不行</b>”，下联“鸽<b>飞</b>阁<b>不飞</b>”——动的一方（舟、鸽）与静的一方（洲、阁）对举。</p><p>题干已点破原理：<b>运动和静止相互依存</b>，问的是静止在此扮演什么角色。</p>"
+  },
+  {
+    "cls": "key",
+    "tag": "立机制",
+    "title": "立机制：运动绝对、静止相对，互相依存",
+    "body": "<p>运动是物质的根本属性和存在方式，<b>绝对</b>；静止是运动的<b>特殊状态</b>，相对、有条件。</p><p>相互依存：动中有静、静中有动；<b>绝对运动通过相对静止表现出来</b>——要说清“行”，必须有个“不行”的参照系，才能识别、度量“舟行”“鸽飞”。</p>"
+  },
+  {
+    "cls": "good",
+    "tag": "A 入选",
+    "title": "选项 A：运动的衡量尺度",
+    "body": "<p><b>A 对</b>：舟“行”是靠“洲不行”衬托出来的——相对静止提供识别和衡量运动的<b>参照</b>，静止正是运动的衡量尺度。</p>",
+    "ribbon": {"k": 1, "ok": true}
+  },
+  {
+    "cls": "bad",
+    "tag": "B 排除",
+    "title": "选项 B：运动的内在原因",
+    "body": "<p><b>B 错</b>：运动的内在原因与动力是<b>矛盾</b>，不是静止。</p><p>静止不产生运动，只衬托运动——张冠李戴到动力论上去了。</p>",
+    "ribbon": {"k": 2, "ok": false}
+  },
+  {
+    "cls": "bad",
+    "tag": "C 排除",
+    "title": "选项 C：运动的普遍状态",
+    "body": "<p><b>C 错</b>：教材原话是“静止是运动的<b>特殊</b>状态”——把“特殊”偷换成“普遍”即错。</p><p>若静止“普遍”，就与运动的绝对性冲突：运动才是普遍的、无条件的。</p>",
+    "ribbon": {"k": 3, "ok": false}
+  },
+  {
+    "cls": "bad",
+    "tag": "D 排除",
+    "title": "选项 D：运动的存在方式",
+    "body": "<p><b>D 错</b>：“<b>运动</b>是物质的存在方式”——主语是运动不是静止，换成静止即表述错位。</p>",
+    "ribbon": {"k": 4, "ok": false}
+  },
+  {
+    "cls": "key",
+    "tag": "追问",
+    "title": "追问：C 为什么最有迷惑性",
+    "body": "<p>因为背过“静止是运动的特殊状态”，一个字的偷换（特殊→普遍）就掉进去。</p><p>判据：相对静止只是运动中的局部情形（特殊）；说“普遍”就否定了运动的绝对性。</p>"
+  },
+  {
+    "cls": "good",
+    "tag": "结论",
+    "title": "收束：答案 A",
+    "body": "<p>动与静互相依存，静是衡量动的<b>参照/尺度</b>：舟行要靠“洲不行”来衬托。</p><p><b>答案 A。</b>记忆锚点：静止=运动的<b>特殊</b>状态=衡量运动的尺度；运动才是物质的存在方式，动力在矛盾。</p>"
+  }
+];
+
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.ribbon) nPick++;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '排除' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: "舟行洲不行：静止是运动的衡量尺度",
+  subtitle: "考点：运动与静止 · 相互依存 · 选项逐项推演",
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已对号选项',
+  snaps: snaps,
+  result: {"big": "答案 A", "html": "运动绝对、静止相对，两者互相依存：相对静止是<b>运动的衡量尺度</b>（舟行靠“洲不行”衬托）。<br>易错：C 把“静止是运动的<b>特殊</b>状态”偷换成“普遍”；D 混淆主语——“运动”才是物质的存在方式；B 运动的动力是矛盾。"}
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：舟行洲不行——静止是运动的衡量尺度</h2>
+<p>答案：<strong>A（运动的衡量尺度）</strong>。</p>
+<h3>第 0 步：先立机制——运动绝对、静止相对，两者互相依存</h3>
+<p>先把辩证法对运动与静止的定位立起来：运动是物质的根本属性和存在方式，是<strong>绝对的、无条件的</strong>；静止是运动的<strong>特殊状态</strong>，是相对的、有条件的。两者不是并立的两个东西，而是同一物质运动的两种规定：</p>
+<ul><li><strong>动中有静</strong>：总体上在动的过程中，局部、某阶段可以呈现暂时的平衡与稳定；</li><li><strong>静中有动</strong>：所谓"不行的洲"，其实随地球自转、公转一刻不停（"坐地日行八万里"）；</li><li><strong>相互依存</strong>：要说清"行"，必须有一个"不行"的参照——<strong>绝对运动通过相对静止表现出来，相对静止是衡量（识别）运动的尺度</strong>。</li></ul>
+<p>对联的妙处正在这里：上联用"洲不行"衬托"舟行"，下联用"阁不飞"衬托"鸽飞"。没有"不行""不飞"这个相对静止的参照系，"行"与"飞"根本无从说起、更无从度量。</p>
+<h3>第 1 步：题眼翻译</h3>
+<p>题干已把原理挑明——"运动和静止是相互依存的"，问的是静止在其中的角色。参照系、衬托者 = <strong>尺度</strong>。抓住"相互依存"四个字，答案自然落在"用谁去衡量运动"上。</p>
+<h3>第 2 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判定</th><th>说明</th></tr></thead><tbody><tr><td>A 运动的衡量尺度</td><td>✅</td><td>相对静止提供参照，才能识别、度量"舟行""鸽飞"</td></tr><tr><td>B 运动的内在原因</td><td>❌</td><td>运动的内在原因与动力是<strong>矛盾</strong>，不是静止</td></tr><tr><td>C 运动的普遍状态</td><td>❌</td><td>教材原话是"静止是运动的<strong>特殊</strong>状态"，把"特殊"换成"普遍"即错</td></tr><tr><td>D 运动的存在方式</td><td>❌</td><td>"<strong>运动</strong>是物质的存在方式"；主语换成静止，表述即错位</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：背过"静止是运动的特殊状态"，但把"特殊"记成"普遍"——一字之差的偷换题。特殊意味着相对静止只是运动中的局部情形；若"普遍"，就与运动的绝对性冲突了。</li><li><strong>误选 D</strong>：与"运动是物质的存在方式"这句话混淆了主语。</li><li><strong>误选 B</strong>：往动力论上联想。静止不产生运动，运动的动力在于矛盾。</li></ul>
+<blockquote>记忆锚点：舟行要靠"洲不行"来衬托——相对静止是运动的<strong>衡量尺度</strong>；静止=运动的<strong>特殊</strong>状态；运动才是物质的存在方式，运动的动力是<strong>矛盾</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

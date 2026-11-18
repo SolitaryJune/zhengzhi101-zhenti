@@ -1,8 +1,109 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-19 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-19</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2015-19 · 杰出人物为什么改不了历史的基本方向（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261118a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261118a"></script>
+<script>
+/* ================== 题目专属区域（依据 zz-2015-19 题干与答案 BCD 编写） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 一行可加宽的格子：格子放框架部位，格下放它管什么 */
+function wingRow(classes){
+  var names = ['必然翼', '偶然翼', '落地条件', '踩塌翼'];
+  var jobs  = ['条件制约', '智慧性格', '顺应群众', '改基本方向'];
+  var row = AW.el('div', 'aw-cells');
+  names.forEach(function(name, i){
+    var col = AW.el('div', 'aw-col');
+    col.style.width = '96px';
+    var box = AW.el('div', 'aw-box' + (classes && classes[i] ? ' ' + classes[i] : ''), name);
+    box.style.width = '96px';
+    col.appendChild(box);
+    col.appendChild(AW.el('div', 'aw-idx', jobs[i]));
+    row.appendChild(col);
+  });
+  return row;
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：题眼是"必然性和偶然性的辩证统一"',
+    body: '<p>题干把方法直接递到手上：马克思主义<b>从必然性和偶然性的辩证统一中</b>理解杰出人物的历史作用。那就不背零散结论，先把这个"双翼框架"立起来，再让四个选项对号入座。</p>' },
+  { tag: '机制·双翼', cls: 'key', title: '机制：必然翼管底线，偶然翼管面貌，外加一条落地条件',
+    body: '<p><b>必然翼</b>：社会基本矛盾运动决定历史总趋势——时势造英雄，人物作用的性质与大小受<b>历史条件制约</b>；<b>偶然翼</b>：进程的具体面貌带个人色彩——<b>智慧、性格</b>使进程加速或延缓；<b>落地条件</b>：人民群众是历史的创造者，作用要发挥必须<b>顺应群众意愿</b>。框架上桌：</p>' +
+      wingRow(['dim', 'dim', 'dim', 'dim']) +
+      '<p>前三格是框架的三个部位，第四格等着踩塌框架的选项。</p>' },
+  { tag: 'B', cls: 'good', k: 2, pick: true, title: 'B 历史作用受到一定历史条件的制约 → 必然翼',
+    body: '<p>时势造英雄，英雄离不开时势：作用能有多大、往哪个方向使，都由历史条件给出边界——必然翼的标准表述。<b>入选</b> ✅。</p>' },
+  { tag: 'C', cls: 'good', k: 3, pick: true, title: 'C 作用的发挥与顺应人民群众的意愿密不可分 → 落地条件',
+    body: '<p>杰出人物的主张只有符合群众意愿与利益，才能动员群众、组织群众，变成改造历史的现实力量——杰出之所以"杰出"，在于<b>顺应并代表群众</b>。<b>入选</b> ✅。</p>' },
+  { tag: 'D', cls: 'good', k: 4, pick: true, title: 'D 因智慧、性格因素对社会进程发生影响 → 偶然翼',
+    body: '<p>个人特质给历史进程打上个人印记，使进程<b>加速或延缓</b>、呈现这样或那样的特点——偶然翼的标准表述。<b>入选</b> ✅。</p>' },
+  { tag: 'A', cls: 'bad', k: 1, pick: false, title: 'A 能修改历史发展的基本方向 → 踩塌必然翼，必错',
+    body: '<p>基本方向由<b>社会基本矛盾运动的规律</b>决定，任何个人都不能修改。把"影响进程"夸大成"决定方向"，个人凌驾于历史规律之上——历史唯心主义。<b>不选</b> ❌。</p>' },
+  { tag: '辨析', cls: 'key', title: '预判追问：承认智慧性格起影响，算英雄史观吗',
+    body: '<p>不算。英雄史观错在把个人当<b>决定力量</b>；唯物史观承认偶然因素<b>影响</b>进程面貌（快些慢些、带个人特点），但否认它<b>决定</b>基本方向——"影响"与"决定"两回事，这正是必然性与偶然性的辩证统一。反而不敢承认偶然因素，历史就成了无人格的抽象过程。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：制约 + 群众 + 影响，方向不可改',
+    body: '<p>必然翼（B）＋落地条件（C）＋偶然翼（D），排除踩塌必然翼的 A——<b>答案 BCD。</b></p>' },
+];
+
+var nJudge = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nJudge++;
+  var sn = {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag,
+    log: s.title,
+    count: nJudge,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, (x.tag ? x.tag + ' · ' : '') + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: !!s.pick };
+  return sn;
+});
+
+AW.init({
+  title: 'zz-2015-19 · 杰出人物的历史作用',
+  subtitle: '2015 年第 19 题（多选）· 考点：杰出人物的历史作用 · 方法：先立"必然翼＋偶然翼＋落地条件"框架，再对号入座',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先立双翼框架，再让四个选项各就各位。',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '记忆锚点：<b>条件制约（B）＋顺应群众（C）＋智慧性格起影响（D）</b>；"修改/改变/决定历史发展的基本方向"——一律不选（<b>A</b>）。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：杰出人物为什么改不了历史的基本方向</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——必然性与偶然性的"双翼"框架</h3>
+<p>马克思评价杰出人物的历史作用，用的是一个分工明确的双重框架：<strong>必然性一翼</strong>管"底线"，历史发展有由社会基本矛盾运动决定的总趋势，<strong>时势造英雄</strong>——任何人物都不能改变历史发展的基本方向，其作用的性质与大小受一定历史条件制约；<strong>偶然性一翼</strong>管"面貌"，历史进程的具体样子会带上个人色彩，杰出人物的<strong>智慧、性格、品质</strong>等偶然因素会使进程加速或延缓、呈现这样或那样的特点。两翼之外还有一条<strong>落地条件</strong>：人民群众是历史的创造者，杰出人物的作用要真正发挥出来，必须顺应人民群众的意愿、依靠并组织群众。</p>
+<p>三个命题对应三个选项——B 是必然翼，D 是偶然翼，C 是落地条件；而 A 恰好是把两翼框架踩塌的那句话。</p>
+<h3>第 1 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>框架位置</th><th>判定</th></tr></thead><tbody><tr><td>B 历史作用受到一定历史条件的制约</td><td>必然翼：时势造英雄，英雄离不开时势</td><td>✅</td></tr><tr><td>C 作用的形成和发挥与顺应人民群众的意愿密不可分</td><td>落地条件：脱离群众的"杰出"寸步难行</td><td>✅</td></tr><tr><td>D 因智慧、性格因素对社会进程发生影响</td><td>偶然翼：个人特质给进程打上个人印记</td><td>✅</td></tr><tr><td>A 能修改历史发展的基本方向</td><td>踩塌必然翼：个人凌驾于历史规律之上</td><td>❌</td></tr></tbody></table>
+<h3>第 2 步：预判两个"为什么"</h3>
+<p><strong>为什么承认"智慧、性格起影响"不算英雄史观？</strong> 英雄史观错在把个人当成历史的<strong>决定力量</strong>；唯物史观承认偶然因素<strong>影响</strong>进程的具体面貌（快一点、慢一点、带点个人特点），但否认它<strong>决定</strong>进程的基本方向。"影响"与"决定"是两回事——这正是偶然性与必然性辩证统一的含义。</p>
+<p><strong>为什么 C 是必要条件？</strong> 杰出人物的主张只有符合群众的意愿与利益，才能动员群众、组织群众，变成改造历史的现实力量。杰出之所以"杰出"，不在个人天赋孤立地发光，而在他顺应并代表了群众的意愿——这是群众史观的硬要求。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：把"杰出人物<strong>影响</strong>历史进程"夸大成"<strong>决定/修改</strong>历史的基本方向"。凡见"修改、改变、决定历史发展的基本方向"出自个人之手，一律排除——这是夸大个人作用的历史唯心主义。</li><li><strong>漏选 D</strong>：以为承认智慧、性格的作用就是倒向英雄史观。恰好相反：不敢承认偶然因素的影响，才把历史看成了无人格的抽象过程；关键是别把"影响"夸大成"决定"。</li><li><strong>漏选 C</strong>：只盯着"必然/偶然"两个范畴，漏掉群众史观维度——而"顺应人民群众意愿"正是本题材料框架里把个人作用"落地"的一翼。</li></ul>
+<blockquote>记忆锚点：<strong>条件制约（B）＋顺应群众（C）＋智慧性格起影响（D）</strong>；"修改/改变/决定历史发展的基本方向"——一律不选（A）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

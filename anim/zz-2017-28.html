@@ -1,8 +1,113 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-28 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-28</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2017-28 评价孙中山：把功绩放回时间轴</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261117a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261117a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+function tlTable(rows, headBg){
+  return '<table style="width:100%;border-collapse:collapse;font-size:13px;margin:6px 0">' +
+    '<tr><th style="border:1px solid #cbd5e1;padding:4px 8px;background:' + (headBg || '#f1f5f9') + ';width:18%">时间</th>' +
+    '<th style="border:1px solid #cbd5e1;padding:4px 8px;background:' + (headBg || '#f1f5f9') + '">事件</th>' +
+    '<th style="border:1px solid #cbd5e1;padding:4px 8px;background:' + (headBg || '#f1f5f9') + ';width:20%">对应选项</th></tr>' +
+    rows.map(function(r){
+      return '<tr><td style="border:1px solid #cbd5e1;padding:4px 8px;font-weight:700">' + r[0] +
+             '</td><td style="border:1px solid #cbd5e1;padding:4px 8px">' + r[1] +
+             '</td><td style="border:1px solid #cbd5e1;padding:4px 8px;font-weight:700;color:' + r[3] + '">' + r[2] + '</td></tr>';
+    }).join('') + '</table>';
+}
+
+var STEPS = [
+  { title: '审题眼：孙中山“伟大表现在”哪里',
+    cls: 'key',
+    body: '<p>人物评价题：问的是孙中山本人的功绩与表现。钥匙 = <b>时间轴 + 身份对表</b>——每条功绩核对两件事：<b>是不是他做的</b>、发生在他<b>在世时</b>还是身后。</p>' },
+  { title: '先立机制：立起他生命的坐标轴',
+    cls: 'key',
+    body: tlTable([
+      ['1911.10', '领导辛亥革命，推翻帝制', 'D', '#16a34a'],
+      ['1912–1924', '维护共和：反袁、护国、护法', 'A', '#16a34a'],
+      ['1924.1', '国民党一大：新三民主义 + 三大政策', 'C', '#16a34a'],
+      ['1925.3.12', '在北京病逝', '——', '#64748b'],
+      ['1926.7', '大规模北伐战争出师', 'B？', '#d97706'],
+    ]) + '<p>注意轴上那格灰线：<b>1925.3 逝世</b>——身后的任何事件都记不到他账上。</p>' },
+  { title: 'D：领导了辛亥革命——轴上第一功',
+    cls: 'good',
+    body: '<p><b>1911.10</b> 辛亥革命推翻清王朝、结束两千多年君主专制制度，缔造中华民国——领导核心正是孙中山，最彪炳史册的功绩。<b>D 对。</b></p>' },
+  { title: 'A：坚定维护共和制度和国家完整统一——后半生主线',
+    cls: 'good',
+    body: '<p><b>1912–1924</b>：袁世凯窃国、复辟帝制、军阀割据，他一次次奋起——反袁“二次革命”、护国运动、两度护法，屡败屡战。“维护”是他的后半生主线。<b>A 对。</b></p>' },
+  { title: 'C：新三民主义 + 三大政策——晚年最大亮点',
+    cls: 'good',
+    body: '<p><b>1924.1</b> 国民党一大：旧三民主义重新解释为新三民主义，确立<b>联俄、联共、扶助农工</b>三大政策——第一次国共合作的政治基础，他生前最后的高光。<b>C 对。</b></p>' },
+  { title: 'B：发动了北伐战争？——核时间，落在轴外',
+    cls: 'bad',
+    body: tlTable([
+      ['北伐出师', '1926.7，广东国民政府誓师', '发动者不是他', '#ef4444'],
+      ['孙中山逝世', '1925.3.12', '已逝世近一年半', '#ef4444'],
+    ], '#fef2f2') + '<p>两个“像”：心愿像（毕生北伐设想、1922 年因陈炯明叛变中断的部署）+ 结果像（军阀确实被推翻）——但“发动”是动作，动作看归属。把身后成就记到逝者账上，正是干扰手法。<b>B 错。</b></p>' },
+  { title: '结论：ACD',
+    cls: 'good',
+    body: '<p>时间轴合拢：<b>1911 辛亥（D）+ 毕生维护共和统一（A）+ 1924 一大（C）</b>都在轴上；北伐 1926 年出师、他 1925 年已逝（B 落在轴外）。答案选 <b>ACD</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var ribbonMap = { 2: 4, 3: 1, 4: 3, 5: 2 }; // 步序→选项序：D→4、A→1、C→3、B→2
+  var optLetter = ribbonMap[i] ? 'ABCD'[ribbonMap[i] - 1] : '';
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: i === 0 ? '审题' : (i === 1 ? '机制' : (i === 5 ? '排除 B' : (i === STEPS.length - 1 ? '结论' : '选项 ' + optLetter))),
+    log: s.title,
+    count: i,
+    ribbon: ribbonMap[i] ? { k: ribbonMap[i], ok: s.cls !== 'bad' } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2017·28】评价孙中山：每条功绩放回时间轴核对',
+  subtitle: '考点：孙中山与辛亥革命 · 人物评价方法 · 多选题',
+  counterLabel: '进度',
+  ribbonTitle: '选项判定（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先立孙中山的生命坐标轴，再逐条把功绩放回轴上核对“在世与否”。',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '记忆锚点：孙中山功绩坐标 = <b>1911 辛亥革命（D）+ 毕生维护共和与统一（A）+ 1924 一大新三民主义·三大政策（C）</b>；北伐战争 1926 年发动、他 1925 年已逝（B 错）——评价人物先立时间轴，<b>心愿不等于事实</b>。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：评价孙中山——把每条功绩放回时间轴核对“在世与否”</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——人物评价题的钥匙：时间轴 + 身份对表</h3>
+<p>评价历史人物“伟大表现在”哪里，不能凭印象罗列功绩，要把每条功绩放回<strong>他生命的坐标</strong>里核对两件事：这件事<strong>是不是他做的</strong>（身份对得上吗）？发生在他<strong>在世时</strong>还是身后？先立孙中山的时间轴主线：</p>
+<table><thead><tr><th>时间</th><th>事件</th><th>与选项的关系</th></tr></thead><tbody><tr><td>1911.10</td><td>领导辛亥革命，推翻帝制、缔造中华民国</td><td>D ✅</td></tr><tr><td>1912–1924</td><td>维护共和：反袁“二次革命”、护国运动、两度护法</td><td>A ✅</td></tr><tr><td>1924.1</td><td>国民党一大：重新解释三民主义（新三民主义）+ 联俄、联共、扶助农工三大政策</td><td>C ✅</td></tr><tr><td>1925.3.12</td><td>在北京病逝</td><td>——</td></tr><tr><td>1926.7</td><td>以推翻北洋军阀统治为目标的大规模北伐战争出师</td><td>B ❌（在身后）</td></tr></tbody></table>
+<p>轴一立起来，四个选项各归各位：A、C、D 都能在轴上找到落点；唯独 B 落在轴外——北伐战争 1926 年 7 月出师时，孙中山已逝世近一年半，“发动者”这个身份对不上号。</p>
+<h3>第 1 步：预判“为什么”——B 的迷惑性来自两个“像”</h3>
+<p>B 是本题主陷阱，它“像”对，全在两处：<strong>其一，心愿像</strong>——北伐确是孙中山毕生志向，他多次提出北伐设想，1922 年还组织过一次因陈炯明叛变而中断的北伐部署；<strong>其二，结果像</strong>——北洋军阀后来确实被这场战争推翻，成就在史书里明摆着。干扰项的制造手法正是这两步偷换：<strong>把身后的历史成就提前记到逝者账上，把“心愿”偷换成“发动的事实”</strong>。对策只有一条：核时间——1926.7 出师对 1925.3 逝世，“发动”这个动作的归属是广东国民政府，不是孙中山。题目问“发动了”，就查动作的归属人，不查“目标一致”。</p>
+<h3>第 2 步：四个选项对号入座</h3>
+<table><thead><tr><th>选项</th><th>时间轴落点</th><th>判定</th></tr></thead><tbody><tr><td>A 坚定维护民主共和国制度和国家完整统一</td><td>1912–1924：反袁、护国、护法，屡败屡战</td><td>✅</td></tr><tr><td>B 发动了以推翻北洋军阀统治为目标的北伐战争</td><td>1926.7 出师，他 1925.3 已逝</td><td>❌</td></tr><tr><td>C 重新解释三民主义并提出三大政策</td><td>1924.1 国民党一大（新三民主义）</td><td>✅</td></tr><tr><td>D 领导了辛亥革命</td><td>1911.10，推翻两千余年君主专制</td><td>✅</td></tr></tbody></table>
+<h3>易错点：每个漏项/误项对应哪种误解</h3>
+<ul><li><strong>误选 B</strong>：把“目标与心愿”当成“发动的事实”。核时间是唯一解：出师 1926.7、逝世 1925.3——别把身后事记到逝者账上。</li><li><strong>漏选 A</strong>：把二次革命、护国、护法的屡败屡战当“失败者的挣扎”而忽略——恰恰是这些斗争构成“坚定维护民主共和制度和国家完整统一”的证明，是他后半生的主线。</li><li><strong>漏选 C</strong>：三大政策记不准位置。它与新三民主义同出于 1924 年国民党一大，是第一次国共合作的政治基础，也是孙中山晚年“愈挫愈奋”的最大亮点。</li><li><strong>漏选 D</strong>：只想到“推翻清王朝”忘了主体归属——辛亥革命的领导核心正是孙中山，这是他最彪炳史册的功绩。</li></ul>
+<blockquote>记忆锚点：孙中山功绩坐标 = <strong>1911 辛亥革命（D）+ 毕生维护共和与统一（A）+ 1924 一大新三民主义·三大政策（C）</strong>；北伐战争 1926 年发动、他 1925 年已逝（B 错）——评价人物先立时间轴，<strong>心愿不等于事实</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

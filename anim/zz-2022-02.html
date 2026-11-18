@@ -1,8 +1,101 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-02 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-02</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2022-02 「人不负青山」——双赢背后的生产力与自然观</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261117a">
+</head>
+<body>
+<!-- 概念/推理链卡片动画（anim_math_concept 风格，政治站无 KaTeX 版），只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261117a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：双赢必须两端同时成立',
+    body: '<p>题干事实：从中西部 22 个省份选聘 <b>110.2 万名生态护林员</b>，走出生态补偿脱贫新路子——<b>生态保护</b>（护青山）与<b>脱贫增收</b>（得实惠）同时实现。要找的哲理必须<b>同时容纳两端</b>：自然能被合理利用（发展端）＋利用有前提（规律端）。哪个选项砍掉一端，哪个就错。</p>',
+    log: '找能同时容纳两端的哲理' },
+  { tag: '模型', cls: 'key', title: '先立模型：生产力里本来就有自然要素',
+    body: '<p>生产力＝<b>劳动者＋劳动资料＋劳动对象</b>，自然界（生态环境）是<b>劳动资料的来源与劳动对象的载体</b>——本身就进入生产过程。所以「绿水青山就是金山银山」不是修辞，而是生产要素层面的命题：<b>保护生态环境就是保护生产力，改善生态环境就是发展生产力</b>。</p>',
+    log: '自然要素属于生产力范畴' },
+  { tag: '机制', cls: '', title: '回到题干：护林员如何体现「不负」与「回报」',
+    body: '<p>护林员拿工资、生态变资产＝自然要素被<b>合理开发</b>而促进社会发展：「人不负青山」（尊重规律去作为）→「青山定不负人」（自然以发展回报人）。注意「青山定不负人」是<b>拟人化的文学表达</b>，哲理落点在规律与回报的因果，不是自然有意识。</p>',
+    log: '双赢＝规律前提下的能动利用' },
+  { tag: 'A 项', cls: 'bad', ribbon: { k: 1, ok: false },
+    title: '选项 A：人与自然同一，自然自发满足人',
+    body: '<p>「人与自然是<b>同一</b>的」抹平了人与自然的界线；「自然能够<b>自发</b>满足人的要求」更错——自然不会自动满足人，满足必须<b>经过实践</b>这个中介。「自发」二字直接判死。<b>A 错误</b>。</p>',
+    log: 'A 错在「自发」，排除' },
+  { tag: 'B 项', cls: 'good', ribbon: { k: 2, ok: true },
+    title: '选项 B：生产力包括自然要素，合理开发促进社会发展',
+    body: '<p>生产力包括自然要素，因此<b>合理开发</b>自然（护林员拿工资、生态变资产）能够促进社会发展——双赢的哲理正在这里：发展端（可利用）与规律端（限定「合理」）<b>两端都保住了</b>。<b>B 正确</b>。</p>',
+    log: 'B 两端都保住，入选' },
+  { tag: 'C 项', cls: 'bad', ribbon: { k: 3, ok: false },
+    title: '选项 C：人的发展只能适应自然的变化',
+    body: '<p>「人是自然的一部分」半句没错，但「<b>只能适应</b>」把关系砍成单向——<b>宿命论/环境决定论</b>，否认人的能动性。题干事实是护林员主动选聘、主动作为、生态与收入双向成就，不是被动适应。<b>C 错误</b>。</p>',
+    log: 'C 砍掉能动一端，排除' },
+  { tag: 'D 项', cls: 'bad', ribbon: { k: 4, ok: false },
+    title: '选项 D：人能动改造自然，自然能动补偿人的劳动',
+    body: '<p>前半句对，后半句错：「能动」是人独有的属性，自然是<b>客体</b>，谈不上能动——把文学语言直译成自然有意识，<b>拟人化错误</b>。<b>D 错误</b>。</p>',
+    log: 'D 拟人化错误，排除' },
+  { tag: '结论', cls: 'good', title: '结论：答案 B',
+    body: '<p>双赢＝尊重规律前提下<b>能动</b>利用自然＋自然要素本来就<b>属于生产力</b>。判词三连：A 错在「自发」、C 错在「只能适应」、D 错在「自然能动」。</p>',
+    log: '锁定 B：生产力包括自然要素' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '「人不负青山，青山定不负人」——双赢的哲理',
+  subtitle: '2022 年第 2 题（单选）· 考点：人与自然的关系 / 生产力的构成 · 方法：两端同时成立判据',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先立生产力模型，再逐项看谁砍掉了双赢的一端。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '记忆锚点：双赢＝尊重规律前提下<b>能动</b>利用自然＋自然要素本来就<b>属于生产力</b>（绿水青山可转化为金山银山）；判词三连——A 错在「<b>自发</b>」、C 错在「<b>只能适应</b>」、D 错在「自然<b>能动</b>」。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解："人不负青山，青山定不负人"——双赢背后的生产力与自然观</h2>
+<p>答案：<strong>B（生产力包括自然要素，合理开发自然能够促进社会发展）</strong>。</p>
+<h3>第 0 步：先立模型——"双赢"必须两端同时成立</h3>
+<p>题干事实：22 个省份选聘 110.2 万名生态护林员，<strong>生态保护</strong>（护青山）与<strong>脱贫增收</strong>（得实惠）同时实现。要找的"深刻哲理"必须<strong>同时容纳两端</strong>：</p>
+<table><thead><tr><th>一端</th><th>需要的哲理</th></tr></thead><tbody><tr><td>自然能被合理利用、换来发展</td><td>自然要素属于生产力范畴，绿水青山可转化为金山银山</td></tr><tr><td>利用不是无条件的</td><td>人靠自然界生活，利用必须尊重自然规律</td></tr></tbody></table>
+<p>任何选项只要<strong>砍掉一端</strong>（否认能动利用，或否认自然价值），立即排除。</p>
+<h3>第 1 步：机制——生产力里本来就有自然要素</h3>
+<p>生产力＝劳动者＋劳动资料＋劳动对象。<strong>自然界是劳动资料的来源与劳动对象的载体</strong>——土地、森林、水源都直接进入生产过程。所以"绿水青山就是金山银山"不是修辞，而是生产要素层面的命题：<strong>保护生态环境就是保护生产力，改善生态环境就是发展生产力</strong>。护林员拿工资、生态变资产，正是自然要素被"合理开发"而促进社会发展的实例——"人不负青山"（尊重规律去作为），"青山定不负人"（自然以发展回报人）。</p>
+<h3>第 2 步：四个选项对号入座</h3>
+<table><thead><tr><th>选项</th><th>对错</th><th>病灶</th></tr></thead><tbody><tr><td>A 人与自然是同一的，自然能够<strong>自发</strong>满足人的要求</td><td>❌</td><td>抹平人与自然界线＋"自发"二字——自然不会自动满足人，满足必须<strong>经过实践</strong>这个中介</td></tr><tr><td>B 生产力包括自然要素，合理开发自然能够促进社会发展</td><td>✅</td><td>两端都保住：自然可被利用（发展端）＋限定"合理"（规律端）</td></tr><tr><td>C 人的发展<strong>只能适应</strong>自然的变化</td><td>❌</td><td>前半句对（人是自然的一部分），后半句"只能适应"是<strong>宿命论</strong>，否认能动性</td></tr><tr><td>D 人能动改造自然，自然<strong>能动</strong>补偿人的劳动</td><td>❌</td><td>"能动"是人独有的属性——把"青山定不负人"的文学语言直译成自然有意识，<strong>拟人化</strong>错误</td></tr></tbody></table>
+<h3>为什么 C 是最强干扰（多说一句）</h3>
+<p>C 的前半句"人是自然的一部分"是对的——这正是"人不负青山"的前提（人靠自然界生活）。但结论"人的发展<strong>只能适应</strong>自然"把关系砍成单向：题干事实是护林员<strong>主动</strong>选聘、<strong>主动</strong>作为、生态与收入<strong>双向</strong>成就。哲学判据：人与自然是<strong>在实践中双向对象化</strong>的关系——人改造自然（能动），同时受自然规律制约（受动）；"只能适应"砍掉能动一端，退回<strong>环境决定论</strong>。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：把"人与自然不可分"夸大成"同一"，并以为自然<strong>自动</strong>供养人——不理解满足必须经过实践中介。</li><li><strong>误选 C</strong>：只见"受动"不见"能动"——把尊重规律曲解为俯首听命，与"双赢"的事实相反。</li><li><strong>误选 D</strong>：被题干文学修辞带偏——"青山定不负人"是<strong>拟人化表达</strong>，哲理落点在规律与回报的因果，不是自然有意识、会"能动"。</li></ul>
+<blockquote>记忆锚点：双赢＝尊重规律前提下<strong>能动</strong>利用自然＋自然要素本属生产力；判词三连——A 错在"<strong>自发</strong>"、C 错在"<strong>只能适应</strong>"、D 错在"自然<strong>能动</strong>"。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

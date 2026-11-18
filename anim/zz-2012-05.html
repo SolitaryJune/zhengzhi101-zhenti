@@ -1,8 +1,128 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-05 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-05</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-05 · 走马看花与下马看花：深入实际才能找出规律</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* 过程类动画：两种调查方法的对比推演——走马看花=面上概览（材料浅散）、
+   下马看花=点上深入（材料全而细）→ 实事求是找出规律；再逐项推演 A–D。 */
+var OPTS = [
+  { L:'A', k:1, ok:false, title:'选项 A：解决实际问题必须要有先进理论的指导',
+    body:'正确命题但<b>答非所问</b>：题干讲调查方法（认识从实际中来），未涉及理论指导这一环——「先进理论」走的是理论→实际方向，与「下马看花」的实际→认识方向相反，<b>排除</b>。' },
+  { L:'B', k:2, ok:false, title:'选项 B：运用多种综合方法分析调查研究的材料',
+    body: '被「一是……一是……」的并列句式引向「方法多样」；但「<b>还必须</b>」三字点明重心在<b>深入</b>，不在方法的花样多，<b>排除</b>。' },
+  { L:'C', k:3, ok:false, title:'选项 C：马克思主义理论必须适合中国革命的具体实际',
+    body:'方向反了：它讲「理论」一侧如何贴合实际（理论联系实际），「下马看花」强调的是<b>认识从实际出发</b>；且把具体调查方法泛化成一般命题——对的命题，错的对位，<b>排除</b>。' },
+  { L:'D', k:4, ok:true, title:'选项 D：只有全面深入地了解中国的实际，才能找出规律',
+    body:'下马（深入）＋过细（分析）→ 全面深入的材料 → <b>找出规律</b>；与题眼「实际意义」的落点严丝合缝，<b>入选</b>。' }
+];
+function flowers(mode){
+  var h = '<div class="aw-cells">';
+  for (var i = 0; i < 6; i++){
+    var zouma = mode === 'zouma' || mode === 'xiama' || mode === 'chain';
+    var xiama = (mode === 'xiama' || mode === 'chain') && i === 2;
+    var cls = xiama ? 'hit' : (zouma ? 'dim' : '');
+    var top = xiama ? '下马·过细' : (zouma ? '走马·略过' : '');
+    h += '<div class="aw-col"><div class="aw-ptr">' + top + '</div>' +
+         '<div class="aw-box ' + cls + '">' + (xiama ? '析' : '花') + '</div>' +
+         '<div class="aw-idx">花' + (i + 1) + '</div></div>';
+  }
+  return h + '</div>';
+}
+function chain(){
+  var steps = [['下马', '深入实际'], ['材料', '全面而细致'], ['分析', '过细研究'], ['规律', '实事求是']];
+  var h = '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:10px">';
+  for (var i = 0; i < 4; i++){
+    h += '<div style="padding:8px 14px;border:1.5px solid var(--blue);background:#eff6ff;border-radius:10px;text-align:center">' +
+         '<b style="color:#1d4ed8">' + steps[i][0] + '</b><br><span style="font-size:12px;color:#475569">' + steps[i][1] + '</span></div>';
+    if (i < 3) h += '<span style="color:#94a3b8;font-weight:700">→</span>';
+  }
+  return h + '</div>';
+}
+function card(title, cls, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4>' + title + '</h4>' + body + '</div>';
+}
+function stage(mode, opt){
+  var h = '<div style="font-size:12.5px;color:#64748b;margin-bottom:4px">调查方法推演：六朵花摆在面前，两种看法拿到的东西不同</div>' + flowers(mode);
+  if (mode === 'intro'){
+    h += '<div style="margin-top:12px">' + card('审题眼：抓住「还必须」与「实际意义」', 'key',
+      '<p>毛泽东谈调查研究有两个比喻：走马看花、下马看花。题干的关键句是「走马看花，<b>不深入</b>，<b>还必须</b>用第二种方法」——重心被「还必须」钉在<b>深入</b>上；题眼则问「下马看花的<b>实际意义</b>」。</p>') + '</div>';
+  } else if (mode === 'mech'){
+    h += '<div style="margin-top:12px">' + card('立机制：两种方法各管一段', 'key',
+      '<p><b>走马看花</b>：骑马掠过，面上概览——拿到全局大略，但材料粗、散、浅；<b>下马看花</b>：下马驻足，过细分析一朵——拿到一个点上<b>全面而细致</b>的材料。两者是「面上概览＋点上深入」的配合，光走马不深入不行。</p>') + '</div>';
+  } else if (mode === 'zouma'){
+    h += '<div style="margin-top:12px">' + card('推演①：走马看花——不深入', 'bad',
+      '<p>六朵花从眼前掠过，每朵都只「略」了一眼：只有面上的概览，材料浅、散，够不着规律。</p>') + '</div>';
+  } else if (mode === 'xiama'){
+    h += '<div style="margin-top:12px">' + card('推演②：下马看花——过细分析一朵', 'good',
+      '<p>下马驻足，对一朵花作<b>过细分析</b>：深入中国社会的<b>具体实际</b>，占有全面而细致的材料——深入实际这一步，走完了。</p>') + '</div>';
+  } else if (mode === 'chain'){
+    h += '<div style="margin-top:12px">' + card('认识路线：深入实际 → 找出规律', 'key',
+      '<p>调查研究是「实事」这道前半工序，目的是从实际中<b>找出规律</b>（「是」即规律）——这正是<b>实事求是</b>思想路线在调查方法上的运用。「实际意义」的落点：只有全面深入地了解中国的实际，才能找出规律。</p>') + chain() + '</div>';
+  } else if (mode === 'opt'){
+    h += '<div style="margin-top:12px">' + card(opt.title, opt.ok ? 'good' : 'bad', '<p>' + opt.body + '</p>') + '</div>';
+  } else if (mode === 'end'){
+    h += '<div style="margin-top:12px">' + card('结论：深入实际，方能找出规律', 'good',
+      '<p>A/B/C 都是「对的话」或「错的方向」，只有 D 完整走完「深入实际 → 找出规律」的认识路线。</p>') + '</div>';
+  }
+  return h;
+}
+var snaps = [
+  { cls:'step', tag:'审题', log:'审题眼：「还必须」点明重心在深入，题眼问「实际意义」', count:0,
+    html: stage('intro') },
+  { cls:'shift', tag:'立机制', log:'立机制：走马=面上概览，下马=点上深入', count:0,
+    html: stage('mech') },
+  { cls:'step', tag:'推演①', log:'走马看花：面上扫过，材料浅散够不着规律', count:0,
+    html: stage('zouma') },
+  { cls:'ok', tag:'推演②', log:'下马看花：驻足过细分析一朵，占有全面细致的材料', count:0,
+    html: stage('xiama') },
+  { cls:'shift', tag:'认识路线', log:'深入实际 → 全面细致材料 → 过细分析 → 找出规律（实事求是）', count:0,
+    html: stage('chain') }
+];
+for (var j = 0; j < 4; j++){
+  var o = OPTS[j];
+  snaps.push({ cls: o.ok ? 'ok' : 'miss', tag:'判选项', log: o.title + '——' + (o.ok ? '入选' : '排除'),
+    count: o.k, ribbon: { k: o.k, ok: o.ok }, html: stage('opt', o) });
+}
+snaps.push({ cls:'done', tag:'结论', log:'答案 D：只有全面深入地了解中国的实际，才能找出规律', count:4, done:true,
+  html: stage('end') });
+
+AW.init({
+  title: 'zz-2012-05 · 走马看花 vs 下马看花：深入实际找出规律',
+  subtitle: '2012 年第 5 题（单选）· 考点：调查研究与实事求是 · 两法对比推演',
+  counterLabel: '已判选项',
+  ribbonTitle: '选项判定（✓ 正确 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立两法对比机制，再推演「走马→下马→找出规律」的认识路线，最后逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 D',
+    html: '记忆锚点：走马看花＝面上概览（不深入）；下马看花＝点上深入、过细分析——深入实际、占有全面而细致的材料，方能实事求是<b>找出规律</b>。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「下马看花」——只有深入实际，才能找出规律</h2>
+<p>答案：<strong>D（只有全面深入地了解中国的实际，才能找出规律）</strong>。</p>
+<h3>第 0 步：先立机制——调查研究两种方法各管一段</h3>
+<p>毛泽东把调查研究比作两种看花法。先弄清这两个比喻各自解决什么问题：</p>
+<table><thead><tr><th>方法</th><th>动作</th><th>能拿到什么</th><th>缺什么</th></tr></thead><tbody><tr><td>走马看花</td><td>骑马掠过花田，面上概览</td><td>全局的大略面貌</td><td>不深入，材料粗、散、浅</td></tr><tr><td>下马看花</td><td>下马驻足，过细地分析一朵</td><td>一个点上<strong>全面而细致</strong>的材料</td><td>（单靠它也不够面）</td></tr></tbody></table>
+<p>两者是<strong>面上概览 + 点上深入</strong>的配合关系。题干的关键句是「走马看花，不深入，<strong>还必须</strong>用第二种方法」——「还必须」三个字把重心钉在<strong>深入</strong>上：光有面上的概览不行，必须下马，深入到具体实际中去。</p>
+<h3>第 1 步：「实际意义」落在哪一层</h3>
+<p>题眼是「下马看花的<strong>实际意义</strong>」。把它拆开：下马 → 深入中国社会的<strong>具体实际</strong>；过细看花 → 对具体情况作<strong>过细的分析</strong>。这样得来的全面深入的材料，才能支撑认识的下一步——<strong>从实际中找出规律</strong>。这正是<strong>实事求是</strong>思想路线在调查方法上的运用：实事求是 = 从实际出发 + 找出规律（「是」即规律），调查研究是「实事」这道前半工序。所以「下马看花」的意义不在方法的花样，而在<strong>深入实际以认识规律</strong>这条认识路线上。</p>
+<p><strong>预判追问：为什么落脚点是「规律」而不是「材料」？</strong> 调查是手段，认识规律、指导革命才是目的——毛泽东谈调查研究从来不是为了「了解情况」了事，而是为了给中国革命找出「什么样能成、什么样不能成」的规律性认识。选项 D 恰好完整地走完「深入实际 → 找出规律」全程，其他选项都停在中途。</p>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 解决实际问题必须要有先进理论的指导</td><td>❌</td><td>正确命题但<strong>答非所问</strong>：题干讲调查方法（认识从实际中来），未涉及理论指导这一环</td></tr><tr><td>B 运用多种综合方法分析调查研究的材料</td><td>❌</td><td>被「一是……一是……」的并列句式引向「方法多样」，但「还必须」点明的重心是<strong>深入</strong>，不是方法的花样多</td></tr><tr><td>C 马克思主义理论必须适合中国革命的具体实际</td><td>❌</td><td>方向反了：它讲「理论」一侧如何贴合实际（理论联系实际），「下马看花」强调的是<strong>认识从实际出发</strong>；且把具体调查方法泛化成一般命题</td></tr><tr><td>D 只有全面深入地了解中国的实际，才能找出规律</td><td>✅</td><td>下马（深入）＋过细（分析）→ 全面深入的材料 → 找出规律；与「实际意义」的落点严丝合缝</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 C（最像「标准话」）</strong>：C 本身是正确命题——这正是干扰项的高配形态：<strong>对的命题，错的对位</strong>。它属于「理论与实际相结合」层面；题目考的是「从实际出发」层面（唯物论的反映论），两个层面不能互换。</li><li><strong>选 B</strong>：只看见「两种方法」的数量形式，没看见「还必须」的语义重心；调查研究的要害从来不是方法多，而是<strong>深入</strong>。</li><li><strong>选 A</strong>：把「理论指导实践」的通行表述套上来——但这恰恰走的是「理论 → 实际」方向，与「下马看花」的「实际 → 认识」方向相反。</li></ul>
+<blockquote>记忆锚点：走马看花 = 面上概览（不深入）；下马看花 = 点上深入、过细分析——深入实际、占有全面而细致的材料，方能实事求是<strong>找出规律</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

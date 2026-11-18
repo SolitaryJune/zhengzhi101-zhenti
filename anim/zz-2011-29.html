@@ -1,8 +1,145 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-29 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-29</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-29 农业社会主义改造的历史经验（农业合作化）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- ============================================================
+     模板：概念/记忆/推理链类（anim_concept 同款结构，政治站无 KaTeX 版）
+     形态：逐步揭示推理链卡片，每步一张 .aw-stepcard；第 2 步内嵌
+     "两条路"顺序对比图 + 三级过渡阶梯图（农业合作化考点）。只改 AW.init 区域。
+     路径：本页位于 anim/{id}.html（站点一级目录之下），../assets/ 指向站点根 assets/。
+============================================================= -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// "两条路"顺序对比：A 的说法（倒置，红）vs 史实（先合作化后机械化，绿）
+function twoWays(){
+  var h = '<div style="display:flex;gap:10px;margin:8px 0 2px">';
+  h += '<div style="flex:1;border:1.5px solid #dc2626;background:#fef2f2;border-radius:8px;padding:8px 6px;text-align:center">' +
+       '<div style="font-size:12px;font-weight:800;color:#dc2626">A 的说法（倒置）</div>' +
+       '<div style="font-size:13px;color:#334155;margin-top:4px">先用装备机械化 <span style="color:#dc2626;font-weight:800">→</span> 再合作化</div>' +
+       '<div style="font-size:11px;color:#dc2626;margin-top:3px">1950 年代拿不出装备——等不起，也倒过来了</div></div>';
+  h += '<div style="flex:1;border:1.5px solid #2e9e5b;background:#eefbf1;border-radius:8px;padding:8px 6px;text-align:center">' +
+       '<div style="font-size:12px;font-weight:800;color:#2e9e5b">史实（正确顺序）</div>' +
+       '<div style="font-size:13px;color:#334155;margin-top:4px">先合作化（组织起来） <span style="color:#2e9e5b;font-weight:800">→</span> 后机械化</div>' +
+       '<div style="font-size:11px;color:#2e9e5b;margin-top:3px">用互助合作弥补装备不足，组织出生产力</div></div>';
+  h += '</div>';
+  return h;
+}
+
+// 三级过渡阶梯（D 的逐步过渡）
+function ladder(){
+  var s = [
+    ['互助组', '劳动协作 · 土地私有', '社会主义萌芽'],
+    ['初级社', '土地入股 · 统一经营', '半社会主义'],
+    ['高级社', '土地归集体', '完全社会主义']
+  ];
+  var h = '<div style="display:flex;align-items:flex-end;gap:6px;margin:8px 0 2px">';
+  for(var i = 0; i < s.length; i++){
+    h += '<div style="flex:1;border:1.5px solid #2e9e5b;background:#eefbf1;border-radius:8px 8px 0 0;padding:6px 4px;text-align:center;height:' + (58 + i * 16) + 'px">' +
+         '<div style="font-size:13px;font-weight:800;color:#2e9e5b">' + s[i][0] + '</div>' +
+         '<div style="font-size:11px;color:#334155;margin-top:2px">' + s[i][1] + '</div>' +
+         '<div style="font-size:11px;color:#64748b;margin-top:2px">' + s[i][2] + '</div></div>';
+  }
+  return h + '</div><p style="font-size:12px;color:#64748b;margin:0">私有改集体不能一步跳——所有制逐级进深，<b>循序渐进</b>正是"有中国特点"。</p>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：从我国实际出发，问的是"历史经验"',
+    cls: 'key', tag: '审题', ribbon: null,
+    log: '题眼"从我国实际出发"——先看清 1950 年代的家底，再谈经验。',
+    body: '<p>题干两个限定：马克思列宁主义农业改造思想 + <b>从我国实际出发</b>；问的是这条合作化道路的<b>历史经验</b>。判定之前先回答：当年中国的家底是什么？</p>' },
+  { title: '先立框架：一穷二白 → 先合作化、后机械化',
+    cls: 'key', tag: '框架', ribbon: null,
+    log: '家底薄、等不起、强不得——两条硬约束先立住，为逐项判断备好尺子。',
+    body: twoWays() + '<p>两条硬约束：<b>等不了</b>——工业给不了农机，只能先用组织方式把生产力"组织"出来；<b>强不得</b>——农民是小私有者又是同盟军，只能吸引、不能强迫。四条选项据此分成两堆。</p>' },
+  { title: 'A：为什么错——前提和结果被倒置',
+    cls: 'bad', tag: 'A ✗', ribbon: { k: 1, ok: false },
+    log: '当年无装备可给；即便有，也是先合作化解放生产力再机械化——A 恰好反着说。',
+    body: twoWays() + '<p><b>条件层面</b>：一穷二白，无装备可依；<b>顺序层面</b>：即便将来有装备，也是先合作化、后机械化。A 把前提当成了先决条件，是<b>倒置</b>，不是历史经验。A 错。</p>' },
+  { title: 'B：原则经验——自愿互利、典型示范、国家帮助',
+    cls: 'good', tag: 'B ✓', ribbon: { k: 2, ok: true },
+    log: '强不得——靠利益算账、做样子给他看、国家扶一把，三条都是吸引而非强制。',
+    body: '<p>对待小私有者兼同盟军<b>不能强迫</b>：入社靠利益算账（<b>自愿互利</b>）、靠看得见的好处（<b>典型示范</b>）、靠国家扶持（<b>国家帮助</b>）。这是<b>原则</b>经验。B 对。</p>' },
+  { title: 'C：时机经验——土改后不失时机引导互助合作',
+    cls: 'good', tag: 'C ✓', ribbon: { k: 3, ok: true },
+    log: '放任小农经济会重新两极分化——趁互助积极性还在，趁热打铁。',
+    body: '<p>土改刚把地分下去，若放任小农经济自由发展，必然<b>重新两极分化</b>——所以要"趁热打铁"，土改后<b>不失时机</b>地引导个体农民走互助合作道路。这是<b>时机</b>经验。C 对。</p>' },
+  { title: 'D：步骤经验——互助组 → 初级社 → 高级社',
+    cls: 'good', tag: 'D ✓', ribbon: { k: 4, ok: true },
+    log: '三级阶梯所有制逐级进深，逐步过渡就是"有中国特点"的核心。',
+    body: ladder() + '<p>这是<b>步骤</b>经验：从私有到集体所有不能一步跳。D 对。</p>' },
+  { title: '陷阱复盘：句子正确 ≠ 选项正确',
+    cls: '', tag: '复盘', ribbon: null,
+    log: '多选判定 = 句子对 + 符合本题史实 + 属于本题考点，三者缺一不可。',
+    body: '<p>A 单独读像一句正确的发展方针，但多选判定是"<b>句子对 + 符合本题史实 + 属于本题考点</b>"三者同时成立——A 死在第二条。另注意："国家帮助"指政策、贷款、物资扶持，不是"装备农业"，别把 A 的内容偷运进 B。</p>' },
+  { title: '结论',
+    cls: 'good', tag: '答案', ribbon: null,
+    log: '时机（C）+ 原则（B）+ 步骤（D）三件套齐活，A 倒置出局。',
+    body: ladder() + '<p>答案选 <b>BCD</b>：趁热打铁（C）+ 自愿互利（B）+ 互助组→初级社→高级社循序渐进（D）。口诀：<b>先合作化、后机械化</b>——A 恰好反着说。</p>' }
+];
+
+var COUNTS = [0, 0, 1, 2, 3, 4, 4, 4];
+
+var snaps = STEPS.map(function(s, i){
+  var sn = {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.log,
+    count: COUNTS[i],
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+  if (s.ribbon) sn.ribbon = s.ribbon;
+  return sn;
+});
+
+AW.init({
+  title: 'zz-2011-29 · 农业社会主义改造的历史经验（多选）',
+  subtitle: '考点：农业合作化道路 · 先合作化后机械化 · 选项逐项判定',
+  intro: '点击「▶ 播放」逐步展开：先立"家底"框架，再逐项判定 A–D；右侧序号带实时标记对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已锁定经验项',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '答案选 <b>BCD</b>——合作化三件套：<b>趁热打铁（C）、自愿互利（B）、互助组→初级社→高级社循序渐进（D）</b>。记忆锚点：1950 年代一穷二白，等不了也强不得，顺序只能是<b>先合作化、后机械化</b>——A 恰好把前提倒置；"国家帮助"是政策扶持，不是"装备农业"，句子正确不等于选项正确。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：农业合作化——从"家底"倒推出三条经验</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——1950 年代的家底决定道路的形状</h3>
+<p>历史经验类题目不靠逐条硬背，先把当时的历史条件立起来：土改后的中国是<strong>一穷二白的农业国</strong>，工业几乎给不了农业什么机械装备。这个"家底"直接推出两条硬约束：</p>
+<ol><li><strong>等不了</strong>：不能等国家先造出拖拉机再搞合作化——那就只能<strong>先用互助合作的组织方式把生产力"组织"出来，再谈机械化</strong>。顺序是"先合作化、后机械化"，而不是"先机械化、后合作化"。</li><li><strong>强不得</strong>：农民既是小私有者，又是工人阶级的同盟军，对待同盟军<strong>不能剥夺、不能强迫</strong>，只能算账说服——靠看得见的利益吸引入社。</li></ol>
+<p>把这两条约束记住，A–D 四个选项就自动分成"长在史实上"和"把前提倒置了"两堆。</p>
+<h3>第 1 步：三条经验各回答一个问题</h3>
+<table><thead><tr><th>选项</th><th>回答什么</th><th>内容</th><th>凭什么成立</th></tr></thead><tbody><tr><td>C</td><td><strong>什么时候干</strong>（时机）</td><td>土改后<strong>不失时机</strong>引导个体农民走互助合作道路</td><td>放任小农经济自由发展会重新两极分化，要趁农民互助积极性还在"趁热打铁"</td></tr><tr><td>B</td><td><strong>按什么规矩干</strong>（原则）</td><td><strong>自愿互利、典型示范、国家帮助</strong></td><td>强不得——只能利益算账（自愿互利）、做样子给他看（典型示范）、国家扶一把（国家帮助）</td></tr><tr><td>D</td><td><strong>分几步走</strong>（步骤）</td><td>互助组 → 初级社 → 高级社，<strong>逐步过渡</strong></td><td>私有改集体不能一步跳：互助组只有劳动协作（社会主义萌芽）→ 初级社土地入股、半社会主义 → 高级社完全集体所有</td></tr></tbody></table>
+<p>三条合起来正是"有中国特点"的含义：时机上趁热打铁、原则上只吸引不强制、步骤上循序渐进。</p>
+<h3>第 2 步：预判追问——两个最容易卡的"为什么"</h3>
+<ul><li><strong>为什么不能等国家先给装备（A）？</strong> 一穷二白，无装备可给——"用先进技术和装备发展农业"在当年是做不到的普遍前提；即便将来有了装备，顺序也是先合作化解放生产力、再机械化。A 恰好把前提和结果<strong>倒置</strong>了。</li><li><strong>互助组、初级社、高级社差在哪？</strong> 差在<strong>所有制进深</strong>：互助组是劳动互助、土地私有（社会主义萌芽）；初级社土地入股、统一经营（半社会主义）；高级社土地归集体（完全社会主义）。理解了"所有制逐步进深"，D 的"逐步过渡"就不用背了。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>"句子正确就选"→ 误选 A</strong>：A 单独读像一句正确的发展方针，但多选的判定是"句子对 + 符合本题史实 + 属于本题考点"三者同时成立；A 死在第二条——它不是合作化的历史经验，而是被倒置的前提。</li><li><strong>把"国家帮助"理解成"国家投资装备"→ 动摇 B</strong>："国家帮助"指政策扶持、贷款、物资调剂等引导手段，不等于"用先进技术装备武装农业"，别把 A 的内容偷运进 B。</li><li><strong>觉得 D 太具体而不敢选</strong>：互助组→初级社→高级社是教材口径的标准步骤表述，三个社名逐字对得上，恰是最该稳拿的一项。</li></ul>
+<blockquote>记忆锚点：合作化三件套——<strong>趁热打铁（C）、自愿互利（B）、互助组→初级社→高级社（D）</strong>；顺序口诀：<strong>先合作化、后机械化</strong>，A 恰好反着说。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

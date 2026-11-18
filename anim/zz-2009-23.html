@@ -1,8 +1,95 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-23 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-23</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2009-23 · 土地承包经营权流转：动的是"权"，不是"制"（2009 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：三层权利模型——"什么在动、什么不动"',
+    cls: 'key',
+    body: '<p>十七届三中全会《决定》这段话，先立权利层级：<b>所有权</b>（农民集体·不动）→ <b>承包经营权</b>（承包农户·流转的就是它）→ <b>经营主体</b>（谁接手谁经营·动）。设问"上述决定<b>有利于</b>"——从权能、要素、配置三层看效果。</p>' },
+  { title: '先立机制：流转的是"权"，不是"地"的归属',
+    cls: '',
+    body: '<p>流转客体＝<b>土地承包经营权</b>（用益物权性质的权利）；"依法、自愿、有偿"三原则＋转包、出租、互换、转让、股份合作五种法定形式，全部发生在<b>集体所有制不动</b>的前提下。效果链：经营权可依法交易 → 权能完善 → 进入要素市场 → 集中配置、规模经营。</p>' },
+  { title: '逐项分析 A：调整农村土地所有制结构',
+    cls: 'bad',
+    ribbon: {k:1, ok:false},
+    body: '<p>A：流转的只是<b>承包经营权</b>，所有权始终在<b>农民集体</b>手里——集体所有性质不变、家庭承包经营制度不变。把"经营权流动"偷换成"调整所有制结构"＝客体偷换＋红线误读 → ❌ 不选。</p>' },
+  { title: '逐项分析 B：完善土地承包经营权权能',
+    cls: 'good',
+    ribbon: {k:2, ok:true},
+    body: '<p>效果链第一环：建立流转市场，把承包经营权从"一块不动的权利"充实为"可依法<b>转包、出租、互换、转让、股份合作</b>"的完整权能——五种法定形式正是权能被充实、被保障的体现 → ✅ 选。</p>' },
+  { title: '逐项分析 C：进一步完善生产要素市场',
+    cls: 'good',
+    ribbon: {k:3, ok:true},
+    body: '<p>土地是<b>基本生产要素</b>之一——题干原文"建立健全土地承包经营权<b>流转市场</b>"，流转市场本身就是要素市场建设，土地要素由此进入市场机制配置 → ✅ 选。</p>' },
+  { title: '逐项分析 D：促进土地资源的优化配置',
+    cls: 'good',
+    ribbon: {k:4, ok:true},
+    body: '<p>流转让分散在千家万户的承包地向<b>种田能手、专业大户、合作社</b>集中——题干末句落点"发展多种形式的<b>适度规模经营</b>"正是这句的原文对应，配置效率提高 → ✅ 选。</p>' },
+  { title: '对号入座汇总',
+    cls: '',
+    body: '<p>A ❌ 所有制没动；B ✅ 权能完善；C ✅ 要素市场；D ✅ 优化配置。→ 答案 <b>BCD</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>BCD</b>。三有利于＝权能完善（B）＋要素市场（C）＋优化配置（D）；所有权不动、经营权流动（A 反）。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2009-23 土地承包经营权流转有利于什么',
+  subtitle: '考点：农村土地承包经营权流转 · 权利层级与效果链 —— 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '<b>B</b> 权能完善——五种法定流转形式（转包/出租/互换/转让/股份合作）充实经营权。<br><b>C</b> 要素市场——"建立健全流转市场"本身就是土地要素市场建设。<br><b>D</b> 优化配置——地向种田能手、合作社集中，"适度规模经营"的原文落点。<br><br><b>干扰项：</b>A"调整农村土地所有制结构"——流转的是用益物权层面的<b>承包经营权</b>，所有权始终归<b>农民集体</b>；"流转土地"≠"买卖土地"。<br><br><b>记忆锚点：</b>所有权不动、经营权流动；权能＋市场＋配置三环相扣。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：土地承包经营权流转——动的是"权"，不是"制"</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——分清三层权利，"什么在动、什么不动"</h3>
+<p>读十七届三中全会《决定》这段话，先立一个权利层级模型：</p>
+<table><thead><tr><th>层级</th><th>归属</th><th>动没动</th></tr></thead><tbody><tr><td><strong>所有权</strong></td><td>农民集体</td><td><strong>不动</strong>——农村土地集体所有性质不变</td></tr><tr><td><strong>承包经营权</strong></td><td>承包农户</td><td><strong>动</strong>——流转的就是它（用益物权性质的权利）</td></tr><tr><td><strong>经营主体</strong></td><td>谁接手谁经营</td><td><strong>动</strong>——地向种田能手、合作社等集中</td></tr></tbody></table>
+<p>流转的客体是"<strong>土地承包经营权</strong>"——使用权层面的权利，不是土地本身；"依法、自愿、有偿"三原则与转包、出租、互换、转让、股份合作五种法定形式，全部发生在<strong>集体所有制不动</strong>的前提下。</p>
+<h3>第 1 步：顺着流转推效果链——B、C、D 为什么对</h3>
+<p><strong>经营权可依法交易</strong>之后，效果链一环扣一环：</p>
+<ol><li><strong>完善土地承包经营权权能（B）</strong>：把承包经营权从"一块不动的权利"充实为"可依法转包、出租、互换、转让、股份合作"的完整权能——五种法定形式正是权能被充实、被保障的体现；</li><li><strong>进一步完善生产要素市场（C）</strong>：土地是基本生产要素之一，"建立健全土地承包经营权<strong>流转市场</strong>"本身就是要素市场建设——土地要素进入市场机制配置；</li><li><strong>促进土地资源的优化配置（D）</strong>：流转让分散在千家万户的承包地向种田能手、专业大户、合作社集中——题干末句"发展多种形式的<strong>适度规模经营</strong>"正是这句的原文落点。</li></ol>
+<h3>第 2 步：A 为什么不选——所有制结构没有动</h3>
+<p>A"调整农村土地<strong>所有制</strong>结构"。流转的是<strong>经营权</strong>，所有权始终在<strong>农民集体</strong>手里——集体所有性质不变、家庭承包经营制度不变。把"经营权流动"偷换成"调整所有制结构"，是本题的核心陷阱：客体被偷换（流转的是用益物权层面的承包经营权），政策红线被误读（无论怎么流转，所有权这条底线不动）。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：把"流转土地"听成"买卖土地"——农村土地不允许买卖，能流转的只是承包经营权。</li><li><strong>漏 C</strong>：只盯着"农业经营"层面，没意识到"流转<strong>市场</strong>"本身就是生产要素市场的建设。</li><li><strong>漏 D</strong>：忽略题干末句"发展适度规模经营"——它正是"优化配置"的原文对应，照应最直接的一项别漏。</li></ul>
+<blockquote>记忆锚点：<strong>所有权不动、经营权流动</strong>；三有利于＝权能完善（B）＋要素市场（C）＋优化配置（D）；"调整所有制结构"一律警惕（A 反）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

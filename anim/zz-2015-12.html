@@ -1,8 +1,128 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-12 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-12</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2015·12 古田会议决议的中心思想：思想建党、政治建军</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 模板：anim_concept（概念/推理链卡片，政治站无 KaTeX 版）· 只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：「中心思想」＝总纲，不是条文",
+    "cls": "key",
+    "body": "<p>题干问古田会议决议的<b>中心思想</b>——即统摄全部条文的<b>总纲</b>。背景：1929 年 12 月，红四军党的第九次代表大会，福建上杭古田。考点：古田会议与党的建设。</p>",
+    "log": "审题：找总纲，不挑具体条文"
+  },
+  {
+    "title": "先立机制：会议要对症的「病」与开的「药」",
+    "cls": "key",
+    "body": "<p>病根：红四军以<b>农民和小资产阶级出身</b>为主、长期农村游击，党内军内滋长<b>非无产阶级思想</b>（单纯军事观点、极端民主化、流寇思想、军阀主义残余等）。药方：红军是「执行革命的政治任务的武装集团」，绝对服从<b>党的领导</b>（政治建军）；党用无产阶级思想改造、加强马列主义教育（<b>思想建党</b>）。</p>",
+    "log": "病＝非无产阶级思想，药＝思想建党、政治建军"
+  },
+  {
+    "title": "A：党必须服从共产国际——「服从」被偷换",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>决议解决的是红军<b>内部</b>党军关系与思想建设；强调的是军队服从<b>党</b>，不是党服从<b>共产国际</b>。「服从」的对象被偷换，主题也无关。<b>A 不选</b>。</p>",
+    "log": "服从对象：军队→党，而非党→共产国际 → A 不选"
+  },
+  {
+    "title": "B：武装斗争是主要形式——这是「割据」的内容",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>「工农武装割据」=武装斗争（主要形式）+土地革命（基本内容）+根据地（战略阵地），回答的是「中国革命<b>走什么路</b>」；与古田会议「如何建党建军」不同层。<b>B 不选</b>。</p>",
+    "log": "割据理论讲道路，古田讲建党建军 → B 不选"
+  },
+  {
+    "title": "C：广泛开展土地革命——同为割据内容",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>土地革命是工农武装割据的<b>基本内容</b>；时间相近（1928—1930）、作者同为毛泽东，最易混——记住分工：割据理论讲「道路」，古田会议讲「建军与建党」。<b>C 不选</b>。</p>",
+    "log": "命题正确但不同层 → C 不选"
+  },
+  {
+    "title": "D：用无产阶级思想进行军队和党的建设",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>思想建党＋政治建军合成一句，正是决议<b>总纲</b>：用无产阶级（工人阶级）的世界观改造党、改造军，正对「非无产阶级思想」这个病根。<b>D 正确</b>。</p>",
+    "log": "总纲对上病根 → 选 D"
+  },
+  {
+    "title": "追问预判：B、C 命题正确，错在哪一层？",
+    "cls": "key",
+    "body": "<p>错在<b>对应关系</b>，不在真假：B、C 回答「革命走什么路」（工农武装割据／农村包围城市）；古田会议回答「农民为主的军队怎样建成无产阶级领导的新型人民军队、党怎样保持先进性」。命题正确≠是本题所指——「中心思想」只有一个。</p>",
+    "log": "答非所问：道路≠建党建军"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>D</b>：用无产阶级思想进行军队和党的建设。一句斩干扰项：A 偷换「服从」对象，B、C 是割据理论的内容、不同层。</p>",
+    "log": "锁定 D：思想建党、政治建军"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "古田会议决议的中心思想：思想建党、政治建军",
+  subtitle: "考点：史纲·古田会议 · 方法：先立「病根→药方」机制，再按「中心思想=总纲」对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "记忆锚点：古田会议=<b>思想建党、政治建军</b>=用无产阶级思想进行军队和党的建设；红军=执行革命政治任务的武装集团，绝对服从党的领导；工农武装割据=武装斗争（主要形式）+土地革命（基本内容）+根据地（战略阵地）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：古田会议决议的中心思想——用无产阶级思想建设党和军队</h2>
+<p>答案：<strong>D（用无产阶级思想进行军队和党的建设）</strong>。</p>
+<h3>第 0 步：先立机制——古田会议要对症的那个「病」</h3>
+<p>会议之所以开，是因为红军有个必须解决的病根：红四军以<strong>农民和其他小资产阶级出身</strong>的人为主体，长期处于农村游击环境，党内军内滋长了各种<strong>非无产阶级思想</strong>——单纯军事观点（军事政治两张皮）、极端民主化、流寇思想、军阀主义残余、主观主义等。这些思想的共同病根：<strong>用旧军队、小生产者的思路来建党建军</strong>，而不是用无产阶级（工人阶级）的世界观来改造。</p>
+<p>古田会议（1929 年 12 月，福建上杭古田，红四军党的第九次代表大会）开的<strong>药方</strong>：</p>
+<ul><li>红军不是单纯打仗的军事集团，而是「<strong>执行革命的政治任务的武装集团</strong>」，必须绝对服从<strong>党的领导</strong>（政治建军）；</li><li>党本身也要用无产阶级思想来改造，加强马克思列宁主义的思想教育（<strong>思想建党</strong>）。</li></ul>
+<p>两句合成一句，就是决议的<strong>中心思想</strong>：<strong>用无产阶级思想进行军队和党的建设</strong>。</p>
+<h3>第 1 步：对号入座</h3>
+<p>题干问「决议的<strong>中心思想</strong>」——即统摄全部条文的<strong>总纲</strong>，不是某一条具体内容。A、B、C 各是一条「正确的党史命题」，但都回答不了「这支以农民为主要成分的军队，如何建成无产阶级领导的新型人民军队」这个病根问题 → 选 <strong>D</strong>。</p>
+<h3>第 2 步：干扰项各自错在哪</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>错因与典型误解</th></tr></thead><tbody><tr><td>A 中国共产党必须服从共产国际的领导</td><td>❌</td><td>决议解决的是红军<strong>内部</strong>党军关系与思想建设；「服从」的对象被偷换——是军队服从<strong>党</strong>，不是党服从<strong>共产国际</strong></td></tr><tr><td>B 武装斗争是中国革命的主要形式</td><td>❌</td><td>属「工农武装割据」思想（武装斗争=主要形式、土地革命=基本内容、根据地=战略阵地），回答「中国革命走什么路」，与决议中心思想不同层</td></tr><tr><td>C 在农村根据地广泛开展土地革命</td><td>❌</td><td>同属工农武装割据的<strong>基本内容</strong>；时间相近（1928—1930）、作者同为毛泽东，最易混——分工：割据理论讲「道路」，古田会议讲「建党建军」</td></tr><tr><td>D 用无产阶级思想进行军队和党的建设</td><td>✅</td><td>思想建党、政治建军——决议总纲，正对「非无产阶级思想」这个病根</td></tr></tbody></table>
+<h3>第 3 步：预判追问——B、C 都是正确命题，错在哪一层？</h3>
+<p>错在<strong>对应关系</strong>，不在命题真假。B、C 是「农村包围城市、工农武装割据」道路理论的内容，回答「中国革命走什么路、靠什么立足」；古田会议回答的是另一问：「这支农民为主的军队，怎样建成无产阶级领导的新型人民军队？党怎样保持先进性？」命题正确≠是本题所指——「中心思想」只有一个，就是统摄决议全部条文的总纲 D。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 B/C（把「割据思想」错接到古田会议）</strong>：时间相近、同为毛泽东提出，容易混——分工口诀：割据理论讲「道路」，古田会议讲「建军与建党」。</li><li><strong>选 A（拿「服从领导」做文章）</strong>：决议强调红军服从<strong>党的领导</strong>，不是党服从<strong>共产国际</strong>——「服从」的对象被偷换了。</li><li><strong>忘了题眼「中心思想」</strong>：决议条文很多（纠正各种非无产阶级思想的具体办法），但一切都统摄在「用无产阶级思想建党建军」之下——选具体条文就是没找到总纲。</li></ul>
+<blockquote>记忆锚点：古田会议=<strong>思想建党、政治建军</strong>=用无产阶级思想进行军队和党的建设；红军=执行革命政治任务的武装集团，绝对服从党的领导；工农武装割据=武装斗争（主要形式）+土地革命（基本内容）+根据地（战略阵地）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

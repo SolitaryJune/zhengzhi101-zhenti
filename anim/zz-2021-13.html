@@ -1,8 +1,127 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-13 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-13</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·13 个人与社会的关系最根本的是什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），
+     模板复制自 408 tools/anim_concept_template.html，只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼',
+    cls: 'key',
+    body: '<p>个人与社会<b>对立统一</b>、相互依存、相互制约、相互促进。题问二者关系<b>最根本</b>的是哪一重——「最根本」类题考<b>教材定点表述</b>，先立关系模型再对号。</p>',
+    log: '审题：找「最根本」的那层关系'
+  },
+  {
+    title: '先立模型：四层关系表',
+    cls: 'key',
+    body: '<p><b>存在层</b>＝前提（「人是社会的人」这个事实）；<b>利益层</b>＝<b>最根本的纽带</b>；<b>价值层</b>＝实现与评价，以利益为基础；<b>理想层</b>＝目标，由利益派生。四层排位定好，答案只能出自利益层。</p>',
+    log: '四层排位：存在前提、利益纽带、价值理想派生'
+  },
+  {
+    title: '机制：为什么偏偏是利益',
+    cls: 'step',
+    body: '<p>人的生存发展条件只能在<b>社会中</b>获得，落到现实就是<b>利益</b>（物质、政治、精神）；社会利益的实现又以每个个人的<b>劳动贡献</b>为基础——个人与社会两头都拴在利益上，这才是<b>双向的硬纽带</b>。价值与理想都靠它落地，是它的派生形态。</p>',
+    log: '双向硬纽带：生存条件靠社会、社会利益靠个人'
+  },
+  {
+    title: 'B：利益关系',
+    cls: 'good',
+    ribbon: { k: 2, ok: true },
+    body: '<p>教材定点：个人与社会的关系，最根本的是<b>个人利益与社会利益的关系</b>。<b>B 正确</b>。</p>',
+    log: 'B 命中：个人利益与社会利益的关系'
+  },
+  {
+    title: 'D：前提不是根本',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>题干「人是社会的人」最容易把人往<b>存在层</b>引。但存在只说明离不开社会这个<b>事实</b>；「关系最根本」要看<b>纽带</b>——把前提当根本，是本题最常见失分。<b>D 错误</b>。</p>',
+    log: 'D 把前提当根本 → 排除'
+  },
+  {
+    title: 'A：理想由利益派生',
+    cls: 'bad',
+    ribbon: { k: 1, ok: false },
+    body: '<p>理想层是精神目标，个人理想的实现依赖社会提供的条件——它<b>由利益关系派生</b>，派生层排不到「最根本」。<b>A 错误</b>。</p>',
+    log: 'A 理想由利益派生 → 排除'
+  },
+  {
+    title: 'C：价值以利益为基础',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>价值层讲实现与评价：对谁有价值、实现谁的利益，都要先落到<b>利益</b>上——它同样<b>以利益关系为基础</b>。<b>C 错误</b>。</p>',
+    log: 'C 价值以利益为基础 → 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>B</b>。记忆锚点：个人与社会的关系<b>最根本＝个人利益与社会利益的关系</b>；四层排位——存在是前提、利益是纽带、价值与理想由利益派生；见「最根本」→ 找教材定点表述。</p>',
+    log: '锁定 B：个人利益与社会利益的关系'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || (i === 0 ? '审题' : (last ? '结论' : '分析')),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '个人与社会的关系，最根本的是什么',
+  subtitle: '考点：个人与社会的关系 · 方法：四层关系模型（存在 / 利益 / 价值 / 理想）',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」先立四层模型，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '个人与社会的关系最根本的是<b>个人利益与社会利益的关系</b>——人的生存条件只能在社会中获得，社会利益的实现以个人劳动为基础，两头都拴在利益上。记忆锚点：存在是前提、利益是纽带、价值与理想由利益派生；「最根本」类题认<b>教材定点表述</b>。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：个人与社会的关系，最根本的是什么</h2>
+<p>答案：<strong>B（个人利益与社会利益的关系）</strong>。</p>
+<h3>第 0 步：先立模型——个人与社会的四层关系，找「最根本」那一层</h3>
+<p>题干先给定性：人是社会的人，个人与社会<strong>对立统一</strong>——相互依存、相互制约、相互促进。这个对立统一不是一句抽象话，它在四层关系里展开，每层有一个定位：</p>
+<table><thead><tr><th>层</th><th>关系</th><th>在体系里的位置</th></tr></thead><tbody><tr><td>存在层</td><td>个人存在与社会存在</td><td><strong>前提</strong>——「人是社会的人」这个事实</td></tr><tr><td>利益层</td><td>个人利益与社会利益</td><td><strong>最根本</strong>——把个人与社会真正捆在一起的纽带</td></tr><tr><td>价值层</td><td>个人价值与社会价值</td><td>实现与评价层——以利益关系为基础</td></tr><tr><td>理想层</td><td>个人理想与社会理想</td><td>目标层——由利益关系派生</td></tr></tbody></table>
+<p>教材定点表述：<strong>个人与社会的关系，最根本的是个人利益与社会利益的关系</strong>。「最根本」类题考固定结论，先在表里占位，再回选项对号。</p>
+<h3>第 1 步：为什么最根本的偏偏是利益（预判追问）</h3>
+<p>道理要能讲出来，才背得住：</p>
+<ul><li><strong>生存发展是社会性的</strong>：人的衣食住行、学习工作、成长成才，所需的一切条件都只能在<strong>社会中</strong>、通过社会获得；离开社会，个人连生存都维持不了。而「生存发展的条件」落到现实里就是<strong>利益</strong>——物质利益、政治利益、精神利益。</li><li><strong>社会利益的实现以个人为基础</strong>：社会不是抽象物，它由一个个具体的人组成；社会利益（公共秩序、公共设施、公共福利）的实现，最终要靠每个个人的劳动与贡献。两头都拴在利益上，这才是<strong>双向的硬纽带</strong>。</li><li><strong>其余三层都要落到利益上才说得清</strong>：讲「价值实现」，要问对谁有价值、实现谁的利益；讲「理想」，个人理想的实现依赖社会提供的条件，社会理想靠无数个人的一致行动达成——理想与价值是利益关系在精神层的<strong>派生形态</strong>，派生层排不到「最根本」。</li></ul>
+<h3>第 2 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>病根</th></tr></thead><tbody><tr><td>A 个人理想与社会理想</td><td>❌</td><td>理想层——精神目标，由利益关系<strong>派生</strong></td></tr><tr><td>B 个人利益与社会利益</td><td>✅</td><td>教材定点：利益关系是个人与社会关系中最根本的一层</td></tr><tr><td>C 个人价值与社会价值</td><td>❌</td><td>价值层——实现与评价层面，以利益为基础</td></tr><tr><td>D 个人存在与社会存在</td><td>❌</td><td>存在层——是<strong>前提</strong>，但「前提」不等于「关系最根本」</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 D（最常见：把前提当根本）</strong>：题干前半句「人是社会的人，每一个人都存在和活动于……现实社会当中」把人往存在层引，于是顺手选 D。但存在只说明人离不开社会这个<strong>事实</strong>；问「关系最根本的是什么」，要找的是把两者捆在一起的<strong>纽带</strong>——是利益，不是「存在」这种静态描述。</li><li><strong>误选 A / C（精神层混淆）</strong>：理想、价值都是「个人—社会」话题里的高频词，看着「也很有道理」。但定点体系里它们都排在利益层之下；「最根本」题认<strong>教材定点表述</strong>，不能凭「感觉也重要」自由发挥。</li></ul>
+<blockquote>记忆锚点：个人与社会的关系<strong>最根本＝个人利益与社会利益的关系</strong>；四层排位——存在是前提、利益是纽带、价值与理想由利益派生；见「最根本」→ 找教材定点表述。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

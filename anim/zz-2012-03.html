@@ -1,8 +1,130 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-03 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-03</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-03 · 资本主义工资本质：一个劳动日的两段推演</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* 过程类动画：把一个劳动日拆成两段（示意）——前段=必要劳动（工资偿付≈劳动力价值），
+   后段=剩余劳动（剩余价值被无偿占有）——由此揭穿「全部劳动的报酬」的假象，再逐项推演 A–D。 */
+var DAY = [1,2,3,4,5,6,7,8];
+var HOUR_LOG = [
+  '第 1 小时（必要劳动·示意）：劳动开始，工资偿付的就是这一段——≈劳动力价值（维持工人生存所需生活资料的价值）。',
+  '第 2 小时（必要劳动）：仍在偿付劳动力价值的范围内——工人拿到的工资只对应这一段，不是全部劳动。',
+  '第 3 小时（必要劳动）：必要劳动段继续——「干多少活拿多少钱」的表象由这四小时制造。',
+  '第 4 小时（必要劳动）：必要劳动段结束——工资的实质到此为止：劳动力价值或价格。',
+  '第 5 小时（剩余劳动）：从这一刻起创造的价值超出劳动力价值——开始产生剩余价值，工资却不再增长。',
+  '第 6 小时（剩余劳动）：剩余价值继续生成——这一段正是资本家无偿占有的部分。',
+  '第 7 小时（剩余劳动）：仍被无偿占有——若工资真是「全部劳动的报酬」，这段就不该存在。',
+  '第 8 小时（剩余劳动）：劳动日结束——总价值＞劳动力价值，差额＝剩余价值。'
+];
+var OPTS = [
+  { L:'A', cls:'bad', ok:false, title:'选项 A：工人所获得的资本家的预付资本',
+    body:'预付可变资本是<b>资本家账本上的支出</b>（货币资本购买劳动力的垫付动作），描述的是资本家的支付行为，不是「工资」这个范畴的质的规定，<b>排除</b>。' },
+  { L:'B', cls:'good', ok:true, title:'选项 B：工人劳动力的价值或价格',
+    body:'工资是<b>劳动力价值（价格）的转化形式</b>：偿付的只是必要劳动段（≈维持劳动力所需生活资料的价值），<b>入选</b>。' },
+  { L:'C', cls:'bad', ok:false, title:'选项 C：工人所创造的剩余价值的一部分',
+    body:'剩余价值恰是后段劳动创造、被资本家<b>无偿占有</b>、工人拿不到的部分；若工资含剩余价值，剥削就不成立了，<b>排除</b>。' },
+  { L:'D', cls:'bad', ok:false, title:'选项 D：工人全部劳动的报酬',
+    body:'两段推演已证伪：工资只对应前段（必要劳动），后段的成果被占有——「全部劳动的报酬」正是工资<b>形式制造的假象</b>，<b>排除</b>。' }
+];
+function dayRow(n){
+  var h = '<div class="aw-cells">';
+  for (var i = 0; i < 8; i++){
+    var shown = i < n;
+    var cls = shown ? (i < 4 ? 'ok' : 'miss') : 'dim';
+    var ptr = shown ? (i < 4 ? '工资' : '占有') : '';
+    var lab = shown ? (i < 4 ? '必要' : '剩余') : (i + 1) + 'h';
+    h += '<div class="aw-col"><div class="aw-ptr">' + ptr + '</div>' +
+         '<div class="aw-box ' + cls + '">' + lab + '</div>' +
+         '<div class="aw-idx">第' + (i + 1) + '小时</div></div>';
+  }
+  h += '</div>';
+  if (n >= 8){
+    h += '<div style="margin-top:10px;padding:8px 12px;border:1.5px solid var(--amber);background:#fffbeb;border-radius:10px;color:#92400e;font-weight:700">总价值（8 小时创造）＞ 劳动力价值（前 4 小时·示意）→ 差额＝剩余价值，归资本家</div>';
+  }
+  return h;
+}
+function card(title, cls, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4>' + title + '</h4>' + body + '</div>';
+}
+function stage(mode, n, opt){
+  var h = '<div style="font-size:12.5px;color:#64748b;margin-bottom:4px">一个劳动日（8 小时·示意）：工资偿付哪一段？</div>' + dayRow(n);
+  if (mode === 'intro'){
+    h += '<div style="margin-top:12px">' + card('审题眼：问「本质」，不是问「现象」', 'key',
+      '<p>资本家雇佣工人并支付工资。日常说法是「干活拿钱」，但题目问这份工钱的<b>本质</b>是什么。考点：<b>劳动力与劳动</b>的区分——政治经济学一半的密码在这里。</p>') + '</div>';
+  } else if (mode === 'mech'){
+    h += '<div style="margin-top:12px">' + card('立机制：劳动不是商品，劳动力才是', 'key',
+      '<p>①若<b>劳动</b>本身按价值出卖：等价交换则无剩余价值、不等价交换又推翻价值规律——两头说不通；②工人出卖的是一定时间的<b>劳动力使用权</b>，其价值由维持劳动力所需生活资料决定；③劳动力的使用（劳动）创造的价值<b>大于</b>劳动力自身价值——差额＝剩余价值。</p>') + '</div>';
+  } else if (mode === 'veil'){
+    h += '<div style="margin-top:12px">' + card('揭假象：现象 ≠ 本质', 'key',
+      '<p>现象：工资「干多少活拿多少钱」，像偿付了<b>全部劳动</b>；本质：工资偿付的只是<b>必要劳动</b>段（≈劳动力价值），剩余劳动段的成果被资本家无偿占有。</p>' +
+      '<p>工资按「干活量」计酬，恰好把两段的划分<b>遮住</b>——这就是「转化形式」的含义：本质没变，形式掩盖本质。</p>') + '</div>';
+  } else if (mode === 'opt'){
+    h += '<div style="margin-top:12px">' + card(opt.title, opt.cls, '<p>' + opt.body + '</p>') + '</div>';
+  } else if (mode === 'end'){
+    h += '<div style="margin-top:12px">' + card('结论：工资＝劳动力的价值或价格', 'good',
+      '<p>只有 B 站在本质层：工资是劳动力价值（价格）的转化形式；A 是资本家的支出视角，C 是拿不到的部分，D 是假象本身。</p>') + '</div>';
+  }
+  return h;
+}
+var nOpt = 0;
+var snaps = [
+  { cls:'step', tag:'审题', log:'审题眼：问工资的「本质」，不是问它的现象', count:0,
+    html: stage('intro', 0) },
+  { cls:'shift', tag:'立机制', log:'立机制：被买卖的是劳动力，不是劳动', count:0,
+    html: stage('mech', 0) }
+];
+for (var i = 0; i < 8; i++){
+  snaps.push({ cls: i < 4 ? 'ok' : 'miss', tag:'第 ' + (i + 1) + ' 小时', log: HOUR_LOG[i],
+    count: i + 1, ribbon: { k: i + 1, ok: i < 4 }, html: stage('day', i + 1) });
+}
+snaps.push({ cls:'shift', tag:'揭假象', log:'「全部劳动的报酬」是假象：工资只偿付必要劳动段', count:8,
+  html: stage('veil', 8) });
+for (var j = 0; j < 4; j++){
+  nOpt++;
+  var o = OPTS[j];
+  snaps.push({ cls: o.ok ? 'ok' : 'miss', tag:'判选项', log: o.title + '——' + (o.ok ? '入选' : '排除'),
+    count: 8, html: stage('opt', 8, o) });
+}
+snaps.push({ cls:'done', tag:'结论', log:'答案 B：工资的本质是劳动力的价值或价格', count:8, done:true,
+  html: stage('end', 8) });
+
+AW.init({
+  title: 'zz-2012-03 · 一个劳动日的两段：工资的假象与本质',
+  subtitle: '2012 年第 3 题（单选）· 考点：资本主义工资 · 劳动日拆段推演',
+  counterLabel: '劳动小时',
+  ribbonTitle: '劳动日推演（✓ 必要劳动·工资偿付 / ✗ 剩余劳动·被无偿占有）',
+  intro: '点击「▶ 播放」：先立「劳动≠劳动力」机制，再逐小时拆解劳动日（示意），看工资到底偿付了哪一段，最后逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '记忆锚点：劳动≠劳动力；工资＝<b>劳动力的价值或价格</b>（≈必要劳动），不是全部劳动的报酬；劳动创造的价值 − 劳动力价值 ＝ <b>剩余价值</b>（归资本家）。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：资本主义工资——「劳动的报酬」的假象，劳动力价值或价格的本质</h2>
+<p>答案：<strong>B（工人劳动力的价值或价格）</strong>。</p>
+<h3>第 0 步：先立机制——「劳动」不是商品，「劳动力」才是</h3>
+<p>这道题的全部密码在一字之差：劳动 ≠ 劳动力。资本家在劳动力市场上买到的，是工人的<strong>劳动力</strong>（人的劳动能力）在一定时间内的<strong>使用权</strong>，而不是工人的<strong>劳动</strong>。为什么劳动本身不能是商品？两条推理就能锁死：</p>
+<ol><li><strong>按价值等价交换</strong> → 资本家付了全部劳动创造的价值，剩余价值无从产生，资本主义制度的地基塌了；</li><li><strong>按不等价交换</strong> → 又直接推翻价值规律。两头都说不通，唯一出路是：被买卖的是劳动力。</li></ol>
+<p>再看「劳动力」这件商品的<strong>价值</strong>由什么决定：和其他商品一样，由生产和再生产它所需要的社会必要劳动时间决定——即维持工人生存、延续工人后代（家庭费用）、培训工人技能（教育训练费用）所需的<strong>生活资料的价值</strong>。而劳动力这种商品的<strong>使用价值</strong>很特殊：对它的使用（劳动）能<strong>创造出比它自身价值更大的价值</strong>——这个差额就是剩余价值，剥削的秘密全在这里。</p>
+<h3>第 1 步：工资形式如何制造假象</h3>
+<p>工资表现为「干多少活、拿多少钱」，好像付的是<strong>全部劳动的报酬</strong>。实际上工资偿付的只是<strong>必要劳动</strong>那一部分（相当于劳动力价值）；剩余劳动创造的价值被资本家无偿占有。现象（全部劳动的报酬）≠ 本质（劳动力的价值或价格）。</p>
+<p><strong>预判追问：为什么资本主义偏偏用「工资」这种形式来付钱？</strong> 按「干了多少活」计酬，恰好把必要劳动与剩余劳动的划分<strong>遮住</strong>了——整个劳动日看起来都被支付了，剥削关系被形式隐藏。这正是「工资是劳动力价值或价格的<strong>转化形式</strong>」的含义：本质没变，但穿上了一件掩盖本质的外衣。</p>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 工人所获得的资本家的预付资本</td><td>❌</td><td>预付可变资本是<strong>资本家账本上的支出</strong>，描述的是资本家的垫付动作，不是「工资」这个范畴的质的规定</td></tr><tr><td>B 工人劳动力的价值或价格</td><td>✅</td><td>工资是劳动力价值（价格）的转化形式；工人所得≈维持劳动力所需生活资料的价值</td></tr><tr><td>C 工人所创造的剩余价值的一部分</td><td>❌</td><td>剩余价值恰是工人<strong>拿不到</strong>、被资本家无偿占有的部分；若工资里含剩余价值，剥削就不成立了</td></tr><tr><td>D 工人全部劳动的报酬</td><td>❌</td><td>这是工资<strong>现象</strong>制造的假象本身——正是题目要你剥掉的那层皮</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 D（最像生活常识）</strong>：「干一天活拿一天钱」= 把现象当本质。命题专设此项，因为它就是工资形式所要制造的效果；哲学-经济学考点里「现象≠本质」在这道题上的落点就是它。</li><li><strong>选 C</strong>：把「工人创造的价值大于工资」错记成「工资里含一部分剩余价值」——方向反了：超出工资的那部分<strong>才是</strong>剩余价值，它恰恰不在工人手里。</li><li><strong>选 A</strong>：从资本家的支付行为倒推范畴本质——「预付」描述的是资本循环里的垫付环节（货币资本购买劳动力），而题目问的是这笔钱<strong>是什么</strong>（劳动力价值的转化形式）。</li></ul>
+<blockquote>记忆锚点：劳动 ≠ 劳动力；工资 = 劳动力的价值或价格（≈必要劳动），不是全部劳动的报酬；劳动创造的价值 − 劳动力价值 = 剩余价值（归资本家）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

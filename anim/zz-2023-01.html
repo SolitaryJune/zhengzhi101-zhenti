@@ -1,8 +1,138 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-01 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-01</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·01 历史、现实、未来是相通的</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链卡片模板（政治站纯文本，无 KaTeX），只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+function miniTable(rows){
+  var s = '<table style="border-collapse:collapse;margin:6px 0;font-size:13px">';
+  for(var i=0;i<rows.length;i++){
+    s += '<tr>';
+    for(var j=0;j<rows[i].length;j++){
+      s += '<td style="border:1px solid #cbd5e1;padding:3px 8px">' + rows[i][j] + '</td>';
+    }
+    s += '</tr>';
+  }
+  return s + '</table>';
+}
+
+var STEPS = [
+  {
+    "title": "审题眼：三句话拆成一条逻辑线",
+    "cls": "key",
+    "body": "<p>序言三句话不是抒情，是三步论证：①「修史立典，存史启智」——修史这件事<b>有意义</b>；②「述录先人的开拓，启迪来者的奋斗」——前半句面向<b>历史</b>，后半句面向<b>未来</b>，动手编纂的是<b>当下</b>；③「一切向前走，都不能忘记走过的过去」——把未来与历史直接相连。考点锁定：<b>历史、现实、未来三者的关系</b>。</p>",
+    "log": "三句话连成 历史→现实→未来 一条逻辑线"
+  },
+  {
+    "title": "立机制：「相通」到底通在哪",
+    "cls": "key",
+    "body": "<p>相通有两层：<b>时间上连续</b>——未来从现实走来、现实从历史走来，谁也不凭空出现；<b>内容上继承发展</b>——历史经验沉淀为「教科书」，被今天读取、用于开创明天。所以「以史为鉴」能成立，依据正是三者相互贯通。分寸注意：相通 = <b>联系与贯通</b>，不是相同、不是重演。</p>",
+    "log": "相通 = 时间连续 + 内容继承，不含重演"
+  },
+  {
+    "title": "预判追问：以史为鉴 = 一切历史都是当代史？",
+    "cls": "key",
+    "body": "<p>不等于，立场相反。「以史为鉴」的前提是历史有<b>客观内容</b>：先人的开拓被如实述录，今天读取的是真实存在过的经验。克罗齐「一切历史都是当代史」把历史说成当代人按主观需要<b>重构</b>的产物，<b>否认历史的客观性</b>。一个立足客观经验，一个立足主观重构，恰好对立。</p>",
+    "log": "客观经验 vs 主观重构——方向相反"
+  },
+  {
+    "title": "选项 A：正中靶心",
+    "cls": "good",
+    "body": "<p>「历史、现实、未来是相通的」——「述录先人、启迪来者」逐句对应：历史启迪未来、现实承续历史、未来从现实走来。这正是序言给「历史是最好的教科书」立的依据。<b>A 对</b>。</p>",
+    "ribbon": { "k": 1, "ok": true },
+    "log": "A：三者相通——逐句都能对上"
+  },
+  {
+    "title": "选项 B：唯心史学命题",
+    "cls": "bad",
+    "body": "<p>「一切历史都是当代史」（克罗齐）否认历史的客观性，把历史变成当代人心灵的产物；序言恰恰强调历史文献的<b>客观内容</b>与真实价值。B 与材料立场相反，<b>错</b>。</p>",
+    "ribbon": { "k": 2, "ok": false },
+    "log": "B：否认历史客观性 → 排除"
+  },
+  {
+    "title": "选项 C：把必然绝对化",
+    "cls": "bad",
+    "body": "<p>历史发展是<b>必然性与偶然性的统一</b>：必然性通过大量偶然性开辟道路——历史人物的个性、突发事件都是历史过程的真实组成。「不包含任何偶然因素」是全称否定式的绝对化表述，<b>错</b>。</p>",
+    "ribbon": { "k": 3, "ok": false },
+    "log": "C：偶然性真实存在 → 排除"
+  },
+  {
+    "title": "选项 D：相通 ≠ 重演",
+    "cls": "bad",
+    "body": "<p>社会发展有相似「一幕」重演，但历史事件<b>不可完整重复和再现</b>；「相通」指联系与继承，不是把昨天原样再放一遍。D 把「相通」偷换成「重复」，<b>错</b>。</p>",
+    "ribbon": { "k": 4, "ok": false },
+    "log": "D：历史事件不可完整重演 → 排除"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案选 <b>A</b>。" + miniTable([
+      ["A 相通", "✓ 时间连续、内容继承"],
+      ["B 当代史", "✗ 否认客观性"],
+      ["C 无偶然", "✗ 必然偶然统一"],
+      ["D 可重复", "✗ 相通≠相同"]
+    ]) + "</p>",
+    "log": "锁定 A：历史、现实、未来是相通的"
+  },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "《复兴文库》序言：历史、现实、未来是相通的",
+  subtitle: "考点：历史·现实·未来的关系 · 方法：拆题眼 → 立机制 → 预判追问 → 逐项排查",
+  counterLabel: '推理步',
+  ribbonTitle: '选项带（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链；序号带 1–4 对应选项 A–D。',
+  snaps: snaps,
+  result: {
+    big: "答案 A",
+    html: "记忆锚点：<b>历史、现实、未来相通而不同一</b>——时间连续、内容继承，但不相同、不重演。两个见到就排除的绝对化命题：「一切历史都是当代史」（否认客观性）、「历史不含任何偶然」（否认偶然性）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：为什么"历史是最好的教科书"——历史、现实、未来的相通性</h2>
+<p>答案：<strong>A（历史、现实、未来是相通的）</strong>。</p>
+<h3>第 0 步：把序言的三句话拆成一条逻辑线</h3>
+<p>材料不是抒情段落，是三步论证：第一句"修史立典，存史启智，以文化人……延续几千年的传统"——说明<strong>修史</strong>这件事本身有意义；第二句"述录先人的开拓，启迪来者的奋斗"——给出修史的<strong>目的</strong>：前半句面向<strong>历史</strong>（述录先人），后半句面向<strong>未来</strong>（启迪来者），动手编纂的是<strong>当下</strong>的现实实践；第三句"一切向前走，都不能忘记走过的过去"——把"向前走（未来）"与"走过的过去（历史）"直接连起来。三句读完，考点浮出水面：<strong>历史、现实、未来三者是什么关系</strong>。</p>
+<h3>第 1 步：立机制——"相通"到底通在哪</h3>
+<p>相通有两层：<strong>时间上连续</strong>——未来从现实走来，现实从历史走来，谁也不是凭空出现；<strong>内容上继承发展</strong>——历史的经验教训沉淀为"教科书"，被今天的人读取、用于开创明天（"启迪来者的奋斗"）。所以"以史为鉴"能够成立，依据正是历史、现实、未来<strong>相互贯通</strong>：历史能认识今天、启迪明天。但要注意分寸：相通指的是<strong>联系与贯通</strong>，不是<strong>相同与重演</strong>——参考解析专门提醒"不能把相通理解成完全相同或完整重复"。</p>
+<h3>第 2 步：预判追问——"以史为鉴"会不会就是"一切历史都是当代史"？</h3>
+<p>不会，两者立场相反。"以史为鉴"的前提是历史有<strong>客观内容</strong>：先人的开拓被如实述录（《复兴文库》是对重要思想文献的客观选编），今天的人从中读取<strong>真实存在过的经验</strong>。而克罗齐"一切历史都是当代史"把历史说成当代人按主观需要<strong>重构</strong>的产物，否认历史的客观性——历史只成了当代心灵的一面镜子。一个立足客观经验，一个立足主观重构，恰好对立。</p>
+<h3>第 3 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对应题干位置</th></tr></thead><tbody><tr><td>A 历史、现实、未来是相通的</td><td>✅</td><td>"述录先人的开拓，启迪来者的奋斗"+"向前走不能忘记走过的过去"，逐句对应</td></tr><tr><td>B 一切历史都是当代史</td><td>❌</td><td>克罗齐命题，否认历史客观性，与序言立场相反</td></tr><tr><td>C 历史过程不包含任何偶然的因素</td><td>❌</td><td>历史是必然性与偶然性的统一，偶然因素真实存在</td></tr><tr><td>D 历史事件往往可以完整重复和再现</td><td>❌</td><td>历史事件不可完整重演；"相通"≠"相同"</td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 B</strong>：把"历史服务当下"直接等价成"历史就是当代史"。序言说历史对当下<strong>有用</strong>（教科书），没有说历史<strong>丧失客观性</strong>、随当代人改写；B 是唯心史学观，见到就排除。</li><li><strong>误选 C</strong>：把"历史有规律"绝对化成"历史只有必然"。唯物史观讲<strong>必然性通过大量偶然性开辟道路</strong>——历史人物的个性、突发事件都是历史过程的真实组成；"不包含任何偶然因素"这种全称否定表述本身就是危险信号。</li><li><strong>误选 D</strong>：把社会形态更替中某些发展阶段的大体相似，误读成"历史事件完整重复和再现"。社会发展有相似"一幕"重演，但事件本身<strong>不可复制</strong>；选 D 恰恰是把 A 的"相通"偷换成了"重复"。</li></ul>
+<blockquote>记忆锚点：历史、现实、未来 = <strong>相通而不同一</strong>——连续、继承、借鉴，但不是相同、不是重演；"一切历史都是当代史"（否认客观性）与"历史不含偶然"（否认偶然性）都是绝对化谬误，见到即排。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,125 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-20 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-20</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2018·20 资本主义阶级结构新变化：变与不变</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 分离图：一个旧位置拆成两个新位置（A 前台 / B 后台）
+function splitDiagram(state){
+  var box = function(head, sub, on, color){
+    var bd = on ? color : '#cbd5e1';
+    var bg = on ? color + '14' : '#f8fafc';
+    var hd = on ? color : '#64748b';
+    return '<span style="display:inline-flex;flex-direction:column;gap:1px;border:2px solid ' + bd +
+      ';background:' + bg + ';border-radius:10px;padding:7px 12px;text-align:center;min-width:150px">' +
+      '<b style="font-size:13px;color:' + hd + '">' + head + '</b>' +
+      '<span style="font-size:11.5px;color:#475569">' + sub + '</span></span>';
+  };
+  return '<div style="display:flex;flex-direction:column;gap:5px;align-items:center;width:max-content;margin:6px 0">' +
+    '<span style="border:2px dashed #64748b;background:#f8fafc;border-radius:10px;padding:5px 14px;font-size:12.5px;color:#64748b">旧位置：资本家＝经营者（一身二任）</span>' +
+    '<span style="font-size:16px;color:#94a3b8">↓ 所有权与经营权分离</span>' +
+    '<div style="display:flex;gap:8px;align-items:center">' +
+    box('A 职业经理·前台', '实际控制经营活动', state >= 1, '#d97706') +
+    '<span style="font-size:14px;font-weight:700;color:#64748b">⇄</span>' +
+    box('B 资本家·后台', '剪息票的食利者', state >= 2, '#d97706') +
+    '</div></div>';
+}
+
+// 劳动者换代条：D 的产业结构背景
+function workersBar(){
+  return '<div style="display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap">' +
+    '<span style="border:2px solid #2a9d8f;background:#2a9d8f14;border-radius:10px;padding:6px 12px;font-size:13px;color:#1f7a70"><b>科技革命</b> → 产业结构转向高技术与服务业</span>' +
+    '<span style="font-size:16px;font-weight:700;color:#64748b">→</span>' +
+    '<span style="border:2px solid #16a34a;background:#f0fdf4;border-radius:10px;padding:6px 12px;font-size:13px;color:#15803d"><b>D 知识型、服务型劳动者持续增加</b></span>' +
+    '</div>';
+}
+
+// C 的两个「改变不了」
+function cBar(){
+  return '<div style="display:flex;gap:8px;margin:6px 0;flex-wrap:wrap">' +
+    '<span style="flex:1;min-width:170px;border:2px solid #dc2626;background:#fef2f2;border-radius:10px;padding:7px 10px;font-size:12.5px;color:#991b1b"><b>改变不了①</b> 资本所有权的垄断格局（大股东控盘）</span>' +
+    '<span style="flex:1;min-width:170px;border:2px solid #dc2626;background:#fef2f2;border-radius:10px;padding:7px 10px;font-size:12.5px;color:#991b1b"><b>改变不了②</b> 职工受雇佣、被剥削的地位</span>' +
+    '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：「阶层、阶级结构」的新变化',
+    body: '<p>设问锁定二战后资本主义<b>社会阶层、阶级结构</b>层面的新变化。先立钥匙再对号：这类变化都从<b>所有权与经营权分离</b>和<b>科技革命</b>里长出来。</p>' },
+  { tag: '机制', cls: 'key', title: '先立机制：一个位置拆成两个',
+    body: '<p>股份公司普及，所有权与经营权分离——「资本家」与「经营者」拆开。分离的<b>前台</b>给 A、<b>后台</b>给 B，劳动者队伍的换代给 D；同时记住底线：变的是剥削方式与统治形式，雇佣劳动制度没动。</p>' + splitDiagram(0) },
+  { tag: '选项A', cls: 'good', ribbon: { k: 1, ok: true }, title: 'A：经理上前台——分离的前台一半',
+    body: '<p>高级职业经理成为大公司经营活动的<b>实际控制者</b>：资本所有者未必懂经营，专业的经理层接管日常经营与控制。<b>A 对。</b></p>' + splitDiagram(1) },
+  { tag: '选项B', cls: 'good', ribbon: { k: 2, ok: true }, title: 'B：资本家退后台——分离的另一半',
+    body: '<p>资本家由直接生产经营者变成<b>剪息票的食利者</b>：退出经营、收股息利息——「管事的」变「收钱的」。与 A 是同一次分离的两半。<b>B 对。</b></p>' + splitDiagram(2) },
+  { tag: '选项D', cls: 'good', ribbon: { k: 3, ok: true }, title: 'D：劳动者换代——科技革命的产物',
+    body: '<p>知识型和服务型劳动者数量随科技革命深入而<b>持续增加</b>：产业结构转向高技术与服务业，劳动者队伍知识化、服务化，是实打实的结构变化。<b>D 对。</b></p>' + workersBar() },
+  { tag: '选项C', cls: 'bad', ribbon: { k: 4, ok: false }, title: 'C：职工持股≠阶级翻转——唯一干扰项',
+    body: '<p>职工持股、参与决策是<b>缓和劳资矛盾的措施</b>，不是阶级位置的翻转：</p>' + cBar() + '<p>劳动者没有因此成为「资本家集团的重要力量」。<b>C 错。</b></p>' },
+  { tag: '追问', cls: 'key', title: '预判追问：变化之后，什么没变',
+    body: '<p>底线一句话：阶层结构和管理形式的变化<b>能缓和矛盾</b>，但不能据此宣布工人阶级或资本主义基本矛盾<b>已经消失</b>——剥削方式与统治形式的调整 ≠ 雇佣劳动制度本身被改变。这正是 C 类表述的迷惑底牌。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：变的三处，不变的一条底线',
+    body: '<p>答案 <b>ABD</b>。记忆锚点：钥匙＝<b>所有权与经营权分离</b>（A 经理实际控制 ⇄ B 资本家食利化）＋<b>科技革命</b>（D 劳动者知识型服务化）；「职工持股」只是缓和矛盾的包装，不翻阶级位置。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: s.tag,
+    log: s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon,
+    done: last,
+  };
+});
+
+AW.init({
+  title: '当代资本主义阶级结构：变的三处、不变的一条底线',
+  subtitle: '2018 年第 20 题 · 所有权与经营权分离 · 科技革命与劳动者换代 · 多选题',
+  intro: '点击「▶ 播放」逐步展开：先立「分离」机制图，再逐项判定 A/B/C/D。',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=D · 4=C；✓ 对 / ✗ 干扰）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABD',
+    html: '钥匙＝<b>所有权与经营权分离</b>：A 经理<b>实际控制</b>（前台）⇄ B 资本家<b>食利化</b>（后台）；<b>科技革命</b>推动 D 劳动者知识型、服务化。<b>C 错</b>：职工持股、参与决策只是缓和劳资矛盾的措施——改变不了资本所有权垄断格局与受雇佣地位，「缓和矛盾」≠「阶级翻转」，更不等于基本矛盾消失。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：当代资本主义阶层、阶级结构「变了什么、没变什么」</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——「所有权与经营权分离」是钥匙，科技革命是推手</h3>
+<p>二战后资本主义最要紧的结构变化：科技革命推动生产社会化，股份公司普及，<strong>资本所有权与经营权分离</strong>——「资本家」和「经营者」从同一个位置拆成两个位置。抓住这把钥匙，四个选项里三条顺手可解：位置拆分后，原资本家退到幕后收息（B），职业经理站上前台掌舵（A），劳动者队伍也随科技革命与产业结构换代（D）。同时立一条底线：这些变化都是剥削方式与统治形式的<strong>调整</strong>，雇佣劳动制度本身没动——C 的错处恰在这条底线上。</p>
+<h3>第 1 步：三个正确项对号入座</h3>
+<table><thead><tr><th>选项</th><th>机制</th></tr></thead><tbody><tr><td>A 高级职业经理成为大公司经营活动的实际控制者</td><td>分离的<strong>前台一半</strong>：资本所有者未必懂经营，专业经理层接管日常经营与控制</td></tr><tr><td>B 资本家由直接生产经营者变成以剪息票为生的食利者</td><td>分离的<strong>后台一半</strong>：退出经营，靠股息利息过活——「管事的」变「收钱的」</td></tr><tr><td>D 知识型和服务型劳动者数量持续增加</td><td>科技革命推动产业结构转向高技术与服务业，劳动者队伍知识化、服务化</td></tr></tbody></table>
+<h3>第 2 步：C 错在哪——「职工持股」翻不动阶级位置</h3>
+<p>C「职工持股和参与决策使得劳动者成为资本家集团的重要力量」错在把<strong>缓和劳资矛盾的措施</strong>当成<strong>阶级位置的翻转</strong>。职工持股、参与决策是二战后资本主义调节分配关系、调和阶级冲突的手段：普通职工手里那点股权，既改变不了资本所有权的垄断格局（大股东控盘未变），也改变不了职工受雇佣、被剥削的地位。参考解析点明整章底线——阶层结构和管理形式的变化能缓和矛盾，但不能据此宣布工人阶级或资本主义基本矛盾已经消失。</p>
+<h3>预判追问：A 和 B 不矛盾吗？</h3>
+<p>不矛盾，它们是<strong>同一次分离的两半</strong>：资本家让出经营权、退居食利（B），经营位置由职业经理接过去（A）——一个退幕、一个登台，互为因果。做题时看到「经理实际控制」与「资本家食利化」同时出现，恰好互相印证、都该勾。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：判断标尺＝看是否改变<strong>雇佣劳动关系与资本所有权结构</strong>；没改变，就谈不上「劳动者变成资本家集团的重要力量」。</li><li><strong>漏选 B</strong>：「食利者」带贬义感，犹豫不敢勾；它与 A 是一对，分离的两半，漏一半就丢一半分。</li><li><strong>把「新变化」当「旧消失」</strong>：结构变了 ≠ 工人阶级消失 ≠ 基本矛盾消失——这是教材对本章的总结论，也是 C 类表述的迷惑底牌。</li></ul>
+<blockquote>记忆锚点：钥匙＝所有权与经营权分离（A 经理实际控制 ⇄ B 资本家食利化）＋科技革命（D 劳动者知识型服务化）；「职工持股」只是缓和矛盾的包装，不翻阶级位置。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

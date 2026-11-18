@@ -1,8 +1,134 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-05 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-05</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2020·05 搞清楚「什么是社会主义、怎样建设社会主义」的关键</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站无 KaTeX 版·纯文本推理链卡片：外壳沿用 assets/anim-engine.js + anim.css，
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每步完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>「什么是社会主义、怎样建设社会主义」是邓小平反复思考的<b>首要的基本理论问题</b>。问搞清楚它的「<b>关键</b>」——要找能<b>牵动全局</b>的那一环，其余命题都是锁上的其他零件。</p>",
+    "log": "审题：找牵动全局的「关键」"
+  },
+  {
+    "title": "先立模型：一组配套命题各归其位",
+    "cls": "key",
+    "body": "<ul><li><b>发展阶段</b>（初级阶段）：回答「现在处在哪」→ 总依据</li><li><b>根本任务</b>：回答「要干什么」→ 本质的要求之一</li><li><b>本质</b>：回答「到底是什么」→ <b>首要问题的答案本身</b></li><li><b>坚持基本制度</b>：回答「底线是什么」→ 认清本质的前提</li></ul>",
+    "log": "四个命题各占一个位置"
+  },
+  {
+    "title": "机制：历史教训引出「本质」之问",
+    "cls": "step",
+    "body": "<p>过去按「公有化程度越高越好」等<b>制度形式</b>理解社会主义，把手段当成目的，实践随之摇摆。1992 年南方谈话给出本质论：<b>解放生产力，发展生产力，消灭剥削，消除两极分化，最终达到共同富裕</b>。</p>",
+    "log": "把手段当目的的教训 → 必须认清本质"
+  },
+  {
+    "title": "为什么本质是「关键」：牵一发动全身",
+    "cls": "step",
+    "body": "<p>本质一清 → <b>根本任务</b>（解放发展生产力）自动从中推出 → <b>发展阶段</b>怎么定位、<b>道路</b>怎么走全部理顺。但守住<b>基本制度</b>是谈本质的前提——不坚持方向，界定就失去立足点。</p>",
+    "log": "本质牵动任务/阶段/道路，制度是前提"
+  },
+  {
+    "title": "D：坚持基本制度 + 认清本质 = 关键",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p><b>坚持基本制度</b>是前提（守住方向），<b>认清本质</b>是关键——前提与关键两半俱全，正是教材口径。<b>D 正确</b>。</p>",
+    "log": "D：前提+关键俱全 → 正确"
+  },
+  {
+    "title": "A：发展阶段是「总依据」，不是关键",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>初级阶段回答「在哪个位置」；顺序上先搞清「是什么」，才谈得上「在哪个阶段怎样干」。<b>A 错误</b>。</p>",
+    "log": "A 是总依据，不是关键 → 排除"
+  },
+  {
+    "title": "B：根本任务只是本质的一部分",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>根本任务（解放和发展生产力）是<b>本质论的内容</b>——用组成部分答不了整体问题。<b>B 错误</b>。</p>",
+    "log": "B 以部分充整体 → 排除"
+  },
+  {
+    "title": "C：一般规律不在设问层次",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>「社会主义社会发展的一般规律」不是本题设问的层次，属于凑数项。<b>C 错误</b>。</p>",
+    "log": "C 层次错位 → 排除"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>D</b>。记忆锚点：关键=在<b>坚持基本制度</b>前提下<b>认清本质</b>；本质=解放发展生产力、消灭剥削、消除两极分化、共同富裕。</p>",
+    "log": "锁定 D：认清社会主义本质"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "搞清楚「什么是社会主义、怎样建设社会主义」的关键",
+  subtitle: "考点：社会主义本质与首要基本理论问题 · 方法：配套命题各归其位 + 找牵动全局的一环",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "记忆锚点：搞清首要基本理论问题的关键 = 在<b>坚持社会主义基本制度</b>的基础上进一步<b>认清社会主义的本质</b>。B（根本任务）只是本质论的组成部分，A（发展阶段）是总依据，C 层次错位——都答不了「关键」。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：搞清楚「什么是社会主义、怎样建设社会主义」的关键</h2>
+<p>答案：<strong>D（在坚持社会主义基本制度的基础上进一步认清社会主义的本质）</strong>。</p>
+<h3>第 0 步：先立模型——一个首要问题带出一组命题，各有各的位置</h3>
+<p>为什么先立模型：邓小平的社会主义理论是一组互相配套的命题，题问「关键」，就得先分清谁是钥匙、谁是锁上的其他零件：</p>
+<table><thead><tr><th>命题</th><th>回答什么</th><th>理论位置</th></tr></thead><tbody><tr><td>社会主义发展阶段</td><td>现在处在哪</td><td>总依据（初级阶段）</td></tr><tr><td>社会主义根本任务</td><td>要干什么</td><td>本质的要求之一（解放和发展生产力）</td></tr><tr><td>社会主义本质</td><td>社会主义到底是什么</td><td><strong>首要问题的答案本身</strong></td></tr><tr><td>坚持基本制度</td><td>哪些底线不能动</td><td>认清本质的前提</td></tr></tbody></table>
+<p>「关键」必然落在<strong>答案本身</strong>那一格——认清本质；而认清本质又必须在<strong>坚持基本制度</strong>的前提下进行。所以 D 是「前提+关键」两半俱全的完整表述，正是教材口径。</p>
+<h3>第 1 步：机制——为什么「认清本质」能牵动全局</h3>
+<p>理解的关键在历史教训：过去几十年按「公有化程度越高越好」等<strong>制度形式</strong>理解社会主义，把手段当成了目的，实践随之摇摆。1992 年南方谈话给出本质论——「解放生产力，发展生产力，消灭剥削，消除两极分化，最终达到共同富裕」：</p>
+<ol><li>本质一清，<strong>根本任务</strong>（解放和发展生产力）自动从中推出；</li><li>本质一清，<strong>发展阶段</strong>如何定位、<strong>发展道路</strong>怎么走，全都随之理顺；</li><li>但守住<strong>基本制度</strong>是谈本质的前提——不坚持方向，界定就失去立足点。</li></ol>
+<p>这就是「关键」的含义：牵一发动全身的那一环。</p>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对应的误解</th></tr></thead><tbody><tr><td>A 在认清基本国情基础上把握发展阶段</td><td>❌</td><td>把「总依据」当「关键」——阶段回答位置问题，不回答「是什么」</td></tr><tr><td>B 在分析主要矛盾基础上明确根本任务</td><td>❌</td><td>用<strong>部分</strong>答<strong>整体</strong>——根本任务只是本质论的内容之一</td></tr><tr><td>C 在总结历史经验基础上揭示一般规律</td><td>❌</td><td>设问层次错位——题问教材对「关键」的表述，不是哲学层的一般规律</td></tr><tr><td>D 在坚持基本制度基础上认清本质</td><td>✅</td><td>前提与关键俱全</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：根本任务出镜率高，但它属于「怎样建设」层面的内容，是答案的一部分，不是答案的钥匙。</li><li><strong>误选 A</strong>：顺序颠倒了——先搞清「是什么」，才谈得上「在哪个阶段怎样干」。</li><li><strong>半对陷阱</strong>：D 的完整表述含「坚持基本制度」这一前提；只背「认清本质」半句，选项里没有它，单选照样丢分。</li></ul>
+<blockquote>记忆锚点：首要基本理论问题=「什么是、怎样建设」；关键=在<strong>坚持基本制度</strong>前提下<strong>认清本质</strong>；本质=解放发展生产力、消灭剥削、消除两极分化、共同富裕。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

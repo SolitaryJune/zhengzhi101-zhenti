@@ -1,8 +1,86 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-14 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-14</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-14 · 社会主义道德核心</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：见「核心」，先问哪个范畴的核心',
+    cls: 'key',
+    body: '<p>社会主义道德建设的核心是什么？这是一道<b>位次题</b>——每个概念在固定表述里各守一位，串位即错。先立位次表再对号，不靠声望选人。</p>' },
+  { title: '立机制：为什么核心是为人民服务',
+    cls: 'key',
+    body: '<p>社会主义道德建立在<b>公有制为主体的经济基础</b>上，人民根本利益一致，道德理应服务人民——「为人民服务」贯穿各领域道德要求，是社会主义道德<b>区别于其他道德的显著标志</b>。位次表：核心=为人民服务；原则=集体主义；基本要求=「五爱」；民族精神的核心=爱国主义（另一范畴）。</p>' },
+  { title: '选项 A：爱国主义',
+    cls: 'bad', k: 1, pick: false,
+    body: '<p>它是<b>民族精神的核心</b>——「核心」错位到另一范畴。见「核心」必先问范畴，<b>排除</b>。</p>' },
+  { title: '选项 B：集体主义',
+    cls: 'bad', k: 2, pick: false,
+    body: '<p>它是社会主义道德建设的<b>原则</b>——与「核心」一字之差、相邻不同位，命题专挖这个坑，<b>排除</b>。</p>' },
+  { title: '选项 C：为人民服务',
+    cls: 'good', k: 3, pick: true,
+    body: '<p>社会主义道德建设的<b>核心</b>——位次表正主，由经济基础与根本利益一致推出，<b>入选</b>。</p>' },
+  { title: '选项 D：社会主义荣辱观',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p>回答「什么是荣、什么是辱」的评价标准问题，属公民道德建设的重要内容，不占「核心—原则」位次，<b>排除</b>。</p>' },
+  { title: '结论：四个位次别串门',
+    cls: 'good',
+    body: '<p>核心为人民，原则是集体，民族精神核心是爱国，荣辱观是评价标准——只有 C 占「道德建设核心」位。</p><p><b>答案 C。</b>记忆锚点：核心=为人民服务；原则=集体主义。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2012-14 · 社会主义道德建设的核心',
+  subtitle: '2012 年第 14 题（单选）· 考点：社会主义道德核心 · 逐项推演',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 正确 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立「核心—原则」位次表，再逐项对号入座。',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '记忆锚点：道德建设<b>核心=为人民服务</b>（显著标志）、<b>原则=集体主义</b>；民族精神的核心=爱国主义——四个位次别串门。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：道德建设的「核心—原则—着力点」各就各位</h2>
+<p>答案：<strong>C（为人民服务）</strong>。</p>
+<h3>第 0 步：先立机制——为什么核心恰好是「为人民服务」</h3>
+<p>社会主义道德建立在<strong>公有制为主体的经济基础</strong>上：人民的根本利益一致，道德理应<strong>服务人民</strong>——这不是一句口号，而是由经济基础推出的必然结论。所以「为人民服务」是社会主义道德建设的<strong>核心</strong>：它贯穿于社会公德、职业道德、家庭美德等各领域、各层次的道德要求之中，是社会主义道德<strong>区别于其他道德的显著标志</strong>。围绕这个核心，其余概念各守一位：</p>
+<table><thead><tr><th>范畴</th><th>固定表述</th></tr></thead><tbody><tr><td>社会主义道德建设的核心</td><td><strong>为人民服务</strong></td></tr><tr><td>社会主义道德建设的原则</td><td>集体主义</td></tr><tr><td>基本要求</td><td>爱祖国、爱人民、爱劳动、爱科学、爱社会主义（「五爱」）</td></tr><tr><td>民族精神的核心</td><td>爱国主义（另一范畴的「核心」）</td></tr></tbody></table>
+<h3>第 1 步：对号入座</h3>
+<p>见「核心」先问一句：<strong>哪个范畴的核心</strong>？题目问的是道德建设，不是民族精神：</p>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 爱国主义</td><td>❌</td><td>是<strong>民族精神的核心</strong>——「核心」错位到另一范畴</td></tr><tr><td>B 集体主义</td><td>❌</td><td>是道德建设的<strong>原则</strong>，与「核心」相邻但不同位</td></tr><tr><td>C 为人民服务</td><td>✅</td><td>社会主义道德建设的核心，位次表正主</td></tr><tr><td>D 社会主义荣辱观</td><td>❌</td><td>公民道德建设的重要内容（荣辱评价标准），不占「核心」位</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 B（「核心/原则」一字之差）</strong>：集体主义与为人民服务总是一起出现，命题专挖这个位置差——记「核心为人民，原则是集体」。</li><li><strong>选 A（爱国主义声望最高）</strong>：两处「核心」最易串门——民族精神的核心才是爱国主义；见「核心」必先问范畴。</li><li><strong>选 D（荣辱观也常考）</strong>：荣辱观回答的是「什么是荣、什么是辱」的评价标准问题，属于公民道德建设的内容要求，不在「核心—原则」这套位次里。</li></ul>
+<blockquote>记忆锚点：核心=为人民服务，原则=集体主义，基本要求=五爱，民族精神核心=爱国主义——四个位次别串门。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

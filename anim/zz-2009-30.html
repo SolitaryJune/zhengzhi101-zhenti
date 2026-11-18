@@ -1,8 +1,157 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-30 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-30</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2009-30 · 基层群众自治制度的三大载体</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链动画（政治站无 KaTeX）：两步判定法（三自定性质→三空间划清单）+ 逐项对号，只写 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行可加宽的格子（引擎 cellRow 固定 44px 宽，放不下中文短语，这里自定义行）
+function boxRow(items, ptrMap){
+  var row = AW.el('div', 'aw-cells');
+  items.forEach(function(it, i){
+    var col = AW.el('div', 'aw-col');
+    col.style.width = it.w || '110px';
+    if(ptrMap && ptrMap[i + 1]) col.appendChild(AW.el('div', 'aw-ptr', ptrMap[i + 1]));
+    var box = AW.el('div', 'aw-box' + (it.c ? ' ' + it.c : ''), it.t);
+    box.style.width = it.w || '110px';
+    col.appendChild(box);
+    row.appendChild(col);
+  });
+  return row;
+}
+
+// 版图行：三个基层空间各配一个法定载体（第二步卡片用）
+function mapRow(){
+  return boxRow([
+    { t: '村委会', c: 'ok', w: '120px' },
+    { t: '居委会', c: 'ok', w: '120px' },
+    { t: '职代会', c: 'ok', w: '120px' }
+  ], { 1: '农村', 2: '城市社区', 3: '企事业单位' });
+}
+
+// 三自行：性质关的检验标志（第一步卡片用）
+function selfRow(){
+  return boxRow([
+    { t: '自我管理', c: 'key', w: '120px' },
+    { t: '自我教育', c: 'key', w: '120px' },
+    { t: '自我服务', c: 'key', w: '120px' }
+  ], { 1: '性质关·三自', 2: '', 3: '' });
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：两步判定法——先过性质关，再划版图",
+    "cls": "key",
+    "body": "<p>基层群众自治＝人民群众在<b>基层依法直接行使民主权利</b>。先验性质：标志是三个「自我」——</p>" +
+      selfRow().outerHTML +
+      "<p>再划版图：能装下「三自」的基层空间恰好三个，各配一个法定载体。逐项对号。</p>",
+    "log": "先验“三自”性质，再按三空间对号入座"
+  },
+  {
+    "title": "版图：三个空间、三个载体，一个不多一个不少",
+    "cls": "key",
+    "body": "<p>「主要内容」考的就是这张清单——农村、城市社区、企事业单位三个基层空间，各有一个法定自治载体：</p>" +
+      mapRow().outerHTML +
+      "<p>注意第四种常被塞进来的东西：<b>群团组织</b>（妇联、共青团、工会）——它按职能自上而下建体系，过不了性质关。</p>",
+    "log": "清单：村委＋居委＋职代会，群团组织不在其列"
+  },
+  {
+    "title": "选项 A：农村村民委员会",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p><b>农村</b>空间的自治载体——村民自我管理、自我教育、自我服务的基层群众性自治组织，性质关、版图关双过 → <b>入选</b>。</p>",
+    "log": "A＝农村载体，双关全过，入选"
+  },
+  {
+    "title": "选项 B：城市居民委员会",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p><b>城市社区</b>空间的自治载体——居民自我管理的基层群众性自治组织 → <b>入选</b>。</p>",
+    "log": "B＝城市社区载体，入选"
+  },
+  {
+    "title": "选项 C：企业职工代表大会",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p><b>企事业单位</b>空间的自治形式——职工直接行使民主权利、实行民主管理的载体，正合「三自」。它姓「民主管理」不姓「行政管理」，不是企业内部的管理机关 → <b>入选</b>。以为职代会只是企业管理形式而漏掉它，是本题最常见的漏选。</p>",
+    "log": "C＝单位载体：职工民主管理，入选"
+  },
+  {
+    "title": "选项 D：妇女联合会",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>妇联是党领导下的<b>群团组织</b>（人民团体），按<b>职能</b>（代表和维护妇女权益）自上而下建立体系，是党联系群众的桥梁。拿「三自」检验：不是基层空间内群众直接行使民主权利的自治形式——<b>“群众”两字相同、“自治”两字缺失</b> → <b>排除</b>。</p>",
+    "log": "D＝群团组织：有“群众”无“自治”，排除"
+  },
+  {
+    "title": "结论：ABC",
+    "cls": "good",
+    "body": "<p>三个空间、三个载体：<b>村委会（农村）＋居委会（城市）＋职代会（单位）</b>——一个不多一个不少，<b>答案 ABC</b>。群团组织（妇联、共青团、工会）均不入自治清单。</p>",
+    "log": "锁定 ABC：三空间三载体配齐"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  title: "基层群众自治制度的三大载体",
+  subtitle: "2009 年第 30 题（多选）· 考点：基层群众自治 · 方法：“三自”定性质、三空间定清单",
+  counterLabel: '推理步',
+  ribbonTitle: '选项判定（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先过“三自”性质关，再按三空间划清单。',
+  result: {
+    big: "答案 ABC",
+    html: "记忆锚点：自治三件套＝<b>村委（农村）、居委（城市）、职代会（单位）</b>；群团组织（妇联、共青团、工会）按职能自上而下，不在自治清单里（D 错）。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：基层群众自治制度——“三自”定性质、三空间定清单</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——两步判定法：先验性质，再划版图</h3>
+<p>判断一个组织算不算基层群众自治组织，要过两道关。<strong>第一道（性质关）</strong>：它是不是人民群众在<strong>基层</strong>依法<strong>直接行使民主权利</strong>的组织形式？标志是三个“自我”——<strong>自我管理、自我教育、自我服务</strong>。<strong>第二道（版图关）</strong>：能装下“三自”的基层空间恰好三个，每个空间配一个法定载体——</p>
+<table><thead><tr><th>基层空间</th><th>组织载体</th><th>选项</th></tr></thead><tbody><tr><td>农村</td><td>农村村民委员会</td><td>A</td></tr><tr><td>城市社区</td><td>城市居民委员会</td><td>B</td></tr><tr><td>企事业单位</td><td>企业职工代表大会</td><td>C</td></tr></tbody></table>
+<p>三个空间、三个载体，一个不多一个不少——这就是“主要内容”的完整清单。</p>
+<h3>第 1 步：先答掉两个必问的“为什么”</h3>
+<p><strong>为什么职代会（C）算自治？</strong> 职代会是企事业单位职工<strong>民主管理</strong>的载体——职工直接行使民主权利，审议企业重大决策、监督干部，正合“三自”。它不是企业的行政管理机关（那才不是自治），所以“以为职代会只是企业内部管理形式”而漏掉 C，是本题最常见的漏选。</p>
+<p><strong>为什么妇联（D）不算？</strong> 妇联是党领导下的<strong>群团组织</strong>（人民团体），按<strong>职能</strong>（代表和维护妇女权益、促进男女平等）自上而下建立组织体系，是党联系群众的桥梁。拿“三自”检验：它不是基层空间内群众直接行使民主权利的自治形式——<strong>“群众”两个字相同，“自治”两个字缺失</strong>。同类的共青团、工会等群团组织，同样不入自治清单。</p>
+<h3>第 2 步：逐项对号</h3>
+<ul><li><strong>A 农村村民委员会</strong>：农村空间的自治载体，村民“三自” ✅</li><li><strong>B 城市居民委员会</strong>：城市社区空间的自治载体，居民“三自” ✅</li><li><strong>C 企业职工代表大会</strong>：企事业单位职工民主管理的自治载体，三大件之一 ✅</li><li><strong>D 妇女联合会</strong>：群团组织，缺“自治”，排除 ❌</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 D——“群众组织＝群众自治组织”的字面混淆</strong>：看见“妇女”也是群众就选。群团组织是“被组织起来联系群众的体系”，自治组织是“群众在基层直接行使民主权利的载体”，差两个字、性质不同。</li><li><strong>漏选 C——把职代会当企业管理机构</strong>：职代会姓“民主管理”不姓“行政管理”，它是三大件里覆盖“单位”空间的那一件；只记城乡社区、漏掉单位，清单就不完整。</li><li><strong>清单记忆法</strong>：答“主要内容有／包括”类题目直接按空间清单对号——村委（农村）、居委（城市）、职代会（单位）。</li></ul>
+<blockquote>记忆锚点：自治三件套＝<strong>村委、居委、职代会</strong>；群团组织（妇联、共青团、工会）按职能自上而下，不在自治清单里（D 错）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

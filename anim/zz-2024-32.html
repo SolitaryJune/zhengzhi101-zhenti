@@ -1,8 +1,87 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-32 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-32</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2024-32 · “四个认同”的完整链条</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：设问是“半句填空”——认同要过哪几道关',
+    cls: 'key',
+    body: '<p>题干铺垫总要求“<b>学思想、强党性、重实践、建新功</b>”，其中“学思想”是建立认同的前提——先“全面学习领会”，才有“不断增进”。设问落在半句话上：不断增进对党的创新理论的____。填的必须是“认同”的层面：一个理论要让人真正信服、入脑入心，要通过<b>立场、思想、学理、情感</b>四道关——2023 年 4 月 3 日主题教育工作会议的固定搭配。</p>' },
+  { title: '选项 A：政治认同——立场关',
+    cls: 'good', k: 1, pick: true,
+    body: '<p>认同首先是对党的<b>政治立场、政治方向</b>的认同，排在第一位的“信”的起点。<b>成立 → 入选</b>。</p>' },
+  { title: '选项 B：思想认同——思想关',
+    cls: 'good', k: 2, pick: true,
+    body: '<p>对应题干“把握好<b>世界观、方法论</b>”：认可它观察和分析问题的思想路径。<b>成立 → 入选</b>。</p>' },
+  { title: '选项 C：理论认同——学理关',
+    cls: 'good', k: 3, pick: true,
+    body: '<p>对应题干“全面系统掌握<b>基本观点、科学体系</b>”“坚持好、运用好立场观点方法”：被“讲道理”讲服了。<b>成立 → 入选</b>。</p>' },
+  { title: '选项 D：情感认同——情感关',
+    cls: 'good', k: 4, pick: true,
+    body: '<p>不光“服”，还要“亲”：发自内心的认同与<b>情感归属</b>，理论与人心相接的最后一环。<b>成立 → 入选</b>。</p>' },
+  { title: '易错点：三种误判对应三种误解',
+    cls: 'bad',
+    body: '<p><b>不敢全选</b>：以为四个“认同”里有凑数的——立场、思想、学理、情感各管一段，互不替代；<b>漏 D</b>：只把认同理解为理性层面，“情感认同”最“软”却正是原表述的组成部分；<b>混入总要求</b>：总要求十二字回答“怎么做”（行动纲领），“四个认同”回答“学思想要达到什么程度”（效果指向），两句口径不能互相顶替。</p>' },
+  { title: '结论：ABCD 全选——固定搭配、缺一不可',
+    cls: 'good',
+    body: '<p>四个层面构成完整链条：<b>立场对（政治）· 思想通（思想）· 学理服（理论）· 情感亲（情感）</b>，缺一环认同就不完整。</p><p><b>答案 ABCD。</b></p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: s.cls === 'bad' ? 'miss' : (last ? 'done' : 'step'),
+    tag: last ? '结论' : (s.cls === 'bad' ? '易错' : (s.cls === 'key' ? '审题' : (s.pick ? '✓ 入选' : '辨析'))),
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2024-32 · “四个认同”的完整链条',
+  subtitle: '2024 年第 32 题（多选）· 考点：主题教育总要求 · 立场→思想→学理→情感，层层过关',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：从“学思想”的前提出发，看认同要过哪四道关。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '记忆锚点：<b>四个认同 = 立场对（政治）、思想通（思想）、学理服（理论）、情感亲（情感）</b>；先“学思想”，后“增认同”，固定搭配、缺一不可。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：主题教育——增进"四个认同"的完整链条</h2>
+<p>答案：<strong>ABCD</strong>（全选）。</p>
+<h3>第 0 步：先立机制——"认同"是怎么建立起来的</h3>
+<p>题干的设问是个"半句填空"：会议要求全面学习领会习近平新时代中国特色社会主义思想，把握好其世界观、方法论，坚持好、运用好贯穿其中的立场观点方法，<strong>不断增进对党的创新理论的____</strong>。填进来的东西必须回答一个问题：一个理论要让人真正信服、入脑入心，要通过哪几道"关卡"？2023 年 4 月 3 日主题教育工作会议给出的固定搭配是四个层面：</p>
+<ol><li><strong>政治认同</strong>——立场关卡：认同首先是对党的政治立场、政治方向的认同，这是"信"的起点；</li><li><strong>思想认同</strong>——思想关卡：认同其世界观、方法论，认可它观察和分析问题的思想路径；</li><li><strong>理论认同</strong>——学理关卡：认同它的基本观点、科学体系，也就是被"讲道理"讲服了；</li><li><strong>情感认同</strong>——情感关卡：不光"服"，还要"亲"——发自内心的认同与情感归属。</li></ol>
+<p>四个层面回答的是"为什么信"的四个不同侧面：<strong>立场对、思想通、学理服、情感亲</strong>，缺一环认同就不完整——这是四个选项全选、且作为固定搭配顺序固定的原因。再看题干铺垫与设问的接续关系：会议先讲总要求"学思想、强党性、重实践、建新功"，其中"学思想"正是建立认同的<strong>前提</strong>——先"全面学习领会"，才有"不断增进"；题干那串"全面系统掌握基本观点、科学体系，把握世界观、方法论"恰好落在思想认同与理论认同两个层面上。</p>
+<h3>第 1 步：逐项对号</h3>
+<ul><li><strong>A 政治认同</strong> ✅：认同的政治维度，排在第一位的"立场关"；</li><li><strong>B 思想认同</strong> ✅：对应题干"把握好世界观、方法论"；</li><li><strong>C 理论认同</strong> ✅：对应题干"全面系统掌握基本观点、科学体系""坚持好、运用好立场观点方法"；</li><li><strong>D 情感认同</strong> ✅：认同的情感维度，理论与人心相接的最后一环。</li></ul>
+<p>→ 选 <strong>ABCD</strong>。"四个认同"是原文固定搭配，四个层面构成完整链条，不存在"多一个少一个"的取舍。</p>
+<h3>易错点：每种误判对应哪种误解</h3>
+<ul><li><strong>不敢全选</strong>：误以为四个"认同"里总有个凑数的。四个层面各管一段——立场、思想、学理、情感——互不替代；识别出"原文固定排列"，就敢全选。</li><li><strong>漏 D（情感认同）</strong>：只把"认同"理解为理性层面（思想、学理），忘了认同还有情感归属这一维。恰恰是"情感认同"最"软"、最容易被漏，但它正是原表述的组成部分。</li><li><strong>把"总要求十二字"混进认同</strong>：总要求"学思想、强党性、重实践、建新功"是<strong>行动纲领</strong>，回答"怎么做"；"四个认同"是学习贯彻的<strong>效果指向</strong>，回答"学思想要达到什么程度"。两句口径不同，不能互相顶替——另有把某些表述里的"三个认同"套过来的错法，同样丢 D。</li></ul>
+<blockquote>记忆锚点：<strong>四个认同 = 立场对（政治）、思想通（思想）、学理服（理论）、情感亲（情感）</strong>；先"学思想"，后"增认同"，固定搭配、缺一不可。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,100 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-30 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-30</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2026-30 · 理想与实践："产物"定因果方向（2026 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼："产物"两个字定箭头',
+    cls: 'key',
+    body: '<p>题干："作为<b>一定的社会实践的产物</b>，理想是……对社会实践活动理性认识的结晶。"因果方向定死：<b>实践 → 理想</b>。四个选项各认领一个方向：A 归宿（实现）、B 标准（检验）、D 动力（深化）、C 想把箭头反过来。</p>' },
+  { title: '先立机制：从"产物"推出三重关系',
+    cls: '',
+    body: '<p>既然是实践的<b>产物</b>：①要回到实践中去实现（归宿）；②其真理性要由实践裁决（标准）；③随实践发展而深化（动力）。三重关系全部从"来源"顺流而下，这就是机制先行的读法。</p>' },
+  { title: '逐项分析 A：理想需要通过实践实现',
+    cls: 'good',
+    ribbon: {k:1, ok:true},
+    body: '<p>A："理想需要通过实践实现。"再美好的理想，离开实践只是空想；实践是理想与现实之间<b>唯一的桥梁</b>——从实践中来，就得回实践中去。✅ 选。</p>' },
+  { title: '逐项分析 B：实践是检验理想科学与否的标准',
+    cls: 'good',
+    ribbon: {k:2, ok:true},
+    body: '<p>B："实践是检验理想科学与否的标准。"理想是否符合历史规律、能否实现，不能自说自话，只能放回实践中检验——实践是检验真理的唯一标准。✅ 选。</p>' },
+  { title: '逐项分析 D：实践深化对理想的认识',
+    cls: 'good',
+    ribbon: {k:3, ok:true},
+    body: '<p>D："实践能深化对理想的认识。""处在特定历史条件下"→ 理想有时代性：实践向前走，认识随之修正、丰富、深化——理想是在实践中不断校准的活目标。✅ 选。</p>' },
+  { title: '逐项分析 C：箭头反打了',
+    cls: 'bad',
+    ribbon: {k:4, ok:false},
+    body: '<p>C："理想是社会实践活动的<b>必要条件</b>。"追问：没有理想的社会实践存在吗？存在——日常生产并不都以理想为前提。方向恰恰相反：<b>实践是理想的基础</b>。理想能引导、激励实践，但"引导"≠"必要条件"——因果倒置。❌ 不选。</p>' },
+  { title: '对号入座汇总',
+    cls: '',
+    body: '<p>A ✅ 归宿：回实践中去；B ✅ 标准：实践裁决；D ✅ 动力：深化认识；C ❌ 把"产物"说成"前提"，箭头反打。→ 答案 <b>ABD</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>ABD</b>。理想与实践：来源、标准、动力三重关系；"必要条件"是因果倒置（C 反）。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2026-30 理想与实践：三重关系',
+  subtitle: '考点：理想与实践 · 来源/标准/动力 · 因果方向的识别 —— 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABD',
+    html: '<b>A</b> 理想需要通过实践实现（归宿）；<b>B</b> 实践是检验理想科学与否的标准（标准）；<b>D</b> 实践能深化对理想的认识（动力）。<br><br><b>干扰项：</b>C"理想是社会实践活动的必要条件"——把"实践的产物"偷换成"实践的先决条件"，因果倒置；理想引导实践，但实践才是理想的基础。<br><br><b>记忆锚点：</b>来源、标准、动力三重关系；见"必要条件/前提"先核箭头方向。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：理想与实践——"产物"两个字定因果方向</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——材料一句话已经把因果写死</h3>
+<p>题干："作为<strong>一定的社会实践的产物</strong>，理想是处在特定历史条件下的人们对社会实践活动理性认识的结晶。"</p>
+<p>拆开读：理想与实践的关系方向是<strong>实践 → 理想</strong>——理想从实践中产生（来源），是实践经验的理性结晶（性质），因而只能在实践中检验（标准）、通过实践实现（归宿），并随实践发展而不断深化（动力）。四个选项各认领一个方向：A 认领"归宿"、B 认领"标准"、D 认领"动力"，C 却想把箭头反过来。</p>
+<h3>第 1 步：A 对——归宿：理想必须通过实践实现</h3>
+<p>理想不是观念世界的自转：再美好的理想，离开实践只是空想，崇高理想的实现要靠一代代人接续奋斗——实践是理想与现实之间唯一的桥梁。这由"产物"身份顺理成章推出：<strong>从实践中来，就得回实践中去</strong>。</p>
+<h3>第 2 步：B 对——标准：实践检验理想科学与否</h3>
+<p>实践是检验真理的唯一标准。理想是不是科学的（是否符合历史发展规律、是否可实现），不能由理想自身宣称，只能放到实践中检验。既称"理性认识的结晶"，其真理性自然也要接受实践标准的裁决。</p>
+<h3>第 3 步：D 对——动力：实践深化对理想的认识</h3>
+<p>"处在特定历史条件下"意味着理想有时代性：实践向前发展，人们对理想的认识随之修正、丰富、深化。实践是认识发展的动力，同样是对理想认识的推动力——理想不是一次定型的静止物，而是在实践推进中不断校准的活目标。</p>
+<h3>第 4 步：C 为什么错——箭头反打：把"产物"说成"前提"</h3>
+<p>C 说"理想是社会实践活动的必要条件"。追问：没有理想的社会实践存在吗？存在——日常生产劳动并不都以某种理想为前提。方向恰恰相反：<strong>实践是理想的基础</strong>（先有社会实践，才有理想的产生）。理想可以<strong>引导、激励</strong>实践（这是它的能动作用），但"引导"不等于"必要条件"。C 把"实践的产物"偷换成"实践的先决条件"，因果倒置。</p>
+<h3>第 5 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>与"产物"的关系</th></tr></thead><tbody><tr><td>A 理想需要通过实践实现</td><td>✅</td><td>从实践中来 → 回实践中去</td></tr><tr><td>B 实践是检验理想科学与否的标准</td><td>✅</td><td>理性结晶的真理性由实践裁决</td></tr><tr><td>C 理想是社会实践的必要条件</td><td>❌</td><td>因果倒置：实践才是理想的基础</td></tr><tr><td>D 实践能深化对理想的认识</td><td>✅</td><td>时代性：实践发展推动认识深化</td></tr></tbody></table>
+<p>→ 选 <strong>ABD</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：把"理想指导实践"的能动作用夸大为"必要条件"。识别标志："必要条件""前提"这类词要看<strong>箭头方向</strong>——题干箭头是实践 → 理想。</li><li><strong>漏选 D</strong>：只答"来源、检验"两个经典点，漏掉"动力"这第三重关系。</li><li><strong>混 A 与 C</strong>："理想通过实践实现"（实践是理想的实现手段）与"实践以理想为必要条件"（理想是实践的先决前提）是方向相反的两个命题。</li></ul>
+<blockquote>记忆锚点：理想与实践三重关系——<strong>来源、标准、动力（A、B、D）</strong>；理想引导实践但不构成实践的必要条件（C 反，因果倒置）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,127 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-14 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-14</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2022 · 法律由什么决定——沿「物质决定」的梯子追到根本</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链版（政治站无 KaTeX）：引用 ../assets/anim-engine.js + ../assets/anim.css，只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每步完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：设问「根本因素」",
+    "cls": "key",
+    "body": "<p>题干已架好两级梯子：法律不是凭空产生的、由<b>一定的社会物质生活条件</b>所决定。设问再往下追——物质生活条件内部，「决定法律本质、内容和发展方向的<b>根本因素</b>」是谁？问的是梯子的<b>最底层</b>。</p>",
+    "log": "问的是最底层那个因素"
+  },
+  {
+    "title": "立模型：法律本质的三层追问梯子",
+    "cls": "key",
+    "body": "<p>表层：法律是<b>统治阶级意志</b>的体现（是谁的意志）→ 中层：意志由<b>社会物质生活条件</b>决定（意志从哪来）→ 根本层：物质生活条件中<b>生产方式说了算</b>（谁根本）。每层回答的问题不同，别停错层。</p>",
+    "log": "意志 → 物质生活条件 → 生产方式"
+  },
+  {
+    "title": "机制：物质生活条件内部三要素的权重",
+    "cls": "key",
+    "body": "<p>物质生活条件 = <b>地理环境 + 人口因素 + 生产方式</b>。前两者只起<b>加速或延缓</b>作用，不能决定社会性质；唯有生产方式（生产力 + 生产关系）决定社会的性质、面貌与发展方向。法律是上层建筑，归根到底被生产方式决定的经济基础托住。</p>",
+    "log": "只有生产方式「决定」，其余「影响」"
+  },
+  {
+    "title": "选项 B：物质资料的生产方式",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p>生产方式决定社会性质与面貌，进而<b>决定法律的本质、内容和发展方向</b>——封建生产方式出封建的法，资本主义生产方式出资本主义的法。<b>B 正确</b>。</p>",
+    "log": "B = 决定链最底端，入选"
+  },
+  {
+    "title": "选项 A：地理环境",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>地理环境是物质生活条件的<b>成员</b>，但只「影响」不「决定」：它影响法律的具体内容（如海陆差异带来的条文不同），不能决定社会的性质与法律的本质——把「条件决定」整句套在集合的第一个成员上，是位阶误判。<b>A 错误</b>。</p>",
+    "log": "A 只影响不决定，排除"
+  },
+  {
+    "title": "选项 C：人口素质",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>人口因素同理——只起<b>加速或延缓</b>作用，不决定社会性质；且「人口素质」更偏后天教化，位阶比人口因素本身还低，更谈不上决定法律的本质。<b>C 错误</b>。</p>",
+    "log": "C 位阶更低，排除"
+  },
+  {
+    "title": "选项 D：统治阶级的意志（最强干扰）",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>「法律是统治阶级意志的体现」这句<b>本身正确</b>，但设问方向是「意志又由什么决定」——统治阶级的意志<b>不是随心所欲的</b>，由其物质生活条件塑造。停在「意志」层 = 只走到梯子第一级；「体现」≠「决定」。<b>D 错误</b>。</p>",
+    "log": "D 层次混淆，再追一层"
+  },
+  {
+    "title": "结论：答案 B",
+    "cls": "good",
+    "body": "<p>追问梯子：意志（体现）→ 物质生活条件（决定）→ <b>生产方式（根本）</b>。地理、人口只「影响」，生产方式才「决定」——见「根本因素」必选生产方式。</p>",
+    "log": "锁定 B：生产方式"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  "title": "决定法律本质的根本因素是什么",
+  "subtitle": "2022 年第 14 题（单选）· 考点：法律的物质决定性 · 方法：三层追问梯子",
+  "counterLabel": "推理步",
+  "ribbonTitle": "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  "intro": "点击「▶ 播放」：先架三层追问梯子，再看物质生活条件内部谁说了算。",
+  "result": {
+    "big": "答案 B",
+    "html": "记忆锚点：追问梯子——<b>意志（体现）→ 物质生活条件（决定）→ 生产方式（根本）</b>；地理、人口只「影响」，生产方式才「决定」；见「根本因素」必选生产方式。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：决定法律本质的根本因素——沿「物质决定」的梯子追到底层</h2>
+<p>答案：<strong>B（物质资料的生产方式）</strong>。</p>
+<h3>第 0 步：先立模型——法律本质的三层追问梯子</h3>
+<p>法律的阶级本质考点是一架<strong>追问的梯子</strong>，一层比一层深，每层回答一个不同的问题：</p>
+<table><thead><tr><th>层次</th><th>命题</th><th>回答的问题</th></tr></thead><tbody><tr><td>表层</td><td>法律是<strong>统治阶级意志</strong>的体现</td><td>法律「是谁的意志」</td></tr><tr><td>中层</td><td>该意志由<strong>社会物质生活条件</strong>决定</td><td>意志「从哪里来」</td></tr><tr><td>根本层</td><td>物质生活条件中，<strong>物质资料的生产方式</strong>是决定性因素</td><td>条件里「谁说了算」</td></tr></tbody></table>
+<p>题干已替你架好前两级（「不是凭空产生的……是由一定的社会物质生活条件所决定的」），设问问的正是<strong>根本层</strong>——「社会物质生活条件」内部谁才是那个根本因素。</p>
+<h3>第 1 步：物质生活条件内部三要素的权重</h3>
+<p>社会物质生活条件是一个集合：<strong>地理环境、人口因素、物质资料的生产方式</strong>。三者的位阶由「谁决定社会的性质与面貌」判分：地理环境与人口因素只起<strong>加速或延缓</strong>作用，不能决定社会的性质；唯有生产方式（生产力 + 生产关系的统一）决定社会的性质、面貌与由一个形态向另一个形态的过渡。法律属于上层建筑——上层建筑的本质、内容与发展方向归根到底由经济基础决定，而经济基础正是生产方式中生产关系的总和，所以说生产方式站在整条决定链的最底端。</p>
+<h3>第 2 步：四个选项对号入座</h3>
+<table><thead><tr><th>选项</th><th>对错</th><th>病灶</th></tr></thead><tbody><tr><td>A 地理环境</td><td>❌</td><td>属于物质生活条件，但只影响法律的具体内容（如海陆条件影响条文差异），不起决定作用</td></tr><tr><td>B 物质资料的生产方式</td><td>✅</td><td>决定社会的性质与面貌，进而<strong>决定法律的本质、内容和发展方向</strong></td></tr><tr><td>C 人口素质</td><td>❌</td><td>人口因素同理——加速或延缓而不决定；「素质」更偏后天教化，位阶更低</td></tr><tr><td>D 统治阶级的意志</td><td>❌</td><td>法律<strong>体现</strong>意志（表层本质），但意志本身又被物质生活条件<strong>决定</strong>——只追了一层</td></tr></tbody></table>
+<h3>为什么 D 是最强干扰、却必须再往下追一层（多说一句）</h3>
+<p>「法律是统治阶级意志的体现」这句本身<strong>完全正确</strong>——错不在内容，而在设问方向：题目问的是「决定法律本质、内容和发展方向的<strong>根本因素</strong>」，等于在问「意志本身又由什么决定」。马克思主义法理学的关键一步恰在这里：统治阶级的意志<strong>不是随心所欲的</strong>，它由该阶级所处的物质生活条件塑造——封建地主阶级的意志产生封建的法，资产阶级的意志产生资本主义的法。<strong>停在「意志」层，等于只走到梯子的第一级。</strong>「意志」是法律的形式（表层）本质，「物质生活条件归根到底是生产方式」才是它的深层决定者。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：把「物质生活条件决定法律」整句套在集合的<strong>第一个成员</strong>上——没做「集合内部谁根本」的位阶辨析。</li><li><strong>误选 C</strong>：把人口素质当社会发展的发动机——夸大了人口因素的作用位阶，且「素质」并非「人口因素」的准确表述。</li><li><strong>误选 D</strong>：把「体现谁的意志」当成「由什么决定」——<strong>层次混淆</strong>：正确的命题被用在了错误的方向上。</li></ul>
+<blockquote>记忆锚点：追问梯子——<strong>意志（体现）→ 物质生活条件（决定）→ 生产方式（根本）</strong>；地理、人口只「影响」，生产方式才「决定」；见「根本因素」必选生产方式。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

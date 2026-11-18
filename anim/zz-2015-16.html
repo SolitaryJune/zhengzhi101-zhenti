@@ -1,8 +1,130 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-16 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-16</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2015·16 ISIS 突起牵住了谁的手：重返亚太受到牵制</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 模板：anim_concept（概念/推理链卡片，政治站无 KaTeX 版）· 只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：一件大事，问一个影响",
+    "cls": "key",
+    "body": "<p>题干事件：<b>2014 年 6 月 29 日</b>，极端恐怖势力 ISIS 宣布成立「伊斯兰国」，扬言建立地跨西亚北非的「哈里发帝国」，中东秩序受重大冲击。设问：这种影响表现为美国——<b>哪个战略受到了什么</b>？考点：<b>国际形势与美国全球战略</b>。</p>",
+    "log": "事件=ISIS 建国；问它牵动了美国哪步棋"
+  },
+  {
+    "title": "先立机制：「重返亚太」的前提与软肋",
+    "cls": "key",
+    "body": "<p>战略资源（军事、财政、外交注意力）<b>有限</b>。奥巴马政府「重返亚太／亚太再平衡」的盘算是重心<b>东移</b>：中东事务降到「管理」水平、逐步抽身。前提软肋只有一条——<b>中东不能重新大乱</b>。</p>",
+    "log": "东移盘算的软肋：中东一乱就得回头"
+  },
+  {
+    "title": "ISIS 突起：抽身的手被拽住",
+    "cls": "key",
+    "body": "<p>ISIS 攻城掠地、恐袭扩散 → 中东重新吃紧 → 美国被迫组建反恐联盟、重新投入军事与外交资源——<b>本来要抽走的那只手，被中东重新拽住</b>。战略重心东移被中东乱局拖住后腿。</p>",
+    "log": "资源被中东分走，东移的脚步慢了"
+  },
+  {
+    "title": "D：「重返亚太」战略受到牵制",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>「牵制」用得准：<b>原计划不动摇，但分了心、分了力</b>——再平衡没有被取消，只是不得不回头处理中东，东移的步子迈不快。<b>D 正确</b>。</p>",
+    "log": "计划没变、分心分力 → 选 D"
+  },
+  {
+    "title": "A：「中东收缩」提上议程——时序颠倒",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>收缩<b>早已在进行</b>（从伊拉克、阿富汗撤军）；ISIS 逼出的不是「开始收缩」，而是<b>重新投入</b>。把「被迫抽身回来」误读成「开始抽身」，方向反了。<b>A 错误</b>。</p>",
+    "log": "收缩是既有动作，ISIS 让它减速回摆 → A 不选"
+  },
+  {
+    "title": "B：「和平演变」归于失败——范畴错配",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>和平演变是针对<b>社会主义国家</b>的意识形态渗透战略，与中东恐怖主义崛起<b>没有因果链</b>，「归于失败」更无从谈起。看到大词先问：它的对象是谁？<b>B 错误</b>。</p>",
+    "log": "对象对不上，范畴错配 → B 不选"
+  },
+  {
+    "title": "C：「北约东扩」被迫搁置——方向错配",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>北约东扩在<b>欧洲／俄罗斯</b>一侧，中东反恐是另一个战略方向；ISIS 兴起并未使东扩「被迫搁置」——两条线搅不到一起。<b>C 错误</b>。</p>",
+    "log": "东扩对欧洲，反恐对中东，两方向 → C 不选"
+  },
+  {
+    "title": "判别刀口：事件与战略方向有无资源争夺",
+    "cls": "key",
+    "body": "<p>选「影响类」题的刀口：看<b>事件与哪个战略方向存在资源争夺关系</b>。中东反恐吃掉的正是准备投向亚太的注意力与军力——有争夺 → 「牵制」；对象对不上（和平演变）或方向不同（北约东扩）、时序颠倒（收缩提上议程）都不成立。</p>",
+    "log": "找资源争夺：中东吃掉了东移的力气"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>D</b>：ISIS 崛起 → 中东重新吃紧 → 美国<b>分身乏术</b> → 「重返亚太」<b>受到牵制</b>。记忆锚点：牵制＝计划不变但分心分力；收缩非新议程，和平演变、北约东扩不在一个方向。</p>",
+    "log": "锁定 D：重返亚太受到牵制"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "ISIS 突起牵住了谁的手：重返亚太受到牵制",
+  subtitle: "考点：时政·国际形势与美国战略 · 方法：先立「东移盘算的软肋」，再按资源争夺对表",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "记忆锚点：ISIS 崛起 → 中东吃紧 → 美国分身乏术 → <b>「重返亚太」受到牵制</b>；「牵制」＝计划不变但分心分力——不是新提收缩（A 时序颠倒）、不是和平演变失败（B 范畴错配）、不是东扩搁置（C 方向错配）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：ISIS 突起牵住了谁的手——美国「重返亚太」受到牵制</h2>
+<p>答案：<strong>D（「重返亚太」战略受到牵制）</strong>。</p>
+<h3>第 0 步：先立机制——「重返亚太」的前提与它的软肋</h3>
+<p>美国的全球战略调整有一条基本约束：<strong>战略资源（军事、财政、外交注意力）是有限的</strong>。奥巴马政府推行「重返亚太／亚太再平衡」，盘算是把战略重心<strong>东移</strong>：中东事务降到「管理」水平、逐步抽身，把军力资源投向亚太。这个盘算有一个软肋——<strong>中东不能重新大乱</strong>。</p>
+<p>2014 年 6 月 29 日 ISIS 宣布「建国」，扬言建立地跨西亚北非的「哈里发帝国」，中东秩序受到重大冲击：美国被迫组建反恐联盟、重新投入军事与外交资源——<strong>本来要抽走的那只手，被中东重新拽住</strong>。战略重心东移的进程被中东乱局拖住后腿，这就是「<strong>重返亚太</strong>战略受到<strong>牵制</strong>」，选 <strong>D</strong>。</p>
+<h3>第 1 步：干扰项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>错因与典型误解</th></tr></thead><tbody><tr><td>A 「中东收缩」战略提上议程</td><td>❌</td><td>时序颠倒：收缩<strong>早已在进行</strong>（从伊拉克、阿富汗撤军）；ISIS 逼出的不是「开始收缩」，而是<strong>重新投入</strong>——把「被迫抽身回来」误读成「开始抽身」</td></tr><tr><td>B 「和平演变」战略归于失败</td><td>❌</td><td>范畴错配：和平演变是针对社会主义国家的<strong>意识形态渗透</strong>战略，与中东恐怖主义崛起没有因果链，「归于失败」更无从谈起</td></tr><tr><td>C 「北约东扩」战略被迫搁置</td><td>❌</td><td>方向错配：北约东扩在<strong>欧洲／俄罗斯</strong>一侧，中东反恐是另一个战略方向；ISIS 兴起并未使东扩「被迫搁置」</td></tr><tr><td>D 「重返亚太」战略受到牵制</td><td>✅</td><td>中东动荡牵走注意力与资源，战略重心东移被拖住——牵制的正是「东移」的那只手</td></tr></tbody></table>
+<h3>第 2 步：预判追问——「牵制」这个词为什么用得准？</h3>
+<p>「牵制」＝原计划不动摇，但<strong>分了心、分了力</strong>：美国的亚太再平衡没有被取消（所以「搁置」错），中东乱局也谈不上什么「和平演变」（范畴错），更不是新提出什么「中东收缩」（时序错）——而是不得不<strong>回头处理中东</strong>，东移的步子迈不快。判别刀口：看<strong>事件（中东反恐）与战略方向（东移亚太）之间是否存在资源争夺关系</strong>——有，选「牵制」。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 A（时序颠倒）</strong>：美国在中东早就在收缩，ISIS 是让收缩<strong>减速、回摆</strong>的因素，不是把收缩「提上议程」的因素——方向反了。</li><li><strong>选 B（范畴错配）</strong>：看到「和平演变」这种大词，先问「它的对象是谁」——靶子是社会主义国家的意识形态，与 ISIS 不搭界。</li><li><strong>选 C（方向错配）</strong>：东扩对着欧洲／俄罗斯，反恐对着中东，两条线互不构成「被迫搁置」的因果。</li></ul>
+<blockquote>记忆锚点：ISIS 崛起 → 中东重新吃紧 → 美国<strong>分身乏术</strong> → 「重返亚太」<strong>受到牵制</strong>；收缩是既有动作不是新议程，「和平演变」「北约东扩」与中东反恐不在一个方向。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

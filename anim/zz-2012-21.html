@@ -1,8 +1,91 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-21 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-21</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-21 · 过渡时期的阶级构成（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：先立"经济成分→阶级"机制，再逐项推演 A–D。
+   全中文、无外部请求；仅引用本地 ../assets 引擎（anim/ 位于站点根下一层）。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼：先定位时间，再从经济推阶级',
+    body: '<p>时间定位：<b>从建国（1949）到社会主义改造基本完成（1956）</b>＝过渡时期，社会性质是<b>新民主主义社会</b>——既有社会主义因素、又有资本主义因素的过渡性社会。阶级结构不能凭感觉，要从<b>此期存在什么经济成分</b>推出来。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行：五种经济成分对应四大阶级',
+    body: '<p>阶级结构由经济结构决定——谁占有哪种生产资料、在哪种经济中劳动，就归入哪个阶级。过渡时期<b>五种经济成分并存</b>：</p><ul><li>社会主义性质的<b>国营经济</b> → 工人阶级；</li><li><b>个体经济</b>（农民和手工业者）→ 农民阶级、城市小资产阶级；</li><li><b>私人资本主义经济</b> → 民族资产阶级；</li><li>另有合作社经济、国家资本主义经济两种过渡形式。</li></ul>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true },
+    title: 'A：工人阶级——领导阶级',
+    body: '<p><b>对</b>。对应社会主义性质的国营经济，是国家的领导阶级。</p>' },
+  { cls: 'good', tag: 'B 入选', ribbon: { k: 2, ok: true },
+    title: 'B：农民阶级——人数最多',
+    body: '<p><b>对</b>。人数最多的劳动者阶级，对应农村个体经济。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true },
+    title: 'D：城市小资产阶级——城市个体经济',
+    body: '<p><b>对</b>。小商贩、手工业者、自由职业者等，对应城市个体经济，与农民同属劳动者，但居住与谋生方式不同，教材并列列出。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: 'C：民族资产阶级——团结改造对象',
+    body: '<p><b>对</b>。对应私人资本主义经济。此时它<b>仍在场</b>：政策是「利用、限制、改造」，是团结改造的对象，不是消灭的对象。</p>' },
+  { cls: 'key', tag: '追问',
+    title: '追问：为什么民族资产阶级还没消失？',
+    body: '<p>因为改造是<b>逐步</b>进行的：加工订货 → 个别企业公私合营 → 全行业公私合营（1956）。直到改造基本完成、资本主义私有制被改造之后，民族资产阶级才逐渐不再作为一个阶级存在。题限「过渡时期」＝改造<b>基本完成之前</b>——漏 C 是把终点当起点的时间错位陷阱。</p>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 ABCD',
+    body: '<p>答案 <b>ABCD</b>：工人（国营）＋农民、城市小资产阶级（个体）＋民族资产阶级（私人资本主义）。</p><p>五种经济成分并存 → 四大阶级并存，改造完成前一个都不能少。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon
+  };
+});
+snaps[snaps.length - 1].done = true; // 最后一步必须 done:true，触发结论卡
+
+AW.init({
+  title: '【2012·21】从新民主主义到社会主义过渡时期的阶级构成（多选）',
+  subtitle: '考点：五种经济成分 → 四大阶级 · 改造逐步进行 · 时间错位陷阱',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '五种经济成分并存 → 四大阶级并存：<b>工人（国营）、农民＋城市小资产阶级（个体）、民族资产阶级（私人资本主义）</b>。改造是渐进过程，改造基本完成前一个都不能少——漏 C 是把「改造完成后」的结构提前套入。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：过渡时期的阶级构成——从经济成分推阶级</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——有什么经济成分，就有什么阶级</h3>
+<p>先把时间范围划清：从中华人民共和国成立（1949）到社会主义改造基本完成（1956）是<strong>过渡时期</strong>，社会性质是<strong>新民主主义社会</strong>——一个既有社会主义因素、又有资本主义因素的过渡性社会。它的经济基础是<strong>五种成分并存</strong>：社会主义性质的国营经济、半社会主义性质的合作社经济、农民和手工业者的个体经济、私人资本主义经济、国家资本主义经济。</p>
+<p>阶级结构由经济结构决定——谁占有哪种生产资料、在哪种经济中劳动，就归入哪个阶级。于是从五种成分对应出<strong>四大阶级</strong>：</p>
+<table><thead><tr><th>经济成分</th><th>对应阶级</th><th>地位</th></tr></thead><tbody><tr><td>国营经济</td><td>工人阶级</td><td>领导阶级</td></tr><tr><td>个体经济（城乡）</td><td>农民阶级、城市小资产阶级</td><td>劳动者的阶级</td></tr><tr><td>私人资本主义经济</td><td>民族资产阶级</td><td>团结、改造的对象</td></tr></tbody></table>
+<h3>逐项对号入座</h3>
+<ul><li><strong>A 对</strong>：工人阶级——对应国营经济，是国家的领导阶级。</li><li><strong>B 对</strong>：农民阶级——人数最多的劳动者阶级，对应农村个体经济。</li><li><strong>C 对</strong>：民族资产阶级——对应私人资本主义经济。此时它<strong>仍在场</strong>：政策是"利用、限制、改造"，是团结改造的对象，不是消灭的对象。</li><li><strong>D 对</strong>：城市小资产阶级——小商贩、手工业者、自由职业者等，对应城市个体经济，与农民同属劳动者。</li></ul>
+<h3>预判追问：为什么民族资产阶级还没消失？</h3>
+<p>因为改造是<strong>逐步</strong>进行的。资本主义工商业经历加工订货 → 个别企业公私合营 → 全行业公私合营（1956）的渐进过程，直到改造基本完成、资本主义私有制被改造之后，民族资产阶级才逐渐不再作为一个阶级存在。题目问的是<strong>过渡时期</strong>的构成——时间限定在改造<strong>基本完成之前</strong>，四大阶级一个都不少。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏 C（时间错位陷阱）</strong>：拿改造<strong>完成后</strong>的社会主义社会结构（"只剩工人、农民"）往回套到过渡时期——把终点当成了起点。</li><li><strong>漏 D（概念合并）</strong>：把"城市小资产阶级"并入"农民阶级"——两者同属个体劳动者，但居住与谋生方式不同，教材并列列出，不能二合一。</li></ul>
+<blockquote>记忆锚点：五种经济成分 → 四大阶级：工人（国营）、农民＋城市小资产阶级（个体）、民族资产阶级（私人资本主义）；改造完成前，一个都不能少。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

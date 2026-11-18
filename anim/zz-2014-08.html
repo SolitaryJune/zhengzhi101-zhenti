@@ -1,8 +1,139 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-08 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-08</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·08 建设文化强国的「关键」：增强全民族文化创造活力</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/定位模板（政治站无 KaTeX 版）。引擎自绘题目卡；只维护下方题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域 ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 定位表小工具
+function locTable(){
+  return '<table class="aw-table"><tr><th>定位</th><th>内容</th><th>选项</th></tr>' +
+    '<tr><td><b>关键</b></td><td>增强全民族文化创造活力</td><td>C</td></tr>' +
+    '<tr><td>根本任务</td><td>培育「四有」公民、提高思想道德与科学文化素质</td><td>B</td></tr>' +
+    '<tr><td>目标/标志</td><td>提高国家文化软实力</td><td>D</td></tr>' +
+    '<tr><td>具体举措</td><td>发展文化事业产业、发展新型文化业态</td><td>A</td></tr></table>';
+}
+
+// 推理链步骤定义
+var STEPS = [
+  {
+    title: '审题眼：定位词是「关键」',
+    cls: 'key',
+    body: '<p>题干问「其<b>关键</b>是」——定位题。先圈出定位词「关键」，再回忆文化强国建设的<b>定位表</b>；不问「什么重要」，问「哪个是发动机」。</p>',
+    log: '圈定位词「关键」→ 找发动机，不是找「重要」'
+  },
+  {
+    title: '先立定位模型：一套表述各挂一个位置',
+    cls: 'key',
+    body: locTable() + '<p>四个选项都是教材里的真表述，考点是<b>挂对位置</b>：内容对、位置不对照样不选。</p>',
+    log: '定位表：关键 / 根本任务 / 目标 / 举措 各就各位'
+  },
+  {
+    title: '机制：活力是发动机',
+    cls: 'key',
+    body: '<p>文化创造的<b>主体是全体人民</b>。一个民族的文化能不能强起来，最终看有没有旺盛的<b>创造活力</b>——活力是发动机、是发动的杠杆；有了它，素质提升、软实力增强、业态繁荣才有源头。其余各项都是活力发挥出来的<b>结果或载体</b>。</p>',
+    log: '先有创造活力，才有一切后续结果'
+  },
+  {
+    title: 'C 对号：创造活力=关键',
+    cls: 'good',
+    body: '<p>「<b>增强全民族文化创造活力</b>」是发动整台机器的杠杆——建设社会主义文化强国，关键是增强全民族文化创造活力。<b>C 正确</b>。</p>',
+    ribbon: { k: 3, ok: true },
+    log: '创造活力=发动机 → 锁定 C'
+  },
+  {
+    title: 'A 过筛：新业态只是举措',
+    cls: 'bad',
+    body: '<p>「发展新型文化业态」是文化产业层面的<b>具体举措</b>——做事的抓手之一，层次低于「关键」；把抓手当发动机，是把手段提到了杠杆的位置。<b>A 错误</b>。</p>',
+    ribbon: { k: 1, ok: false },
+    log: '业态=具体举措 → A 不选'
+  },
+  {
+    title: 'B 过筛：素质挂在「根本任务」下',
+    cls: 'bad',
+    body: '<p>「提高全民族思想道德素质和科学文化素质」表述真实存在，但挂在<b>根本任务</b>（培育「四有」公民）名下——位置不对。它还是活力作用于人的<b>结果</b>，不是发动机。<b>B 错误</b>。</p>',
+    ribbon: { k: 2, ok: false },
+    log: '素质=根本任务层的内容 → B 不选'
+  },
+  {
+    title: 'D 过筛：软实力是目标，别因果倒置',
+    cls: 'bad',
+    body: '<p>「提高国家文化软实力」最像答案，但它是建设文化强国的<b>目标/标志</b>——「强起来」之后呈现的结果。先有创造活力这个发动机，才谈得上软实力这个输出；把结果当关键=因果倒置。<b>D 错误</b>。</p>',
+    ribbon: { k: 4, ok: false },
+    log: '软实力=目标层 → D 不选'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>C</b>：建设社会主义文化强国的关键是<b>增强全民族文化创造活力</b>。判别口诀：问「关键」就找<b>发动的杠杆</b>（活力），B、D 都是真表述但分别挂在「结果」层的根本任务与目标下。</p>',
+    log: '结论：关键=文化创造活力 → 选 C'
+  }
+];
+
+// 前 n 步卡片的累积 HTML
+function cardsUpTo(n){
+  return STEPS.slice(0, n).map(function(s, i){
+    return card(i + 1, s.cls, s.title, s.body);
+  }).join('');
+}
+
+var snaps = [
+  { cls: 'step', tag: '第 1 步', log: STEPS[0].log, count: 1, html: cardsUpTo(1) },
+  { cls: 'step', tag: '第 2 步', log: STEPS[1].log, count: 2, html: cardsUpTo(2) },
+  { cls: 'step', tag: '第 3 步', log: STEPS[2].log, count: 3, html: cardsUpTo(3) },
+  { cls: 'ok',   tag: 'C 对号', log: STEPS[3].log, count: 4, html: cardsUpTo(4), ribbon: STEPS[3].ribbon },
+  { cls: 'miss', tag: 'A 过筛', log: STEPS[4].log, count: 5, html: cardsUpTo(5), ribbon: STEPS[4].ribbon },
+  { cls: 'miss', tag: 'B 过筛', log: STEPS[5].log, count: 6, html: cardsUpTo(6), ribbon: STEPS[5].ribbon },
+  { cls: 'miss', tag: 'D 过筛', log: STEPS[6].log, count: 7, html: cardsUpTo(7), ribbon: STEPS[6].ribbon },
+  { cls: 'done', tag: '结论',   log: STEPS[7].log, count: 8, html: cardsUpTo(8), done: true }
+];
+
+AW.init({
+  title: '建设社会主义文化强国的「关键」',
+  subtitle: '考点：文化建设定位题 · 方法：先立定位表，再区分「杠杆（关键）」与「结果（任务/目标）」',
+  counterLabel: '推理步',
+  ribbonTitle: '选项过筛（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开：立定位表 → 对号 C → 过筛 A/B/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '记忆锚点：文化强国定位表——<b>关键=增强全民族文化创造活力</b>；根本任务=培育「四有」公民（B）；目标=文化软实力（D）；业态=举措（A）。问「关键」，选「活力」这个发动机。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：建设社会主义文化强国，「关键」定位在哪一环</h2>
+<p>答案：<strong>C（增强全民族文化创造活力）</strong>。</p>
+<h3>第 0 步：先立模型——「文化强国」是一套有分工的表述体系</h3>
+<p>这道题属于<strong>定位题</strong>：题干不问「什么是重要的」，而问「其<strong>关键</strong>是」。文化强国建设的配套表述在教材里各挂一个位置，先把这张定位表立起来：</p>
+<table><thead><tr><th>定位</th><th>内容</th><th>对应选项</th></tr></thead><tbody><tr><td><strong>关键</strong></td><td>增强全民族文化创造活力</td><td>C</td></tr><tr><td>根本任务</td><td>培育「四有」公民，提高全民族思想道德素质和科学文化素质</td><td>B</td></tr><tr><td>目标/标志</td><td>提高国家文化软实力</td><td>D</td></tr><tr><td>具体举措</td><td>发展文化事业和文化产业、发展新型文化业态等</td><td>A</td></tr></tbody></table>
+<p>为什么「关键」落在创造活力上？机制是这样的：文化创造<strong>的主体是全体人民</strong>，一个民族文化能不能强起来，最终取决于这个民族有没有旺盛的<strong>创造活力</strong>——活力是发动机、是发动的杠杆；有了它，国民素质的提升、软实力的增强、新业态的繁荣才有源头。其余各项都是活力发挥出来的<strong>结果</strong>或<strong>载体</strong>。所以「关键」= <strong>增强全民族文化创造活力</strong>，选 C。</p>
+<h3>第 1 步：干扰项逐个过筛——都是「重要」，但都不在「关键」这个位置</h3>
+<ul><li><strong>A「发展新型文化业态」</strong>：文化产业层面的<strong>具体举措</strong>，是做事情的抓手之一，层次低于「关键」；把抓手当关键，是把「手段」提到了「杠杆」的位置。</li><li><strong>B「提高全民族思想道德素质和科学文化素质」</strong>：表述在教材里真实存在，但挂在<strong>根本任务</strong>名下（培育「四有」公民的落脚点）。定位题考的就是<strong>挂对位置</strong>——内容对、位置不对，照样不选。</li><li><strong>D「提高国家文化软实力」</strong>：最像答案的干扰项。软实力是建设文化强国的<strong>目标追求与标志</strong>——「强起来」之后呈现出来的结果；用第 0 步的机制说：先有创造活力这个发动机，才谈得上软实力这个输出。把「结果」当「关键」，因果就倒置了。</li></ul>
+<h3>第 2 步：预判追问——「目标」和「关键」怎么区分才不出错</h3>
+<p>B、D 都「真的重要」，都出现在文化强国的话语体系里，凭什么只选 C？区分的办法是问一句：这一项是<strong>发动的杠杆</strong>，还是<strong>预期的结果</strong>？</p>
+<ul><li>创造活力：先有它，才有后续的一切 → 杠杆 → 关键；</li><li>素质提升（B）：是活力作用于人的结果，也是根本任务要完成的指标 → 结果；</li><li>软实力（D）：文化「强起来」在国际上的呈现 → 结果；</li><li>新业态（A）：让活力落地变现的产业形式 → 载体/举措。</li></ul>
+<p>题干问「关键」，就是问「发动机在哪」——四选一里只有 C 是发动机。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 D（看到「强国」就选「软实力」）</strong>：字面联想的典型——「文化强国↔文化软实力」词面最贴，但题干问的是「其<strong>关键是</strong>」，软实力处于「目标」层。</li><li><strong>误选 B（把根本任务当关键）</strong>：B 的表述教材里确实有，靠「眼熟」做题就会掉进去；定位题必须核对它挂在哪个定位之下。</li><li><strong>漏看题眼</strong>：本题属于「关键/根本/目标/核心/保证」定位词系列题，审题第一步先把定位词圈出来，再回忆对应的定位表。</li></ul>
+<blockquote>记忆锚点：文化强国定位表——<strong>关键=增强全民族文化创造活力</strong>；根本任务=培育「四有」公民（B）；目标=文化软实力（D）；业态=举措（A）。问「关键」，选「活力」这个发动机。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

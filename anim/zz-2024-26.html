@@ -1,8 +1,114 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-26 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-26</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2024-26 · 数字经济的三个身份与一个偷换</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（概念模板 · 数据作证逐项推演，含排除） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：每个数据都在给一个“身份”作证",
+    "cls": "key",
+    "body": "<p>题干三组数据：①规模十年 <b>11 万亿 → 50.2 万亿元</b>（增长约三倍半）；②占 GDP 比重 <b>41.5%</b>；③数据产量和算力总规模<b>均居世界第二</b>。问法是「充分表明」——选项必须是从数据能直接读出的结论。三组数据各作一个证，挂三个正确选项；剩下那个在动词上设偷换。</p>",
+    "log": "三组数据 → 三个身份"
+  },
+  {
+    "title": "A. 数据已成为新的生产要素——入选",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p>要素层：生产要素清单已从土地、劳动、资本、技术四项扩到五项，<b>数据</b>入列。「数据产量居世界第二」就是要素地位的规模实证——数据不再只是普通信息。<b>入选</b>。</p>",
+    "log": "数据入列五要素 → A ✓"
+  },
+  {
+    "title": "B. 数字经济正成为新一轮国际竞争重点领域——入选",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p>竞争层：题干特意给出「<b>均居世界第二</b>」的国际排位——数字规模与算力就是大国竞争的新指标，国际坐标提示竞争赛场。<b>入选</b>。</p>",
+    "log": "世界第二 = 国际坐标 → B ✓"
+  },
+  {
+    "title": "C. 数字经济已取代实体经济——偷换，排除",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>错在「<b>取代</b>」二字：数字经济的正路是<b>与实体经济深度融合</b>——赋能制造业、数字化改造产业链；实体经济是数字技术落地的场和根，不是被替代对象。占 GDP 41.5% 恰恰说明两者在融合中<b>共同做大</b>，不是此消彼长。抓动词：「赋能、融合」对，「取代、颠覆」错。<b>不选</b>。</p>",
+    "log": "「取代」偷换「融合」 → ✗"
+  },
+  {
+    "title": "D. 数字经济是稳增长促转型的重要引擎——入选",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>引擎层：占 GDP <b>41.5%</b>、十年增长三倍半——一个占四成以上比重的部门，稳增长、促转型自然靠它发力，「充分表明」的正是这个拉动作用。<b>入选</b>。</p>",
+    "log": "41.5% + 三倍半 → D ✓"
+  },
+  {
+    "title": "结论：ABD",
+    "cls": "good",
+    "body": "<p><b>答案 ABD。</b>误选 C 的原因：被 41.5% 的大数字带偏，以为比重高就等于取代。记忆锚点：数字经济三身份——要素（数据入列，A）＋赛场（国际竞争，B）＋引擎（稳增长促转型，D）；与实体经济是「深度融合」，不是「取代」。</p>",
+    "log": "锁定 ABD，排除 C"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'))),
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "zz-2024-26 数字经济的三个身份与一个偷换",
+  subtitle: "考点：数字经济与现代化产业体系 · 方法：让数据作证（要素／赛场／引擎）+ 抓动词排偷换",
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先读三组数据立三个身份，再逐项对号、抓「取代」排 C。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABD",
+    html: "数字经济三身份——<b>要素（数据入列五要素，A）＋赛场（世界第二的国际竞争，B）＋引擎（稳增长促转型，D）</b>。C 错在「取代」：标准口径是与实体经济<b>深度融合</b>，占 GDP 41.5% 是融合中共同做大，不是替代。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：数字经济十年——数据要素、竞争赛场与增长引擎</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第一步：先立机制——每个数据都在给一个"身份"作证</h3>
+<p>题干给了一组数据：数字经济规模十年从 11 万亿元增至 50.2 万亿元（增长约三倍半），占 GDP 比重 41.5%；数据产量和算力总规模均居世界第二。逐条读，每条数据都在为数字经济的某个"身份"作证：</p>
+<ol><li><strong>新生产要素的载体</strong>——"数据产量……居世界第二"：生产要素清单已从土地、劳动、资本、技术四项扩到五项，<strong>数据</strong>入列；产量规模世界第二就是要素地位的规模实证。</li><li><strong>增长引擎</strong>——"规模 50.2 万亿元、占 GDP 41.5%"：一个占四成以上比重的部门，稳增长、促转型自然靠它发力。</li><li><strong>国际竞争赛场</strong>——"均居世界第二"：题干特意给国际排位，提示数字经济已是大国竞争的重点领域。</li></ol>
+<p>立好三个身份再看选项：A 对身份 1，D 对身份 2，B 对身份 3；C 则在数字经济与实体经济的关系上设错。问法"充分表明"决定：选项必须是从数据能直接读出的结论。</p>
+<h3>第二步：三个正确选项各对一层</h3>
+<ul><li><strong>A 数据已成为新的生产要素</strong> ✅：要素层。数据与土地、劳动、资本、技术并列为生产要素，是数字经济最基础的制度判断；"数据产量居世界第二"是其规模证据。</li><li><strong>B 数字经济正在成为新一轮国际竞争的重点领域</strong> ✅：竞争层。"均居世界第二"的国际坐标提示：数字规模与算力就是大国竞争的新指标。</li><li><strong>D 数字经济是稳增长促转型的重要引擎</strong> ✅：引擎层。占 GDP 41.5%、十年增长三倍半，"充分表明"的正是它对增长和转型的拉动。</li></ul>
+<h3>第三步：C 为什么错——"融合"被偷换成"取代"</h3>
+<p><strong>C 数字经济已取代实体经济</strong> ❌：错在"取代"二字。数字经济的正路是<strong>与实体经济深度融合</strong>——赋能制造业、数字化改造产业链，推动生产要素重组、产业结构升级和发展方式变革；实体经济是国家经济的立身之本，是数字技术落地的场和根，不是被替代对象。占 GDP 41.5% 恰恰说明两者在<strong>融合中共同做大</strong>，而不是此消彼长的取代。凡"取代实体经济"式表述一律错，标准口径是"数实融合"。</p>
+<p>→ 选 <strong>ABD</strong>。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 C</strong>：被"41.5%"的大数字带偏，以为比重高就等于取代。判断办法：抓住动词——"赋能、融合、改造"对，"取代、替代、颠覆"错。</li><li><strong>漏 A</strong>：把"数据"仍当普通信息看。数据入列生产要素是数字经济最基础的制度判断，也是建设现代化产业体系的要素前提。</li><li><strong>漏 B</strong>：只算国内账、不看国际坐标。题干特意给出"均居世界第二"，就是在提示竞争赛场的含义。</li></ul>
+<blockquote>记忆锚点：数字经济三身份——<strong>要素（数据入列五要素，A）＋赛场（世界第二的国际竞争，B）＋引擎（稳增长促转型，D）</strong>；与实体经济是"深度融合"，不是"取代"。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,120 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-02 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-02</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-02 · 看羊吃什么就割什么——因果联系</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 推理链：每一步的完整内容（引擎按步数截取显示；s.cls: key=关键/good=正确/bad=排除） */
+var STEPS = [
+  {
+    "cls": "key",
+    "tag": "审题眼",
+    "title": "审题眼：两个现象之间是什么联系",
+    "body": "<p>场景：不认识羊草，就把羊赶去，<b>看羊吃什么就割什么</b>，半天割回羊草。</p><p>题眼：“他之所以这样做，是因为他意识到两者之间存在……”——考<b>“羊吃草”与“割羊草”</b>这两个现象之间的联系类型。</p>"
+  },
+  {
+    "cls": "key",
+    "tag": "立机制",
+    "title": "立机制：联系客观且多样，人只能利用不能臆造",
+    "body": "<p>联系是<b>客观的</b>（不依人的意志转移），也是<b>多样的</b>：因果、必然与偶然、本质与非本质……</p><p>羊吃某种草在前，这种草因此被确认为“羊草”、成为“该割的草”在后——<b>引起与被引起</b>的关系。专家是把这对客观的因果联系当<b>路标</b>用。</p>"
+  },
+  {
+    "cls": "bad",
+    "tag": "A 排除",
+    "title": "选项 A：主观联系",
+    "body": "<p><b>A 错</b>：“主观联系”这个说法本身违背联系的客观性——联系都是客观的。</p><p>专家动的是脑筋，利用的是羊吃草这一<b>客观事实</b>，不是臆想出来的关系。</p>",
+    "ribbon": {"k": 1, "ok": false}
+  },
+  {
+    "cls": "bad",
+    "tag": "B 排除",
+    "title": "选项 B：必然联系",
+    "body": "<p><b>B 错</b>：必然联系是事物内在的、<b>必定如此</b>的联系（规律层面）。</p><p>羊照样吃草，人不割它也照样成立——“羊吃草”并不必然引起“割羊草”，两者没有“必定如此”。</p>",
+    "ribbon": {"k": 2, "ok": false}
+  },
+  {
+    "cls": "good",
+    "tag": "C 入选",
+    "title": "选项 C：因果联系",
+    "body": "<p><b>C 对</b>：吃草在前、据此确定割什么在后——<b>引起与被引起</b>。</p><p>不养羊的人借“羊吃草”找到“羊草”，正是利用因果联系作为行动的路标。</p>",
+    "ribbon": {"k": 3, "ok": true}
+  },
+  {
+    "cls": "bad",
+    "tag": "D 排除",
+    "title": "选项 D：本质联系",
+    "body": "<p><b>D 错</b>：本质联系决定事物的<b>根本性质</b>（如剥削关系之于资本主义）。</p><p>“吃什么草/割什么草”是现象层面的事，够不上本质层次。</p>",
+    "ribbon": {"k": 4, "ok": false}
+  },
+  {
+    "cls": "key",
+    "tag": "追问",
+    "title": "追问：为什么不是 B/D——看层次",
+    "body": "<p>判据是联系<b>深浅层次</b>：因果=引起与被引起；必然=内在规律、必定如此；本质=决定根本性质。</p><p>本题只是用现象引导现象的生活办法，不是规律层面的“必定如此”，更不决定根本性质。</p>"
+  },
+  {
+    "cls": "good",
+    "tag": "结论",
+    "title": "收束：答案 C",
+    "body": "<p>羊吃草=因，割羊草=果：看吃什么就割什么，拿<b>因果联系</b>当路标。</p><p><b>答案 C。</b>记忆锚点：联系只能利用、不能臆造；“主观联系”本身就不是联系；不必然、非本质，只是因果。</p>"
+  }
+];
+
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.ribbon) nPick++;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '排除' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: "看羊吃什么就割什么：利用的是因果联系",
+  subtitle: "考点：联系的客观性与多样性 · 因果联系 · 选项逐项推演",
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已对号选项',
+  snaps: snaps,
+  result: {"big": "答案 C", "html": "“羊吃草”引起并指引“割羊草”——<b>因果联系</b>（引起与被引起）。<br>易错：B 必然联系要“必定如此”（羊吃草≠人必割）；D 本质联系要决定根本性质；A“主观联系”违背联系的客观性。"}
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：看羊吃什么就割什么——利用的是因果联系</h2>
+<p>答案：<strong>C（因果联系）</strong>。</p>
+<h3>第 0 步：先立机制——联系是客观的，也是多样的</h3>
+<p>唯物辩证法先给两条前提：<strong>联系是客观的</strong>——不以人的意志为转移，不能主观臆造；<strong>联系是多样的</strong>——有因果联系、必然与偶然联系、本质与非本质联系、直接与间接联系之分。人做事，靠的是<strong>认识并利用客观存在的联系</strong>；注意"利用联系"不等于"联系是主观的"——动脑筋的是人，被利用的联系本身是客观的。</p>
+<p>"羊吃草"与"割羊草"之间是什么联系？羊吃了某种草（先行现象），这种草才因此被确认为"羊草"、从而成为"该割的草"（后续现象）——<strong>引起与被引起</strong>的关系。专家看羊吃什么就割什么，正是把这对客观的因果联系当作找草的"路标"。</p>
+<h3>第 1 步：题眼翻译</h3>
+<p>题干问"他之所以这样做，是因为他意识到两者之间存在着……联系"——考两个现象之间的关系<strong>类型</strong>。判断顺序：先问它是不是客观联系（排除 A），再问属于哪一种客观联系（B/C/D 择一）。</p>
+<h3>第 2 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判定</th><th>说明</th></tr></thead><tbody><tr><td>A 主观联系</td><td>❌</td><td>"主观联系"这个说法本身违背联系的客观性；专家利用的是羊吃草这一客观事实</td></tr><tr><td>B 必然联系</td><td>❌</td><td>必然联系是内在的、必定如此的联系；羊照样吃草，人不割它也成立，两者没有"必定如此"</td></tr><tr><td>C 因果联系</td><td>✅</td><td>吃草在前，据此确定割什么在后——先行现象引起后续现象</td></tr><tr><td>D 本质联系</td><td>❌</td><td>本质联系决定事物的根本性质；"吃什么草/割什么草"是现象层面的引导关系，够不上本质</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 B/D</strong>：把"联系密切、靠得住"当成"必然、本质"。判据是层次：因果=引起与被引起；必然=内在规律、必定如此；本质=决定根本性质。本题只是一个生活办法，用现象引导现象，不是规律层面的必然性。</li><li><strong>误选 A</strong>：把"人动脑筋利用联系"误解为"联系是主观的"。人只能发现、利用联系，不能臆造联系——臆造出来的恰恰不是联系。</li></ul>
+<blockquote>记忆锚点：羊吃草=因，割羊草=果，看吃什么就割什么是拿<strong>因果联系</strong>当路标；联系只能利用、不能臆造，"主观联系"本身就不是联系。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

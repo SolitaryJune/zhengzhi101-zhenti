@@ -1,8 +1,93 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-33 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-33</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2023-33 G20巴厘讲话——全球发展的三个标准词</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：出处与问法',
+    body: '<p>题干出处：《<b>共迎时代挑战，共建美好未来</b>》——2022 年 11 月二十国集团领导人第十七次峰会（印度尼西亚巴厘岛）重要讲话。问法是「倡议推动……」，判断口径只有一个：<b>讲话原文的成套表述</b>。</p>' },
+  { tag: '模型', cls: 'key', title: '先立模型：三个标准词成套出现',
+    body: '<p>讲话就全球发展提出三点倡议，句式成套——<b>更加包容、更加普惠、更有韧性</b>。三个词各管一层：包容＝团结协作、不让任何一个国家掉队；普惠＝成果更多更公平惠及各国人民；韧性＝经得起风浪、共渡难关。命题人设误靠<b>换词</b>，逐词比对即可。</p>' },
+  { tag: '选项A', cls: 'bad', title: 'A「更具竞争」：换词干扰项', 
+    body: '<p>「更具竞争的全球发展」——「竞争」不在成套表述里。讲话标题两个「共」字点明基调：团结协作、命运与共、共建美好未来；「竞争」意味着相互角力、以邻为壑，与基调方向相反，是<b>换词干扰项</b>。<b>A 错</b>。</p>',
+    ribbon: { k: 1, ok: false } },
+  { tag: '选项B', cls: 'good', title: 'B「更加包容」：原文原词',
+    body: '<p>「更加包容的全球发展」——原文原词。团结协作、反对分裂对抗，不让任何一个国家掉队。<b>B 正确</b>。</p>',
+    ribbon: { k: 2, ok: true } },
+  { tag: '选项C', cls: 'good', title: 'C「更加普惠」：原文原词',
+    body: '<p>「更加普惠的全球发展」——原文原词。发展成果更多更公平惠及各国人民，尤其支持发展中国家。<b>C 正确</b>。</p>',
+    ribbon: { k: 3, ok: true } },
+  { tag: '选项D', cls: 'good', title: 'D「更有韧性」：注意量词是「更有」',
+    body: '<p>「更有韧性的全球发展」——原文原词。注意量词是「更有」而非「更加」，恰是原文句式（两个「更加」＋一个「更有」），共渡粮食能源等难关、经得起风浪。<b>D 正确</b>——「更有」不是设误点，反而是对的标志。</p>',
+    ribbon: { k: 4, ok: true } },
+  { tag: '结论', cls: 'good', title: '结论：锁定 BCD',
+    body: '<p>答案 <b>BCD</b>。三个标准词成套记忆：<b>包容、普惠、韧性</b>；唯一干扰项 A 用「更具竞争」换词——与《共迎时代挑战，共建美好未来》的团结基调相反。时政多选必须逐词校验，不能惯性全选。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step')),
+    tag: s.tag,
+    log: s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: 'G20 巴厘讲话：倡议推动什么样的全球发展',
+  subtitle: '考点：全球发展与二十国集团 · 方法：成套表述逐词比对',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '答案 <b>BCD</b>（更加包容＋更加普惠＋更有韧性）。记忆锚点：三个标准词——<b>包容、普惠、韧性</b>（不让谁掉队 / 惠及大家 / 经得起风浪）。干扰项 A 的套路是<b>换词</b>：「更具竞争」与《共迎时代挑战，共建美好未来》团结协作的基调相反；注意 D 的量词「更有」恰是原文句式，勿漏选。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：G20 巴厘讲话——全球发展的三个标准词</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立模型——时政倡议题比的是「成套表述」，不是价值判断</h3>
+<p>2022 年 11 月，二十国集团（G20）领导人第十七次峰会在印度尼西亚巴厘岛举行，习近平主席出席并发表题为《共迎时代挑战，共建美好未来》的重要讲话，就「推动全球发展」提出三点倡议，句式是成套的：<strong>更加包容</strong>的全球发展、<strong>更加普惠</strong>的全球发展、<strong>更有韧性</strong>的全球发展。</p>
+<p>「倡议推动……」型时政多选题，功夫不在背答案，而在两道工序：第一，认出选项是不是讲话原文的<strong>成套表述</strong>；第二，对每个选项做<strong>词面校验</strong>——命题人设误的套路是<strong>换词</strong>，把成套搭配里的一个词换成语义相反或标新立异的词。三个标准词各有分工，是校验时的对照卡：</p>
+<table><thead><tr><th>标准词</th><th>内涵</th><th>针对什么问题</th></tr></thead><tbody><tr><td>更加包容</td><td>团结协作，不让任何一个国家掉队</td><td>分裂对抗、脱钩断链</td></tr><tr><td>更加普惠</td><td>发展成果更多更公平惠及各国人民，尤其支持发展中国家</td><td>南北差距</td></tr><tr><td>更有韧性</td><td>经得起风浪、共渡难关（粮食、能源等安全）</td><td>危机冲击</td></tr></tbody></table>
+<h3>第 1 步：逐项词面校验，对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>校验依据</th></tr></thead><tbody><tr><td>A 更具竞争的全球发展</td><td>❌</td><td>「竞争」不在成套表述里，且与讲话基调相反——典型换词项</td></tr><tr><td>B 更加包容的全球发展</td><td>✅</td><td>原文原词「更加包容」</td></tr><tr><td>C 更加普惠的全球发展</td><td>✅</td><td>原文原词「更加普惠」</td></tr><tr><td>D 更有韧性的全球发展</td><td>✅</td><td>原文原词「更有韧性」</td></tr></tbody></table>
+<p>→ 选 <strong>BCD</strong>。</p>
+<h3>为什么「竞争」必错（预判追问）</h3>
+<p>答案的底色其实写在题干的讲话标题里：《<strong>共</strong>迎时代挑战，<strong>共</strong>建美好未来》——两个「共」字点明基调是<strong>团结协作、命运与共</strong>，各国是同舟共济的伙伴。「竞争」意味着相互角力、以邻为壑，与「共建美好未来」方向相反；一篇呼吁共迎挑战的讲话，逻辑上不可能倡议「更具竞争」的全球发展。再看句式：三点倡议是「更加包容、更加普惠、更有韧性」——两个「更加」加一个「更有」，里面根本没有「竞争」这个词。所以 A 不是表述差异，而是方向性错项。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A（被「竞争」迷惑）</strong>：把「有竞争才有活力」的日常观念带进考场。时政题不做价值发挥，只比对口径——讲话通篇讲团结合作，没有「竞争」这个倡议词。</li><li><strong>漏选 D（被「更有」绊住）</strong>：见惯了三个「更加」，看到「更有韧性」量词不同就起疑。原文恰是「更有韧性」，「更加／更有」交替是原文句式——本题 D 的「更有」反而是对的标志。</li><li><strong>惯性全选</strong>：时政多选并非「都是官方话就全选」，本题就是靠换词设置唯一排除项的典型，必须逐词校验。</li></ul>
+<blockquote>记忆锚点：巴厘讲话三个标准词——<strong>包容、普惠、韧性</strong>（不让谁掉队／惠及大家／经得起风浪）；干扰项套路＝换词（更具竞争）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

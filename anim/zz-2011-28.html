@@ -1,8 +1,81 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-28 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-28</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-28 · 延安整风：主观主义的表现形式（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：先立整风"三反对"分工表与主观主义的两条脱离路径，
+   再逐项对号入座，最后复盘"真存在、挂错线"。全中文、自包含，仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var S1 = card(1, 'key', '审题眼：问的是"表现形式"，不是"反对什么"',
+  '<p>延安整风最主要的任务是<b>反对主观主义</b>——题问它的两种主要<b>表现形式</b>。</p><p>注意问法：不是问"整风反对哪些作风"，而是问主观主义<b>内部怎么分化</b>。</p>');
+var S2 = card(2, 'key', '机制先行：三反对分工表 + 两条脱离路径',
+  '<p><b>主观主义—学风</b>、<b>宗派主义—党风</b>、<b>党八股—文风</b>——三条线各管一域。</p><p>主观主义的实质是<b>主观脱离客观</b>，往下脱离只有两条路：从<b>书本</b>出发、从<b>狭隘经验</b>出发。</p>');
+var S3 = card(3, 'good', '选项 A 教条主义：从书本出发 —— 对',
+  '<p>唯书唯上——照搬本本与外国经验（王明教条主义是典型），不问中国实际。</p><p>脱离路径：从<b>书本</b>出发。A 对。</p>');
+var S4 = card(4, 'good', '选项 C 经验主义：从狭隘经验出发 —— 对',
+  '<p>把局部经验、一时经验<b>绝对化</b>，轻视科学理论的指导。</p><p>方向相反（唯书 vs 唯经验），病灶相同（不以客观全面实际为出发点）。C 对。</p>');
+var S5 = card(5, 'bad', '选项 B 形式主义：真存在，但挂在文风线 —— 错',
+  '<p>形式主义属<b>文风</b>问题——党八股是它在文风上的突出表现。</p><p>挂在"党八股—文风"一行，不是主观主义（学风线）的表现形式。B 错挂。</p>');
+var S6 = card(6, 'bad', '选项 D 宗派主义：真存在，但挂在党风线 —— 错',
+  '<p>宗派主义是整风要反对的对象之一，但对应"<b>党风</b>"一行。</p><p>它与主观主义（学风）<b>并列</b>，不是它的下位形式——选 D 等于把三条线混成一条。D 错挂。</p>');
+var S7 = card(7, 'key', '陷阱复盘：真存在、挂错线',
+  '<p>B、D 的迷惑性来自"整风里真实被反对"——但问的是<b>主观主义的表现形式</b>。</p><p>先默写三反对分工表，再看选项落在哪一行：学风线只收教条与经验这一对。</p>');
+var S8 = card(8, 'good', '收束：答案 AC',
+  '<p>答案 <b>AC</b>：教条主义（从书本出发）+ 经验主义（从狭隘经验出发）。</p><p>党风线（D）、文风线（B）都是真存在、挂错线。</p>');
+
+var snaps = [
+  { cls: 'step', tag: '审题眼', log: '问"主观主义的表现形式"——不是问整风反对什么', html: S1, count: 0 },
+  { cls: 'step', tag: '立机制', log: '三反对三条线：学风、党风、文风；主观脱离客观的两条路', html: S1 + S2, count: 0 },
+  { cls: 'ok',   tag: 'A 入选', log: 'A 教条主义：唯书唯上，从书本出发脱离实际', html: S1 + S2 + S3, count: 1, ribbon: { k: 1, ok: true } },
+  { cls: 'ok',   tag: 'C 入选', log: 'C 经验主义：局部经验绝对化，从狭隘经验出发', html: S1 + S2 + S3 + S4, count: 2, ribbon: { k: 3, ok: true } },
+  { cls: 'miss', tag: 'B 排除', log: 'B 形式主义：属文风问题（党八股），挂在学风线之外', html: S1 + S2 + S3 + S4 + S5, count: 3, ribbon: { k: 2, ok: false } },
+  { cls: 'miss', tag: 'D 排除', log: 'D 宗派主义：对应党风线，与主观主义并列而非下位', html: S1 + S2 + S3 + S4 + S5 + S6, count: 4, ribbon: { k: 4, ok: false } },
+  { cls: 'step', tag: '陷阱',   log: '复盘：真存在、挂错线——先默写分工表再对行', html: S1 + S2 + S3 + S4 + S5 + S6 + S7, count: 4 },
+  { cls: 'done', tag: '结论',   log: '学风线只收一对：教条 + 经验——答案 AC', html: S1 + S2 + S3 + S4 + S5 + S6 + S7 + S8, count: 4, done: true }
+];
+
+AW.init({
+  title: '【2011·28】延安整风：主观主义的主要表现形式（多选）',
+  subtitle: '考点：延安整风三反对 · 主观与客观的两条脱离路径 · 干扰项归因',
+  intro: '点击「▶ 播放」或按 → 先立分工表，再逐项判定 A–D；右侧序号带实时标记对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已判定',
+  snaps: snaps,
+  result: {
+    big: '答案 AC',
+    html: '<b>三反对三条线</b>：学风反主观主义（教条 A + 经验 C）、党风反宗派主义（D 错挂）、文风反党八股（B 错挂）。<br>主观脱离客观的两条路：从书本出发、从狭隘经验出发——"真存在、挂错线"是本题唯一陷阱。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：延安整风的分工表——主观主义的两条脱离路径</h2>
+<p>答案：<strong>AC</strong>。</p>
+<h3>第 0 步：先立机制——整风"三反对"是一张分工明确的清单</h3>
+<p>延安整风（1941–1945）的内容不是笼统的"反对坏作风"，而是一张分工明确的"三反对"清单，每条对应一个领域的作风问题：</p>
+<table><thead><tr><th>反对对象</th><th>整顿什么</th><th>针对的毛病</th></tr></thead><tbody><tr><td>主观主义</td><td>学风</td><td>教条主义、经验主义（本题问的就是这一行）</td></tr><tr><td>宗派主义</td><td>党风</td><td>小团体主义、闹独立性</td></tr><tr><td>党八股</td><td>文风</td><td>空话套话、八股腔</td></tr></tbody></table>
+<p>题目从清单里抽出第一行往下追问：主观主义的主要表现形式是什么。主观主义的实质是<strong>主观认识脱离客观实际</strong>——往下脱离的路只有两条：一条从书本出发，一条从狭隘经验出发。</p>
+<h3>第 1 步：两条路径对号入座</h3>
+<ul><li><strong>A 教条主义</strong>：唯书唯上——照搬本本与外国经验（王明教条主义是典型），不问中国实际。脱离路径：从<strong>书本</strong>出发。</li><li><strong>C 经验主义</strong>：把局部经验、一时经验绝对化，轻视科学理论的指导。脱离路径：从<strong>狭隘经验</strong>出发。</li><li>两者方向相反（一个唯书、一个唯经验），病灶相同（都不以客观全面的实际为出发点）——所以同属主观主义的两种主要表现形式。</li></ul>
+<h3>第 2 步：为什么 B、D 不算——真存在，但挂错线</h3>
+<p>B、D 的迷惑性在于它们都是整风运动里<strong>真实被反对</strong>的东西，但都挂在分工表的其他行：</p>
+<ul><li><strong>B 形式主义</strong>：属文风问题——党八股是形式主义在文风上的突出表现，挂在"党八股—文风"一行，不是主观主义的表现形式。</li><li><strong>D 宗派主义</strong>：整风要反对的对象之一，但对应"党风"一行，与主观主义（学风）<strong>并列</strong>，不是它的下位形式——把 D 选进来等于把三条线混成一条。</li></ul>
+<p>再预判一个追问："整风反对的东西不少，为什么表现形式只有两个？"——因为题目问的是"主观主义的<strong>表现形式</strong>"，不是"整风<strong>反对</strong>什么"：前者问主观主义内部怎么分化，后者问整风的全部任务清单。B、D 属于后者，答非所问。</p>
+<h3>易错点</h3>
+<ul><li><strong>扩大化误选 D</strong>：把"整风反对的所有作风"当成"主观主义的表现形式"——宗派主义是被反对的对象，但它是与主观主义并列的另一条线。</li><li><strong>错挂文风误选 B</strong>：把形式主义（党八股）从文风线错挂到学风线。</li></ul>
+<blockquote>记忆锚点：三反对三条线——学风反主观主义（教条 A + 经验 C）、党风反宗派主义（D 错挂）、文风反党八股（B 错挂）；主观脱离客观的两条路：从书本出发、从狭隘经验出发。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

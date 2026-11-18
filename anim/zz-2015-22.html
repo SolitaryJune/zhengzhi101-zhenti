@@ -1,8 +1,97 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-22 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-22</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2015-22 人才的三层定位 · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念推理链模板（无 KaTeX 版）：引擎外壳 + 只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：问的是"为什么"',
+    cls: 'key', sc: 'step', tag: '审题',
+    body: '<p>题干引习近平的话："不唯地域引进人才，不求所有开发人才，不拘一格用好人才"，问的是——我们为什么<b>比历史上任何时期都更加强调重视人才</b>？</p><p>问原因的题，先把人才定位的框架立起来。</p>',
+    log: '问"为什么重视人才"，先搭定位框架' },
+  { t: '机制卡：人才定位三层并立',
+    cls: 'key', sc: 'shift', tag: '机制',
+    body: '<p><b>资源层</b>：人才是最宝贵的资源——第一资源、国家战略资源；<b>竞争层</b>：综合国力竞争归根到底是人才竞争；<b>事业层</b>：推进中国特色社会主义事业，关键在人。</p><p>三层各撑一个选项，逐层核对即可。</p>',
+    log: '资源层 + 竞争层 + 事业层，三层并立' },
+  { t: '选项 A：第一资源和国家战略资源 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A', ribbon: { k: 1, ok: true },
+    body: '<p>资源层标准表述：人才资源是第一资源，人才是国家战略资源。</p><p><b>A 对</b>。</p>',
+    log: '资源层对上号 → A 选' },
+  { t: '选项 C：国家竞争力的重要体现 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C', ribbon: { k: 3, ok: true },
+    body: '<p>竞争层标准表述：综合国力竞争归根到底是人才竞争，人才是国家竞争力的重要体现。</p><p><b>C 对</b>。</p>',
+    log: '竞争层对上号 → C 选' },
+  { t: '选项 D：推进中国特色社会主义事业的关键因素 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 D', ribbon: { k: 4, ok: true },
+    body: '<p>事业层标准表述：事业发展、民族复兴，关键在人——用好人才是推进事业的关键因素。</p><p><b>D 对</b>。</p>',
+    log: '事业层对上号 → D 选' },
+  { t: '选项 B：先进生产力的集中体现 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 B', ribbon: { k: 2, ok: false },
+    body: '<p>张冠李戴："先进生产力的<b>集中体现和主要标志</b>"在教材里有固定主人——<b>科学技术</b>。这组短语换成人才当主语，就是偷换。</p><p>见到"集中体现"先核对主语是谁。<b>B 不选</b>。</p>',
+    log: '"集中体现"固定配给科学技术 → B 不选' },
+  { t: '结论：ACD',
+    cls: 'good', sc: 'done', tag: '结论',
+    body: '<p>答案 <b>ACD</b>：资源层 + 竞争层 + 事业层三层齐；B 偷换了"科学技术"的主语。</p>',
+    log: '三层对号齐 → 锁定 ACD' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2015·22】我们为什么比任何时期都更重视人才（多选）',
+  subtitle: '考点：人才强国战略 · 三层定位逐项对号',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先立"资源—竞争—事业"三层框架，再逐项核对。',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '记忆锚点：人才三层——<b>第一资源（A）+ 竞争力体现（C）+ 事业关键（D）</b>；"先进生产力的集中体现"固定配给<b>科学技术</b>，谁冒领谁错。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：人才的三层定位——为什么"比任何时期都更重视人才"</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——题眼问"原因"，先搭人才定位的框架</h3>
+<p>题眼是"比历史上任何时期都更加强调重视人才、用好人才"，问的是<strong>为什么</strong>。人才问题在教材与时政语境中的定位，是<strong>三层并立</strong>的结构，答题时逐层核对选项：</p>
+<ul><li><strong>资源层</strong>：人才是最宝贵的资源——第一资源、国家战略资源；</li><li><strong>竞争层</strong>：综合国力竞争归根到底是人才竞争——人才是国家竞争力的重要体现；</li><li><strong>事业层</strong>：推进中国特色社会主义事业、实现民族复兴，关键在人——人才是事业成败的关键因素。</li></ul>
+<p>三层各自支撑一个选项，框架立住，答案自然铺开。</p>
+<h3>第 1 步：逐项对号入座</h3>
+<ul><li><strong>A 第一资源和国家战略资源 ✅</strong>：资源层的标准表述，与"人才资源是第一资源"直接对应。</li><li><strong>B 先进生产力的集中体现 ❌</strong>：张冠李戴。教材的固定搭配是"<strong>科学技术</strong>是先进生产力的集中体现和主要标志"——这组短语在教材里有<strong>固定主人</strong>（科学技术），主语换成人才就是偷换。见到"集中体现"先核对主语是谁。</li><li><strong>C 国家竞争力的重要体现 ✅</strong>：竞争层的标准表述——国际竞争说到底是人才竞争、人才优势就是竞争优势。</li><li><strong>D 推进中国特色社会主义事业的关键因素 ✅</strong>：事业层的标准表述——事业发展关键在人。</li></ul>
+<p>→ 选 <strong>ACD</strong>。</p>
+<h3>易错点：每个失误对应哪种误解</h3>
+<ul><li><strong>误选 B</strong>：把"人才很重要"顺着语感推成"人才是先进生产力的集中体现"。"集中体现和主要标志"是科学技术的专属短语，B 偷换了主语——这是本题唯一的排除点，值得多记一句。</li><li><strong>漏选 C 或 D</strong>：只背了"人才是第一资源"一句，忘了人才定位是资源、竞争、事业三层并立；漏项往往漏在背得最少的那一层。</li></ul>
+<blockquote>记忆锚点：人才三层——<strong>第一资源（A）+ 竞争力体现（C）+ 事业关键（D）</strong>；"先进生产力的集中体现"固定配给<strong>科学技术</strong>，谁冒领谁错。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

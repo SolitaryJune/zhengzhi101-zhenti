@@ -1,8 +1,143 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-08 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-08</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2026·08 公共安全治理模式转型</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行格子（时间轴、对比格用）
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：治理模式转变的方向在哪条线上",
+    "cls": "key",
+    "tag": "审题",
+    "log": "题眼：建立大安全大应急框架，治理模式向哪里转",
+    "body": "<p>题干给的是二十大报告的一句配置：「建立大安全大应急框架，完善公共安全体系，推动公共安全治理模式……」。问的是<b>转变方向</b>——先立机制，弄清「模式转型」到底在转什么，再看四个选项谁在这条线上。</p>"
+  },
+  {
+    "title": "先立机制：为什么必须转型",
+    "cls": "key",
+    "tag": "机制",
+    "log": "事后补救代价大 → 安全第一、预防为主 → 关口前移",
+    "body": "<p>风险社会里「出了事再处置」代价太大：事故已发生、损失已造成，处置再高效也只是补救。所以报告定调「<b>坚持安全第一、预防为主</b>」。转型的实质不是换手段、也不是换主体，而是<b>时间关口前移</b>：把资源从「灾后救火」挪到「灾前防火」，把风险消解在成灾之前。</p>"
+  },
+  {
+    "title": "摆出时间轴：事后 → 事前",
+    "cls": "key",
+    "tag": "机制",
+    "log": "旧模式事后处置为主 → 新模式事前预防为主",
+    "body": cells([
+      {"t": "事后处置为主<br>灾后救火·被动补救", "c": "miss", "l": "旧模式"},
+      {"t": "→", "c": "dim", "l": ""},
+      {"t": "事前预防为主<br>排查风险·主动防控", "c": "good", "l": "新模式"}
+    ]) + "<p>对照记忆：时机（灾后 → 灾前）、重心（救援善后 → 排查源头）、代价（损失已成 → 小得多）。报告落点：<b>向事前预防转型</b>。</p>"
+  },
+  {
+    "title": "A 排除：与「统筹协同」思路相反",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "「分散 → 单一」与统筹整合相反 → A 排除",
+    "ribbon": {"k": 1, "ok": false},
+    "body": "<p>「大安全大应急框架」恰恰强调各方力量在统一框架下<b>统筹联动、协同应对</b>；「从分散接管到单一接管」说的却是收拢成单一主体——方向正好拧着。<b>A 错误</b>。</p>"
+  },
+  {
+    "title": "B 排除：偷换治理主体",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "转型动的是时机，不是主体 → B 排除",
+    "ribbon": {"k": 2, "ok": false},
+    "body": "<p>公共安全治理是党委领导、政府负责、社会协同、公众参与、法治保障的格局，不存在「政府监管换成市场监管」。模式转型动的是<b>时机</b>（事后 → 事前），不是<b>主体</b>。<b>B 错误</b>。</p>"
+  },
+  {
+    "title": "D 排除：手段升级 ≠ 模式转型",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "疏导、干预都在事发之后，关口没前移 → D 排除",
+    "ribbon": {"k": 4, "ok": false},
+    "body": "<p>「危机疏导」「危机干预」听起来更专业、更主动，但它们都是危机<b>发生后</b>的应对手段——时机仍停在事后、事中，关口并没有前移到「事前」。手段升级不等于模式转型。<b>D 错误</b>。</p>"
+  },
+  {
+    "title": "C 对号：向事前预防转型",
+    "cls": "good",
+    "tag": "命中",
+    "log": "报告原话：治理模式向事前预防转型 → C 正确",
+    "ribbon": {"k": 3, "ok": true},
+    "body": "<p>二十大报告标准表述：推动公共安全治理模式<b>向事前预防转型</b>——即从「事后处置为主」转向「事前预防为主」。与第 3 步摆出的时间轴完全重合。<b>C 正确</b>。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "tag": "结论",
+    "log": "锁定 C：从事后处置为主转向事前预防为主",
+    "body": "<p>答案 <b>C</b>。记忆锚点：大安全大应急框架 → 治理模式<b>向事前预防转型</b>（事后处置为主 → 事前预防为主，关口前移、源头治理）。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'))),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  "title": "政治 2026·08 公共安全治理模式转型",
+  "subtitle": "考点：公共安全治理 · 方法：先立「关口前移」机制，再摆事后 → 事前时间轴对号",
+  "counterLabel": "推理步",
+  "ribbonTitle": "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  "intro": "点击「▶ 播放」逐步展开推理链。",
+  "snaps": snaps,
+  "result": {
+    "big": "答案 C",
+    "html": "记忆锚点：公共安全治理模式转型＝<b>事后处置为主 → 事前预防为主</b>（安全第一、预防为主，关口前移、源头治理）；大应急框架＝统筹协同，不是单一接管。选 <b>C</b>。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：公共安全治理模式向哪里转型</h2>
+<p>答案：<strong>C（从事后处置为主转向事前预防为主）</strong>。</p>
+<h3>第 0 步：先立机制——「治理模式转型」的实质是关口前移</h3>
+<p>先问一个为什么：公共安全治理为什么要转型？因为风险社会里「出了事再处置」代价太大——事故已经发生、损失已经造成，处置得再高效也只是补救。所以二十大报告定下主线：「坚持安全第一、预防为主，建立大安全大应急框架，完善公共安全体系，<strong>推动公共安全治理模式向事前预防转型</strong>」。转型的实质不是换手段、也不是换主体，而是<strong>时间关口前移</strong>：把资源从「灾后救火」挪到「灾前防火」，把风险消解在成灾之前。</p>
+<h3>第 1 步：两种模式摆在一起看</h3>
+<table><thead><tr><th>维度</th><th>事后处置为主（旧）</th><th>事前预防为主（新）</th></tr></thead><tbody><tr><td>行动时机</td><td>灾害发生之后</td><td>成灾之前</td></tr><tr><td>工作重心</td><td>应急救援、善后恢复</td><td>风险排查、源头治理</td></tr><tr><td>代价</td><td>损失已成、被动补救</td><td>代价小、主动防控</td></tr><tr><td>对应关键词</td><td>大应急</td><td>安全第一、预防为主</td></tr></tbody></table>
+<p>题干问的正是这条时间轴的方向：<strong>事后 → 事前</strong>，只有 C 在这条线上。</p>
+<h3>第 2 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因</th></tr></thead><tbody><tr><td>A 从分散接管到单一接管的转变</td><td>❌</td><td>「单一」与「大安全大应急」的统筹协同思路相反</td></tr><tr><td>B 从政府监管到市场监管的转变</td><td>❌</td><td>偷换治理主体；转型动的是时机，不是主体</td></tr><tr><td>C 从事后处置为主转向事前预防为主</td><td>✅</td><td>「向事前预防转型」的标准表述</td></tr><tr><td>D 从危机疏导到危机干预的转变</td><td>❌</td><td>疏导、干预都是事发后的应对手段，仍停在事后事中</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 D（「干预」听着更主动）</strong>：把应对手段的升级误当成治理模式的转型——手段再主动，时机仍在事后，关口没有前移。</li><li><strong>选 A（把「大应急」读成「单一接管」）</strong>：大框架恰恰强调各方力量统筹联动，不是收拢成单一主体。</li><li><strong>选 B（被「监管」套词带偏）</strong>：公共安全治理是党委领导、政府负责、社会协同的格局，不存在「换成市场监管」这条路。</li></ul>
+<blockquote>记忆锚点：公共安全治理模式转型＝<strong>事后处置为主 → 事前预防为主</strong>（关口前移、源头治理）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

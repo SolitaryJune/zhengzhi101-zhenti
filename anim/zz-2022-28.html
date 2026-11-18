@@ -1,8 +1,118 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-28 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-28</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2022·28 毛泽东思想活的灵魂——三个基本方面</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，时间线推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>1981 年 6 月，党的十一届六中全会通过《关于建国以来党的若干历史问题的决议》，科学评价毛泽东和毛泽东思想的历史地位。问：活的灵魂概括为哪三个基本方面。</p>",
+    "log": "出处：1981 年《决议》"
+  },
+  {
+    "title": "先立模型：两套「三」分两层",
+    "cls": "key",
+    "body": "<p><b>活的灵魂</b>（方法论层）：实事求是、群众路线、独立自主——贯穿各个组成部分的立场观点方法。<b>三大法宝</b>（革命路径层，出自《〈共产党人〉发刊词》）：统一战线、武装斗争、党的建设。命题人就爱从另一侧搬词。</p>",
+    "log": "模型立起：灵魂三层 vs 法宝三层"
+  },
+  {
+    "title": "B：实事求是——精髓",
+    "cls": "good",
+    "body": "<p>一切从实际出发、理论联系实际——毛泽东思想的<b>精髓</b>，灵魂第一位。<b>B 正确</b>。</p>",
+    "ribbon": { "k": 2, "ok": true },
+    "log": "实事求是＝精髓 → B 选"
+  },
+  {
+    "title": "A：群众路线——根本工作路线",
+    "cls": "good",
+    "body": "<p>一切为了群众、一切依靠群众，从群众中来、到群众中去——党的<b>根本工作路线</b>。<b>A 正确</b>。</p>",
+    "ribbon": { "k": 1, "ok": true },
+    "log": "群众路线＝根本路线 → A 选"
+  },
+  {
+    "title": "D：独立自主——立足点",
+    "cls": "good",
+    "body": "<p>自力更生，把立足点放在<b>依靠自己力量</b>的基点上——中国革命与建设的基本原则。<b>D 正确</b>。</p>",
+    "ribbon": { "k": 4, "ok": true },
+    "log": "独立自主＝基本立足点 → D 选"
+  },
+  {
+    "title": "C：武装斗争——法宝不是灵魂",
+    "cls": "bad",
+    "body": "<p>「武装斗争」是真命题但属于<b>三大法宝</b>（统一战线、武装斗争、党的建设），回答「革命怎么搞」，不在灵魂名单里。见眼熟词先问出处。<b>C 错误</b>。</p>",
+    "ribbon": { "k": 3, "ok": false },
+    "log": "武装斗争属于法宝 → C 不选"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>ABD</b>。记忆锚点：活的灵魂＝实事求是 + 群众路线 + 独立自主；三大法宝＝统一战线 + 武装斗争 + 党的建设——两个「三」分属两层，永不混用。</p>",
+    "log": "锁定 ABD：活的灵魂三方面"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "毛泽东思想活的灵魂（1981 年《决议》）",
+  subtitle: "考点：毛泽东思想活的灵魂 · 方法：与三大法宝分层区分",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABD",
+    html: "记忆锚点：<b>活的灵魂＝实事求是 + 群众路线 + 独立自主</b>（1981 年《决议》原话）；<b>三大法宝＝统一战线 + 武装斗争 + 党的建设</b>。C「武装斗争」是法宝层的词，见眼熟先问出处。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：毛泽东思想活的灵魂——三个基本方面</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立模型——把"活的灵魂"与"三大法宝"分开</h3>
+<p>1981 年 6 月党的十一届六中全会通过《关于建国以来党的若干历史问题的决议》，科学评价毛泽东和毛泽东思想的历史地位，并把毛泽东思想活的灵魂概括为<strong>三个基本方面：实事求是、群众路线、独立自主</strong>——这是贯穿毛泽东思想各个组成部分的立场、观点、方法。与它相邻的还有另一套"三件套"：<strong>统一战线、武装斗争、党的建设</strong>——那是《〈共产党人〉发刊词》里的<strong>三大法宝</strong>，属于革命路径层面，不是灵魂层面。两套"三"极易互串，命题人就爱从这一侧搬词。</p>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>推理</th></tr></thead><tbody><tr><td>A 群众路线</td><td>✅</td><td>一切为了群众、一切依靠群众，从群众中来、到群众中去——党的根本工作路线</td></tr><tr><td>B 实事求是</td><td>✅</td><td>一切从实际出发、理论联系实际——毛泽东思想的精髓</td></tr><tr><td>D 独立自主</td><td>✅</td><td>自力更生，把立足点放在依靠自己力量的基点上</td></tr><tr><td>C 武装斗争</td><td>❌</td><td>属于三大法宝（统一战线、武装斗争、党的建设），不在活的灵魂之列</td></tr></tbody></table>
+<h3>为什么 C 会出现在选项里（预判追问）</h3>
+<p>"武装斗争"本身是真命题——中国革命的主要形式确实是武装斗争，但它回答的是"中国革命怎么搞"（路径），不是"毛泽东思想活的灵魂是什么"（方法论）。命题人借用一个"看似眼熟、确有其事"的词来考边界：见到选项先问它出自哪套框架，别因眼熟就勾。</p>
+<h3>易错点</h3>
+<ul><li><strong>勾 C</strong>：两套"三"混淆——活的灵魂是"实事求是、群众路线、独立自主"（方法论），三大法宝是"统一战线、武装斗争、党的建设"（革命路径）。</li></ul>
+<blockquote>记忆锚点：活的灵魂＝实事求是 + 群众路线 + 独立自主（1981 年《决议》原话）；三大法宝＝统一战线 + 武装斗争 + 党的建设——两个"三"分属两层，永不混用。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

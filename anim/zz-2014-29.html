@@ -1,8 +1,130 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-29 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-29</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·29 避免内战的两步棋：1945-1946 和平窗</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 自包含推理链卡片模板（引擎自动按 URL 注入题干与选项），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+    {
+      "title": "审题眼：先锁时间窗",
+      "cls": "key",
+      "body": "<p>题眼：「抗日战争<b>结束后</b>」「<b>避免内战</b>、和平建国」——时间窗锁定 <b>1945 年 8 月至 1946 年 6 月全面内战爆发前</b>。措施题先卡时间窗，再问史实真不真、目的对不对。</p>",
+      "log": "题眼：先锁 1945.8—1946.6 和平窗"
+    },
+    {
+      "title": "先立机制：窗内两步棋",
+      "cls": "key",
+      "body": "<p>这半年中共的和平努力就两步：<b>重庆谈判</b>（签《双十协定》）＋<b>参加并维护政协协议</b>。1946 年 6 月国民党围攻中原解放区、全面内战爆发后，斗争转入自卫战争——「避免内战」的措施必须落在窗内、目的为和平。</p>",
+      "log": "窗内两步棋：谈判＋政协"
+    },
+    {
+      "title": "1945.8-10 · 重庆谈判",
+      "cls": "good",
+      "ribbon": {
+        "k": 1,
+        "ok": true
+      },
+      "body": "<p><b>A 赴重庆与国民党当局进行谈判</b>：1945 年 8 月底毛泽东亲赴重庆，10 月签订《双十协定》——和平建国方案的正面争取。<b>A 正确</b>。</p>",
+      "log": "亲赴重庆、签双十协定 → A 选"
+    },
+    {
+      "title": "1946.1 · 政治协商会议",
+      "cls": "good",
+      "ribbon": {
+        "k": 3,
+        "ok": true
+      },
+      "body": "<p><b>C 参加政协会议并维护政协协议</b>：1946 年 1 月政协通过政府组织、宪法草案等五项协议，中共严格维护并督促实施。<b>C 正确</b>。</p>",
+      "log": "参会并维护协议 → C 选"
+    },
+    {
+      "title": "B：第二战线在窗外",
+      "cls": "bad",
+      "ribbon": {
+        "k": 2,
+        "ok": false
+      },
+      "body": "<p><b>在国统区开辟第二战线</b>：学生民主运动汇成第二战线，是<b>全面内战爆发后</b>（1946 年底抗暴运动起，至 1947 年五二〇运动）配合军事斗争的产物——史实真、时间错。<b>B 不选</b>。</p>",
+      "log": "第二战线在内战爆发后 → B 不选"
+    },
+    {
+      "title": "D：土改时间看似在窗内、目的已变",
+      "cls": "bad",
+      "ribbon": {
+        "k": 4,
+        "ok": false
+      },
+      "body": "<p><b>在解放区开展土地改革运动</b>：《五四指示》（1946.5.4）出台早于 6.26 全面内战爆发，但它把土地政策转向「<b>耕者有其田</b>」，目的是<b>动员农民备战支前</b>；《中国土地法大纲》（1947）与大规模土改更在内战爆发后。时间与目的双不合。<b>D 不选</b>。</p>",
+      "log": "五四指示备战支前 → D 不选"
+    },
+    {
+      "title": "结论",
+      "cls": "good",
+      "body": "<p>答案 <b>AC</b>：重庆谈判（A）＋政协会议（C）。多选题先卡<b>时间窗</b>——「史实真、时间错（或目的变）」的选项最常见。</p>",
+      "log": "锁定 AC"
+    }
+  ];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "避免内战的两步棋：1945-1946 的和平时间窗",
+  subtitle: "考点：争取和平民主的斗争 · 方法：先锁时间窗（1945.8-1946.6），再判史实与目的",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 AC",
+    html: "记忆锚点：和平窗（1945.8-1946.6）内两步棋——<b>重庆谈判（A）＋政协会议（C）</b>；第二战线与土改都是内战爆发后的答卷——《五四指示》虽在 6.26 之前，但目的是备战支前。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：避免内战的两步棋——先锁时间窗，再判对错</h2>
+<p>答案：<strong>AC</strong>。</p>
+<h3>第 0 步：先立机制——把"和平时间窗"画出来</h3>
+<p>题眼两个词："抗日战争<strong>结束后</strong>""<strong>避免内战</strong>、和平建国"。措施题要先卡<strong>时间窗</strong>：这半年的窗口是 <strong>1945 年 8 月至 1946 年 6 月全面内战爆发前</strong>。窗内中共的和平努力就两步——<strong>赴重庆谈判</strong>（签《双十协定》）和<strong>参加政治协商会议并维护协议</strong>；此后 1946 年 6 月国民党围攻中原解放区，全面内战爆发，中共的斗争转入自卫战争。所以判断选项时问两个问题：史实真不真？落在窗内、目的对不对？"史实真、时间错"是这类多选题最常见的干扰方式。</p>
+<h3>第 1 步：逐项裁决</h3>
+<ul><li><strong>A 赴重庆与国民党当局进行谈判</strong> ✅：1945 年 8 月底毛泽东亲赴重庆，10 月签订《双十协定》——和平建国方案的正面争取。</li><li><strong>C 参加政协会议并维护政协协议</strong> ✅：1946 年 1 月政治协商会议通过政府组织、宪法草案等五项协议，中共严格维护并督促其实施。</li><li><strong>B 在国统区开辟第二战线</strong> ❌：国统区的学生民主运动汇成第二战线，是<strong>全面内战爆发后</strong>（1946 年底抗暴运动起，至 1947 年五二〇运动）配合军事斗争的产物——不是"避免内战"阶段的措施。</li><li><strong>D 在解放区开展土地改革运动</strong> ❌：见下——时间看似在窗内，目的已经变了。</li></ul>
+<p>→ 选 <strong>AC</strong>。</p>
+<h3>为什么 D 的时间在窗内、却仍然不算</h3>
+<p>最值得提前答掉的"为什么"：《五四指示》（1946 年 5 月 4 日）确实出台于全面内战爆发（6 月 26 日）之前，单看时间似乎"在窗内"。但《五四指示》是把解放区土地政策由减租减息转向"<strong>耕者有其田</strong>"的转折点，其目的是<strong>动员农民参军支前、准备自卫战争</strong>；大规模的土地改革运动和《中国土地法大纲》（1947 年）更是全面内战<strong>爆发后</strong>的事。题干问的是"为避免内战、实现和平建国而采取的措施"——D 时间不对味、目的更不对味，两头都不合。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：史实真、时间错——第二战线确有其事，但发生在内战爆发后的国统区，与"避免内战"无关。</li><li><strong>误选 D</strong>：只看时间不看目的——《五四指示》虽在 6 月之前，但它是备战动员的转折，不是和平建国的措施。</li></ul>
+<blockquote>记忆锚点：和平窗（1945.8—1946.6）内两步棋——<strong>重庆谈判（A）＋政协会议（C）</strong>；第二战线与土地改革，都是内战爆发后的答卷。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

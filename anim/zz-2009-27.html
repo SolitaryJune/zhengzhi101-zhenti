@@ -1,8 +1,82 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-27 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-27</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2009-27 · 两步走与三个错误观点（反向设问）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：题问“错误的有”——先立标尺',
+    cls: 'key',
+    body: '<p>反向设问！《新民主主义论》口径：<b>分两步走</b>——民主革命是社会主义革命的<b>必要准备</b>，社会主义革命是<b>必然趋势</b>，中间不容横插资产阶级专政。D 就是这把标尺本身。</p>' },
+  { title: '选项 A：“毕其功于一役”',
+    cls: 'good', k: 1, pick: true,
+    body: '<p>想把两个革命<b>一次做完</b>——混淆两个阶段的质的区别（“左”倾混淆）。违背两步走 → <b>错误观点，入选</b>。</p>' },
+  { title: '选项 B：“二次革命论”',
+    cls: 'good', k: 2, pick: true,
+    body: '<p>陈独秀：民主革命由资产阶级领导，胜利后先发展资本主义再搞二次革命——<b>割裂</b>两步、放弃无产阶级领导权（“右”倾割裂）→ <b>错误观点，入选</b>。</p>' },
+  { title: '选项 C：“无间断”革命',
+    cls: 'good', k: 3, pick: true,
+    body: '<p>否认民主革命阶段应有发展，主张不停顿直奔社会主义——同样<b>混淆</b>两步的性质与界限 → <b>错误观点，入选</b>。</p>' },
+  { title: '选项 D：中国革命分“两步走”',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p>这正是党的<b>正确观点</b>（上篇与下篇）——题目要选<b>错误的</b>，正确的不选。<b>排除</b>。</p>' },
+  { title: '结论：ABC',
+    cls: 'good',
+    body: '<p>A、C 一类（“左”，越过/混淆阶段），B 一类（“右”，割裂两步）——三个都违背“两步走”，<b>答案 ABC</b>；D 是正确口径，反向设问下不选。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2009-27 · 两步走与三个错误观点（反向设问）',
+  subtitle: '2009 年第 27 题（多选）· 考点：民主革命与社会主义革命的关系 · 先立标尺再挑错',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立“两步走”标尺，再把各观点拿去量。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: '记忆锚点：<b>两步走＝正（D）</b>；“毕其功”“无间断”（左，混淆阶段）与“二次革命论”（右，割裂两步）都是错（ABC）。反向设问题先看题眼！'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：民主革命与社会主义革命的关系——先定正确口径，再挑错</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——"两步走"是标尺，其余观点都拿它量</h3>
+<p>审题先抓题眼：<strong>题目问的是"错误的有"</strong>（反向设问）。毛泽东《新民主主义论》给出了正确口径：中国革命必须<strong>分两步走</strong>——第一步民主主义革命，第二步社会主义革命；两步是"上篇与下篇"的关系：民主革命是社会主义革命的<strong>必要准备</strong>，社会主义革命是民主革命的<strong>必然趋势</strong>，中间不容横插一个资产阶级专政。D 正是这个正确口径本身。拿这把标尺量 A、B、C，三个全是历史上出现过的错误主张：</p>
+<h3>第 1 步：三个错误观点各错在哪</h3>
+<ul><li><strong>A "毕其功于一役"</strong>：想把民主革命和社会主义革命<strong>一次做完</strong>，混淆两个阶段的质的区别——"左"倾混淆。</li><li><strong>B "二次革命论"</strong>（陈独秀）：主张民主革命由资产阶级领导、胜利后先让资本主义充分发展，将来再进行第二次社会主义革命——<strong>割裂</strong>两步、放弃无产阶级领导权——"右"倾割裂。</li><li><strong>C "无间断"革命</strong>：否认民主革命阶段应有的发展，认为可以不停顿地直奔社会主义——同样<strong>混淆</strong>两个革命的性质与界限。</li><li><strong>D 中国革命分"两步走"</strong>：正确观点，题目要选<strong>错误的</strong>，不选。</li></ul>
+<p>注意 A、C 是一类（越过阶段），B 是另一类（横插一段资本主义）——错误方向相反，但都违背"两步走"的辩证关系。</p>
+<h3>易错点</h3>
+<ul><li><strong>看漏题眼</strong>：按惯性"选正确的"把 D 勾上——反向设问题（"错误的有"）审题第一。</li><li><strong>A、C 与 B 混为一谈</strong>：前者混淆阶段，后者割裂阶段，错误机制不同，归类清楚才记得牢。</li><li><strong>为什么"毕其功"错</strong>：民主革命时期就搞社会主义措施，会吓跑同盟军、超越阶段；为什么"二次革命论"错：放弃领导权，第一步的成果就到不了第二步。</li></ul>
+<blockquote>记忆锚点：<strong>两步走＝正（D）</strong>；"毕其功""无间断"（左，混淆阶段）与"二次革命论"（右，割裂两步）都是错（ABC）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

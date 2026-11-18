@@ -1,8 +1,92 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-09 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-09</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-09 · 反侵略战争屡败的根本原因</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：80 年屡败，问"根本原因"',
+    cls: 'key',
+    body: '<p>1840—1919 年，鸦片战争、甲午战争、八国联军……次次战败、条约收场。题眼有两个限定："<b>从中国内部因素</b>""<b>根本原因</b>"——教材内因两条：<b>制度腐败（根本）、技术落后（重要）</b>，主次要分清。</p>' },
+  { title: '立机制：制度腐败如何"从内部输掉战争"',
+    cls: 'key',
+    body: '<p>因果链：清王朝<b>腐朽昏庸</b> → <b>不敢发动和依靠人民</b>（视民众为隐患而压制）→ 压制爱国官兵抵抗、妥协求和、签约 → 战争从内部输掉。组织动员瘫痪的总根源，只有制度。</p>' },
+  { title: '再追问一层：技术落后是谁造成的',
+    cls: 'key',
+    body: '<p>经济、军事技术为什么长期落后？<b>腐朽制度压制了社会近代化</b>——不许办新式工业、不许变革军制。连"落后"都是制度的结果，派生结果当不了第一因。</p>' },
+  { title: '选项 A：军事战略错误',
+    cls: 'bad', k: 1, pick: false,
+    body: '<p>具体作战层面的问题（消极防御、指挥失当）；且战略错误多源于<b>朝廷腐朽决策</b>——它是果不是因，层级够不着"根本"，<b>排除</b>。</p>' },
+  { title: '选项 B：社会制度腐败',
+    cls: 'good', k: 2, pick: true,
+    body: '<p>使国家<b>难以有效组织和动员</b>反侵略力量的总根源——教材明文的根本原因，因果链的起点。<b>入选</b>。</p>' },
+  { title: '选项 C：经济技术落后',
+    cls: 'bad', k: 3, pick: false,
+    body: '<p>武器装备差距是现实，确属重要原因——但它是制度腐败<b>派生</b>的结果，"重要"≠"根本"，<b>排除</b>。</p>' },
+  { title: '选项 D：思想观念保守',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p>观念落后同样是腐朽制度压制变革的<b>结果</b>，教材未以此为根本，<b>排除</b>。</p>' },
+  { title: '结论：追问到第一因，是制度',
+    cls: 'good',
+    body: '<p>A 是表象、C/D 是派生——层层追问，组织动员瘫痪的总根源只有制度腐败。</p><p><b>答案 B。</b>记忆锚点：<b>制度腐败＝根本，技术落后＝重要</b>。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2011-09 · 近代反侵略战争屡败的根本原因',
+  subtitle: '2011 年第 9 题（单选）· 考点：反侵略战争失败的原因 · 因果链 + 逐项推演',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 正确 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立因果链机制，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '记忆锚点：败因两条分主次——<b>社会制度腐败＝根本原因</b>（组织动员瘫痪的总根源），经济技术落后＝重要原因（派生结果）。追问到底，第一因是制度。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：近代反侵略战争屡败的根本原因——社会制度腐败</h2>
+<p>答案：<strong>B（社会制度腐败）</strong>。</p>
+<h3>第 0 步：先立机制——一条"从内部输掉战争"的因果链</h3>
+<p>1840—1919 年 80 年间，鸦片战争、第二次鸦片战争、中法战争、中日甲午战争、八国联军侵华战争，次次以失败、割地、赔款收场。教材把中国内部的失败原因归纳为两条，并且<strong>排了主次</strong>：社会制度腐败是根本原因，经济技术落后是重要原因。为什么制度排第一？把因果链拉出来看：</p>
+<p>清王朝统治集团<strong>腐朽昏庸</strong> → 不敢发动和依靠人民群众（甚至把民众当"隐患"防范压制）→ 既压制爱国官兵的抵抗，又妥协求和、签订条约 → 战争被"从内部"输掉。</p>
+<p>再看第二层：经济技术为什么长期落后？正是<strong>腐朽制度压制了社会近代化</strong>——不许办新式工业、不许变革军制、不许培养新式人才。也就是说，连"技术落后"本身都是制度腐败的<strong>衍生结果</strong>。衍生结果不能当第一因，第一因只能是制度。</p>
+<h3>第 1 步：预判追问——C 项明明也是真的，为什么不当答案</h3>
+<p>C（经济技术落后）是本题最强的干扰项，处理它的关键是咬住题眼"<strong>根本原因</strong>"：</p>
+<ul><li>题目问的不是"全部原因"，也不是"直接原因"，而是追问到头的<strong>第一因</strong>；</li><li>武器装备差、军队近代化水平低，这些确实是屡战屡败的直接现实原因——但它们"为什么会落后"？答案又回到制度：腐朽的封建统治既不允许、也组织不起近代化的经济与国防；</li><li>层次关系是：制度腐败（根本）→ 经济技术落后（重要、派生）→ 战争失败。"重要"≠"根本"，教材原文的排序就是主次排序。</li></ul>
+<h3>第 2 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判定</th><th>理由</th></tr></thead><tbody><tr><td>A 军事战略错误</td><td>✗</td><td>具体作战层面的问题（消极防御、指挥失当）；而且战略错误本身多源于朝廷腐朽决策——层级太低，够不着"根本"</td></tr><tr><td>B 社会制度腐败</td><td>✅</td><td>使国家<strong>难以有效组织和动员</strong>反侵略力量的总根源——教材明文的根本原因</td></tr><tr><td>C 经济技术落后</td><td>✗</td><td>重要原因，但属派生层次；题眼"根本"要求再往下挖一层</td></tr><tr><td>D 思想观念保守</td><td>✗</td><td>观念落后同样是腐朽制度压制变革的结果，教材未以此为"根本"</td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 C</strong>：只背了"两条原因"没背主次。记住教材排序：制度腐败＝根本，经济技术落后＝重要——问"根本"时不能选"重要"。</li><li><strong>误选 A</strong>：把战场上的表象当根子。战略错误恰恰是制度腐败的产物（朝廷昏庸决策、压制主战力量），它是果不是因。</li><li><strong>误选 D</strong>：把"愚昧保守"当第一因。观念层面的落后，同样源于腐朽制度对社会变革的长期压制，也是果。</li></ul>
+<blockquote>记忆锚点：败因两条分主次——<strong>制度腐败＝根本（组织动员瘫痪的总根源），技术落后＝重要（派生结果）</strong>；问"根本"就追问到第一因：制度。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

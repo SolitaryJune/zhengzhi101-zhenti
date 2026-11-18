@@ -1,8 +1,102 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-21 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-21</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2026-21 · 河流与文明：地理环境影响而不决定（2026 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：六大河流 → 考地理环境的作用',
+    cls: 'key',
+    body: '<p>黄河、长江、尼罗河、两河、恒河……"同饮一江水" → 共同文化要素 → 共同文化心态。设问"河流对于文明的作用表明"——考<b>自然地理环境</b>在社会存在中的定位。先立尺子再对号。</p>' },
+  { title: '先立机制：油门与刹车，不是方向盘',
+    cls: '',
+    body: '<p>社会存在天平：<b>地理环境、人口因素</b>＝必要条件（能<b>加速或延缓</b>社会发展）；<b>生产方式</b>＝决定性力量（决定社会性质、面貌与文明形态）。地理环境影响快慢，不决定方向——尺子立住，四个选项各就各位。</p>' },
+  { title: '逐项分析 A：交流"主要通过河流"？',
+    cls: 'bad',
+    ribbon: {k:1, ok:false},
+    body: '<p>A："文明之间的交流<b>主要通过河流</b>完成。"两处不成立：①贸易、迁徙、宗教、使节、战争……渠道众多，河流只是媒介之一；②题干讲的是<b>起源</b>（河流孕育文明），不是<b>交流</b>（文明间互动）——题域被悄悄换掉了。❌ 不选。</p>' },
+  { title: '逐项分析 B：独特环境＋民族传统孕育文明',
+    cls: 'good',
+    ribbon: {k:2, ok:true},
+    body: '<p>B："每一种文明都产生于独特的自然环境和民族传统。"六种文明各傍自己的母亲河：黄河长江之于中华、尼罗河之于古埃及；"同饮一江水"形成共同文化要素与心态——一方水土一方文明的实证。✅ 选。</p>' },
+  { title: '逐项分析 C：优劣 → 进步与延缓',
+    cls: 'good',
+    ribbon: {k:3, ok:true},
+    body: '<p>C："地理环境的优劣对文明的进步和延缓起着<b>重要作用</b>。"水网便利可<b>加速</b>文明成长，环境恶化会<b>延缓</b>它——"进步和延缓"正是教材给地理环境的定位：重要影响、必要条件，但非决定。材料里河流物质＋精神两方面的滋养就是展开。✅ 选。</p>' },
+  { title: '逐项分析 D：对文明形态"决定性作用"？',
+    cls: 'bad',
+    ribbon: {k:4, ok:false},
+    body: '<p>D："自然环境对文明形态形成具有<b>决定性</b>作用。"这是<b>地理环境决定论</b>：把必要条件夸大成决定力量。归谬：同一条河畔生产方式一变，文明形态随之更替；相似环境也孕育过形态迥异的文明。"决定性"的椅子只能给<b>生产方式</b>坐。❌ 不选。</p>' },
+  { title: '对号入座汇总',
+    cls: '',
+    body: '<p>A ❌ 渠道之一≠主要、起源≠交流；B ✅ 独特环境与传统；C ✅ 加速或延缓；D ❌ 决定论越位。→ 答案 <b>BC</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>BC</b>。地理环境是"油门与刹车"——文明起点之一（B）、能加速延缓（C）；不是"方向盘"（D 反），也不是"主要交流渠道"（A 反）。方向盘握在生产方式手里。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2026-21 河流与文明：地理环境的作用',
+  subtitle: '考点：自然环境与社会发展 · 必要条件加速延缓 · 反对地理环境决定论 —— 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 BC',
+    html: '<b>B</b>：每一种文明都产生于独特的自然环境和民族传统——六大河流＋"同饮一江水"的实证。<br><b>C</b>：地理环境的优劣对文明的进步和延缓起重要作用——必要条件的正确定位。<br><br><b>干扰项：</b>A"主要渠道"（渠道众多且题干谈起源非交流）；D"决定性作用"（地理环境决定论，决定文明形态的是生产方式）。<br><br><b>记忆锚点：</b>"不决定"≠"不重要"——必要条件有加速延缓之效；决定性的椅子只给生产方式。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：河流与文明——地理环境"影响"而不"决定"</h2>
+<p>答案：<strong>BC</strong>。</p>
+<h3>第 0 步：先立机制——地理环境在社会存在天平上的真实位置</h3>
+<p>先把社会存在的天平装进头脑，四个选项才有尺子可量：</p>
+<table><thead><tr><th>要素</th><th>在社会存在中的身份</th><th>作用强度</th></tr></thead><tbody><tr><td>自然地理环境</td><td><strong>必要条件</strong>、前提之一</td><td>能<strong>加速或延缓</strong>社会发展，不起决定作用</td></tr><tr><td>人口因素</td><td><strong>必要条件</strong>、前提之一</td><td>同上</td></tr><tr><td>物质资料的生产方式</td><td><strong>决定性力量</strong></td><td>决定社会的性质、面貌与文明形态</td></tr></tbody></table>
+<p>一句话立住天平：地理环境是"<strong>油门与刹车</strong>"，不是"<strong>方向盘</strong>"——影响快慢，不决定方向。再看材料讲什么：河流孕育文明的物质与精神两方面，"同饮一江水"→ 共同文化要素 → 共同文化心态。讲的是地理环境如何<strong>参与塑造</strong>文明的起点与进程——恰好落在这两格"必要条件"上。</p>
+<h3>第 1 步：B 对——文明的起点是"一方水土一方文明"</h3>
+<p>材料列举黄河、长江、尼罗河、幼发拉底河、底格里斯河、恒河——每种文明都傍着自己的母亲河生长；"长期生活在同一河畔、同一区域的人类群体，形成诸多共同的文化要素"——独特的自然环境＋民族传统，孕育出独特文明。中华文明的农耕礼乐、古埃及的尼罗河历法，起点各不相同。B 说"每一种文明都产生于独特的自然环境和民族传统"，与材料一一对应。</p>
+<h3>第 2 步：C 对——优劣之别表现为"进步与延缓"</h3>
+<p>C 的措辞要抠准："自然地理环境的优劣对文明的进步和延缓起着<strong>重要作用</strong>"。水网便利、土壤肥沃能<strong>加速</strong>文明成长；环境恶化、灾害频发会<strong>延缓</strong>它——"进步和延缓"正是教材给地理环境的正确定位：<strong>重要影响、必要条件，但非决定</strong>。材料里河流对文明物质（灌溉、交通）与精神（文化心态）两方面的滋养，就是这种作用的展开。</p>
+<h3>第 3 步：A 为什么错——"渠道之一"冒充"主要渠道"</h3>
+<p>A 说"文明之间的交流<strong>主要通过河流</strong>完成"。两处不成立：</p>
+<ol><li><strong>夸大</strong>：文明交流靠商业贸易、人口迁徙、宗教传播、使节往来、战争与和平交往等多条渠道，河流只是媒介之一，谈不上"主要"。</li><li><strong>题域错位</strong>：题干讲的是<strong>文明起源</strong>（河流孕育文明），不是<strong>文明交流</strong>（文明之间怎么互动）——A 把两个问题悄悄换掉了，连设问的题域都跳走了。</li></ol>
+<h3>第 4 步：D 为什么错——"决定性"越位</h3>
+<p>D 说自然环境对文明形态形成具有<strong>决定性作用</strong>。这是<strong>地理环境决定论</strong>的翻版：把必要条件夸大成决定力量。归谬一问就破：同一条河畔，生产方式变迁，文明形态随之更替（黄河边既有青铜农耕也有现代工业文明）；相似的自然环境也孕育过形态迥异的文明。"决定文明形态"的椅子只能给<strong>生产方式</strong>坐——"决定性"三个字是它专用的。</p>
+<h3>第 5 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>机制对号</th></tr></thead><tbody><tr><td>A 文明交流主要通过河流</td><td>❌</td><td>渠道众多非"主要"；题干谈起源非交流</td></tr><tr><td>B 每种文明产生于独特环境与传统</td><td>✅</td><td>六大河流＋"同饮一江水"共同文化心态</td></tr><tr><td>C 地理环境优劣起进步/延缓作用</td><td>✅</td><td>必要条件的加速或延缓定位</td></tr><tr><td>D 自然环境对文明形态起决定作用</td><td>❌</td><td>地理环境决定论；决定者是生产方式</td></tr></tbody></table>
+<p>→ 选 <strong>BC</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 D</strong>：被材料对河流的赞美感染，把"重要"滑成"决定"。标尺：凡给地理环境戴"决定性"帽子的选项一律警惕——那是孟德斯鸠式地理环境决定论的老路。</li><li><strong>误选 A</strong>：把题干对河流作用的肯定外推成"主要交流渠道"，还忽视了"起源≠交流"的题域差异。</li><li><strong>漏选 C</strong>：知道地理环境"不决定"就否定一切作用，忘了必要条件还有"加速或延缓"这层被教材明确肯定的定位——"不决定"不等于"不重要"。</li></ul>
+<blockquote>记忆锚点：地理环境＝<strong>必要条件</strong>：是文明起点之一（B）、能加速延缓（C）；不"决定"文明形态（D 反），也不是"主要交流渠道"（A 反）——方向盘始终握在生产方式手里。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

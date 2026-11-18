@@ -1,8 +1,121 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-25 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-25</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-25 · 社会主义本质论破什么、不破什么（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片 + 小型链式/表格可视化（内联样式，自包含，
+   仅引用本地 ../assets 引擎，无任何外部请求；引擎默认渲染 stage.innerHTML）。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+/* 链式小图：items 用箭头串起来（三层因果链 / 时间线） */
+function chain(items, color){
+  return '<div style="display:flex;gap:6px;align-items:stretch;flex-wrap:wrap;margin:8px 0">' +
+    items.map(function(t){
+      return '<div style="flex:1;min-width:120px;border:1.5px solid ' + color +
+        ';border-radius:8px;padding:6px 8px;background:' + color + '14;font-size:13px;color:#334155">' + t + '</div>';
+    }).join('<div style="align-self:center;color:#64748b;font-weight:700">→</div>') + '</div>';
+}
+/* 两栏小表：[左列, 右列, ok|bad|plain] */
+function rows(pairs){
+  return '<table style="border-collapse:collapse;width:100%;margin:6px 0">' + pairs.map(function(r){
+    var c = r[2] === 'ok' ? '#166534' : (r[2] === 'bad' ? '#b91c1c' : '#334155');
+    var bg = r[2] === 'ok' ? '#f0fdf4' : (r[2] === 'bad' ? '#fef2f2' : '#f8fafc');
+    return '<tr><td style="border:1px solid #e2e8f0;padding:5px 8px;font-size:13px;font-weight:700;background:' +
+      bg + ';color:' + c + ';white-space:nowrap">' + r[0] + '</td><td style="border:1px solid #e2e8f0;padding:5px 8px;font-size:13px;color:#334155">' +
+      r[1] + '</td></tr>';
+  }).join('') + '</table>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼：问的是"对传统认识的突破"',
+    body: '<p>1992 年初南方谈话五句本质论："解放生产力，发展生产力，消除（消灭）剥削，消除两极分化，最终达到共同富裕。"题目问这概括对<b>传统认识</b>的突破体现在哪——不能背概念，得先回答两个"为什么"：传统认识<b>错在哪</b>？本质论<b>凭什么破</b>？坐标立起来，四个选项自动对号。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行：传统认识两处错位，本质论重新排座次',
+    body: '<p>传统认识两处错位：<b>①判断标准错位</b>——不看生产力，只看制度名目（计划经济、单一公有制当身份证），越穷越光荣；<b>②层次混淆</b>——把"本质"与"具体做法"混为一谈，计划=社会主义、市场=资本主义成了铁律。</p>' +
+      '<p>本质论把三句话排成一条因果链：</p>' +
+      chain(['根本任务层<br><b>解放·发展生产力</b><br>（手段）', '价值取向层<br><b>消除剥削·两极分化</b><br>（过程约束）', '最终目标层<br><b>共同富裕</b><br>（目的）'], '#0e7490') +
+      '<p>判断姓"社"姓"资"不再看名目，而看是否服务这条链——四个选项的共同坐标。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true },
+    title: '选项 A：破除脱离生产力抽象谈论社会主义 —— 对',
+    body: '<p>对应"①标准错位"的纠正：过去用纯粹制度标准衡量社会主义；本质论把解放和发展生产力放在概括<b>之首</b>——生产力标准请回第一层。</p>' +
+      rows([['传统', '只看制度名目：是不是计划经济、单一公有制', 'bad'], ['本质论', '解放·发展生产力位居概括之首，看是否发展生产力', 'ok']]) +
+      '<p>A 对。</p>' },
+  { cls: 'bad', tag: 'B 排除', ribbon: { k: 2, ok: false },
+    title: '选项 B："否定了必须坚持公有制和按劳分配" —— 错',
+    body: '<p>概括里确实没有"公有制""按劳分配"字眼，B 就在这里设伏。但南方谈话同样白纸黑字：<b>"一个公有制占主体，一个共同富裕，这是我们所必须坚持的社会主义的根本原则。"</b></p>' +
+      rows([['本质层', '回答"社会主义最终是什么样"——不把制度安排本身当本质', 'plain'], ['制度层', '公有制、按劳分配回答"现阶段怎么安排"——仍必须坚持，是保证消灭剥削、共同富裕的制度前提', 'ok']]) +
+      '<p>把"未列入本质表述"偷换成"否定必须坚持"，是分层论述被读成原则否定——方向截然相反。B 错。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: '选项 C：摆脱忽视根本目的和目标的认识 —— 对',
+    body: '<p>对应"最终目标层"的重新立起："最终达到共同富裕"明确写进本质——贫穷不是社会主义。发展生产力是手段、共同富裕是目的，手段与目的绑在一起才算完整。</p><p>C 对。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true },
+    title: '选项 D：纠正把本质等同于具体做法的认识 —— 对',
+    body: '<p>对应"②层次混淆"的纠正。南方谈话明言：<b>"计划多一点还是市场多一点，不是社会主义与资本主义的本质区别。"</b>计划、市场都是手段，公有制实现形式、管理体制都是具体做法；本质是方向与目标，不锁定某一套操作方案——这正是后来社会主义市场经济体制的理论地基。</p><p>D 对。</p>' },
+  { cls: 'key', tag: '陷阱拆解',
+    title: 'B 的迷惑点："没写进去"≠"否定"',
+    body: '<p>识破标志：A、C、D 破的都是<b>误解</b>（脱离生产力谈社会主义、忽视共同富裕、本质=做法），B 否的是<b>原则</b>——"破误解"与"否原则"方向相反，必是干扰项。</p>' +
+      rows([['A 与 D', 'A 破的是判断标准层面（制度名目→生产力标准）', 'plain'], ['层面不同', 'D 破的是概念层次层面（本质→手段与做法）；两层都破，但不可互相替代', 'plain']]) +
+      '<p>易错提醒：不要以为共同富裕"只是目标"就不算突破——把目的层写进本质恰是本质论最重要的新意之一（漏 C 也错）。</p>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 ACD',
+    body: '<p>答案 <b>ACD</b>：三破一不破——破"脱离生产力谈社会主义"（A）、破"忽视共同富裕"（C）、破"本质=具体做法"（D）；不破公有制与按劳分配（B）——"未列入"≠"否定"，分层不越界。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2013·25】本质论破什么、不破什么（多选）',
+  subtitle: '考点：社会主义本质 · 南方谈话 · 传统认识的突破',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '<b>三破一不破</b>：破"脱离生产力抽象谈社会主义"（A）、破"忽视共同富裕"（C）、破"本质=具体做法"（D）。<br>干扰项 B："一个公有制占主体，一个共同富裕"仍是必须坚持的根本原则——"未列入本质表述"≠"否定必须坚持"。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：社会主义本质论对"传统认识"的突破——破了哪三层、没动哪一层</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——传统认识"错"在哪，本质论才能"破"在哪</h3>
+<p>先别急着看选项。要判断"哪些是突破"，得先知道<strong>传统认识是怎么错位的</strong>。长期以来对社会主义的认识有两个偏航点：</p>
+<ol><li><strong>判断标准错位</strong>：不看生产力，只看制度名目——把"计划经济、单一公有制"当作社会主义的身份证，于是姓"社"姓"资"的争论全在形式上打转，甚至把贫穷当成社会主义的荣光；</li><li><strong>层次混淆</strong>：把"本质"（社会主义最终是什么）与"具体做法"（用什么手段、体制去实现）混为一谈——"计划=社会主义、市场=资本主义"被当成铁律。</li></ol>
+<p>1992 年初邓小平在南方谈话中概括："社会主义的本质，是解放生产力，发展生产力，消除（消灭）剥削，消除两极分化，最终达到共同富裕。"这句话之所以是突破，在于它<strong>重新排了座次</strong>——三句话其实是一条因果链：</p>
+<table><thead><tr><th>层次</th><th>本质论的内容</th><th>纠正了什么</th></tr></thead><tbody><tr><td>根本任务层（手段）</td><td>解放生产力、发展生产力</td><td>把生产力标准请回第一位——脱离生产力抽象谈论制度名目作废</td></tr><tr><td>价值取向层（过程约束）</td><td>消除剥削、消除两极分化</td><td>实质问题不回避，制度形式要服从于它</td></tr><tr><td>最终目标层（目的）</td><td>共同富裕</td><td>根本目的重新立起来——贫穷不是社会主义</td></tr></tbody></table>
+<p>判断一种做法姓"社"姓"资"，不再看它的名目，而看它是否服务"发展生产力 → 消除剥削与分化 → 共同富裕"这条链。<strong>这就是四个选项共同的判断坐标。</strong></p>
+<h3>第一步：A、C、D 逐层对号</h3>
+<ul><li><strong>A 对（破"标准错位"）</strong>："破除了脱离生产力水平抽象谈论社会主义的认识"——过去用纯粹制度标准（是否单一公有制、是否计划经济）衡量社会主义；本质论把解放和发展生产力放在概括<strong>之首</strong>，生产力标准回归第一层。</li><li><strong>C 对（破"忽视目的"）</strong>："摆脱了长期以来忽视建设社会主义根本目的和目标的认识"——"最终达到共同富裕"被明确写进本质，共同富裕是目的，发展生产力是达到目的的手段，手段与目的绑在一起说清了。</li><li><strong>D 对（破"层次混淆"）</strong>："纠正了把社会主义本质等同于社会主义具体做法的认识"——南方谈话明言"计划多一点还是市场多一点，不是社会主义与资本主义的本质区别"；计划、市场都是手段，公有制的实现形式、管理体制都是具体做法。本质回答"最终是什么样"，不锁定某一套操作方案——这正是后来社会主义市场经济体制的理论地基。</li></ul>
+<h3>第二步：B 为什么是干扰项——"没写进去"不等于"否定"</h3>
+<p>本质论的概括里确实没有"公有制""按劳分配"的字眼，B 恰好利用这一点说它"否定了社会主义必须坚持公有制和按劳分配的原则"。但南方谈话同样白纸黑字："一个公有制占主体，一个共同富裕，这是我们所必须坚持的社会主义的根本原则。"可见<strong>本质论没有碰公有制和按劳分配</strong>：</p>
+<ul><li>本质论只是<strong>不把制度安排本身当作本质</strong>——它是保证"消灭剥削、最终共同富裕"得以实现的制度前提；</li><li>本质回答"社会主义最终是什么样"，公有制、按劳分配回答"现阶段怎么安排"，两个层次各司其职，方向不否认安排；</li><li>把"未列入本质表述"偷换成"否定必须坚持"，是把"分层论述"读成"原则否定"——方向截然相反，必错无疑。</li></ul>
+<h3>易错点：每个干扰项背后的误解</h3>
+<ul><li><strong>误选 B</strong>：把"概括里没写"当成"否定"——层次越界。识破标志：A、C、D 破的都是"误解"，B 否的是"原则"，"破误解"与"否原则"方向相反。</li><li><strong>A、D 混为一谈</strong>：A 说的是<strong>判断标准</strong>层面（制度名目 → 生产力标准），D 说的是<strong>概念层次</strong>层面（本质 → 手段与做法）；两层都要破，但破的层面不同，不可互相替代。</li><li><strong>漏选 C</strong>：以为共同富裕只是"目标"不算"理论突破"——恰恰相反，把目的层写进"本质"是本质论最重要的新意之一。</li></ul>
+<blockquote>记忆锚点：本质论三破一不破——破"脱离生产力谈社会主义"（A）、破"忽视共同富裕"（C）、破"本质=具体做法"（D）；不破公有制与按劳分配（B）——"未列入"≠"否定"，分层不越界。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

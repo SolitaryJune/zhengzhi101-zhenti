@@ -1,8 +1,92 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-17 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-17</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>2018·17 量子纠缠：未认知 ≠ 不客观</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- 复制自 anim_math_concept_template（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：两句关键措辞',
+    cls: 'key',
+    log: '题眼：必然会影响 + 未被完全认知',
+    body: '<p>题干两个词定调：①「测量其中一个粒子<b>必然</b>会影响其他粒子」——「必然」说明是客观规律，不是巧合；②「未被完全认知」——说的是<b>认识</b>没到位，不是现象不客观。要选的是这背后的哲学结论。</p>' },
+  { title: '先立机制：存在论与认识论分开',
+    cls: 'key',
+    body: '<p>一个现象<b>是否存在、是否客观</b>（存在论），和人类<b>是否认识它</b>（认识论）是两回事。纠缠是两个（或多个）粒子共同组成的量子状态——不管认识没认识，它都按客观规律运行。带着这把尺子看四个选项。</p>' },
+  { title: 'A：联系的客观性和普遍性',
+    cls: 'good',
+    body: '<p>纠缠是「共同组成的量子状态」，无论相隔多远都有确定关联——联系<b>不以人的意志为转移</b>（客观性），且在微观世界同样存在（普遍性）。<b>A 对。</b></p>' },
+  { title: 'B：联系的主观性和偶然性',
+    cls: 'bad',
+    body: '<p>错。辩证法只讲联系的<b>客观性</b>——「主观联系」（占卜式征兆）不是真实联系；题干写明「<b>必然</b>会影响」，与「偶然性」直接相反。<b>B 错。</b></p>' },
+  { title: 'C：联系的复杂性和多样性',
+    cls: 'good',
+    body: '<p>联系形式本来就多种多样，量子纠缠是人类<b>新认识到的</b>一种联系形式——恰恰补证「联系还有尚未穷尽的形式」。<b>C 对。</b></p>' },
+  { title: 'D：世界的真正统一性在于物质性',
+    cls: 'good',
+    body: '<p>连这么「反常识」的量子现象也是客观的、有规律的，不是意识产物——从最新科学角度再次证明<b>世界统一于物质</b>。<b>D 对。</b></p>' },
+  { title: '结论：ACD',
+    cls: 'good',
+    body: '<p>四个选项三对一错：A/C/D 分别对应联系的客观普遍性、复杂多样性、世界的物质统一性；B 的钩子是把「测量者介入」读成「意识决定」——其实测量也是客观物理过程。答案选 <b>ACD</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var optK = { 2: 1, 3: 2, 4: 3, 5: 4 }[i];
+  var optLetter = optK ? 'ABCD'[optK - 1] : '';
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: i === 0 ? '审题' : (i === 1 ? '机制' : (i === STEPS.length - 1 ? '结论' : '选项 ' + optLetter)),
+    log: s.log || s.title,
+    count: optK || (i === STEPS.length - 1 ? 4 : 0),
+    ribbon: optK ? { k: optK, ok: s.cls !== 'bad' } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2018·17】量子纠缠：未认知 ≠ 不客观',
+  subtitle: '考点：联系的客观性·普遍性·多样性 · 世界的物质统一性 · 多选题',
+  counterLabel: '已核选项',
+  ribbonTitle: '选项判定（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链：先立机制，再逐项判定 A/B/C/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '记忆锚点：未认知 ≠ 不客观；「必然会影响」＝<b>客观联系</b>（A）；新联系形式＝<b>联系多样性</b>（C）；最神秘的现象也统一于<b>物质</b>（D）；别把「观察者介入」读成「意识决定」（B）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「量子纠缠」说明不了神秘，只能说明物质与联系</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——「未被完全认知」是个认识论状态，不是存在论状态</h3>
+<p>先分清两个层面：一个现象<strong>是否存在、是否客观</strong>（存在论），和人类<strong>是否已认识它</strong>（认识论）。「量子纠缠」是两个（或多个）粒子共同组成的量子状态——注意题干的措辞：<strong>「无论粒子之间相隔多远，测量其中一个粒子必然会影响其他粒子」</strong>。「必然」二字说明这不是偶然巧合，而是客观存在的物理关联；「未被完全认知」只是说人类认识还没到位，现象本身照样按客观规律运行。认识不到位，不等于它不客观、不等于它可以由意识说了算。把这条界线立住，四个选项就能对号入座。</p>
+<h3>第 1 步：四个选项对号入座</h3>
+<ul><li><strong>A 物质世界联系的客观性和普遍性</strong> ✅：纠缠是「共同组成的量子状态」，不管隔多远都有确定关联——联系不以人的意志为转移（客观性），且在微观世界同样存在（普遍性）。</li><li><strong>C 事物联系的复杂性和多样性</strong> ✅：联系的形式本来就多种多样（直接/间接、必然/偶然……），量子纠缠是人们<strong>新认识到的</strong>一种联系形式——恰恰补了一笔「联系还有人类尚未穷尽的形式」，丰富了对联系多样性的印证。</li><li><strong>D 世界的真正统一性在于它的物质性</strong> ✅：连这么「反常识」的量子现象，也是客观的、有规律的，而不是意识的产物——它从最新科学角度再次证明世界统一于物质。</li><li><strong>B 事物联系的主观性和偶然性</strong> ❌：两个钩子。其一，唯物辩证法只讲联系的<strong>客观性</strong>，「主观联系」（如占卜里的征兆）不是真实联系；其二，题干写明「必然会影响」，与「偶然性」相反。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 B 的根源</strong>：把「测量者介入会影响结果」读成「意识决定物质」。其实量子测量本身也是客观物理过程，纠缠关联是客观规律，不是观察者头脑里的联系——「未被完全认知」恰恰要求我们坚持客观性，而不是滑向主观性。</li><li><strong>漏选 C</strong>：以为「新现象」只证明普遍性。辩证法讲的联系从来是<strong>具体、多样、有条件</strong>的——每发现一种新的联系形式，都在证明联系的复杂多样性。</li><li><strong>漏选 D</strong>：被「量子」二字的神秘感吓住。越是尚未认知的领域，越要守住「世界统一于物质」这条底线：未认知 ≠ 超物质。</li></ul>
+<blockquote>记忆锚点：未认知 ≠ 不客观；联系是客观的、普遍的、多样的；「必然会影响」= 客观联系；世界的真正统一性在于物质性。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,122 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-17 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-17</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·17 领袖权威：影响历史与创造历史的边界</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 概念/推理链卡片（同 anim/zz-2023-10 外壳；政治站纯文本，无 KaTeX） */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+function miniTable(rows){
+  var s = '<table style="border-collapse:collapse;margin:6px 0;font-size:13px">';
+  for(var i=0;i<rows.length;i++){
+    s += '<tr>';
+    for(var j=0;j<rows[i].length;j++){
+      s += '<td style="border:1px solid #cbd5e1;padding:3px 8px">' + rows[i][j] + '</td>';
+    }
+    s += '</tr>';
+  }
+  return s + '</table>';
+}
+
+var STEPS = [
+  { title: '审题眼：问「能够」——划领袖作用的边界',
+    cls: 'key',
+    body: '<p>题干给足材料：乐队指挥、大海航行、巴黎公社教训（「缺乏集中和权威」），问「无产阶级领袖在历史上<b>能够</b>……」。考点：历史人物（领袖）的作用 vs <b>人民群众是历史的创造者</b>。</p>',
+    log: '问领袖能做什么——作用有边界' },
+  { title: '先立机制：历史唯物主义两层结构',
+    cls: 'key',
+    body: '<p><b>第一层：人民群众是历史的创造者</b>——物质财富、精神财富、社会变革的主力都出自群众，历史总趋势由群众实践决定。<b>第二层：领袖是杰出人物</b>——把分散力量组织起来、协同起来，对历史起<b>影响</b>作用。题干三段材料全在讲第二层：权威解决「一致行动」的<b>组织</b>问题。</p>',
+    log: '群众创造历史，领袖组织群众' },
+  { title: '选项 A：引领社会发展的方向',
+    cls: 'good',
+    body: '<p>领袖提出纲领、指明道路，对社会发展方向起<b>引领</b>作用——属于「影响层面」，<b>成立</b>。</p>',
+    ribbon: {k: 1, ok: true},
+    log: 'A 引领方向 ✓' },
+  { title: '选项 B：影响历史事件的进程',
+    cls: 'good',
+    body: '<p>历史事件按必然性展开，领袖可以<b>加速或延缓</b>进程——是「影响」而非「决定」，<b>成立</b>。</p>',
+    ribbon: {k: 2, ok: true},
+    log: 'B 影响进程 ✓' },
+  { title: '选项 C：凝聚人民群众的力量',
+    cls: 'good',
+    body: '<p>权威的功能正是把分散的个人意志汇成<b>一致行动</b>——乐队指挥比喻的直接对应，<b>成立</b>。</p>',
+    ribbon: {k: 3, ok: true},
+    log: 'C 凝聚力量 ✓' },
+  { title: '选项 D：创建人类社会的历史',
+    cls: 'bad',
+    body: '<p>「创造历史」是<b>人民群众的专属动词</b>。乐队指挥组织已有力量、不生产力量本身——指挥使乐曲协调，乐曲是全体乐手演奏出来的；离开群众的实践活动，任何领袖都创建不出历史。<b>不选</b>。</p>',
+    ribbon: {k: 4, ok: false},
+    log: 'D 创造历史 ✗（英雄史观）' },
+  { title: '干扰项归因：D 从哪来',
+    cls: 'bad',
+    body: '<p>题干反复强调「没有权威就不可能有一致行动」，容易顺手把领袖升格为「历史的创立者」。恰恰相反——权威之所以必要，正因为它<b>服务于群众的协同</b>：D 把「组织历史、影响历史」偷换成「创造历史」，滑进英雄史观。承认领袖权威 ≠ 承认英雄创造历史。</p>',
+    log: 'D：把「组织」偷换成「创造」' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>ABC</b>。' + miniTable([
+      ['A 引领方向', '✓ 影响层面'],
+      ['B 影响进程', '✓ 加速或延缓'],
+      ['C 凝聚力量', '✓ 乐队指挥比喻'],
+      ['D 创造历史', '✗ 专属人民群众']
+    ]) + '</p>',
+    log: '锁定 ABC' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '领袖权威：影响历史与创造历史的边界',
+  subtitle: '考点：历史人物作用 · 人民群众是历史的创造者 · 方法：两层模型 + 逐项对号',
+  counterLabel: '推理步',
+  ribbonTitle: '选项带（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链；序号带 1–4 对应选项 A–D。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: '记忆锚点：领袖<b>三能</b>——<b>引领方向、影响进程、凝聚力量</b>；<b>一不能</b>——创建人类社会的历史（人民群众的专属动词）。D 把「组织历史、影响历史」偷换成「创造历史」，滑进英雄史观。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：领袖权威——「影响历史」与「创造历史」的边界由谁划</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立模型——历史唯物主义的「两层结构」</h3>
+<p>这类「领袖能不能怎样」的题，不能靠背套话，先把历史唯物主义的两层结构立起来。<strong>第一层：人民群众是历史的创造者</strong>——物质财富、精神财富由群众创造，社会变革的决定力量也是群众，历史发展的<strong>总趋势</strong>由群众的实践活动决定，这一层任何人（包括领袖）都替代不了。<strong>第二层：杰出人物（领袖）对历史起影响作用</strong>——任何历史事件、任何历史时代，都需要有人提出纲领、组织力量、协调行动；领袖做得好，历史进程可以<strong>加速或延缓</strong>，但改变不了总趋势的方向。</p>
+<p>题干里的三个比喻和一段教训，全都在讲第二层「为什么需要权威」：马克思的<strong>乐队指挥</strong>——许多人协同演奏，必须有人统一节拍；恩格斯的<strong>大海航行</strong>——船上一致行动，离不开权威的指挥；<strong>巴黎公社灭亡</strong>（「缺乏集中和权威」）是反面教材——政权没有权威就组织不起来、维持不下去。三段材料合起来：权威解决的是<strong>组织协同</strong>问题。</p>
+<h3>第 1 步：把「能够」的范围划在影响层面</h3>
+<p>题问「无产阶级领袖在历史上<strong>能够</strong>……」，问的是领袖作用的合法范围。由第 0 步的两层结构可知：凡是「影响、组织、引领、凝聚」层面的事，领袖<strong>能够</strong>做；凡是「创造历史、决定历史总趋势」层面的事，只有人民群众<strong>能够</strong>做。范围一划出来，逐项对号即可。</p>
+<h3>第 2 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对应哪层结构</th></tr></thead><tbody><tr><td>A 引领社会发展的方向</td><td>✅</td><td>影响层面：领袖提出纲领、指明道路，对发展方向起引领作用</td></tr><tr><td>B 影响历史事件的进程</td><td>✅</td><td>影响层面：事件按历史必然性展开，领袖能加速或延缓进程——是「影响」而非「决定」</td></tr><tr><td>C 凝聚人民群众的力量</td><td>✅</td><td>组织层面：权威的功能正是把分散意志汇成一致行动——乐队指挥比喻的直接对应</td></tr><tr><td>D 创建人类社会的历史</td><td>❌</td><td>创造层面：「创造历史」专属人民群众；领袖离开群众的实践活动，一事无成</td></tr></tbody></table>
+<p>→ 能做的是 A、B、C，选 <strong>ABC</strong>。</p>
+<h3>追问一步：为什么「指挥」推不出「创造」</h3>
+<p>「乐队指挥」使乐队奏出协调的乐曲，但乐曲是全体乐手演奏出来的——指挥<strong>组织已有的力量</strong>，不<strong>生产力量本身</strong>。同理，权威之所以必要，恰恰因为它<strong>服务于群众的协同</strong>：承认领袖权威，不等于承认英雄创造历史。这正是历史观上「英雄史观」与「群众史观」的分水岭，也是本题唯一干扰项的命门。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 D（英雄史观）</strong>：题干反复强调「没有权威就不可能有一致行动」，容易顺手把领袖升格为「历史的创立者」。D 偷换了两个动词——领袖能「<strong>组织</strong>历史活动、<strong>影响</strong>历史进程」，不能「<strong>创造</strong>人类社会的历史」；把组织偷换成创造，就滑进了英雄史观。</li><li><strong>漏选 A、C（怕与群众史观冲突）</strong>：有人知道「群众是历史的创造者」，于是连「引领方向」「凝聚力量」也不敢选。其实 A、C 都在影响/组织层面，本来就是群众创造历史活动的组成部分——承认领袖作用与坚持群众史观并不矛盾，矛盾的是 D。</li></ul>
+<blockquote>记忆锚点：领袖<strong>三能</strong>——<strong>引领方向、影响进程、凝聚力量</strong>；<strong>一不能</strong>——<strong>创造历史</strong>（人民群众的专属动词）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

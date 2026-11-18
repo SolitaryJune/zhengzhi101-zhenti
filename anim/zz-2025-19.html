@@ -1,8 +1,103 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2025-19 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2025-19</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2025-19 · 竹的多样化功能与价值（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼', count: 0,
+    log: '先读材料：一根竹子八种用法，同一客体在不同主体、不同需要下呈现多样化价值。',
+    title: '审题眼：一根竹子，八种用法，问的是价值论',
+    body: '<p>苏东坡："食者竹笋，庇者竹瓦，载者竹筏，爨者竹薪，衣者竹皮，书者竹纸，履者竹鞋……"</p><p>同一客体在不同主体、不同需要下呈现<b>多样化价值</b>。考点：<b>价值的主体性与客观性 · 潜在价值向现实价值的转化（实践）</b>。</p>' },
+  { cls: 'key', tag: '机制先行', count: 0,
+    log: '立机制：价值在主客体关系中生发，潜在变现实要靠实践——拿这两条去量选项。',
+    title: '机制先行：价值在主客体关系中生发，靠实践兑现',
+    body: '<ul><li>价值 = 客体对主体需要的<b>满足关系</b>——不是客体的纯自然属性，也不是主体的纯主观意愿；</li><li><b>关系变，价值变</b>：主体、客体、关系任何一环变，价值就变；</li><li><b>潜在 → 现实靠实践</b>：竹"浑身是宝"的可能性，要挖笋、编瓦、扎筏才兑现。</li></ul><p>拿这两条去量四个选项。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true }, count: 1,
+    log: 'A 入选：食者取笋、庇者取瓦——主体、客体、关系变了，价值跟着变。',
+    title: '选项 A：随主体、客体及其相互关系的变化而变化 —— 对',
+    body: '<p>食者取笋、庇者取瓦、载者取筏——<b>主体需要不同</b>，竹的<b>不同部位</b>进入<b>不同关系</b>，价值各不相同。</p><p>这正是"价值随主客体及其关系变化"的原样呈现。</p>' },
+  { cls: 'good', tag: 'B 入选', ribbon: { k: 2, ok: true }, count: 2,
+    log: 'B 入选：欲望情感兴趣变，价值实现与评价跟着变——主体性印记，但不是主观任意。',
+    title: '选项 B：随主体的欲望、情感和兴趣的转移而变化 —— 对',
+    body: '<p>价值的<b>主体性</b>维度：主体的欲望、情感、兴趣变化，价值的实现方式与评价随之变化。东坡对竹的偏爱（"不可一日无此君"）本身就是主体性印记。</p><p>注意：主体性 ≠ 主观任意性——B 只说"随……而变化"的事实，以客体属性和实践为客观基础，不陷入主观价值论。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true }, count: 3,
+    log: 'C 入选：竹的"浑身是宝"是潜在价值，挖笋编瓦扎筏的实践把它兑现成现实价值。',
+    title: '选项 C：随实践发展由潜在价值转化为现实价值 —— 对',
+    body: '<p>竹能做笋、做瓦、做筏，这些"可能性"是属性提供的<b>潜在价值</b>；挖笋、编瓦、扎筏的<b>实践</b>把它兑现成现实价值。</p><p>"浑身是宝"不是天然摆好的礼物，是实践一件件开发出来的。</p>' },
+  { cls: 'bad', tag: 'D 排除', ribbon: { k: 4, ok: false }, count: 3,
+    log: 'D 排除："自然显露"抽掉了实践这座桥——属性自在存在，不会自动变成社会价值。',
+    title: '选项 D：随客体属性的自然显露而转化为社会价值 —— 错',
+    body: '<p>错误钉在"<b>自然显露</b>"四字：属性自在存在，<b>不会自动</b>变成社会价值。</p><p>竹能造纸，是蔡伦式的实践发现、开发、利用出来的，不是竹子自己"显露"给你。从潜在到现实的桥梁只能是<b>实践</b>——D 恰好把这座桥抽掉了，与 C 对照正成反例。</p>' },
+  { cls: 'key', tag: '陷阱对比', count: 3,
+    log: '对比 C 与 D：同一条转化链，动力源换成"自然显露"就错了；B 勿当主观价值论漏掉。',
+    title: 'C 与 D：同一条转化链，换了个动力源',
+    body: '<ul><li><b>C</b>：潜在 → 现实，动力是<b>实践发展</b> ✔；</li><li><b>D</b>：属性 → 社会价值，动力是<b>自然显露</b> ✘——"自动转化"违背价值的生成机制；</li><li>提醒：B 容易被当"主观价值论"漏掉——记住主体性以客观基础为前提，B 只描述变化、不宣称任意决定。</li></ul>' },
+  { cls: 'good', tag: '结论', count: 3,
+    log: '收束：答案 ABC——随主客体关系变、带主体性印记、靠实践兑现。',
+    title: '收束：答案 ABC',
+    body: '<p>答案 <b>ABC</b>：价值随主客体关系变（A）、带主体性印记（B）、靠实践兑现（C）。</p><p>D 的病根一句话：价值不会"自然显露"，只会"实践生成"。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    count: s.count,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2025·19】竹的多样化功能：价值的生成机制（多选）',
+  subtitle: '考点：价值的主体性与客观性 · 潜在价值与现实价值 · 选项逐项推演',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已确认正确项',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: '<b>价值在主客体关系中生成、在实践里兑现</b>：随主客体关系变（A）、带主体性印记（B）、靠实践兑现（C）。<br>"自然显露"是伪过程（D 反）——属性自在存在，社会价值只能由实践开发出来。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：一根竹子里的价值论——价值在主客体关系与实践之中</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——价值是什么、在哪里生成</h3>
+<p>价值不是客体的纯自然属性，也不是主体的纯主观意愿，而是<strong>客体对主体需要的满足关系</strong>——在主客体关系中生发。由此有两个推论：</p>
+<ol><li><strong>关系变，价值变</strong>：主体（谁在用、什么需要）、客体（竹的哪个部位、什么属性）、二者关系（怎么用）任何一环变了，价值就变（A）；</li><li><strong>潜在变现实靠实践</strong>：竹能做笋、做瓦、做筏，这些"可能性"是客体属性提供的<strong>潜在价值</strong>；挖笋、编瓦、扎筏把它兑现成<strong>现实价值</strong>——兑现的手就是实践（C）。</li></ol>
+<p>苏东坡那句"一日不可无此君"，恰恰把同一客体在不同主体、不同需要下的多样价值摆成了清单。</p>
+<h3>第 1 步：A、B、C 对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对号处</th></tr></thead><tbody><tr><td>A 随主体、客体及其相互关系的变化而变化</td><td>✅</td><td>食者、庇者、载者、爨者——主体需要不同，笋/瓦/筏/薪各显其用；同一竹子价值随主客体关系流转</td></tr><tr><td>B 随主体的欲望、情感和兴趣的转移而变化</td><td>✅</td><td>价值的主体性维度：主体的欲望、情感、兴趣变化，价值的实现方式与评价随之变化——东坡对竹的偏爱本身就是这一维度</td></tr><tr><td>C 随实践发展而由潜在价值转化为现实价值</td><td>✅</td><td>竹的"浑身是宝"不是天然摆好，靠种植、加工、使用的实践把潜在功能一件件兑现</td></tr></tbody></table>
+<h3>第 2 步：为什么 B 不算主观价值论（预判追问）</h3>
+<p>B 最容易引起迟疑："欲望情感兴趣"会不会陷入主观价值论？不会。价值的<strong>主体性</strong>本来就包含主体需要、欲望、情感、兴趣对价值实现与评价的影响——这是价值作为主客体关系的题中之义；只是主体性<strong>以客体属性和实践为客观基础</strong>，不是随心所欲。B 说的是"随……而变化"的事实描述，不是"价值由……任意决定"的夸大，因此入选。</p>
+<h3>第 3 步：为什么 D 错——"自然显露"抽掉了实践</h3>
+<p>D 说价值"随着客体属性的自然显露而转化为社会价值"。错误钉在"<strong>自然显露</strong>"四字上：客体的属性自在地存在，不会自动变成社会价值——竹能造纸，是蔡伦式的实践<strong>发现、开发、利用</strong>出来的，不是竹子自己"显露"给你。从潜在价值到现实（社会）价值的桥梁只能是<strong>实践</strong>，D 恰好把这座桥抽掉了，与 C 相对照正成反例。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 D</strong>：看到"客体属性""社会价值"这些词眼熟就选。对照 C 的"随实践发展"——同一条转化链，D 换了个动力源（自然显露），就是错的。</li><li><strong>漏选 B</strong>：怕沾"主观"二字漏掉。记住主体性 ≠ 主观任意性，B 只说"变化"不说"任意决定"，与客观基础不冲突。</li><li><strong>误选思路混淆 A 与 B</strong>：A 讲<strong>关系结构</strong>（主体、客体、关系）的变化，B 讲<strong>主体内部状态</strong>（欲望、情感、兴趣）的变化，两个维度互补而非互斥。</li></ul>
+<blockquote>记忆锚点：价值三句话——<strong>随主客体关系变（A）、带主体性印记（B）、靠实践兑现（C）</strong>；"自然显露"是伪过程（D 反）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

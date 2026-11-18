@@ -1,8 +1,78 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-20 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-20</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2020-20 产业资本循环空间上并存的资本形式（多选） · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: "审题眼：问的是“空间上同时存在”", cls: "key", sc: "step", tag: "审题", log: "题眼锁定：循环内部的职能形式，不是资本种类", body: "<p>题眼：<b>产业资本循环过程中在空间上同时存在的资本形式</b>。</p><p>两个筛子：①循环<b>内部</b>当班的形式（职能形式）；②能<b>并存</b>的形式。选项先过筛子再对号。</p>" },
+  { t: "机制先行：一条公式三阶段，各有一名当班形式", cls: "key", sc: "shift", tag: "机制", log: "走一遍公式：G—W…P…W′—G′", body: "<p><b>购买 G—W</b>（买生产资料和劳动力）→ <b>货币资本</b>当班，为增殖准备条件；</p><p><b>生产 W…P…W′</b>（劳动力与生产资料结合）→ <b>生产资本</b>当班，生产剩余价值；</p><p><b>销售 W′—G′</b>（卖出商品）→ <b>商品资本</b>当班，实现剩余价值。</p>" },
+  { t: "为什么能“空间上并存”：循环连续不断的硬要求", cls: "key", sc: "shift", tag: "追问", log: "资本按比例分成三份，同时在买、在产、在卖", body: "<p>若全部本钱押在一种形式上，一批走完才有下一批——循环必然时断时续。</p><p>所以产业资本必须<b>按比例分成三份</b>：一份在买、一份在产、一份在卖——三种形式<b>空间并存</b>、依次<b>时间继起</b>。</p>" },
+  { t: "选项 A：生产资本 —— 对", cls: "good", sc: "ok", tag: "选项 A", ribbon: { k: 1, ok: true }, log: "生产阶段当班，生产剩余价值", body: "<p>生产阶段：劳动力与生产资料结合、创造剩余价值——<b>生产资本</b>是职能形式之一。A 对。</p>" },
+  { t: "选项 B：借贷资本 —— 错", cls: "bad", sc: "miss", tag: "选项 B", ribbon: { k: 2, ok: false }, log: "生息资本不在循环公式任何一环上班", body: "<p>借贷资本是<b>生息资本</b>的形态：从职能资本中<b>分离出来</b>、靠让渡资本使用权收利息，有自己的公式（G—G′）。</p><p>它是独立的<b>资本种类</b>，不在 G—W…P…W′—G′ 的任何一环——问职能形式，它不进门。<b>B 错</b>。</p>" },
+  { t: "选项 C：货币资本 —— 对", cls: "good", sc: "ok", tag: "选项 C", ribbon: { k: 3, ok: true }, log: "购买阶段当班，为增殖准备条件", body: "<p>购买阶段：用 G 购买生产资料与劳动力——<b>货币资本</b>是职能形式之一。C 对。</p>" },
+  { t: "选项 D：商品资本 —— 对", cls: "good", sc: "ok", tag: "选项 D", ribbon: { k: 4, ok: true }, log: "销售阶段当班，实现剩余价值，别漏", body: "<p>销售阶段：待售的 W′ 里已物化剩余价值——<b>商品资本</b>也是职能形式之一，最易漏选。D 对。</p>" },
+  { t: "结论：ACD", cls: "good", sc: "step", tag: "结论", log: "汇总：A、C、D 入选，B 排除", body: "<p>答案 <b>ACD</b>：货币（买）→ 生产（增殖）→ 商品（卖），三职能形式空间并存。</p><p>借贷资本属生息资本——问循环职能形式，它不进门。</p>" }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "【2020·20】产业资本循环空间上并存的资本形式（多选）",
+  subtitle: "考点：产业资本循环三阶段与三种职能形式",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）",
+  intro: "点击「▶ 播放」：先走一遍循环公式，再分清“职能形式”与“资本种类”。",
+  snaps: snaps,
+  result: {
+    big: "答案 ACD",
+    html: "记忆锚点：产业资本循环三职能 = <b>货币 → 生产 → 商品</b>（G—W…P…W′—G′），时间继起、空间并存；借贷资本属<b>生息资本</b>，不是职能形式（B 错）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：产业资本循环里“空间上并存”的三种职能形式</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——一个循环公式，三个阶段三种形式</h3>
+<p>产业资本循环的完整公式：<code>G—W…P…W′—G′</code>。资本依次经过三个阶段，每个阶段“换一身衣服”，也就换了名字：</p>
+<table><thead><tr><th>阶段</th><th>在干什么</th><th>职能形式</th><th>职能（干什么用）</th></tr></thead><tbody><tr><td>购买 G—W</td><td>用货币购买生产资料和劳动力</td><td><strong>货币资本</strong></td><td>为价值增殖准备条件</td></tr><tr><td>生产 W…P…W′</td><td>劳动力与生产资料结合，生产出含剩余价值的商品</td><td><strong>生产资本</strong></td><td>生产剩余价值</td></tr><tr><td>销售 W′—G′</td><td>卖出商品，收回增殖了的货币</td><td><strong>商品资本</strong></td><td>实现剩余价值</td></tr></tbody></table>
+<p><strong>为什么“空间上同时存在”？</strong>——这正是题眼。循环要连续不中断，产业资本就不能把全部本钱一次性押在一种形式上：刚买进的原材料还在排队，在产的还没完工，完工的还在货架上。所以现实中的产业资本必须<strong>按比例分成三份</strong>：一份在买、一份在产、一份在卖——三种形式<strong>在空间上并存</strong>，每一份又<strong>在时间上依次继起</strong>地转换角色。“并存”不是画出来的，是连续循环对资本分配提出的硬要求。</p>
+<h3>第 1 步：职能形式与资本种类——B 为什么不进门</h3>
+<p>题目问的是“<strong>产业资本循环过程中</strong>”在空间上并存的资本形式，即产业资本在自己循环内部<strong>轮流采取的三种职能形式</strong>。而<strong>借贷资本</strong>是<strong>生息资本</strong>的形态：它从职能资本中<strong>分离出来</strong>、靠让渡资本使用权收取利息，是独立于产业资本循环之外的<strong>资本种类</strong>——它有自己的公式（G—G′），但<strong>不在 <code>G—W…P…W′—G′</code> 的任何一环里上班</strong>。问职能形式，它不进门。</p>
+<table><thead><tr><th>选项</th><th>判定</th><th>理由</th></tr></thead><tbody><tr><td>A 生产资本</td><td>✓</td><td>生产阶段当班，生产剩余价值</td></tr><tr><td>B 借贷资本</td><td>✗</td><td>生息资本形态、独立于循环之外，不是职能形式</td></tr><tr><td>C 货币资本</td><td>✓</td><td>购买阶段当班，为增殖准备条件</td></tr><tr><td>D 商品资本</td><td>✓</td><td>销售阶段当班，实现剩余价值</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：把“社会上有哪些资本种类”（产业资本、商业资本、借贷资本……）当成“循环里有哪些职能形式”。看到“资本形式”就往“钱的形态”上靠——借贷资本确实是钱，但问的是循环内部的当班形式，记得先问：它在循环公式的哪一环？</li><li><strong>漏选 D</strong>：只记得“钱买货、厂里生产”，忘记卖出去的 W′ 也占压着资本——商品里已经物化了剩余价值，销售环节照样有资本当班。商品资本是最容易漏的一个。</li></ul>
+<blockquote>记忆锚点：一条公式 <code>G—W…P…W′—G′</code>，三阶段三形式——货币（买）→ 生产（增殖）→ 商品（卖）；连续循环要求时间上继起、空间上并存；借贷资本属生息资本，不是职能形式。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

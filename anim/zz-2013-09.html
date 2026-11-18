@@ -1,8 +1,110 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-09 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-09</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-09 · 牛体岂能马用：维新派与洋务派的分歧实质</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 推理链：每步一个快照；s.cls: key=关键/good=正确/bad=排除；ribbon 点亮序号带 */
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    log: '先看题眼：维新派用“牛体马用”驳“中体西用”，问分歧的实质。',
+    title: '审题眼：“牛体马用”在驳什么',
+    body: '<p>甲午战后维新运动兴起。维新派驳洋务派“中体西用”：体与用不可分——中学有中学的体用，西学有西学的体用；把中学之“体”与西学之“用”拼在一起，如同让“<b>牛体</b>”产生“<b>马用</b>”一样荒谬。</p><p>问：维新派与洋务派<b>分歧的实质</b>。</p>' },
+  { cls: 'key', tag: '立机制',
+    log: '立机制：近代两场论战先分开——对象不同、焦点不同，本题是第一场。',
+    title: '立机制：两场论战分开——对象不同、焦点不同',
+    body: '<ul><li>① 维新派 vs <b>洋务派</b>（19 世纪末，甲午后）：争要不要学西方的<b>制度与思想文化</b>、兴民权、行变法；</li><li>② 改良派 vs <b>革命派</b>（1905 前后）：《民报》与《新民丛报》笔战，争要不要以<b>革命手段推翻清政府</b>、要不要社会革命。</li></ul><p>本题是①。洋务派“中体西用”只学器物、不动制度——分歧的种子就埋在这里。</p>' },
+  { cls: 'key', tag: '题眼翻译',
+    log: '翻译比喻：体用不可分——学西用就躲不开西体，分歧在制度思想层。',
+    title: '题眼翻译：体用不可分，学器物必然牵动制度',
+    body: '<p>严复的比方：有牛之体，才有负重之用；有马之体，才有致远之用——没听说把牛的身子配马的用途。</p><p>器物之“用”长在制度文化之“体”上，<b>体用是一套、拆不开</b>：承认要学西学之“用”，就躲不开西学之“体”。所以分歧实质 = 要不要越过“器物”，去学西方的<b>政治制度与思想文化</b>。</p>' },
+  { cls: 'bad', tag: 'A 排除', ribbon: { k: 1, ok: false },
+    log: 'A 排除：社会革命是第二场论战（改良 vs 革命）的内容，时间对手都错位。',
+    title: '选项 A：要不要社会革命',
+    body: '<p><b>A 错</b>：这是后来<b>革命派与改良派</b>论战（1905 前后）的内容。</p><p>时间与对手都错位——与洋务派的争论里还没有“革命”二字。</p>' },
+  { cls: 'bad', tag: 'B 排除', ribbon: { k: 2, ok: false },
+    log: 'B 排除：同属第二场论战；维新派恰恰反对革命，主张改良。',
+    title: '选项 B：要不要以革命手段推翻清政府',
+    body: '<p><b>B 错</b>：同属第二场论战（改良派 vs 革命派）。</p><p>而且维新派恰恰<b>反对</b>革命、主张改良——本题问的又是与洋务派的分歧，对手都对不上。</p>' },
+  { cls: 'bad', tag: 'C 排除', ribbon: { k: 3, ok: false },
+    log: 'C 排除：办近代企业是双方共识（洋务派就在办），共识构不成分歧。',
+    title: '选项 C：要不要在中国兴办近代企业',
+    body: '<p><b>C 错</b>：洋务派自己就在办军工、民用企业——办企业是双方的<b>共识</b>。</p><p>共识构不成分歧；何况题眼在“实质”，深层才谈得上实质。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true },
+    log: 'D 入选：洋务派只许学“用”，维新派要连“体”一起变——分歧正在制度思想层。',
+    title: '选项 D：要不要学习西方的政治制度与思想文化',
+    body: '<p><b>D 对</b>：洋务派只许学“用”（器物），维新派主张连“体”（制度、思想）一起变。</p><p>“牛体马用”说的正是：学器物躲不开学制度——分歧实质就在这一层。</p>' },
+  { cls: 'key', tag: '追问',
+    log: '追问：为什么体用不可分？——任何文化是一整套，器物长在制度土壤里。',
+    title: '追问：为什么“体用不可分”',
+    body: '<p>维新派的道理：任何文化是一整套——器物、制度、思想互相咬合。枪炮好用，是因为它长在工业化、科学教育、社会组织的土壤里；只搬枪炮不搬土壤，“用”就成了无源之水。</p><p>这正是对“中体西用”的釜底抽薪式否定——比器物之争深一层，所以叫“实质”。</p>' },
+  { cls: 'good', tag: '结论',
+    log: '收束：答案 D——学西用就躲不开西体。',
+    title: '收束：答案 D',
+    body: '<p>牛体不生马用——体用不可分：学西用就躲不开西体。<b>答案 D。</b></p><p>记忆锚点：维新 vs 洋务争“制度与思想”；改良 vs 革命争“要不要革命、推翻清政府”（A/B）；办企业（C）是共识非分歧。</p>' }
+];
+
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.ribbon) nPick++;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2013·09】牛体岂能马用：维新派与洋务派分歧的实质',
+  subtitle: '考点：维新运动 · 两场论战辨析 · 体用不可分 · 选项逐项推演',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已对号选项',
+  snaps: snaps,
+  result: {
+    big: '答案 D',
+    html: '“中体西用”只学器物；维新派驳以“体用不可分”（有牛之体才有负重之用）——学西用必牵动西体，分歧实质 = <b>要不要学习西方的政治制度与思想文化</b>。<br>易错：A/B 张冠李戴到 1905 前后的改良派 vs 革命派论战；C 兴办近代企业是双方共识，共识构不成分歧。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：牛体岂能马用——维新派与洋务派分歧的实质</h2>
+<p>答案：<strong>D（要不要学习西方的政治制度与思想文化）</strong>。</p>
+<h3>第 0 步：先立机制——近代史上有两场论战，对象不同、焦点不同</h3>
+<p>近代中国向西方学习的问题上，先后发生过两场容易混淆的大论战。先把它们分开，本题的选项才能各归各位：</p>
+<table><thead><tr><th>论战</th><th>时间与双方</th><th>争什么</th></tr></thead><tbody><tr><td>维新派 vs 洋务派</td><td>19 世纪末（甲午战后），要变法维新 vs 坚持"中体西用"</td><td>要不要学西方的<strong>政治制度与思想文化</strong>、兴民权、行变法</td></tr><tr><td>改良派 vs 革命派</td><td>1905 年前后（《民报》与《新民丛报》笔战）</td><td>要不要以<strong>革命手段推翻清政府</strong>、要不要社会革命</td></tr></tbody></table>
+<p>本题是第一场。洋务派的"中体西用"：只学西方<strong>器物</strong>（坚船利炮、声光化电），封建制度之"体"一动不动。维新派反驳它的武器是"<strong>体用不可分</strong>"——这要先讲清这个机制，答案才浮得出。</p>
+<h3>第 1 步：题眼翻译——"牛体马用"这个比喻在说什么</h3>
+<p>严复打了个比方：有牛之体，才有负重之用；有马之体，才有致远之用；没听说过把牛的身子配上马的用途。道理是：<strong>器物之"用"长在制度文化之"体"上，体用是一套、拆不开</strong>。既然承认要学西学之"用"，就躲不开西学之"体"——学器物必然牵动学制度与思想。所以维新派与洋务派分歧的实质，就是<strong>要不要越过"器物"这一层，去学西方的政治制度与思想文化</strong>。</p>
+<h3>第 2 步：逐项对号</h3>
+<ul><li><strong>A 要不要社会革命</strong> ❌：这是第二场论战（改良派 vs 革命派）的内容——时间、对手都错位。</li><li><strong>B 要不要以革命手段推翻清政府</strong> ❌：同属第二场论战；维新派恰恰<strong>反对</strong>革命，主张改良。</li><li><strong>C 要不要在中国兴办近代企业</strong> ❌：洋务派自己就在办军工、民用企业，办企业是双方的<strong>共识</strong>——共识构不成分歧。</li><li><strong>D 要不要学习西方的政治制度与思想文化</strong> ✅：洋务派只许学"用"，维新派主张连"体"一起变——分歧正在这一层。</li></ul>
+<h3>为什么体用不可分（预判追问）</h3>
+<p>维新派的道理：任何文化是一整套——器物、制度、思想互相咬合。枪炮好用，是因为它长在工业化、科学教育、社会组织的土壤里；只搬枪炮不搬土壤，"用"就成了无源之水。这正是对"中体西用"的釜底抽薪式否定——比器物之争深一层，所以叫"<strong>实质</strong>"。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A/B</strong>：把两场论战张冠李戴。记时间锚：与<strong>洋务派</strong>争 = 19 世纪末，争制度思想要不要学；<strong>改良派 vs 革命派</strong>之争 = 1905 前后，争要不要革命、推翻清政府。</li><li><strong>误选 C</strong>：没抓"实质"二字——办企业是表层共识，制度之变才是深层分歧；"共识"永远不构成"分歧"。</li></ul>
+<blockquote>记忆锚点：牛体不生马用——体用不可分，学西用躲不开西体；维新 vs 洋务争"制度与思想"，改良 vs 革命争"要不要革命"。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

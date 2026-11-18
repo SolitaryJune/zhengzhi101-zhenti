@@ -1,8 +1,148 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-02 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-02</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2009·02 实践为什么能检验真理</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX，纯文本推理卡片），只改下方题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "tag": "考点",
+    "body": "<p>1978 年真理标准大讨论的哲学根基题。问的是实践<b>凭什么</b>能当检验真理的标准——问「根据」，不是问「实践有什么好处」。</p>",
+    "log": "问的是「凭什么」，不是「有什么用」"
+  },
+  {
+    "title": "立模型：检验需要什么",
+    "cls": "key",
+    "tag": "模型",
+    "body": "<p>检验真理 = 判定<b>主观认识是否与客观实际相符合</b>。裁判者必须能把主观、客观两端「摆到一起」对照。带着这个要求去筛候选人。</p>",
+    "log": "检验的任务：对照主客观是否一致"
+  },
+  {
+    "title": "真理不能自证",
+    "cls": "bad",
+    "tag": "排除一",
+    "body": "<p>真理是<b>主观形态</b>的认识——让认识自己证明自己符合客观，等于「主观符合主观」的<b>循环论证</b>，不构成检验。</p>",
+    "log": "真理自我检验 = 循环论证"
+  },
+  {
+    "title": "客观事物不能开口",
+    "cls": "bad",
+    "tag": "排除二",
+    "body": "<p>离开人的活动，客观事物不会主动「回答」认识是否与它一致——它没有能动性，当不了裁判。</p>",
+    "log": "客观事物无法主动对照"
+  },
+  {
+    "title": "实践的桥梁作用",
+    "cls": "good",
+    "tag": "机制",
+    "body": "<p>实践具有<b>直接现实性</b>：带着主观蓝图去做（主观端），产出客观世界的现实改变（客观端）——它是<b>主观见之于客观</b>的桥梁，两端都握在手里。</p>",
+    "log": "实践直接现实性：主观→客观"
+  },
+  {
+    "title": "D 正确：本性出题目，特点给手段",
+    "cls": "good",
+    "tag": "D 判定",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>结论浮出：由<b>真理的本性</b>（要求主客观相符——出检验任务）和<b>实践的特点</b>（直接现实性——供检验手段）共同决定，教材标准表述。<b>D 正确</b>。</p>",
+    "log": "本性出任务 + 特点供手段 → D"
+  },
+  {
+    "title": "A：半截话拼不成答案",
+    "cls": "bad",
+    "tag": "A 判定",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>「真理的主观性」不是根据（它恰恰说明真理<b>不能自证</b>），「实践的客观性」也讲不出桥梁作用——两个半截拼不起来，回答不了「凭什么」。<b>A 错误</b>。</p>",
+    "log": "A 各对半截，组合无效"
+  },
+  {
+    "title": "B：错位范畴",
+    "cls": "bad",
+    "tag": "B 判定",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>绝对性/相对性讲的是真理的<b>深度与广度</b>（认识到哪一层了），是另一对范畴，与「检验标准」无关。<b>B 错误</b>。</p>",
+    "log": "B 用了错位范畴"
+  },
+  {
+    "title": "C：仿写句式的近亲",
+    "cls": "bad",
+    "tag": "C 判定",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>「属性」「功能」读着最顺，但<b>「本性」专指「要求主客观相符」</b>的规定、<b>「特点」专指直接现实性</b>——换成「属性/功能」这两层精确含义就丢了，只剩漂亮话。<b>C 错误</b>。</p>",
+    "log": "C 是仿写干扰：丢掉两层含义"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "tag": "答案",
+    "body": "<p>答案 <b>D</b>：真理的本性和实践的特点所决定的。记忆锚点：<b>本性出题目，特点给手段</b>。</p>",
+    "log": "锁定 D"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "实践凭什么能检验真理",
+  subtitle: "考点：实践是检验真理的唯一标准 · 方法：本性出任务、特点供手段",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "记忆锚点：检验真理 = 对照<b>主观与客观</b>；真理的<b>本性</b>出题目（要求主客观相符），实践的<b>特点</b>给手段（直接现实性）。A 是「半真半假」的拼凑，B 换了范畴，C 是仿写句式的陷阱。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：实践凭什么能检验真理</h2>
+<p>答案：<strong>D（真理的本性和实践的特点所决定的）</strong>。</p>
+<h3>第 0 步：先立模型——「检验」这个动作需要什么</h3>
+<p>先想清楚「检验」要干什么：判定一个认识是不是真理，就是回答<strong>主观认识是否与客观实际相符合</strong>。于是裁判者必须能把主观、客观两端「摆到一起」对照。带着这个要求去筛候选人：</p>
+<ol><li><strong>真理自己不行</strong>：真理是主观形态的认识，让认识自己证明自己符合客观，等于「主观符合主观」——循环论证；</li><li><strong>客观事物也不行</strong>：离开人的活动，它不会主动「回答」这个认识和我一致吗——缺乏能动性，当不了裁判。</li></ol>
+<p>两端都被排除后，剩下的唯一候选就是<strong>实践</strong>。</p>
+<h3>第 1 步：机制——真理的本性出题目，实践的特点给手段</h3>
+<table><thead><tr><th>要素</th><th>内容</th><th>在检验中扮演的角色</th></tr></thead><tbody><tr><td>真理的<strong>本性</strong></td><td>主观与客观相符合</td><td>提出检验的<strong>任务</strong>：必须对照「主客观是否一致」</td></tr><tr><td>实践的<strong>特点</strong></td><td>直接现实性：主观见之于客观</td><td>提供检验的<strong>手段</strong>：把认识变成现实结果，用结果裁决</td></tr></tbody></table>
+<p>实践为什么两端都握得住？它是人有目的的活动——带着主观「蓝图」；它又引起客观世界的现实改变——产出客观「成品」。按认识去做，做出来的结果对不对，认识对不对一目了然。1978 年真理标准大讨论「实践是检验真理的唯一标准」，哲学根据正在这里。</p>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 真理的主观性和实践的客观性</td><td>❌</td><td>只取半截：「主观性」不是根据所在，「客观性」也讲不出桥梁作用</td></tr><tr><td>B 真理的相对性和实践的绝对性</td><td>❌</td><td>相对/绝对讲的是真理的深度，是另一对范畴，与检验标准无关</td></tr><tr><td>C 真理的属性和实践的功能</td><td>❌</td><td>仿写教材句式的「近亲」干扰项，丢掉了「本性/特点」的两层精确含义</td></tr><tr><td>D 真理的本性和实践的特点</td><td>✅</td><td>教材标准表述：本性定任务，特点供手段</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 C（「属性」「功能」读着最顺）</strong>：这是有意仿写的近义干扰项——「本性」专指「要求主客观相符」这一内在规定，「特点」专指「直接现实性」；换成「属性/功能」，这两层含义就丢了，只剩漂亮话。</li><li><strong>选 A（半真半假最难防）</strong>：它各对了半个词，但拼起来回答不了「凭什么能当标准」——「真理的主观性」恰恰说明真理不能自证，而不是实践能检验它的理由。</li><li><strong>把「实践的优点」当「实践的根据」</strong>：题问的是根据（凭什么），不是作用（有什么用）——审题眼在「由……所决定」四个字上。</li></ul>
+<blockquote>记忆锚点：检验真理 = 对照「主观与客观」；真理的<strong>本性</strong>出题目（要相符），实践的<strong>特点</strong>给手段（直接现实性）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

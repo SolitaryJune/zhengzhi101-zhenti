@@ -1,8 +1,148 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-02 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-02</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-02 · 量变引起质变：90% 的五次连乘</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* 过程类动画：90%×90%×… 连乘推演——量变积累越过 60 分关节点引发质变 */
+var VALS = ['90%', '81%', '72.9%', '65.6%', '59.0%'];
+var NOTES = [
+  '第 1 个环节打了个 9 折：单项看仍是不错的成绩。',
+  '两个 90% 连乘＝81%：折扣开始叠加，但仍在「好成绩」的度内。',
+  '三次连乘＝72.9%：量的积累在继续，性质还没变。',
+  '四次连乘≈65.6%：已逼近 60 分关节点——临界状态。',
+  '五次连乘≈59%：跌破 60 分关节点，「好成绩」变成「不及格」——性质翻转，质变发生！'
+];
+var OPTBODY = '<ul>' +
+  '<li><b>A 肯定中包含否定</b>：辩证否定观讲事物因内部否定因素自我扬弃——题干只有数量折扣的积累，<b>原理错配</b>，排除。</li>' +
+  '<li><b>C 必然性通过偶然性开辟道路</b>：题干是纯数量推演，不涉及必然与偶然，排除。</li>' +
+  '<li><b>D 可能和现实相互转化</b>：成绩下降是现实的积累过程，不是可能与现实的转化，排除。</li>' +
+  '<li><b>B 量变引起质变</b>：小折扣连乘积累→破度变质，与推演完全对应，<b>入选</b>。</li>' +
+  '</ul>';
+
+function cellsRow(n, crossed){
+  var html = '<div class="aw-cells">';
+  for (var i = 0; i < 5; i++){
+    var cls = '';
+    if (i < n) cls = (crossed && i === 4) ? 'miss' : 'ok';
+    html += '<div class="aw-col"><div class="aw-ptr">' + (i < n ? '×90%' : '') + '</div>' +
+            '<div class="aw-box ' + cls + '">90%</div>' +
+            '<div class="aw-idx">环节' + (i + 1) + '</div></div>';
+  }
+  return html + '</div>';
+}
+function chainHtml(n, crossed){
+  var parts = [];
+  for (var i = 0; i < 5; i++){
+    if (i < n){
+      var c = (i === n - 1) ? (crossed ? '#b91c1c' : '#15803d') : '#64748b';
+      parts.push('<b style="color:' + c + '">' + VALS[i] + '</b>');
+    } else {
+      parts.push('<span style="color:#cbd5e1">' + VALS[i] + '</span>');
+    }
+    if (i < 4) parts.push('<span style="color:#94a3b8"> ×90% →</span>');
+  }
+  return '<div style="font-size:16px;font-family:monospace;letter-spacing:.5px">' + parts.join('') + '</div>';
+}
+function gateHtml(crossed){
+  if (crossed){
+    return '<div style="margin-top:8px;padding:8px 12px;border:1.5px solid var(--red);background:#fef2f2;border-radius:10px;color:#b91c1c;font-weight:700">60 分＝及格关节点：已被跌破 → 性质翻转：好成绩 → 不及格（质变！）</div>';
+  }
+  return '<div style="margin-top:8px;padding:8px 12px;border:1.5px dashed #94a3b8;border-radius:10px;color:#64748b">60 分＝及格关节点（「好成绩」的度的边界）：尚未越过</div>';
+}
+function bigVal(n, crossed){
+  if (n === 0) return '<div style="font-size:34px;font-weight:800;color:#cbd5e1">—</div>';
+  return '<div style="font-size:34px;font-weight:800;color:' + (crossed ? '#b91c1c' : '#15803d') + '">' + VALS[n - 1] + '</div>';
+}
+function stageCard(title, cls, body){
+  return '<div class="aw-stepcard ' + cls + '"><h4>' + title + '</h4>' + body + '</div>';
+}
+function stage(mode, n, note){
+  var crossed = (mode === 'mul' && n === 5) || mode === 'opts' || mode === 'end';
+  var nn = (mode === 'opts' || mode === 'end') ? 5 : n;
+  var h = '<div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">' +
+          '<div style="min-width:250px"><div style="font-size:12.5px;color:#64748b;margin-bottom:2px">五环节连乘（每环节都打 9 折）</div>' +
+          cellsRow(nn, crossed) + '</div>' +
+          '<div><div style="font-size:12.5px;color:#64748b;margin-bottom:2px">累计成绩</div>' + bigVal(nn, crossed) + '</div></div>' +
+          '<div style="margin:10px 0 4px">' + chainHtml(nn, crossed) + '</div>' + gateHtml(crossed);
+  if (mode === 'mech'){
+    h += '<div style="margin-top:12px">' + stageCard('机制：量变 → 度 → 质变', 'key',
+      '<p><b>量变</b>＝数量增减、程度改动（每环节打 9 折）；<b>度</b>＝保持性质不变的幅度（60 分及格线是关节点）；<b>质变</b>＝量的积累突破关节点，性质根本变化。</p>' +
+      '<p>原理链：<b>量变是质变的必要准备，质变是量变的必然结果</b>——先找什么在积累、边界在哪、翻成了什么。</p>') + '</div>';
+  } else if (mode === 'opts'){
+    h += '<div style="margin-top:12px">' + stageCard('选项判定：B 对号入座', 'good', OPTBODY) + '</div>';
+  } else if (mode === 'end'){
+    h += '<div style="margin-top:12px">' + stageCard('结论：连乘见质变', 'good',
+      '<p>每个环节都「还行」≠ 结果还行：<b>环环相扣的连乘</b>让小折扣不断积累，越过关节点，性质就翻转。</p>' +
+      '<p><b>答案 B（量变引起质变）。</b>方法论：重视环节质量、掌握适度原则，勿以折扣小而轻之。</p>') + '</div>';
+  } else if (mode === 'mul' && note){
+    h += '<div style="margin-top:12px"><div class="aw-stepcard"><h4>第 ' + n + ' 次连乘</h4><p>' + note + '</p></div></div>';
+  } else if (mode === 'intro'){
+    h += '<div style="margin-top:12px">' + stageCard('审题眼', 'key',
+      '<p>一道数学题：<b>90%×90%×90%×90%×90%≈59%</b>。「90 分」本是很不错的成绩，但在<b>环环相扣、连续不断</b>的工作中，每个环节都打点折扣，最终成绩就是<b>不及格</b>。</p>' +
+      '<p>问的是这里的<b>辩证法道理</b>——先看下面的连乘推演，再对号入座。</p>') + '</div>';
+  }
+  return h;
+}
+
+var MUL_STEPS = [3, 4, 5, 6, 7];           // 五次连乘在 snaps 中的序号
+var snaps = [
+  { cls: 'step', tag: '审题', log: '审题眼：五环节连乘，90%⁵≈59%，跌破及格线',
+    html: stage('intro', 0) },
+  { cls: 'shift', tag: '立机制', log: '立机制：量变（打 9 折）→ 度（60 分关节点）→ 质变（不及格）',
+    html: stage('mech', 0) }
+].concat(MUL_STEPS.map(function(_, idx){
+  var n = idx + 1, crossed = n === 5;
+  return {
+    cls: crossed ? 'miss' : (n === 4 ? 'shift' : 'ok'),
+    tag: '第 ' + n + ' 次连乘',
+    log: NOTES[idx],
+    count: n,
+    ribbon: { k: n, ok: !crossed },
+    html: stage('mul', n, NOTES[idx])
+  };
+})).concat([
+  { cls: 'step', tag: '判选项', log: '选项判定：A/C/D 原理错配排除，B 与推演对号',
+    count: 5, html: stage('opts', 5) },
+  { cls: 'done', tag: '结论', log: '答案 B：量的积累越过关节点引发质变', count: 5, done: true,
+    html: stage('end', 5) }
+]);
+
+AW.init({
+  title: 'zz-2012-02 · 90%×90%×…≈59%：量变引起质变',
+  subtitle: '2012 年第 2 题（单选）· 量变质变规律 · 连乘推演',
+  counterLabel: '连乘次数',
+  ribbonTitle: '累计成绩是否仍 ≥60 分（✓ 度内 / ✗ 破线）',
+  intro: '点击「▶ 播放」：先立机制，再逐次连乘，看累计成绩何时跌破 60 分关节点。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '记忆锚点：<b>连乘见质变</b>——90% 的五次方≈59%；每个环节都打折扣，<b>积累越过关节点（60 分），性质就翻转</b>。单看一个环节都在度内，错在忽略连乘的积累效应。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：90%×90%×…≈59%——量的积累越过关节点引发质变</h2>
+<p>答案：<strong>B（量变引起质变）</strong>。</p>
+<h3>第 0 步：先立机制——量变、度、质变是一根链条</h3>
+<table><thead><tr><th>范畴</th><th>含义</th></tr></thead><tbody><tr><td>量变</td><td>数量的增减、程度的改动，尚未改变事物的性质</td></tr><tr><td>度</td><td>保持事物性质不变的幅度与范围，两端是关节点</td></tr><tr><td>质变</td><td>量的积累突破关节点，事物性质发生根本变化</td></tr></tbody></table>
+<p>原理链条：<strong>量变是质变的必要准备，质变是量变的必然结果</strong>；量积累到一定程度、越过「度」的边界，性质就翻转。所以拿到本题先找三样东西：<strong>什么在积累（量变）、边界在哪（度/关节点）、翻成了什么（质变）</strong>。</p>
+<h3>第 1 步：把算式翻译成「量的积累」——连乘推演</h3>
+<table><thead><tr><th>连乘次数</th><th>计算</th><th>累计成绩</th><th>与 60 分关节点比</th></tr></thead><tbody><tr><td>1</td><td>90%×1</td><td>90%</td><td>度内，仍是好成绩</td></tr><tr><td>2</td><td>90%×90%</td><td>81%</td><td>度内</td></tr><tr><td>3</td><td>×90%</td><td>72.9%</td><td>度内</td></tr><tr><td>4</td><td>×90%</td><td>≈65.6%</td><td>度内，但已逼近</td></tr><tr><td>5</td><td>×90%</td><td>≈59%</td><td><strong>跌破 60 分——不及格</strong></td></tr></tbody></table>
+<p>单看每一个环节，90% 都在「好成绩」这个度的范围之内；但「环环相扣、连续不断」的工作是<strong>连乘</strong>——每环节的小折扣不断积累，第 5 次乘完累计约 59%，跌破 60 分这个关节点，「好成绩」变成「不及格」：<strong>性质翻转了</strong>。小折扣（量变）→ 连乘积累 → 破度（质变），正是量变引起质变的日常版本；它同时给出方法论：做事要重视环节质量、掌握适度原则，勿以折扣小而轻之。</p>
+<h3>第 2 步：逐项判定</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 肯定中包含否定</td><td>❌</td><td>这是辩证否定观的内容，讲事物因内部否定因素而自我扬弃；题干只有数量折扣的积累，没有否定因素的展开过程</td></tr><tr><td>B 量变引起质变</td><td>✅</td><td>环节折扣连乘积累，成绩由「优」翻成「不及格」，性质变了</td></tr><tr><td>C 必然性通过偶然性开辟道路</td><td>❌</td><td>题干不涉及必然与偶然的关系，纯数量推演</td></tr><tr><td>D 可能和现实是相互转化的</td><td>❌</td><td>题干不是可能性与现实性的转化，成绩下降是现实的积累过程</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>觉得「每个 90% 都还行」就不算变质</strong>：单看一个环节确实在度内——错在忽略<strong>连乘的积累效应</strong>；量变分析要看总量与趋势，这正是命题设下的陷阱。</li><li><strong>选 A（否定之否定最「辩证」）</strong>：把「含否定因素的自我运动」套到算式上——题干全程是数量增减与程度变化，没有内部肯定/否定因素的对立展开，属原理错配。</li></ul>
+<blockquote>记忆锚点：连乘见质变——90% 的五次方≈59%；环节都打折扣，积累越过关节点（60 分），性质就翻转。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

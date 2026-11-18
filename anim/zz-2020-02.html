@@ -1,8 +1,121 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-02 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-02</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2020·02 对人工智能社会效用的评价是什么评价</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>乐观派说「发动机」，悲观派说「人类的终结」——题干问：这种对「<b>社会效用</b>」的评价属于哪一种。抓题眼「<b>效用</b>」：效用讲的是「对我们好不好、有什么用」，不是「它是什么」。</p>",
+    "log": "审题：题眼是「社会效用」"
+  },
+  {
+    "title": "先立模型：观念把握客体的两种方式",
+    "cls": "key",
+    "body": "<p>观念把握客体分两条路：<b>真理性（认知性）认识</b>——回答客体「是什么、为什么」，对象是客体自身的属性与规律；<b>价值评价</b>——回答客体「对主体有无意义」，对象是<b>主客体之间的价值关系</b>。两把尺子，落点不同。</p>",
+    "log": "模型：真理认识 vs 价值评价"
+  },
+  {
+    "title": "对号：「效用」落在价值一侧",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>「社会效用」= 客体的属性<b>满足主体需要</b>的关系，正是价值评价的对象。<b>D「对客观事物的属性及其满足主体需要的价值性评价」正确</b>。</p>",
+    "log": "效用=属性满足需要的关系 → 选 D"
+  },
+  {
+    "title": "A：真理性评价问的是规律",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>真理性评价的对象是<b>客观规律本身</b>；题干不问「人工智能的运行规律是什么」，问的是「它对人好不好」。<b>A 错误</b>。</p>",
+    "log": "A 问规律，题问效用 → 排除"
+  },
+  {
+    "title": "B：认知性评价仍在客体一侧",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>认知性认识的对象仍是<b>客体属性</b>，「对主体需要发展程度的认知」也不构成对「效用」的评价——评价要下判断，不是只做认知记录。<b>B 错误</b>。</p>",
+    "log": "B 是认知记录，不是价值判断 → 排除"
+  },
+  {
+    "title": "C：主体性 ≠ 主观随意性",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>两派评价针锋相对，确实<b>因主体而异</b>——但评价的对象（价值关系）客观存在，结果要接受<b>实践检验</b>，有客观标准。这是价值评价的<b>主体性</b>，不是「主观性」。<b>C 错误</b>。</p>",
+    "log": "C 把主体性夸大成主观随意 → 排除"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>D</b>：价值性评价。记忆锚点：见「效用／好坏／有无意义」→ 价值评价；见「是什么／规律」→ 真理性认识；主体性 ≠ 主观性。</p>",
+    "log": "锁定 D：价值性评价"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "对人工智能社会效用的评价：价值性评价",
+  subtitle: "考点：真理性认识与价值评价的区别 · 方法：抓题眼「效用」+ 两条把握方式对号",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "记忆锚点：评价「<b>社会效用</b>」= 揭示客体属性<b>满足主体需要</b>的价值关系，属于<b>价值性评价</b>。它因主体而异是<b>主体性</b>，但对象客观、经得起实践检验，不是「主观性评价」——C 正是把这两者混为一谈。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：对人工智能「社会效用」的评价属于哪一种认识</h2>
+<p>答案：<strong>D（对客观事物的属性及其满足主体需要的价值性评价）</strong>。</p>
+<h3>第 0 步：先立模型——观念把握客体的两种方式</h3>
+<p>人类的观念活动对客体有两种把握方式，对象与结果都不一样：</p>
+<table><thead><tr><th>方式</th><th>回答什么</th><th>对象</th><th>检验标准</th></tr></thead><tbody><tr><td>真理性（认知性）认识</td><td>客体「是什么、为什么」</td><td>客体自身的属性与规律</td><td>实践能否证实其符合</td></tr><tr><td>价值评价</td><td>客体「对主体有无意义」</td><td><strong>主客体之间的价值关系</strong></td><td>实践效果与主体需要的真实满足</td></tr></tbody></table>
+<p>题眼是「<strong>社会效用</strong>」：效用 = 客体的属性满足主体需要的关系，落在价值评价一侧——评价的不是规律本身，而是「它对我们好不好、有什么用」。</p>
+<h3>第 1 步：为什么不是「主观性评价」——主体性 ≠ 主观随意性</h3>
+<p>乐观派说「发动机」，悲观派说「人类的终结」，评价确实随主体而异——但这是价值评价的<strong>主体性</strong>，不是<strong>主观随意性</strong>：</p>
+<ol><li>评价的对象（人工智能的属性与人类需要之间的价值关系）是<strong>客观存在</strong>的；</li><li>评价结果最终要接受实践检验，有客观标准可依；</li><li>价值评价虽「因主体而异」，却以求实地反映价值关系为目标，与「各说各话、无对错可言」的主观论是两回事。</li></ol>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 真理性评价</td><td>❌</td><td>真理回答规律本身；「效用」不问规律，问意义好坏</td></tr><tr><td>B 认知性评价</td><td>❌</td><td>认知的对象仍是客体属性；对「需要发展程度」的认知不是本题所问的评价</td></tr><tr><td>C 主观性评价</td><td>❌</td><td>有主体差异性≠主观随意，评价仍有客观标准——夸大成「主观性」即错</td></tr><tr><td>D 价值性评价</td><td>✅</td><td>「社会效用」正是客体属性满足主体需要的价值关系</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：看到两派评价针锋相对，就断定「评价是主观的」——混淆了「因主体而异」与「主观随意」，这正是本题埋的坑。</li><li><strong>误选 A/B</strong>：见「评价」二字就近联想「真理」「认知」——没抓住「效用」这个题眼；真理性、认知性认识的对象都是客体自身，不含「满足主体需要」这层关系。</li></ul>
+<blockquote>记忆锚点：见「效用／好坏／有无意义」→ 价值评价；见「是什么／规律」→ 真理性认识；主体性 ≠ 主观性。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

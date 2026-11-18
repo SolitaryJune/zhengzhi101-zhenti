@@ -1,8 +1,150 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2016-10 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2016-10</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2016·10 「师夷长技」的长技指什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画（推理链卡片 + 层次线，纯文本无 KaTeX，走 anim-engine），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 层次线卡片（递进关系类用）
+function tl(rows){
+  return '<div>' + rows.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:86px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>1843 年魏源编成《海国图志》，自述「为以夷攻夷而作，为以夷款夷而作，为<b>师夷长技以制夷</b>而作」。设问：夷之「长技」主要指什么——考向西方学习的<b>层次定位</b>。</p>",
+    "log": "1843 年，「长技」= 哪一层"
+  },
+  {
+    "title": "先立层次线：器物 → 制度 → 文化",
+    "cls": "key",
+    "body": tl([
+      ["器物层", "魏源《海国图志》、洋务运动——军事和科学技术"],
+      ["制度层", "维新派、革命派——君主立宪、民主共和"],
+      ["文化层", "新文化运动——民主与科学及各种新思潮"]
+    ]) + "<p>层次不能<b>前移</b>：1843 年的魏源是这条线的起点，停在器物层。</p>",
+    "log": "器物 → 制度 → 文化，逐级升级"
+  },
+  {
+    "title": "回到原文定位「长技」",
+    "cls": "key",
+    "body": "<p>「攻夷」「款夷」都落在<b>军事对抗与外交周旋</b>；《海国图志》对长技说得很具体：<b>战舰、火器、「养兵练兵之法」</b>，配套主张是设船厂炮局、聘西洋工匠教造——条条都在军事与科技，无一涉及制度文化。</p>",
+    "log": "长技=战舰火器+养兵练兵之法"
+  },
+  {
+    "title": "选项 C：器物层就位",
+    "cls": "good",
+    "body": "<p>战舰、火器、养兵练兵之法 = <b>军事和科学技术</b>，正是「师夷」要学的全部内容；「师夷」的目的是「制夷」，尚不涉及改造社会制度。<b>C 正确</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": true
+    },
+    "log": "C=军事和科学技术"
+  },
+  {
+    "title": "选项 D：制度层前移",
+    "cls": "bad",
+    "body": "<p>学习西方政治制度始于<b>维新派</b>（康梁变法），比 1843 年的魏源晚半个多世纪——把制度层前移了。<b>D 排除</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "log": "D 是制度层内容，前移了"
+  },
+  {
+    "title": "选项 A：文化层前移",
+    "cls": "bad",
+    "body": "<p>思想文化层面的学习要到<b>新文化运动</b>前后才展开，「宗教的思想文化」更不在魏源视野内——把文化层前移了。<b>A 排除</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "log": "A 是文化层内容，前移了"
+  },
+  {
+    "title": "选项 B：教育层前移",
+    "cls": "bad",
+    "body": "<p>新式学堂、派遣留学生等近代教育是<b>洋务运动及以后</b>的事，不在《海国图志》主旨内——把教育层前移了。<b>B 排除</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    },
+    "log": "B 属后来的教育层"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>C</b>。记忆锚点：学习三步走——<b>器物</b>（师夷长技 / 洋务）→ <b>制度</b>（维新 / 革命）→ <b>文化</b>（新文化运动）；1843 年停在第一步，长技 = <b>军事 + 科技</b>，目的在「制夷」而非改造社会制度。</p>",
+    "log": "锁定 C：长技=军事和科学技术"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "「师夷长技」的长技指什么",
+  subtitle: "考点：开眼看世界（学习西方的层次递进） · 方法：先立器物→制度→文化层次线，再回原文定位",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 C",
+    html: "记忆锚点：近代学习西方三步走——<b>器物</b>（师夷长技、洋务）→ <b>制度</b>（维新、革命）→ <b>文化</b>（新文化运动）。1843 年魏源的「长技」停在<b>军事和科学技术</b>：战舰、火器、养兵练兵之法；宗教文化、教育人才、民主制度都是后来才升级的内容——三个干扰项共同的错误结构就是「层次前移」。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：魏源「师夷长技」的「长技」指什么</h2>
+<p>答案：<strong>C（军事和科学技术）</strong>。</p>
+<h3>第 0 步：先立机制——向西方学习是一条逐级升级的线，先定位再作答</h3>
+<p>近代中国人向西方学习经历了<strong>器物 → 制度 → 思想文化</strong>三个层次的递进，每一层都有代表人物与主张。这类「某某主张学什么」的题，考的就是<strong>把人物钉在层次线上</strong>：</p>
+<table><thead><tr><th>层次</th><th>代表</th><th>学什么</th></tr></thead><tbody><tr><td><strong>器物（技术）层</strong></td><td>魏源《海国图志》（1843）→ 洋务运动</td><td><strong>军事和科学技术</strong>：战舰、火器、养兵练兵之法</td></tr><tr><td>制度层</td><td>维新派（康梁）、革命派（孙中山）</td><td>君主立宪、民主共和</td></tr><tr><td>思想文化层</td><td>新文化运动（陈独秀、李大钊等）</td><td>民主与科学及各种新思潮</td></tr></tbody></table>
+<p>魏源 1843 年编成《海国图志》，是这条线的<strong>起点</strong>，停在器物层。</p>
+<h3>第 1 步：回到原文与史实定位</h3>
+<p>题干引文「为以夷攻夷而作，为以夷款夷而作，为师夷长技以制夷而作」——「攻夷」「款夷」都落在<strong>军事对抗与外交周旋</strong>上，可见「师夷」的目的就是「制夷」，立足点是抵御侵略。而《海国图志》对「长技」说得很具体：<strong>战舰、火器，以及「养兵练兵之法」</strong>——全部属于军事和科学技术。魏源主张的配套措施也正是「官设船厂炮局、延聘西洋工匠教造、教习驾驶操练」，没有一条涉及宗教、教育或政治制度。选 <strong>C</strong>。</p>
+<h3>第 2 步：干扰项归因——三个干扰项都把「后来才学的内容」前移到 1843 年</h3>
+<table><thead><tr><th>选项</th><th>错在哪</th><th>对应的典型误解</th></tr></thead><tbody><tr><td>A 宗教的思想文化</td><td>思想文化层的学习要到新文化运动前后才展开，「宗教」更不在魏源视野内</td><td>把文化层前移</td></tr><tr><td>B 教育和人才培养</td><td>新式学堂、派遣留学生是洋务运动及以后的事，不在《海国图志》主旨内</td><td>把教育层前移</td></tr><tr><td>D 民主和政治制度</td><td>制度层学习始于维新派，比魏源晚半个多世纪</td><td>把制度层前移</td></tr></tbody></table>
+<p>三个干扰项共享同一个错误结构：<strong>层次线前移</strong>——用后人升级的学习内容冒充 1843 年的主张。判别方法就是先把层次线立好，再看题干人物站在哪一格。</p>
+<blockquote>记忆锚点：学习三步走——<strong>器物</strong>（师夷长技 / 洋务）→ <strong>制度</strong>（维新 / 革命）→ <strong>文化</strong>（新文化运动）；1843 年的魏源停在第一步，「长技」= 军事 + 科技，目的是「制夷」而非改造社会制度。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

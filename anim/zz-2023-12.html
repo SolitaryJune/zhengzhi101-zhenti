@@ -1,8 +1,120 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-12 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-12</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·12 进入社会主义社会的标志</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 概念/时间线卡片（依据 anim_math_concept_template；政治站纯文本，无 KaTeX） */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+function miniTable(rows){
+  var s = '<table style="border-collapse:collapse;margin:6px 0;font-size:13px">';
+  for(var i=0;i<rows.length;i++){
+    s += '<tr>';
+    for(var j=0;j<rows[i].length;j++){
+      var v = rows[i][j];
+      var hl = (v.indexOf('✓') >= 0) ? ' style="border:1px solid #cbd5e1;padding:3px 8px;background:#22c55e22;font-weight:700"' : ' style="border:1px solid #cbd5e1;padding:3px 8px"';
+      s += '<td' + hl + '>' + v + '</td>';
+    }
+    s += '</tr>';
+  }
+  return s + '</table>';
+}
+
+var STEPS = [
+  { title: '审题眼：什么算"进入"了社会主义',
+    cls: 'key',
+    body: '<p>题干点出时期任务："实现<b>从新民主主义到社会主义的转变</b>"。问"步入社会主义社会的标志"——先想清楚：<b>一个社会姓什么，最终由什么决定？</b></p>',
+    log: '转变完成的标志是什么？' },
+  { title: '机制：社会形态定性看经济制度',
+    cls: 'key',
+    body: '<p>判断一个社会"姓什么"，根本标准是<b>生产关系/经济制度</b>——看生产资料公有制是否占主体。1956 年底<b>三大改造基本完成</b>，私有制的社会主义改造取得决定性胜利，公有制占主体 → <b>社会主义经济制度确立</b> → 进入社会主义社会（基本制度确立）。</p>',
+    log: '经济基础变性质，社会形态才换名' },
+  { title: '预判追问：政治制度 1954 就确立，为什么不算？',
+    cls: 'key',
+    body: '<p>1954 年人大制度确立时，农业、手工业仍是私有制，资本主义工商业还在改造之中——<b>上层建筑的进展替代不了经济基础的定性</b>。"定名分"的开关装在<b>经济制度</b>上：政治再完善，私有制还在，就还在过渡时期。</p>',
+    log: '上层建筑 ≠ 社会形态定性' },
+  { title: '选项 A：上层建筑当标志，错',
+    cls: 'bad',
+    body: '<p>"社会主义政治制度的确立"（人大制度 1954）是"根本政治前提"的完善——政治制度再完善，私有制还在，就还在过渡时期。A 错。</p>',
+    ribbon: {k: 1, ok: false},
+    log: 'A：上层建筑 ≠ 标志' },
+  { title: '选项 B：经济制度确立，正中标志位',
+    cls: 'good',
+    body: '<p>"<b>社会主义经济制度的确立</b>"——1956 年三大改造基本完成、公有制占主体，社会性质由新民主主义变为社会主义。B 对。</p>',
+    ribbon: {k: 2, ok: true},
+    log: 'B：经济制度定名分 → 选中' },
+  { title: '选项 C：收拾旧局面 ≠ 变性质',
+    cls: 'bad',
+    body: '<p>民主革命遗留任务（土改、剿匪、镇反等）1952 年前后完成，只是<b>清除旧社会残余</b>，社会仍是新民主主义性质——这是过渡时期的前期工作。C 错。</p>',
+    ribbon: {k: 3, ok: false},
+    log: 'C：1952 仍是新民主主义' },
+  { title: '选项 D：建国 ≠ 进入社会主义',
+    cls: 'bad',
+    body: '<p>1949 年建立的是<b>新民主主义社会</b>，人民民主专政政权是题干说的"根本政治前提"，不是社会主义制度本身——转变正是 1949—1956 这一过渡时期的任务。D 错。</p>',
+    ribbon: {k: 4, ok: false},
+    log: 'D：1949 是新民主主义开头' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>B</b>。年份轴：' + miniTable([
+      ['1949', '人民民主专政（D）'],
+      ['1952', '遗留任务完成（C）'],
+      ['1954', '人大制度（A）'],
+      ['1956', '三大改造完成（B ✓）']
+    ]) + '</p>',
+    log: '锁定 B：社会主义经济制度的确立' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '进入社会主义社会：经济制度定名分',
+  subtitle: '考点：社会主义基本制度确立 · 方法：经济基础定性原理 + 年份轴钉位干扰项',
+  counterLabel: '推理步',
+  ribbonTitle: '选项带（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链；序号带 1–4 对应选项 A–D。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '记忆锚点：<b>1949 开头（新民主主义）、1956 变性（社会主义）</b>——变性靠经济制度（三大改造完成、公有制主体地位确立）。政治前提 1949、政治制度 1954、遗留任务 1952，都不改变社会形态的定性。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：进入社会主义社会的标志——社会形态定性看经济制度</h2>
+<p>答案：<strong>B（社会主义经济制度的确立）</strong>。</p>
+<h3>第 0 步：先立机制——"是什么社会"由经济制度说了算</h3>
+<p>判断一个社会"姓什么"，根本标准是<strong>生产关系/经济制度</strong>——看生产资料公有制是否占据主体地位，这就是"经济基础定名分"的原理。1956 年底，对农业、手工业、资本主义工商业的社会主义改造（三大改造）基本完成，生产资料私有制的社会主义改造取得决定性胜利，公有制经济占据主体地位——<strong>社会主义经济制度确立</strong>，中国社会由此进入社会主义社会（社会主义基本制度确立）。这正是题干说的"从新民主主义到社会主义的转变"完成的那一刻。政治前提（人民民主专政政权）1949 年就已具备，但只有<strong>经济基础变了性质</strong>，社会形态才算变了。</p>
+<h3>第 1 步：预判追问——为什么政治制度确立（1954）不算标志？</h3>
+<p>有人会问：人民代表大会制度 1954 年就确立了，政治层面都到位了，为什么还不算"进入社会主义"？因为<strong>上层建筑的进展替代不了经济基础的定性</strong>：1954 年时，农业、手工业仍是私有制，资本主义工商业还在改造之中——政治制度再完善，只要私有制还是主体，社会就仍处在<strong>过渡时期</strong>（新民主主义社会）。反过来，1956 年三大改造一完成、公有制占了主体，社会性质立刻改变——"定名分"的开关装在<strong>经济制度</strong>上，这就是 A 不能选而 B 能选的原理依据。</p>
+<h3>第 2 步：画一条年份轴，把干扰项钉在各自的位置上</h3>
+<table><thead><tr><th>年份</th><th>事件</th><th>定位</th></tr></thead><tbody><tr><td>1949</td><td>新中国成立、人民民主专政政权建立</td><td>新民主主义社会开始的标志（D 错在这里）</td></tr><tr><td>1952</td><td>土地改革等民主革命遗留任务基本完成</td><td>仍在新民主主义社会阶段（C 错在这里）</td></tr><tr><td>1954</td><td>人民代表大会制度确立</td><td>政治制度层面的进展，属"根本政治前提"的完善（A 与之相关）</td></tr><tr><td>1956</td><td>三大改造基本完成</td><td><strong>社会主义经济制度确立 → 进入社会主义社会（B 对）</strong></td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：把上层建筑的进展当标志。人大制度（1954）重要，但"进入什么社会"看的是经济基础——政治制度再完善，私有制还在，就还在过渡时期。</li><li><strong>误选 C</strong>：把"收拾旧局面"当"社会变性质"。民主革命遗留任务（土改、剿匪、镇反等）1952 年前后完成，只是清除了旧社会的残余，社会仍是新民主主义性质——完成这些恰恰是<strong>过渡时期的前期工作</strong>。</li><li><strong>误选 D</strong>：把"建国"与"进入社会主义"混为一谈。1949 年建立的是<strong>新民主主义社会</strong>，人民民主专政政权是题干说的"根本政治前提"，不是社会主义制度本身——"从新民主主义到社会主义的转变"正是 1949—1956 这一过渡时期党面临的主要任务。</li></ul>
+<blockquote>记忆锚点：<strong>1949 开头（新民主主义）、1956 变性（社会主义）</strong>——变性靠经济制度（三大改造完成、公有制主体地位确立）；政治前提 1949、政治制度 1954，都不改变社会形态的定性。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

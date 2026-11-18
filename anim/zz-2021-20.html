@@ -1,8 +1,149 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-20 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-20</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·20 该服装厂资本构成会发生变化的是</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链模板（政治站无 KaTeX，纯文本推理卡片）。只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：两个事件，一个问法",
+    "cls": "key",
+    "tag": "审题",
+    "body": "<p>事件①：人工流水线改成<b>全机器流水线</b>（实物结构变）；事件②：布料等原料价格<b>大幅下降</b>（价格变）。问「资本构成会发生变化的是」——先把三张「面孔」的定义立起来，再逐一对号。</p>",
+    "log": "两个事件：实物结构变 + 价格变"
+  },
+  {
+    "title": "先立机制：资本构成三张面孔",
+    "cls": "key",
+    "tag": "机制",
+    "body": "<p><b>技术构成</b>：生产资料数量与劳动力数量之比——看厂房实物。<b>价值构成</b>：不变资本 c 与可变资本 v 之比——看账本的钱。<b>有机构成</b>：由技术构成决定并反映其变化的价值构成——桥梁。关键：价格还能<b>独立</b>撬动价值构成，但只有技术构成引起的那部分才算有机构成变化。</p>",
+    "log": "三张面孔：看实物 / 看账本 / 技术说了算的账"
+  },
+  {
+    "title": "数字演算：账本怎么被两次改写",
+    "cls": "key",
+    "tag": "演算",
+    "body": "<p>改造前：50 台机器配 50 名工人，c = 80 万、v = 50 万（c:v = 8:5）。<b>事件一</b>全机器化：100 台机器配 10 人，c = 120 万、v = 10 万（c:v = 12:1）。<b>事件二</b>原料降价：原料支出 30 万 → 10 万（c:v = 8:1）。两条线索各自动账。</p>",
+    "log": "c:v：8:5 → 12:1 → 8:1，两次改写"
+  },
+  {
+    "title": "C：技术构成变了吗？",
+    "cls": "good",
+    "tag": "C ✓",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p>事件一：人工流水线改成全机器流水线——50 人 50 台变成 10 人 100 台，<b>生产资料数量与劳动力数量的比例直接改变</b>，这正是技术构成的定义域。<b>C 正确</b>。</p>",
+    "log": "C ✓ 实物比例：机器增、工人减"
+  },
+  {
+    "title": "D：价值构成变了吗？",
+    "cls": "good",
+    "tag": "D ✓",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>账本两笔账都动了：机器换人使 c 增、v 减（8:5 → 12:1）；原料降价又使 c 里的原料支出缩水（→ 8:1）——一升一降都在改写 c 与 v 的比例。<b>D 正确</b>。</p>",
+    "log": "D ✓ c:v 被「机器」和「价格」双重改写"
+  },
+  {
+    "title": "A：有机构成变了吗？",
+    "cls": "good",
+    "tag": "A ✓",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p>事件一使<b>技术构成提高</b>；有机构成正是「由技术构成决定并反映其变化」的价值构成——技术构成一变，它必然跟着变（题目只问变不变，不问升降方向）。<b>A 正确</b>。</p>",
+    "log": "A ✓ 技术构成变 → 有机构成变"
+  },
+  {
+    "title": "B：资本积累构成？",
+    "cls": "bad",
+    "tag": "B ✗",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>政治经济学里<b>查无此概念</b>。资本积累指剩余价值资本化，是一个过程而非「构成」；凭空拼凑的名词是本题唯一的杜撰项。<b>B 错误</b>。</p>",
+    "log": "B ✗ 查无此人的假名词"
+  },
+  {
+    "title": "追问：降价会「抵消」有机构成变化吗",
+    "cls": "key",
+    "tag": "追问",
+    "body": "<p>不会。有机构成的变化来自<b>事件一的技术构成</b>；原料降价只是<b>额外</b>改写价值构成——它连技术构成的实物比例都动不了，更取消不了已发生的变化。价格撬得动价值构成，撬不动有机构成。</p>",
+    "log": "价格撬得动价值构成，撬不动有机构成"
+  },
+  {
+    "title": "干扰归因",
+    "cls": "bad",
+    "tag": "归因",
+    "body": "<p>漏 D：只盯「机器换人」没算原料降价——两件事都在改写 c:v。漏 A：以为降价拉低 c 就「抵消」了——问的是变化不是方向。误选 B：见「积累」眼熟就勾上——不存在的名词永远不选。</p>",
+    "log": "三个病灶：漏算价格 / 混淆问法 / 顺手勾假名词"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "tag": "结论",
+    "body": "<p>答案 <b>ACD</b>。记忆锚点：三构成口诀——<b>技术看实物、价值看账本、有机是「技术说了算的那份账」</b>；价格能单独撬动价值构成，但撬不动有机构成。</p>",
+    "log": "锁定 ACD：技术、价值、有机都变了"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "该服装厂资本构成会发生变化的是",
+  subtitle: "2021 年第 20 题（多选）· 考点：资本技术构成 / 价值构成 / 有机构成 · 逐项对号推演",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立三张「面孔」，再用数字演算逐项对号。',
+  snaps: snaps,
+  result: {
+    big: "答案 ACD",
+    html: "记忆锚点：<b>技术看实物、价值看账本、有机是「技术说了算的那份账」</b>——机器换人同时改变技术/价值/有机构成，原料降价只额外改写价值构成（c:v），既动不了技术构成，也抵消不了有机构成的变化；「资本积累构成」查无此人。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：机器换人 + 原料降价——三张「面孔」谁在变</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——同一比例的三种说法</h3>
+<p>题干问「资本构成会发生变化的是」，得先立起政治经济学看「生产资料 vs 劳动力」这一比例的三张面孔，再看两个事件各自动了谁：</p>
+<table><thead><tr><th>构成</th><th>定义</th><th>看什么</th></tr></thead><tbody><tr><td>技术构成</td><td>生产资料<strong>数量</strong>与劳动力<strong>数量</strong>的比例</td><td>厂房实物：几台机器配几个工人</td></tr><tr><td>价值构成</td><td>不变资本 c 与可变资本 v 的比例</td><td>账本金额：买设备原料的钱对买劳动力的钱</td></tr><tr><td>有机构成</td><td>由技术构成<strong>决定</strong>并反映技术构成变化的价值构成</td><td>桥梁：技术构成变，它跟着变</td></tr></tbody></table>
+<p>两条关键机制：①技术构成变化必然牵引价值构成（机器换人 → c 增 v 减）；②价值构成<strong>还能被价格独立撬动</strong>——原料降价使 c 缩水，厂房实物比例纹丝不动。一条边界：只有<strong>由技术构成变化引起</strong>的那部分价值构成变化才叫有机构成变化，纯价格因素引起的不算。</p>
+<h3>第 1 步：两个事件各自动了谁——数字演算</h3>
+<p>设改造前：设备原料合计 c = 80 万，50 名工人工资 v = 50 万（c:v = 8:5），厂房里 50 台机器配 50 名工人。</p>
+<ul><li><strong>事件一：人工流水线 → 全机器流水线。</strong> 改成 100 台机器配 10 名工人：实物比例大幅提高——<strong>技术构成变</strong>；账面上设备投入涨、工资支出缩（设 c = 120 万、v = 10 万，c:v = 12:1）——<strong>价值构成变</strong>；且这轮价值变化由技术构成变化引起——<strong>有机构成变</strong>。</li><li><strong>事件二：布料等原料价格大幅下降。</strong> 原料支出从 30 万降到 10 万（c:v 从 12:1 变为 8:1）：账本再次改写——<strong>价值构成又变</strong>；但机器与工人的实物比例没动——技术构成、有机构成<strong>不因此变</strong>，也<strong>不会被「抵消」</strong>。</li></ul>
+<p>三个概念合起来：C 技术构成（事件一）、D 价值构成（两个事件）、A 有机构成（事件一）都发生了变化。</p>
+<h3>第 2 步：排除 B</h3>
+<ul><li><strong>B 资本积累构成</strong>：❌ 政治经济学里查无此概念。资本积累指剩余价值资本化，是一个<strong>过程</strong>而非「构成」；凭空拼凑的名词是本题唯一的杜撰项。</li></ul>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>漏 D</strong>：只盯「机器换人」这件显眼事，没算「原料降价」——两件事一升一降，都在改写 c 与 v 的比例。</li><li><strong>漏 A</strong>：以为原料降价把 c 拉低，「有机构成变化」就被抵消——有机构成的变化来自事件一的技术构成，价格波动改不了这条因果链，更取消不了已发生的变化；题目问的是「变不变」，不是升降方向。</li><li><strong>误选 B</strong>：见「积累」二字眼熟就顺手勾上——不存在的名词永远不选。</li></ul>
+<blockquote>记忆锚点：三构成口诀——<strong>技术看实物、价值看账本、有机是「技术说了算的那份账」</strong>；价格能单独撬动价值构成，但撬不动有机构成；「资本积累构成」查无此人。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

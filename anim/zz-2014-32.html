@@ -1,8 +1,142 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-32 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-32</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2014-32 自贸区"试验"什么：先行先试的制度逻辑（全选 ABCD）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- ============================================================
+     模板：概念/记忆/推理链类（anim_math_concept 同款结构，政治站无 KaTeX 版）
+     形态：逐步揭示推理链卡片；第 3 步内嵌"任务链"流程条（抓手→核心→
+     使命→落脚）；序号带逐个点亮 A–D（本题四项全对，带全绿）。
+     路径：本页位于 anim/{id}.html，../assets/ 指向站点根 assets/。
+============================================================= -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// "四站一条链"任务链流程条
+function chainBar(){
+  var segs = [
+    ['A', '抓手 · 开放', '结构升级'],
+    ['B', '核心 · 职能', '审批改备案'],
+    ['C', '使命 · 经验', '可复制推广'],
+    ['D', '落脚 · 体制', '更高标准']
+  ];
+  var h = '<div style="display:flex;align-items:stretch;gap:0;margin:8px 0 4px">';
+  for(var i = 0; i < segs.length; i++){
+    var s = segs[i];
+    h += '<div style="flex:1;text-align:center;padding:8px 4px;background:#e8f6f4;border:1.5px solid #0e9488;' +
+         'border-radius:10px">' +
+         '<div style="font-size:13px;font-weight:800;color:#0e9488">' + s[0] + '</div>' +
+         '<div style="font-size:12.5px;font-weight:700;color:#334155;margin-top:2px">' + s[1] + '</div>' +
+         '<div style="font-size:12px;color:#64748b;margin-top:2px">' + s[2] + '</div></div>';
+    if(i < segs.length - 1){
+      h += '<div style="flex:none;align-self:center;padding:0 4px;color:#d9a514;font-weight:800;font-size:15px">→</div>';
+    }
+  }
+  return h + '</div><div style="font-size:12.5px;color:#64748b;text-align:center">以开放促改革：先小范围试错，再把经验推向全国</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：抓住"试验"二字',
+    cls: 'key', tag: '审题',
+    log: '2013-09-29 上海自贸试验区启动——考点是它的"主要任务"，逐项看是否在"试验"射程内。',
+    body: '<p>题眼：2013 年 9 月 29 日，中国（上海）自由贸易试验区正式启动运作。问的是"建设该试验区的主要任务"。"自由贸易"说的是手段，"<b>试验</b>"说的是身份——题目真正想考的，是这四个字背后的制度逻辑。</p>' },
+  { title: '先立机制：先行先试 = 风险隔离 + 经验输出',
+    cls: 'key', tag: '机制',
+    log: '两段式因果链：小范围试错，成本可控；试出的规则复制推广，以开放促改革。',
+    body: '<p><b>第一段·风险隔离地试错</b>：新制度（负面清单、贸易便利化、服务业开放）先在一个围网内跑，出问题成本可控、可纠错——这就是"先行先试"。<b>第二段·经验向全国输出</b>：试出来的规则不是园区特权，而是要形成<b>可复制、可推广</b>的经验——这就是"以开放促改革"。由此，任务必然双层：直接层面（结构、政府职能）＋制度层面（为全国探路）。</p>' },
+  { title: '四站一条链：A→B→C→D 本是一条线',
+    cls: 'key', tag: '模型',
+    log: '四个选项是同一条逻辑链上的四站，先看全局再逐项确证。',
+    body: chainBar() },
+  { title: 'A：抓手——开放指向结构升级',
+    cls: 'good', tag: 'A ✓',
+    ribbon: { k: 1, ok: true },
+    log: '投资贸易便利化、服务业开放，把开放红利引向结构升级 → A 选。',
+    body: '<p><b>A 促进转变经济增长方式和优化经济结构</b>：投资贸易便利化、服务业扩大开放不是为开放而开放，而是把开放红利引向<b>结构升级</b>——这是直接层面的任务。<b>A 正确</b>。</p>' },
+  { title: 'B：核心——倒逼政府自身革命',
+    cls: 'good', tag: 'B ✓',
+    ribbon: { k: 2, ok: true },
+    log: '负面清单替代事前审批，碰的是审批制这块最硬的骨头 → B 选。',
+    body: '<p><b>B 推动加快转变政府职能和行政体制改革</b>：<b>负面清单管理替代事前审批</b>——"法无禁止即可为"，把"政府管不过来的"交给市场。开放倒逼改革，碰得最深的正是审批制这块最硬的骨头，这是自贸区<b>最核心</b>的试验。<b>B 正确</b>。</p>' },
+  { title: 'C：使命——为全国探路攒经验',
+    cls: 'good', tag: 'C ✓',
+    ribbon: { k: 3, ok: true },
+    log: '"试验"二字存在的全部理由：探索新途径、积累新经验 → C 选。',
+    body: '<p><b>C 为全国深化改革和扩大开放探索新途径、积累新经验</b>：这是机制第二段的直接表述——试验区若只服务本园区，就不叫"试验"而叫"特区"；它的全部制度使命是产出<b>可复制、可推广</b>的经验。<b>C 正确</b>。</p>' },
+  { title: 'D：落脚——更高标准的市场经济体制',
+    cls: 'good', tag: 'D ✓',
+    ribbon: { k: 4, ok: true },
+    log: '竞争中性与规则透明，"更公平"针对准入待遇 → D 选。',
+    body: '<p><b>D 推动构建更加公平合理的市场经济体制</b>：竞争中性和规则透明的规则体系，落脚点是更高标准的市场经济体制。"更公平"不是空话——针对的是民营与外资的<b>准入待遇</b>（准入前国民待遇＋负面清单），正是试验区要改的对象。<b>D 正确</b>。</p>' },
+  { title: '排雷：最典型的漏选从哪来',
+    cls: 'key', tag: '排雷',
+    log: '以为自贸区"只管贸易"就会漏 B；把时政题当经贸知识题就会漏 C。',
+    body: '<p><b>怕漏 B</b>：只看见"自由贸易"四个字——恰恰相反，第一位的试验是<b>政府自身改革</b>，贸易投资便利只是倒逼手段。<b>怕漏 C</b>：只背"贸易、投资"——忘了它是深化改革的<b>制度试验田</b>，"探索新途径、积累新经验"是官方表述原话。<b>怕漏 D</b>：觉得提法太大——"更公平"对应准入改革，实打实。</p>' },
+  { title: '结论',
+    cls: 'good', tag: '答案',
+    log: '四项全部落在"先行先试"射程内，无原理硬伤 → 锁定 ABCD（全选）。',
+    body: '<p>答案 <b>ABCD</b>（全选）：结构（A）＋职能（B）＋经验（C）＋体制（D）——四站一条链，一环都不少。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag,
+    log: s.log,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: 'zz-2014-32 · 自贸区"试验"什么：先行先试的制度逻辑',
+  subtitle: '2014 年多选题 · 考点：上海自贸试验区 · 方法：风险隔离＋经验输出的两段式机制',
+  intro: '点击「▶ 播放」逐步展开推理链；右侧序号带逐个标记 A–D 的对号结果。',
+  ribbonTitle: '选项 A–D（1=A · 2=B · 3=C · 4=D；✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '推理步',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD（全选）',
+    html: '记忆锚点：四站一条链——<b>抓手开放（A）、核心职能（B）、使命经验（C）、落脚体制（D）</b>。防坑一句：自贸区不是"贸易区"，它先试验的是<b>政府怎么管</b>。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：自贸区"试验"什么——先行先试的制度逻辑</h2>
+<p>答案：<strong>ABCD（全选）</strong>。</p>
+<h3>第 0 步：先立机制——"试验区"三个字为什么重要</h3>
+<p>题眼落在"中国（上海）<strong>自由贸易试验区</strong>"的"试验"二字上。试验区的制度逻辑是一条两段式的因果链：</p>
+<ol><li><strong>风险隔离地试错</strong>：新制度（负面清单、贸易便利化、服务业开放）先在一个 28 平方公里的围网内跑，出了问题成本可控、可纠错——这就是"先行先试"；</li><li><strong>经验向全国输出</strong>：试出来的规则不是园区特权，而是要形成<strong>可复制、可推广</strong>的经验，推向全国——这就是"以开放促改革"。</li></ol>
+<p>由这条机制，任务必然是<strong>双层</strong>的：直接层面是让开放服务于<strong>经济结构升级</strong>、倒逼<strong>政府职能转变</strong>；制度层面是为全国深化改革和扩大开放<strong>探路</strong>。四个选项就是在这条逻辑链上取的四段。审全选题的方法：逐项检查是否落在"先行先试"的射程内、有无原理硬伤。</p>
+<h3>第 1 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>所处层面</th><th>为什么成立</th></tr></thead><tbody><tr><td>A 促进转变经济增长方式和优化经济结构</td><td>直接任务</td><td>投资贸易便利化、服务业扩大开放，把开放红利引向结构升级</td></tr><tr><td>B 推动加快转变政府职能和行政体制改革</td><td>核心试验</td><td><strong>负面清单管理替代事前审批</strong>——把"政府管不过来的"交给市场，碰的正是审批制这块最硬的骨头</td></tr><tr><td>C 为全国深化改革和扩大开放探索新途径、积累新经验</td><td>制度使命</td><td>"试验"二字存在的全部理由——产出可复制、可推广的经验</td></tr><tr><td>D 推动构建更加公平合理的市场经济体制</td><td>落脚点</td><td>竞争中性、规则透明，改革的终点是更高标准的市场经济体制</td></tr></tbody></table>
+<p>→ 四项全部在射程内，选 <strong>ABCD</strong>。</p>
+<h3>第 2 步：四个选项其实是同一条链</h3>
+<p>不要把 ABCD 当四个孤立的记忆点，它们是<strong>一条线上的四站</strong>：以开放为<strong>抓手</strong>（A），改革倒逼政府<strong>自身</strong>革命（B），在小范围<strong>试出经验</strong>（C），最终落到<strong>体制升级</strong>（D）。理解了这条链，四个选项一个也丢不掉。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选 B</strong>（把自贸区理解成"只管贸易"）：最典型的误解是只看见"自由贸易"四个字。恰恰相反，自贸区<strong>第一位的试验是政府自身改革</strong>——审批改备案、事前改事中事后监管，贸易便利只是倒逼的手段。</li><li><strong>漏选 C</strong>（把时政题当经贸知识题）：只背"贸易、投资"，忘了它是 2013 年深化改革的<strong>制度试验田</strong>——"探索新途径、积累新经验"是官方表述的原话，应选。</li><li><strong>漏选 D</strong>（觉得"公平合理的市场经济体制"提法太大）：D 不是空话，"更公平"针对的是民营与外资的准入待遇（准入前国民待遇＋负面清单），正是试验区改的对象。</li></ul>
+<blockquote>记忆锚点：四站一条链——<strong>抓手开放（A）、核心职能（B）、使命经验（C）、落脚体制（D）</strong>；防坑一句：自贸区不是"贸易区"，它先试验的是<strong>政府怎么管</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

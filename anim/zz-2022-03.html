@@ -1,8 +1,139 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-03 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-03</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2022 · 卖者成债权人——货币的「另一种职能」</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链动画（政治站无 KaTeX，纯文本卡片 + 引擎格子工具）；
+     题干与选项由引擎按 URL 自动注入，下方只写 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一条时间轴：指针行放时点文字，格子放货/钱
+function timeline(label, chars, classes, ptr){
+  return '<p style="margin:6px 0 2px;font-weight:600">' + label + '</p>' +
+         AW.cellRow(chars, classes, ptr).outerHTML;
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：引文里的身份互换",
+    "cls": "key",
+    "body": "<p>《资本论》关键词：「卖者成为<b>债权人</b>」「买者成为<b>债务人</b>」「买者只是作为<b>未来货币</b>的代表来购买」。<b>未来货币</b>四个字最重：付钱的动作被搬到了以后——这就是<b>赊购</b>。货币职能题第一步永远先问：钱与货在时空上是怎么动的？</p>",
+    "log": "题眼=未来货币的代表：货先动，钱后动"
+  },
+  {
+    "title": "先立机制：钱货时空关系判据",
+    "cls": "key",
+    "body": "<p>五种职能是同一个判据的五个取值：钱货<b>同时</b>易手 → 流通手段；只有<b>观念上</b>的货币（标价）→ 价值尺度；货币<b>退出</b>流通被保存 → 贮藏手段；<b>货先动、钱后动</b>、货币事后单独来结算 → 支付手段（赊账清偿、工资、租金、税）；职能跨出国界 → 世界货币。核心判据：<b>钱与货在时间上分离 → 支付手段</b>。</p>",
+    "log": "判据立好：时间差是支付手段的指纹"
+  },
+  {
+    "title": "推演：两条时间轴对照",
+    "cls": "key",
+    "body":
+      timeline('现金交易（流通手段）：钱货同时易手', ['货', '钱'], ['hit', 'hit'], {1:'T0 同时', 2:'T0 同时'}) +
+      timeline('赊购（本题引文）：货先动、钱后动', ['货', '钱'], ['hit', 'dim'], {1:'T1 交货', 2:'T2 付款'}) +
+      "<p>现金交易在交换瞬间<b>了结</b>，两不相欠；赊购在 T1 与 T2 之间留下<b>债权债务</b>——到期日货币单独出场，干的不是「购买」而是「<b>清偿债务</b>」。</p>",
+    "log": "时间差=债权债务的来源，清偿时执行支付手段"
+  },
+  {
+    "title": "选项 A：价值尺度",
+    "cls": "bad",
+    "ribbon": {"k": 1, "ok": false},
+    "body": "<p>价值尺度只需<b>观念上</b>的货币给商品<b>标价</b>（标价 100 元，钱不必到场）；引文讲的是真实的债权债务结算，全程无标价环节。误选诱因：被「价值形式的发展」里的「价值」二字牵走。<b>A 排除</b>。</p>",
+    "log": "A 无标价环节，排除"
+  },
+  {
+    "title": "选项 B：流通手段",
+    "cls": "bad",
+    "ribbon": {"k": 2, "ok": false},
+    "body": "<p>流通手段要求<b>一手交钱、一手交货</b>：钱货同时易手，交易瞬间了结、两不相欠，根本<b>不会产生</b>债权债务。引文恰以债权债务为题眼、以「未来货币」点明时间差——方向正好相反。见「购买」就填流通手段，是最常见的惯性误选。<b>B 排除</b>。</p>",
+    "log": "B 无时间差，排除"
+  },
+  {
+    "title": "选项 C：支付手段",
+    "cls": "good",
+    "ribbon": {"k": 3, "ok": true},
+    "body": "<p>赊购形成债权债务，货币到<b>期限用来清偿债务</b>时执行支付手段职能——T1 交货时货币只是「未来的代表」，T2 结算时它单独出场还债。「债权人/债务人」正是支付手段的铁证暗号。<b>C 正确</b>。</p>",
+    "log": "C=清偿债务，入选"
+  },
+  {
+    "title": "选项 D：贮藏手段",
+    "cls": "bad",
+    "ribbon": {"k": 4, "ok": false},
+    "body": "<p>贮藏手段是货币<b>退出流通</b>、被保存起来（如窖藏金银）；引文里的货币正在参与购销结算——一个「退出」、一个「在场结算」，方向完全相反。把「取得另一种职能」脑补成「被保存」，是概念混淆。<b>D 排除</b>。</p>",
+    "log": "D 方向相反，排除"
+  },
+  {
+    "title": "结论：答案 C",
+    "cls": "good",
+    "body": "<p>完整链条：未来货币的代表 → 赊购 → 债权人/债务人 → 到期清偿 → <b>支付手段</b>。同族场景：工资（劳务先交付）、租金、税金，都是「货/服务先动、钱后动」。</p>",
+    "log": "锁定 C：支付手段"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  "title": "卖者成债权人——货币的「另一种职能」",
+  "subtitle": "2022 年第 3 题（单选）· 考点：货币的职能 · 方法：钱货时空关系判据",
+  "counterLabel": "推理步",
+  "ribbonTitle": "选项对号（1=A 价值尺度 · 2=B 流通手段 · 3=C 支付手段 · 4=D 贮藏手段；✓ 对 / ✗ 错）",
+  "intro": "点击「▶ 播放」：先立判据，再译引文，最后逐项排除。",
+  "result": {
+    "big": "答案 C（支付手段）",
+    "html": "记忆锚点：见「<b>债权人、债务人、赊账、工资、租金、税</b>」→ <b>支付手段</b>；钱货同时易手 → 流通手段；观念标价 → 价值尺度；退出流通 → 贮藏手段。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：货币职能的判据——钱与货的"时空关系"</h2>
+<p>答案：<strong>C（支付手段）</strong>。</p>
+<h3>第一步：先立机制——货币执行哪种职能，由钱与货在时空上怎么动决定</h3>
+<p>货币的五种职能不是五条并列的背诵条目，而是<strong>同一个判据的不同取值</strong>：货币与商品在交换中的相对位置。</p>
+<ul><li>钱货<strong>同时</strong>易手（一手交钱、一手交货）：货币充当交换媒介 → 流通手段；</li><li>只有<strong>观念上</strong>的货币出场（标价、值多少钱）：价值尺度；</li><li>货币<strong>退出</strong>流通、被保存起来：贮藏手段；</li><li><strong>货先动、钱后动</strong>（时间分离，货币事后单独来结算）：支付手段——赊购清偿、工资、租金、税收；</li><li>上述职能<strong>跨出国界</strong>：世界货币。</li></ul>
+<p>一句话判据：<strong>钱与货在时间上分离，货币到期单独出场结账 → 支付手段</strong>。</p>
+<h3>第二步：把《资本论》引文翻译成时间轴</h3>
+<p>引文三个关键词：「卖者成为<strong>债权人</strong>」「买者成为<strong>债务人</strong>」「买者只是作为<strong>未来货币</strong>的代表来购买」。</p>
+<table><thead><tr><th>时点</th><th>发生了什么</th><th>货币在哪</th></tr></thead><tbody><tr><td>T1 签约交货</td><td>商品易手而买方未付款：卖方持有债权，买方欠下债务</td><td><strong>不在场</strong>（只是"未来货币的代表"）</td></tr><tr><td>T2 到期结算</td><td>买方支付货币、清偿债务</td><td>货币此时才<strong>单独</strong>出场</td></tr></tbody></table>
+<p>货币在 T2 的出场不是"购买"——购买在 T1 已经完成——而是<strong>履行债务</strong>。题干说"货币也就取得了另一种职能"，这个职能就是<strong>支付手段</strong>。</p>
+<h3>第三步：四个选项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>病灶/依据</th></tr></thead><tbody><tr><td>A 价值尺度</td><td>❌</td><td>只需观念货币给商品<strong>标价</strong>；引文全程无标价环节</td></tr><tr><td>B 流通手段</td><td>❌</td><td>流通手段要求钱货<strong>同时</strong>易手，不会留下任何债权债务</td></tr><tr><td>C 支付手段</td><td>✅</td><td>赊购形成债权债务，货币到期<strong>清偿债务</strong>时执行支付手段</td></tr><tr><td>D 贮藏手段</td><td>❌</td><td>贮藏须<strong>退出流通</strong>；引文里的货币正参与购销结算，方向相反</td></tr></tbody></table>
+<h3>预判追问：为什么"债权人/债务人"是支付手段的铁证</h3>
+<p>流通手段的交易在交换瞬间就<strong>了结</strong>：钱货对流、两不相欠，事后不需要货币单独再来一次。而引文里的交易被拆成两段：T1 段只有货动了，"欠款"必须记账——<strong>债权债务正是时间差的会计凭证</strong>；到 T2 货币单独出场，它面对的不是"换货"而是"还债"。工资、租金、税金同理：劳务、房屋、公共服务早已交付，货币滞后支付，走的都是支付手段。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：见"购买"二字就条件反射填"流通手段"——没检查钱货是否同时易手；引文偏偏强调买者是"未来货币的代表"，时间差才是题眼。</li><li><strong>误选 A</strong>：被"价值形式的发展"里的"价值"二字牵走——那说的是商品形态变化的阶段，与"标价"无关。</li><li><strong>误选 D</strong>：把"取得另一种职能"脑补成"货币被保存起来"——混淆了退出流通（贮藏）与延期结算（支付）。</li></ul>
+<blockquote>记忆锚点：见<strong>债权人、债务人、赊账、工资、租金、税</strong> → 支付手段；一手交钱一手交货 → 流通手段；观念标价 → 价值尺度；退出流通 → 贮藏手段。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

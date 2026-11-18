@@ -1,8 +1,140 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-33 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-33</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·33 RCEP 签署的重要意义：三层标尺逐项称重</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>题干三个关键词：<b>15 国</b>（东盟 10 国 + 中日韩澳新）、<b>全球最大自贸区</b>、<b>2020 年 11 月</b>疫情与保护主义逆风中签署。问法是「重要意义<b>主要</b>体现在」——多选，需逐项称重。</p>",
+    "log": "抓三个关键词：15 国 · 全球最大 · 逆风签署"
+  },
+  {
+    "title": "先立标尺：意义看三层",
+    "cls": "key",
+    "body": "<p>时政意义题的通用框架：<b>区域格局</b>（一体化制度上没上新台阶）、<b>世界经济</b>（复苏缺不缺动能）、<b>中国角色</b>（价值链里的位置变没变）。四个选项就是往这三层里对号入座。</p>",
+    "log": "三层标尺：区域 · 世界 · 中国"
+  },
+  {
+    "title": "A：复苏注入新动能 ✅",
+    "cls": "good",
+    "body": "<p>全球最大自贸区落地 → 关税降低、规则统一、统一大市场形成。疫后复苏最缺的就是「动能」——最大自贸区给的第一层意义正是<b>为区域乃至全球经济复苏注入新动能</b>。<b>A 正确</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": true
+    },
+    "log": "对号「世界经济」层 → A 入选"
+  },
+  {
+    "title": "B：一体化新篇章 ✅",
+    "cls": "good",
+    "body": "<p>首个把东亚主要经济体装进同一张规则网的自贸协定：统一原产地规则、关税减让等制度安排落地，区域一体化<b>跨上新台阶</b>——「开启了区域经济一体化新篇章」。<b>B 正确</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": true
+    },
+    "log": "对号「区域格局」层 → B 入选"
+  },
+  {
+    "title": "C：压倒性优势？夸大 ❌",
+    "cls": "bad",
+    "body": "<p>「全球贸易投资自由化、便利化取得<b>压倒性优势</b>」双重越界：空间上，RCEP 只约束 15 个成员之间，全球多边贸易体制仍在与单边主义、保护主义拉锯；结论上，推动便利化≠「竞争结果已定」。<b>C 错误</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    },
+    "log": "空间越界 + 结论越界 → C 排除"
+  },
+  {
+    "title": "D：价值链中心节点 ✅",
+    "cls": "good",
+    "body": "<p>RCEP 成员多为亚太经济体，区域内产业链供应链本就以中国为枢纽交织；协定生效降低制度性交易成本，这一枢纽地位只会发挥得更好——<b>更好发挥中国作为亚太地区价值链中心节点的作用</b>。<b>D 正确</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": true
+    },
+    "log": "对号「中国角色」层 → D 入选"
+  },
+  {
+    "title": "预判追问：为什么 C 就是不行",
+    "cls": "key",
+    "body": "<p>见「压倒性优势 / 决定性 / 已成定局 / 终结」这类<b>定局式信号词</b>先打问号：官方表述讲留有余地。「全球最大」是体量排名事实，不等于全球规则的胜负判定——把「最大」读成「定局」，正是 C 想利用的误解。</p>",
+    "log": "定局式信号词 = 时政题经典陷阱"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>三层各有着落：区域格局（B）+ 世界复苏（A）+ 中国节点（D）→ 答案 <b>ABD</b>。记忆锚点：<b>区域开新篇、复苏注动能、中国强节点</b>；凡见「压倒性优势」一律排除。</p>",
+    "log": "锁定 ABD：三层意义各归其位"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "RCEP 签署的重要意义：三层标尺逐项称重",
+  subtitle: "考点：区域全面经济伙伴关系协定（RCEP） · 方法：区域—世界—中国三层对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABD",
+    html: "记忆锚点：RCEP 意义三层——<b>区域开新篇、复苏注动能、中国强节点</b>。C 的「全球…压倒性优势」犯了两个错：RCEP 只是<b>区域</b>协定（空间越界），推动便利化≠「竞争结果已定」（结论越界）；「压倒性优势/已成定局」这类定局式措辞是时政题的经典陷阱信号词，见词先打问号。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：RCEP 签署的意义——先立"三层意义"标尺，再逐项称重</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立基本盘——RCEP 是什么、签在什么当口</h3>
+<p>时政意义题不能凭语感选，先把两块基本盘立起来：</p>
+<table><thead><tr><th>基本盘</th><th>事实</th><th>意味着什么</th></tr></thead><tbody><tr><td>体量</td><td>15 国（东盟 10 国 + 中、日、韩、澳、新），覆盖全球约三成人口、经济总量与贸易额</td><td>"全球最大自贸区"不是形容词，是硬指标</td></tr><tr><td>时点</td><td>2020 年 11 月签署：疫情冲击、全球经济衰退、单边主义保护主义抬头</td><td>在逆风里落笔，本身就是给世界经济的定心丸</td></tr></tbody></table>
+<p>基本盘一立，意义题的通用框架就浮出来了——<strong>看三层：区域格局（一体化）、世界经济（复苏动能）、中国角色（价值链节点）</strong>。四个选项就是往这三层里对号入座。</p>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判定</th><th>对号的理由</th></tr></thead><tbody><tr><td>A 为区域乃至全球经济复苏注入新动能</td><td>✅</td><td>全球最大自贸区落地 → 关税降低、规则统一、统一大市场形成；疫后复苏最缺的就是"动能"，这正是最大自贸区给出的第一层意义</td></tr><tr><td>B 开启了区域经济一体化新篇章</td><td>✅</td><td>首个把东亚主要经济体装进同一张规则网的自贸协定，统一原产地规则、关税减让等制度安排，区域一体化跨上新台阶</td></tr><tr><td>C 全球贸易投资自由化、便利化取得压倒性优势</td><td>❌</td><td>程度夸大：RCEP 是<strong>区域</strong>协定，推动的是区域内的一体化与自由化便利化，不能据此断言全球层面"压倒性优势"、更不能说全球竞争结果已定</td></tr><tr><td>D 更好发挥中国作为亚太地区价值链中心节点的作用</td><td>✅</td><td>RCEP 成员多为亚太经济体，区域内产业链供应链本就以中国为枢纽交织；协定降低制度性交易成本，这一节点作用只会发挥得更好</td></tr></tbody></table>
+<p>→ 三层意义各有着落：区域格局（B）+ 世界复苏（A）+ 中国节点（D），选 <strong>ABD</strong>。</p>
+<h3>为什么 C 不行（唯一排除点，值得多说一句）</h3>
+<p>"取得压倒性优势"是把区域层面的事放大成了全球层面的定局，两层都站不住：</p>
+<ul><li><strong>空间上越界</strong>：RCEP 只约束 15 个成员之间；全球范围内，多边贸易体制仍在与单边主义、保护主义拉锯，自由化便利化谈不上"压倒性优势"。</li><li><strong>结论上越界</strong>：协定推动一体化与贸易投资便利化，说的是"向前推进了一大步"，不等于"竞争结果已定"。权威口径正对应这条——RCEP 推动<strong>区域</strong>经济一体化和贸易投资便利化，<strong>不能据此断言全球竞争结果已定</strong>。</li></ul>
+<h3>易错点：C 对应哪种误解</h3>
+<ul><li><strong>把"最大"当"定局"</strong>：看到"全球最大自贸区"就顺势推到"全球格局已定"——体量第一是排名事实，不是全球规则的胜负判定。</li><li><strong>对绝对化词眼不设防</strong>："压倒性优势 / 决定性 / 已成定局 / 终结"是时政题的经典陷阱信号词；官方表述讲究留有余地，见到定局式措辞先打问号。</li><li><strong>漏 D</strong>：觉得 D 像"中国本位"的主观发挥——其实价值链中心节点说的是客观格局：东亚生产网络以中国为枢纽，RCEP 的统一规则安排是强化而非削弱这一枢纽。</li></ul>
+<blockquote>记忆锚点：RCEP 意义三层口诀——<strong>区域开新篇、复苏注动能、中国强节点</strong>；凡见"压倒性优势"这类定局式表述，一律排除。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

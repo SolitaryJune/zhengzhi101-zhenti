@@ -1,8 +1,107 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-01 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-01</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2018·01 时势造英雄：马克思主义创立的原因</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 三行小表（条件清单用）
+function rows(list){
+  return '<div>' + list.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:76px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：题干先摆「三条件」，再问「主要是因为」',
+    body: '<p>题干第一句：「马克思主义的产生具有深刻的<b>社会根源、阶级基础、思想渊源</b>」——三个词全是<b>客观历史条件</b>；接着讲两人放弃安逸、投身革命——这是<b>个人努力</b>。设问「之所以能够创立，主要是因为」问的是产生机制中的<b>主要原因</b>：答案要同时接住「客观条件」与「人物作为」两端。</p>',
+    log: '设问=创立的主要原因，要接住条件与人物两端' },
+  { tag: '机制', cls: 'key', title: '先立机制：划时代理论 = 时势 × 人',
+    body: '<p>唯物史观：重大思想不是天才头脑的灵感突现，而是<b>客观历史条件成熟到哪一步，理论才可能走到哪一步</b>——条件提供课题与材料，个人提供劳动与综合：</p>' +
+          rows([
+            ['社会根源', '资本主义大工业发展、内在矛盾（周期性经济危机）充分暴露——课题被时代提出'],
+            ['阶级基础', '无产阶级作为独立政治力量登上历史舞台（三大工人运动）——迫切需要科学世界观'],
+            ['思想渊源', '德国古典哲学、英国古典政治经济学、英法空想社会主义——批判继承的材料']
+          ]) +
+          '<p>条件 × 努力，两端合起来，答案自现。</p>',
+    log: '时势造英雄：三大客观条件 × 个人努力' },
+  { tag: '选项 A', cls: 'bad', title: 'A「超常人的认知能力」：天才论，排除',
+    body: '<p>把创立归功于天赋，是唯心史观的<b>天才论／英雄史观</b>——恰是唯物史观要破除的解释。它还回答不了「为什么科学社会主义不早不晚恰好诞生在 19 世纪 40 年代」——必然性只能由历史条件解释。<b>排除</b>。</p>',
+    log: 'A 是英雄史观的天才论' },
+  { tag: '选项 B', cls: 'bad', title: 'B「优良家庭背景与教育经历」：次要条件，排除',
+    body: '<p>律师家庭、工厂主家庭只是个人成长条件，解释不了理论为何<b>必然</b>出现在那个时代——把次要条件当主要原因。<b>排除</b>。</p>',
+    log: 'B 把次要条件当主因' },
+  { tag: '选项 C', cls: 'good', title: 'C「社会历史条件和个人努力的相互作用」：正合机制，当选',
+    body: '<p>客观条件提供课题与可能性，个人努力把可能变成现实——马克思、恩格斯放弃安逸、毕生研究与革命实践，与三条件结合，科学社会主义才创立。这正是「合力」机制。<b>当选</b>。</p>',
+    log: '条件×努力=相互作用 → C 正确' },
+  { tag: '选项 D', cls: 'bad', title: 'D「德国是当时最为发达的资本主义国家」：史实错误，排除',
+    body: '<p>当时最发达的资本主义国家是<b>英国</b>（工厂制度成熟、宪章运动）；德国突出的是<b>思想渊源</b>（古典哲学）而非经济发达程度——想当然拼凑。<b>排除</b>。</p>',
+    log: 'D 史实错误：当时最发达的是英国' },
+  { tag: '结论', cls: 'good', title: '结论：锁定 C',
+    body: '<p>答案 <b>C</b>：社会历史条件和个人努力的相互作用。伟大理论 = 客观条件（社会根源·阶级基础·思想渊源）× 主观努力——时势造英雄，英雄应时势。</p>',
+    log: '锁定 C：时势造英雄' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.log,
+    count: i + 1,
+    ribbon: { k: i + 1, ok: s.cls !== 'bad' },
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '时势造英雄：马克思主义创立的原因',
+  subtitle: '2018 年单选第 1 题 · 考点：马克思主义的产生条件 · 方法：先立「时代条件 × 个人努力」的合力机制，再对号入座',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  counterLabel: '推理步',
+  ribbonTitle: '推理进度（绿=成立/正确，红=干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '记忆锚点：马克思主义的创立 = <b>社会历史条件 × 个人努力</b>（时势造英雄）。客观条件：社会根源（资本主义矛盾充分暴露）、阶级基础（无产阶级登上历史舞台）、思想渊源（三大理论来源）。A 是唯心史观天才论，B 把次要条件当主因，D 史实错误——当时最发达的资本主义国家是英国。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：马克思主义为什么能在这个时代被创立出来</h2>
+<p>答案：<strong>C（社会历史条件和个人努力的相互作用）</strong>。</p>
+<h3>第 0 步：先立机制——划时代理论是「时势」与「人」的乘积</h3>
+<p>题干第一句已经把考点摊开：「马克思主义的产生具有深刻的社会根源、阶级基础和思想渊源」——这三个词全是<strong>客观历史条件</strong>。唯物史观的基本判断是：任何重大思想的诞生都不是天才头脑的灵感突现，而是<strong>客观历史条件成熟到哪一步，理论才可能走到哪一步</strong>；条件提供课题与材料，个人提供劳动与综合。设问「之所以能够创立，主要是因为」问的就是这个产生机制中的<strong>主要原因</strong>：</p>
+<ul><li><strong>社会根源</strong>：资本主义大工业发展成熟，内在矛盾（周期性经济危机）充分暴露，「经济事实」摊在桌面上供人解剖——课题被时代提出来了；</li><li><strong>阶级基础</strong>：无产阶级作为独立政治力量登上历史舞台（三大工人运动），迫切需要科学的世界观——谁来回答课题有了需求方；</li><li><strong>思想渊源</strong>：德国古典哲学、英国古典政治经济学、英法空想社会主义——直接理论来源提供了批判继承的材料。</li></ul>
+<p>马克思、恩格斯放弃安逸生活、毕生投身理论研究与革命实践（<strong>个人努力</strong>），把上述可能性变成现实。条件 × 努力，两端合起来正是 <strong>C</strong>。</p>
+<h3>第 1 步：干扰项归因</h3>
+<table><thead><tr><th>选项</th><th>错在哪</th><th>对应的典型误解</th></tr></thead><tbody><tr><td>A</td><td>把创立归功于「超常人的认知能力」——唯心史观的天才论，恰是唯物史观要破除的解释</td><td>英雄史观：以为伟人靠天赋创造历史</td></tr><tr><td>B</td><td>家庭背景与教育经历只是个人成长条件，解释不了理论为何<strong>必然</strong>出现在 19 世纪 40 年代</td><td>把次要条件当主要原因</td></tr><tr><td>D</td><td>史实错误：当时最发达的资本主义国家是<strong>英国</strong>（工厂制度成熟、宪章运动），不是德国</td><td>想当然拼凑；德国突出的是思想渊源（古典哲学）而非经济发达</td></tr></tbody></table>
+<h3>为什么 A 最有迷惑性</h3>
+<p>马克思、恩格斯确实才华过人，「超常认知能力」符合直觉。但注意题干的铺垫方向：命题人列出的全是<strong>客观条件</strong>（社会根源、阶级基础、思想渊源），再补一句两人的<strong>选择</strong>（放弃安逸、投身革命）——答案的坐标系已经画好：条件 × 努力。A 把天平完全压到「天赋」一端，与唯物史观正面冲突；而且「超常认知」回答不了「为什么科学社会主义不早不晚恰好诞生在那个年代」——必然性只能由历史条件解释。</p>
+<blockquote>记忆锚点：伟大理论 = 客观条件（社会根源·阶级基础·思想渊源）× 主观努力；「天才论」= 英雄史观的反面教材；当时最发达的资本主义国家是英国。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

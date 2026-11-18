@@ -1,8 +1,95 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-32 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-32</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2020-32 嫦娥四号月背探测·三项"首次"一条线</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：一次月背着陆，问它"这次月球探测"干了什么',
+    body: '<p>2019 年 1 月 3 日 10:26，嫦娥四号成功着陆<b>月球背面</b>预选着陆区，并通过<b>鹊桥中继星</b>传回月背影像图。</p>' +
+          '<p>四个选项都是"成果宣告"，要逐项核对：哪几项是这次探测真正创下的，哪一项是把别的工程的功劳安错了门。</p>' },
+  { tag: '机制', cls: 'key', title: '先立事实底座：月背最大的"拦路虎"是通信',
+    body: '<p>月球背面<b>始终背对地球</b>——探测器落在月背后，电波被月球本体遮挡，无法直接联系地面。</p>' +
+          '<p>所以先发射"鹊桥"中继星架桥，嫦娥四号经它中继传回影像。三个正面选项（软着陆、中继通信、新篇章）都从这条事实线里长出来。</p>' },
+  { tag: 'A', cls: 'good', title: 'A 对：人类探测器首次月背软着陆',
+    body: '<p>此前<b>从未有任何探测器</b>在月背软着陆——嫦娥四号是"人类首次"，这是它最重的一块金牌。</p>' +
+          '<p>注意主语是"<b>人类</b>探测器"，比"我国首次"分量更重。✅</p>' },
+  { tag: 'C', cls: 'good', title: 'C 对：首次月背与地球的中继通信',
+    body: '<p>月背电波被月球挡住，直接对地通信不可能——"鹊桥"中继星的使命正是架起这条链路。</p>' +
+          '<p>题干"通过鹊桥中继星传回了月背影像图"就是 C 的材料依据：中继通信本身就是一项"首次"。✅</p>' },
+  { tag: 'D', cls: 'good', title: 'D 对：开启人类月球探测新篇章',
+    body: '<p>"人类探测器第一次踏上月背"——揭开了"古老月背的神秘面纱"，对<b>全人类</b>的月球科学都是新起点。</p>' +
+          '<p>D 的主语与 A 一致（人类口径）：首次的覆盖面是人类史，新篇章自然也是人类的。✅</p>' },
+  { tag: 'B', cls: 'bad', title: 'B 错："开启了我国太空站建设的序幕"是张冠李戴',
+    body: '<p>太空站（中国空间站）属于<b>近地轨道载人航天工程</b>序列；嫦娥四号属于<b>月球探测（探月工程）</b>序列——两条不同的工程线。</p>' +
+          '<p>月背着陆再轰动，也轮不到它给太空站"开序幕"。记：<b>嫦娥探月、天宫空间站，各开各的门</b>。❌</p>' },
+  { tag: '为什么', cls: 'key', title: '预判追问：为什么 D 的主语是"人类"不是"我国"',
+    body: '<p>决定"新篇章"量级的是"首次"的覆盖面：嫦娥四号的首次是<b>人类史上</b>的首次，所以新篇章是人类的。</p>' +
+          '<p>"我国探月新篇章"早在嫦娥一号、绕落回三步走推进时已经开启——把主语写成"我国"反而缩小了这件事的分量。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：三个"首次/新"一条线',
+    body: '<p><b>A</b> 首次月背软着陆 ✅ · <b>C</b> 首次月背—地球中继通信 ✅ · <b>D</b> 人类探月新篇章 ✅ · <b>B</b> 太空站序幕 ❌（串门）</p>' +
+          '<p>答案 <b>ACD</b>：软着陆落地 → 鹊桥传图 → 人类新篇章，一气呵成。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    ribbon: { k: i + 1, ok: s.cls !== 'bad' },
+    done: last,
+  };
+});
+
+AW.init({
+  title: '嫦娥四号：三个"首次/新"一条线，太空站别串门',
+  subtitle: '2020 年多选题第 32 题 · 考点：嫦娥四号月球探测（时政）',
+  intro: '点击「▶ 播放」逐步展开：先立月背通信底座，再逐项核对成果归属。',
+  counterLabel: '推理步',
+  ribbonTitle: '推理步骤（✓ 正确项 / ✗ 排除项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '嫦娥四号 = <b>人类首次月背软着陆（A）+ 首次月背—地球中继通信（C，靠鹊桥）+ 人类探月新篇章（D）</b>。<br>' +
+          'B 错在张冠李戴：太空站是近地轨道载人航天工程，与探月工程是两条线。<br>' +
+          '记忆锚点：<b>嫦娥探月、天宫空间站，各开各的门</b>。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：嫦娥四号月背着陆创造了哪些"首次"</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立事实底座——2019 年 1 月 3 日发生了什么</h3>
+<p>嫦娥四号探测器于 2019 年 1 月 3 日 10 时 26 分成功着陆月球背面预选着陆区（冯·卡门撞击坑），实现<strong>人类探测器首次月背软着陆</strong>。月球背面始终背对地球，探测器落在月背后与地面的直接通信被月球本体遮挡，所以此前已先发射"<strong>鹊桥</strong>"中继星，落在月背的嫦娥四号正是通过它把月背影像图传回地球——这同时实现了<strong>首次月背与地球的中继通信</strong>。"人类探测器第一次踏上月背"这件事本身，对整个人类探月史而言就是<strong>新篇章</strong>的开启。三个"首次/新"互为因果，构成本题的正面选项。</p>
+<h3>第 1 步：逐项核对</h3>
+<ul><li><strong>A 对</strong>：<strong>实现了人类探测器首次月背软着陆</strong>——考点核心，"人类首次"是嫦娥四号最重的一块金牌，此前从未有探测器在月背软着陆。</li><li><strong>C 对</strong>：<strong>实现了首次月背与地球的中继通信</strong>——月背电波被月球挡住，直接对地通信不可能，"鹊桥"中继星的使命正是架起这条"首次"的通信链路；题干"通过鹊桥中继星传回了月背影像图"就是 C 的材料依据。</li><li><strong>D 对</strong>：<strong>开启了人类月球探测新篇章</strong>——注意主体是"人类"而不只是"我国"：人类探测器第一次到月背，揭开了"古老月背的神秘面纱"，对全人类的月球科学都是新起点。</li><li><strong>B 错</strong>：<strong>"开启了我国太空站建设的序幕"</strong>——张冠李戴。太空站（中国空间站）属于<strong>近地轨道载人航天工程</strong>序列，与嫦娥四号所属的<strong>月球探测（探月工程）</strong>是两条不同的工程线；月背着陆再轰动，也轮不到它给太空站"开序幕"。</li></ul>
+<p>→ 选 <strong>ACD</strong>。</p>
+<h3>预判"为什么"：为什么 D 的主语是"人类"而不是"我国"</h3>
+<p>因为决定"新篇章"量级的是"首次"的覆盖面：嫦娥四号的首次是<strong>人类史上</strong>的首次（此前任何国家的探测器都没做到），所以它开启的是<strong>人类</strong>月球探测新篇章；而"我国探月新篇章"早在嫦娥一号、绕落回三步走推进时已经开启。把主语写成"我国"反而缩小了这件事的分量——这也正是命题人选 D 而不设"开启我国探月新篇章"干扰项的道理。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：混淆"探月工程"与"载人航天/空间站工程"两条线——记"嫦娥探月、天宫空间站"，各开各的序幕。</li><li><strong>漏选 C</strong>：以为传回影像靠探测器自身天线——月背信号被月球本体遮挡，"鹊桥"是唯一桥梁，中继通信本身就是一项"首次"。</li><li><strong>漏选 D</strong>：只盯"我国首次"，忽略"人类首次"——A 的主语是"人类探测器"，D 的主语是"人类"，两者口径一致、相互支撑。</li></ul>
+<blockquote>记忆锚点：嫦娥四号 = <strong>人类首次月背软着陆（A）+ 首次月背—地球中继通信（C，靠鹊桥）+ 人类探月新篇章（D）</strong>；太空站是另一条线（B 错）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

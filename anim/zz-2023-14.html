@@ -1,8 +1,96 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-14 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-14</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·14 全面依法治国"首先要"什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 概念/推理链卡片（依据 anim_math_concept_template；政治站纯文本，无 KaTeX） */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：题干先铺格局，再问"首先"',
+    cls: 'key',
+    body: '<p>题干铺出格局：依法治国、依法执政、依法行政<b>共同推进</b>；法治国家、法治政府、法治社会<b>一体建设</b>；科学立法、严格执法、公正司法、全民守法<b>全面推进</b>。然后问：坚持全面依法治国<b>首先</b>要坚持什么？</p>',
+    log: '格局铺完，问"首先"那一格' },
+  { title: '机制：宪法是体系的顶点',
+    cls: 'key',
+    body: '<p>"首先"的位置由<b>宪法本身的地位</b>决定：宪法是国家根本法、治国安邦的总章程，具有<b>最高的法律地位、法律权威、法律效力</b>——一切法律法规都不得同宪法相抵触。体系顶点不落实，依法治国无从谈起。</p>',
+    log: '宪法最高效力 → 依法治国首依宪' },
+  { title: '选项 A：成对表述的正主',
+    cls: 'good',
+    body: '<p>"坚持<b>依宪治国</b>"——依法治国首先要坚持依宪治国（依法执政首先要坚持依宪执政）。A 对。</p>',
+    ribbon: {k: 1, ok: true},
+    log: 'A：依宪治国，宪法最高效力' },
+  { title: '选项 B：格局中的一环',
+    cls: 'bad',
+    body: '<p>"依法行政"是"共同推进"三依法之一，对应法治政府建设的关键——它是<b>行政机关</b>层面的要求，层级低于"首先"。B 错。</p>',
+    ribbon: {k: 2, ok: false},
+    log: 'B：依法行政属共同推进一环' },
+  { title: '选项 C：配对句的另一个主语',
+    cls: 'bad',
+    body: '<p>"依法执政"是党执政的基本方式，但它的配对句是"依法执政首先要<b>依宪执政</b>"——题干问的是"依法治国首先要"。C 错位。</p>',
+    ribbon: {k: 3, ok: false},
+    log: 'C：依法执政配的是依宪执政' },
+  { title: '选项 D：四环节之一',
+    cls: 'bad',
+    body: '<p>"公正司法"是"全面推进"四环节之一，维护社会公平正义的最后一道防线——重要，但不是"首先"。D 错。</p>',
+    ribbon: {k: 4, ok: false},
+    log: 'D：公正司法是防线不是总纲' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>A</b>。成对背：依法治国→依宪治国；依法执政→依宪执政。</p>',
+    log: '锁定 A：坚持依宪治国' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '全面依法治国：为什么要"首先依宪治国"',
+  subtitle: '考点：依宪治国与依法治国 · 方法：宪法的根本法地位 → 成对表述 → 干扰项归位',
+  counterLabel: '推理步',
+  ribbonTitle: '选项带（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链；序号带 1–4 对应选项 A–D。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：成对背——<b>依法治国首先要坚持依宪治国；依法执政首先要坚持依宪执政</b>。依据：宪法是根本法、总章程，具有最高法律地位、权威、效力。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：全面依法治国"首先要"什么——宪法的根本法地位</h2>
+<p>答案：<strong>A（坚持依宪治国）</strong>。</p>
+<h3>第 0 步：先立机制——为什么"首先"落在宪法上</h3>
+<p>全面依法治国的格局是：依法治国、依法执政、依法行政<strong>共同推进</strong>；法治国家、法治政府、法治社会<strong>一体建设</strong>；科学立法、严格执法、公正司法、全民守法<strong>全面推进</strong>。在这个格局里，"首先要坚持依宪治国"的位置不是排出来的，而是由<strong>宪法本身的地位</strong>决定的：宪法是国家的根本法，是治国安邦的<strong>总章程</strong>，具有<strong>最高的法律地位、法律权威、法律效力</strong>——一切法律法规都不得同宪法相抵触。依法治国依的是整个法律体系，而体系的"顶点"是宪法：连宪法都不落实，依法治国就无从谈起。所以标准表述是成对出现的——<strong>依法治国首先要坚持依宪治国，依法执政首先要坚持依宪执政</strong>。</p>
+<h3>第 1 步：把 B、C、D 放回格局图里找位置</h3>
+<table><thead><tr><th>选项</th><th>在法治格局中的位置</th></tr></thead><tbody><tr><td>A 依宪治国</td><td>✅ "首先要"——由宪法最高法律效力决定</td></tr><tr><td>B 依法行政</td><td>"共同推进"三依法之一，对应建设法治政府的关键</td></tr><tr><td>C 依法执政</td><td>党执政的基本方式，与之配套的是"依宪执政"</td></tr><tr><td>D 公正司法</td><td>"全面推进"四环节之一，维护社会公平正义的最后一道防线</td></tr></tbody></table>
+<h3>第 2 步：易错点——每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 C</strong>：知道"党领导依法治国"，就选了"依法执政"。注意配对关系："依法执政首先要<strong>依宪执政</strong>"——C 项自己才是"首先"的宾语位置上的候选，但它对应的是"依法执政"那句，不是"依法治国"这句；题干问的是"坚持全面依法治国首先要"。</li><li><strong>误选 B</strong>：把"法治政府建设"的抓手当总纲。依法行政是行政机关的事，是"共同推进"里的一环，层级低于"首先"。</li><li><strong>误选 D</strong>：被"公平正义"的关键词带偏。公正司法很重要（最后一道防线），但它是四环节之一，不是"首先"。</li></ul>
+<blockquote>记忆锚点：成对背——<strong>依法治国→依宪治国；依法执政→依宪执政</strong>。依据是宪法的根本法地位：最高法律地位、权威、效力。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

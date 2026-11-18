@@ -1,8 +1,136 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-12 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-12</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-12 · 传说群像 → 自强不息</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链模板（政治站无 KaTeX，纯文本推理链卡片），只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：先立民族精神底表",
+    "cls": "key",
+    "tag": "立框架",
+    "body": "<p>中华民族精神：以<b>爱国主义</b>为核心＋<b>团结统一、爱好和平、勤劳勇敢、自强不息</b>。</p><p>四个选项全在这张底表里——题眼不是「哪项属于民族精神」，而是「四个传说的<b>共同指向</b>」。方法：逐个压缩、求交集。</p>",
+    "log": "立民族精神底表 → 求四传说交集"
+  },
+  {
+    "title": "压缩① 夸父追日",
+    "cls": "step",
+    "tag": "压缩",
+    "body": "<p>夸父逐日，道渴而死，弃其杖化邓林——<b>明知不可为而为之，至死不休</b>。</p><p>提取品质：<b>奋斗到底</b>。</p>",
+    "log": "夸父追日 → 奋斗到底"
+  },
+  {
+    "title": "压缩② 大禹治水",
+    "cls": "step",
+    "tag": "压缩",
+    "body": "<p>治水十三年，<b>三过家门而不入</b>。</p><p>提取品质：<b>百折不挠</b>。</p>",
+    "log": "大禹治水 → 百折不挠"
+  },
+  {
+    "title": "压缩③ 愚公移山",
+    "cls": "step",
+    "tag": "压缩",
+    "body": "<p>「子子孙孙无穷匮也，而山不加增」——挖山不止，代代相继。</p><p>提取品质：<b>恒心韧性</b>。</p>",
+    "log": "愚公移山 → 恒心韧性"
+  },
+  {
+    "title": "压缩④ 精卫填海",
+    "cls": "step",
+    "tag": "压缩",
+    "body": "<p>以微小之躯衔西山之石，填东海之壑——身微志坚。</p><p>提取品质：<b>坚韧不屈</b>。</p>",
+    "log": "精卫填海 → 坚韧不屈"
+  },
+  {
+    "title": "求交集：C 入选 自强不息",
+    "cls": "good",
+    "body": "<p>四个内核取交集：面对看似不可能的巨大困难，<b>不屈不挠、长期奋斗、坚忍不拔</b>。</p><p>《周易》「天行健，君子以<b>自强不息</b>」——不断进取、永不停歇，与交集完全对口，<b>C 正确</b>。</p>",
+    "ribbon": { "k": 3, "ok": true },
+    "log": "交集对上自强不息 → C"
+  },
+  {
+    "title": "A 最强干扰：劳动场景≠意志内核",
+    "cls": "bad",
+    "body": "<p>治水、填海确有<b>劳动场景</b>，「勤劳」字面沾边——但「勤劳勇敢」刻画吃苦耐劳、敢作敢为的<b>品格底色</b>。</p><p>传说的落点在「愈挫愈勇的意志」：看场景选 A，看内核才选 C，<b>A 错误</b>。</p>",
+    "ribbon": { "k": 1, "ok": false },
+    "log": "A：看场景会误选，看内核才对"
+  },
+  {
+    "title": "B 方向不合：团结统一",
+    "cls": "bad",
+    "body": "<p>夸父、愚公、精卫是<b>个体或家族</b>的奋斗叙事，没有民族团结、维护国家统一的主题，<b>B 错误</b>。</p><p>（愚公率子孙移山有合力成分，但寓言的经典落点是恒心与坚持。）</p>",
+    "ribbon": { "k": 2, "ok": false },
+    "log": "B 无统一主题，方向不合"
+  },
+  {
+    "title": "D 无关：爱好和平",
+    "cls": "bad",
+    "body": "<p>追日、治水、移山、填海都是<b>抗争、奋斗</b>的叙事，与「爱好和平」不沾边，属凑数项，<b>D 错误</b>。</p>",
+    "ribbon": { "k": 4, "ok": false },
+    "log": "D 与抗争奋斗叙事无关"
+  },
+  {
+    "title": "收束：口诀记忆",
+    "cls": "good",
+    "body": "<p>追日、治水、移山、填海——「<b>知其不可而为之，不屈不挠</b>」＝自强不息。</p><p>民族精神四项内容＋爱国主义核心，是传说、名言类题目的对号底表 → 选 <b>C</b>。</p>",
+    "log": "口诀收束 → C"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '干扰项' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '传说群像 → 自强不息',
+  subtitle: '考点：中华民族精神的内容 · 传说逐个压缩求交集 · 干扰项归因',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: { big: '答案 C', html: '<b>自强不息</b>（天行健，君子以自强不息）：四传说求交集＝面对巨大困难不屈不挠、奋斗到底。<br>民族精神＝爱国主义（核心）＋团结统一、爱好和平、勤劳勇敢、自强不息。<br>记忆锚点：追日、治水、移山、填海 → 知其不可而为之 → 自强不息。' }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：夸父追日、大禹治水、愚公移山、精卫填海——自强不息</h2>
+<p>答案：<strong>C</strong>。</p>
+<h3>第 0 步：先立「民族精神」底表，再看题眼</h3>
+<p>中华民族精神的完整表述：以<strong>爱国主义</strong>为核心，包括<strong>团结统一、爱好和平、勤劳勇敢、自强不息</strong>。注意本题四个选项全部在这张底表里——所以题眼不是「哪项属于民族精神」（都属），而是「四个传说的<strong>共同指向</strong>是哪一项」。方法由此确定：把每个传说压缩成一个短语，再求四者的<strong>交集</strong>。</p>
+<h3>第 1 步：逐个压缩，取交集</h3>
+<table><thead><tr><th>传说</th><th>压缩后的内核</th><th>提取的品质</th></tr></thead><tbody><tr><td>夸父追日</td><td>明知不可为而为之，至死不休</td><td>奋斗到底</td></tr><tr><td>大禹治水</td><td>十三年三过家门而不入</td><td>百折不挠</td></tr><tr><td>愚公移山</td><td>「子子孙孙无穷匮也」</td><td>恒心韧性</td></tr><tr><td>精卫填海</td><td>以微小之躯衔石填海</td><td>坚韧不屈</td></tr></tbody></table>
+<p>交集：面对看似不可能完成的巨大困难，<strong>不屈不挠、长期奋斗、坚忍不拔</strong>。这正是「自强不息」——语出《周易》「天行健，君子以自强不息」，指不断进取、永不停歇的精神状态。选 C。</p>
+<h3>第 2 步：三个干扰项为何易误选</h3>
+<ul><li><strong>A（勤劳勇敢）——最强干扰项</strong>：大禹治水、精卫填海确有劳动场景，「勤劳」字面沾边。但「勤劳勇敢」刻画的是吃苦耐劳、敢作敢为的<strong>品格底色</strong>；题干传说的落点不在「勤」，而在<strong>愈挫愈勇的意志</strong>。看「场景」会选 A，看「精神内核」才选 C。</li><li><strong>B（团结统一）</strong>：传说是夸父、愚公、精卫等<strong>个体或家族</strong>的奋斗叙事，没有民族团结、维护国家统一的主题——方向不合。</li><li><strong>D（爱好和平）</strong>：与抗争、奋斗的叙事无关，属凑数项。</li></ul>
+<h3>易错点与预判追问</h3>
+<ul><li><strong>只看「劳动场景」选 A</strong>：场景≠内核，四个故事真正共享的是意志品质。</li><li><strong>愚公移山算不算团结统一？</strong> 率子孙共移山确有合力成分，但寓言的经典落点是恒心与坚持；四者取交集，交集只能是自强不息。</li><li><strong>记忆口诀</strong>：追日、治水、移山、填海——「知其不可而为之，不屈不挠」＝自强不息。</li></ul>
+<blockquote>记忆锚点：民族精神＝爱国主义（核心）＋团结统一、爱好和平、勤劳勇敢、自强不息；传说群像求交集 → 自强不息。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

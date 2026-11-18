@@ -1,8 +1,143 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-09 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-09</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·09 官督商办民用企业的性质</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），
+     模板复制自 408 tools/anim_concept_template.html，只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼',
+    cls: 'key',
+    body: '<p>对象限定：洋务派兴办的<b>民用企业</b>（轮船招商局、开平矿务局等），多数「官督商办」，问<b>基本上</b>是什么性质。两个关键词：①「民用」——区别于官办军事工业；②「基本上」——按主流定性，不按附带特征。</p>',
+    tag: '审题',
+    log: '审题：对象 = 官督商办民用企业，「基本上」提示按主流定性'
+  },
+  {
+    title: '先立模型：洋务企业两分',
+    cls: 'key',
+    body: '<ul><li><b>军事工业</b>：官办——经费官拨、产品官用调拨、不计成本 → 封建性浓厚</li><li><b>民用企业</b>：多数官督商办——「商」出钱办厂、官府只「督」（监督保护）</li></ul><p>两类性质不同源，本题只问第二类。</p>',
+    tag: '建模',
+    log: '洋务企业两分：官办军工 vs 官督商办民用'
+  },
+  {
+    title: '立标尺：性质看生产方式，三项检验',
+    cls: 'key',
+    body: '<p>企业性质不看招牌看<b>生产方式</b>：①技术——机器还是手工；②劳动——雇佣还是人身依附；③目的——逐利商品生产还是自用调拨。</p>',
+    tag: '标尺',
+    log: '标尺：技术 / 劳动 / 目的三项检验'
+  },
+  {
+    title: '过检验：三项全落资本主义坐标',
+    cls: 'step',
+    body: '<ul><li>资金：<b>商股集资</b>，资本来自私人资本（官府只监督保护）</li><li>技术＋劳动：<b>机器生产、雇佣劳动</b>，工人拿工资、无人身依附</li><li>目的：面向市场、<b>以利润为目的</b>——与军工「产品调拨军营」根本不同</li></ul>',
+    tag: '检验',
+    log: '商股 + 机器 + 雇佣 + 逐利 → 三项全落资本主义坐标'
+  },
+  {
+    title: 'A：基本上是资本主义性质',
+    cls: 'good',
+    ribbon: { k: 1, ok: true },
+    body: '<p>三项检验全部命中 → 教材定点结论：官督商办的民用企业<b>基本上是资本主义性质</b>的近代企业。<b>A 正确</b>。</p>',
+    tag: '命中',
+    log: 'A 命中：基本上是资本主义性质'
+  },
+  {
+    title: 'B：把附带特征当定性',
+    cls: 'bad',
+    ribbon: { k: 2, ok: false },
+    body: '<p>「官督」确实带封建性（官府委派督办、衙门习气），但那是<b>附带特征</b>；「半封建」是描述近代中国<b>社会性质</b>的词，套不到单个企业头上。题干「基本上」提示按主流定性。<b>B 错误</b>。</p>',
+    tag: '排除',
+    log: 'B 把附带特征当主流定性 → 排除'
+  },
+  {
+    title: 'C：管理外衣 ≠ 生产方式',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>封建衙门式的<b>管理方式</b> ≠ 封建主义<b>生产方式</b>；封建性浓的是官办<b>军事工业</b>，民用企业恰是洋务派由「自强」转「求富」吸收私人资本的产物。<b>C 错误</b>。</p>',
+    tag: '排除',
+    log: 'C 「官督」只是管理外衣 → 排除'
+  },
+  {
+    title: 'D：时代错乱',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>行会是<b>前资本主义</b>的手工业封建组织（师徒依附、限制竞争），与近代机器大工业企业是两个时代的事物，根本不搭。<b>D 错误</b>。</p>',
+    tag: '排除',
+    log: 'D 行会是前资本主义组织 → 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>A</b>。记忆锚点：洋务企业两分——官办军工封建性浓；官督商办民用企业<b>基本上是资本主义性质</b>。企业性质看<b>生产方式</b>（机器＋雇佣＋逐利），不看管理外衣。</p>',
+    tag: '结论',
+    log: '锁定 A：基本上是资本主义性质的企业'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag,
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+});
+
+AW.init({
+  title: '官督商办的民用企业是什么性质',
+  subtitle: '考点：洋务运动 · 民用企业性质 · 方法：企业两分 + 生产方式三项检验（技术 / 劳动 / 目的）',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」先立模型与标尺，再逐项排查。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '官督商办民用企业<b>基本上是资本主义性质</b>：商股集资、机器生产、雇佣劳动、面向市场逐利。记忆锚点：洋务企业两分——官办军工封建性浓；「官督」的封建管理只是<b>外衣</b>，企业性质看生产方式；「半封建」是描述<b>社会性质</b>的词，行会是前资本主义组织。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：官督商办的民用企业是什么性质</h2>
+<p>答案：<strong>A（资本主义性质的企业）</strong>。</p>
+<h3>第 0 步：先立模型——洋务派办的两类企业，性质不能一锅烩</h3>
+<p>判定企业性质，不看招牌看<strong>生产方式</strong>。生产方式由三项检验构成：用什么技术生产（手工还是机器）、怎么组织劳动（人身依附还是雇佣）、生产目的（自用调拨还是逐利的商品生产）。先把洋务派的企业按这个模型分成两类：</p>
+<table><thead><tr><th>类别</th><th>经营方式</th><th>举例</th><th>性质底色</th></tr></thead><tbody><tr><td>军事工业</td><td>官办（经费官拨、产品官用、不计成本）</td><td>江南制造总局、福州船政局</td><td>封建性浓厚，带资本主义因素</td></tr><tr><td>民用企业</td><td>多数<strong>官督商办</strong>，少数官办、官商合办</td><td>轮船招商局、开平矿务局、上海机器织布局</td><td><strong>基本上是资本主义性质</strong></td></tr></tbody></table>
+<p>题干限定的对象是第二类：官督商办的<strong>民用</strong>企业。对象一划准，逐项过检验。</p>
+<h3>第 1 步：官督商办民用企业过三项检验</h3>
+<ul><li>资金来源：「商」出钱办厂——商股集资，企业资本来自私人资本，官府只「督」（监督保护）；</li><li>技术与劳动：轮船、煤矿、纺织都是<strong>机器生产</strong>，工人拿工资受雇，没有人身依附；</li><li>生产目的：产品面向市场出售、<strong>以利润为目的</strong>——这与官办军工「产品调拨军营、不计成本」根本不同。</li></ul>
+<p>三项全部落在资本主义坐标上。教材定点结论：官督商办的民用企业<strong>基本上是资本主义性质的</strong>近代企业。</p>
+<h3>第 2 步：为什么带着封建管理却不算封建企业（预判追问）</h3>
+<p>「官督」确实带封建性：官府委派督办、拨给津贴、有衙门习气、控制企业。但<strong>性质由生产方式决定，不由管理方式决定</strong>——封建管理是外衣（附带特征），机器＋雇佣＋逐利是内核（主流）。题干「基本上」三个字正是提示：按主流定性，不按附带特征定性。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 B（把附带特征当定性）</strong>：看到「官府监督、封建习气」就答「半封建」。「半封建」是描述近代中国<strong>社会性质</strong>（半殖民地半封建社会）的词，套不到单个企业头上；「基本上」提示按主流定性作答。</li><li><strong>选 C（管理外衣 ≠ 生产方式）</strong>：把「官督」这层管理方式当成了企业性质本身。封建性浓的是官办<strong>军事工业</strong>；民用企业恰是洋务运动由「自强」转「求富」、吸收私人资本办起来的产物。</li><li><strong>选 D（时代错乱）</strong>：行会是前资本主义的手工业封建组织（师徒依附、限制竞争），与近代机器大工业企业是两个时代的事物。</li></ul>
+<blockquote>记忆锚点：洋务企业两分——官办军工封建性浓，官督商办民用企业<strong>基本上是资本主义性质</strong>；企业性质看生产方式（机器＋雇佣＋逐利），不看管理外衣。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

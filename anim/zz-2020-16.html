@@ -1,8 +1,146 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-16 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-16</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2020·16 美国退出《中导条约》的真实原因</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼：「真实原因」四字',
+    cls: 'key',
+    tag: '审题',
+    body: '<p>《中导条约》（1987 年里根—戈尔巴乔夫签署）禁止美苏（俄）两家拥有、发展陆基射程 500—5500 千米的导弹；2019 年 8 月 2 日美国正式退出。</p><p>题问「<b>真实原因</b>」——不是「美方怎么说」。坐标系：<b>说辞层</b>（借口）≠ <b>动因层</b>（利益）≠ <b>后果层</b>（影响）。</p>',
+    log: '审题：说辞与动因分层'
+  },
+  {
+    title: '先立模型：条约是一把「锁」',
+    cls: 'key',
+    body: '<p>条约锁住的是<b>两个大国</b>的陆基中导力量——只约束美苏（俄），第三国本就不在锁内。开锁的动因要从「<b>松绑后得到什么</b>」读，不从「开锁时说了什么」读。</p>',
+    log: '锁谁、图什么——从行为读'
+  },
+  {
+    title: '说辞层：俄违约是台阶',
+    cls: 'step',
+    body: '<p>「俄罗斯首先违约」是美方的一面之词，俄方否认，拿不出经得起检验的证据；即便按美方说法成立，也只是给「<b>本来就想退</b>」提供的台阶——借口回答「怎么对世界说」，不回答「到底图什么」。</p>',
+    log: '俄违约 = 说辞，不是动因'
+  },
+  {
+    title: '动因层：退出 = 自我松绑',
+    cls: 'step',
+    body: '<p>条约锁住的恰是美国想要的东西：陆基中导的研发与部署。美国海空基远程打击力量<b>本就占优</b>，被锁住的陆基中导恰是要补的一环——退出即<b>解禁扩容</b>。</p>',
+    log: '松绑 = 解禁陆基中导'
+  },
+  {
+    title: '动因层：谋绝对军事优势',
+    cls: 'step',
+    body: '<p>解套后把存量优势<b>延伸到新领域</b>，在他国仍受约束时率先扩容武库，追求「绝对安全」、维护军事霸权——官方定性：退约是「自我松绑」、谋求<b>单方面军事优势</b>。</p>',
+    log: '图的是绝对优势与霸权'
+  },
+  {
+    title: '后果层：方向反证 B',
+    cls: 'step',
+    body: '<p>退约的实际后果是<b>破坏</b>全球战略平衡与稳定、损害国际军控与防扩散体系——后果与动因方向相反：做的是打破平衡的事，不是「谋求」平衡的事。B 把后果描成了目的。</p>',
+    log: '后果 = 破坏平衡 → B 说反'
+  },
+  {
+    title: 'C：自我松绑谋求绝对军事优势 → 正确',
+    cls: 'good',
+    ribbon: { k: 3, ok: true },
+    body: '<p>落在<b>动因层</b>、对行为本身的动机判断，与官方定性一致。<b>C 正确</b>。</p>',
+    log: 'C 对位「真实原因」 → 正确'
+  },
+  {
+    title: 'A：把指控当原因 → 排除',
+    cls: 'bad',
+    ribbon: { k: 1, ok: false },
+    body: '<p>「真实原因」四字就是提醒把<b>说辞</b>与<b>动因</b>分开——A 是包装纸，不是礼盒里的东西。<b>A 错误</b>。</p>',
+    log: 'A 是借口 → 排除'
+  },
+  {
+    title: 'B：正面词 ≠ 正面事实 → 排除',
+    cls: 'bad',
+    ribbon: { k: 2, ok: false },
+    body: '<p>「平衡、稳定」是好词，但官方定性是退约<b>破坏</b>平衡——干扰项常用好词给错误行为描金。<b>B 错误</b>。</p>',
+    log: 'B 方向说反 → 排除'
+  },
+  {
+    title: 'D：固有属性不是新动因 → 排除',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>「其他国家不受条约限制」半真半假：是真的（双边条约只锁美俄），但<b>一直如此</b>，构不成 2019 年退约的动因——美国拿它做补充说辞。<b>D 错误</b>。</p>',
+    log: 'D 是固有属性 → 排除'
+  },
+  {
+    title: '结论：答案 C',
+    cls: 'good',
+    tag: '结论',
+    body: '<p>答案 <b>C</b>。胜负手：A、B、D 都是美方自己的<b>话语</b>，只有 C 是对行为的<b>动机判断</b>——时政题问「真实原因/实质」，答案通常落在利益与优势层面。</p>',
+    log: '锁定 C：自我松绑谋绝对优势'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '美国退出《中导条约》的真实原因',
+  subtitle: '考点：形势与政策（国际战略环境） · 方法：说辞层/动因层/后果层三分',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链：先分层，再从行为读动机。',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '记忆锚点：退约 = <b>自我松绑、谋求绝对军事优势</b>（动因层）；俄违约 = 借口（说辞层）；破坏战略平衡与稳定 = 后果；「其他国家不受限」 = 双边条约固有属性。「真实原因」四字 = 撇开说辞看利益。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：美国退出《中导条约》的真实原因</h2>
+<p>答案：<strong>C（自我松绑，谋求绝对军事优势）</strong>。</p>
+<h3>第 0 步：先立模型——条约是一把「锁」，问的是谁想开锁、图什么</h3>
+<p>《中导条约》：1987 年里根与戈尔巴乔夫签署，全称《苏联和美国消除两国中程和中短程导弹条约》，规定<strong>销毁并不得再研制、部署</strong>射程 500—5500 公里的陆基巡航导弹与弹道导弹——它只约束美苏（俄）两家，锁住的是这两个大国中导力量的发展。2019 年 2 月美国宣布暂停履行义务，同年 8 月 2 日正式退出。</p>
+<p>审题眼在「<strong>真实原因</strong>」四个字：问的不是美国公开宣称的理由（说辞），而是真实动因（利益）。这一区分是四个选项的解题坐标系——A、D 属说辞层，B 属后果层，C 属动因层。</p>
+<h3>第 1 步：机制——开锁的动因，要看「松绑后得到什么」</h3>
+<ol><li>条约锁住的恰是美国想要的东西：陆基中程导弹的研发与部署。退出 = <strong>自我松绑</strong>，被禁的武器类别立即解禁；</li><li>松绑图什么？图<strong>单方面、绝对的军事优势</strong>——美国的海空基远程打击力量本就占优，被锁住的陆基中导恰是要补的一环；解套后放手研发部署，把存量优势延伸到新领域，在他国仍受约束时率先扩容武库，追求「绝对安全」，维护军事霸权；</li><li>对照官方定性：美国退约是「自我松绑」、谋求单方面军事优势，其<strong>后果</strong>是破坏全球战略平衡与稳定、损害国际军控与防扩散体系——后果与动因方向相反：它做的是<strong>打破</strong>平衡的事，不是「谋求」平衡的事。</li></ol>
+<p>预判一个追问：公开理由（俄罗斯违约）为什么不选？——那是美方的一面之词，俄方否认，且拿不出经得起检验的证据；即便按美方说法成立，也只是给「本来就想退」提供的台阶。命题点恰在<strong>借口与动因之分</strong>：借口回答「怎么对世界说」，动因回答「到底图什么」——看行动（松绑扩武）比听话术更准。</p>
+<h3>第 2 步：四个选项归位</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归位</th></tr></thead><tbody><tr><td>A 俄罗斯首先违约</td><td>❌</td><td>说辞层：美方单方面指控、俄方否认；借口 ≠ 真实原因</td></tr><tr><td>B 谋求全球战略平衡与稳定</td><td>❌</td><td>方向说反：退约恰恰<strong>破坏</strong>战略平衡与稳定——把后果描成目的</td></tr><tr><td>C 自我松绑谋求绝对军事优势</td><td>✅</td><td>动因层：解禁中导、扩容武库、追求绝对优势与军事霸权</td></tr><tr><td>D 其他国家不受条约限制</td><td>❌</td><td>条约本就只约束美苏两家，第三国不受限是双边条约固有属性，构不成退约动因</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：把「新闻里美国宣布退约时说的话」当答案——「真实原因」四字就是在提醒把说辞与动因分开；A 是包装纸，不是礼盒里的东西。</li><li><strong>误选 B</strong>：被「平衡、稳定」等正面词吸引——正面词不等于正面事实，官方定性是退约<strong>破坏</strong>平衡；干扰项常用「好词」给错误行为描金。</li><li><strong>误选 D</strong>：半真半假最难缠——「其他国家不受限」是真的，但它是条约固有属性而非 2019 年退约的新动因；美国拿它做补充说辞，考试要选动因层面的 C。</li><li><strong>共性病根</strong>：时政题问「真实原因 / 实质」时，答案通常落在<strong>利益与优势</strong>层面（谋求绝对军事优势、维护霸权），而不是摆在台面上的说辞；三项干扰全是美方自己的话语，只有 C 是对行为的动机判断。</li></ul>
+<blockquote>记忆锚点：退约 = <strong>自我松绑、谋求绝对军事优势</strong>（动因）；俄违约 = 借口（说辞）；破坏战略平衡与稳定 = 后果；「真实原因」四字 = 撇开说辞看利益。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

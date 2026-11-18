@@ -1,8 +1,91 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-11 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-11</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-11 · 法律权威指什么</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：定义域已画在题干里',
+    cls: 'key',
+    body: '<p>题干限定："法律权威是就国家和社会管理过程中法律的<b>地位和作用</b>而言的"。所以选的不是"法的一般特征"，而是<b>地位层面</b>的含义。</p>' },
+  { title: '立机制：拆"权威"这个词',
+    cls: 'key',
+    body: '<p>"权威"＝权力＋威信：所有人都必须服从、谁也不能凌驾于法之上；"尊严"＝不可侵犯。合起来教材原话：<b>法律权威是指法的不可违抗性</b>。</p>' },
+  { title: '预判追问：权威＝强制吗？',
+    cls: 'key',
+    body: '<p>不是。<b>强制性是后盾</b>（靠制裁兜底，回答"靠什么保证实施"）；<b>不可违抗性是状态</b>（法律实际被普遍服从的地位）。被普遍漠视的法，罚则再多也谈不上权威——后盾≠本体。</p>' },
+  { title: '选项 A：法的强制性',
+    cls: 'bad', k: 1, pick: false,
+    body: '<p>违法受制裁、以国家强制力保证实施——这是权威的<b>保证手段</b>，不是权威的定义本身，<b>排除</b>。</p>' },
+  { title: '选项 B：法的不可违抗性',
+    cls: 'good', k: 2, pick: true,
+    body: '<p>法律被普遍尊重与服从、不得违抗的<b>地位</b>——与题干"地位和作用"严丝合缝，<b>入选</b>。</p>' },
+  { title: '选项 C：法的合理性',
+    cls: 'bad', k: 3, pick: false,
+    body: '<p>讲法的内容正当与否，属"良法"的<b>评价维度</b>；合理是权威的支撑条件之一，不是定义，<b>排除</b>。</p>' },
+  { title: '选项 D：法的规范性',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p>讲法是调整行为的规范这一<b>形式特征</b>，回答"法是什么"而非"权威是什么"，层面不同，<b>排除</b>。</p>' },
+  { title: '结论：地位层面的只有"不可违抗性"',
+    cls: 'good',
+    body: '<p>A 是后盾、C 是评价、D 是形式特征——都不在"地位与作用"层面。</p><p><b>答案 B。</b>记忆锚点：<b>法律权威＝法的不可违抗性</b>。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2011-11 · 法律权威是指什么',
+  subtitle: '2011 年第 11 题（单选）· 考点：法律权威的含义 · 拆词分层 + 逐项推演',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 正确 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先拆"权威"并给四个"法字头"词分层，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '记忆锚点：法律权威＝<b>法的不可违抗性</b>（地位与作用层面）；强制性是后盾、规范性是形式、合理性是评价——三者都≠权威本体。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：法律权威的定义——"地位与作用"落到"不可违抗性"</h2>
+<p>答案：<strong>B（法的不可违抗性）</strong>。</p>
+<h3>第 0 步：先立机制——"权威"这个词在说什么</h3>
+<p>题干自己把定义域划好了："法律权威是就国家和社会管理过程中法律的<strong>地位和作用</strong>而言的"。先拆词再对号：</p>
+<ul><li>"权威"＝权力＋威信，落到法律上，说的是法律在实践中表现出的<strong>地位</strong>——任何人都必须服从，谁也不能凌驾于法律之上；"尊严"则强调<strong>不可侵犯</strong>。两者合起来，教材的对应表述就是：<strong>法律权威是指法的不可违抗性</strong>。</li><li>再预判一个追问：权威和强制是不是一回事？不是。<strong>强制性是后盾</strong>——靠国家强制力（制裁、惩罚）兜底，回答"靠什么保证实施"；<strong>不可违抗性是状态</strong>——法律实际被普遍服从的地位，回答"法律处在什么地位"。有强制力未必自动有权威：一部被普遍漠视的法，罚则再多也谈不上权威。所以不能把后盾当成本体。</li></ul>
+<h3>第 1 步：给四个"法字头"词分层定位</h3>
+<p>四个选项全是"法的××性"，容易搅在一起。按它们各自回答的问题分层，混战立刻清晰：</p>
+<table><thead><tr><th>选项</th><th>回答的问题</th><th>与"权威"的关系</th></tr></thead><tbody><tr><td>A 强制性</td><td>靠什么保证实施</td><td>权威的<strong>保证/后盾</strong>，不是权威本身</td></tr><tr><td>B 不可违抗性</td><td>法律处在什么地位</td><td><strong>就是权威的定义</strong></td></tr><tr><td>C 合理性</td><td>法的内容正当与否</td><td>评价维度，与"地位"无关</td></tr><tr><td>D 规范性</td><td>法是什么（行为规范）</td><td>形式特征，与"权威"不同层面</td></tr></tbody></table>
+<h3>第 2 步：逐项对号</h3>
+<ul><li><strong>A 法的强制性</strong> ✗：实现权威的保证力量（违法受制裁），但它是手段与后盾——题问的是"地位与作用"层面的定义，不能把后盾当本体。</li><li><strong>B 法的不可违抗性</strong> ✅：法律被普遍尊重与服从、不得违抗的地位——与题干"地位和作用"严丝合缝。</li><li><strong>C 法的合理性</strong> ✗：讲法的内容是否正当合理，属"良法"评价维度，答非所问。</li><li><strong>D 法的规范性</strong> ✗：讲法是调整人们行为的规范这一形式特征，回答"法是什么"，不是"权威是什么"。</li></ul>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：把"权威"理解成"靠拳头说话"——混淆了权威的保证手段与权威本身；且只靠强制的法恰恰谈不上真权威（权威还建立在人们内心的尊重与认同上）。</li><li><strong>误选 D</strong>：看到"法律规范人们的行为"就顺手把"规范性"当定义——规范性是法的性质标签，不是地位状态。</li><li><strong>误选 C</strong>：把"良法"（合理）与"权威"（被服从）混为一谈——合理是权威的支撑条件之一，不是定义本身。</li></ul>
+<blockquote>记忆锚点：法律权威＝<strong>法的不可违抗性</strong>（地位与作用层面）；强制性是后盾、规范性是形式、合理性是评价——三者都≠权威本体。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

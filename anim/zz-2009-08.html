@@ -1,8 +1,138 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-08 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-08</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2009·08 《中国社会各阶级的分析》开篇</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>1925 年 12 月《中国社会各阶级的分析》开篇设问。这是<b>原文定位题</b>——背到开篇名句即可秒杀。</p>",
+    "log": "原文定位题，开篇两句话"
+  },
+  {
+    "title": "开篇原文",
+    "cls": "good",
+    "body": "<p>「谁是我们的敌人？谁是我们的朋友？这个问题是革命的首要问题。中国过去一切革命斗争成效甚少，其基本原因就是因为<b>不能团结真正的朋友，以攻击真正的敌人</b>。」——<b>D 正确</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": true
+    },
+    "log": "开篇原文逐字对应 → D"
+  },
+  {
+    "title": "为什么首要",
+    "cls": "key",
+    "body": "<p>革命要成功必须回答「依靠谁、团结谁、打击谁」；力量配置错了，斗争必然成效甚少——阶级分析就是把敌我友从<b>经济地位</b>上分清。</p>",
+    "log": "分清敌我友 = 首要问题"
+  },
+  {
+    "title": "A：时间错位",
+    "cls": "bad",
+    "body": "<p>「农村包围城市」的新道路是 1927 年大革命失败后井冈山时期才形成的，1925 年的文章不可能以此为总结。<b>A 错误</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "log": "A 提前了两年多的历史"
+  },
+  {
+    "title": "B：无此概括",
+    "cls": "bad",
+    "body": "<p>扩大民主主义宣传不是该文对失败原因的概括。<b>B 错误</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    },
+    "log": "B 无原文依据"
+  },
+  {
+    "title": "C：出处挪移",
+    "cls": "bad",
+    "body": "<p>「到群众中做实际调查」是调查研究作风的要求，出自 1930 年《反对本本主义》——风格像、出处错。<b>C 错误</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    },
+    "log": "C 是后来的方法论"
+  },
+  {
+    "title": "全文骨架",
+    "cls": "good",
+    "body": "<p>文章依次分析：地主买办阶级（敌人）→ 民族资产阶级（右翼可能为敌）→ 小资产阶级（朋友）→ 半无产阶级（最接近的朋友）→ 工业无产阶级（领导力量），处处为敌我友定位。</p>",
+    "log": "五类阶级分析，全为敌我友定位"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>D</b>。记忆锚点：首要问题=<b>谁是敌人谁是朋友</b>；基本原因=<b>不能团结真正的朋友以攻击真正的敌人</b>。</p>",
+    "log": "锁定 D"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "《中国社会各阶级的分析》开篇立论",
+  subtitle: "考点：革命的首要问题（分清敌我友） · 方法：原文定位",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "记忆锚点：1925《中国社会各阶级的分析》开篇=首要问题<b>谁是敌人谁是朋友</b>；成效甚少基本原因=<b>不能团结真正的朋友以攻击真正的敌人</b>。A、C 都是「时间错位」干扰。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：《中国社会各阶级的分析》开篇立论</h2>
+<p>答案：<strong>D（没有团结真正的朋友以攻击真正的敌人）</strong>。</p>
+<h3>第 0 步：先立原文——这是「原文定位题」</h3>
+<p>1925 年 12 月，毛泽东发表《中国社会各阶级的分析》，开篇两句话就是考点：</p>
+<blockquote>谁是我们的敌人？谁是我们的朋友？这个问题是革命的首要问题。中国过去一切革命斗争成效甚少，其基本原因就是因为不能团结真正的朋友，以攻击真正的敌人。</blockquote>
+<p>写这篇文章的目的，就是用马克思主义的阶级分析方法，把「敌、我、友」从经济地位上分清楚：工业无产阶级是领导力量，半无产阶级、小资产阶级是最接近的朋友，地主阶级、买办阶级是敌人，民族资产阶级的右翼可能是敌人。</p>
+<h3>第 1 步：机制——为什么「分清敌友」是首要问题</h3>
+<ol><li>革命要成功，必须回答「依靠谁、团结谁、打击谁」——力量配置错了，斗争必然成效甚少；</li><li>辛亥革命以来历次斗争的教训正在于：没有发动占人口绝大多数的工农，也没有认清真正的敌人；</li><li>所以毛泽东把「不能团结真正的朋友，以攻击真正的敌人」概括为<strong>基本原因</strong>，并以阶级分析作为解决之道。</li></ol>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 没有找到革命的新道路</td><td>❌</td><td>「农村包围城市」是 1927 年大革命失败后井冈山时期才形成的，时间对不上 1925 年</td></tr><tr><td>B 没有扩大民主主义的宣传</td><td>❌</td><td>非该文对失败原因的概括</td></tr><tr><td>C 没有到群众中做实际的调查</td><td>❌</td><td>调查研究作风的要求出自后来的《反对本本主义》（1930 年），非本句原文</td></tr><tr><td>D 没有团结真正的朋友以攻击真正的敌人</td><td>✅</td><td>开篇原文，逐字对应</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 C（「调查研究」最像毛泽东的风格）</strong>：风格对、出处错——把后来的方法论文献挪到了 1925 年。</li><li><strong>选 A（把「道路问题」前置）</strong>：农村包围城市的道路要到 1927 年之后逐步形成，1925 年的文章不可能以此作总结。</li></ul>
+<blockquote>记忆锚点：1925《中国社会各阶级的分析》开篇——首要问题=<strong>谁是敌人谁是朋友</strong>；成效甚少基本原因=<strong>不能团结真正的朋友以攻击真正的敌人</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

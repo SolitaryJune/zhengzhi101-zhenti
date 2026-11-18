@@ -1,8 +1,123 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-17 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-17</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2020·17 首次拍到黑洞照片表明什么（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼：「首次」二字定生死',
+    cls: 'key',
+    tag: '审题',
+    body: '<p>2019 年 4 月 10 日「事件视界望远镜」公布人类<b>首次</b>拍到的黑洞照片；题干三句关键：继 2015 年引力波「听到」之后的<b>直接</b>「视界」证据、<b>再次验证广义相对论的预言</b>、帮助解答宇宙本质问题。</p><p>题眼：「首次」——<b>首次看到 ≠ 刚刚存在</b>，四个选项的分合全系于这一句。</p>',
+    log: '审题：首次看到 ≠ 刚刚存在'
+  },
+  {
+    title: '先立机制：一张照片三层含义',
+    cls: 'key',
+    body: '<ul><li><b>存在层</b>：黑洞拍照前就客观存在 → B 的地基</li><li><b>时空层</b>：验证广义相对论 = 时空性质依物质分布与运动 → C 的题眼</li><li><b>认识层</b>：预言 → 听到 → 看到，观念步步拓展 → D 的题眼</li></ul><p>四个选项正好一层一个，逐层检验。</p>',
+    log: '存在/时空/认识三层展开'
+  },
+  {
+    title: '存在层：B 世界是物质的统一体 → 对',
+    cls: 'good',
+    ribbon: { k: 2, ok: true },
+    body: '<p>黑洞、引力波都是物质的<b>具体形态</b>——具体形态千差万别，世界<b>统一于物质</b>。这是照片给出的最直接的世界图景。<b>B 对</b>。</p>',
+    log: 'B：多样形态统一于物质 ✓'
+  },
+  {
+    title: '时空层：C 空间性质依物质分布运动 → 对',
+    cls: 'good',
+    ribbon: { k: 3, ok: true },
+    body: '<p>题干明说照片「<b>再次验证爱因斯坦广义相对论的预言</b>」——广义相对论的核心正是<b>时空性质取决于物质的分布及其运动</b>（引力使时空弯曲），黑洞附近引力场极强、弯曲最极端，恰是极端实证。别把这句当科技花边。<b>C 对</b>。</p>',
+    log: 'C：验证广义相对论 = 验证时空观 ✓'
+  },
+  {
+    title: '认识层：D 空间观念随认识拓展 → 对',
+    cls: 'good',
+    ribbon: { k: 4, ok: true },
+    body: '<p>从「预言」到引力波「听到」、再到照片「看到」——人类的<b>空间观念</b>随实践与认识的发展不断拓展。观念拓展属<b>认识范畴</b>，不等于空间本身被改变。<b>D 对</b>。</p>',
+    log: 'D：观念三连跳，认识步步进 ✓'
+  },
+  {
+    title: 'A：存在与「能否看到」不许混 → 错',
+    cls: 'bad',
+    ribbon: { k: 1, ok: false },
+    body: '<p>A 说「客观存在与人的实践和认识水平<b>有关</b>」——黑洞不是被拍到才存在，照片公布前已运转亿万年；实践和认识水平决定的是<b>能否观测到、用什么方式观测到</b>，不是对象是否存在。A 把「认识影响认识的内容与方式」偷换成「影响存在本身」。反证：正因为存在不依赖认识，「尚未拍到」推不出「不存在」。<b>A 错</b>。</p>',
+    log: 'A 偷换「存在」与「认识」 ✗'
+  },
+  {
+    title: '结论：答案 BCD',
+    cls: 'good',
+    tag: '结论',
+    body: '<p>答案 <b>BCD</b>。病根总结：全题押在「<b>首次看到 ≠ 刚刚出现</b>」一个区别上——A 把「认识的进步」错当「存在的开关」；漏选 D 的人多是没分清「观念拓展」（认识层）与 A 的「存在层」不在一层。</p>',
+    log: '汇总：BCD 入选，A 排除'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '首次「看到」黑洞正面照表明什么（多选）',
+  subtitle: '考点：世界物质统一性 · 时空观 · 认识随实践发展 · 方法：存在/时空/认识三层',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先立三层标尺，再逐项检验四个说法。',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '记忆锚点：首次看到 ≠ 刚刚出现——存在不因认识改变（A 错）。照片验证三件事：世界统一于物质（B）、空间的性质依赖于物质的分布及其运动状态（C）、空间的<b>观念</b>随认识发展而拓展（D）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：首次「看到」黑洞正面照表明什么</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——一张照片里叠着三层哲学含义</h3>
+<p>题干是一则科技新闻，但句子自带哲学分层。先把「人类首次拍到黑洞照片」这件事拆成三层，四个选项正好一层一个：</p>
+<table><thead><tr><th>层面</th><th>题干事实</th><th>哲学对应</th></tr></thead><tbody><tr><td>存在层</td><td>黑洞在拍照之前就客观存在，「首次」只是认识的突破</td><td>世界是物质的统一体（B）</td></tr><tr><td>时空层</td><td>照片「再次验证广义相对论的预言」</td><td>空间的性质依赖于物质的分布及其运动状态（C）</td></tr><tr><td>认识层</td><td>理论预言 → 引力波「听到」 → 照片「看到」</td><td>空间观念随认识发展而拓展（D）</td></tr></tbody></table>
+<p>题眼是「<strong>首次</strong>」二字：首次看到 ≠ 刚刚存在。这一区分直接决定 A 的生死，也撑起 B——四个选项的分合全系于这一句。</p>
+<h3>第 1 步：为什么 A 错——「存在」与「能否看到」不许混</h3>
+<p>A 说「物质世界的<strong>客观存在</strong>与人的实践和认识水平<strong>有关</strong>」。拆开看：</p>
+<ol><li>黑洞不是被「拍到」才存在的——照片公布之前，它已运转亿万年；</li><li>实践和认识水平决定的是人<strong>能否观测到、用什么方式观测到</strong>（从「听到」引力波到「看到」照片），不是被观测对象<strong>是否存在</strong>；</li><li>A 的手法是把「认识水平影响认识的内容与方式」偷换成「影响存在本身」——物质的客观存在不以人的意志（包括认识水平）为转移，这正是「客观性」原则要守住的底线。反过来想更清楚：正因为存在不依赖认识，「尚未拍到」永远推不出「不存在」。</li></ol>
+<h3>第 2 步：B、C、D 为什么对</h3>
+<ul><li><strong>B 对</strong>：黑洞、引力波都是物质的具体形态——具体形态千差万别，世界<strong>统一于物质</strong>，这是照片给出的最直接的世界图景；</li><li><strong>C 对</strong>：题干明说照片「再次验证了爱因斯坦广义相对论的预言」。广义相对论的核心命题正是<strong>时空性质取决于物质的分布及其运动</strong>（引力使时空弯曲），黑洞附近引力场极强、时空弯曲最极端，恰是这一命题的极端实证——别把这句当科技花边读过去，它就是 C 的题干依据；</li><li><strong>D 对</strong>：从「预言」到「听到」、再到「看到」，人类的<strong>空间观念</strong>（关于空间的认识）随实践与认识的发展不断拓展——观念的拓展属于认识范畴，不等于空间本身被改变。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：被「实践是认识的基础」带偏——实践决定的是<strong>能不能认识到</strong>，不是<strong>存在不存在</strong>；混淆「客观存在」与「对客观存在的认识」正是这个干扰项的钩子。</li><li><strong>漏选 C</strong>：没接上「验证广义相对论 = 验证时空性质依赖物质分布」这条线，把最硬的题眼句当成新闻背景。</li><li><strong>漏选 D</strong>：把 D 当天文学结论砍掉——D 说的是空间<strong>观念</strong>拓展（认识层面），与 A 偷换「存在」（存在层面）不在一层；分不清这两层，容易把 D 连着 A 一起删。</li><li><strong>共性病根</strong>：全题的逻辑押在一个区别上——<strong>首次看到 ≠ 刚刚出现</strong>；吃透这一句，A 错、B/C/D 对顺理成章。</li></ul>
+<blockquote>记忆锚点：首次看到 ≠ 刚刚出现（存在不因认识改变，A 错）；世界统一于物质（B）；空间性质依物质分布与运动而变（C）；空间<strong>观念</strong>随认识拓展（D）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

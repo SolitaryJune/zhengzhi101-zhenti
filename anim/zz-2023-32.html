@@ -1,8 +1,122 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-32 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-32</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·32 台湾问题白皮书的四重作用</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站（无 KaTeX）概念/推理链版：引擎 + 推理卡片累积展开，只改题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  {
+    "title": "审题眼：问「有益于」什么",
+    "cls": "key",
+    "body": "<p>2022 年 8 月 10 日，国台办、国新办发表《台湾问题与新时代中国统一事业》白皮书（发表时台海局势因外部势力窜访挑衅而紧张）。问发表「有益于」什么——按文件<b>说话的对象</b>拆方向最稳。</p>",
+    "log": "按说话对象拆四个方向"
+  },
+  {
+    "title": "先立框架：一份文件向谁说话",
+    "cls": "key",
+    "body": "<p>对「台独」和外部干涉：<b>揭批</b>（斗争）；对两岸同胞和国际社会：<b>争取</b>（团结）；对统一方式与诚意：<b>展现立场</b>（方针）；对全党全国和促统力量：<b>提振信心</b>（动员）。四选项各落一向。</p>",
+    "log": "揭批/争取/诚意/动员"
+  },
+  {
+    "title": "A：揭批勾连挑衅的恶劣言行",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p><b>斗争方向</b>：系统揭露「台独」势力和外部势力勾连挑衅、损害中国主权和领土完整、阻挠破坏统一进程的事实。<b>入选</b>。</p>",
+    "log": "A 揭批 ✓"
+  },
+  {
+    "title": "B：最大限度争取理解和支持",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p><b>团结方向</b>：面向两岸同胞特别是台湾同胞与国际社会陈述事实、阐明大义。「最大限度」是<b>原文固定搭配</b>。<b>入选</b>。</p>",
+    "log": "B 争取理解支持 ✓"
+  },
+  {
+    "title": "C：展现最大诚意争取和平统一",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p><b>方针方向</b>：重申「和平统一、一国两制」，愿继续以<b>最大诚意、尽最大努力</b>争取和平统一——方针的标准宣示。<b>入选</b>。</p>",
+    "log": "C 展现诚意 ✓"
+  },
+  {
+    "title": "D：提振精气神、增强信心勇气",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p><b>动员方向</b>：文件不只对外发声——对全党全国各族人民和岛内、海外反「台独」促统力量，白皮书是<b>鼓舞与动员</b>。<b>入选</b>。</p>",
+    "log": "D 提振信心 ✓"
+  },
+  {
+    "title": "追问预答：「最高级」词形辨真伪",
+    "cls": "good",
+    "body": "<p>全选检验找错点：绝对化、违方针、夸事实。B「最大限度」C「最大诚意」看似踩雷，实为<b>原文固定搭配</b>——判断标准不在词形而在<b>有无原文出处、是否合方针</b>；四向互不排斥，全选成立。</p>",
+    "log": "原文搭配非陷阱，全选成立"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>ABCD</b>。记忆锚点：白皮书四向=<b>揭批＋争取＋展现诚意＋提振信心</b>。</p>",
+    "log": "锁定 ABCD"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "台湾问题白皮书的四重作用",
+  subtitle: "考点：《台湾问题与新时代中国统一事业》白皮书 · 方法：按说话对象四向拆解＋原文搭配排查",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABCD",
+    html: "记忆锚点：白皮书四向＝揭批「台独」与外部势力（斗争·A）＋最大限度争取两岸同胞和国际社会理解支持（团结·B）＋展现最大诚意尽最大努力争取和平统一（方针·C）＋提振促统力量信心勇气（动员·D）；「最大限度、最大诚意」是原文搭配非陷阱。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：《台湾问题与新时代中国统一事业》白皮书的四重作用</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立框架——权威文件向谁说话</h3>
+<p>2022 年 8 月 10 日，国务院台湾事务办公室、国务院新闻办公室发表《台湾问题与新时代中国统一事业》白皮书，发表时正值台海局势因外部势力窜访挑衅而骤然紧张。问「发表有益于」什么，最快的拆法是按<strong>文件说话的对象</strong>分方向——一份国家级白皮书总是同时向几类主体发声，四个选项正好各落一向：</p>
+<ol><li>对「台独」势力和外部干涉势力——<strong>揭批</strong>，把勾连挑衅、损害主权、阻挠统一的事实摆在桌面上（斗争，A）；</li><li>对两岸同胞特别是台湾同胞与国际社会——<strong>争取</strong>理解和支持，陈述事实、阐明大义（团结，B）；</li><li>对统一的方式与诚意——<strong>展现立场</strong>，重申愿继续以最大诚意、尽最大努力争取和平统一（方针，C）；</li><li>对全党全国各族人民和岛内、海外反「台独」促统力量——<strong>提振信心</strong>，凝聚共识、鼓舞士气（动员，D）。</li></ol>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>说话对象与方向</th></tr></thead><tbody><tr><td>A 揭批「台独」势力和外部势力勾连挑衅、损害主权、阻挠破坏统一的恶劣言行</td><td>✅</td><td>斗争方向：白皮书系统揭露其劣迹</td></tr><tr><td>B 最大限度争取两岸同胞特别是台湾同胞与国际社会的理解和支持</td><td>✅</td><td>团结方向：面向岛内同胞与国际社会</td></tr><tr><td>C 展现愿继续以最大诚意尽最大努力争取和平统一的立场和态度</td><td>✅</td><td>方针方向：重申和平统一的最大诚意</td></tr><tr><td>D 提振全党全国人民精气神，增强岛内和海外反「台独」促统力量的信心勇气</td><td>✅</td><td>动员方向：文件也面向「自己人」说话</td></tr></tbody></table>
+<h3>第 2 步：预判追问——「最大限度」「最大诚意」是不是绝对化陷阱</h3>
+<p>全选题的检验法是逐项找错点：绝对化措辞、与方针相悖、把未发生说成已发生。B 的「最大限度」和 C 的「最大诚意」看似踩雷，实际是白皮书<strong>原文的固定搭配</strong>——「愿继续以最大诚意、尽最大努力争取和平统一」是和平统一方针的标准宣示。判断「最高级」措辞的真伪，标准不在词形而在<strong>有没有原文出处、是否符合既定方针</strong>：有出处、合方针就是原文引用；无出处、拔高事实（如本题之外常见的「一切」「彻底」）才是雷区。四向揭批、争取、诚意、动员互不排斥、互相配合，全选成立。</p>
+<h3>易错点：每处犹豫对应哪种误解</h3>
+<ul><li><strong>对 B、C 犹豫而漏选</strong>：把「最大限度」「最大诚意」当成绝对化陷阱——两处都是原文固定搭配，正是诚意的体现，必须选。</li><li><strong>漏选 D</strong>：以为白皮书只「对外」发声，忽略它对全党全国人民和岛内、海外促统力量的<strong>动员鼓舞</strong>作用。</li><li><strong>对 A 犹豫</strong>：觉得「揭批」语气太重——对「台独」势力和外部干涉，揭批其勾连挑衅正是白皮书的明确功能。</li></ul>
+<blockquote>记忆锚点：白皮书四向=<strong>揭批（斗争）＋争取（团结）＋展现诚意（方针）＋提振信心（动员）</strong>；「最大限度、最大诚意」是原文搭配非陷阱。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

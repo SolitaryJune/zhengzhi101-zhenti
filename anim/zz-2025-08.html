@@ -1,8 +1,147 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2025-08 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2025-08</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2025·08 高水平对外开放「主要是指」什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版）：逐步展开推理卡片，只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行台阶格：政策性 → 要素型 → 制度型
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: "审题眼：「高水平」是比较级——先立升级序列",
+    cls: "key",
+    log: "题眼：高水平必然相对低一阶而言，先看三级台阶",
+    body: "<p>题干问「当前我国的高水平对外开放<b>主要是指</b>」。「高水平」是比较级词汇，一定相对「低一阶」的开放而言。所以第一步不是挑选项，而是把我国开放走过的<b>三级台阶</b>立起来，看「高水平」落在哪一级。</p>"
+  },
+  {
+    title: "先立机制：开放走过的三级台阶",
+    cls: "key",
+    log: "机制：政策性（给政策）→ 要素型（物流动）→ 制度型（改规则）",
+    body: "<p>第一阶<b>政策性开放</b>：特区优惠、局部试点，「给政策」；第二阶<b>商品和要素流动型开放</b>：商品、资本、技术、人员跨境流动，「物的流动」；第三阶<b>制度型开放</b>：规则、规制、管理、标准对接国际高标准经贸规则，「规则的衔接」。2018 年底中央经济工作会议首提向制度型开放转变，二十大固定表述「稳步扩大规则、规制、管理、标准等制度型开放」。</p>" + cells([
+      {t:"政策性开放<br>特区优惠·政策洼地", c:"dim", l:"第一阶·起点"},
+      {t:"要素流动型开放<br>物的流动·入世大发展", c:"", l:"第二阶"},
+      {t:"制度型开放<br>规则·规制·管理·标准", c:"ok", l:"第三阶·高水平"}
+    ])
+  },
+  {
+    title: "追问：台阶为什么必须往上走",
+    cls: "step",
+    log: "瓶颈从「物」转移到「制度」→ 从给政策转向改制度",
+    body: "<p>前两阶有<b>天花板</b>：优惠给到头是「洼地竞赛」，扭曲资源配置；要素流动规模再大也会边际收益递减。卡住开放水平的瓶颈已不在「物」上而在「<b>制度</b>」上——国内规则、监管、标准与国际高标准不衔接，要素进不来、留不住、用不好。所以要从「给政策」转向「<b>改制度</b>」：对接高标准规则，深化国内改革，<b>以开放促改革</b>。</p>"
+  },
+  {
+    title: "D 对号入座：制度型开放",
+    cls: "good",
+    log: "规则·规制·管理·标准＝固定表述 → 选 D",
+    ribbon: {k: 4, ok: true},
+    body: "<p>题干「当前」「高水平」主要所指，正对着二十大报告的规范表述：<b>制度型开放</b>。<b>D 正确</b>。</p>"
+  },
+  {
+    title: "B 要素型开放：高水平要超越的那一阶",
+    cls: "bad",
+    log: "B 是第二阶，表现≠标志",
+    ribbon: {k: 2, ok: false},
+    body: "<p>「开放活跃、流量大」只是要素型开放的<b>表现</b>；「高水平」标志的是<b>制度对接</b>，不是流量大小——量与质混淆，就会误选 B。<b>B 错误</b>。</p>"
+  },
+  {
+    title: "C 政策性开放：起点，方向记反了",
+    cls: "bad",
+    log: "C 是第一阶打法，恰恰要淡化",
+    ribbon: {k: 3, ok: false},
+    body: "<p>优惠政策、局部试点是四十多年前开放的<b>起点</b>；「当前」的方向恰好是从「给政策」转向「改制度」——把起点当当前，方向反了。<b>C 错误</b>。</p>"
+  },
+  {
+    title: "A 全局性开放：查原文——没有这个提法",
+    cls: "bad",
+    log: "A 查无固定表述，凭语感选词最危险",
+    ribbon: {k: 1, ok: false},
+    body: "<p>开放布局的规范说法是「陆海内外联动、东西双向互济」，从来不用「全局性开放」定义高水平。规范表述题铁律：<b>固定搭配必须原文有出处</b>，「全局性开放」查无此词。<b>A 错误</b>。</p>"
+  },
+  {
+    title: "追问：制度型开放「型」在哪里",
+    cls: "step",
+    log: "规则、规制、管理、标准＝制度基础设施，不是优惠",
+    body: "<p><b>规则</b>管市场准入等成文规则，<b>规制</b>管政府监管方式，<b>管理</b>管经济社会治理，<b>标准</b>管技术标准体系——共同点：都是<b>制度基础设施</b>。开放对象从「让多少东西进来」变成「按什么规则办事」，对接规则改的是自己的制度，所以能倒逼深层次改革。</p>"
+  },
+  {
+    title: "结论",
+    cls: "good",
+    log: "锁定 D：制度型开放",
+    body: "<p>答案 <b>D</b>。台阶口诀：政策性 → 要素型（物的流动）→ <b>制度型（规则的衔接）</b>；高水平开放＝<b>规则、规制、管理、标准</b>制度型开放，以开放促改革。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || (last ? '完成' : '第 ' + i + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "政治 2025·08 高水平对外开放「主要是指」什么",
+  subtitle: "考点：制度型开放 · 方法：立「三级台阶」升级序列，规范表述对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」沿推理链展开：审题 → 立台阶 → 说瓶颈 → 对号 → 结论。",
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "答案 <b>D（制度型开放）</b>：从「给政策」到「改制度」，对接<b>规则、规制、管理、标准</b>等国际高标准经贸规则。A 查无此提法，B 是第二阶（物的流动），C 是第一阶（政策洼地）。记忆锚点：政策性 → 要素型 → <b>制度型</b>。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：当前我国的高水平对外开放「主要是指」什么</h2>
+<p>答案：<strong>D（制度型开放）</strong>。</p>
+<h3>第 0 步：先立机制——「高水平」是比较级，先立开放的升级序列</h3>
+<p>「高水平」一定相对「低一阶」而言，所以判断它指什么，先看我国开放走过的<strong>三级台阶</strong>——每上一级台阶，开放的对象就深一层：</p>
+<table><thead><tr><th>台阶</th><th>靠什么开放</th><th>开放的对象</th></tr></thead><tbody><tr><td>第一阶：政策性开放</td><td>经济特区优惠政策、局部试点</td><td>「给政策」——挖政策洼地</td></tr><tr><td>第二阶：商品和要素流动型开放</td><td>商品、资本、技术、人员跨境流动（入世后大发展）</td><td>「物流动」——东西、资金进出国门</td></tr><tr><td>第三阶：制度型开放</td><td><strong>规则、规制、管理、标准</strong>对接国际高标准经贸规则</td><td>「改规则」——制度层面与国际接轨</td></tr></tbody></table>
+<p>2018 年底中央经济工作会议首次提出「推动由商品和要素流动型开放向<strong>规则等制度型开放</strong>转变」，党的二十大报告固定表述为「稳步扩大<strong>规则、规制、管理、标准</strong>等制度型开放」。题干问「当前」「高水平」主要是指——正对着第三阶的规范提法。</p>
+<h3>第 1 步：追问为什么台阶必须往上走——瓶颈转移的机制</h3>
+<p>前两级台阶有<strong>天花板</strong>：政策优惠给到头就是各地比拼「洼地竞赛」，扭曲资源配置；要素流动到一定规模，边际收益递减，卡住开放水平的瓶颈已经不在「物」上，而在「<strong>制度</strong>」上——国内的市场规则、监管方式、标准体系与国际高标准不衔接，要素就进不来、留不住、用不好。所以开放要再上台阶，必须从「给政策」转向「改制度」：主动对照国际高标准经贸规则，深化国内相关领域改革——<strong>以开放促改革</strong>。这也解释了题干为什么说开放是「实现中华民族伟大复兴的关键一招」：改的是自己的制度，倒逼的是深层次变革。</p>
+<h3>第 2 步：四个干扰位各错在哪一阶</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因</th></tr></thead><tbody><tr><td>A 全局性开放</td><td>❌</td><td><strong>查无此固定提法</strong>——开放布局讲「陆海内外联动、东西双向互济」，从来不用「全局性开放」定义高水平；规范表述题先查原文</td></tr><tr><td>B 要素型开放</td><td>❌</td><td>是<strong>第二阶</strong>（物的流动）——「开放活跃、流量大」是表现不是标志，高水平恰要求<strong>超越</strong>它</td></tr><tr><td>C 政策性开放</td><td>❌</td><td>是<strong>第一阶</strong>（起点打法），恰恰是要淡化的方向——把「起点」当成了「当前所指」，方向记反</td></tr><tr><td>D 制度型开放</td><td>✅</td><td>规则、规制、管理、标准——十八大以来尤其二十大以来的固定搭配，高水平开放的主要所指</td></tr></tbody></table>
+<h3>第 3 步：预判追问——「制度型」的四个词各管什么</h3>
+<p><strong>规则</strong>（市场准入、竞争政策等成文规则）、<strong>规制</strong>（政府监管方式）、<strong>管理</strong>（经济社会治理）、<strong>标准</strong>（技术标准体系）。共同点：都是<strong>制度基础设施</strong>，不是优惠政策——开放的对象从「让多少东西进来」变成「按什么规则办事」。背这四个词时按「从成文规则到执行治理、再到技术细节」的顺序串一遍，就不会漏字换字。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 B（「要素流动」最直观）</strong>：把「开放做得活跃」当成「开放水平高」——量与质混淆。高水平标志的是<strong>制度对接</strong>，不是流量大小。</li><li><strong>选 C（习惯性联想经济特区）</strong>：政策性开放是四十多年前的起点，题干问的是「当前」，方向正好相反。</li><li><strong>选 A（凭语感挑气势大的词）</strong>：规范表述题的铁律——固定搭配必须原文有出处，「全局性开放」没有。</li></ul>
+<blockquote>记忆锚点：政策性 → 要素型（物的流动）→ <strong>制度型（规则的衔接）</strong>；高水平开放＝<strong>规则、规制、管理、标准</strong>制度型开放（2018 中央经济工作会议首提转变，二十大固定表述），以开放促改革。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

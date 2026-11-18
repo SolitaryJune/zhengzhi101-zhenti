@@ -1,8 +1,114 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-10 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-10</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·10 八七会议确立了什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 概念/时间线卡片（依据 anim_math_concept_template；政治站纯文本，无 KaTeX） */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+function miniTable(rows){
+  var s = '<table style="border-collapse:collapse;margin:6px 0;font-size:13px">';
+  for(var i=0;i<rows.length;i++){
+    s += '<tr>';
+    for(var j=0;j<rows[i].length;j++){
+      s += '<td style="border:1px solid #cbd5e1;padding:3px 8px">' + rows[i][j] + '</td>';
+    }
+    s += '</tr>';
+  }
+  return s + '</table>';
+}
+
+var STEPS = [
+  { title: '审题眼：1927·8·7 汉口，急转弯',
+    cls: 'key',
+    body: '<p>大革命失败、白色恐怖笼罩全国——党面临"往哪儿走、怎么走"的急转弯。1927 年 8 月 7 日中共中央在汉口召开紧急会议，即<b>八七会议</b>。问"这次会议确立了什么" = 问会议层面确立的历史功绩。</p>',
+    log: '八七会议：问会议层面的功绩' },
+  { title: '机制：会议三件事',
+    cls: 'key',
+    body: '<p>①彻底清算大革命后期的<b>右倾</b>机会主义错误（陈独秀为代表）；②确定<b>土地革命和武装反抗国民党反动统治的总方针</b>——最主要功绩，"确立了什么"的答案位置；③毛泽东提出"<b>政权是由枪杆子中取得的</b>"论断。</p>',
+    log: '纠右倾 + 定总方针 + 枪杆子论断' },
+  { title: '选项 A：方向反了',
+    cls: 'bad',
+    body: '<p>会议批评的是大革命后期的<b>右倾</b>（对国民党右派妥协退让），不是"左倾"。"左"倾冒险错误是后来土地革命时期的事。A 错。</p>',
+    ribbon: {k: 1, ok: false},
+    log: 'A：右倾 ≠ 左倾，方向反了' },
+  { title: '选项 B：时序错位',
+    cls: 'bad',
+    body: '<p>工作重心由城市向乡村转移，是<b>井冈山道路开辟后逐步实现</b>的，八七会议并未提出。B 错。</p>',
+    ribbon: {k: 2, ok: false},
+    log: 'B：重心转移在井冈山时期' },
+  { title: '选项 C：时间与层次双重错位',
+    cls: 'bad',
+    body: '<p>发动湘鄂粤赣四省农民秋收暴动的计划，载于 <b>8 月 3 日（会前 4 天）</b>临时中央发出的《湘鄂粤赣四省农民秋收暴动大纲》——C 说"会议提出"对不上出处；会议确立的是<b>总方针</b>，具体起义是总方针之下的落实部署（会后毛泽东回湖南领导湘赣边界秋收起义）。C 错。</p>',
+    ribbon: {k: 3, ok: false},
+    log: 'C：《大纲》会前已发，非会议确立' },
+  { title: '选项 D：总方针',
+    cls: 'good',
+    body: '<p>"确立了<b>土地革命和武装起义方针</b>"——八七会议最主要的历史功绩，写进党史定位的那一条。D 对。</p>',
+    ribbon: {k: 4, ok: true},
+    log: 'D：土地革命 + 武装反抗的总方针' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>D</b>。' + miniTable([
+      ['A 左倾', '✗ 应为右倾'],
+      ['B 重心转移', '✗ 井冈山时期'],
+      ['C 秋收起义', '✗ 会前已部署'],
+      ['D 土地革命+武装起义方针', '✓ 总方针']
+    ]) + '</p>',
+    log: '锁定 D：土地革命和武装起义方针' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '八七会议：纠右倾、定方针、枪杆子里出政权',
+  subtitle: '考点：八七会议 · 方法：先立会议功绩坐标，再按方向/时序/层次排查干扰项',
+  counterLabel: '推理步',
+  ribbonTitle: '选项带（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链；序号带 1–4 对应选项 A–D。',
+  snaps: snaps,
+  result: {
+    big: '答案 D',
+    html: '记忆锚点：八七会议 = <b>纠右倾 + 定方针（土地革命、武装反抗）+ 枪杆子里出政权</b>。A 方向反了、B 时序错位、C 双重错位（〈暴动大纲〉会前 8 月 3 日已由临时中央发出，具体起义是总方针的落实，非会议"确立"）。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：八七会议确立了什么——先立"会议三件事"的坐标，再对号入座</h2>
+<p>答案：<strong>D（确立了土地革命和武装起义方针）</strong>。</p>
+<h3>第 0 步：先立机制——大革命失败后的急转弯</h3>
+<p>1927 年大革命失败，白色恐怖笼罩全国，党面临"往哪儿走、怎么走"的急转弯。1927 年 8 月 7 日，中共中央在汉口召开紧急会议（八七会议），主要功绩有三条：①彻底清算了大革命后期的<strong>右倾</strong>机会主义错误（对国民党右派妥协退让，以陈独秀为代表）；②确定了<strong>土地革命和武装反抗国民党反动统治的总方针</strong>——这是会议最主要的历史贡献，也是党史定位里"确立了什么"的答案位置；③毛泽东在会上提出"政权是由枪杆子中取得的"著名论断。题干把背景（白色恐怖、挽救革命）念完，问"这次会议确立了什么"，问的就是会议本身的历史功绩——<strong>总方针</strong>，即 D。</p>
+<h3>第 1 步：预判追问——秋收起义也在那几天，为什么 C 不算"会议确立的"？</h3>
+<p>八七会议前后确实在筹备秋收起义，但 C 仍不成立，有两层错位。<strong>出处错位</strong>：发动湘、鄂、粤、赣四省农民秋收暴动的计划，载于 1927 年 8 月 3 日临时中央发出的《中共中央关于湘鄂粤赣四省农民秋收暴动大纲》——那是<strong>会前 4 天</strong>的文件，C 说"会议提出"对不上出处。<strong>层次错位</strong>：把起义组织起来是总方针之下的<strong>具体落实部署</strong>——会后毛泽东以中央特派员身份回湖南领导湘赣边界秋收起义（9 月 9 日爆发）。单选题要选会议层面确立的、分量最重的那一条："方针"（D）是写进党史定位的总纲领，具体起义安排（C）不在"确立了什么"的答案位置上。</p>
+<h3>第 2 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>定位</th></tr></thead><tbody><tr><td>A 批评了大革命后期的左倾倾向</td><td>❌</td><td>方向反了：清算的是<strong>右倾</strong>机会主义（妥协退让）</td></tr><tr><td>B 提出了党的工作重心由城市向乡村转移的必要性</td><td>❌</td><td>时序错位：重心转向乡村是井冈山道路开辟后逐步实现的，会议未提出</td></tr><tr><td>C 提出了组织湘鄂粤赣农民秋收起义</td><td>❌</td><td>双重错位：《暴动大纲》会前 4 天（8 月 3 日）已由临时中央发出；会议确立的是总方针，具体起义是落实部署</td></tr><tr><td>D 确立了土地革命和武装起义方针</td><td>✅</td><td>会议最主要功绩：土地革命和武装反抗国民党反动统治的总方针</td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：把"右倾""左倾"记混。大革命后期是<strong>右倾</strong>——对国民党右派一味妥协退让；"左"倾冒险错误是后来土地革命时期的事（如王明"左"倾教条主义）。方向一反就错。</li><li><strong>误选 B</strong>：知道"后来去了农村"，就以为会议提了转移。工作重心由城市向乡村转移，是经过井冈山革命根据地创建等实践<strong>逐步实现</strong>的，不是八七会议的提议——时序错位。</li><li><strong>误选 C</strong>：把"那时确实在筹备秋收起义"的史实与"会议确立了什么"的设问混淆——《湘鄂粤赣四省农民秋收暴动大纲》会前 4 天已由临时中央发出，会后回湘组织落实；筹备属实，但不等于"由会议提出、确立"。</li></ul>
+<blockquote>记忆锚点：八七会议 = <strong>纠右倾 + 定方针（土地革命、武装反抗）+ 枪杆子里出政权</strong>；秋收起义是总方针的具体落实，不是会议"确立"的内容。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

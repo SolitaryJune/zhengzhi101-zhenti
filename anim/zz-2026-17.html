@@ -1,8 +1,100 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-17 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-17</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2026-17 · 暗物质与物质观：客观实在性与可知性（2026 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：三个物理属性 = 两个哲学命题',
+    cls: 'key',
+    body: '<p>暗物质：<b>产生引力</b>（有质量效应）、<b>不发光</b>（不参与电磁作用）、<b>可测绘分布</b>（借引力效应间接把握）。合起来考两点：它不依赖人看见而存在 → <b>客观实在性</b>；它能被认识 → <b>可知论</b>。选项逐项对号。</p>' },
+  { title: '先立机制：看不见 ≠ 不存在，看不见 ≠ 不可知',
+    cls: '',
+    body: '<p>星系旋转、引力透镜的异常早已摆在那里——暗物质不因没人直接看到就不存在；科学家又能借引力效应反推其分布——感官够不着，<b>理性与科学仪器够得着</b>。一个"感官够不着、理性够得着"的对象，正是本题的钥匙。</p>' },
+  { title: '逐项分析 A：只有"具体感知"才确证？',
+    cls: 'bad',
+    ribbon: {k:1, ok:false},
+    body: '<p>A 说客观性"<b>只有</b>通过人们具体的感知而得到确证"。破绽：<b>暗物质恰恰不能被具体感知</b>，它的存在靠引力效应<b>间接确证</b>——把确证通道收窄为"具体感知"不合题干；且暗含"存在取决于被感知"，滑向经验论。❌ 不选。</p>' },
+  { title: '逐项分析 B：客观实在 + 可被反映',
+    cls: 'good',
+    ribbon: {k:2, ok:true},
+    body: '<p>B："物质不依赖于人的意志而存在，并为人的意识所反映。"前半句 = <b>客观实在性</b>（物质的根本特性），后半句 = <b>可知论</b>。这正是马克思主义物质定义的完整表述，暗物质案例全部命中。✅ 选。</p>' },
+  { title: '逐项分析 C：旧唯物主义的标签词',
+    cls: 'bad',
+    ribbon: {k:3, ok:false},
+    body: '<p>C："外在的、直观的、机械的、自在的对象"——这是<b>形而上学唯物主义</b>给物质世界贴的标签，把世界当成与人无关、只供直观的现成对象。马克思主义物质观以<b>实践</b>为中介：人在改造世界中认识世界。措辞一复古就露馅。❌ 不选。</p>' },
+  { title: '逐项分析 D：没有不可知的"物自体"',
+    cls: 'good',
+    ribbon: {k:4, ok:true},
+    body: '<p>D：物质世界不是超越人类理性之外的"物自体"。康德把"物自体"划为不可认识的彼岸；可知论说：世界上只有<b>尚未被认识</b>之物，没有<b>不可认识</b>之物。暗物质正示范"现在没观测到 ≠ 永远不可认识"。✅ 选。</p>' },
+  { title: '对号入座汇总',
+    cls: '',
+    body: '<p>A ❌ 确证通道被收窄，间接确证同样成立；B ✅ 客观实在性 + 可知性；C ❌ 旧唯物标签、丢实践中介；D ✅ 可知论反对"物自体"。→ 答案 <b>BD</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>BD</b>。暗物质把"客观实在性"与"可知性"一次考全：存在不靠感知，认识不设彼岸。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2026-17 暗物质：客观实在性与可知性',
+  subtitle: '考点：物质与意识 · 旧唯物主义辨析 · 可知论反对"物自体" —— 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 BD',
+    html: '<b>B</b>：物质不依赖于人的意志而存在，并为人的意识所反映——客观实在性 + 可知性，暗物质全命中。<br><br><b>D</b>：物质世界不是超越人类理性之外的"物自体"——只有尚未被认识之物，没有不可认识之物。<br><br><b>干扰项：</b>A"只有具体感知才确证"是经验论（间接确证同样成立）；C"直观、机械、自在"是旧唯物主义标签，丢了实践中介。<br><br><b>记忆锚点：</b>客观实在性不看"看没看见"，可知论不设"物自体"。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：暗物质如何同时印证"客观实在性"与"可知性"</h2>
+<p>答案：<strong>BD</strong>。</p>
+<h3>第 0 步：先立机制——暗物质是"看不见但存在"的教科书案例</h3>
+<p>题干给了暗物质三个属性：产生引力（有质量效应）、不发光（不参与电磁相互作用）、可借引力效应"测绘分布"。三点合起来是一道"物质观 + 可知论"的推理题：</p>
+<ul><li>它<strong>不依赖</strong>我们看见与否而存在——星系旋转、引力透镜的异常早就摆在那里；</li><li>它<strong>可以被认识</strong>——虽"看不见"，科学家能借它对可见物质的引力效应反推其分布。</li></ul>
+<p>一个"感官够不着、理性够得着"的对象，正好把物质的客观性（B）和世界的可知性（D）同时考出来。</p>
+<h3>第 1 步：B 为什么对——客观实在性 + 可知性一句说全</h3>
+<p>B：物质不依赖于人的意志而存在，并为人的意识所反映。前半句是<strong>物质的根本特性</strong>（客观实在性）——暗物质不因"没人直接看到它"就不存在；后半句是<strong>可知论立场</strong>——它终将通过其效应被意识反映（题干里科学家已经在测绘其分布）。两句合起来正是马克思主义物质定义的完整表述：物质是标志客观实在的哲学范畴，不依赖于人的意识而存在，并能为人的意识所反映。</p>
+<h3>第 2 步：D 为什么对——康德"物自体"是可知论要跨过的坎</h3>
+<p>D：物质世界不是超越于人类理性所能理解的现象之外"物自体"。康德把"物自体"划为不可认识的彼岸；可知论明确：世界上只有<strong>尚未被认识</strong>之物，没有<strong>不可认识</strong>之物。暗物质恰恰示范了"现在还没直接观测到 ≠ 永远不可认识"——借助引力效应，人类已经在把握它的分布，认识每前进一步，"物自体"的地盘就缩小一分。</p>
+<h3>第 3 步：A、C 为什么错</h3>
+<p>A 的破绽在"<strong>只有</strong>通过人们具体的感知而得到确证"。暗物质本身就不能被"具体感知"（不发光、不参与电磁作用），它的存在是靠<strong>引力效应间接确证</strong>的——感性感知够不着时，科学仪器与理性抽象照样能确证客观性。把确证通道收窄为"具体感知"，既不符合题干，又暗含"存在取决于被感知"的逻辑，那已经滑向经验论和贝克莱式的唯心论。</p>
+<p>C 的破绽在"<strong>外在的、直观的、机械的、自在的</strong>"——这是<strong>旧唯物主义（形而上学唯物主义）</strong>给物质世界贴的标签：把世界当作与人无关、只供直观的现成对象。马克思主义的物质观以<strong>实践</strong>为中介：物质世界是与人的实践活动发生对象性关系的对象，人在改造世界中认识它。C 用旧唯物主义的措辞描述物质世界，属于复古式干扰。</p>
+<h3>第 4 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>关键词</th></tr></thead><tbody><tr><td>A 只有具体感知才确证客观性</td><td>❌</td><td>确证可经间接效应；存在不依赖被感知</td></tr><tr><td>B 不依赖意志存在、被意识反映</td><td>✅</td><td>客观实在性 + 可知性</td></tr><tr><td>C 外在、直观、机械、自在</td><td>❌</td><td>旧唯物主义标签，丢了实践中介</td></tr><tr><td>D 不是理性之外的"物自体"</td><td>✅</td><td>可知论反对不可知的彼岸</td></tr></tbody></table>
+<p>→ 选 <strong>BD</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选 B</strong>：被"暗物质看不见"带偏，以为物质必须被直接观测才谈得上"被意识反映"。其实"反映"包括间接反映——通过效应、通过理性把握。</li><li><strong>误选 A</strong>：把"确证"理解成"眼见为实"。暗物质正是反例：眼见（发光）恰恰够不着它。</li><li><strong>误选 C</strong>：看到"物质世界"四个字就点头，没注意"直观、机械、自在"是形而上学唯物主义的标签词。</li><li><strong>漏选 D</strong>：不熟悉"物自体"典故。凡选项出现"不可认识""物自体""彼岸"，先按可知论直觉把它排除。</li></ul>
+<blockquote>记忆锚点：<strong>客观实在性不看"看没看见"（B），可知论不设"物自体"（D）；"只有感知才确证"是经验论（A 反），"直观机械自在"是旧唯物（C 反）。</strong></blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

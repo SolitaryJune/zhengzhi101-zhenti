@@ -1,8 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2019-25 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2019-25</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2019·25 "一国"与"两制"的框架内结合</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），
+     引用 ../assets/anim-engine.js，只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: "审题眼：这题问的是「关系」",
+    cls: "key",
+    body: "<p>题干限定：在坚持<b>「一国」</b>基础上，实现「两制」和谐相处、相互促进——问的是处理这层关系<b>「必须做到」</b>什么。关系限定题先别急着看选项，把关系本身的结构立起来再筛。</p>",
+    log: "先审题：问的是「一国」与「两制」怎么相处"
+  },
+  {
+    title: "立机制：从属结构，不是并列结构",
+    cls: "key",
+    body: "<p><b>「一国」是根、是前提</b>——中央对港澳拥有全面管治权，「两制」才能运行；<b>「两制」从属、派生于「一国」，统一于「一国」之内</b>。</p><p>由此得出正确做法的形状：都是<b>框架内两端的结合</b>——一端连「一国」（中央权力、一国原则、内地后盾），一端连「两制」（高度自治权、两制差异、港澳竞争力）。</p>",
+    log: "一国是根、两制是叶 → 筛子：框架内两端结合"
+  },
+  {
+    title: "选项 A：维护中央权力 × 保障高度自治权",
+    cls: "good",
+    ribbon: { k: 1, ok: true },
+    body: "<p>中央权力是「一国」端，特别行政区高度自治权是「两制」端——两端都在框架内，有机结合正是题干要的做法。<b>A 入选</b>。</p>",
+    log: "A：一端「一国」、一端「两制」→ 框架内结合 ✓"
+  },
+  {
+    title: "选项 B：坚持「一国」原则 × 尊重「两制」差异",
+    cls: "good",
+    ribbon: { k: 2, ok: true },
+    body: "<p>题干「在坚持一国基础上实现两制和谐相处」的原话翻译——原则是「一国」端，差异被尊重是「两制」端。<b>B 入选</b>。</p>",
+    log: "B：题干原话 → 框架内结合 ✓"
+  },
+  {
+    title: "选项 C：利用国际有利条件 × 发挥港澳优势",
+    cls: "bad",
+    ribbon: { k: 3, ok: false },
+    body: "<p>「国际有利条件」是<b>外部因素</b>，与「一国」这一端不发生任何结构关联——一端在框架外，不成其为「一国」与「两制」的结合。</p><p>它本身是句正确的话，但<b>答非所问</b>。<b>C 排除</b>。</p>",
+    log: "C：国际条件在框架外 → 答非所问 ✗"
+  },
+  {
+    title: "选项 D：内地坚强后盾 × 提高港澳自身竞争力",
+    cls: "good",
+    ribbon: { k: 4, ok: true },
+    body: "<p>内地后盾是「一国」端，港澳竞争力是「两制」端——题干「和谐相处、<b>相互促进</b>」四个字点的就是这种结合。<b>D 入选</b>。</p>",
+    log: "D：后盾 × 竞争力 → 相互促进 ✓"
+  },
+  {
+    title: "追问：C 本身是句正确的话，为什么不能选",
+    cls: "step",
+    body: "<p>题干问的是处理<b>「一国」与「两制」关系</b>「必须做到」什么——选项必须同时触及这层关系的两端。多选题的通用纪律：<b>本身正确 ≠ 对题</b>；框架外的正确句恰恰是命题人设的钩子。</p>",
+    log: "先审问的是哪层关系，再判选项在不在框架里"
+  },
+  {
+    title: "结论",
+    cls: "good",
+    body: "<p>答案 <b>ABD</b>。记忆锚点：一国是根、两制是叶——正确做法 = <b>框架内两端结合</b>（A 中央权力 × 自治权、B 一国原则 × 两制差异、D 后盾 × 竞争力）；国际条件是框架外的外部因素，C 答非所问。</p>",
+    log: "锁定 ABD：三组「一国端 × 两制端」的结合"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "「一国」与「两制」：用从属结构筛出框架内的有机结合",
+  subtitle: "考点：一国两制 · 方法：先立从属结构，再用「框架内两端结合」筛选项",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立「一国是根」的从属结构，再逐项过筛。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABD",
+    html: "记忆锚点：一国是根、两制是叶——正确做法 = <b>框架内两端结合</b>（A 中央权力 × 自治权、B 一国原则 × 两制差异、D 内地后盾 × 港澳竞争力）；国际条件是框架外的外部因素，答非所问（C 错）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：把握"一国"与"两制"的关系——用"从属结构"筛出框架内的有机结合</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——"一国"与"两制"是从属结构，不是并列结构</h3>
+<p>关系类题目不能逐项硬背，先把这层关系的结构立起来：在"一国两制"里，<strong>"一国"是根、是前提</strong>——坚持一国原则，中央对港澳拥有全面管治权，"两制"才能运行；<strong>"两制"从属、派生于"一国"，统一于"一国"之内</strong>——差异得到尊重，两制才能和谐相处、相互促进。</p>
+<p>结构一立，正确做法的形状就定了：凡是"把握二者关系"的举措，必然是<strong>框架内两端的有机结合</strong>——一端连"一国"（中央权力、一国原则、内地后盾），另一端连"两制"（高度自治权、两制差异、港澳竞争力）。拿这个形状去筛选项，一眼见底。</p>
+<h3>第 1 步：A~D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>"一国"端</th><th>"两制"端</th><th>判定</th></tr></thead><tbody><tr><td>A 维护中央权力 × 保障特区高度自治权</td><td>中央权力</td><td>高度自治权</td><td>✅ 框架内结合</td></tr><tr><td>B 坚持"一国"原则 × 尊重"两制"差异</td><td>一国原则</td><td>两制差异</td><td>✅ 题干原话翻译</td></tr><tr><td>C 利用国际有利条件 × 发挥港澳优势</td><td>（无）</td><td>港澳优势</td><td>❌ 一端在框架外</td></tr><tr><td>D 内地坚强后盾 × 提高港澳自身竞争力</td><td>内地后盾</td><td>港澳竞争力</td><td>✅ 框架内结合</td></tr></tbody></table>
+<p>→ A、B、D 都是"一国"端配"两制"端，只有 C 的"国际有利条件"在框架外，选 <strong>ABD</strong>。</p>
+<h3>第 2 步：预判追问——C 本身是句正确的话，为什么不能选？</h3>
+<p>因为题干问的是<strong>处理"一国"与"两制"关系</strong>"必须做到"什么，选项必须同时触及这层关系的两端。"利用国际有利条件"是港澳发展的<strong>外部条件</strong>，它与"一国"这一端不发生任何结构关联——选它等于答非所问。多选题的通用纪律：<strong>本身正确 ≠ 对题</strong>；先审题干问的是哪层关系，再判断选项在不在框架里。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：典型误解是"正确的话就能选"——没有先划出"一国—两制"框架，看到 C 也在讲促进港澳繁荣就顺手打勾。关系限定类多选题里，框架外的正确句恰恰是命题人设的钩子。</li><li><strong>漏选 D</strong>：把"内地后盾"误解为对自治的"干预"——其实"后盾 + 竞争力"正是一国端与两制端的相互促进，题干"相互促进"四个字点的就是它。</li></ul>
+<blockquote>记忆锚点：一国是根、两制是叶——正确做法 = <strong>框架内两端结合</strong>（A 中央权力 × 自治权、B 一国原则 × 两制差异、D 内地后盾 × 港澳竞争力）；国际条件是框架外的外部因素，C 答非所问。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

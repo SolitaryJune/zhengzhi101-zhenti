@@ -1,8 +1,125 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-21 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-21</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2018·21 社会主义发展道路多样性：三条身份牌</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 三块身份牌：成因卡片逐个点亮
+function badges(state){
+  var bdg = function(name, tag, on, color){
+    var bd = on ? color : '#cbd5e1';
+    var bg = on ? color + '14' : '#f8fafc';
+    var hd = on ? color : '#64748b';
+    return '<span style="display:inline-flex;flex-direction:column;gap:1px;border:2px solid ' + bd +
+      ';background:' + bg + ';border-radius:10px;padding:7px 11px;text-align:center;min-width:150px">' +
+      '<b style="font-size:12.5px;color:' + hd + '">' + name + '</b>' +
+      '<span style="font-size:11px;color:#475569;border-top:1px dashed ' + bd + ';margin-top:3px;padding-top:3px">' + tag + '</span></span>';
+  };
+  return '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;width:max-content;margin:6px 0">' +
+    bdg('生产力状况＋社会发展阶段', '决定性因素', state >= 1, '#16a34a') +
+    bdg('历史文化传统差异', '重要条件', state >= 2, '#2a9d8f') +
+    bdg('时代与实践不断发展', '现实原因', state >= 3, '#d97706') +
+    '</div>';
+}
+
+// C 的身份偷换对比条
+function swapBar(){
+  return '<div style="display:flex;gap:8px;align-items:stretch;margin:6px 0;flex-wrap:wrap">' +
+    '<span style="flex:1;min-width:170px;border:2px solid #dc2626;background:#fef2f2;border-radius:10px;padding:7px 10px;text-align:center;font-size:12.5px;color:#991b1b"><b>民族因素/地理环境</b><span style="display:block;margin-top:2px">真实身份：影响因素（添特色）</span></span>' +
+    '<span style="align-self:center;font-size:16px;font-weight:700;color:#64748b">被偷换成</span>' +
+    '<span style="flex:1;min-width:170px;border:2px solid #dc2626;background:#fef2f2;border-radius:10px;padding:7px 10px;text-align:center;font-size:12.5px;color:#991b1b"><b>「决定因素」</b><span style="display:block;margin-top:2px">这个位置只属于生产力＋发展阶段</span></span>' +
+    '</div>';
+}
+
+// 列宁句两半结构
+function leninBar(){
+  return '<div style="display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap">' +
+    '<span style="border:2px solid #6366f1;background:#6366f114;border-radius:10px;padding:6px 12px;font-size:13px;color:#4338ca"><b>前半句</b> 走向社会主义不可避免 = 一般规律</span>' +
+    '<span style="font-size:16px;font-weight:700;color:#64748b">+</span>' +
+    '<span style="border:2px solid #d97706;background:#fffbeb;border-radius:10px;padding:6px 12px;font-size:13px;color:#b45309"><b>后半句</b> 走法不会完全一样 = 道路多样（本题考点）</span>' +
+    '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：列宁的话拆成两半，考点在后半句',
+    body: '<p>「不可避免」立<b>一般规律</b>，「走法不会完全一样」讲<b>道路多样</b>——设问问的是<b>多样性的成因</b>。先把列宁句的骨架钉住，再背成因。</p>' + leninBar() },
+  { tag: '机制', cls: 'key', title: '先立机制：三条成因，每条带一块身份牌',
+    body: '<p>教材列三条成因，各带身份牌：<b>决定性因素</b>＝生产力发展状况和社会发展阶段；<b>重要条件</b>＝历史文化传统差异；<b>现实原因</b>＝时代和实践不断发展。做题程序：背牌 → 查每个选项有没有偷换身份。</p>' + badges(0) },
+  { tag: '选项A', cls: 'good', ribbon: { k: 1, ok: true }, title: 'A：决定性因素——多样性的总根源',
+    body: '<p>生产力发展状况和社会发展阶段<b>决定</b>了道路具有不同特点：有什么样的生产力与发展阶段，才撑得起什么样的制度形式。<b>A 对。</b></p>' + badges(1) },
+  { tag: '选项B', cls: 'good', ribbon: { k: 2, ok: true }, title: 'B：重要条件——文化传统打底色',
+    body: '<p>历史文化传统的差异是造成多样性的<b>重要条件</b>：同样的制度框架放进不同的文化传统里，长出的样子必然不同。牌面比 A 低一级，但同样是成因。<b>B 对。</b></p>' + badges(2) },
+  { tag: '选项D', cls: 'good', ribbon: { k: 3, ok: true }, title: 'D：现实原因——时代与实践不断分化',
+    body: '<p>时代和实践的不断发展是造成多样性的<b>现实原因</b>：社会主义不是一次设计定终身，时代在变、实践在推进，各国道路必然继续分化。<b>D 对。</b></p>' + badges(3) },
+  { tag: '选项C', cls: 'bad', ribbon: { k: 4, ok: false }, title: 'C：身份牌被偷换——唯一干扰项',
+    body: '<p>民族因素、地理环境确实给道路添特色——半句真；但说成<b>「决定因素」</b>就错——半句假：</p>' + swapBar() + '<p>「决定」的位置只属于生产力＋社会发展阶段（A）。<b>C 错。</b></p>' },
+  { tag: '追问', cls: 'key', title: '预判追问：为什么「决定」给生产力、不给地理环境',
+    body: '<p>历史唯物主义的排序：地理环境、人口因素是社会发展的<b>自然前提</b>，影响快慢与特色，<b>不决定</b>制度性质与选择；<b>生产力才是最终决定力量</b>。所以「地理环境决定论」在历史观上本身就错——C 等于连历史观一起偷换了。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：三块身份牌 + 一次偷换',
+    body: '<p>答案 <b>ABD</b>。记忆锚点：<b>决定性</b>＝生产力状况＋社会发展阶段；<b>重要条件</b>＝历史文化传统；<b>现实原因</b>＝时代与实践不断发展；「地理环境决定」＝偷换身份牌，不选。承认多样性 ≠ 否认社会主义基本原则。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: s.tag,
+    log: s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon,
+    done: last,
+  };
+});
+
+AW.init({
+  title: '社会主义发展道路多样性：三条成因的身份牌',
+  subtitle: '2018 年第 21 题 · 列宁论道路多样性 · 成因身份牌：决定性/重要条件/现实原因 · 多选题',
+  intro: '点击「▶ 播放」逐步展开：先拆列宁句、立三块身份牌，再逐项判定 A/B/C/D。',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=D · 4=C；✓ 对 / ✗ 干扰）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABD',
+    html: '三条成因带三块牌：<b>决定性＝生产力状况＋社会发展阶段（A）</b>、<b>重要条件＝历史文化传统（B）</b>、<b>现实原因＝时代与实践发展（D）</b>。<b>C 错</b>：民族因素、地理环境只是<b>影响因素</b>，不是「决定因素」——地理环境决定论本身违背历史唯物主义。承认多样性 ≠ 否认社会主义基本原则。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：社会主义发展道路为什么「条条不同」——三条成因各有身份牌</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——列宁那句话拆成两半</h3>
+<p>题干引列宁：走向社会主义「不可避免」，但「走法不会完全一样」。前半句立<strong>一般规律</strong>（总方向统一），后半句讲<strong>具体道路多样</strong>（各国特色）——本题问的是后半句的成因。教材给三条，每条带一块身份牌：</p>
+<ul><li>各国<strong>生产力发展状况和社会发展阶段</strong>——<strong>决定性因素</strong>（总根源）；</li><li><strong>历史文化传统</strong>的差异——<strong>重要条件</strong>；</li><li><strong>时代和实践的不断发展</strong>——<strong>现实原因</strong>。</li></ul>
+<p>做题程序就是先把三块身份牌背下来，再逐个查选项有没有偷换身份。本题 A、B、D 按牌入座，C 把牌换了。</p>
+<h3>第 1 步：A、B、D 按身份牌入座</h3>
+<table><thead><tr><th>选项</th><th>身份牌</th><th>为什么成立</th></tr></thead><tbody><tr><td>A 各国生产力发展状况和社会发展阶段决定道路具有不同特点</td><td>决定性因素</td><td>生产力与社会发展阶段不同，能承载的社会主义形式就不同——多样性的总根源</td></tr><tr><td>B 历史文化传统的差异性是造成多样性的重要条件</td><td>重要条件</td><td>同样的制度框架放进不同的文化传统里，必然长出不同的样子</td></tr><tr><td>D 时代和实践的不断发展是造成多样性的现实原因</td><td>现实原因</td><td>社会主义不是一次设计定终身，时代与实践推进中各国道路继续分化</td></tr></tbody></table>
+<h3>第 2 步：C 错在哪——把「影响」抬成「决定」</h3>
+<p>C「各国民族因素和地理环境的不同是造成社会主义发展道路多样性的<strong>决定因素</strong>」——错在两个字：「决定」。民族因素、地理环境确实给道路添特色，但它们只是<strong>影响因素</strong>；「决定」的位置只属于生产力发展状况和社会发展阶段（即 A）。半句真（造成多样性）、半句假（决定因素），合起来就是这类选择题最经典的偷换手法。</p>
+<h3>预判追问：为什么决定性偏偏给「生产力」？</h3>
+<p>历史唯物主义的排序是：地理环境、人口因素构成社会存在与发展的<strong>自然前提</strong>，影响发展的快慢与特色，但<strong>不决定</strong>社会制度的性质与选择；<strong>生产力才是最终决定力量</strong>——有什么样的生产力与发展阶段，才撑得起什么样的生产关系与制度形式。所以「地理环境决定论」在历史观上本身就是错的，C 等于连历史观一起偷换了。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：看到「民族因素」「地理环境」觉得「确实造成多样性」就顺手勾——凡是把次要因素写成「决定性因素」的选项，一律先查身份牌再动笔。</li><li><strong>漏选 B</strong>：以为「重要条件」分量不够、不像标准答案——教材原话就是「重要条件」，三个正确项牌面有高低（决定性/重要条件/现实原因），但都是成因。</li><li><strong>忘掉前半句</strong>：承认多样性 ≠ 否认社会主义基本原则；一般规律与具体国情相结合——这是参考解析补的下半句。</li></ul>
+<blockquote>记忆锚点：决定性＝生产力状况＋社会发展阶段；重要条件＝历史文化传统；现实原因＝时代与实践不断发展；「地理环境决定」＝偷换身份牌，不选。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,117 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-03 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-03</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2018·03 「以人民为中心」的唯物史观根基</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 纵向对号条目（标签 + 说明，用于机制展开）
+function kv(rows){
+  return '<div>' + rows.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:86px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+// 三格并列小图（群众史观三句话）
+function grid3(items){
+  return '<div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0">' + items.map(function(L){
+    return '<div style="flex:1;min-width:150px;border:1px solid #2a9d8f;border-radius:8px;padding:6px 10px;background:#2a9d8f14">' +
+           '<b style="color:#1f7a70">' + L.k + '</b><div style="font-size:12.5px;color:#555">' + L.v + '</div></div>';
+  }).join('') + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：找「能直接推出中心立场」的原理',
+    body: '<p>设问「“坚持以人民为中心”的<b>理论基础</b>是唯物史观关于（）」。「理论基础」的判断标准有两条：原理的<b>主语</b>是「人民群众」这个集体范畴；命题的<b>方向</b>是「创造、决定」，才托得住「中心」二字。</p>' },
+  { tag: '机制', cls: 'key', title: '先立机制：群众史观三句话',
+    body: grid3([
+      { k: '物质财富', v: '人民群众是社会物质财富的创造者' },
+      { k: '精神财富', v: '人民群众是社会精神财富的创造者' },
+      { k: '社会变革', v: '人民群众是社会变革的决定性力量' },
+    ]) + '<p>三句合一即规范表述：<b>人民群众是历史的创造者</b>。它与英雄史观的对立，就在「谁创造历史」这一问上。</p>' },
+  { tag: '推导', cls: '', title: '推导链：从「谁创造」到「谁居中心」',
+    body: kv([
+      ['历史之问', '历史由谁创造？——唯物史观：由人民群众创造'],
+      ['价值立场', '历史由人民创造 → 治国理政就应坚持人民主体地位、以人民为中心'],
+      ['工作路线', '由此展开：立党为公、执政为民，践行全心全意为人民服务，贯彻群众路线，把人民对美好生活的向往作为奋斗目标'],
+    ]) + '<p>题干那一整段正是这条链第三环的逐条展开；回溯「理论基础」就是回到第一环。</p>' },
+  { tag: '选项A', cls: 'bad', ribbon: { k: 1, ok: false }, title: 'A：讲「人的本质」，层级错位',
+    body: '<p>A「人的本质是一切社会关系的总和」——回答的是「人是什么」（人的本质规定），主语是一般意义的「人」，不含「创造历史」的方向，推不出「以人民为中心」。<b>排除</b>。</p>' },
+  { tag: '选项B', cls: 'good', ribbon: { k: 2, ok: true }, title: 'B：群众史观直接托底',
+    body: '<p>B「人民群众是历史的创造者」——唯物史观关于群众历史作用的根本原理，一步推出「人民主体地位、以人民为中心」。<b>当选</b>。</p>' },
+  { tag: '选项C', cls: 'bad', ribbon: { k: 3, ok: false }, title: 'C：只讲制约不讲创造',
+    body: '<p>C「人民群众的活动受到社会历史条件制约」——讲的是条件性、有限性，方向恰好相反：说明群众「受制约」，推不出群众「居中心」。<b>排除</b>。</p>' },
+  { tag: '选项D', cls: 'bad', ribbon: { k: 4, ok: false }, title: 'D：抽象「主体地位」非规范表述',
+    body: '<p>D「总体的人在总体的历史过程中的主体地位」——抽象人本主义式表述，未点明「人民群众」这一集体范畴，不是群众史观的规范原理。<b>排除</b>。</p>' },
+  { tag: '追问', cls: 'key', title: '预判追问：A/C/D 也是唯物史观原理，为何不够格',
+    body: '<p>三个干扰项本身都是<b>正确命题</b>，错不在内容，而在与设问不构成根据：「理论基础」要求原理与结论之间是<b>推出关系</b>，不是「同属一个大板块」的归属关系。A 答人的规定性，C 答创造活动的边界，D 是抽象表述——都隔着一步，只有「人民群众是历史的创造者」一步到位。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：一句话带走',
+    body: '<p>答案 <b>B</b>。记忆锚点：群众史观 = 物质财富＋精神财富＋社会变革三个创造者；<b>「以人民为中心」的理论基础 = 人民群众是历史的创造者</b>；「人的本质」「条件制约」「抽象主体」都推不出中心地位。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon,
+    done: last,
+  };
+});
+
+AW.init({
+  title: '「以人民为中心」的唯物史观根基',
+  subtitle: '2018 年第 3 题 · 人民群众是历史的创造者 · 方法：先立群众史观，再看哪条原理一步推出中心立场',
+  intro: '点击「▶ 播放」逐步展开推理链：先立「谁创造历史」的机制，再让四个选项对号。',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 干扰）',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '「以人民为中心」的理论基础 = <b>人民群众是历史的创造者</b>（群众史观：物质财富＋精神财富＋社会变革三个创造者）。A 讲「人的本质」层级错位；C 只讲制约推不出中心地位；D 是抽象人本主义式表述——三条干扰项都是正确命题，但只有 B 与结论构成<b>推出关系</b>。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「以人民为中心」的原理地基在哪里</h2>
+<p>答案：<strong>B（人民群众是历史的创造者的原理）</strong>。</p>
+<h3>第 0 步：先立机制——「谁创造历史」决定「谁居中心」</h3>
+<p>这道题的题干很长，但真正的推理只有一条链：<strong>历史由谁创造 → 价值立场以谁为中心 → 工作路线怎么落实</strong>。先把链条的第一环立起来。</p>
+<p>唯物史观在「谁创造历史」上与英雄史观正面对立，它给出的群众史观由三句话构成：</p>
+<table><thead><tr><th>命题</th><th>内容</th><th>指向</th></tr></thead><tbody><tr><td>之一</td><td>人民群众是<strong>社会物质财富</strong>的创造者</td><td>吃穿住行、生产工具都出自群众之手</td></tr><tr><td>之二</td><td>人民群众是<strong>社会精神财富</strong>的创造者</td><td>文化、科学、思想源于群众的实践</td></tr><tr><td>之三</td><td>人民群众是<strong>社会变革</strong>的决定性力量</td><td>制度更替靠群众推动</td></tr></tbody></table>
+<p>三句合一就是规范表述：<strong>人民群众是历史的创造者</strong>。这一原理倒过来就生成价值立场——历史既然由人民创造，治国理政就必须坚持人民主体地位、立党为公执政为民、贯彻群众路线、把人民对美好生活的向往作为奋斗目标。题干那一整段，正是这条原理在治国层面的逐条展开；它的「理论基础」自然回到第一环。</p>
+<h3>第 1 步：「理论基础」的判断标准是什么</h3>
+<p>设问找的是「<strong>能直接推出</strong>『以人民为中心』的那条原理」，而不是「唯物史观里提到人民的任何原理」。判断标准有两条：其一，原理的<strong>主语</strong>是「人民群众」这个集体范畴；其二，命题的<strong>方向</strong>是「创造、决定」，才能托住「中心」二字。用这两条去对号，只有 B 同时满足。</p>
+<h3>第 2 步：干扰项归因</h3>
+<table><thead><tr><th>选项</th><th>它讲的是什么</th><th>为什么托不住「中心」</th><th>对应的误解</th></tr></thead><tbody><tr><td>A</td><td>「人的本质是一切社会关系的总和」回答「人是什么」</td><td>主语是一般意义的「人」，命题方向是本质规定，不含「创造历史」</td><td>把唯物史观里凡提「人」的原理都当成价值立场的地基</td></tr><tr><td>C</td><td>群众的活动<strong>受社会历史条件制约</strong></td><td>讲的是条件性、有限性，方向恰好相反——说明群众「受制约」，推不出群众「居中心」</td><td>把「条件性」顶替「主体性」</td></tr><tr><td>D</td><td>「总体的人在总体的历史过程中的主体地位」</td><td>抽象人本主义式表述，未点明「人民群众」这一集体范畴，不是群众史观的规范原理</td><td>看到「主体地位」四个字就当群众史观</td></tr></tbody></table>
+<h3>预判追问：A、C、D 也出自唯物史观，为什么不够格</h3>
+<p>这正是本题的陷阱所在。三个干扰项<strong>本身都是正确命题</strong>，错不在内容而在「与设问不构成根据」：「理论基础」要求原理与结论之间是<strong>推出关系</strong>，不是「同属一个大板块」的归属关系。A 回答人的规定性，C 回答创造活动的边界，D 是抽象表述——它们离「以人民为中心」都隔着一步，只有「人民群众是历史的创造者」一步到位。</p>
+<h3>易错点</h3>
+<ul><li><strong>见「人」就选 A</strong>：A 与题干共用人本主义语感，是最顺手的一项；牢记「人的本质」与「群众作用」是两个不同原理。</li><li><strong>把 C 当「辩证」加分项</strong>：C 讲制约确实辩证，但题问的是「中心」的根据，方向反了。</li><li><strong>被 D 的「主体地位」吸引</strong>：「主体地位」不是群众史观的规范提法，规范表述就是 B 的原句。</li></ul>
+<blockquote>记忆锚点：群众史观 = 物质财富＋精神财富＋社会变革三个创造者；<strong>「以人民为中心」的理论基础 = 人民群众是历史的创造者</strong>；「人的本质」「条件制约」「抽象主体」都推不出中心地位。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

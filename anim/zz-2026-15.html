@@ -1,8 +1,138 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-15 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-15</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2026·15 台湾光复纪念日的历史事件</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行时间轴 / 要素格（史实、会议、著作类用）
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：纪念日日期＝被纪念事件的日期",
+    "cls": "key",
+    "log": "题眼：10 月 25 日对应 1945 年哪一事件",
+    "body": "<p>2025 年 10 月 24 日，十四届全国人大常委会决定设立<b>台湾光复纪念日</b>（每年 10 月 25 日）。纪念日的日期＝被纪念事件发生的日期——把 1945 年日本投降前后的节点排开，四个选项各归各位。</p>"
+  },
+  {
+    "title": "排时间轴：1945 年四个节点",
+    "cls": "key",
+    "log": "8.15 终战诏书 → 9.2 密苏里号 → 9.9 南京受降 → 10.25 台北受降",
+    "body": "<div class=\"aw-cells\"><div class=\"aw-col\"><div class=\"aw-box \" style=\"font-size:12px\">日本天皇发布<br>终战诏书</div><div class=\"aw-idx\">8.15</div></div><div class=\"aw-col\"><div class=\"aw-box \" style=\"font-size:12px\">密苏里号<br>签署投降书</div><div class=\"aw-idx\">9.2</div></div><div class=\"aw-col\"><div class=\"aw-box \" style=\"font-size:12px\">中国战区受降<br>（南京）</div><div class=\"aw-idx\">9.9</div></div><div class=\"aw-col\"><div class=\"aw-box good\" style=\"font-size:12px\"><b>台湾省受降仪式</b><br>（台北·光复）</div><div class=\"aw-idx\">10.25</div></div></div>"
+  },
+  {
+    "title": "A 对号：台北受降仪式",
+    "cls": "good",
+    "log": "1945.10.25 台北受降 → A 正确",
+    "ribbon": {
+      "k": 1,
+      "ok": true
+    },
+    "body": "<p>1945 年 10 月 25 日，<b>中国战区台湾省受降仪式在台北举行</b>，台湾重回祖国版图——与纪念日同月同日，光复的标志性事件。<b>A 正确</b>。</p>"
+  },
+  {
+    "title": "B 排除：法理依据≠光复当天事件",
+    "cls": "bad",
+    "log": "开罗宣言 1943.12、波茨坦公告 1945.7 → B 排除",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    },
+    "body": "<p>《开罗宣言》（中、美、英，<b>1943 年 12 月</b>）与《波茨坦公告》（<b>1945 年 7 月</b>）确是台湾归还中国的<b>法律依据</b>，但两份文件分别发表于不同时间，不是光复当天发生的事——纪念日期取自<b>受降当天</b>。<b>B 错误</b>。</p>"
+  },
+  {
+    "title": "C 排除：密苏里号在 9 月 2 日",
+    "cls": "bad",
+    "log": "投降签字 1945.9.2 → C 排除",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    },
+    "body": "<p>「日本无条件投降仪式在密苏里号战舰上举行」——1945 年 <b>9 月 2 日</b>在东京湾举行，早了一个多月，是「日本投降」的节点而非台湾受降的节点。<b>C 错误</b>。</p>"
+  },
+  {
+    "title": "D 排除：终战诏书在 8 月 15 日",
+    "cls": "bad",
+    "log": "宣布投降 1945.8.15 → D 排除",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "body": "<p>「日本天皇发布终战诏书」——1945 年 <b>8 月 15 日</b>，投降<b>宣布</b>日，不是台湾受降日。<b>D 错误</b>。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "log": "锁定 A：中国战区台湾省受降仪式在台北举行",
+    "body": "<p>答案 <b>A</b>。记忆锚点：光复纪念日 10.25＝1945.10.25 <b>台北受降</b>；时间轴：8.15 终战诏书 → 9.2 密苏里号 → 9.9 南京受降 → 10.25 台北受降。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  "title": "政治 2026·15 台湾光复纪念日的历史事件",
+  "subtitle": "考点：台湾光复纪念日 · 方法：1945 年投降节点时间轴——纪念日日期＝事件日期",
+  "counterLabel": "推理步",
+  "ribbonTitle": "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  "intro": "点击「▶ 播放」逐步展开推理链。",
+  "snaps": snaps,
+  "result": {
+  "big": "答案 A",
+  "html": "记忆锚点：<b>台湾光复纪念日 10.25＝1945.10.25 中国战区台湾省受降仪式在台北举行</b>（A）；8.15 终战诏书、9.2 密苏里号、《开罗宣言》1943.12／《波茨坦公告》1945.7 是法理依据。选 <b>A</b>。"
+}
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：台湾光复纪念日对应哪一历史事件</h2>
+<p>答案：<strong>A（中国战区台湾省受降仪式在台北举行）</strong>。</p>
+<h3>第 0 步：先立模型——把 1945 年前后的节点排成时间轴</h3>
+<p>纪念日的日期 = 被纪念事件发生的日期。先把日本投降前后的节点排开，每个选项各归各位：</p>
+<table><thead><tr><th>时间</th><th>事件</th><th>对应选项</th></tr></thead><tbody><tr><td>1945 年 8 月 15 日</td><td>日本天皇发布终战诏书，宣布无条件投降</td><td>D</td></tr><tr><td>1945 年 9 月 2 日</td><td>日本签署投降书仪式在东京湾密苏里号战舰上举行</td><td>C</td></tr><tr><td>1943 年 12 月／1945 年 7 月</td><td>《开罗宣言》（中、美、英，1943 年 12 月）、《波茨坦公告》（1945 年 7 月）发表，确认日本所窃取的台湾归还中国</td><td>B</td></tr><tr><td><strong>1945 年 10 月 25 日</strong></td><td><strong>中国战区台湾省受降仪式在台北举行，台湾重回祖国版图</strong></td><td><strong>A</strong></td></tr></tbody></table>
+<p>法理链条也要理顺：《开罗宣言》《波茨坦公告》是<strong>法律依据</strong>（规定台湾归还中国），而 10 月 25 日的受降仪式是<strong>实际行使主权</strong>的落地事件——纪念「光复」，纪念的是光复<strong>当天发生</strong>的事，即受降仪式。</p>
+<h3>第 1 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因</th></tr></thead><tbody><tr><td>A 中国战区台湾省受降仪式在台北举行</td><td>✅</td><td>1945 年 10 月 25 日，与纪念日同月同日——光复的标志性事件</td></tr><tr><td>B 中、美、英等国发表《开罗宣言》和《波茨坦公告》</td><td>❌</td><td>两份文件分别发表于 1943 年 12 月与 1945 年 7 月，时间不符；且是法理依据，不是光复当天的事件</td></tr><tr><td>C 日本无条件投降仪式在密苏里号战舰上举行</td><td>❌</td><td>1945 年 9 月 2 日，早了一个多月</td></tr><tr><td>D 日本天皇发布终战诏书</td><td>❌</td><td>1945 年 8 月 15 日，投降宣布日，不是台湾受降日</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 B（「法律依据」与「纪念事件」混淆）</strong>：《开罗宣言》《波茨坦公告》确与台湾归还直接相关，但纪念日的日期取自<strong>受降当天</strong>，两者时间相差近两年。</li><li><strong>选 C／D（投降节点与受降节点混淆）</strong>：8 月 15 日宣布投降、9 月 2 日签字，都是「日本投降」的节点；台湾光复有自己的节点——10 月 25 日台北受降。</li><li><strong>顺带记准</strong>：中国战区受降总仪式 1945 年 9 月 9 日在南京举行，台湾省受降 10 月 25 日在台北举行。</li></ul>
+<blockquote>记忆锚点：光复纪念日 10.25 = 1945.10.25 台北受降；时间轴：8.15 终战诏书 → 9.2 密苏里号 → 9.9 南京受降 → 10.25 台北受降。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

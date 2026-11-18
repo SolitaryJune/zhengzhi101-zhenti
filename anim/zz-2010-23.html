@@ -1,8 +1,98 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-23 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-23</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-23 · 人民代表大会制度从哪里来（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261117a">
+</head>
+<body>
+<!-- 概念/推理链模板：机制先行（四维框架 + 时间线）→ A/B/C/D 逐项对号（全选 ABCD） -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261117a"></script>
+<script>
+/* ================== 题目专属区域（依据 zz-2010-23 题干与 refAnalysis 编写） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：1954 年 9 月，制度在全国范围建立',
+    body: '<p>题干两处背景：<b>1954 年 9 月</b>一届人大一次会议召开，标志人民代表大会制度在全国范围内建立；它是人民当家作主的<b>根本政治制度</b>。</p><p>问"这一制度是……"——问<b>来历与定位</b>，拆成四个维度逐个核对。</p>',
+    log: '审题：问制度的来历 → 拆理论 / 历史 / 人民 / 必然四维' },
+  { tag: '机制', cls: 'key', title: '机制先行：四维框架，为什么叫"根本"政治制度',
+    body: '<p><b>根本</b>：由宪法确立、直接体现国体（一切权力属于人民），其他制度由它派生、经它授权。</p><p>四维各管一段：<b>理论</b>——以什么为指导（A）；<b>历史</b>——由谁、怎样建成（B）；<b>人民</b>——为谁而设（C）；<b>必然</b>——为什么只能是它（D）。互不重叠，逐个查就不漏不错。</p>',
+    log: '机制：根本政治制度 = 国体的政体表达，四维核对来历' },
+  { tag: '时间线', cls: 'key', title: '时间线：近代试错 → 根据地探索 → 1954 定型',
+    body: '<p><b>近代</b>：君主立宪、议会制、多党制、总统制都试过、都不行——别的方案被逐一排除；</p><p><b>革命年代</b>：工农兵代表会议、"三三制"参议会——根据地政权建设持续探索二十多年；</p><p><b>1954 年 9 月</b>：一届人大一次会议 + 宪法，制度从局部探索上升为全国政权的组织形式。</p>',
+    log: '时间线：试错排除 + 长期积累，1954 年全国范围定型' },
+  { tag: '选项A', cls: 'good', title: 'A 把马克思主义与中国实际相结合的伟大创造 —— 对',
+    body: '<p>以马克思主义国家学说为理论底本，但从代表产生方式到组织原则都立足中国实际——不照搬苏联苏维埃，也不照搬西方议会。</p><p>理论渊源维度成立。<b>A 对</b>。</p>',
+    ribbon: { k: 1, ok: true },
+    log: 'A 理论维：有底本更有创造，不是照搬模板' },
+  { tag: '选项B', cls: 'good', title: 'B 党带领全国人民长期奋斗的重要成果 —— 对',
+    body: '<p>从根据地工农兵代表会议到 1954 年确立，二十多年政权建设的积累——1954 年不是凭空诞生。</p><p>历史过程维度成立。<b>B 对</b>。</p>',
+    ribbon: { k: 2, ok: true },
+    log: 'B 历史维：根据地探索一路积累，长期奋斗的成果' },
+  { tag: '选项C', cls: 'good', title: 'C 全国各族人民共同利益和共同愿望的反映 —— 对',
+    body: '<p>国家一切权力属于人民，各族人民通过人民代表大会当家作主——制度的内容就是人民的利益与愿望。</p><p>人民立场维度成立。<b>C 对</b>。</p>',
+    ribbon: { k: 3, ok: true },
+    log: 'C 人民维：一切权力属于人民，共同利益愿望的制度化' },
+  { tag: '选项D', cls: 'good', title: 'D 近代以来中国社会发展的必然选择 —— 对',
+    body: '<p>君主立宪、议会制、多党制、总统制都试过、都没能解决中国问题——历史反复筛选后只剩这一条路，"必然"有硬证据。</p><p>历史必然维度成立。<b>D 对</b>。</p>',
+    ribbon: { k: 4, ok: true },
+    log: 'D 必然维：其他方案全部出局，历史只剩这一条路' },
+  { tag: '结论', cls: 'good', title: '收束：四维互补不重复，全选 ABCD',
+    body: '<p>一条线收拢：<b>A</b> 答"以什么为指导"、<b>B</b> 答"怎样建成"、<b>C</b> 答"为谁而设"、<b>D</b> 答"为什么只能是它"。</p><p>四维互补而不重复，也没有一个越出"根本政治制度"的定位——逐项找不出剔除理由，放心全选。</p>',
+    log: '结论：ABCD——理论、历史、人民、必然四个维度全占' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag,
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon,
+    done: last,
+  };
+});
+
+AW.init({
+  title: 'zz-2010-23 · 人民代表大会制度从哪里来（多选）',
+  subtitle: '考点：人民代表大会制度 · 四维框架（理论/历史/人民/必然）+ 时间线逐项对号',
+  ribbonTitle: '选项 A–D 逐个点亮（✓ 对）',
+  intro: '点击「▶ 播放」：先立四维框架与时间线，再逐项核对 A–D。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '记忆锚点：<b>理论结合的创造（A）＋长期奋斗的成果（B）＋共同愿望的反映（C）＋历史必然的选择（D）</b>。<br>四维全占即全选：A 答"以什么为指导"、B 答"怎样建成"、C 答"为谁而设"、D 答"为什么只能是它"——1954 年 9 月一届人大一次会议是全国定型的落点，不是凭空诞生。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：人民代表大会制度"从哪里来"——四个维度全占</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——政体问"来历"，拆成四个维度核对</h3>
+<p>先把题干给的两条背景立住：<strong>1954 年 9 月</strong>第一届全国人大第一次会议召开，标志着这个制度<strong>在全国范围内建立</strong>；它是人民当家作主的<strong>根本政治制度</strong>。"根本"在哪里？它由宪法确立，直接体现国体（一切权力属于人民），行政、司法等其他制度都由它派生、经它授权——所以问"这一制度是……"，问的是它的<strong>来历与定位</strong>，可以拆成四个互不重叠的维度逐个核对：</p>
+<table><thead><tr><th>维度</th><th>回答的问题</th><th>对应选项</th></tr></thead><tbody><tr><td>理论渊源</td><td>以什么为指导、是不是照搬模板</td><td>A 结合中国实际的创造</td></tr><tr><td>历史过程</td><td>由谁、经过怎样的过程建成</td><td>B 长期奋斗的成果</td></tr><tr><td>人民立场</td><td>为谁而设、反映谁的利益</td><td>C 共同利益和愿望的反映</td></tr><tr><td>历史必然</td><td>为什么只能是它</td><td>D 近代以来发展的必然选择</td></tr></tbody></table>
+<h3>时间线：制度不是一天建成的</h3>
+<p>四个维度都装在同一条时间线里。<strong>近代</strong>：君主立宪制、议会制、多党制、总统制都先后试过，全部没能解决中国问题——资本主义道路走不通，把其他方案逐一排除，这正是 D"必然选择"的论证过程；<strong>革命年代</strong>：从工农兵代表会议到"三三制"参议会，党在根据地政权建设中持续探索，这是 B"长期奋斗"的积累；<strong>1954 年 9 月</strong>：一届人大一次会议召开并通过宪法，制度从局部探索上升为全国政权的组织形式——这就是题干那句"标志着在全国范围内建立起来"。理论上，它以马克思主义国家学说为底本，但名称、组织形式、与政权的关系都立足中国实际，不是照搬苏联苏维埃、也不是照搬西方议会——A 成立；内容上，国家一切权力属于人民，各族人民通过人大当家作主——C 成立。</p>
+<h3>为什么 1954 年才算"建立"</h3>
+<p>此前二十多年是<strong>局部地区</strong>的政权探索；1954 年宪法把这个制度确立为<strong>全国</strong>政权的组织形式，全国范围的人大由选举产生并集中行使国家权力——"建立"指的是制度在全国家范围定型，不是概念首次提出。抓住这一点，B 的"长期奋斗"就有了事实载体。</p>
+<h3>易错点：全选题的漏选各有来历</h3>
+<ul><li><strong>漏 B</strong>：把 1954 年当成"凭空诞生"，忽略根据地二十多年的政权积累——"长期奋斗的重要成果"正指这段前史。</li><li><strong>漏 A</strong>：以为建政就是照搬苏联——其实从代表产生方式到组织原则都是结合中国实际的创造，"伟大创造"不虚。</li><li><strong>漏 C</strong>：把制度当成纯形式设计，忘了它的内容就是人民当家作主、反映各族人民共同利益和愿望。</li><li><strong>漏 D</strong>：把"必然选择"当套话——它有硬证据：其他方案都试过、都不行，历史反复筛选后只剩这一条路。全选题先逐项找"剔除理由"，四个维度互补而不重复，谁也剔不掉，放心全选。</li></ul>
+<blockquote>记忆锚点：问制度哪来的——理论结合的创造（A）、长期奋斗的成果（B）、共同愿望的反映（C）、历史必然的选择（D），四个维度全占即 ABCD。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

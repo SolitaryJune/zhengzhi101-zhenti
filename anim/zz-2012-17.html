@@ -1,8 +1,88 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-17 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-17</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-17 · 新事物为什么必然战胜旧事物（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261117a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261117a"></script>
+<script>
+/* ================== 题目专属区域（依据 zz-2012-17 题干与 refAnalysis 编写） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：「从根本上说」＝找「必然」的根据',
+    body: '<p>「沉舟侧畔千帆过，病树前头万木春」——发展的实质是新事物产生、旧事物灭亡。题问新生事物<b>必然</b>取代旧事物的根本原因。多选题：四项逐条过，不当「单选」做。</p>' },
+  { tag: '机制', cls: 'key', title: '立机制：判「新」的三条本质标准（不看时间）',
+    body: '<p>「必然」＝比旧事物更优越、更有生命力，拆成三条：①<b>客观适应</b>——新结构新功能适应变化了的环境（能活）；②<b>扬弃出新</b>——克服旧、保留好、添新内容（更强）；③<b>群众支持</b>——社会历史领域符合人民根本利益（有人）。三条正好对应 B、C、D。</p>' },
+  { tag: 'A', cls: 'bad', k: 1, pick: false, title: '选项 A：产生于旧事物之后，是新出现的事物',
+    body: '<p>把「新出现」当「新事物」的规定性——<b>偷换标准</b>。反例：新冒出来的东西不少是旧事物的复辟和变种，出现得晚却开倒车。「新」在于符合历史必然性、有远大前途，与出头早晚无关。<b>不选</b>。</p>' },
+  { tag: 'B', cls: 'good', k: 2, pick: true, title: '选项 B：新结构新功能，适应已经变化的环境和条件',
+    body: '<p>环境变了、旧结构失效，新事物以新结构适应之——必然胜利的<b>客观依据</b>（能活）。<b>入选</b> ✅。</p>' },
+  { tag: 'C', cls: 'good', k: 3, pick: true, title: '选项 C：对旧事物的扬弃，并添加旧事物不能容纳的新内容',
+    body: '<p>不是一笔勾销：既克服又保留，还添上新内容——优越性的来源（更强）。<b>入选</b> ✅。</p>' },
+  { tag: 'D', cls: 'good', k: 4, pick: true, title: '选项 D：社会历史领域内，符合人民群众的根本利益和要求',
+    body: '<p>注意限定语「<b>在社会历史领域内</b>」：人民群众是历史的创造者，符合其根本利益→获得最广大支持——不可战胜的<b>社会条件</b>（有人）。<b>入选</b> ✅。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：三条标准 = 「必然」的根据',
+    body: '<p>A 用时间偷换标准，B+C+D 恰是三条本质标准的展开：能活（客观适应）＋更强（扬弃出新）＋有人（群众支持）。</p><p><b>答案 BCD。</b></p>' },
+];
+
+var nJudge = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nJudge++;
+  var sn = {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag,
+    log: s.title,
+    count: nJudge,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, (x.tag ? x.tag + ' · ' : '') + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: !!s.pick };
+  return sn;
+});
+
+AW.init({
+  title: 'zz-2012-17 · 新事物为什么必然战胜旧事物',
+  subtitle: '2012 年第 17 题（多选）· 考点：新生事物不可战胜的根据 · 判「新」三标准',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先立「判新三标准」——能活、更强、有人，再逐项对号入座。',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '记忆锚点：判「新」不看出头早，只看三条——<b>适应环境（B）、扬弃出新（C）、人民支持（D）</b>；「新出现」≠「新事物」（复辟变种也能新出现）。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：新事物为什么「必然」战胜旧事物——找根据，不背结论</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——「新」的判别标准不是时间</h3>
+<p>发展的实质是新事物的产生和旧事物的灭亡。那么什么叫「新事物」？辩证法的回答：<strong>不按出现先后，按本质来判</strong>。新生事物之所以「必然」取代旧事物，根据在于它比旧事物更优越、更有生命力，可拆成三条可检验的标准：</p>
+<table><thead><tr><th>判别标准</th><th>内容</th><th>对应选项</th></tr></thead><tbody><tr><td>① 客观适应性</td><td>具有新的结构和功能，能<strong>适应已经变化了的环境和条件</strong></td><td>B</td></tr><tr><td>② 优越性（怎么来的）</td><td>对旧事物<strong>扬弃</strong>（克服消极、保留合理），并<strong>添加旧事物所不能容纳的新内容</strong></td><td>C</td></tr><tr><td>③ 社会条件（历史领域）</td><td>符合<strong>广大人民群众的根本利益和要求</strong>，因而获得最广大的支持</td><td>D</td></tr></tbody></table>
+<p>三条合起来就是「必然」二字的全部根据：环境适应（能活）＋扬弃出新（更强）＋群众支持（有人）。A 恰好用「出现时间」偷换了这套本质标准。</p>
+<h3>第 1 步：预判「为什么 A 错」——时间标准错在哪</h3>
+<p>A 说「新生事物产生于旧事物之后，是新出现的事物」。它把「新出现」当成「新事物」的规定性。反例立刻打脸：历史上新冒出来的东西不少是<strong>旧事物的复辟和变种</strong>——出现得晚，却开历史倒车。所以「新」在于<strong>是否符合历史必然性、有没有远大前途</strong>，与出头早晚无关。A 是唯一干扰项，手法就是偷换标准。</p>
+<h3>第 2 步：逐项确认 B、C、D 为什么对</h3>
+<ul><li><strong>B 对</strong>：环境变了，旧结构失效；新事物以新结构、新功能适应<strong>变化了的</strong>环境和条件——这是它必然胜利的<strong>客观依据</strong>（能活）。</li><li><strong>C 对</strong>：新事物不是把旧事物一笔勾销，而是<strong>扬弃</strong>——既克服又保留，并添上旧事物容纳不了的新内容——这是优越性的来源（更强）。</li><li><strong>D 对</strong>：注意限定语「<strong>在社会历史领域内</strong>」：人民群众是历史的创造者，新事物符合其根本利益，必然得到最广大支持——这是不可战胜的<strong>社会条件</strong>（有人）。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>以时间判新 → 误选 A</strong>：见「产生于旧事物之后」觉得也对——那是常识的时间先后，不是辩证法的本质规定；正反对照（三条标准 vs 时间标准）即可排除。</li><li><strong>漏 D（只盯自然界）</strong>：以为「新胜旧」只是自然规律，忘了题干专门给出「在社会历史领域内」的限定——该领域内群众支持是决定性条件，D 必选。</li></ul>
+<blockquote>记忆锚点：判「新」不看出头早，只看三条——适应环境（B）、扬弃出新（C）、人民支持（D）；「新出现」≠「新事物」。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

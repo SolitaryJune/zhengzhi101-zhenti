@@ -1,8 +1,127 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-17 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-17</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·17 长江贯通东流：时空观的读法</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>题眼：科学家用<b>物源示踪</b>研究长江中下游盆地沉积物来源，得出长江贯通东流<b>距今 2300 多万年</b>。问：这一成果「从一个侧面显示出」哪些时空原理？（多选）</p>",
+    "log": "从证据链反推原理"
+  },
+  {
+    "title": "立机制：时空为什么「测得着」",
+    "cls": "key",
+    "body": "<p>时空<b>客观存在</b>；物质运动只能在时空中展开（时空是<b>存在形式</b>）；物质运动的变化通过时空特征（位置、年代）<b>表现出来</b>。物质运动在地层里留下时空印记——读印记就是读时空。</p>",
+    "log": "三条命题立全，再对选项"
+  },
+  {
+    "title": "走证据链：运动 → 分布 → 断代",
+    "cls": "key",
+    "body": "<p>上游沉积物被<b>搬运</b>（物质的空间位移）→ 下游地层出现上游物质（贯通事件发生的<b>空间示踪</b>）→ 按层位<b>定年代</b>（时间断代）。时空信息全顺着物质运动的变化读出来。</p>",
+    "log": "证据链 = B 的实证"
+  },
+  {
+    "title": "B ✅ 通过物质运动的变化表现出来",
+    "cls": "good",
+    "body": "<p>沉积物位移、地层年代——整条物源示踪证据链，就是「时空通过<b>物质运动的变化</b>表现出来」的实证。<b>B 正确</b>。</p>",
+    "ribbon": { "k": 2, "ok": true },
+    "log": "证据链对上 B → 选"
+  },
+  {
+    "title": "D ✅ 时空是物质运动的存在形式",
+    "cls": "good",
+    "body": "<p>长江奔流只能在时空中展开；「贯通东流的时限」问的正是这一物质运动的<b>时间形式</b>——标准表述。<b>D 正确</b>。</p>",
+    "ribbon": { "k": 4, "ok": true },
+    "log": "存在形式 → 选 D"
+  },
+  {
+    "title": "A ❌「有限」丢了「无限性」",
+    "cls": "bad",
+    "body": "<p>具体事物（长江水系）的时空有限，但<b>整个物质世界的时空是无限的</b>；只说「时空是有限的」命题不成立，且题干问的是成果显示什么，与有限无限之争无关。<b>A 错误</b>。</p>",
+    "ribbon": { "k": 1, "ok": false },
+    "log": "偷换有限性 → A 不选"
+  },
+  {
+    "title": "C ❌「观念形式」把时空主观化",
+    "cls": "bad",
+    "body": "<p>把时空说成「<b>观念形式</b>」= 说时空是主观的（马赫主义式的颠倒）。时空客观存在——若年代只是观念，何须科学家十年物源示踪？<b>C 错误</b>。</p>",
+    "ribbon": { "k": 3, "ok": false },
+    "log": "主观主义 → C 不选"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>BD</b>。记忆锚点：时空三句——<b>客观的、是物质运动的存在形式（D）、通过物质运动的变化表现出来（B）</b>；说成「观念形式」必错，丢了「无限性」必错。</p>",
+    "log": "锁定 BD"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "长江贯通东流：时间与空间的读法",
+  subtitle: "考点：马原·时空观（多选） · 方法：先立三命题，再走证据链对选项",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」沿物源示踪证据链逐步展开推理。',
+  snaps: snaps,
+  result: {
+    big: "答案 BD",
+    html: "记忆锚点：时空<b>客观</b>，是物质运动的<b>存在形式</b>（D），通过物质运动的变化<b>表现出来</b>（B）。物源示踪 = 运动→空间分布→时间断代。说成「观念形式」必错（C），丢了「整个物质世界时空无限」必错（A）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：长江的"年龄"是怎么测出来的——时空与物质运动</h2>
+<p>答案：<strong>BD</strong>。</p>
+<h3>第 0 步：先立机制——"测长江年龄"为什么可能</h3>
+<p>马克思主义时空观有三个环环相扣的命题。先立全框架，再做题：</p>
+<table><thead><tr><th>命题</th><th>含义</th></tr></thead><tbody><tr><td>客观性</td><td>时空不依赖人的观念而客观存在，观念只是对它的反映</td></tr><tr><td>存在形式</td><td>物质运动只能在时间（先后持续）与空间（广延位置）中展开；离开时空的物质运动、离开物质运动的时空都不存在</td></tr><tr><td>表现方式</td><td>物质运动的变化，正是通过时空特征（位置、年代、距离）表现出来的</td></tr></tbody></table>
+<p>"测长江年龄"之所以可能，靠的正是第三条：物质运动会在地层里留下<strong>时空印记</strong>，读印记就是读时空——所以科学家不用时光机，也能知道几千万年前发生了什么。</p>
+<h3>第 1 步：物源示踪的证据链</h3>
+<p>上游沉积物被水流从青藏高原、四川盆地<strong>搬运</strong>到下游沉积——这是物质的空间位移；下游地层里一旦出现上游物质，说明"贯通东流"这个事件发生了；再按沉积层位定年代，得到"距今 2300 多万年"。整条证据链是：</p>
+<p><strong>运动（搬运）→ 空间分布（示踪）→ 时间断代</strong></p>
+<p>时空信息全顺着物质运动的变化读出来——这正是 B 的实证；而"长江奔流只能在时空中展开"，贯通东流的年代问的正是这件事的时间形式——这是 D。</p>
+<h3>第 2 步：四个选项逐个裁决</h3>
+<ul><li><strong>A 时间和空间是有限的，物质运动是永恒的</strong> ❌：具体事物（长江水系）的时空有限，但<strong>整个物质世界的时空是无限的</strong>；砍掉"无限性"，命题就不成立，且题干问的是"成果显示什么"，与有限无限之争无关。</li><li><strong>B 时间和空间是通过物质运动的变化表现出来的</strong> ✅：沉积物位移、地层年代，整条物源示踪证据链就是 B 的实证。</li><li><strong>C 时间和空间是标示物质运动的观念形式</strong> ❌：把时空说成"观念形式"等于说时空是主观的（马赫主义式的颠倒）。时空客观存在——若年代只是观念，何须科学家十年物源示踪。</li><li><strong>D 时间和空间是物质运动的存在形式</strong> ✅：长江奔流只能在时空中展开；"贯通东流的时限"问的正是这一物质运动的<strong>时间形式</strong>。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：把"具体事物的时空有限"偷换成"时间和空间是有限的"。完整命题必须带上"整个物质世界的时空是无限的"，只说有限就错。</li><li><strong>误选 C</strong>：被"年代是人算出来的"迷惑。人<strong>计算</strong>年代不等于年代<strong>是</strong>观念——仪器、地层都是物质性中介，恰恰证明时空客观。</li></ul>
+<blockquote>记忆锚点：时空三句——<strong>客观的、是物质运动的存在形式（D）、通过物质运动的变化表现出来（B）</strong>；说成"观念形式"必错，丢了"无限性"必错。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

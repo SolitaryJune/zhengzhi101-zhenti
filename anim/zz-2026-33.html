@@ -1,8 +1,125 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-33 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-33</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2026-33 · 中非关系“不会变”：一个定位、三个层面与一条红线</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：问的不是清单，是「不会变」",
+    "cls": "key",
+    "body": "<p>题干给了事件：2025-04-24 会见肯尼亚总统鲁托、签署含「一带一路」经贸高新科技文化交流等 <b>20 项</b>合作文件。但问法落在「<b>不会变</b>」——考的不是协议清单本身，而是清单背后中非关系的<b>定性</b>与基本盘。</p>",
+    "log": "20 项协议是「变」，问的是背后的「不变」"
+  },
+  {
+    "title": "先立机制：一个定位 + 一条红线 + 三个不会变",
+    "cls": "key",
+    "body": "<p><b>定位</b>：中非是全面战略合作伙伴关系；<b>红线</b>：中国结伴不结盟，伙伴无假想敌、无军事义务，「盟友」二字是禁忌。<b>三层</b>：理念层（怎么对待非洲）、初心层（为何走到一起）、宗旨层（合作图什么）——判断标准确立：落三层的入选，沾「盟友」的排除。</p>",
+    "log": "立坐标：伙伴定位 + 不结盟红线 + 理念/初心/宗旨三层"
+  },
+  {
+    "title": "选项 B：真实亲诚政策理念——入选",
+    "cls": "good", "k": 2, "pick": true,
+    "body": "<p>「真实亲诚」是中国对非政策理念，管的是<b>怎么对待非洲</b>。题干 20 项文件是「变」的部分，恰恰反衬理念层的不变——国际形势越变，这份态度越显分量。<b>落在理念层 → 入选</b>。</p>",
+    "ribbon": { "k": 2, "ok": true },
+    "log": "B 落理念层（怎么对待）→ 入选"
+  },
+  {
+    "title": "选项 C：患难与共、守望相助的初心——入选",
+    "cls": "good", "k": 3, "pick": true,
+    "body": "<p>中非同为发展中国家，反帝反殖、民族解放的共同历史把双方绑在一起，管的是<b>为什么走到一起</b>。无论风云如何变化，这份初心不变。<b>落在初心层 → 入选</b>。</p>",
+    "ribbon": { "k": 3, "ok": true },
+    "log": "C 落初心层（为何同行）→ 入选"
+  },
+  {
+    "title": "选项 D：合作共赢、共同发展的根本宗旨——入选",
+    "cls": "good", "k": 4, "pick": true,
+    "body": "<p>中非合作不是你输我赢的零和博弈，而是做大蛋糕、共同发展——管的是<b>合作图什么</b>。题干的经贸、高新科技等 20 项合作正是这一宗旨的当下落点。<b>落在宗旨层 → 入选</b>。</p>",
+    "ribbon": { "k": 4, "ok": true },
+    "log": "D 落宗旨层（图什么）→ 入选"
+  },
+  {
+    "title": "选项 A：盟友关系——排除（唯一排除点）",
+    "cls": "bad", "k": 1, "pick": false,
+    "body": "<p>「盟友」是军事集团概念：有共同假想敌、有集体防御条约义务。中国<b>结伴不结盟</b>，中非的规范表述是<b>全面战略合作伙伴关系</b>——「伙伴」与「盟友」一字之差、性质相反；若 A 成立还与 B/C/D 的开放伙伴逻辑自相矛盾。<b>违反不结盟红线 → 排除</b>。</p>",
+    "ribbon": { "k": 1, "ok": false },
+    "log": "A 踩不结盟红线 → 排除"
+  },
+  {
+    "title": "结论：答案 BCD",
+    "cls": "good",
+    "body": "<p>三个「不会变」各占一层：<b>B 政策理念（怎么对待）、C 患难与共初心（为何同行）、D 合作共赢宗旨（图什么）</b>；A 被不结盟红线裁掉。<b>答案 BCD</b>。误选 A 的误解：把「全面战略合作伙伴」读成「盟友」——外交术语里伙伴≠盟友，凡「盟友」表述必错。</p>",
+    "log": "锁定 BCD：理念 · 初心 · 宗旨三层不变，A 触红线"
+  }
+];
+
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.log || s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = s.ribbon;
+  return sn;
+});
+
+AW.init({
+  title: "中非关系“不会变”：一个定位、三个层面与一条红线",
+  subtitle: "2026 年第 33 题（多选）· 考点：中非关系定位与「三个不会变」 · 逐项对号推演",
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立定位与红线，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: "答案 BCD",
+    html: "答案 <b>BCD</b>：三个「不会变」各占一层——B 真实亲诚理念（怎么对待）· C 患难与共初心（为何同行）· D 合作共赢宗旨（图什么）。记忆锚点：中非关系 = <b>全面战略合作伙伴</b> + <b>不结盟红线</b> + <b>三个不会变</b>；「盟友」二字必错——伙伴不设假想敌、不背军事义务。"
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：中非关系"不会变"——一个定位、三个层面与一条红线</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——中非是什么关系，"不会变"分几层</h3>
+<p>题干给了大量事件信息（2025 年 4 月 24 日会见肯尼亚总统鲁托、签署含"一带一路"、经贸、高新科技、文化交流等 20 项内容的合作文件），但问法落在「不会变」——考的不是协议清单，而是清单背后中非关系的<strong>定性</strong>与<strong>基本盘</strong>。先把两个坐标立起来：</p>
+<ol><li><strong>定位坐标</strong>：中非是<strong>全面战略合作伙伴关系</strong>；中国外交的总方针是<strong>结伴而不结盟</strong>——伙伴不设假想敌、不背军事互助义务，"盟友"一词在中国外交语境里是禁忌。这条红线自动裁掉一切"盟友关系"类表述。</li><li><strong>层面坐标</strong>："不会变"按官方表述恰分三层：<strong>政策理念层</strong>（怎么对待非洲——真实亲诚）、<strong>初心层</strong>（为什么走到一起——患难与共、守望相助）、<strong>宗旨层</strong>（合作图什么——合作共赢、共同发展）。</li></ol>
+<p>判断标准由此确立：落在"理念 / 初心 / 宗旨"三层的入选；沾"盟友、集团"的排除。</p>
+<h3>第 1 步：B、C、D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>所属层面</th><th>判断与依据</th></tr></thead><tbody><tr><td>B 真实亲诚对非政策理念</td><td>政策理念层（怎么对待）</td><td>"真实亲诚"是中国对非政策理念，管的是态度与诚意——国际形势越变，这份理念越显分量，属"不变"的第一层</td></tr><tr><td>C 患难与共、守望相助的初心</td><td>初心层（为何走到一起）</td><td>中非同为发展中国家，反帝反殖、争取民族解放的共同历史把双方绑在一起——无论风云如何变化，这份初心不变</td></tr><tr><td>D 合作共赢、共同发展的根本宗旨</td><td>宗旨层（合作图什么）</td><td>中非合作不是你输我赢的零和博弈，而是做大蛋糕、共同发展——题干 20 项合作正是这一宗旨的当下落点</td></tr></tbody></table>
+<p>→ 选 <strong>BCD</strong>。</p>
+<h3>第 2 步：A 为什么错（唯一排除点，值得多说一句）</h3>
+<p>「盟友」是军事集团概念：有共同假想敌、有集体防御的条约义务。中国的外交传统是<strong>不结盟</strong>——伙伴关系网络铺得再广，也从不与任何一方结盟。所以：</p>
+<ol><li>中非关系的规范表述是<strong>全面战略合作伙伴关系</strong>，"伙伴"与"盟友"一字之差、性质相反；</li><li>若 A 成立，"盟友"暗含针对第三方的阵营指向，直接与中非合作不针对第三方、不谋势力范围的立场矛盾；</li><li>参考口径：我国坚持不结盟，故不能将中非关系表述为盟友关系。</li></ol>
+<h3>易错点：每个干扰项、漏选对应哪种误解</h3>
+<ul><li><strong>误选 A（把"全面战略合作伙伴"读成"盟友"）</strong>：结盟思维的套用——以为关系好、合作深就该叫"盟友"。外交术语里"伙伴"与"盟友"是两条路线，见到"盟友"类表述必排。</li><li><strong>漏选 B（觉得"真实亲诚"是口号）</strong>：理念层的"不变"恰恰不靠具体协议支撑——题干 20 项文件是"变"的部分，反衬理念层面"不变"。</li><li><strong>漏选 C/D（被题干的具体合作内容带偏）</strong>：有人只在"一带一路"、经贸、高新科技等清单里找答案。清单是现象，"不会变"问的是清单背后的初心与宗旨，C、D 正是对清单的"元回答"。</li></ul>
+<blockquote>记忆锚点：中非关系 = <strong>一个定位（全面战略合作伙伴）+ 一条红线（不结盟）+ 三个不会变（真实亲诚理念 · 患难与共初心 · 合作共赢宗旨）</strong>——凡"盟友"表述必错。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

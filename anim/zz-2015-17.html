@@ -1,8 +1,110 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-17 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-17</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2015-17 · 土壤形成的五因素里藏着三个哲学命题（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261118a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261118a"></script>
+<script>
+/* ================== 题目专属区域（依据 zz-2015-17 题干与答案 ABD 编写） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 一行可加宽的格子：格子放因素名，格下放它的成土职责 */
+function factorRow(classes){
+  var names = ['母质', '气候', '生物', '地形', '时间'];
+  var jobs  = ['物质基础', '风化·积累', '最活跃', '地表再分配', '历史动态'];
+  var row = AW.el('div', 'aw-cells');
+  names.forEach(function(name, i){
+    var col = AW.el('div', 'aw-col');
+    col.style.width = '92px';
+    var box = AW.el('div', 'aw-box' + (classes && classes[i] ? ' ' + classes[i] : ''), name);
+    box.style.width = '92px';
+    col.appendChild(box);
+    col.appendChild(AW.el('div', 'aw-idx', jobs[i]));
+    row.appendChild(col);
+  });
+  return row;
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：具体科学材料考哲学——先翻译、后对号',
+    body: '<p>材料给的是土壤学，问"土壤的生产过程<b>说明</b>"什么。方法模型两步走：第一步把材料逐句<b>翻译成哲学命题</b>，第二步拿选项<b>对号认领</b>。不翻译就看选项，四个词都眼熟，必然纠结。</p>' },
+  { tag: '机制·五因素', cls: 'key', title: '机制：五大成土因素各管什么',
+    body: '<p>五大因素先摆上桌：</p>' + factorRow(['dim', 'dim', 'dim', 'dim', 'dim']) +
+      '<p>母质管<b>物质基础</b>，气候管<b>风化与积累</b>，生物<b>最活跃</b>，地形使物质<b>在地表再分配</b>、造成光热水条件<b>差异</b>，时间是<b>历史动态过程</b>、作用<b>随时间延续而加强</b>。</p>' },
+  { tag: '翻译', cls: 'key', title: '翻译：材料三句话 → 三个哲学命题',
+    body: '<p>① 五因素"导致、促进、使……相互作用"→ <b>普遍联系</b>；② "历史动态过程、随时间延续而加强"→ <b>过程论</b>；③ 在空间中展开、随时间中延续 → <b>时空是物质运动的存在形式</b>。命题齐了，等选项来认领。</p>' },
+  { tag: 'A', cls: 'good', k: 1, pick: true, title: 'A 事物总是作为过程而存在 → 认领"过程论"',
+    body: '<p>五大因素的作用"随着时间延续而加强"——土壤是<b>历史地、过程化地</b>造就的，正是过程论的标准表述。<b>入选</b> ✅。</p>' },
+  { tag: 'B', cls: 'good', k: 2, pick: true, title: 'B 时空是物质运动的存在形式 → 认领"时空观"',
+    body: '<p>成土这一"物质运动"在哪里展开？空间上：地形造成<b>光热水条件差异</b>、物质<b>地表再分配</b>；时间上："随时间延续而加强"。时空不是独立容器，正是物质运动的<b>存在形式</b>。<b>入选</b> ✅。</p>' },
+  { tag: 'C', cls: 'bad', k: 3, pick: false, title: 'C 发展总是线性上升 → "直线论"，必错',
+    body: '<p>发展的真实图景是<b>前进性与曲折性的统一</b>：螺旋式上升、波浪式前进。"总是线性上升"把曲折抹掉了；材料里成土过程也处处是差异与再分配，不是一条直线。<b>不选</b> ❌。</p>' },
+  { tag: 'D', cls: 'good', k: 4, pick: true, title: 'D 事物的产生是多重因素相互作用的结果 → 认领"普遍联系"',
+    body: '<p>母质、气候、生物、地形、时间<b>相互交织</b>、共同造就土壤——没有哪一项单干成土，正是普遍联系的观点。<b>入选</b> ✅。</p>' },
+  { tag: '辨析', cls: 'key', title: '预判追问：没明说"时空"，B 为什么也算对',
+    body: '<p>因为时空不是独立于运动的"容器"，要<b>从材料的具体运动里认出来</b>：地形差异、地表再分配＝空间形式；随时间延续＝时间形式。C 则错在把"总趋势前进"夸大成"路径笔直"——见"线性/直线上升"一律先打问号。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：过程 + 时空 + 联系',
+    body: '<p>过程论（A）＋时空观（B）＋普遍联系（D），排除"直线论"（C）——<b>答案 ABD。</b></p>' },
+];
+
+var nJudge = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nJudge++;
+  var sn = {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag,
+    log: s.title,
+    count: nJudge,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, (x.tag ? x.tag + ' · ' : '') + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: !!s.pick };
+  return sn;
+});
+
+AW.init({
+  title: 'zz-2015-17 · 土壤的生产过程说明什么',
+  subtitle: '2015 年第 17 题（多选）· 考点：联系与发展 · 方法：材料逐句翻译成哲学命题，再对号认领',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先把五大成土因素翻译成哲学命题，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABD',
+    html: '记忆锚点：见"多种因素共同起作用"→普遍联系（<b>D</b>）；见"历史动态过程、随时间延续"→过程论（<b>A</b>）；见"在空间中展开、随时间变化"→时空是物质运动的存在形式（<b>B</b>）；见"线性上升"→必错（<b>C</b>）。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：土壤形成的五因素里藏着三个哲学命题</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——"具体科学材料考哲学"的两步翻译法</h3>
+<p>这类题不能上来就对选项，先立一个方法模型：材料给的是具体科学事实，问"说明"什么哲学道理，标准动作是<strong>先翻译、后对号</strong>——把材料逐句翻成哲学命题，再拿选项来认领。翻对了，答案自己浮出来；不翻译就直接看选项，四个词都"眼熟"，必然纠结。</p>
+<p>先把五大成土因素各自管什么摆清楚：母质是<strong>物质基础</strong>（初始无机养分最初来源）；气候主管矿物的风化合成、有机质的形成积累、物质的迁移分解合成；生物是<strong>最活跃</strong>的因素；地形使物质在<strong>地表</strong>再分配、造成接受光热水条件的<strong>差异</strong>；时间是<strong>历史动态过程</strong>，各因素的作用<strong>随时间延续而加强</strong>。</p>
+<h3>第 1 步：材料翻译——三句话对应三个命题</h3>
+<table><thead><tr><th>材料关键句</th><th>翻译出的哲学命题</th><th>对应选项</th></tr></thead><tbody><tr><td>五因素"导致、促进、使……相互作用"，共同造就土壤</td><td>事物是普遍联系的，事物的产生是多重因素相互作用的结果</td><td>D ✅</td></tr><tr><td>时间是"历史动态过程"，作用"随时间延续而加强"</td><td>事物总是作为过程而存在（过程论）</td><td>A ✅</td></tr><tr><td>地形造成"光、热、水条件差异"、物质在地表再分配</td><td>成土运动在空间与时间中展开——时空是物质运动的存在形式</td><td>B ✅</td></tr><tr><td>（对照选项）发展"总是呈现出线性上升的态势"</td><td>直线论——发展是前进性与曲折性的统一，螺旋式上升</td><td>C ❌</td></tr></tbody></table>
+<h3>第 2 步：预判两个"为什么"</h3>
+<p><strong>为什么材料没明说"时空"，B 也算对？</strong> 因为时空不是独立于运动的容器，而正是<strong>物质运动的存在形式</strong>：土壤的形成这一"物质运动"在哪里展开？在空间里——地形造成条件差异、物质在地表再分配，就是它的空间形式；在什么中延续？"随时间延续而加强"，就是它的时间形式。材料用土壤学的话把时空观完整演示了一遍。</p>
+<p><strong>为什么 C 必错？</strong> 发展的真实图景是<strong>前进性与曲折性的统一</strong>——螺旋式上升、波浪式前进。"总是呈现出线性上升的态势"把"曲折"抹掉了，成了"直线论"；材料本身也在否定它：成土过程充满差异、再分配与分解合成，从来不是一条直线。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：把"发展的总趋势是前进的"夸大成"发展总是线性上升"。趋势向前不等于路径笔直——凡见"线性、直线上升"一律先打问号。</li><li><strong>漏选 B</strong>：觉得材料没出现"时空"二字就不选。错在把时空当成独立名词，忘了"空间形式/时间形式"是要从材料的具体运动里认出来的。</li><li><strong>漏选 A</strong>：只盯着五个"因素"，没看见"时间……动态过程、随时间延续"这句对<strong>过程</strong>的正面陈述。</li></ul>
+<blockquote>记忆锚点：见"多种因素共同起作用"→普遍联系（D）；见"历史动态过程、随时间延续而加强"→过程论（A）；见"在空间中展开、随时间变化"→时空是物质运动的存在形式（B）；见"线性上升"→必错（C）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,93 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-25 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-25</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>2018·25 党的政治建设为何摆在首位：一条因果链</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- 复制自 anim_math_concept_template（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：把政治建设「摆在首位」的理由',
+    cls: 'key',
+    log: '题眼：十九大 · 政治建设统领 + 摆在首位',
+    body: '<p>题干给足背景：十九大提出<b>以党的政治建设为统领</b>，全面推进各项建设，制度建设贯穿其中，并特别强调<b>政治建设摆在首位</b>。问的是「为什么」——要找的是一条因果链，不是散装理由。</p>' },
+  { title: '先立机制：从「政党是什么」推起',
+    cls: 'key',
+    body: '<p>政党首先是<b>政治组织</b>——政治属性是政党的第一属性（起点）。因为是马克思主义政党，<b>旗帜鲜明讲政治是根本要求</b>（中段）；因为政治建设管方向、管效果，它是<b>根本性建设</b>（末端）。三句话连成链：A → D → C。</p>' },
+  { title: 'A：政治属性是政党的第一属性',
+    cls: 'good',
+    body: '<p>因果链起点：任何政党都围绕政治纲领、政治目标组织起来，政治属性天然排第一——这是「首位」最底层的道理。<b>A 对。</b></p>' },
+  { title: 'B：坚定政治立场是党的根本宗旨',
+    cls: 'bad',
+    body: '<p>错。张冠李戴：党的<b>根本宗旨是全心全意为人民服务</b>——由党的性质引出的「为了谁」；「坚定政治立场」是政治要求，不是宗旨本身。「根本宗旨」四个字在教材里只有唯一答案。<b>B 错。</b></p>' },
+  { title: 'C：政治建设是根本性建设，决定方向和效果',
+    cls: 'good',
+    body: '<p>因果链末端，也是十九大报告<b>定位原文</b>：「根本性建设」「决定党的建设方向和效果」——两个词组原样记住。<b>C 对。</b></p>' },
+  { title: 'D：旗帜鲜明讲政治是马克思主义政党的根本要求',
+    cls: 'good',
+    body: '<p>因果链中段，同样是报告原话：讲政治不是一时要求，而是马克思主义政党的<b>根本要求</b>。<b>D 对。</b></p>' },
+  { title: '结论：ACD',
+    cls: 'good',
+    body: '<p>一条因果链三个节点：政党第一属性是政治（A）→ 马克思主义政党根本要求是讲政治（D）→ 政治建设是根本性建设、决定方向和效果（C）；B 把宗旨的牌子挂给了政治立场。答案选 <b>ACD</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var optK = { 2: 1, 3: 2, 4: 3, 5: 4 }[i];
+  var optLetter = optK ? 'ABCD'[optK - 1] : '';
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: i === 0 ? '审题' : (i === 1 ? '机制' : (i === STEPS.length - 1 ? '结论' : '选项 ' + optLetter)),
+    log: s.log || s.title,
+    count: optK || 0,
+    ribbon: optK ? { k: optK, ok: s.cls !== 'bad' } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2018·25】党的政治建设为何摆在首位：一条因果链',
+  subtitle: '考点：十九大 · 党的政治建设是根本性建设 · 多选题',
+  counterLabel: '已核选项',
+  ribbonTitle: '选项判定（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链：先立因果链，再逐项判定 A/B/C/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '记忆锚点：因果链＝<b>政党第一属性是政治（A）→ 根本要求是讲政治（D）→ 政治建设是根本性建设、决定方向和效果（C）</b>；根本宗旨只有一块牌子——全心全意为人民服务（B）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：为什么政治建设要「摆在首位」——三个理由各有出处，一个选项是张冠李戴</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——「首位」从政党的本质属性讲起</h3>
+<p>政党首先是<strong>政治组织</strong>——政治属性是政党的第一属性，没有政治属性就不成其为政党。这是「政治建设摆在首位」最底层的道理。十九大报告在此基础上给了两层表述：<strong>旗帜鲜明讲政治是我们党作为马克思主义政党的根本要求</strong>；<strong>党的政治建设是党的根本性建设，决定党的建设方向和效果</strong>。三句话连成一条因果链：因为是政党（第一属性是政治）→ 因为是马克思主义政党（根本要求是讲政治）→ 所以政治建设管方向、管效果，必须统领一切建设。C、D 就是这条链的中间和末端。</p>
+<h3>第 1 步：三个正确项按因果链入座</h3>
+<ul><li><strong>A 政治属性是政党的第一属性</strong> ✅：因果链的起点。任何政党都是围绕政治纲领、政治目标组织起来的，政治属性天然排第一。</li><li><strong>C 政治建设是党的根本性建设，决定党的建设方向和效果</strong> ✅：因果链的末端、也是十九大报告的<strong>定位原文</strong>——「根本性建设」「决定方向和效果」两个词组要原样记住。</li><li><strong>D 旗帜鲜明讲政治是我们党作为马克思主义政党的根本要求</strong> ✅：因果链的中段，同样是报告原话——讲政治不是一时要求，而是马克思主义政党的<strong>根本要求</strong>。</li></ul>
+<h3>第 2 步：B 错在哪——张冠李戴</h3>
+<ul><li><strong>B 坚定政治立场是党的根本宗旨</strong> ❌：错在把两块牌子挂错了地方。党的<strong>根本宗旨是全心全意为人民服务</strong>——这是从党的性质（工人阶级先锋队、人民立场）引出的「为了谁」；「坚定政治立场」讲的是政治要求，不是宗旨本身。张冠李戴的干扰项最善伪装：政治立场、人民立场与宗旨三者相关，但「根本宗旨」这四个字在教材里只有唯一答案。参考解析方向一致：政治建设是根本性建设、决定方向和效果——宗旨与政治建设是两码事。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：感觉「讲政治、站对立场」确实最重要，就顺手把「根本宗旨」的名头给了它。对策：凡见「根本宗旨」，答案只能是全心全意为人民服务；别的表述再重要也不是。</li><li><strong>漏选 A</strong>：觉得「第一属性」说法陌生。A 是 C、D 的理论前提，三个正确项本来就是同一条因果链——漏掉起点，整条链就断了。</li><li><strong>把「以政治建设为统领」记成「以制度建设为统领」</strong>：十九大的表述是政治建设统领，制度建设<strong>贯穿其中</strong>——主次别倒置。</li></ul>
+<blockquote>记忆锚点：因果链＝政党第一属性是政治（A）→ 马克思主义政党根本要求是讲政治（D）→ 政治建设是根本性建设、决定方向和效果（C）；根本宗旨≠政治立场，宗旨只有一个——全心全意为人民服务。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

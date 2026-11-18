@@ -1,8 +1,131 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-22 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-22</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·22 社会主义建设初步探索的意义</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链卡片动画：引用 ../assets/anim-engine.js，只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：意义 = 在历史链条上承什么、启什么",
+    "cls": "key",
+    "body": "<p>1956 年制度确立后，「落后大国怎么建设社会主义」成为新课题。评价初步探索（〈论十大关系〉→八大→正确处理人民内部矛盾）的意义，不能孤立看它本身，要看它在「<b>制度确立 → 初步探索 → 改革开放</b>」链条上承了什么上、启了什么下。</p>",
+    "log": "意义 = 承上 + 启下 + 理论，三格框架"
+  },
+  {
+    "title": "先立机制：三个格子的框架",
+    "cls": "key",
+    "body": "<p><b>承上</b>：顶住内外压力，制度巩固发展 → 候选 C。<b>启下</b>：给改革开放攒家底 → 候选 D。<b>理论</b>：原创成果丰富科学社会主义 → 候选 B。框架立好，选项往格子里装；装不进格子的就是越权帽子。</p>",
+    "log": "三格：承上 / 启下 / 理论"
+  },
+  {
+    "title": "C：巩固和发展了社会主义制度（承上）",
+    "cls": "good",
+    "body": "<p>探索虽有「大跃进」等严重曲折，但制度经受住考验并继续发展——工业体系从无到有、「两弹一星」横空出世，经济与国防根基更厚。<b>C 正确</b>。</p>",
+    "ribbon": {"k": 3, "ok": true},
+    "log": "C ✓ 承上：制度根基更厚"
+  },
+  {
+    "title": "D：打底改革开放（启下）",
+    "cls": "good",
+    "body": "<p>正反两方面经验、独立完整的工业体系和国民经济体系、积累的建设原则——「<b>宝贵经验、理论准备、物质基础</b>」三件家底，正是改革开放起步时的本钱。<b>D 正确</b>。</p>",
+    "ribbon": {"k": 4, "ok": true},
+    "log": "D ✓ 启下：经验/理论/物质三件套"
+  },
+  {
+    "title": "B：丰富了科学社会主义（理论）",
+    "cls": "good",
+    "body": "<p>把马列原理同中国实际「第二次结合」的努力——统筹兼顾、正确处理人民内部矛盾等原创性思想，科学社会主义因此多了「中国篇」。<b>B 正确</b>。</p>",
+    "ribbon": {"k": 2, "ok": true},
+    "log": "B ✓ 理论：原创思想入册"
+  },
+  {
+    "title": "A：「第二次飞跃」的时间戳不对",
+    "cls": "bad",
+    "body": "<p>判断飞跃不看势头，看<b>理论成果是否成型</b>：第一次飞跃成果是毛泽东思想；第二次飞跃发生在<b>改革开放以后</b>，成果是中国特色社会主义理论体系。初步探索只是在<b>做准备</b>，「实现了」三个字必须等新理论成型才算数。<b>A 错误</b>。</p>",
+    "ribbon": {"k": 1, "ok": false},
+    "log": "A ✗ 第二次飞跃在改革开放后"
+  },
+  {
+    "title": "预判追问：探索期思想也算大成果，为什么不算飞跃？",
+    "cls": "key",
+    "body": "<p>区分两件事：飞跃 = 与新道路配套的新理论成果<b>成型</b>并<b>指导新道路</b>；探索期形成的《论十大关系》等属于「理论准备」——攒经验、攒理论、攒家底，是进行时；说「实现了飞跃」是把进行时写成了完成时。</p>",
+    "log": "追问：准备 ≠ 实现，进行时 ≠ 完成时"
+  },
+  {
+    "title": "干扰归因",
+    "cls": "bad",
+    "body": "<p>误选 A：混淆「准备了条件」与「实现了飞跃」。漏 D：只看曲折、低估遗产——三件家底是教科书记在初步探索名下的标准遗产。漏 B：以为「丰富科学社会主义」帽子太高不敢戴——原创性思想恰恰够得上。</p>",
+    "log": "病灶：准备当实现 / 曲折盖过遗产"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>BCD</b>。三格框架全收：巩固制度（承上）、打底改革开放（启下）、丰富科学社会主义（理论）；A 是框架外的越权帽子——第二次飞跃在改革开放之后才实现。</p>",
+    "log": "锁定 BCD：三格框架收齐"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "社会主义建设初步探索的意义",
+  subtitle: "2021 年第 22 题（多选）· 考点：初步探索的意义与「第二次飞跃」的时间戳",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立「承上/启下/理论」三格框架，再逐项对号，最后查 A 的飞跃时间戳。',
+  snaps: snaps,
+  result: {
+    big: "答案 BCD",
+    html: "记忆锚点：初步探索三个意义——<b>巩固制度（承上）、打底改革开放（启下）、丰富科学社会主义（理论）</b>。一顶不能戴的帽子：第二次飞跃在改革开放后才实现，探索期只算「理论准备」。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：初步探索的三个意义，与「第二次飞跃」的时间戳</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——把「初步探索」放进历史链条里评价</h3>
+<p>社会主义基本制度确立（1956 年）后，「在经济文化落后的东方大国建设社会主义」成为全新课题。党从《论十大关系》（1956）到八大（1956）再到《关于正确处理人民内部矛盾的问题》（1957），进行了二十年的初步探索。评价一段探索的「意义」，不能孤立地看它本身做得如何，而要看它在历史链条上<strong>承了什么上、启了什么下</strong>：</p>
+<table><thead><tr><th>方向</th><th>内容</th><th>对应选项</th></tr></thead><tbody><tr><td>承上</td><td>顶住内外压力，制度得到巩固和发展</td><td>C</td></tr><tr><td>启下</td><td>为改革开放攒下家底</td><td>D</td></tr><tr><td>理论</td><td>独立探索出的原创性成果丰富了科学社会主义</td><td>B</td></tr></tbody></table>
+<p>机制立好之后，B、C、D 三项正好是这个框架的逐条展开，A 则是框架外的「越权帽子」。</p>
+<h3>第 1 步：B、C、D 如何落在链条上</h3>
+<ul><li><strong>C 巩固和发展了我国的社会主义制度</strong> ✅（承上）：探索虽有「大跃进」等严重曲折，但社会主义制度经受住了考验并继续发展——工业体系从无到有、「两弹一星」横空出世，制度的经济、国防根基反而更厚了。</li><li><strong>D 为开创中国特色社会主义提供了宝贵经验、理论准备和物质基础</strong> ✅（启下）：正反两方面经验（《论十大关系》的统筹方针 vs 大跃进的教训）、独立完整的工业体系和国民经济体系、积累的建设原则——「经验、理论、物质」三件家底，正是改革开放起步时的本钱。</li><li><strong>B 丰富了科学社会主义的理论和实践</strong> ✅（理论）：把马列原理同中国实际「第二次结合」的努力，提出了统筹兼顾、正确处理人民内部矛盾等原创性思想，科学社会主义因此多了「中国篇」。</li></ul>
+<h3>第 2 步：A 为什么错——「飞跃」有时间戳</h3>
+<ul><li><strong>A 实现了马克思主义中国化的第二次飞跃</strong> ❌：判断「飞跃」不看势头、看<strong>理论成果是否成型</strong>。教科书口径：第一次飞跃的理论成果是<strong>毛泽东思想</strong>；第二次飞跃发生在<strong>改革开放以后</strong>，理论成果是<strong>中国特色社会主义理论体系</strong>。初步探索时期确实在为第二次飞跃<strong>做准备</strong>（攒经验、攒理论、攒家底），但「实现了」三个字必须等新理论成型才算数——那要到十一届三中全会之后。把「准备了条件」说成「实现了飞跃」，是把进行时写成了完成时。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：典型误解是「初步探索时期的思想也算重大理论成果，所以是飞跃」。区分法：飞跃 = 与新道路配套的新理论成果<strong>成型</strong>并<strong>指导新道路</strong>；探索期形成的《论十大关系》等属于「理论准备」，不是成型的新理论体系。</li><li><strong>漏 D</strong>：只看到探索的曲折，低估遗产。「宝贵经验、理论准备、物质基础」三件套正是教科书记在初步探索名下的标准遗产，一个都不能少。</li><li><strong>漏 B</strong>：以为「丰富了科学社会主义」是很高的帽子不敢戴——探索中的原创性思想恰恰够得上这一条。</li></ul>
+<blockquote>记忆锚点：初步探索三个意义——<strong>巩固制度（承上）、打底改革开放（启下）、丰富科学社会主义（理论）</strong>；一顶不能戴的帽子——第二次飞跃在改革开放后才实现，探索期只算「理论准备」。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

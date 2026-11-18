@@ -1,8 +1,137 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-10 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-10</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·10 抗日战争胜利的关键</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），
+     模板复制自 408 tools/anim_concept_template.html，只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼',
+    cls: 'key',
+    body: '<p>题问「中国人民抗日战争胜利的<b>关键</b>」是——定位词题。教材把胜利原因分层，每层配一个专属定位词；答这类题不比谁「重要」，比<b>定位词与原因的绑定关系</b>。</p>',
+    tag: '审题',
+    log: '审题：定位词「关键」，找对应的那条原因'
+  },
+  {
+    title: '先立模型：胜利原因四层体系',
+    cls: 'key',
+    body: '<ul><li><b>关键</b>：中国共产党的中流砥柱作用</li><li><b>决定性因素</b>：民族觉醒、民族团结、民族抗争（爱国主义民族精神）</li><li><b>重要法宝</b>：全民族抗战（抗日民族统一战线）</li><li><b>外部条件</b>：世界反法西斯力量的同情和支持</li></ul>',
+    tag: '建模',
+    log: '四层体系：关键 / 决定性因素 / 重要法宝 / 外部条件'
+  },
+  {
+    title: '机制：为什么「关键」是中流砥柱',
+    cls: 'step',
+    body: '<ul><li><b>政治</b>：最早举起抗日旗帜，和平解决西安事变、<b>倡导并维护</b>统一战线，顶住投降逆流与反共摩擦</li><li><b>军事</b>：《论持久战》＋敌后战场，与正面战场互为支撑</li><li><b>路线</b>：全面抗战路线，动员亿万民众</li></ul><p>没有这根柱子，「法宝」立不起来——使法宝成真的力量才是关键。</p>',
+    tag: '机制',
+    log: '中流砥柱 = 政治倡导 + 军事支撑 + 路线动员'
+  },
+  {
+    title: 'D：中国共产党的中流砥柱作用',
+    cls: 'good',
+    ribbon: { k: 4, ok: true },
+    body: '<p>教材定点绑定：中流砥柱作用是抗战胜利的<b>关键</b>。<b>D 正确</b>。</p>',
+    tag: '命中',
+    log: 'D 命中：关键 = 中流砥柱作用'
+  },
+  {
+    title: 'A：两条正确原因的拼盘',
+    cls: 'bad',
+    ribbon: { k: 1, ok: false },
+    body: '<p>民族意识觉醒≈<b>决定性因素</b>，全民族抗战＝<b>重要法宝</b>——A 把两条正确原因打包，面面俱到最像答案，但「关键」这个定位词只属于中流砥柱。<b>A 错误</b>。</p>',
+    tag: '排除',
+    log: 'A 是拼盘项，定位词对不上 → 排除'
+  },
+  {
+    title: 'B：战争性质 ≠ 原因定位',
+    cls: 'bad',
+    ribbon: { k: 2, ok: false },
+    body: '<p>「正义性与进步性」是对战争<b>性质</b>的表述（正义的胜利、和平的胜利），不在原因定位体系里。<b>B 错误</b>。</p>',
+    tag: '排除',
+    log: 'B 性质判断混入原因定位 → 排除'
+  },
+  {
+    title: 'C：外部条件 ≠ 关键',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>世界反法西斯力量的同情和支持是<b>外部条件</b>——重要帮手，但不决定胜负，构不成「关键」。<b>C 错误</b>。</p>',
+    tag: '排除',
+    log: 'C 外部条件不是关键 → 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>D</b>。记忆锚点：四层对号——<b>关键＝中流砥柱</b>；决定性因素＝民族觉醒团结抗争；重要法宝＝全民族抗战；外部条件＝国际同情支持。定位词与原因一一绑定，不可互换。</p>',
+    tag: '结论',
+    log: '锁定 D：中国共产党中流砥柱作用是关键'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag,
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+});
+
+AW.init({
+  title: '中国人民抗日战争胜利的关键',
+  subtitle: '考点：抗战胜利的原因 · 定位词绑定 · 方法：原因四层体系对号（关键 / 决定性因素 / 重要法宝 / 外部条件）',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」先立四层体系，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 D',
+    html: '抗战胜利的<b>关键</b>＝中国共产党的<b>中流砥柱作用</b>：政治上倡导并维护统一战线，军事上《论持久战》＋敌后战场，路线上全面抗战动员民众。易混点：民族觉醒＝决定性因素，全民族抗战＝重要法宝，国际支持＝外部条件——把「法宝」当「关键」就是背串了绑定关系。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：抗战胜利原因体系里的「关键」对号入座</h2>
+<p>答案：<strong>D（中国共产党的中流砥柱作用）</strong>。</p>
+<h3>第 0 步：先立模型——胜利原因是一个四层体系，定位词与原因一一绑定</h3>
+<p>抗战胜利的原因在教材里是一个<strong>分层体系</strong>，每条原因配一个专属定位词（关键／决定性因素／重要法宝／外部条件）。命题就考这个绑定关系：给出定位词，让你找出对应的那条原因。先把体系立起来：</p>
+<table><thead><tr><th>定位词</th><th>对应的原因</th></tr></thead><tbody><tr><td><strong>关键</strong></td><td>中国共产党的<strong>中流砥柱作用</strong></td></tr><tr><td>决定性因素</td><td>中国人民巨大的<strong>民族觉醒</strong>、空前的民族团结和英勇的民族抗争（爱国主义民族精神）</td></tr><tr><td>重要法宝</td><td><strong>全民族抗战</strong>（抗日民族统一战线）</td></tr><tr><td>外部条件</td><td>世界上一切爱好和平与正义的国家、人民和反法西斯力量的<strong>同情和支持</strong></td></tr></tbody></table>
+<p>「关键」＝决定胜负成败的那一根柱子。柱子一找，答案浮出。</p>
+<h3>第 1 步：为什么「关键」落在中流砥柱（预判追问）</h3>
+<p>「中流砥柱」说的是危机时刻撑住大局的那根柱子。党对胜利的贡献是<strong>全程、全方位</strong>的：</p>
+<ul><li><strong>政治上</strong>：九一八事变后最早举起抗日旗帜；西安事变和平解决，<strong>倡导建立</strong>抗日民族统一战线；抗战中顶住投降逆流与反共摩擦，「坚持抗战、反对投降；坚持团结、反对分裂；坚持进步、反对倒退」，把统一战线<strong>维护到最后</strong>。</li><li><strong>军事上</strong>：提出《论持久战》和一整套人民战争的战略战术，开辟敌后战场，与正面战场互为支撑。</li><li><strong>路线上</strong>：实行全面抗战路线，动员亿万民众，使抗战真正成为人民战争。</li></ul>
+<p>没有这根柱子，「法宝」立不起来——所以全民族抗战是法宝，而<strong>使法宝成真的力量才是关键</strong>。</p>
+<h3>第 2 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对应的层次</th></tr></thead><tbody><tr><td>A 民族意识的觉醒与全民族抗战</td><td>❌</td><td><strong>拼盘项</strong>：民族觉醒≈决定性因素，全民族抗战＝重要法宝——两条都对，但都不是「关键」</td></tr><tr><td>B 反侵略战争的正义性与进步性</td><td>❌</td><td>战争<strong>性质</strong>的表述（正义的胜利），不在原因定位体系里</td></tr><tr><td>C 世界反法西斯力量的同情和支持</td><td>❌</td><td><strong>外部条件</strong>——重要帮手，但不决定胜负</td></tr><tr><td>D 中国共产党的中流砥柱作用</td><td>✅</td><td>教材定点绑定：中流砥柱作用是抗战胜利的<strong>关键</strong></td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 A（最常见）</strong>：A 是两条正确原因的拼盘，看着面面俱到最像答案。但「关键」这个定位词只属于中流砥柱；把「法宝」当「关键」就是背串了绑定关系。</li><li><strong>误选 C</strong>：把重要外部支援当决定力量。国际支持是外部条件，起帮手作用，构不成「关键」。</li><li><strong>误选 B</strong>：把「正义的胜利、和平的胜利」这类<strong>性质判断</strong>误当原因定位。</li></ul>
+<blockquote>记忆锚点：四层对号——<strong>关键＝中流砥柱</strong>；决定性因素＝民族觉醒团结抗争；重要法宝＝全民族抗战；外部条件＝国际同情支持。定位词与原因一一绑定，不可互换。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

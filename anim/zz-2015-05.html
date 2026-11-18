@@ -1,8 +1,130 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-05 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-05</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2015·05 中国工业化道路问题：重工业、轻工业和农业的关系</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>题眼：「<b>在苏联的影响下起步</b>」「当时所讲的<b>工业化道路</b>问题」。苏联的教训：只顾重工业、忽视农业轻工业。考点：毛泽东「中国工业化道路」的专指内容。</p>",
+    "log": "题眼：工业化道路是个专名，有专指"
+  },
+  {
+    "title": "先立机制：道路的分岔口在农轻重",
+    "cls": "key",
+    "body": "<p>发展重工业有两种办法：少发展农业轻工业（苏联式），或多发展农业轻工业（中国式）。后者反而<b>更多更快积累资金</b>、供给原料和市场，支撑重工业更稳更快。《关于正确处理人民内部矛盾的问题》明确：工业化道路问题主要指<b>重工业、轻工业和农业的发展关系</b>。</p>",
+    "log": "两条路分岔在农轻重比例 → 道路=农轻重"
+  },
+  {
+    "title": "D：工业化道路=农轻重关系",
+    "cls": "good",
+    "ribbon": {
+      "k": 4,
+      "ok": true
+    },
+    "body": "<p>「道路」的具体所指就是农、轻、重三者的比例关系——这是毛泽东的专门定义，与题干「苏联影响下起步」的教训呼应。<b>D 正确</b>。</p>",
+    "log": "专名专指：道路=农轻重 → 选 D"
+  },
+  {
+    "title": "C：沿海与内地——讲的是布局不是道路",
+    "cls": "bad",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    },
+    "body": "<p>《论十大关系》第二条，讲工业的<b>空间布局</b>（利用和发展沿海工业以支持内地）。命题正确，但不是「工业化道路」的所指。<b>C 不选</b>。</p>",
+    "log": "布局≠道路 → C 不选"
+  },
+  {
+    "title": "B：经济建设与国防建设——也是十大关系之一",
+    "cls": "bad",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    },
+    "body": "<p>《论十大关系》第三条（«要一手抓经济、一手抓国防»），命题正确但与「苏联影响」「道路」无呼应。<b>B 不选</b>。</p>",
+    "log": "真命题但非本题所指 → B 不选"
+  },
+  {
+    "title": "A：中央与地方——同样凑数",
+    "cls": "bad",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "body": "<p>《论十大关系》第五条，讲发挥中央与地方两个积极性。陷阱设计：用<b>正确的十大关系内容</b>冒充「道路」的定义。<b>A 不选</b>。</p>",
+    "log": "又一条真关系，但不是道路 → A 不选"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>D</b>：重工业、轻工业和农业的发展关系。记忆锚点：<b>工业化道路=农轻重</b>；十大关系里的其他「关系」再真，也不是「道路」。</p>",
+    "log": "锁定 D：道路=农轻重关系"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "中国工业化道路问题：重工业、轻工业和农业的关系",
+  subtitle: "考点：毛中特·探索社会主义建设道路 · 「道路」是专名有专指",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "记忆锚点：<b>工业化道路=农轻重关系</b>；《论十大关系》里的中央与地方、沿海与内地、经建与国防都是「关系」但都不是「道路」。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：中国工业化道路问题主要指什么——重工业、轻工业和农业的关系</h2>
+<p>答案：<strong>D（重工业、轻工业和农业的发展关系问题）</strong>。</p>
+<h3>第 0 步：先立机制——「工业化道路」这个词在毛泽东那里专指什么</h3>
+<p>背景：新中国工业化照苏联模式起步，苏联只顾重工业、轻视农业和轻工业，导致消费品长期短缺、农产品供应紧张。毛泽东《论十大关系》（1956）开头第一条就是「重工业和轻工业、农业的关系」；《关于正确处理人民内部矛盾的问题》（1957）里更直接点题——<strong>中国工业化道路的问题，主要是指重工业、轻工业和农业的发展关系问题</strong>。</p>
+<p>逻辑在于：发展重工业有两种办法——一种是少发展些农业、轻工业（苏联式），一种是多发展些农业、轻工业（中国式）。后一种办法看起来慢，实则农轻反而<strong>更多更快地积累资金</strong>、供给原料和市场，支撑重工业更稳更快。所以「走哪条工业化道路」的分岔口，恰恰落在<strong>农、轻、重三者的比例关系</strong>上——这就是「道路」一词的具体所指。</p>
+<h3>第 1 步：对号入座——题干问「工业化道路」，别答成「十大关系里的其他关系」</h3>
+<table><thead><tr><th>选项</th><th>内容</th><th>出处</th><th>判断</th></tr></thead><tbody><tr><td>A</td><td>中央和地方的关系</td><td>《论十大关系》第五条</td><td>❌ 不是工业化道路的所指</td></tr><tr><td>B</td><td>经济建设和国防建设的关系</td><td>《论十大关系》第三条</td><td>❌ 同上</td></tr><tr><td>C</td><td>沿海工业和内地工业的关系</td><td>《论十大关系》第二条</td><td>❌ 同上</td></tr><tr><td>D</td><td>重工业、轻工业和农业的发展关系</td><td>工业化道路的专门定义</td><td>✅</td></tr></tbody></table>
+<p>A、B、C 都是《论十大关系》中的<strong>真命题</strong>——这正是本题的陷阱设计：用正确的「十大关系」内容冒充「工业化道路」的定义。命题对应关系是唯一解：<strong>道路问题=农轻重关系</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 C（把「布局」当「道路」）</strong>：沿海与内地讲的是工业的<strong>空间布局</strong>，题干背景「苏联影响下起步」指向的是<strong>结构比例</strong>（苏联的教训恰是忽视农轻），不是布局。</li><li><strong>选 A（「关系问题」字面泛化）</strong>：凡讲「关系」就往十大关系上靠，忘了题眼是「工业化道路」这个<strong>专名</strong>——专名有专指。</li><li><strong>选 B</strong>：经济建设与国防建设同样属于十大关系，且与「苏联影响」无呼应，属凑数项。</li></ul>
+<blockquote>记忆锚点：<strong>工业化道路=农轻重</strong>；十大关系里的中央与地方、沿海与内地、经建与国防都是「关系」但都不是「道路」。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

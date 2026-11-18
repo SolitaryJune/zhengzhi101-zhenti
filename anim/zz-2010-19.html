@@ -1,8 +1,83 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-19 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-19</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-19 狐狸与仙鹤：形式平等 · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：寓言破在哪一环',
+    cls: 'key', sc: 'step', tag: '审题',
+    body: '<p>狐狸请仙鹤用<b>平底盘子</b>“平等”地喝鱼汤：狐狸扁嘴喝得欢，仙鹤长喙一点没喝到。</p><p>规则同一 + 起点条件不同 = <b>形式平等、事实不平等</b>。考点：资本主义民主“法律面前人人平等”的实质。</p>' },
+  { t: '机制先行：寓言 ↔ 社会对照',
+    cls: 'key', sc: 'shift', tag: '机制',
+    log: '把寓言逐项翻译到资本主义社会',
+    body: '<p><b>同用平底盘</b> ↔ “法律面前人人平等”的形式规定；</p><p><b>嘴型不同</b> ↔ 财产（生产资料占有）的不平等；</p><p><b>仙鹤喝不到汤</b> ↔ 劳资之间事实上的不平等；</p><p><b>规则由狐狸定</b> ↔ 不平等被法律确认、固定——合法化。</p>' },
+  { t: '选项 A：名义平等掩盖事实不平等 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A',
+    body: '<p>法律上人人平等是真的“平底盘”，但嘴型之差让平等停在名义上。</p><p><b>法律名义上的平等掩盖着事实上的不平等</b>。A 对。</p>' },
+  { t: '选项 B：形式上的平等即是制度本质 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 B',
+    body: '<p>以现象代本质。资本主义的本质是<b>生产资料私有制基础上的雇佣剥削关系</b>，形式平等只是掩盖本质的手段。</p><p>“即是”二字把面具当成了脸。B 错。</p>' },
+  { t: '选项 C：将劳资利益不平等合法化 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C',
+    body: '<p>规则由占有财产的一方主导制定，喝不到汤的恰是劳动者——不平等还被法律固定下来。</p><p><b>实质是将劳资之间经济利益的不平等合法化</b>。C 对。</p>' },
+  { t: '选项 D：建立在财产不平等基础上 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 D',
+    body: '<p>嘴型之差即财产之差：这种平等权利的前提本身就是不平等的财产关系。</p><p><b>平等的权利建立在财产不平等基础之上</b>。D 对。</p>' },
+  { t: '结论：ACD',
+    cls: 'good', sc: 'done', tag: '结论',
+    body: '<p>答案 <b>ACD</b>：掩盖（A）· 合法化（C）· 财产基础（D）。</p><p>唯一排除的 B 把掩盖本质的形式手段说成了制度本质。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2010·19】狐狸请仙鹤喝汤：形式平等的实质（多选）',
+  subtitle: '考点：资本主义民主的阶级实质 · 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '记忆锚点：<b>盘子平等，嘴长不平等；形式平等是面具，财产不平等是脸</b>——面具挡视线（A）、替老板办手续（C）、长在财产上（D），但面具不是脸（B）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：狐狸请仙鹤喝汤——形式平等的寓言机制</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——寓言的"平等"破在哪一环</h3>
+<p>寓言结构：狐狸宣布规则平等——都用平底盘子喝；但参与者身体条件不同——狐狸扁嘴、仙鹤长喙。<strong>规则同一 + 起点条件不同 = 形式平等、事实不平等</strong>。把它翻译到资本主义社会：</p>
+<table><thead><tr><th>寓言</th><th>资本主义社会</th></tr></thead><tbody><tr><td>同用平底盘</td><td>"法律面前人人平等"的形式规定</td></tr><tr><td>嘴型不同</td><td>财产（生产资料占有）的不平等</td></tr><tr><td>仙鹤一点没喝到</td><td>劳动者与资本家事实上的不平等</td></tr><tr><td>规则由狐狸定</td><td>不平等被法律确认、固定——合法化</td></tr></tbody></table>
+<h3>逐项对号入座</h3>
+<ul><li><strong>A 对</strong>：法律名义上的平等掩盖着事实上的不平等——正是"平底盘对嘴型"的对照。</li><li><strong>C 对</strong>：实质是将劳资之间经济利益的不平等合法化——规则由占有财产的一方主导制定，喝不到汤的恰是劳动者。</li><li><strong>D 对</strong>：这种平等的权利建立在财产不平等的基础之上——嘴型之差即财产之差，是事实不平等的根。</li><li><strong>B 错</strong>：以现象代本质。资本主义的<strong>本质</strong>是生产资料资本主义私有制基础上的雇佣剥削关系；形式上的平等只是掩盖本质的手段。"形式上的平等即是制度的本质"，等于把面具当成了脸。</li></ul>
+<h3>为什么 B 最有迷惑性</h3>
+<p>B 是半句错话：前半句"这种形式上的平等"是真的，后半句"即是资本主义制度的本质"把手段升格为本质。钩子就在"即是"二字——越是贴近材料的现象判断，越要追问一句：它是本质，还是掩盖本质的东西？</p>
+<blockquote>记忆锚点：盘子平等，嘴长不平等；形式平等是面具，财产不平等是脸——面具挡视线（A）、替老板办手续（C）、长在财产上（D），但面具不是脸（B）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

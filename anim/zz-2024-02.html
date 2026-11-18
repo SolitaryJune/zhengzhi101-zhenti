@@ -1,8 +1,76 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-02 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-02</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2024·02 厄尔尼诺与必然性、偶然性</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 anim_math_concept 模板（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [{"title": "审题眼", "cls": "key", "tag": "审题", "body": "<p>气候题只是载体。题眼「其中一个因素<b>突然掉链子</b>」= 偶然性出场。问「偶然因素是什么」——考<b>必然性与偶然性</b>这对范畴。</p>", "log": "题眼「突然掉链子」= 偶然"}, {"title": "先立机制：必然管方向，偶然管面貌", "cls": "key", "tag": "立机制", "body": "<p><b>必然性</b>：确定不移的趋势，决定发展的<b>根本方向</b>；<b>偶然性</b>：可以这样也可那样出现，不决定方向，但<b>影响发展进程与具体面貌</b>（加速/延缓、外貌）。必然通过大量偶然开辟道路，偶然背后藏着必然。</p>", "log": "模型：必然管方向，偶然管面貌"}, {"title": "材料对号：气候的「稳」与「变」", "cls": "good", "tag": "材料", "body": "<p>纬度、海陆、地形基本不变 → 气候<b>相对稳定</b>（必然层面）；一个因素掉链子 → 厄尔尼诺 → 推高变暖、极端天气（偶然改变<b>进程与面貌</b>）。→ 偶然因素绝非可有可无，<b>不可忽视</b>——C 站住了。</p>", "log": "偶然改变进程面貌 → C 正确", "ribbon": {"k": 3, "ok": true}}, {"title": "A. 决定趋势的根本因素——夸大", "cls": "bad", "tag": "A ✗", "ribbon": {"k": 1, "ok": false}, "body": "<p>「决定发展趋势」是<b>必然性</b>的地位。把偶然抬成必然——厄尔尼诺能改变面貌，但改变不了「气候由根本因素决定」的趋势方向。</p>", "log": "A 把偶然抬成必然（夸大）"}, {"title": "B. 可有可无的影响因素——贬低", "cls": "bad", "tag": "B ✗", "ribbon": {"k": 2, "ok": false}, "body": "<p>否认偶然的作用。题干明说厄尔尼诺「更可能导致频次更多、范围更广、强度更大的极端天气」——影响重大，哪里可有可无？</p>", "log": "B 被题干直接反驳"}, {"title": "D. 确定不移的因素——张冠李戴", "cls": "bad", "tag": "D ✗", "ribbon": {"k": 4, "ok": false}, "body": "<p>「确定不移」是教材里<b>必然性</b>的定义原话。套给偶然因素，就是特征互串。</p>", "log": "D 用了必然性的定义，排除"}, {"title": "结论", "cls": "good", "tag": "完成", "body": "<p>答案 <b>C</b>。记忆锚点：必然管<b>方向</b>（确定不移、决定趋势），偶然管<b>面貌</b>（进程快慢、具体样子）——偶然不可忽视，也决定不了趋势。</p>", "log": "锁定 C：偶然不可忽视"}];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "2024·02 厄尔尼诺与必然性、偶然性",
+  subtitle: "考点：必然性与偶然性的辩证关系 · 方法：范畴模型 + 选项定位",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」：先立范畴模型，再把厄尔尼诺装进去。",
+  snaps: snaps,
+  result: {
+    big: "答案 C",
+    html: "答案 <b>C</b>：偶然因素是事物发展中<b>不可忽视</b>的影响因素——它不决定趋势方向，但影响发展进程与具体面貌。A 把偶然抬成必然（决定趋势是必然性的地位），B 否认偶然的作用，D 把必然性的「确定不移」张冠李戴给偶然。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：偶然因素在事物发展中占什么位置</h2>
+<p>答案：<strong>C（事物发展中不可忽视的影响因素）</strong>。</p>
+<h3>第 0 步：先立机制——必然性与偶然性这对范畴</h3>
+<p>气候题只是载体，考的是辩证法基本范畴：<strong>必然性与偶然性</strong>。</p>
+<table><thead><tr><th>范畴</th><th>定义</th><th>在发展中的角色</th></tr></thead><tbody><tr><td>必然性</td><td>一定如此、确定不移的趋势</td><td>决定发展的<strong>根本方向</strong>（趋势）</td></tr><tr><td>偶然性</td><td>可以出现也可以不出现、可以这样也可那样出现</td><td>不决定方向，但<strong>影响发展的进程与具体面貌</strong>（加速/延缓、外貌特征）</td></tr></tbody></table>
+<p>二者是对立统一：必然性通过大量偶然性为自己开辟道路，偶然性背后隐藏着必然性。</p>
+<h3>第 1 步：把材料装进模型</h3>
+<ul><li>纬度、海陆位置、地形等因素基本不变，大气环流与洋流相互作用形成<strong>相对稳定的气候状态</strong>——这是<strong>必然性</strong>层面：基本趋势由根本因素决定；</li><li>「其中一个因素突然掉链子」→ 厄尔尼诺 → 推高变暖、引发更多极端天气——这是<strong>偶然性</strong>层面：它不改变「气候由诸因素决定」的根本方向，却实实在在<strong>改变了发展进程的具体面貌</strong>。</li></ul>
+<p>→ 偶然因素绝非可有可无，<strong>不可忽视</strong>，选 <strong>C</strong>。</p>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对应的误解</th></tr></thead><tbody><tr><td>A 决定趋势的根本性因素</td><td>❌</td><td>把偶然抬成必然——「决定趋势」是必然性的地位（夸大）</td></tr><tr><td>B 可有可无的影响因素</td><td>❌</td><td>否认偶然的作用（贬低），被题干「更可能导致极端天气」直接反驳</td></tr><tr><td>C 不可忽视的影响因素</td><td>✅</td><td>偶然影响进程与具体面貌——正确定位</td></tr><tr><td>D 确定不移的因素</td><td>❌</td><td>「确定不移」是必然性的定义特征——张冠李戴</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：看到厄尔尼诺影响巨大，就以为它「决定」气候——分寸错了：偶然可以<strong>改变面貌、加速延缓</strong>，但不改变<strong>趋势方向</strong>。</li><li><strong>误选 D</strong>：「确定不移」四个字很有迷惑性，它是教材里<strong>必然性</strong>的原话，套给偶然就错。</li></ul>
+<blockquote>记忆锚点：必然管<strong>方向</strong>（确定不移、决定趋势），偶然管<strong>面貌</strong>（进程快慢、具体样子）；必然借偶然开辟道路——偶然不可忽视，也决定不了趋势。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

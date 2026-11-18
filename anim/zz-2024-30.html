@@ -1,8 +1,95 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-30 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-30</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2024-30 · 传统美德「两创」：两道工序与一个方向盘</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（概念类：工序拆解 + 主从关系定 D） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：先立机制——「两创」两道工序＋一个方向盘',
+    cls: 'key',
+    body: '<p>题干自带流程：先「<b>去粗取精、去伪存真</b>」（筛选），再「<b>古为今用、推陈出新</b>」（转化与出新）。<b>创造性转化</b>＝改造仍有价值的内涵与陈旧形式，使之与当代相适应；<b>创新性发展</b>＝按时代新进步补充、拓展、完善内涵。方向盘写在最前：两个「坚持」——<b>马克思主义道德观、社会主义道德观</b>。故传统美德是<b>资源</b>不是<b>主体</b>。</p>' },
+  { title: '选项 A：挖掘具有当代价值的道德精神',
+    cls: 'good', k: 1, pick: true,
+    body: '<p>筛选工序——「去粗取精」取的正是<b>有当代价值</b>的部分，是「挖掘→转化→滋养」链条的起点。<b>符合 → 入选</b>。</p>' },
+  { title: '选项 B：赋予中华传统美德新的时代内涵',
+    cls: 'good', k: 2, pick: true,
+    body: '<p>转化与出新的落点——「<b>创新性发展</b>」的定义复现：补充、拓展、完善，增强影响力感召力。<b>符合 → 入选</b>。</p>' },
+  { title: '选项 C：用中华传统美德滋养社会主义道德建设',
+    cls: 'good', k: 3, pick: true,
+    body: '<p>题干定位：传统美德是「<b>思想道德资源</b>」，「古为今用」即滋养今天的道德建设——资源就是用来滋养的。<b>符合 → 入选</b>。</p>' },
+  { title: '选项 D：形成以中国传统文化为主体的道德体系',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p><b>主体错位</b>——方向盘被换掉了：道德体系以<b>马克思主义为指导</b>，传统文化只是资源而非主体；「去粗取精、去伪存真」也明示不能全盘照搬。<b>排除</b>。</p>' },
+  { title: '干扰项解剖：为什么「弘扬」推不出「为主体」',
+    cls: 'key',
+    body: '<p>追问：既然要「继承和弘扬」，为何不能「以传统文化为主体」？——继承是<b>有甄别的继承</b>：题干两个「坚持」在前压阵，「去粗取精」在后把关。D 把<b>资源</b>摆到<b>方向盘</b>的位置，属「全盘照搬」式偏差，两道闸门都拦着它。</p>' },
+  { title: '结论：ABC 入选',
+    cls: 'good',
+    body: '<p>链条完整：挖掘（A）→赋予新内涵（B）→滋养社会主义道德建设（C）。<b>答案 ABC。</b></p>' },
+];
+
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+
+AW.init({
+  title: 'zz-2024-30 · 传统美德「创造性转化、创新性发展」',
+  subtitle: '2024 年第 30 题（多选）· 考点：中华传统美德的转化 · 两道工序＋一个方向盘',
+  counterLabel: '已入选',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先拆「两创」工序与主从关系，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: '记忆锚点：两创＝先<b>筛选</b>（去粗取精、挖掘当代价值 A）再<b>出新</b>（赋予时代内涵 B），落点是<b>滋养</b>社会主义道德建设（C）；传统美德是<b>资源不是主体</b>——凡「以传统文化为主体／全盘继承」式表述必错。'
+  }
+});
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：传统美德「两创」——转化什么、以谁为主体</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——「两创」的两道工序与一个方向盘</h3>
+<p>创造性转化、创新性发展（「两创」）是处理传统文化的基本方法论。题干引文自带完整流程：先「<strong>去粗取精、去伪存真</strong>」（筛选工序），再「<strong>古为今用、推陈出新</strong>」（转化与出新工序）。拆开讲：</p>
+<ul><li><strong>创造性转化</strong>：按当今时代的特点和要求，对传统文化中<strong>仍有价值的内涵与陈旧的表达形式</strong>加以改造、转化，使之与当代文化相适应、与现代社会相协调；</li><li><strong>创新性发展</strong>：按照时代的新进步、新进展，对传统内涵<strong>加以补充、拓展、完善</strong>，赋予新的时代内涵和现代表达形式，增强其影响力和感召力。</li></ul>
+<p>两道工序之上还有一个<strong>方向盘</strong>：题干写在最前面的两个「坚持」——坚持马克思主义道德观、坚持社会主义道德观。它决定了主从关系：传统美德是被转化的<strong>资源</strong>，转化成果滋养的是<strong>社会主义道德建设</strong>；「去粗取精、去伪存真」明示不能全盘照搬。这层主从关系直接决定 D 的命运。</p>
+<h3>第 1 步：四个选项逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判定</th><th>对应机制</th></tr></thead><tbody><tr><td>A 对其中具有当代价值的道德精神加以挖掘</td><td>✅</td><td>筛选工序——「去粗取精」取的正是有当代价值的部分，链条的起点</td></tr><tr><td>B 赋予中华传统美德新的时代内涵</td><td>✅</td><td>转化与出新的落点——「创新性发展」的定义复现</td></tr><tr><td>C 用中华传统美德滋养社会主义道德建设</td><td>✅</td><td>题干定位：传统美德是「思想道德资源」，「古为今用」即滋养今天的道德建设</td></tr><tr><td>D 形成以中国传统文化为主体的道德体系</td><td>❌</td><td>主体错位——方向盘被换掉了：道德体系以马克思主义为指导，传统文化只是资源而非主体</td></tr></tbody></table>
+<p>→ 选 <strong>ABC</strong>。</p>
+<h3>为什么 D 错得如此隐蔽（预判追问）</h3>
+<p>有人问：既然要「继承和弘扬」，为什么不能「以传统文化为主体」？——因为题干在「继承弘扬」之前先立了两个「坚持」，之后又强调「去粗取精、去伪存真」：继承是<strong>有甄别的继承</strong>，传统美德经过转化之后是滋养社会主义道德建设的<strong>养分</strong>，而不是新道德体系的<strong>框架</strong>。D 的措辞「以中国传统文化为主体」把资源摆到了方向盘的位置，属于「全盘照搬」式偏差——两道闸门（两个「坚持」＋「去粗取精」）都拦着它。</p>
+<h3>易错点：每个干扰项/漏选对应哪种误解</h3>
+<ul><li><strong>误选 D</strong>：被「继承和弘扬」的语境带过去，忘了题干两个「坚持」在前压阵；凡「以传统文化为主体／全盘继承」式表述必错。</li><li><strong>漏 A</strong>：只见「创新」不见「挖掘」。「两创」的完整链条是<strong>挖掘（A）→转化→滋养（C）</strong>，A 是起点，跳过它就漏了一环。</li><li><strong>漏 C</strong>：觉得「滋养」太虚；但题干定位传统美德正是「思想道德资源」，「资源」就是用来滋养当代道德建设的。</li><li><strong>混淆「转化」与「发展」</strong>：转化侧重改造形式与载体（使之与当代相适应），发展侧重补充拓展内涵（B）——考试常把两者互换设错。</li></ul>
+<blockquote>记忆锚点：两创＝先<strong>筛选</strong>（去粗取精、挖掘当代价值 A）再<strong>出新</strong>（赋予时代内涵 B），落点是<strong>滋养</strong>社会主义道德建设（C）；传统美德是资源不是主体，「以传统文化为主体」即错。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

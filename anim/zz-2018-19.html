@@ -1,8 +1,119 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-19 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-19</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2018·19 资本积累的四个「水龙头」</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 泉眼—水龙头图：上游剩余价值量，四个龙头逐个点亮
+function taps(active){
+  var tap = function(k, name, sub, on){
+    var bg = on ? '#f0fdf4' : '#f8fafc';
+    var bd = on ? '#16a34a' : '#cbd5e1';
+    var col = on ? '#15803d' : '#64748b';
+    return '<span style="display:inline-flex;flex-direction:column;gap:1px;border:2px solid ' + bd +
+      ';background:' + bg + ';border-radius:10px;padding:7px 10px;text-align:center;min-width:118px">' +
+      '<b style="font-size:13px;color:' + col + '">' + k + ' ' + name + '</b>' +
+      '<span style="font-size:11.5px;color:#475569">' + sub + '</span></span>';
+  };
+  return '<div style="display:flex;flex-direction:column;gap:6px;align-items:center;width:max-content;margin:6px 0">' +
+    '<span style="border:2px solid #d97706;background:#fffbeb;border-radius:10px;padding:6px 14px;font-weight:700;font-size:13.5px">泉眼：剩余价值量（源泉唯一）</span>' +
+    '<span style="font-size:11.5px;color:#94a3b8">↓ 剩余价值资本化 · 另可分流为资本家消费（比例考点，本题不考）</span>' +
+    '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">' +
+    tap('A', '剥削程度', '剩余价值率', active >= 1) +
+    tap('B', '劳动生产率', '相对剩余价值', active >= 2) +
+    tap('C', '垫付资本', '总量放大', active >= 3) +
+    tap('D', '所用/所费差额', '免费服务', active >= 4) +
+    '</div></div>';
+}
+
+// 差额算账小卡：100 台在转 / 60 台折旧
+function ledger(){
+  return '<div style="display:flex;gap:8px;align-items:stretch;margin:6px 0;flex-wrap:wrap">' +
+    '<span style="flex:1;min-width:150px;border:2px solid #16a34a;background:#f0fdf4;border-radius:10px;padding:7px 10px;text-align:center"><b style="font-size:13.5px;color:#15803d">所用：100 台</b><span style="display:block;font-size:11.5px;color:#475569">整个投入生产、全在转</span></span>' +
+    '<span style="align-self:center;font-size:18px;font-weight:700;color:#64748b">−</span>' +
+    '<span style="flex:1;min-width:150px;border:2px solid #d97706;background:#fffbeb;border-radius:10px;padding:7px 10px;text-align:center"><b style="font-size:13.5px;color:#b45309">所费：折旧 60 台</b><span style="display:block;font-size:11.5px;color:#475569">只按折旧计入成本</span></span>' +
+    '<span style="align-self:center;font-size:18px;font-weight:700;color:#64748b">=</span>' +
+    '<span style="flex:1;min-width:150px;border:2px solid #2a9d8f;background:#2a9d8f14;border-radius:10px;padding:7px 10px;text-align:center"><b style="font-size:13.5px;color:#1f7a70">差额 40 台＝白得的服务</b><span style="display:block;font-size:11.5px;color:#475569">不追加预付，也可转积累</span></span>' +
+    '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：问积累规模＝问剩余价值量',
+    body: '<p>题干给了唯一钥匙：「资本积累的<b>源泉是剩余价值</b>」。积累＝剩余价值重新转化为资本，所以「积累规模取决于什么」＝<b>上游剩余价值量由什么决定</b>。判断标尺：这个因素能否增大剩余价值量。</p>' },
+  { tag: '机制', cls: 'key', title: '先立机制：一条泉眼、四个龙头',
+    body: '<p>教材列的影响因素恰好四条，四个选项逐一对应；另有一条「积累与消费的分割比例」决定分流，本题不考。先把水路图立起来，再逐个对号。</p>' + taps(0) },
+  { tag: '选项A', cls: 'good', ribbon: { k: 1, ok: true }, title: 'A：剥削程度——最直接的龙头',
+    body: '<p>剥削程度（剩余价值率）越高，同一批工人创造的剩余价值越多，可转化为资本的部分就越多——直接加大泉眼。<b>A 对。</b></p>' + taps(1) },
+  { tag: '选项B', cls: 'good', ribbon: { k: 2, ok: true }, title: 'B：劳动生产率——从相对剩余价值处来水',
+    body: '<p>生产率提高 → 生活资料便宜 → 必要劳动时间缩短 → <b>相对剩余价值</b>增加；同时同量剩余价值对应的商品更多，积累的物质基础更厚。<b>B 对。</b></p>' + taps(2) },
+  { tag: '选项C', cls: 'good', ribbon: { k: 3, ok: true }, title: 'C：垫付资本——总闸门，但非唯一来源',
+    body: '<p>预付资本越大，雇的工人、用的生产资料越多，剩余价值<b>总量</b>水涨船高——「本钱」决定「盘子」。注意参考解析的提醒：它是四因素之一，<b>不是唯一来源</b>。<b>C 对。</b></p>' + taps(3) },
+  { tag: '选项D', cls: 'good', ribbon: { k: 4, ok: true }, title: 'D：所用/所费差额——白捡的服务',
+    body: '<p>机器厂房<b>整个</b>投入生产（所用），只按折旧<b>部分</b>计入成本（所费），差额越大越「物尽其用」：</p>' + ledger() + '<p>这批免费服务带来的产品价值不追加预付即可积累；折旧基金更新前也能拿来扩大生产。<b>D 对。</b></p>' },
+  { tag: '追问', cls: 'key', title: '预判追问：为什么四项全勾也不「多选」',
+    body: '<p>因为四条各自独立成立：A 管「榨的强度」、B 管「生产效率」、C 管「盘子大小」、D 管「免费服务」，全部落到「增大剩余价值量」这一把尺子上。积累规模由<b>多因素共同决定</b>——把它们当互斥选项反而是误解；四项并列恰恰是本题结构。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：四个龙头全开',
+    body: '<p>答案 <b>ABCD</b>。记忆锚点：积累＝剩余价值<b>再变资本</b>；四个龙头＝<b>剥削程度（A）＋劳动生产率（B）＋垫付资本（C）＋所用/所费差额（D）</b>；别把预付资本当唯一来源——它是四因素之一。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: s.tag,
+    log: s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon,
+    done: last,
+  };
+});
+
+AW.init({
+  title: '资本积累的四个「水龙头」：问规模＝问泉眼',
+  subtitle: '2018 年第 19 题 · 资本积累＝剩余价值资本化 · 积累规模的影响因素 · 多选题',
+  intro: '点击「▶ 播放」逐步展开：先立「泉眼—龙头」水路图，再逐项判定 A/B/C/D。',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 干扰）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '积累＝剩余价值<b>再变资本</b>；四个龙头＝<b>剥削程度（A）＋劳动生产率（B）＋垫付资本（C）＋所用/所费差额（D）</b>。最易漏 D：所用（整体在转）＞所费（按折旧计成本），差额＝白得的服务。别把预付资本当唯一来源——它是四因素之一。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：资本积累的规模由谁决定——先问「泉眼有多大」，再数水龙头</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——积累＝剩余价值资本化，问规模＝问泉眼</h3>
+<p>资本积累的定义本身就给了骨架：把剩余价值的一部分转化为新的资本、投入扩大再生产。于是一道连环题浮出来——「积累规模的大小」表面问积累，<strong>实际问上游的剩余价值量</strong>：泉眼出多少水，下游才有多少可分。教材把「影响剩余价值量的因素」列成四条，再叠加「剩余价值分为积累与消费两部分的比例」，就是全部答案空间。本题四个选项恰好逐一对应那四条，判断标尺统一：<strong>这一因素能否增大剩余价值量（或让同一份剩余价值里拿出更多来积累）</strong>。</p>
+<h3>第 1 步：四个「水龙头」逐一对号</h3>
+<table><thead><tr><th>选项</th><th>机制</th><th>对积累的作用</th></tr></thead><tbody><tr><td>A 资本家对工人的剥削程度</td><td>剩余价值率越高，同一批工人榨出的剩余价值越多</td><td>源头加大泉眼</td></tr><tr><td>B 劳动生产率的高低</td><td>生活资料便宜 → 必要劳动时间缩短 → <strong>相对剩余价值</strong>增加</td><td>泉眼加大＋物质基础变厚</td></tr><tr><td>C 资本家垫付资本的大小</td><td>预付资本越大 → 雇的工人、用的生产资料越多 → 剩余价值<strong>总量</strong>水涨船高</td><td>总闸门放大来水</td></tr><tr><td>D 所用资本与所费资本之间的差额</td><td>机器厂房<strong>整个</strong>在转（所用），只按折旧<strong>部分</strong>计成本（所费）</td><td>添一份不花钱的积累来源</td></tr></tbody></table>
+<p>四条全部成立，选 <strong>ABCD</strong>。</p>
+<h3>预判追问：D 的「差额」凭什么也算积累来源？</h3>
+<p>这是本题最抽象的一处，值得算一笔账：100 台机器整个投入生产，但只按折旧把相当于 60 台的价值计入产品成本——差下的 40 台机器照样在生产中服役，资本家等于<strong>无偿获得</strong>了这部分劳动资料的服务。由此多出来的产品价值，不追加预付就能转化为积累；老机器的折旧基金在设备更新前也可拿来扩大生产。所以「所用＞所费」的差额越大，积累的额外来源越足。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选 D</strong>：四项里最陌生的一条，容易在「所用资本」「所费资本」两个名词面前不敢勾——记住「差额＝免费服务」就敢勾了。</li><li><strong>把 C 当「唯一来源」</strong>：参考解析特意提醒「不能把预付资本当作唯一来源」——C 只是四因素之一，积累规模由多因素共同决定，单押一个就错。</li><li><strong>忽略「积累/消费分割比例」</strong>：A~D 决定「来水」，这个比例决定「分流」；本题没考它，但它是同一泉眼下的另一半，别把它当成选项之一。</li></ul>
+<blockquote>记忆锚点：积累＝剩余价值资本化；泉眼＝剩余价值量，四个龙头＝剥削程度（A）＋劳动生产率（B）＋垫付资本（C）＋所用/所费差额（D）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

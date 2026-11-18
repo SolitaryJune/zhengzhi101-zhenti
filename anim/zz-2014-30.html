@@ -1,8 +1,131 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-30 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-30</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·30 柏拉图论法律：教育作用与强制作用</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 自包含推理链卡片模板（引擎自动按 URL 注入题干与选项），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+    {
+      "title": "审题眼：两句引文两副面孔",
+      "cls": "key",
+      "body": "<p>题眼：柏拉图两句话——「法律可以<b>教会</b>愿意和平善良生活的人遵循准则」「也有一部分是为<b>不接受教诲</b>的人制定的」。考点：法律的<b>规范作用</b>。方法：拆句抓动词。</p>",
+      "log": "题眼：教会＋治顽固，一半教育一半强制"
+    },
+    {
+      "title": "先立机制：规范作用五件套",
+      "cls": "key",
+      "body": "<p>法的规范作用五项，各有作用对象：<b>指引</b>（给自己指路）、<b>评价</b>（衡量他人已做的）、<b>教育</b>（对一般人示范教化）、<b>预测</b>（预先估计、安排未来）、<b>强制</b>（制裁违法者）。抓动词：「教会」→教育，「对付顽固不化」→强制。</p>",
+      "log": "五作用：指引评价教育预测强制"
+    },
+    {
+      "title": "C：「教会」＝教育作用",
+      "cls": "good",
+      "ribbon": {
+        "k": 3,
+        "ok": true
+      },
+      "body": "<p>前半句「法律可以<b>教会</b>…在与他人交往中所要遵循的准则」：通过法的实施对一般人示范教化——<b>教育作用（C）</b>。<b>C 正确</b>。</p>",
+      "log": "教会准则=示范教化 → C 选"
+    },
+    {
+      "title": "D：治「顽固不化」＝强制作用",
+      "cls": "good",
+      "ribbon": {
+        "k": 4,
+        "ok": true
+      },
+      "body": "<p>后半句「为<b>不接受教诲</b>、顽固不化…的人制定」：对不守法者制裁、迫使其服从——<b>强制作用（D）</b>。别只看到柔性的前半句，对偶结构两句都要接住。<b>D 正确</b>。</p>",
+      "log": "制裁顽固者=迫使服从 → D 选"
+    },
+    {
+      "title": "A：五件套里没有「保障」",
+      "cls": "bad",
+      "ribbon": {
+        "k": 1,
+        "ok": false
+      },
+      "body": "<p><b>A 保障作用</b>：规范作用五件套里<b>没有</b>「保障」这一项——保障合法权益是对法律功能的另一角度概括，与引文内容也对不上。<b>A 不选</b>。</p>",
+      "log": "「保障」不在五件套 → A 不选"
+    },
+    {
+      "title": "B：「预测」需有预先估计之意",
+      "cls": "bad",
+      "ribbon": {
+        "k": 2,
+        "ok": false
+      },
+      "body": "<p><b>B 预测作用</b>：预测＝根据法律<b>预先估计</b>他人将怎样行为、据此安排自己的行为，指向未来交往。引文谈「教化」与「制裁」，没有预先估计之意——「交往准则」是行为准则的内容，不是预判。<b>B 不选</b>。</p>",
+      "log": "无「预先估计」之意 → B 不选"
+    },
+    {
+      "title": "结论",
+      "cls": "good",
+      "body": "<p>答案 <b>CD</b>：教会（C 教育）＋治顽固（D 强制）。记忆锚点：五作用口诀——<b>指引、评价、教育、预测、强制</b>；引文结构＝「一半教育、一半强制」。</p>",
+      "log": "锁定 CD"
+    }
+  ];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "柏拉图两句话，点出法律的两副面孔",
+  subtitle: "考点：法律的规范作用 · 方法：五件套（指引评价教育预测强制）+ 拆句抓动词",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 CD",
+    html: "记忆锚点：五作用=<b>指引、评价、教育、预测、强制</b>（对象：自己/他人已做/一般人/未来/违法者）。柏拉图引文两半：<b>教会（C）＋治顽固（D）</b>；「保障」不在五件套，「预测」需预先估计之意。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：柏拉图引文里法律的两副面孔——教育与强制</h2>
+<p>答案：<strong>CD</strong>。</p>
+<h3>第 0 步：先立机制——法的规范作用"五件套"</h3>
+<p>引文评价题不能凭感觉，先把知识框架立起来：法律的<strong>规范作用</strong>共有五项，各有明确的"作用对象"，这也是识别它们的钥匙。</p>
+<table><thead><tr><th>作用</th><th>一句话含义</th><th>看谁</th></tr></thead><tbody><tr><td>指引</td><td>给<strong>本人</strong>的行为指路</td><td>自己</td></tr><tr><td>评价</td><td>衡量<strong>他人</strong>行为的合法与否</td><td>别人已做的</td></tr><tr><td>教育</td><td>通过法的实施对一般人产生<strong>示范教化</strong></td><td>一般人</td></tr><tr><td>预测</td><td><strong>预先估计</strong>相互将怎样行为，据此安排自己的行为</td><td>未来的事</td></tr><tr><td>强制</td><td>制裁违法犯罪，<strong>迫使</strong>违法者服从</td><td>违法者</td></tr></tbody></table>
+<p>读引文的诀窍是<strong>拆句抓动词</strong>：柏拉图这段话恰好是"一半教育、一半强制"的结构——"教会"指向教育，"对付不接受教诲的人"指向强制。</p>
+<h3>第 1 步：拆引文、对职能</h3>
+<ul><li>前半句："法律有一部分是为有美德的人制定的……法律<strong>可以教会</strong>他们在与他人的交往中所要遵循的准则"——对一般人示范教化，属于<strong>教育作用（C）</strong>。</li><li>后半句："法律也有一部分是为那些<strong>不接受教诲</strong>的人制定的，这些人顽固不化，没有任何办法能使他们摆脱罪恶"——对不守法者制裁、迫使其服从，属于<strong>强制作用（D）</strong>。</li></ul>
+<h3>为什么不是"保障"、也不是"预测"</h3>
+<ul><li><strong>"保障"压根不在五件套里</strong>：保障合法权益是对法律功能的另一角度概括（法保护权利、惩戒违法共同维护秩序），不属于法的规范作用，直接排除 A。</li><li><strong>"预测"隔着一段距离</strong>：预测作用的核心是"<strong>预先估计</strong>他人将怎样行为、并据此安排自己的行为"，指向的是未来的交往安排；引文谈的是"教化"与"制裁"这两件正在发生的事，没有"预先估计"之意，B 排除。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>漏掉 D</strong>：只看到"教会"的柔性一面，漏掉后半句对"顽固不化"者的制裁一面——引文是"一半教育、一半强制"的对偶结构，两句都要接住。</li><li><strong>误选 B</strong>：把"与他人交往中要遵循的准则"当成"预测他人行为"——那是行为准则的内容，不是对相互行为的预判。</li></ul>
+<blockquote>记忆锚点：五作用口诀——<strong>指引、评价、教育、预测、强制</strong>（对象分别是自己、他人已做、一般人、未来、违法者）；柏拉图这段＝教会（C）＋治顽固（D）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,130 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-27 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-27</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·27 《临时约法》的革命性与民主性</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 自包含推理链卡片模板（引擎自动按 URL 注入题干与选项），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+    {
+      "title": "审题眼：先立标尺",
+      "cls": "key",
+      "body": "<p>题眼：毛泽东赞《中华民国临时约法》「<b>革命性、民主性</b>」。标尺：每条规定<b>相对封建专制改变了什么</b>——推翻帝制确立共和＝革命性，主权与权利归国民＝民主性。</p>",
+      "log": "题眼：拿「相对封建专制改变了什么」当标尺"
+    },
+    {
+      "title": "先立机制：第一部共和国性质法典",
+      "cls": "key",
+      "body": "<p>《临时约法》1912 年 3 月由临时参议院颁布，是中国历史上<b>第一部资产阶级共和国宪法性质</b>的法典：主权在民、国民平等、三权分立＋责任内阁制。下面逐条拿标尺量。</p>",
+      "log": "第一部共和国宪法性质法典，逐条量"
+    },
+    {
+      "title": "B：主权属于国民全体",
+      "cls": "good",
+      "ribbon": {
+        "k": 2,
+        "ok": true
+      },
+      "body": "<p><b>B 中华民国之主权属于国民全体</b>：总纲第一要义，把「主权在君」翻转为「主权在民」——民主性最集中的体现。<b>B 正确</b>。</p>",
+      "log": "主权在君→主权在民 → B 选"
+    },
+    {
+      "title": "A：国民一律平等",
+      "cls": "good",
+      "ribbon": {
+        "k": 1,
+        "ok": true
+      },
+      "body": "<p><b>A 规定中华民国国民一律平等</b>：废除封建等级身份制，公民权利写进根本大法——民主性落到「人」上。<b>A 正确</b>。</p>",
+      "log": "废除等级制、权利入根本大法 → A 选"
+    },
+    {
+      "title": "D：根本大法废除帝制",
+      "cls": "good",
+      "ribbon": {
+        "k": 4,
+        "ok": true
+      },
+      "body": "<p><b>D 以根本大法的形式废除了封建君主专制制度</b>：确认资产阶级共和国方案，从制度上终结两千多年帝制——革命性所在。抓关键词「<b>根本大法</b>」「<b>废除</b>」。<b>D 正确</b>。</p>",
+      "log": "根本法终结帝制 → D 选"
+    },
+    {
+      "title": "C：约法里根本没有这一条",
+      "cls": "bad",
+      "ribbon": {
+        "k": 3,
+        "ok": false
+      },
+      "body": "<p><b>C 不承认清政府与列强签订的一切不平等条约</b>：约法<b>没有</b>这一条。南京临时政府为求列强承认，在《告各友邦书》中反而宣布旧约继续有效——民族资产阶级软弱性、未反帝是它的局限，局限不是亮点。<b>C 不选</b>。</p>",
+      "log": "未反帝未废约，是局限 → C 不选"
+    },
+    {
+      "title": "结论",
+      "cls": "good",
+      "body": "<p>答案 <b>ABD</b>：主权在民（B）＋国民平等（A）＋根本法废帝制（D）。唯一排除点 C——别把「应该废约」当「事实废约」。</p>",
+      "log": "锁定 ABD"
+    }
+  ];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "《临时约法》的「革命性、民主性」在哪几条",
+  subtitle: "考点：辛亥革命与《临时约法》 · 方法：拿「相对封建专制改变了什么」当标尺",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABD",
+    html: "记忆锚点：三亮点——<b>主权在民（B）＋国民平等（A）＋根本法废帝制（D）</b>；C「不承认一切不平等条约」约法里根本没有——《告各友邦书》反而承认旧约继续有效，未反帝是局限。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：《临时约法》的"革命性、民主性"体现在哪几条</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立标尺——什么叫"革命性、民主性"</h3>
+<p>部件题要先立模型，引文评价题也一样：判断一条规定算不算"革命性、民主性"，标尺是它<strong>相对于封建专制制度改变了什么</strong>——从制度上推翻帝制、确立共和＝<strong>革命性</strong>；把主权和权利从君主手里转到国民手里＝<strong>民主性</strong>。带着这把尺子再看《中华民国临时约法》（1912 年 3 月，中华民国临时参议院颁布）的历史定位：中国历史上<strong>第一部具有资产阶级共和国宪法性质的法典</strong>，核心内容即主权在民、国民一律平等、三权分立、责任内阁制。逐项拿尺子量。</p>
+<h3>第 1 步：逐项裁决</h3>
+<table><thead><tr><th>选项</th><th>内容</th><th>裁决</th><th>量出来的是什么</th></tr></thead><tbody><tr><td>A</td><td>规定中华民国国民一律平等</td><td>✅</td><td>废除封建等级身份制，公民权利写进根本大法——民主性落到"人"上</td></tr><tr><td>B</td><td>规定中华民国之主权属于国民全体</td><td>✅</td><td>总纲第一要义，把"主权在君"翻转为"主权在民"——民主性最集中的体现</td></tr><tr><td>C</td><td>不承认清政府与列强签订的一切不平等条约</td><td>❌</td><td>约法里<strong>没有</strong>这一条——未反帝是它的局限，局限不是亮点</td></tr><tr><td>D</td><td>以根本大法的形式废除了封建君主专制制度</td><td>✅</td><td>确认资产阶级共和国方案，从制度上终结两千多年帝制——革命性所在</td></tr></tbody></table>
+<p>→ 选 <strong>ABD</strong>。</p>
+<h3>为什么"不承认一切不平等条约"偏偏不在</h3>
+<p>这是本题唯一的排除点，值得多答一层"为什么"：南京临时政府成立后，为争取列强的外交承认，在《告各友邦书》中反而宣布<strong>清政府与各国所订条约继续有效</strong>。这背后是民族资产阶级的软弱性——对帝国主义抱有幻想，不敢明确反帝。所以约法对帝国主义列强的旧条约<strong>原封未动</strong>，"革命性、民主性"只体现在反封建这一面。题干问的是约法"体现在"什么，约法里没有的规定自然不能算它的体现。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：把"应该如此"当成"事实如此"——从感情上觉得革命政府就该废约，于是替约法"脑补"了这一条。史实恰恰相反：《告各友邦书》承认旧约继续有效，这正是辛亥革命不彻底性的著名证据。</li><li><strong>漏掉 D</strong>：把约法当成一部普通法律，没抓住"以<strong>根本大法</strong>的形式""<strong>废除了</strong>封建君主专制制度"这两个关键词——废除帝制、确立共和是辛亥革命最大的制度功绩，D 是"革命性"的直接对应项。</li></ul>
+<blockquote>记忆锚点：约法三亮点——<strong>主权在民（B）＋国民一律平等（A）＋根本大法废帝制（D）</strong>；未反帝、未废约（C）是局限。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

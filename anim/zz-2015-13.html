@@ -1,8 +1,125 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-13 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-13</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2015·13 「常青树」之喻：爱国主义是个人实现人生价值的力量源泉</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 模板：anim_concept（概念/推理链卡片，政治站无 KaTeX 版）· 只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：先把「果实结在树上」拆成结构",
+    "cls": "key",
+    "body": "<p>习近平要求留学人员「把国家富强、民族振兴、人民幸福作为努力志向，自觉使<b>个人成功的果实</b>结在<b>爱国主义这颗常青树</b>上」，设问是「之所以……是因为爱国主义<b>是</b>……」——问的是爱国主义的<b>定位</b>。拆比喻：果实＝个人成功，树＝爱国主义（祖国是根与土），「结在」＝养分由树供给。考点：<b>爱国主义与人生价值的实现</b>。</p>",
+    "log": "果实=成功，树=爱国主义，结在树上=靠树滋养"
+  },
+  {
+    "title": "先立机制：爱国主义把个人与祖国的命运联结",
+    "cls": "key",
+    "body": "<p>爱国主义是调节<b>个人与祖国关系</b>的道德要求、政治原则和法律规范。对个人实现人生价值而言：祖国的发展<b>搭建舞台、提供条件</b>，爱国主义提供<b>情感依托与精神动力</b>——它持续地滋养、托举个人奋斗。给这种「供养分」的角色定位，教材口径是：个人实现人生价值的<b>重要精神力量</b>，落在选项里就是「力量源泉」。</p>",
+    "log": "树供给养分：舞台＋条件＋精神动力 → 力量源泉"
+  },
+  {
+    "title": "A：个人实现人生价值的力量源泉",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p>「常青树」滋养果实的意象与「力量源泉」严丝合缝：祖国发展为个人价值实现提供舞台，爱国主义提供精神动力——是<b>激励、滋养</b>的过程性支撑。<b>A 正确</b>。</p>",
+    "log": "树滋养果 → 力量源泉 → 选 A"
+  },
+  {
+    "title": "B：「人人」「直接条件」——双重拔高",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>爱国主义是重要<b>精神力量</b>，不是人人成功都必需的「<b>直接</b>条件」；「<b>人人</b>」还把命题泛化成绝对表述。精神支撑重要≠直接必需。<b>B 错误</b>。</p>",
+    "log": "重要≠直接必需，还有「人人」泛化 → B 不选"
+  },
+  {
+    "title": "C：「根本保障」——把动力当机制",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>能「保障」成功的根本在<b>实践与奋斗</b>：不下苦功做学问、干事业，爱国情感再深也结不出果实。爱国主义是精神动力，不是「保障机制」——<b>C 错误</b>。</p>",
+    "log": "动力推人走但不替人成事 → C 不选"
+  },
+  {
+    "title": "D：「决定性因素」——拔得最高，错得最远",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>个人成功由实践、才干、机遇等<b>共同作用</b>；爱国情感再深也不能单独「决定」成败。措辞强度最高的选项，恰是离教材定位最远的。<b>D 错误</b>。</p>",
+    "log": "精神层面单独决定不了成败 → D 不选"
+  },
+  {
+    "title": "判别刀口：措辞强度与机制错位",
+    "cls": "key",
+    "body": "<p>教材定位「力量源泉」强调<b>激励、滋养</b>（过程性精神支撑）；「直接条件」「根本保障」「决定性因素」都把这种精神动力升级成了<b>成事的决定性机制</b>——机制错位是三者的共同病根。技巧：凡把精神层面的东西说成「决定性」「根本保障」，先降一档再对教材口径。</p>",
+    "log": "「源泉」是滋养，「条件/保障/决定」是成事机制"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>A</b>：爱国主义是个人实现人生价值的<b>力量源泉</b>——树滋养果，果离树结不成。记忆锚点：「直接条件」「根本保障」「决定性因素」均为拔高错位。</p>",
+    "log": "锁定 A：力量源泉"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "「常青树」之喻：个人成功结在爱国主义树上",
+  subtitle: "考点：思修·爱国主义与人生价值 · 方法：先拆比喻结构，再让选项对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 A",
+    html: "记忆锚点：爱国主义＝调节个人与祖国关系的准则＝<b>个人实现人生价值的力量源泉</b>（滋养、激励）；「直接条件」「根本保障」「决定性因素」都是拔高错位——<b>分量越重越要核口径</b>。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「常青树」之喻——爱国主义是个人实现人生价值的力量源泉</h2>
+<p>答案：<strong>A（个人实现人生价值的力量源泉）</strong>。</p>
+<h3>第 0 步：先立机制——「果实结在树上」是个什么结构</h3>
+<p>先把比喻拆成结构再谈定位：</p>
+<ul><li><strong>果实</strong> = 个人成功（个人人生价值的实现）；</li><li><strong>树</strong> = 爱国主义（背后是祖国这个根与土）；</li><li>果实「结在」树上，说的是<strong>果实的养分由树供给</strong>——树滋养果、托举果，果离了树结不成。</li></ul>
+<p>翻成教材语言：爱国主义是调节<strong>个人与祖国关系</strong>的道德要求、政治原则和法律规范。它把个人命运与祖国命运联结起来：祖国的发展为个人实现人生价值<strong>搭建舞台、提供条件</strong>，爱国主义则为个人的奋斗提供<strong>情感依托与精神动力</strong>。对个人实现人生价值而言，这是一种持续供给养分的<strong>力量源泉</strong>——「结在常青树上」说的正是这层滋养关系，选 <strong>A</strong>。</p>
+<h3>第 1 步：预判追问——为什么教材只说「重要精神力量」，不说「保障」「决定」？</h3>
+<p>参考解析的口径是：爱国主义把个人与祖国的命运联系起来，是个人实现人生价值的<strong>重要精神力量</strong>。注意这个用词的分量：<strong>精神力量</strong>起的是<strong>激励、支撑、滋养</strong>作用，是过程性的；而「保障」「决定」说的是<strong>成事机制</strong>——有了它就必然成。精神动力推着人走，但不替人成事：留学人员若不下苦功做学问、干事业，爱国情感再深也结不出「成功的果实」。所以教材把爱国主义的定位停在「力量源泉」这一档，B、C、D 都把这一定位<strong>拔高</strong>成了成事机制。</p>
+<h3>第 2 步：干扰项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>错因与典型误解</th></tr></thead><tbody><tr><td>B 人人实现人生价值的直接条件</td><td>❌</td><td>「直接条件」＋「人人」双重拔高：爱国主义是重要精神支撑，但不构成人人都必须具备的「直接」条件；「人人」还把命题泛化成绝对表述</td></tr><tr><td>C 个人成功的根本保障</td><td>❌</td><td>成功的根本在<strong>实践与奋斗</strong>；爱国主义是精神动力，不是「保障机制」——把动力错当保障</td></tr><tr><td>D 个人成功的决定性因素</td><td>❌</td><td>成功由实践、才干、机遇等共同作用；「决定性」拔得最高，精神层面单独决定不了成败</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 C/D（被大词带偏）</strong>：「根本保障」「决定性因素」分量最重、听起来最「正确」，但精神动力≠成事机制——分量越重的词，越要对着教材口径核一遍。</li><li><strong>选 B（混淆「重要」与「直接」）</strong>：爱国是价值实现的<strong>重要</strong>精神支撑，「重要」不等于「直接」「人人必需」。</li><li><strong>只背内涵不看设问</strong>：题眼是「之所以……是因为爱国主义<strong>是</strong>……」——问的是它对人生价值实现的<strong>定位</strong>，不是问它的全部内涵（道德要求、政治原则、法律规范那一串）。</li></ul>
+<blockquote>记忆锚点：爱国主义 = 调节个人与祖国关系的准则 = 个人实现人生价值的<strong>力量源泉</strong>（滋养、激励）；「直接条件」「根本保障」「决定性因素」都是把这一定位拔高错位。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

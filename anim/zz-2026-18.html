@@ -1,8 +1,101 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-18 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-18</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2026-18 · 马铃薯基因育种：规律与实践（2026 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼："能够培育"问的是根据',
+    cls: 'key',
+    body: '<p>设问："科学家<b>能够</b>利用基因技术培育新型作物，是因为？"——问的是<b>实践成功的根据</b>。材料链条：揭示规律（查明 40%/60% 来源）→ 设计方案（番茄底盘 + 块茎基因）→ 改造世界（新型作物）。答案两头找：<b>规律</b>与<b>实践能力</b>。</p>' },
+  { title: '先立机制：规律 → 方案 → 现实',
+    cls: '',
+    body: '<p>基因组"混血"联系客观存在（番茄祖先 + 薯先生）；团队<b>发现</b>它，再据此<b>设计</b>育种路径，最后培育出新物种、新器官（块茎）。哲学上这就是：尊重规律 → 发挥能动性 → 成功改造世界。</p>' },
+  { title: '逐项分析 A：把握规律是正确活动的基础',
+    cls: 'good',
+    ribbon: {k:1, ok:true},
+    body: '<p>A："对客观事物规律的把握是人们正确活动的基础。"基因规律不以人是否发现为转移，但<b>只有把握了它</b>（查明来源）才能设计出可行方案——正是"尊重客观规律是正确发挥主观能动性的前提"。✅ 选。</p>' },
+  { title: '逐项分析 B：联系是意识赋予的？',
+    cls: 'bad',
+    ribbon: {k:2, ok:false},
+    body: '<p>B："事物之间的联系通常都是人们主观意识所赋予的。"追问：番茄与马铃薯的基因联系是人赋予的吗？不是——它客观存在，科学家是<b>发现</b>不是<b>发明</b>。人能建立新联系，但依据固有联系。方向颠倒，唯心联系观。❌ 不选。</p>' },
+  { title: '逐项分析 C："必须先改造主观世界"？',
+    cls: 'bad',
+    ribbon: {k:3, ok:false},
+    body: '<p>C："改造客观世界的前提是<b>必须先</b>改造主观世界。"二者关系是<b>在实践中相互促进、相互统一</b>："必须先"把关系变成先后排序——既不符材料（先动手做基因组研究），也颠倒实践的基础地位。❌ 不选。</p>' },
+  { title: '逐项分析 D：能力随科学实践发展',
+    cls: 'good',
+    ribbon: {k:4, ok:true},
+    body: '<p>D："人类改造世界的能力随科学实践的发展而发展。"传统杂交 → 基因组测序 → 人工设计育种——能力每上一级台阶，背后都是科学实践的一次跃升。能力不是天生的，是实践中<b>长出来</b>的。✅ 选。</p>' },
+  { title: '对号入座汇总',
+    cls: '',
+    body: '<p>A ✅ 规律是地基；B ❌ 联系靠发现不靠赋予；C ❌ 主客观改造相互促进无先后；D ✅ 实践长能力。→ 答案 <b>AD</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>AD</b>。培育新型作物 = 把握规律（A）+ 科学实践升级能力（D），两者缺一不可。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2026-18 马铃薯基因育种：规律与实践',
+  subtitle: '考点：规律与改造世界 · 联系的客观性 · 主客观世界改造的统一 —— 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 AD',
+    html: '<b>A</b>：对客观事物规律的把握是人们正确活动的基础——查明"混血"规律才有育种路径。<br><br><b>D</b>：人类改造世界的能力随科学实践的发展而发展——杂交→基因组→设计育种，能力随实践升级。<br><br><b>干扰项：</b>B 把"发现联系"偷换成"意识赋予联系"（联系客观）；C"必须先改造主观世界"把相互促进排成先后。<br><br><b>记忆锚点：</b>规律是地基，实践长能力；联系靠发现不靠赋予。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：从"马铃薯身世之谜"到基因育种的实践哲学</h2>
+<p>答案：<strong>AD</strong>。</p>
+<h3>第 0 步：先立机制——材料里藏着一条"规律 → 方案 → 实践"的完整链条</h3>
+<p>题干其实讲了一步接一步的三件事：</p>
+<ol><li><strong>揭示规律</strong>：分析 128 份基因组，查明马铃薯约 40% 基因来自番茄祖先、60% 来自"薯先生"——客观存在的杂交联系被<strong>发现</strong>；</li><li><strong>提出方案</strong>：以番茄为遗传底盘、导入块茎形成关键基因——依据规律<strong>设计</strong>实践方案；</li><li><strong>改造世界</strong>：培育"地下结土豆、地上长番茄"的新型作物——把方案<strong>变成现实</strong>。</li></ol>
+<p>设问问"科学家<strong>能够</strong>利用基因技术进行新型作物的培育，是因为"——就是问第 2、3 步凭什么成立。答案自然指向两端：一头是<strong>规律</strong>（A），一头是<strong>实践能力</strong>（D）。</p>
+<h3>第 1 步：A 为什么对——正确活动的基础是"把握规律"</h3>
+<p>"对客观事物规律的把握是人们正确活动的基础。"基因杂交的规律是客观的，不以人是否发现为转移；但只有当团队<strong>把握</strong>了它（查明 40%/60% 的来源），才能设计出可行的育种路径。没有这一步，"培育新型作物"只是空想。这正是"尊重客观规律是正确发挥主观能动性的前提"的材料化表达。</p>
+<h3>第 2 步：B 为什么错——联系是客观的，不是意识"赋予"的</h3>
+<p>B 说"事物之间的联系通常都是人们主观意识所赋予的"。追问一句：番茄祖先与马铃薯之间的基因联系，是人赋予的吗？不是——它早在人类出现之前就客观存在了，科学家做的事是<strong>发现</strong>它、<strong>读懂</strong>它，而不是<strong>发明</strong>它。B 把"认识联系"偷换成"创造联系"，方向整个反了，是唯心主义的联系观。要补一句：人确实可以<strong>建立</strong>新的具体联系（人工杂交），但前提是遵循<strong>固有的</strong>客观联系，而非凭意识赋予。</p>
+<h3>第 3 步：C 为什么错——"必须先改造主观世界"不成立</h3>
+<p>C 说"改造客观世界的前提是人们必须先改造主观世界"。二者关系是<strong>在实践中相互促进、相互统一</strong>：改造客观世界的同时改造主观世界，主观世界的改造又反过来推动客观世界的改造。"必须先"三个字把关系变成先后排序——好像要先关起门完成思想改造才能动手实践；既不符合材料（团队是先动手做基因组研究），也颠倒了实践的基础地位。</p>
+<h3>第 4 步：D 为什么对——能力是实践的函数</h3>
+<p>"人类改造世界的能力随科学实践的发展而发展。"从传统杂交育种 → 基因组测序 → 人工设计育种路径，人类改造生物的能力每上一个台阶，背后都是科学实践的一次跃升。能力不是天生给定的，是在实践中<strong>长出来</strong>的——这正是材料"科学家提出一条新的育种路径"的哲学注脚。</p>
+<h3>第 5 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对号处</th></tr></thead><tbody><tr><td>A 把握规律是正确活动的基础</td><td>✅</td><td>查明"混血"规律 → 才有育种路径</td></tr><tr><td>B 联系由主观意识赋予</td><td>❌</td><td>基因联系客观存在，人是"发现"不是"赋予"</td></tr><tr><td>C 先改造主观世界再改造客观世界</td><td>❌</td><td>二者在实践中相互促进，无"必须先"</td></tr><tr><td>D 改造能力随科学实践发展</td><td>✅</td><td>杂交 → 基因组 → 设计育种，能力随实践升级</td></tr></tbody></table>
+<p>→ 选 <strong>AD</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：被"科学家提出新路径"的创造性叙述带偏，以为联系可以由人"赋予"。注意：人能建立新联系，但依据的是固有联系。</li><li><strong>误选 C</strong>：把"改造主观世界很重要"放大成"必须先改造"。多选题里"必须先""只有…才"这类绝对化排序词，多数是坑。</li><li><strong>漏选 D</strong>：只盯住"规律"一头，忘了设问的另一半——"能够利用基因技术"问的还有<strong>能力从哪来</strong>。</li></ul>
+<blockquote>记忆锚点：<strong>规律是地基（A），实践长能力（D）；联系靠发现不靠赋予（B 反），主客观改造相互促进无先后（C 反）。</strong></blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,127 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-04 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-04</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-04 · 资本积累滚雪球：两极分化是怎么被「必然」生产出来的</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* 过程类动画：剩余价值→资本化→扩大再生产逐轮推演（示意数字）——
+   财富一极越滚越大、劳动者一极原地踏步（相对贫困），推演「资本主义积累的一般规律」，再逐项推演 A–D。 */
+var ROUNDS = [
+  { cap:'100', gap:0,   log:'起点（示意）：资本 100，雇佣劳动者靠出卖劳动力换取工资——两边各就各位。' },
+  { cap:'120', gap:20,  log:'第 1 轮：剩余价值 20，资本家不全部消费，把其中一部分转化为新资本（剩余价值的资本化）→ 资本变 120。' },
+  { cap:'144', gap:44,  log:'第 2 轮：更大的资本雇佣更多劳动力、更新设备 → 生产出更多剩余价值 → 再资本化 → 144。' },
+  { cap:'173', gap:73,  log:'第 3 轮：有机构成提高（机器排挤工人），对劳动力相对需求下降——相对过剩人口出现，压住工资水平。' },
+  { cap:'207', gap:107, log:'第 4 轮：滚雪球继续——财富加速集中到少数人手中；「我们是 99%」喊出的，正是 1% 与 99% 的两极。' }
+];
+var OPTS = [
+  { L:'A', cls:'bad', title:'选项 A：劳资冲突的集中表现',
+    body:'两极分化会<b>加剧</b>劳资冲突，但「集中表现」答的是它表现为什么，答不了它<b>从哪来</b>——题目问「……的产物」，问的是因果来源，<b>排除</b>。' },
+  { L:'B', cls:'bad', title:'选项 B：生产社会化的必然产物',
+    body:'「生产社会化与资本主义私人占有的矛盾」是<b>基本矛盾</b>，解释的是资本主义的历史命运；两极分化的直接机制是<b>资本积累</b>这条链条——原理正确但配错题，<b>排除</b>。' },
+  { L:'C', cls:'good', title:'选项 C：资本积累的必然结果',
+    body:'推演已演示：剩余价值→资本化→规模扩大→财富一极与贫困一极<b>同步积累</b>——这正是<b>资本主义积累的一般规律</b>，与推演严丝合缝，<b>入选</b>。' },
+  { L:'D', cls:'bad', title:'选项 D：虚拟资本泡沫化的恶果',
+    body:'金融泡沫是<b>表层诱因</b>，解释不了两极分化长期、制度性的存在；「华尔街」「泡沫」只是命题的时事情境外壳，考点在原理，<b>排除</b>。' }
+];
+function cols(n){
+  var h = '<div class="aw-cells">';
+  for (var i = 0; i < 5; i++){
+    var shown = i < n;
+    var cls = shown ? (i === 0 ? 'ok' : 'hit') : 'dim';
+    var gapCls = shown ? 'miss' : 'dim';
+    h += '<div class="aw-col"><div class="aw-ptr">' + (shown && i > 0 ? '资本化' : '') + '</div>' +
+         '<div class="aw-box ' + cls + '">' + (shown ? ROUNDS[i].cap : '资本') + '</div>' +
+         '<div class="aw-idx">资本·第' + i + '轮</div>' +
+         '<div class="aw-ptr" style="color:#b91c1c">' + (shown ? '工资不变' : '') + '</div>' +
+         '<div class="aw-box ' + gapCls + '" style="margin:0">' + (shown ? '100' : '劳动') + '</div>' +
+         '<div class="aw-idx">劳动者所得</div>' +
+         '<div class="aw-idx" style="color:#b91c1c">' + (shown && i > 0 ? '差距 ' + ROUNDS[i].gap : '') + '</div></div>';
+  }
+  return h + '</div>';
+}
+function card(title, cls, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4>' + title + '</h4>' + body + '</div>';
+}
+function stage(mode, n, opt){
+  var h = '<div style="font-size:12.5px;color:#64748b;margin-bottom:4px">积累滚雪球（数值为示意）：上排=资本家一方，下排=劳动者一方</div>' + cols(n);
+  if (mode === 'intro'){
+    h += '<div style="margin-top:12px">' + card('审题眼：别被时事情境带跑', 'key',
+      '<p>「占领华尔街」「我们是 99%」、漫画里的两极分化——都是<b>叙事外壳</b>。题目问的是：财富占有的两极分化是资本主义制度下<b>什么的产物</b>——考因果来源，答的是政治经济学原理。</p>') + '</div>';
+  } else if (mode === 'mech'){
+    h += '<div style="margin-top:12px">' + card('立机制：资本积累＝剩余价值转化为资本', 'key',
+      '<p><b>资本积累</b>＝剩余价值的资本化：资本家不把剩余价值全部消费掉，拿出一部分买追加的生产资料和劳动力，搞<b>扩大再生产</b>。两股力量让它停不下来：①<b>内驱</b>——剩余价值规律，为追逐更多剩余价值而扩大规模；②<b>外压</b>——竞争规律，不积累就落败，积累成了生存强制。</p>') + '</div>';
+  } else if (mode === 'polar'){
+    h += '<div style="margin-top:12px">' + card('两极分化＝资本主义积累的一般规律', 'key',
+      '<p>一极：<b>财富</b>（资本与社会财富）在资本家一方积累、集中；另一极：<b>贫困、劳动折磨、失业</b>（相对过剩人口）在雇佣劳动者一方积累。</p>' +
+      '<p>这不是政策失误或金融事故，而是积累机制<b>自身运转的必然产物</b>——「必然」二字强在把因果钉在制度上：机制在转，两极就再生产出来。</p>') + '</div>';
+  } else if (mode === 'opt'){
+    h += '<div style="margin-top:12px">' + card(opt.title, opt.cls, '<p>' + opt.body + '</p>') + '</div>';
+  } else if (mode === 'end'){
+    h += '<div style="margin-top:12px">' + card('结论：两极分化是资本积累的必然结果', 'good',
+      '<p>链条：剩余价值 → 资本积累 → 财富与贫困<b>两极同步积累</b>（一般规律）→「99% 对 1%」。只有 C 把因果钉在制度机制上。</p>') + '</div>';
+  }
+  return h;
+}
+var snaps = [
+  { cls:'step', tag:'审题', log:'审题眼：问两极分化是「什么的产物」——考因果来源', count:0,
+    html: stage('intro', 0) },
+  { cls:'shift', tag:'立机制', log:'立机制：资本积累＝剩余价值转化为资本（内驱+外压）', count:0,
+    html: stage('mech', 0) }
+];
+for (var i = 0; i < 5; i++){
+  snaps.push({ cls: i === 0 ? 'step' : (i >= 3 ? 'miss' : 'ok'), tag: i === 0 ? '起点' : '第 ' + i + ' 轮积累',
+    log: ROUNDS[i].log, count: i,
+    ribbon: i > 0 ? { k: i, ok: true } : null,
+    html: stage('round', i + 1) });
+}
+snaps.push({ cls:'shift', tag:'揭规律', log:'一极财富积累、一极贫困积累——资本主义积累的一般规律', count:4,
+  html: stage('polar', 5) });
+for (var j = 0; j < 4; j++){
+  var o = OPTS[j];
+  snaps.push({ cls: j === 2 ? 'ok' : 'miss', tag:'判选项', log: o.title + '——' + (j === 2 ? '入选' : '排除'),
+    count: 4, html: stage('opt', 5, o) });
+}
+snaps.push({ cls:'done', tag:'结论', log:'答案 C：两极分化是资本积累的必然结果', count:4, done:true,
+  html: stage('end', 5) });
+
+AW.init({
+  title: 'zz-2012-04 · 资本积累滚雪球：99% 与 1% 的两极',
+  subtitle: '2012 年第 4 题（单选）· 考点：资本积累与两极分化 · 逐轮推演',
+  counterLabel: '积累轮次',
+  ribbonTitle: '积累轮次（✓ 剩余价值资本化成功）',
+  intro: '点击「▶ 播放」：先立机制，再逐轮看剩余价值如何资本化、两极如何拉开（示意数字），最后逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '记忆锚点：剩余价值 → <b>资本积累</b> → 财富与贫困<b>两极同步积累</b>（资本主义积累的一般规律）→「99% 对 1%」；基本矛盾（B）管历史命运，积累（C）管两极分化。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「我们是 99%」——两极分化为什么是资本积累的必然结果</h2>
+<p>答案：<strong>C（资本积累的必然结果）</strong>。</p>
+<h3>第 0 步：先立机制——资本积累这台机器怎么转</h3>
+<p>先明确概念：<strong>资本积累 = 剩余价值转化为资本</strong>（剩余价值的资本化），即资本家不把剩余价值全部消费掉，而拿出一部分去购买追加的生产资料和劳动力，进行<strong>扩大再生产</strong>。这台机器靠两股力量驱动，停不下来：</p>
+<ol><li><strong>内驱</strong>：剩余价值规律——为追逐更多剩余价值，必须扩大规模；</li><li><strong>外压</strong>：竞争规律——不积累就要被吞并，积累成了<strong>生存强制</strong>。</li></ol>
+<p>于是链条滚动：剩余价值 → 资本化 → 资本规模扩大 → 雇佣的劳动力更多、支配的社会财富更多 → 产生更多剩余价值 → 更多资本化……每一轮都让资本一方更重。</p>
+<h3>第 1 步：积累的必然结局——两极分化（资本主义积累的一般规律）</h3>
+<p>积累推进的同时，<strong>资本有机构成提高</strong>（技术进步，不变资本占比上升），对劳动力的相对需求下降 → <strong>相对过剩人口</strong>扩大，劳动力供给过剩压住工资水平。于是社会财富的分配出现两极：</p>
+<table><thead><tr><th>一极</th><th>另一极</th></tr></thead><tbody><tr><td><strong>财富</strong>（资本、社会财富）在资本家一方积累、集中</td><td><strong>贫困、劳动折磨、失业</strong>在雇佣劳动者一方积累</td></tr></tbody></table>
+<p>这就是<strong>资本主义积累的一般规律</strong>：两极分化不是偶发的政策失误、不是某次金融危机的意外，而是资本积累机制<strong>自身运转的必然产物</strong>。「我们是 99%」的标语、漫画里美国社会财富占有的两极分化，正是这条规律的现实注脚——99% 与 1% 的对立，就是贫困一极与财富一极的对立。</p>
+<p><strong>预判追问：「必然」二字强在哪里？</strong> 它把因果钉在<strong>制度</strong>上：只要剩余价值转化为资本的机制在运转，两极分化就会再生产出来；改变领导者、修补金融监管都动不了这个根。这正是「必然结果」与「集中表现」「恶果」这类描述性选项的分界线。</p>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 劳资冲突的集中表现</td><td>❌</td><td>两极分化会<strong>加剧</strong>劳资冲突，但选项解释不了分化从哪来——问的是「是什么的产物」，答成了「表现为什么」</td></tr><tr><td>B 生产社会化的必然产物</td><td>❌</td><td>生产社会化与资本主义私人占有的矛盾是<strong>基本矛盾</strong>，它解释的是资本主义的历史命运；两极分化的直接机制是资本积累</td></tr><tr><td>C 资本积累的必然结果</td><td>✅</td><td>财富一极与贫困一极<strong>同步积累</strong>——资本主义积累的一般规律的教科书表述</td></tr><tr><td>D 虚拟资本泡沫化的恶果</td><td>❌</td><td>金融泡沫是表层诱因，解释不了两极分化长期、制度性的存在；时事情境（华尔街、泡沫）只是载体</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 B（背得最熟的大词最危险）</strong>：「基本矛盾」是对的原理但配错题——它管的是资本主义整体命运；题目问财富两极分化从哪来，要从「剩余价值→积累→两极」的链条上答。</li><li><strong>被时事情境带偏选 D</strong>：漫画、占领华尔街、泡沫都是<strong>叙事外壳</strong>，考点在政治经济学原理；把「恶果」当因果分析，就掉进了命题的情境陷阱。</li><li><strong>选 A</strong>：把「产物的表现」与「产物的原因」混为一谈——劳资冲突与两极分化互为表里，但题目问的是后者的制度来源。</li></ul>
+<blockquote>记忆锚点：剩余价值 → 资本积累 → 财富与贫困<strong>两极同步积累</strong>（资本主义积累的一般规律）→「99% 对 1%」。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

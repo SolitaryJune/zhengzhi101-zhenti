@@ -1,8 +1,98 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-19 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-19</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2024·19 文明多样性：唯物史观与矛盾分析</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：拆题干因果句——多样性从哪里来',
+    cls: 'key', tag: '审题',
+    body: '<p>题干是个因果句：<b>不同历史国情、民族习俗（生产生活方式不同）→ 孕育不同文明</b>。命题人点名「唯物史观社会形态理论」，所以用两件武器读它：① <b>社会存在决定社会意识</b>——生产方式是文明样态的物质根子；② <b>共性寓于个性之中</b>——世界多样性就存在于每种文明的具体独特性里。多选题，四个选项逐一归位。</p>',
+    log: '机制：生产方式定样态 + 共性寓于个性' },
+  { title: 'A. 独特的生产方式和生活方式决定文明的不同样态——入选',
+    cls: 'good', tag: 'A ✓', ribbon: { k: 1, ok: true },
+    body: '<p>游牧、农耕、渔猎、工商——生产方式不同，制度礼俗随之不同。社会存在决定社会意识，<b>生产方式是文明样态的物质根子</b>；命题人明示「内在地包含」，A 正是这句话的本体表述。入选。</p>',
+    log: 'A＝社会存在决定社会意识 → 入选' },
+  { title: 'B. 各种文明都有比其他文明更优越、更强大的文化基因——排除',
+    cls: 'bad', tag: 'B ✗', ribbon: { k: 2, ok: false },
+    body: '<p><b>文明优越论</b>。文明只有特色之别、没有高下之分；题干说多样性是「世界的基本特征」——基本特征意味着并列共存，不是排座次。给每种文明发一张「比别人强」的证书，恰好否定了多样性本身。排除。</p>',
+    log: 'B「独自的更优越基因」＝文明优越论' },
+  { title: 'C. 每一种文明的独特性，是人类文明的重要组成部分——入选',
+    cls: 'good', tag: 'C ✓', ribbon: { k: 3, ok: true },
+    body: '<p><b>共性寓于个性</b>。多样性不是悬在半空的抽象物，它由每种文明的具体独特性汇聚而成——没有「每个都是组成部分」，就没有题干说的「世界的基本特征」。C 说的正是多样性的存在方式。入选。</p>',
+    log: 'C＝独特文明皆成员 → 入选' },
+  { title: 'D. 每种文明都在与世隔离的状态下独自产生、发展、演变——排除',
+    cls: 'bad', tag: 'D ✗', ribbon: { k: 4, ok: false },
+    body: '<p><b>文明隔离论</b>。文明因交流而多彩、因互鉴而丰富——中国引丝绸之路、四大发明西传、佛教东来，都是文明互相吸取养分的明证。「相隔离」既违背史实，也和题干立场相反。排除。</p>',
+    log: 'D「相隔离独自演变」＝文明隔离论' },
+  { title: '结论：AC 入选，B、D 两大「论」出局',
+    cls: 'good', tag: '完成',
+    body: '<p>答案 <b>AC</b>。A 立物质根子（生产方式定样态），C 立存在方式（独特文明皆成员）；B 文明优越论「比人优」、D 文明隔离论「离人群」。文明既有多样性也有共同性——凡用单一文明标准否定其他文明（B），或把独特性推成隔绝（D），都是设障词。</p>',
+    log: '锁定 AC' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "2024·19 唯物史观怎么读「2500 多个民族」的文明多样性",
+  subtitle: "考点：社会存在决定社会意识 · 共性寓于个性 · 方法：立机制 + 四选项逐项归位",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）",
+  intro: "点击「▶ 播放」：先拆题干的因果句立机制，再逐项对号。",
+  snaps: snaps,
+  result: {
+    big: "答案 AC",
+    html: "答案 <b>AC</b>：两大正确表述——<b>生产方式定样态（A，社会存在决定社会意识）、独特文明皆成员（C，共性寓于个性）</b>；两大典型错误——<b>文明优越论（B，「独自的更优越基因」，比人优）、文明隔离论（D，「相隔离独自演变」，离人群）</b>。文明既有多样性也有共同性，凡见「比其他文明优越」「相隔离」字眼即排除。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：文明多样性——唯物史观怎么读"2500 多个民族"</h2>
+<p>答案：<strong>AC</strong>。</p>
+<h3>第 0 步：先立机制——多样性从哪里来</h3>
+<p>先把题干里那句话拆开看："不同历史和国情，不同民族和习俗，孕育了不同文明"。这是个因果句：<strong>原因（生产生活方式不同）→ 结果（文明样态不同）</strong>。唯物史观对这种因果有一套标准解释——</p>
+<ol><li><strong>社会存在决定社会意识</strong>：物质生产方式是社会发展的决定力量，一个文明长什么样，首先是它"怎么谋生"的投影。游牧、农耕、渔猎、工商，生产方式不同，衣食住行、制度礼俗随之不同——这就是 A 项的机制。</li><li><strong>矛盾普遍性与特殊性的辩证关系</strong>：每一种文明既有"文明一般"的普遍性（都在追求美好生活、都对人类进步有贡献——题干说多样性"是人类进步的源泉"），又有各自特殊的样态。<strong>共性寓于个性之中</strong>：世界的多样性不是悬在半空的抽象物，它就存在于每一种文明的具体独特性里——这就是 C 项的机制。</li></ol>
+<p>再看题干的落脚点：<strong>"唯物史观关于社会形态的理论中，内在地包含着文明多样性的思想"</strong>——命题人明示要用唯物史观的"生产方式"和矛盾学说来读这道题，而不是泛泛谈文化。</p>
+<h3>第 1 步：四个选项逐项对号</h3>
+<ul><li><strong>A 独特的生产方式和生活方式决定着文明发展的不同样态</strong> ✅：社会存在决定社会意识，生产方式是文明样态的物质根子，正是"内在包含"的核心含义。</li><li><strong>B 各种文明都具有独自的比其他文明更优越、更强大的文化基因</strong> ❌：<strong>文明优越论</strong>。文明只有特色之别、没有高下之分；题干说多样性是"世界的基本特征"，而"基本特征"意味着并列共存，不是排座次。B 给每种文明发一张"比别人强"的证书，恰好否定多样性。</li><li><strong>C 每一种文明都代表着一方文化的独特性，是人类文明的重要组成部分</strong> ✅：特殊性正是多样性的载体，各文明共同构成人类文明百花园——共性寓于个性。</li><li><strong>D 每一种文明都是在与其他文明相隔离的状态下独自产生、发展和演变的</strong> ❌：<strong>文明隔离论</strong>。文明因交流而多彩、因互鉴而丰富——中国引丝绸之路、四大发明西传、佛教东来，都是文明互相吸取养分的明证；"相隔离"与史实和题干立场都相反。</li></ul>
+<p>→ 选 <strong>AC</strong>。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 B</strong>：把"坚定文化自信"误读成"我的文明最优越"。区分：自信是尊重自己不贬低别人；题干"多样性是世界的基本特征"直接否定排座次。而且"独自的、更优越的文化基因"与"共同性"并存的事实矛盾——文明既有共性也有个性，凡把"个性"推到"独有且压人一头"的，都是设障词。</li><li><strong>误选 D</strong>：把"独特性"听成"隔绝"。独特说的是样态不同，不是发展上老死不相往来；主张文明封闭、用单一文明标准否定其他文明，都是题干观点的反面。</li><li><strong>漏 A</strong>：只盯着"文化"层面，忘了命题人点名"唯物史观社会形态理论"——落点在<strong>生产方式</strong>这个物质根子，A 才是"内在地包含"的本体表述。</li><li><strong>漏 C</strong>：以为 C 只是"凑数的正确废话"。其实 C 说的是多样性的存在方式：多样性由每种文明的独特性汇聚而成，没有 C 的"每个都是组成部分"，就没有题干的"世界的基本特征"。</li></ul>
+<blockquote>记忆锚点：文明多样性两大正确表述——<strong>生产方式定样态（A）、独特文明皆成员（C）</strong>；两大典型错误——<strong>文明优越论（B）、文明隔离论（D）</strong>：前者"比人优"，后者"离人群"，考试反复在这两点上设障。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

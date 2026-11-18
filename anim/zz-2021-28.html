@@ -1,8 +1,137 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-28 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-28</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·28 中国早期信仰马克思主义的人物类型</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>五四以后社会主义思潮兴起，马克思主义开始在知识界传播。问早期信仰者的「类型」——先想清楚一个机制：这批「第一批人」可能出现在哪个群体里？时间锚点卡死在<b>建党之前的知识界</b>。</p>",
+    "log": "时间锚点：建党前，传播阵地在知识界"
+  },
+  {
+    "title": "先立机制：为什么只能是知识分子",
+    "cls": "key",
+    "body": "<p>此时工人阶级尚未普遍觉醒，工人中还没有系统接受马克思主义理论的群体；《新青年》等刊物、学会社团等传播阵地全在知识界。所以早期信仰者的谱系必然在<b>知识分子内部</b>按五四前后的政治经历分化——教科书给出三类。</p>",
+    "log": "第一批人必然在知识界内分化"
+  },
+  {
+    "title": "A：同盟会会员、辛亥活动家",
+    "cls": "good",
+    "body": "<p>董必武、林伯渠、吴玉章等——旧民主主义革命的<b>亲历者</b>转而接受新道路，属于第三类。<b>A 正确</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": true
+    },
+    "log": "A ✓ 辛亥老将转向新道路"
+  },
+  {
+    "title": "B：五四运动的左翼骨干",
+    "cls": "good",
+    "body": "<p>毛泽东、周恩来、蔡和森等——在五四运动实践中淬炼出来的<b>青年骨干</b>，属于第二类。<b>B 正确</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": true
+    },
+    "log": "B ✓ 五四青年骨干"
+  },
+  {
+    "title": "C：五四前新文化运动精神领袖",
+    "cls": "good",
+    "body": "<p>李大钊、陈独秀——旧阵营里思想最先锋的一批<b>率先转向</b>马克思主义，是最早的引路人，属于第一类。<b>C 正确</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": true
+    },
+    "log": "C ✓ 李大钊、陈独秀最早引路"
+  },
+  {
+    "title": "D：工人群众中的活跃分子？",
+    "cls": "bad",
+    "body": "<p>早期信仰马克思主义的人物均为<b>知识分子出身</b>；马克思主义与工人运动相结合是建党前后逐步展开的过程——工人中的先进分子成长为马克思主义者是稍后的事。<b>D 错误</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "log": "D ✗ 工人加入是建党以后的事"
+  },
+  {
+    "title": "干扰归因",
+    "cls": "bad",
+    "body": "<p>误选 D：被「马克思主义要与工人运动相结合」的大方向带跑——结合是后来的过程，「早期」类型的锚点在知识界。漏 C：只记「青年学生转向」，忘了李大钊、陈独秀这类五四前的老领袖才是最早引路人。</p>",
+    "log": "病灶：方向带跑时间锚 / 漏掉老领袖"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>ABC</b>。记忆锚点：早期信仰者三类——<b>老领袖（李陈）、青年骨干（毛周蔡）、辛亥老将（董林吴）</b>，全在知识界。</p>",
+    "log": "锁定 ABC：知识界三类型接力"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "中国早期信仰马克思主义的人物类型",
+  subtitle: "2021 年第 28 题（多选）· 考点：马克思主义早期传播 · 三类早期信仰者谱系 · 逐项对号推演",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立「第一批人在知识界」机制，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABC",
+    html: "记忆锚点：三类早期信仰者——<b>五四前新文化运动精神领袖（李大钊、陈独秀）、五四左翼骨干（毛泽东、周恩来等）、原同盟会会员与辛亥活动家（董必武、林伯渠、吴玉章等）</b>；均为知识分子，工人加入是建党以后的事。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：早期马克思主义者从哪里来——三类人的来源谱系</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——「第一批人」只能出现在知识界</h3>
+<p>先想清楚一个前提：五四运动后马克思主义开始传播，但此时<strong>中国工人阶级尚未普遍觉醒</strong>，还处在自发斗争阶段，工人中尚未形成系统接受马克思主义理论、以传播马克思主义为业的群体；而传播阵地——《新青年》等刊物、各地学会社团、大学讲坛——全部在<strong>知识界</strong>手里。所以「中国早期信仰马克思主义的人物」必然从知识分子内部产生，并按他们五四前后的政治经历分化成三种类型。这道题考的就是这张谱系表，D 是放在谱系之外的「时间陷阱」。</p>
+<h3>第 1 步：三类人对号入座</h3>
+<table><thead><tr><th>类型</th><th>选项</th><th>代表人物</th><th>从哪里转身</th><th>判定</th></tr></thead><tbody><tr><td>五四以前新文化运动的精神领袖</td><td>C</td><td>李大钊、陈独秀</td><td>旧阵营中思想最先锋者<strong>率先转向</strong>，最早引路人</td><td>✅</td></tr><tr><td>五四运动的左翼骨干</td><td>B</td><td>毛泽东、周恩来、蔡和森等</td><td>五四实践中淬炼出的青年</td><td>✅</td></tr><tr><td>原同盟会会员、辛亥革命时期活动家</td><td>A</td><td>董必武、林伯渠、吴玉章等</td><td>旧民主主义革命亲历者转投新道路</td><td>✅</td></tr><tr><td>工人群众中的活跃分子</td><td>D</td><td>——</td><td>工人先进分子接受马克思主义是<strong>建党前后</strong>的事</td><td>❌</td></tr></tbody></table>
+<p>三类人构成「先锋领袖 — 青年骨干 — 老一辈革命者」的接力谱系 → <strong>ABC</strong>。</p>
+<h3>第 2 步：D 为什么不成立——预判「工人不是主体吗」这个追问</h3>
+<p>有人会问：马克思主义不是工人阶级的理论吗，早期信仰者怎么会没有工人？正解在<strong>时间锚点</strong>：「马克思主义与工人运动相结合」是建党前后才逐步展开的过程（1920 年前后办工人夜校、办劳动补习学校，先进知识分子<strong>到工人中去</strong>）；在那之前，先完成「接受并传播马克思主义」这件事的只能是已经掌握理论工具的知识分子。题目问的是「早期信仰者」的类型——第一批人的名单里都是知识分子出身，D 描述的群体是<strong>下一阶段</strong>才登上舞台的。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 D（被大方向带跑）</strong>：「马克思主义要与工人运动相结合」方向没错，但那是后来的过程；「早期」两字把时间锚点卡死在知识界。</li><li><strong>漏 C（只记青年转向）</strong>：以为信仰者都是五四青年——李大钊、陈独秀这类五四<strong>以前</strong>的精神领袖才是最早的引路人。</li><li><strong>漏 A（想不起辛亥老人）</strong>：董必武、林伯渠、吴玉章由旧民主主义转向新民主主义，恰说明马克思主义吸引力跨代际——老将也在第一批名单里。</li></ul>
+<blockquote>记忆锚点：早期信仰者三类人——<strong>老领袖（李大钊、陈独秀）、青年骨干（毛泽东、周恩来、蔡和森）、辛亥老将（董必武、林伯渠、吴玉章）</strong>，全在知识界；工人加入是建党前后「到工人中去」以后的事。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

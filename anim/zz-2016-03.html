@@ -1,8 +1,154 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2016-03 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2016-03</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2016·03 剩余价值率：m′=m÷v，两套划分别混用</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画（推理链卡片，纯文本无 KaTeX，走 anim-engine），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>预付资本 100 万（固定资本 60 + 流动资本 40，其中购买劳动力 10 万），一轮生产后总资本 120 万。求剩余价值率。考点：<b>m′ = m ÷ v</b>；题眼是「购买劳动力支付了 10 万」这句插话。</p>",
+    "log": "预付100万→120万，求 m′=m÷v"
+  },
+  {
+    "title": "先立机制：资本有两套划分",
+    "cls": "key",
+    "body": "<p><b>不变/可变</b>按在剩余价值生产中的<b>作用</b>分——管「增殖从哪来」；<b>固定/流动</b>按价值<b>周转方式</b>分——管「多久回本」。两本账各管一摊，<b>不许拿周转账算增殖账</b>。</p>",
+    "log": "c/v 管增殖，固定/流动管周转"
+  },
+  {
+    "title": "再立机制：W = c + v + m，转移不增殖",
+    "cls": "key",
+    "body": "<p>商品价值 W = c + v + m。机器、厂房、原材料（c）只把<b>旧价值转移</b>进产品，一分不增殖；只有劳动力 v 能创造出<b>大于工资</b>的新价值，多出的才是 m。</p>",
+    "log": "c 只转移旧价值，增殖只来自 v"
+  },
+  {
+    "title": "读出 m：增殖 20 万全是剩余价值",
+    "cls": "good",
+    "body": "<p>总资本 120 − 预付 100 = 增殖 <b>20 万</b>。c 的两笔只转移旧价值、不会「凭空多出」，多出的 20 万只能来自工人劳动创造超过工资的部分 → <b>m = 20 万</b>。</p>",
+    "log": "m = 20 万，全部算剩余价值"
+  },
+  {
+    "title": "读出 v：只认购买劳动力的钱",
+    "cls": "good",
+    "body": "<p>购买劳动力支付 <b>10 万</b>——按作用划分它就是可变资本，<b>v = 10 万</b>。它虽然也被叫作「流动资本」，但那是周转账里的名字，分母只认它。</p>",
+    "log": "v = 10 万（分母锁定）"
+  },
+  {
+    "title": "选项 A：20 ÷ 10 = 200%",
+    "cls": "good",
+    "body": "<p>m′ = m ÷ v = 20 ÷ 10 = <b>200%</b>。<b>A 正确</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": true
+    },
+    "log": "m′=20÷10=200% → A 正确"
+  },
+  {
+    "title": "选项 B 50%：分母错拿流动资本",
+    "cls": "bad",
+    "body": "<p>20 ÷ 40 = 50%——把<b>流动资本总额 40 万</b>当成 v，两套划分混用。流动资本里 30 万买原材料属 c，只有 10 万是 v。<b>B 排除</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    },
+    "log": "B 拿周转账算增殖账"
+  },
+  {
+    "title": "选项 C 100%：增殖被腰斩",
+    "cls": "bad",
+    "body": "<p>以为 20 万里有一半是折旧「贡献」的、m 只算 10 万（或把增殖额 20 万误当 v，凑成 20÷20）。转移旧价值不会「贡献」新增殖。<b>C 排除</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    },
+    "log": "C 没吃透「转移不增殖」"
+  },
+  {
+    "title": "选项 D 20%：错用利润率公式",
+    "cls": "bad",
+    "body": "<p>20 ÷ 100 = 20%——这是<b>利润率 p′ = m ÷ (c+v)</b>，「对全部资本」的口径；问剩余价值率要用「对工人」的口径，分母是 v。<b>D 排除</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "log": "D 混同了利润率"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>A</b>：m′ = 200%。记忆锚点：<b>m′ = m ÷ v，v 只认购买劳动力的钱</b>；固定/流动管周转、不变/可变管增殖；m ÷ (c+v) 是利润率，别认错门。</p>",
+    "log": "锁定 A：剩余价值率 200%"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "剩余价值率：m′=m÷v，两套划分别混用",
+  subtitle: "考点：剩余价值率（可变资本 · 两套资本划分 · 利润率辨析） · 方法：先立 c+v+m 机制，再逐项对号",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 A（200%）",
+    html: "记忆锚点：<b>m′ = m ÷ v</b>，分母只认<b>购买劳动力的 10 万</b>（可变资本）；增殖 20 万全部来自劳动创造——机器、原材料只转移旧价值、不增殖。<b>20÷40</b> 是错拿了流动资本（两套划分混用），<b>20÷100</b> 是错用了利润率公式 p′=m÷(c+v)。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：剩余价值率为什么必须用 20 万 ÷ 10 万</h2>
+<p>答案：<strong>A（200%）</strong>。</p>
+<h3>第 0 步：先立机制——资本有"两套划分"，各管一摊账</h3>
+<p>做这道题之前，先把政治经济学记账的总框架立起来。一件商品的价值由三块拼成：<strong>W = c + v + m</strong>——不变资本 c（机器、厂房、原材料）只把原有的价值<strong>转移</strong>进产品，本身一分不增殖；可变资本 v（购买劳动力的钱）买来的是劳动力，工人创造的新价值<strong>大于</strong>工资，多出来的就是剩余价值 m。剩余价值率 <strong>m′ = m ÷ v</strong>，回答的问题是"<strong>增殖从哪里来、工人被剥削到什么程度</strong>"。</p>
+<p>但教材里资本还有<strong>另一套划分</strong>：固定资本 / 流动资本，依据是价值的<strong>周转方式</strong>——固定资本（机器设备）的价值分多次、一部分一部分地转移到产品里；流动资本（原材料、燃料、工资）的价值一次全部转移。这套划分回答的问题是"<strong>资本多久周转回来一次</strong>"。</p>
+<table><thead><tr><th>划分</th><th>划分依据</th><th>回答什么问题</th><th>分母/分子里认谁</th></tr></thead><tbody><tr><td>不变资本 c / 可变资本 v</td><td>在<strong>剩余价值生产中的作用</strong></td><td>增殖从哪里来</td><td>m′ 的分母只认 v</td></tr><tr><td>固定资本 / 流动资本</td><td>价值的<strong>周转方式</strong></td><td>周转速度</td><td>与 m′ 的公式<strong>无关</strong></td></tr></tbody></table>
+<p>两套划分像两本账：一本记"谁增殖"，一本记"多久回本"。命题人出这道题，考的就是<strong>不许拿第二本账去算第一本账的题</strong>。</p>
+<h3>第 1 步：从数据里读出 m——为什么 20 万增殖全是剩余价值</h3>
+<p>预付资本 100 万，一轮生产结束总资本 120 万，多出的 <strong>20 万</strong>从哪儿来？逐笔追问：</p>
+<ol><li><strong>机器设备（固定资本 60 万）</strong>：按损耗把价值转移进产品，转移多少、产品里就有多少，不增不减；</li><li><strong>原材料（流动资本里的生产资料部分）</strong>：一次转移，同样只搬家不增殖；</li><li><strong>购买劳动力的 10 万</strong>：工人干活创造的新价值 &gt; 这 10 万工资，超出部分才是"凭空多出来"的。</li></ol>
+<p>既然 c 的两笔都只会"转移旧价值"，总资本从 100 万变 120 万多出的 20 万，<strong>只能</strong>是工人劳动创造、超过工资的部分——<strong>m = 20 万</strong>。</p>
+<h3>第 2 步：读出 v，代入公式</h3>
+<p>购买劳动力支付了 10 万——这笔钱按"作用划分"就是可变资本，<strong>v = 10 万</strong>（它同时也在"周转划分"里被叫作流动资本，但那是另一本账的名字，不影响 v 的身份）。</p>
+<p>m′ = m ÷ v = 20 万 ÷ 10 万 = <strong>200%</strong>，选 <strong>A</strong>。</p>
+<h3>易错点：每个错误选项对应一种典型误解</h3>
+<ul><li><strong>误选 B（50%）——拿"周转账"算"增殖账"</strong>：20 ÷ 40 = 50%，分母错拿了<strong>流动资本总额 40 万</strong>。典型误解：把"固定/流动"与"不变/可变"两套划分混为一谈，以为流动资本 = 可变资本。其实流动资本 40 万里只有 10 万是购买劳动力的 v，剩下 30 万买原材料，属于不变资本 c。</li><li><strong>误选 C（100%）——把增殖额"腰斩"</strong>：典型误解是以为 20 万的增殖里有一半是机器折旧"贡献"的、m 只算 10 万（或把增殖额 20 万误当成 v，凑成 20 ÷ 20）。根源还是没吃透"转移旧价值不增殖"：c 转移进去多少、产品里就有多少，<strong>c 不可能"贡献"新增殖</strong>。</li><li><strong>误选 D（20%）——把剩余价值率混同于利润率</strong>：20 ÷ 100 = 20%，这是<strong>利润率 p′ = m ÷ (c + v)</strong> 的算法，分母换成了全部预付资本。两个公式都存在，但答非所问：问"剩余价值率"，就得用"对工人"的口径（分母 v），而不是"对全部资本"的口径（分母 c + v）。</li></ul>
+<blockquote>记忆锚点：m′ = m ÷ v，<strong>v 只认"购买劳动力的钱"</strong>；固定/流动管周转，不变/可变管增殖；除以全部预付资本（c+v）算出来的是利润率，别认错门。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,99 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2019-05 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2019-05</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2019-05 新思想的核心要义 · 定位词对号动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（参照 tools/anim_concept_template，政治站无 KaTeX，纯文本卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：题干念了一整份「定位词名单」',
+    cls: 'key', sc: 'step', tag: '审题',
+    log: '题眼：继承和发展、最新成果、结晶、组成部分、行动指南都念了，唯独空出「核心要义」',
+    body: '<p>题干把「继承和发展」「最新成果」「结晶」「组成部分」「行动指南」念了个遍，唯独空出<b>核心要义</b>让你填。</p><p>这是定位词对号题：每个指导思想都配一套定位词，各回答一个不同的问题——考<b>成套记忆、对号入座</b>，不考临场发挥。</p>' },
+  { t: '机制先行：定位词各回答什么问题',
+    cls: 'key', sc: 'shift', tag: '机制',
+    log: '先立定位词表：核心要义是轴心，主题、历史地位、行动指南各归各位',
+    body: '<p><b>核心要义</b>回答"体系围绕什么展开"；<b>主题</b>回答总问题——新时代坚持和发展什么样的中国特色社会主义、怎样坚持和发展中国特色社会主义；<b>历史地位</b>回答"排在哪"——马克思主义中国化最新成果、理论体系的重要组成部分；<b>行动指南</b>回答"用来干什么"。</p><p>核心要义是轴心：「八个明确」「十四个坚持」全部围绕<b>坚持和发展中国特色社会主义</b>展开——主题即核心要义。</p>' },
+  { t: '选项 A：推进马克思主义中国化时代化大众化 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 A', ribbon: {k: 1, ok: false},
+    log: 'A 是理论建设途径，贴着题干「继承和发展」出干扰',
+    body: '<p>「中国化时代化大众化」与题干「继承和发展」字面最贴——它是推动理论创新的建设<b>途径</b>，回答"怎么发展理论"，不是这一思想本身的核心。</p><p><b>A 错</b>。</p>' },
+  { t: '选项 B：坚持以经济建设为中心 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 B', ribbon: {k: 2, ok: false},
+    log: 'B 的「核心」属于基本路线——搭配对象错了',
+    body: '<p>「以经济建设为中心」确实带"核心"二字（基本路线的核心内容、兴国之要），但<b>搭配对象</b>错了：它属于基本路线，不属于核心要义。</p><p>核心要义搭配的是"中国特色社会主义"。「核心」撞词是本题最险的坑。<b>B 错</b>。</p>' },
+  { t: '选项 C：坚持和发展中国特色社会主义 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C', ribbon: {k: 3, ok: true},
+    log: 'C 与核心要义严丝合缝——体系的轴心',
+    body: '<p>这一思想的全部内容（「八个明确」「十四个坚持」）都围绕坚持和发展中国特色社会主义展开——它就是<b>核心要义</b>的标准表述。</p><p><b>C 对</b>。</p>' },
+  { t: '选项 D：实现社会主义现代化 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 D', ribbon: {k: 4, ok: false},
+    log: 'D 是奋斗目标，回答「去哪里」，不是「围绕什么展开」',
+    body: '<p>「实现社会主义现代化」回答"去哪里"，核心要义回答"围绕什么展开"——目标是<b>奋斗方向</b>，不是理论的轴心。</p><p><b>D 错</b>。</p>' },
+  { t: '结论：核心要义 = 坚持和发展中国特色社会主义',
+    cls: 'good', sc: 'done', tag: '结论',
+    log: '汇总：C 选；A、B、D 不选——答案 C',
+    body: '<p>答案 <b>C（坚持和发展中国特色社会主义）</b>。</p><p>A 是建设途径，B 的「核心」属于基本路线，D 是奋斗目标——定位词各归各位，答案只有一个。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2019·05】习近平新时代中国特色社会主义思想的核心要义',
+  subtitle: '考点：新思想的定位词体系 · 方法：先立定位词表，再逐项对号',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先立定位词表看懂命题手法，再逐项检验四个选项。',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '记忆锚点：核心要义 = <b>坚持和发展中国特色社会主义</b>；主题 = 新时代坚持和发展什么样的中国特色社会主义、怎样坚持和发展中国特色社会主义。A 是理论建设途径，B 的「核心」属于基本路线，D 是奋斗目标——定位词各归各位，别被撞词带走。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：新思想的「核心要义」——定位词对号题</h2>
+<p>答案：<strong>C（坚持和发展中国特色社会主义）</strong>。</p>
+<h3>第 0 步：先立机制——一个理论体系配有一套「定位词」</h3>
+<p>一个写入党章的指导思想，教材都会给它配一组<strong>定位词</strong>，每个词回答一个不同的问题。先把这一套立起来，选项才有落座的地方：</p>
+<table><thead><tr><th>定位词</th><th>回答的问题</th><th>本题体系中的内容</th></tr></thead><tbody><tr><td>核心要义</td><td>体系<strong>围绕什么展开</strong></td><td>坚持和发展中国特色社会主义</td></tr><tr><td>主题</td><td>新时代的总问题是什么</td><td>新时代坚持和发展什么样的中国特色社会主义、怎样坚持和发展中国特色社会主义</td></tr><tr><td>历史地位</td><td>它在理论长河中排在哪</td><td>马克思主义中国化最新成果、中国特色社会主义理论体系的重要组成部分</td></tr><tr><td>行动指南</td><td>它用来干什么</td><td>全党全国人民为实现中华民族伟大复兴而奋斗</td></tr><tr><td>主要创立者</td><td>谁创立的</td><td>习近平</td></tr></tbody></table>
+<p><strong>核心要义为什么是它</strong>：核心要义是整套体系的轴心——这一思想的全部内容（「八个明确」「十四个坚持」）都围绕"坚持和发展中国特色社会主义"这个轴心展开；轴心即核心要义，与「主题」是同一个东西的两种说法。</p>
+<h3>第 1 步：读出题干的「念名单」命题手法</h3>
+<p>题干那段话把<strong>其他定位词几乎念全了</strong>：「继承和发展」「最新成果」是历史地位，「结晶」是创立方式，「组成部分」是理论体系归属，「行动指南」是功能定位——唯独空出「核心要义」让你填。这决定了本题是<strong>固定搭配对号</strong>题：不考临场发挥，考定位词是否成套记住、能否各归各位。</p>
+<h3>第 2 步：A~D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>它的真实定位</th><th>对号结果</th></tr></thead><tbody><tr><td>A 推进马克思主义中国化时代化大众化</td><td>推动理论创新的建设<strong>途径</strong></td><td>❌ 不在定位词表内</td></tr><tr><td>B 坚持以经济建设为中心</td><td>党的基本路线的核心内容（兴国之要）</td><td>❌ 「核心」属于基本路线</td></tr><tr><td>C 坚持和发展中国特色社会主义</td><td><strong>核心要义</strong></td><td>✅</td></tr><tr><td>D 实现社会主义现代化</td><td>奋斗目标</td><td>❌ 目标回答「去哪里」</td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种典型误解</h3>
+<ul><li><strong>误选 A</strong>：被题干相近文字带走——「中国化时代化大众化」与题干「继承和发展」字面最贴，是贴着题干设计的干扰；它是"怎么发展理论"的<strong>途径</strong>，不是这一思想本身的核心。</li><li><strong>误选 B</strong>：「核心」二字撞车——「以经济建设为中心」确实是"核心内容"，但它是<strong>基本路线</strong>的核心内容，搭配对象错了：核心要义搭配的是"中国特色社会主义"，不是基本路线。</li><li><strong>误选 D</strong>：把「奋斗目标」当「理论核心」——目标回答"去哪里"，核心要义回答"围绕什么展开"；社会主义现代化是奋斗方向，不是理论的轴心。</li></ul>
+<blockquote>记忆锚点：核心要义 = <strong>坚持和发展中国特色社会主义</strong>；主题、历史地位、行动指南同套一起记——定位词各归各位，别被「目标」「任务」「途径」带走。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

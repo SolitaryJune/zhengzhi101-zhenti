@@ -1,8 +1,103 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-17 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-17</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2024·17 更智慧地使用 AI 工具与实践的两个尺度</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：风险与突破并存，问「更智慧地用」',
+    cls: 'key', tag: '审题',
+    body: '<p>AIGC 有突破（快速问答、创作代码）也有风险（近似原画侵权、被恶意用于造假诈骗）。题眼：「守住<b>法律和伦理底线</b>」「<b>科技向善</b>」「关键在于人们<b>更智慧地使用</b>工具」——这是多选题，四个选项逐一验真。</p>',
+    log: '多选题：逐项验真，先立模型' },
+  { title: '先立机制：实践的两把尺子 + 一块底牌',
+    cls: 'key', tag: '立机制',
+    body: '<p>使用 AI 工具是<b>实践活动</b>，成功实践受双重尺度制约：<b>真理尺度</b>＝合规律性（守底线）；<b>价值尺度</b>＝合目的性（向善）。底牌：AI 是<b>人的智能的物化</b>，能模拟部分功能但不能代替人的社会意识——主语始终是人。</p>',
+    log: '机制：两把尺子 + AI 只是工具' },
+  { title: 'A. 以人民根本利益为最高标准——入选',
+    cls: 'good', tag: 'A ✓', ribbon: { k: 1, ok: true },
+    body: '<p>这正是<b>价值尺度</b>的展开：「科技向善」的落点就是人民利益。符合 → 入选。</p>',
+    log: 'A＝价值尺度 → 入选' },
+  { title: 'B. 合目的性与合规律性的统一——入选',
+    cls: 'good', tag: 'B ✓', ribbon: { k: 2, ok: true },
+    body: '<p><b>两把尺子的统一</b>本身——题干「守底线＋向善」就是这统一的现场演示。符合 → 入选。</p>',
+    log: 'B＝双尺度统一 → 入选' },
+  { title: 'C. 科技发展由主观意志决定——唯心主义，排除',
+    cls: 'bad', tag: 'C ✗', ribbon: { k: 3, ok: false },
+    body: '<p>拼装句验真：「<b>客观物质活动</b>」半句没错，毒在「<b>由主观意志决定</b>」——科技发展受客观规律与社会物质条件制约，不以意志为转移；此说是<b>唯心主义</b>，且恰好拆掉「守底线」的前提。排除。</p>',
+    log: 'C 定语有毒：意志决定＝唯心' },
+  { title: 'D. 成功的实践是真理尺度与价值尺度的统一——入选',
+    cls: 'good', tag: 'D ✓', ribbon: { k: 4, ok: true },
+    body: '<p>换个措辞复述两尺度统一：B 说「<b>能够</b>实现」（可能性），D 说「成功的实践<b>是</b>」（现实判据）——角度不同，不重复。入选。</p>',
+    log: 'D＝原理复现 → 入选' },
+  { title: '结论',
+    cls: 'good', tag: '完成',
+    body: '<p>答案 <b>ABD</b>。记忆锚点：智慧地用 AI＝真理尺度（合规律·守底线）＋价值尺度（合目的·向善），最高标准是人民根本利益；AI 是人的智能的物化，主语永远是人；凡「由主观意志决定」必是唯心，见之必排。</p>',
+    log: '锁定 ABD' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "2024·17 更智慧地使用 AI 工具意味着什么",
+  subtitle: "考点：实践的两个尺度 · 方法：两把尺子对号入座 + 拼装句逐短语验真",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」：先立「两把尺子」机制，再逐项归位，重点看 C 的毒在哪个短语。",
+  snaps: snaps,
+  result: {
+    big: "答案 ABD",
+    html: "答案 <b>ABD</b>：「更智慧地使用 AI 工具」＝在<b>真理尺度</b>（合规律·守底线）与<b>价值尺度</b>（合目的·向善，以人民根本利益为最高标准）之内驾驭工具——成功的实践是两尺度的统一。C 错在「由<b>主观意志</b>决定」这一唯心主义定语：科技发展是客观物质活动，但受客观规律制约，不由意志决定。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「更智慧地使用 AI 工具」——实践的两个尺度</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——任何成功实践都要同时过两把尺子</h3>
+<p>先把题干的骨架抽出来：AIGC 既有突破（快速问答、创作代码）也有风险（近似原画侵权、被恶意用于造假诈骗），题眼落在「守住法律和伦理底线」「科技向善」「关键还在于人们更智慧地使用工具」——这三个短语在马原里对应同一个模型：<strong>实践是受双重尺度制约的对象化活动</strong>。</p>
+<ul><li><strong>真理尺度（合规律性）</strong>：实践必须遵循<strong>客观规律</strong>——对 AI 而言，就是不违背技术自身的规律、不越法律与伦理的底线；</li><li><strong>价值尺度（合目的性）</strong>：实践必须满足<strong>人的需要</strong>，且以维护人民的根本利益为最高标准——对 AI 而言，就是「科技向善」。</li></ul>
+<p>成功的实践＝两个尺度的<strong>统一</strong>。还要补一块底牌：AI 是<strong>人的智能的物化</strong>，能模拟人的部分功能，但<strong>不能代替人的社会意识</strong>——工具再强，「怎么用」的主语始终是人。「更智慧地使用」的全部含义就是：人在两把尺子之内驾驭工具。带着这个模型对号入座。</p>
+<h3>第 1 步：四个选项逐项归位</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归位</th></tr></thead><tbody><tr><td>A 技术进步要以维护人民的根本利益为最高标准</td><td>✅</td><td><strong>价值尺度</strong>的展开：「科技向善」的落点就是人民利益</td></tr><tr><td>B 人类活动能够实现合目的性与合规律性的统一</td><td>✅</td><td><strong>两尺度统一</strong>本身——题干「守底线＋向善」就是它的现场演示</td></tr><tr><td>C 科技发展是由主观意志决定的客观物质活动</td><td>❌</td><td>毒在「由主观意志决定」——唯心主义（见下）</td></tr><tr><td>D 成功的实践是真理尺度与价值尺度的统一</td><td>✅</td><td>换个措辞复述两尺度统一，与 B 同源而角度不同</td></tr></tbody></table>
+<h3>为什么 C 错（唯一排除点，值得多说一句）</h3>
+<p>C 是半真半假的拼装句：「客观物质活动」半句没错——科技发展确实是人改造世界的<strong>客观物质活动</strong>；错的是它前面加的定语「<strong>由主观意志决定</strong>」。科技发展和一切实践活动一样，受<strong>客观规律</strong>与既有社会物质条件制约，不以任何人的意志为转移；说它由主观意志决定，就滑向了<strong>唯心主义</strong>。这个错还恰好拆掉了题干的前提——若科技真由意志决定，「底线」就约束不住任何东西，「更智慧地使用」也无从谈起。</p>
+<h3>易错点</h3>
+<ul><li><strong>C 的前半句迷惑</strong>：只看到「客观物质活动」是对的，就整句放行——多选题的拼装句要<strong>逐个短语验真</strong>，有一个分句错则整句错。</li><li><strong>漏选 A</strong>：把 A 当成纯时政口号跳过——它其实是价值尺度的规范表达，与题干「科技向善」直接对应。</li><li><strong>以为 B、D 重复而漏选</strong>：B 说「人类活动<strong>能够</strong>实现统一」（可能性），D 说「成功的实践<strong>是</strong>统一」（现实判据）——角度不同，都符合设问「意味着」。</li></ul>
+<blockquote>记忆锚点：智慧地用 AI＝真理尺度（合规律·守底线）＋价值尺度（合目的·向善）的统一，最高标准是人民根本利益；AI 是人的智能的物化，主语永远是人；凡见「由主观意志决定」必是唯心主义，见之必排。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,119 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-04 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-04</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2015·04 马克思主义政党：先锋队的两层含义</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 模板：anim_concept（概念/推理链卡片，政治站无 KaTeX 版）· 只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：把「结合的产物」拆开",
+    "cls": "key",
+    "body": "<p>题干一句话两层信息：「马克思主义政党是<b>科学社会主义与工人运动相结合</b>的产物」「是<b>工人阶级的先锋队</b>」。把「结合」拆开看，每个要素对应政党的一重属性——考点：<b>马克思主义政党的阶级性与先进性</b>。</p>",
+    "log": "「结合」里藏着两个要素、两重属性"
+  },
+  {
+    "title": "先立机制：工人运动＋科学社会主义各给什么",
+    "cls": "key",
+    "body": "<p><b>工人运动</b>＝工人阶级的自发斗争，提供<b>阶级基础</b>→政党的<b>阶级性</b>：以工人阶级为基础，成员来自这个阶级、利益与之一致。<b>科学社会主义</b>＝理论武器，从外部「灌输」进工人运动→政党的<b>先进性</b>：由科学理论武装。</p>",
+    "log": "工人运动给阶级性，科学社会主义给先进性"
+  },
+  {
+    "title": "B：以工人阶级为基础——先锋队第一层",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p>「先锋队」拆两层：①<b>以工人阶级为基础</b>（阶级性）；②<b>由工人阶级中的先进分子组成</b>（先进性）。题干强调「结合的产物」「工人阶级的先锋队」，正面说的正是第一层——政党的<b>阶级基础</b>。<b>B 正确</b>。</p>",
+    "log": "结合点落在阶级基础上 → 选 B"
+  },
+  {
+    "title": "A：政党即工人阶级本身？部分当整体",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>「先锋队」是工人阶级中的<b>先进分子</b>组织，是阶级的一部分、代表整个阶级，<b>不等于阶级本身</b>——若「即工人阶级本身」，「先锋」二字就没有意义了。<b>A 错误</b>。</p>",
+    "log": "先锋队≠整个阶级 → A 不选"
+  },
+  {
+    "title": "C：阶级性是先进性的根本前提？谁都有阶级性",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>阶级性<b>任何政党都有</b>（资产阶级政党同样有），有阶级性说明不了先进；马克思主义政党的先进性来自<b>科学社会主义的理论武装</b>和工人阶级本身的先进性。「在先」不等于「前提」。<b>C 错误</b>。</p>",
+    "log": "阶级性人人有，先进性另有根据 → C 不选"
+  },
+  {
+    "title": "D：政党先进性决定工人阶级先进性？因果颠倒",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>方向反了：是<b>工人阶级的先进性</b>（大工业生产者、最有远见、组织纪律性强）决定了以它为基础的政党的先进性，而不是政党的先进性反过来决定阶级的先进性——把<b>代表关系</b>错当成了<b>决定关系</b>。<b>D 错误</b>。</p>",
+    "log": "是阶级的先进性决定政党的先进性 → D 不选"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>B</b>：马克思主义政党以工人阶级为基础。口诀：结合＝工人运动（阶级基础）＋科学社会主义（理论武装）；先锋队＝以工人阶级<b>为基础</b>＋由<b>先进分子</b>组成。</p>",
+    "log": "锁定 B：以工人阶级为基础"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "马克思主义政党：先锋队的两层含义",
+  subtitle: "考点：科学社会主义 · 方法：先拆「结合的产物」，再让四个选项对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 B",
+    html: "记忆锚点：先锋队＝以工人阶级<b>为基础</b>＋由<b>先进分子</b>组成；A 把部分当整体，C 把阶级性当先进性前提，D 把因果颠倒——是<b>阶级的先进性决定政党的先进性</b>。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：马克思主义政党=科学社会主义与工人运动的结合——先锋队的两层含义</h2>
+<p>答案：<strong>B（马克思主义政党以工人阶级为基础）</strong>。</p>
+<h3>第 0 步：先立机制——把「结合的产物」拆开看</h3>
+<p>「马克思主义政党是科学社会主义与工人运动相结合的产物」这句话里藏着两个要素，各自铸就政党的一重属性：</p>
+<table><thead><tr><th>要素</th><th>是什么</th><th>对应政党的什么性质</th></tr></thead><tbody><tr><td><strong>工人运动</strong></td><td>工人阶级的自发斗争，提供<strong>阶级基础</strong></td><td><strong>阶级性</strong>——政党以工人阶级为基础，成员来自这个阶级、利益与之一致</td></tr><tr><td><strong>科学社会主义</strong></td><td>理论武器，从外部「灌输」到工人运动</td><td><strong>先进性</strong>——政党由科学理论武装</td></tr></tbody></table>
+<p>所以「工人阶级的先锋队」要拆成两层：①<strong>以工人阶级为基础</strong>（阶级性：政党不是悬在阶级之外的）；②<strong>由工人阶级中的先进分子组成</strong>（先进性：先锋队≠整个阶级，也不会从工人运动中自发产生——自发运动只能形成工联意识，科学理论必须灌输进去）。</p>
+<h3>第 1 步：对号入座</h3>
+<p>题干强调「结合的产物」「工人阶级的先锋队」，正面说的正是政党的<strong>阶级基础</strong>——以工人阶级为基础 → 选 <strong>B</strong>。</p>
+<h3>第 2 步：干扰项各自错在哪</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>错因</th></tr></thead><tbody><tr><td>A 马克思主义政党即工人阶级本身</td><td>❌</td><td>「先锋队」是工人阶级中的<strong>先进分子</strong>组织，是阶级的一部分、代表整个阶级，<strong>不等于阶级本身</strong>——把部分当整体</td></tr><tr><td>C 阶级性是先进性的根本前提</td><td>❌</td><td>阶级性谁都有（资产阶级政党同样有阶级性），<strong>先进性来自科学社会主义的理论武装</strong>与工人阶级的先进性，不是来自「有阶级性」这件事</td></tr><tr><td>D 政党的先进性决定工人阶级的先进性</td><td>❌</td><td><strong>因果颠倒</strong>：是工人阶级的先进性（大工业生产者、最有远见、组织纪律性）决定了以它为基础的政党的先进性</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 A（把「代表整个阶级」当成「等于整个阶级」）</strong>：先锋队与阶级是<strong>部分与整体、先进分子与阶级基础</strong>的关系；「即工人阶级本身」抹掉了「先锋」二字的存在意义。</li><li><strong>选 C（把「阶级性」包装成「前提」）</strong>：「在先」不等于「前提」——先进性的根据是<strong>理论武装+阶级的先进性</strong>，单纯的阶级性（任何阶级都有）说明不了先进。</li><li><strong>选 D（顺着「先锋队=先进」想当然外推）</strong>：把政党与阶级的<strong>代表关系</strong>错当成<strong>决定关系</strong>，方向整个反了。</li></ul>
+<blockquote>记忆锚点：结合=工人运动（阶级基础）+科学社会主义（理论武装）；先锋队=以工人阶级<strong>为基础</strong>+由<strong>先进分子</strong>组成；阶级性≠先进性，是阶级的先进性决定政党的先进性。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

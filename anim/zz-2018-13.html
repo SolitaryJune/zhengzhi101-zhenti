@@ -1,8 +1,113 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-13 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-13</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2018·13 社会公德最基本的要求=遵纪守法</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 两层小表（层次清单用）
+function rows(list){
+  return '<div>' + list.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:76px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：「最基本」＋「起码」双重指向',
+    body: '<p>题干给社会公德下的定义落在「维护公共利益、公共秩序、社会和谐稳定的<b>起码</b>道德要求」上；设问问「<b>最基本</b>的要求」。「起码」＋「最基本」双重指向同一个方向：五项内容里的<b>底线层</b>。</p>',
+    log: '题眼=起码/最基本 → 底线层' },
+  { tag: '机制', cls: 'key', title: '先立机制：五项内容、两种层次',
+    body: rows([
+      ['五项内容', '文明礼貌、助人为乐、爱护公物、保护环境、遵纪守法'],
+      ['倡导层', '前四项——做到了是美德，靠教育与自觉提升'],
+      ['底线层', '遵纪守法——人人必须履行的起码要求，靠强制保证'],
+      ['身份', '只有遵纪守法=道德要求＋法律义务双重身份']
+    ]) + '<p>五项不是并列货色：四个往上倡导，一个往下托底。</p>',
+    log: '四项倡导 + 一项底线' },
+  { tag: '判定', cls: 'key', title: '底线为什么是它：违礼可教育，违法必强制',
+    body: '<p>违礼（比如不够客套）可以批评教育、劝导改进；越过纪律与法律这条线，公共生活就失序，必须<b>强制纠正</b>。教材据此明确：<b>遵纪守法是社会公德最基本的要求</b>。</p>',
+    log: '道德底线+法律义务 → 遵纪守法' },
+  { tag: '选项 A', cls: 'good', title: 'A「遵纪守法」：底线层，当选',
+    body: '<p>唯一具有「道德要求＋法律义务」双重身份的一项，与「起码／最基本」逐字对上。<b>当选</b>。</p>',
+    log: 'A=底线层 → 当选' },
+  { tag: '选项 B', cls: 'bad', title: 'B「助人为乐」：把「最高尚」当「最基本」，排除',
+    body: '<p>倡导层中层次更高的美德（人道主义关怀）——但「最高尚」往上够、「最基本」往下托底，方向正好相反。混淆两词。<b>排除</b>。</p>',
+    log: 'B 高尚≠基本' },
+  { tag: '选项 C', cls: 'bad', title: 'C「爱护公物」：错层，排除',
+    body: '<p>重要，但仍是倡导层要求，与「最基本」错了一层。<b>排除</b>。</p>',
+    log: 'C 倡导层，错层' },
+  { tag: '选项 D', cls: 'bad', title: 'D「文明礼貌」：直觉误导最强，排除',
+    body: '<p>直觉上礼貌是「孩子受教育的第一课」、最常见——但「基本」在此不是「最先学会」，而是<b>不可逾越的底线</b>；礼貌缺失靠劝导，违纪违法靠强制。用经验直觉偷换了规范含义。<b>排除</b>。</p>',
+    log: 'D 第一课≠底线' },
+  { tag: '结论', cls: 'good', title: '结论：锁定 A',
+    body: '<p>答案 <b>A</b>。记忆锚点：五项内容=文明礼貌 · 助人为乐 · 爱护公物 · 保护环境 · <b>遵纪守法</b>；「最基本／起码／底线」类设问直接锁定遵纪守法——唯一靠强制保证的一项。</p>',
+    log: '锁定 A：遵纪守法' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.log,
+    count: i + 1,
+    ribbon: { k: i + 1, ok: s.cls !== 'bad' },
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '社会公德最基本的要求=遵纪守法',
+  subtitle: '2018 年单选第 13 题 · 考点：社会公德五项内容的层次 · 方法：审「起码/最基本」题眼 → 四倡导＋一底线',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  counterLabel: '推理步',
+  ribbonTitle: '推理进度（绿=成立/正确，红=干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：社会公德五项主要内容=<b>文明礼貌、助人为乐、爱护公物、保护环境、遵纪守法</b>，分两种层次——前四项是倡导性要求（做到了是美德），<b>遵纪守法</b>处在底线层，同时具有「道德要求＋法律义务」双重身份，是人人必须履行的起码要求，故「最基本的要求」=遵纪守法。B 把「最高尚」当「最基本」，C 错层，D 被「第一课」直觉带偏——「基本」指不可逾越的底线，不是最先学会的行为。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：五项公德里「最基本」落在底线层</h2>
+<p>答案：<strong>A（遵纪守法）</strong>。</p>
+<h3>第 0 步：先立结构——五项内容、两种层次</h3>
+<p>社会公德是人们在公共生活和社会交往中应遵守的行为准则，教材列五项主要内容：<strong>文明礼貌、助人为乐、爱护公物、保护环境、遵纪守法</strong>。五项不是并列的同层货色，而是分属两种层次：</p>
+<table><thead><tr><th>层次</th><th>内容</th><th>性质</th></tr></thead><tbody><tr><td>倡导层</td><td>文明礼貌、助人为乐、爱护公物、保护环境</td><td>做到了是美德，靠教育与自觉提升</td></tr><tr><td>底线层</td><td>遵纪守法</td><td>人人必须履行的起码要求，靠强制保证</td></tr></tbody></table>
+<p>题干已把题眼递到手上：「维护公共利益、公共秩序、社会和谐稳定的<strong>起码</strong>道德要求」——「起码」二字指向底线层。</p>
+<h3>第 1 步：为什么底线层是遵纪守法——双重身份</h3>
+<p>五项之中，只有遵纪守法同时具有<strong>道德要求＋法律义务</strong>双重身份：法律和纪律是维护公共秩序的强制边界，是道德的底线——违礼（比如不够客套）可以批评教育、劝导提升，违法违纪则必须强制纠正；越过这条线，公共生活就失序。教材据此明确：<strong>遵纪守法是社会公德最基本的要求</strong>。选 <strong>A</strong>。</p>
+<h3>第 2 步：干扰项归因</h3>
+<ul><li><strong>B 助人为乐</strong>：倡导层中层次更高的美德（体现人道主义关怀）——选它的人把「最高尚」与「最基本」混同，两个词正好是相反的方向：高尚往上够，基本往下托底。</li><li><strong>C 爱护公物</strong>：重要，但仍是倡导层要求，与「最基本」错层。</li><li><strong>D 文明礼貌</strong>：直觉误导最强——见下。</li></ul>
+<h3>为什么 D 最有迷惑性</h3>
+<p>直觉上「讲礼貌」最基本——孩子受教育的第一课就是礼貌，公共场合最常见的要求似乎也是它。但「基本」在本题语境里不是「最先学会」，而是<strong>不可逾越的底线</strong>：礼貌缺失靠劝导、示范去改进，纪律与法律底线靠强制去守住。D 的迷惑正是用「日常第一课」的经验直觉，偷换了「起码要求=底线」的规范含义——审题时把「起码」圈出来，就不会被直觉带走。</p>
+<h3>易错点</h3>
+<ul><li><strong>把五项当平行选项背</strong>：记成「四倡导＋一底线」的结构，「最基本／起码／底线」类设问直接锁定遵纪守法；</li><li><strong>顺手选 B</strong>：拿道德口号的「响亮度」当判断依据，不审层次与题眼。</li></ul>
+<blockquote>记忆锚点：五项内容=<strong>文明礼貌 · 助人为乐 · 爱护公物 · 保护环境 · 遵纪守法</strong>；「最基本的要求」=遵纪守法（道德＋法律双重身份，唯一靠强制保证的一项）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

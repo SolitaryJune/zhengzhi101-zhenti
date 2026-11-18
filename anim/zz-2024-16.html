@@ -1,8 +1,100 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-16 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-16</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2024·16 「全球南方」声音更响亮表明什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：题面全是「现象」',
+    cls: 'key', tag: '审题',
+    body: '<p>第 78 届联大高级别周：议程聚焦「全球南方」国家的需求；中国以最大发展中国家身份表达「全球南方<b>天然成员</b>」的诉求；落点是「南方国家的声音<b>更响亮</b>」。设问「这表明」＝要往<b>本质</b>推一步。</p>',
+    log: '现象：南方声音更响亮 → 推本质' },
+  { title: '先立机制：声音为什么变响亮',
+    cls: 'key', tag: '立机制',
+    body: '<p>机制链条：发展中国家<b>群体性崛起</b> → 国际力量对比<b>此消彼长</b> → 在最高多边场合集体抬升议程、放大声音。这不是嗓门大，是<b>实力变了</b>——正是百年未有之大变局最直观的表征。注意分寸：「表明」只能推到事实撑得住的那一步。</p>',
+    log: '机制：力量对比变 → 声音响' },
+  { title: 'D. 力量对比深刻变化，百年变局深入演进——入选',
+    cls: 'good', tag: 'D ✓', ribbon: { k: 4, ok: true },
+    body: '<p>与「声音更响亮」量级相称，是现象背后的<b>事实本质</b>；表述用「正在发生」「深入发展演进」的进行时——分寸刚好。</p>',
+    log: 'D 是现象背后的本质 → 正确' },
+  { title: 'A. 南北对话僵局已经破解——完成时陷阱',
+    cls: 'bad', tag: 'A ✗', ribbon: { k: 1, ok: false },
+    body: '<p>「<b>已经破解</b>」把「对话有进展」说成僵局已解——南北发展失衡远未解决。见到绝对化的完成时表述先打问号。</p>',
+    log: 'A 过度引申：进展 ≠ 破解' },
+  { title: 'B. 全球南方占据主导地位——程度陷阱',
+    cls: 'bad', tag: 'B ✗', ribbon: { k: 2, ok: false },
+    body: '<p>影响力上升是真趋势，但「<b>占据主导地位</b>」是程度错误——发展中国家数量众多 ≠ 已主导国际组织决策。</p>',
+    log: 'B 过度引申：响亮 ≠ 主导' },
+  { title: 'C. 改变规则议题成为普遍共识——共识陷阱',
+    cls: 'bad', tag: 'C ✗', ribbon: { k: 3, ok: false },
+    body: '<p>「改变国际秩序游戏规则」是南方的<b>主张</b>；主张存在 ≠ 已成国际社会「<b>普遍共识</b>」——多数国家要的是秩序的改良完善。</p>',
+    log: 'C 过度引申：诉求 ≠ 共识' },
+  { title: '结论',
+    cls: 'good', tag: '完成',
+    body: '<p>答案 <b>D</b>。记忆锚点：全球南方＝新兴市场国家和发展中国家（非地理划分）；声音更响亮 → <b>国际力量对比深刻变化、百年变局深入演进</b>；见「已破解／占主导／普遍共识」先打问号。</p>',
+    log: '锁定 D：力量对比深刻变化' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "2024·16 「全球南方」声音更响亮表明什么",
+  subtitle: "考点：全球南方与百年变局 · 方法：现象→本质，只推一步，防过度引申",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」：先立「实力变化 → 声音变响」机制，再逐项排查过度引申。",
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "答案 <b>D</b>：南方声音更响亮的本质＝新兴市场国家和发展中国家<b>群体性崛起</b>，<b>国际力量对比深刻变化、百年变局深入发展演进</b>。A「已破解」、B「占主导」、C「普遍共识」都把趋势拔高成既成事实——过度引申是三个干扰项的统一配方。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「全球南方」声音更响亮，表明了什么</h2>
+<p>答案：<strong>D（国际力量对比正在发生深刻变化，百年变局正在深入发展演进）</strong>。</p>
+<h3>第 0 步：先立机制——从「现象」往「本质」推一步，且只推一步</h3>
+<p>题面给的全是<strong>现象</strong>：第 78 届联大高级别周把更多目光投向「全球南方」，议程围绕南方国家的需求展开；中国作为最大发展中国家，以「全球南方天然成员」的身份出席多场会议表达诉求；南方国家的声音更响亮，成为本届联大的亮点。设问「这表明」要求<strong>往本质推一步</strong>：一群发展中国家能在全球最高级别的多边场合集体抬升议程、放大声音，靠的不是嗓门，而是<strong>实力的此消彼长</strong>——新兴市场国家和发展中国家<strong>群体性崛起</strong>，国际力量对比发生深刻调整，这正是<strong>百年未有之大变局</strong>最直观的表征。所以「声音更响亮」的本质＝力量对比在变＝百年变局在深入演进，选 <strong>D</strong>。</p>
+<p>为什么不能推得更远？因为「表明」只允许推到<strong>已有事实支撑得住的结论</strong>：把「趋势」说成「既成事实」、把「参与」说成「主导」、把「主张」说成「共识」，都属于过度引申——三个干扰项全是照这个配方造出来的。</p>
+<h3>第 1 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>过度引申在哪</th></tr></thead><tbody><tr><td>A 全球南北对话的僵局已经破解</td><td>❌</td><td>把「对话有进展」说成「僵局已破解」——南北发展失衡远未解决</td></tr><tr><td>B 「全球南方」在国际组织中的话语权和影响力占据了主导地位</td><td>❌</td><td>把「声音更响亮」说成「主导」——联大议程仍由多方博弈决定</td></tr><tr><td>C 改变国际秩序游戏规则的议题成为国际社会的普遍共识</td><td>❌</td><td>把「南方提出需求」说成「普遍共识」——变革诉求存在，共识远未普遍</td></tr><tr><td>D 国际力量对比深刻变化，百年变局深入发展演进</td><td>✅</td><td>与「声音更响亮」量级相称，且是现象背后的事实</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：「话语权和影响力上升」是真趋势，但「占据主导地位」是<strong>程度错误</strong>——发展中国家数量众多不等于在国际组织中已主导决策。</li><li><strong>误选 C</strong>：「改变国际秩序游戏规则」是南方的<strong>主张</strong>，主张存在≠已成为国际社会<strong>普遍共识</strong>；多数国家要的是秩序的改良完善，而非推倒重来。</li><li><strong>误选 A</strong>：见到「已经破解」这类<strong>绝对化的完成时表述</strong>要条件反射地警惕——时政选项里它几乎总是陷阱；事实的分寸是「上升、变化、演进」这类进行时。</li></ul>
+<blockquote>记忆锚点：全球南方＝新兴市场国家和发展中国家（非地理划分、非固定组织）；声音更响亮 → <strong>国际力量对比深刻变化、百年变局深入演进</strong>；见「已破解／占主导／普遍共识」先打问号。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

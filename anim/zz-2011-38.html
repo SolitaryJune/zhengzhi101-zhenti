@@ -1,8 +1,96 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-38 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-38</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-38 · 拆「两张脸」：真实的中国与中国的责任</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* 分析题答题思路推演：两张脸的失真机制 → 真实中国（两面+定性）→ 责任（第一义·内容·边界）→ 收口 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+function twoFaces(){
+  return '<div style="display:flex;gap:10px;flex-wrap:wrap;margin:2px 0 10px">' +
+    '<div style="flex:1;min-width:200px;border:1.5px solid #b91c1c;border-radius:10px;padding:8px 10px;background:#fef2f2">' +
+    '<b style="color:#b91c1c">唱红脸（捧）</b><br><span style="font-size:13px;color:#7f1d1d">夸大经济表现，捧成「独秀」「救世主」——意在让你背<b>超出阶段</b>的义务</span></div>' +
+    '<div style="flex:1;min-width:200px;border:1.5px solid #64748b;border-radius:10px;padding:8px 10px;background:#f1f5f9">' +
+    '<b style="color:#334155">唱白脸（批）</b><br><span style="font-size:13px;color:#475569">把金融危机、全球失衡的责任归到中国头上——意在<b>转嫁责任</b></span></div>' +
+    '</div><p style="font-size:13.5px;color:#334155">方向相反，功能相同：制造<b>失真的中国形象</b>，同宗于「中国责任论」——所以答题骨架＝纠偏。</p>';
+}
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：一红一白「两张脸」，都通向「中国责任论」',
+    body: '<p>金融危机后，某些西方政要、媒体对华言论用词翻新：有「独秀」「救世」之说，也有「责任」之论——<b>一白一红两张脸</b>，万变不离其宗。</p>' +
+          '<p>问：什么是「<b>真实的中国</b>」以及中国的「<b>责任</b>」是什么（10 分）。考点：中国的基本国情与国际责任。</p>' },
+  { tag: '立机制', cls: 'key', title: '立机制：两张脸同宗——答题骨架由「纠偏」决定',
+    body: twoFaces() },
+  { tag: '国情·成就面', cls: 'good', k: 1, pick: true, title: '真实的中国①：成就面——有能力承担相应责任',
+    body: '<p>改革开放以来取得<b>巨大发展成就</b>，经济总量居世界前列，国际影响力上升——中国有能力承担相应的国际责任，不容「唱衰」与甩锅。</p>' },
+  { tag: '国情·差距面', cls: 'good', k: 2, pick: true, title: '真实的中国②：差距面——不是「救世主」',
+    body: '<p>人口多、底子薄，<b>人均水平不高</b>，地区发展不平衡，发展任务繁重——「独秀」「救世」之说夸大其词，捧杀由此拆穿。</p>' },
+  { tag: '国情·定性', cls: 'good', k: 3, pick: true, title: '真实的中国③：定性——初级阶段、发展中国家',
+    body: '<p>综合两面，落脚定性：仍处于<b>社会主义初级阶段</b>，是<b>发展中国家</b>。两张脸共同的失真处，都脱离了这个基本定性——这是「真实的中国」的题眼。</p>' },
+  { tag: '责任①', cls: 'good', k: 4, pick: true, title: '中国的责任①：首先办好自己的事',
+    body: '<p>把十几亿人口大国的<b>改革发展稳定</b>搞好，本身就是对世界最大的贡献——责任链条的第一义、起点。</p>' },
+  { tag: '责任②', cls: 'good', k: 5, pick: true, title: '中国的责任②：按能力承担国际责任',
+    body: '<p>随着国力增长，做<b>负责任大国</b>：维护世界和平、参与国际合作和全球治理、促进共同发展——责任有具体内容，不是空泛表态。</p>' },
+  { tag: '责任③', cls: 'good', k: 6, pick: true, title: '中国的责任③：责任有边界——既不卸责，也不超载',
+    body: '<p>承担与自身<b>能力、发展阶段相适应</b>的责任：<b>既反对推卸应尽的责任</b>（拆「批」的脸），<b>也反对承担超出发展阶段的责任</b>（拆「捧」的脸）。</p>' },
+  { tag: '收口', cls: 'good', title: '收口：两面陈述国情 ＋ 责任边界 ＝ 同时拆掉两张脸',
+    body: '<p>顺着「救世」说多谈贡献，就接下超阶段义务；顺着「批」自辩，就默认失实责任——只有「<b>成就＋差距＋定性</b>」两面陈述、再给出「<b>第一义→内容→边界</b>」的责任层次，才能既纠捧又纠批。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: s.tag,
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2011-38 · 拆「两张脸」：真实的中国与中国的责任',
+  subtitle: '2011 年第 38 题（分析题 10 分）· 基本国情与国际责任 · 答题推演',
+  counterLabel: '得分点',
+  ribbonTitle: '答题得分点（✓ 已覆盖）',
+  intro: '点击「▶ 播放」：先看两张脸为何同宗，再按「真实的中国→责任→边界」逐层作答。',
+  snaps: snaps,
+  result: {
+    big: '答题框架',
+    html: '真实中国＝<b>成就面＋差距面＋初级阶段定性</b>；中国责任＝<b>首先办好自己的事 → 按能力担责（和平·合作·治理·发展）→ 责任有边界</b>。捧杀棒杀同宗，皆是「中国责任论」。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：拆「两张脸」——什么是真实的中国，中国负什么责任</h2>
+<p>题型：分析题（10 分）。答题要点：认识中国国情用<strong>全面的两点论</strong>——既有发展成就，也有人均水平较低、发展不平衡等现实，仍是<strong>发展中国家、处于社会主义初级阶段</strong>；中国的责任 = <strong>首先办好自己的事</strong>，再<strong>按能力、与发展阶段相适应地承担国际责任</strong>，既反对「借批卸责」，也不接受「明捧实压」。</p>
+<h3>第 0 步：先立机制——「两张脸」为什么万变不离其宗</h3>
+<p>材料给了西方某些人士两张脸：<strong>唱红脸</strong>者把中国捧成「独秀」「救世主」，<strong>唱白脸</strong>者把国际金融危机、全球失衡的责任推给中国。两张脸方向相反，功能相同：都制造了一个<strong>失真的中国形象</strong>，都服务于「中国责任论」——捧杀意在让中国承担<strong>超出能力与发展阶段</strong>的义务，棒杀意在<strong>转嫁责任</strong>。</p>
+<p>看清这一点，答题骨架就由「纠偏」决定了：用<strong>真实的中国</strong>（成就＋差距两面＋定性）拆「捧」的脸，用<strong>责任的边界</strong>拆「批」的脸——恰好全覆盖，一层都不能少。</p>
+<h3>第 1 层：什么是「真实的中国」——两点论，缺一面就是失真</h3>
+<table><thead><tr><th>维度</th><th>内容</th><th>拆哪张脸</th></tr></thead><tbody><tr><td>成就面</td><td>改革开放以来取得巨大发展成就，经济总量居世界前列，国际影响力上升</td><td>有能力承担相应国际责任——不容「唱衰」与甩锅</td></tr><tr><td>差距面</td><td>人口多、底子薄，人均水平不高，地区发展不平衡，发展任务繁重</td><td>中国不是「救世主」——「独秀」「救世」之说夸大其词</td></tr><tr><td>定性</td><td>仍处于<strong>社会主义初级阶段</strong>，是<strong>发展中国家</strong></td><td>两张脸共同的失真处：都脱离了这个基本定性</td></tr></tbody></table>
+<p>单说成就或单说差距都是片面——只有两面对照再落到定性上，才是「真实的中国」。</p>
+<h3>第 2 层：中国的「责任」是什么——有第一义、有内容、有边界</h3>
+<ol><li><strong>首先办好自己的事</strong>：把十几亿人口大国的改革发展稳定搞好，本身就是对世界最大的贡献——这是责任链条的起点；</li><li><strong>按能力承担国际责任</strong>：随着国力增长，做负责任大国——维护世界和平、参与国际合作和全球治理、促进共同发展；</li><li><strong>责任有边界</strong>：承担与自身能力、发展阶段相适应的责任——<strong>既反对推卸应尽的责任，也反对承担超出发展阶段的责任</strong>。</li></ol>
+<p><strong>预判追问：为什么不顺着「救世」之说多谈贡献？</strong> 材料明写捧杀者「动辄将一切不符合实际加诸中国」——顺着捧，就接下了超阶段的义务；顺着批，就默认了失实的责任。只有两面陈述国情＋给出责任边界，才能同时拆掉两张脸。</p>
+<h3>易错点</h3>
+<ul><li><strong>只答成就面</strong>：掉进「唱红脸」的框架，丢掉「初级阶段、发展中国家」的定性——而这恰是本题的定性核心，两张脸的失真都从这里算起。</li><li><strong>只谈差距、回避责任</strong>：变成单纯「哭穷」，丢掉「办好自己的事、负责任大国」的得分点。</li><li><strong>把责任写成无限兜底</strong>：「承担一切国际责任」违背「与能力和发展阶段相适应」的边界，等于接受了「中国责任论」的前提。</li><li><strong>漏「首先办好自己的事」</strong>：它是责任链条的第一义，漏掉则整个责任层次立不住。</li></ul>
+<blockquote>记忆锚点：真实中国 = <strong>成就 + 差距 + 初级阶段定性</strong>；中国责任 = <strong>办好自己的事 → 按能力担责（和平·合作·治理·发展）→ 责任有边界</strong>；捧杀棒杀同宗，皆是「中国责任论」。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

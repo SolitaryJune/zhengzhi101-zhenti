@@ -1,8 +1,88 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-04 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-04</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-04 · 新经济政策为什么"比较好"</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：一段话里的因果链',
+    cls: 'key',
+    body: '<p>邓小平的话：苏联没完全搞清楚 → <b>列宁思路比较好</b>（新经济政策）→ 但后来<b>模式僵化了</b>。问"比较好"的原因：僵化坏在脱离实际，好必然好在它的反面——<b>从实际出发</b>。</p>' },
+  { title: '立机制：新经济政策的"退却"',
+    cls: 'key',
+    body: '<p>1921 年，战时共产主义引发危机。列宁调整：粮食税代替余粮收集制、允许私人贸易、利用商品货币关系、租让制——核心是<b>退回俄国小农经济占优的现实</b>，迂回过渡。立足点从书本挪到国情。</p>' },
+  { title: '选项 A：提出了比较系统的建设纲领',
+    cls: 'bad', k: 1, pick: false,
+    body: '<p>新经济政策是危机中的<b>政策调整与探索起步</b>，谈不上"系统纲领"；列宁本人也说没完全搞清楚。与语境冲突，<b>排除</b>。</p>' },
+  { title: '选项 B：根据俄国实际探索建设道路',
+    cls: 'good', k: 2, pick: true,
+    body: '<p>从战时共产主义的教训退回现实，<b>实事求是</b>——这正是"思路比较好"的全部理由。<b>入选</b>。</p>' },
+  { title: '选项 C：找到了比较成熟的模式',
+    cls: 'bad', k: 3, pick: false,
+    body: '<p>与"后来苏联的模式<b>僵化</b>了"直接矛盾；新经济政策后来被中断，根本没来得及"成熟"。<b>排除</b>。</p>' },
+  { title: '选项 D：按马克思主义未来设想来建设',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p>恰恰相反：照搬"直接过渡"设想的战时共产主义碰了壁，新经济政策正是<b>放弃照搬设想</b>的产物。<b>排除</b>。</p>' },
+  { title: '结论：一"活"一"僵"，对照即答案',
+    cls: 'good',
+    body: '<p>A 抬高为"系统纲领"，C 说成"成熟模式"，D 说成"照搬设想"——三个都违背题干的探索语境。</p><p><b>答案 B。</b>记忆锚点：列宁思路好＝<b>从国情出发探索</b>；僵化＝脱离实际。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2011-04 · 列宁新经济政策为何"思路比较好"',
+  subtitle: '2011 年第 4 题（单选）· 考点：列宁新经济政策 · 逐项推演',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 正确 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先拆邓小平讲话的因果链，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '记忆锚点：<b>好＝从国情出发实事求是地探索，僵＝脱离实际</b>。A"系统纲领"、C"成熟模式"都超出探索期定位；D 与"放弃照搬设想"的方向恰好相反。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：新经济政策为什么"思路比较好"——从国情出发探索道路</h2>
+<p>答案：<strong>B（根据俄国的实际情况来探索社会主义建设的道路）</strong>。</p>
+<h3>第 0 步：先立机制——邓小平这段话的内在结构</h3>
+<p>题干引用邓小平的话，其实藏着一条因果链：</p>
+<blockquote>苏联搞了很多年"并没有完全搞清楚" → "可能<strong>列宁的思路比较好</strong>，搞了个新经济政策" → "但后来苏联的<strong>模式僵化了</strong>"。</blockquote>
+<p>问题问的是：列宁思路"比较好"的<strong>原因</strong>是什么？把整段话读通：僵化的模式坏在<strong>脱离实际、把探索成果固化</strong>；那么列宁的好，必然好在它的反面——<strong>从俄国实际出发去探索</strong>，而不是按某种现成设想办事。</p>
+<h3>第 1 步：新经济政策干了什么</h3>
+<p>1921 年，战时共产主义政策使苏俄经济与政治危机加深。列宁果断调整：以<strong>粮食税代替余粮收集制</strong>，允许私人贸易、利用商品货币关系，实行国家资本主义（租让制）……核心动作是<strong>退却</strong>——从"直接过渡"的设想退回到小农经济占优势的俄国现实，"迂回过渡"。这个"退"不是放弃社会主义，而是<strong>把社会主义建设的立足点从书本挪到了国情</strong>。</p>
+<h3>第 2 步：逐项对号</h3>
+<ul><li><strong>A 提出了比较系统的社会主义建设纲领</strong>：新经济政策是危机中的<strong>政策调整与探索起步</strong>，谈不上系统纲领；连列宁本人也承认没有完全搞清楚——"系统纲领"与题干语境直接冲突。</li><li><strong>B 根据俄国的实际情况来探索社会主义建设的道路</strong> ✅：从战时共产主义的教训退回现实，实事求是——这正是"思路比较好"的全部理由。</li><li><strong>C 为俄国找到了一种比较成熟的社会发展模式</strong>：与"后来苏联的模式僵化了"相矛盾；而且新经济政策后来被中断，根本没来得及成熟。</li><li><strong>D 按照马克思主义关于未来社会主义的设想来建设社会主义</strong>：恰恰相反——"直接按设想过渡"的战时共产主义碰了壁，新经济政策正是<strong>放弃照搬设想</strong>的产物。</li></ul>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 D</strong>：把"坚持马克思主义"与"按设想办事"混为一谈。列宁的好思路恰恰是<strong>用马克思主义的方法分析俄国实际</strong>，而不是套用对未来社会的设想。</li><li><strong>误选 A</strong>：觉得大政策必是"大纲领"。考题故意用"比较系统"抬高门槛——探索期的调整，谈不上系统。</li><li><strong>误选 C</strong>：没抓住题干"模式僵化了"的对照提示：列宁之"好"是探索之好，不是定型之好。</li></ul>
+<blockquote>记忆锚点：列宁思路好＝<strong>从国情出发、实事求是地探索</strong>；僵化模式坏＝脱离实际。一"活"一"僵"，对照即答案。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

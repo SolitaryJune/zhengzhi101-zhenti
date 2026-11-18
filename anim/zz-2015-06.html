@@ -1,8 +1,138 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-06 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-06</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2015·06 邓小平十三大前夕谈话：把初级阶段作为基本国情把握</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>题眼：「十三大<b>召开前夕</b>」「一切都要<b>从这个实际出发</b>」。四个选项都是「首次……」——判断首次类选项必须先摆<b>时间线</b>。</p>",
+    "log": "题眼：「首次」比大小，先摆时间线"
+  },
+  {
+    "title": "先立机制：初级阶段理论时间线",
+    "cls": "key",
+    "body": "<p><b>1981</b> 年十一届六中全会决议：<b>首次提出</b>初级阶段概念；<b>1987.10</b> 党的十三大：<b>首次系统阐述</b>初级阶段理论，以此为总依据制定基本路线；十三大<b>召开前夕</b>邓小平谈话：把「共产主义的初阶段」（一般）与「中国的不发达阶段」（特殊）<b>两层定位</b>叠加。</p>",
+    "log": "1981 首提概念，十三大系统阐述，前夕谈话作定位"
+  },
+  {
+    "title": "C：作为事关全局的基本国情加以把握",
+    "cls": "good",
+    "ribbon": {
+      "k": 3,
+      "ok": true
+    },
+    "body": "<p>「一切都要从这个实际出发，根据这个实际来制定规划」——把初级阶段当作<b>想问题办事情的全局出发点</b>，即作为事关全局的基本国情加以把握。<b>C 正确</b>。</p>",
+    "log": "「一切从这个实际出发」=全局出发 → 选 C"
+  },
+  {
+    "title": "A：首次提出概念——是1981年决议",
+    "cls": "bad",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "body": "<p>「社会主义初级阶段」概念<b>首次提出</b>于 1981 年十一届六中全会《历史决议》，早于这段谈话——时间对不上。<b>A 错误</b>。</p>",
+    "log": "概念首提在1981 → A 不选"
+  },
+  {
+    "title": "B：首次系统阐述——主体是十三大报告",
+    "cls": "bad",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    },
+    "body": "<p><b>系统阐述</b>的主体是十三大报告本身，不是召开前夕的谈话——「前夕谈话≠大会报告」，主体错位是本题埋的钩子。<b>B 错误</b>。</p>",
+    "log": "系统阐述=十三大报告 → B 不选"
+  },
+  {
+    "title": "D：首次划分发展阶段——无此说法",
+    "cls": "bad",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "body": "<p>谈话做的是<b>定位</b>（中国处在什么阶段），不是<b>划分</b>（把社会主义分成几个阶段），也谈不上「首次」。<b>D 错误</b>。</p>",
+    "log": "定位≠划分 → D 不选"
+  },
+  {
+    "title": "追问：初级阶段是所有国家的必经阶段吗？",
+    "cls": "key",
+    "body": "<p>不是。初级阶段<b>不是泛指任何国家进入社会主义都要经历的起始阶段</b>，而是我国在生产力落后、商品经济不发达条件下建设社会主义<b>必然经历的特定阶段</b>——由我国特定国情决定，所以「一切都要从这个实际出发」。</p>",
+    "log": "特定国情决定特定阶段 → 呼应 C"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>C</b>：首次把初级阶段作为<b>事关全局的基本国情</b>加以把握。记忆锚点：概念首提=1981 决议；系统阐述=十三大；前夕谈话=基本国情的全局把握。</p>",
+    "log": "锁定 C：作为基本国情把握"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "邓小平十三大前夕谈话：把初级阶段作为基本国情把握",
+  subtitle: "考点：社会主义初级阶段 · 「首次」类选项先摆时间线",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 C",
+    html: "记忆锚点：概念首提=<b>1981 年决议</b>；系统阐述=<b>十三大</b>；十三大前夕谈话=把初级阶段作为<b>事关全局的基本国情</b>把握——「一切都要从这个实际出发」。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：邓小平十三大前夕的论述——把初级阶段作为事关全局的基本国情把握</h2>
+<p>答案：<strong>C（首次把社会主义初级阶段作为事关全局的基本国情加以把握）</strong>。</p>
+<h3>第 0 步：先立机制——初级阶段理论的时间线</h3>
+<p>判断「首次」类选项必须先摆时间线：</p>
+<table><thead><tr><th>时间</th><th>事件</th><th>与「首次」的对应</th></tr></thead><tbody><tr><td>1981 年</td><td>十一届六中全会《关于建国以来党的若干历史问题的决议》</td><td><strong>首次提出</strong>「社会主义初级阶段」概念（对应 A）</td></tr><tr><td>1987 年</td><td>十三大前夕邓小平这段谈话</td><td>论述了<strong>两层定位</strong>：社会主义本身是共产主义的初阶段 + 中国处于初级阶段（不发达阶段）</td></tr><tr><td>1987 年 10 月</td><td>党的十三大</td><td><strong>首次系统阐述</strong>社会主义初级阶段理论（对应 B），并以此为<strong>总依据</strong>制定基本路线</td></tr></tbody></table>
+<p>题干是「十三大<strong>召开前夕</strong>」的谈话：它把「社会主义一般定位（共产主义的初阶段）」与「中国特殊定位（初级阶段=不发达阶段）」<strong>两个层次叠在一起</strong>，强调「一切都要从这个实际出发」——即把初级阶段上升为<strong>想问题、办事情的出发点</strong>，作为事关全局的基本国情加以把握。这正是 C。</p>
+<h3>第 1 步：干扰项各自错在哪</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>错因</th></tr></thead><tbody><tr><td>A 首次提出初级阶段概念</td><td>❌</td><td>时间对不上：首次提出是 <strong>1981 年</strong>十一届六中全会决议，早于这段谈话</td></tr><tr><td>B 首次系统阐述初级阶段理论</td><td>❌</td><td>主体对不上：系统阐述是<strong>十三大报告</strong>本身，不是召开前夕的谈话</td></tr><tr><td>C 首次把初级阶段作为事关全局的基本国情加以把握</td><td>✅</td><td>两层定位+「一切从这个实际出发」，正是把初级阶段当作全局出发点的表述</td></tr><tr><td>D 首次对社会主义发展阶段进行划分</td><td>❌</td><td>既无此「首次」，也不是这段谈话的内容</td></tr></tbody></table>
+<h3>第 2 步：预判追问——「初级阶段」是所有社会主义国家都要走的吗？</h3>
+<p>不是。这段话的深意在于：初级阶段<strong>不是泛指任何国家进入社会主义都要经历的起始阶段</strong>，而是<strong>我国在生产力落后、商品经济不发达条件下建设社会主义必然要经历的特定阶段</strong>——由我国特定国情决定。所以「一切都要从这个实际出发」的「实际」，就是中国的国情。C 把这个「国情=全局出发点」的含义点出来，与谈话精神严丝合缝。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 B（「系统阐述」听着最像大话）</strong>：「系统阐述」的主体是十三大报告这个文件；题干问的是<strong>这段谈话</strong>本身——「前夕谈话」≠「大会报告」，主体错位是命题人埋的钩子。</li><li><strong>选 A（概念第一次出现就是它）</strong>：只记住了十三大与初级阶段绑定，忘了概念最早出现在 1981 年决议。</li><li><strong>选 D（「划分」与「定位」混淆）</strong>：谈话做的是<strong>定位</strong>（中国处在什么阶段），不是<strong>划分</strong>（把社会主义分成几个阶段）。</li></ul>
+<blockquote>记忆锚点：概念首提=<strong>1981 年决议</strong>；系统阐述=<strong>十三大</strong>；十三大前夕谈话=把初级阶段作为<strong>事关全局的基本国情</strong>把握——「一切都要从这个实际出发」。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

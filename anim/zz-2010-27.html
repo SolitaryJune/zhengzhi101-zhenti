@@ -1,8 +1,95 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-27 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-27</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-27 · 农村包围城市道路的依据</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261117a">
+</head>
+<body>
+<!-- 概念/推理链模板：机制先行 → 四条依据逐项对号（多选 ABCD） -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261117a"></script>
+<script>
+/* ================== 题目专属区域（依据 zz-2010-27 题干与 refAnalysis 编写） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：问的是“根据”，到国情里找',
+    body: '<p>邓小平：“马克思、列宁从来没有说过农村包围城市……毛泽东同志根据中国的<b>具体条件</b>指明了革命的具体道路。”</p><p>题问找到这条道路的<b>根据</b>——独创的道路必从国情分析里“长”出来，四个选项都是“中国的具体条件”。</p>',
+    log: '审题：问“根据”→ 到中国国情里找' },
+  { tag: '机制', cls: 'key', title: '机制先行：俄国“城市中心论”为何水土不服',
+    body: '<p>俄国道路走通靠三前提：城市工人集中且政党强大；有可利用的合法斗争缝隙；敌人前线崩溃、后方空虚。</p><p>大革命失败后的中国<b>三条全反</b>：内无民主制度、外无民族独立、农民占绝大多数——所以道路必须另起炉灶。</p>',
+    log: '机制：俄国三前提，中国三条全反 → 只能从国情另找路' },
+  { tag: '依据D', cls: 'good', title: 'D 经济政治发展不平衡 —— 总根源',
+    body: '<p>经济上农村可脱离城市自给自足，政治上白色政权（军阀）分裂混战——红色政权才能在四周白色政权的包围中<b>长期存在和发展</b>。</p><p>这是四条依据的总根源：没有它，后三条没有落脚的地。<b>D 对</b>。</p>',
+    ribbon: { k: 4, ok: true },
+    log: 'D＝总根源：红色政权存在发展的立足之地' },
+  { tag: '依据A', cls: 'good', title: 'A 内无民主制度，外无民族独立 —— 只能武装',
+    body: '<p>两个“没有”堵死了合法议会斗争的一切可能——没有舞台、没有空间，武装斗争成为<b>唯一的必然形式</b>。</p><p>政权条件决定斗争形式：枪杆子里出政权。<b>A 对</b>。</p>',
+    ribbon: { k: 1, ok: true },
+    log: 'A 定斗争形式：没有合法舞台 → 只能武装夺取政权' },
+  { tag: '依据B', cls: 'good', title: 'B 农民占绝大多数，是主力军 —— 重心在农村',
+    body: '<p>产业工人少、农民占人口绝大多数——到农村去，就是到<b>主力军</b>所在的地方去，深入土地革命。</p><p>力量所在决定革命重心。<b>B 对</b>。</p>',
+    ribbon: { k: 2, ok: true },
+    log: 'B 定力量重心：农民的大海 → 重心放到农村' },
+  { tag: '依据C', cls: 'good', title: 'C 敌人占据中心城市，农村是薄弱环节 —— 先农村后城市',
+    body: '<p>敌人长期占据中心城市，广大农村是统治的<b>薄弱环节</b>——避实击虚，先在薄弱处站住脚。</p><p>敌我分布决定进攻顺序。<b>C 对</b>。</p>',
+    ribbon: { k: 3, ok: true },
+    log: 'C 定进攻顺序：绕开硬核桃，扎根薄弱处' },
+  { tag: '结论', cls: 'good', title: '收束：四条依据环环相扣，缺一不可',
+    body: '<p>一条逻辑链：D 给<b>立足之地</b> → A 定<b>斗争形式</b> → B 定<b>力量重心</b> → C 定<b>进攻顺序</b>。</p><p>少了 D 没根基、少 A 不知为何武装、少 B 不知为何去农村、少 C 不知为何站得住。</p>',
+    log: '结论：ABCD，四条国情依据环环相扣' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag,
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon,
+    done: last,
+  };
+});
+
+AW.init({
+  title: 'zz-2010-27 · 农村包围城市、武装夺取政权道路的依据（多选）',
+  subtitle: '考点：农村包围城市道路 · 机制先行（城市中心论为何水土不服）+ 四条国情依据逐项对号',
+  ribbonTitle: '选项 A–D 逐个点亮（✓ 对）',
+  intro: '点击「▶ 播放」：先看俄国道路为何水土不服，再按总根源 → 斗争形式 → 力量重心 → 进攻顺序逐项核对。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '记忆锚点：<b>不平衡的国情是根（D）＋没有议会舞台才武装（A）＋农民的大海定重心（B）＋城市硬核桃、农村薄弱皮定顺序（C）</b>。<br>一条逻辑链：D 给立足之地 → A 定斗争形式 → B 定力量重心 → C 定进攻顺序——合成“农村包围城市、武装夺取政权”，四条依据缺一不可。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：农村包围城市——四条国情依据环环相扣推出一条路</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——俄国道路为什么在中国"水土不服"</h3>
+<p>道路题不能背选项，先看"城市中心论"能走通靠什么。俄国十月革命依托三个前提：城市里有集中的产业工人和强大的无产阶级政党；统治者有可利用的合法斗争缝隙；敌人前线崩溃、后方空虚。大革命失败后的中国恰恰三条全反：<strong>内无民主制度</strong>（没有议会、工会可作合法斗争的舞台），<strong>外无民族独立</strong>（帝国主义直接豢养军阀，武装到牙齿），产业工人人数少、农民占人口绝大多数。邓小平引言正是点明：这条道路不是从马列本本里抄来的，而是毛泽东"根据中国的具体条件"——即从国情分析里"长"出来的。题问"根据"，问的就是这四条国情依据。</p>
+<h3>第 1 步：四条依据各答一个"为什么"</h3>
+<table><thead><tr><th>依据</th><th>回答的问题</th><th>推出的结论</th></tr></thead><tbody><tr><td>D 经济政治发展不平衡</td><td>红色政权为什么能在夹缝里<strong>存在</strong></td><td>总根源：自然经济自给自足、白色政权分裂混战</td></tr><tr><td>A 内无民主制度、外无民族独立</td><td>为什么必须<strong>武装</strong>夺取政权</td><td>没有合法舞台，只能枪杆子里出政权</td></tr><tr><td>B 农民占绝大多数、是主力军</td><td>重心为什么放在<strong>农村</strong></td><td>到主力军所在的地方去，深入土地革命</td></tr><tr><td>C 敌人占据中心城市、农村是薄弱环节</td><td>为什么能<strong>先农村后城市</strong></td><td>避实击虚，先在薄弱处站住脚</td></tr></tbody></table>
+<p>四条是环环相扣的一条逻辑链，不是并列的散点：D 给立足之地，A 定斗争形式，B 定力量重心，C 定进攻顺序——合成"农村包围城市、武装夺取政权"的完整道路。</p>
+<h3>第 2 步：预判追问</h3>
+<ul><li><strong>为什么 D 是"总根源"？</strong> 经济上农村可以脱离城市自给自足，政治上军阀割据混战使白色政权之间有裂缝——红色政权才能在四周白色政权的包围中长期存在和发展；没有这条，后三条都没有落脚的地。</li><li><strong>为什么 A 决定"武装"？</strong> 两个"没有"（没有民主制度可利用、没有民族独立可言）堵死了合法议会斗争的一切可能，武装斗争于是成为唯一的必然形式。</li><li><strong>引邓小平的话有何用意？</strong> 强调这是"当时世界上还没有的"独创——凡独创必从具体国情出发，所以四个选项都是"中国的具体条件"，缺一不可。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>漏选 D（觉得"发展不平衡"是空话）</strong>：不平衡恰是全部依据的总根源，是革命"长期存在"两字的靠山——最典型的漏选项。</li><li><strong>漏选 A（把武装斗争当默认前提）</strong>：不问"为什么偏偏是武装"，忘了两个"没有"才是武装的必然性来源。</li><li><strong>把道路的内容当依据</strong>：党的领导、土地革命、武装斗争是"工农武装割据"的内容要素；本题问的是国情<strong>依据</strong>，两问别混。</li></ul>
+<blockquote>记忆锚点：不平衡的国情是根（D）＋没有议会舞台才武装（A）＋农民的大海定重心（B）＋城市硬核桃、农村薄弱皮定顺序（C）→ 绕开硬核桃，扎根薄弱处。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

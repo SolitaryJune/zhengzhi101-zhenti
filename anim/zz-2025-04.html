@@ -1,8 +1,139 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2025-04 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2025-04</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2025·04 列宁「一国胜利论」的依据</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版）：逐步展开推理卡片，只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行环节格：三环推理链（不平衡 → 链条强弱 → 薄弱环节突破）
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: "审题眼：结论与依据分开",
+    cls: "key",
+    log: "题眼：首先在一国或数国胜利——依据是什么",
+    body: "<p>1916 年《无产阶级革命的军事纲领》：社会主义「将<b>首先在一个或者几个国家</b>内获得胜利，而其余的国家在一段时间内将仍然是资产阶级的或资产阶级以前的国家」。注意题目问的是这条结论的<b>依据</b>——不是同期的其他论断。</p>"
+  },
+  {
+    title: "先立模型：前提变了，结论跟着变",
+    cls: "key",
+    log: "模型：同时胜利论 → 一国胜利论的推理链",
+    body: "<p>马恩时代（自由竞争资本主义）：各国发展接近、危机大体同步 → 革命将在主要资本主义国家<b>大体同时</b>发生。垄断资本主义时代：前提变成<b>发展不平衡</b>，结论随之变为<b>首先一国或数国胜利</b>。</p>" + cells([
+      {t:"① 前提<br>各国发展<br>极不平衡", c:"key", l:"第一环"},
+      {t:"② 中间<br>统治链条<br>有强有弱", c:"", l:"第二环"},
+      {t:"③ 结论<br>最薄弱环节<br>首先突破", c:"ok", l:"第三环"}
+    ])
+  },
+  {
+    title: "追问：为什么「不平衡」能推出「首先一国胜利」",
+    cls: "step",
+    log: "革命爆发地点看链条强弱，不按发达程度排座次",
+    body: "<p>不平衡使各种矛盾<b>集中</b>在统治链条的薄弱处（统治最脆弱、矛盾最尖锐的国家），突破自然从薄弱环节开始——一国或数国<b>率先</b>胜利，其余国家暂时留在旧体系里。这正是题干引文的完整含义。</p>"
+  },
+  {
+    title: "C 对号入座：发展极不平衡",
+    cls: "good",
+    log: "依据＝不平衡规律 → 选 C",
+    ribbon: {k: 3, ok: true},
+    body: "<p>「资本主义的发展在各个国家是<b>极不平衡的</b>」正是推理链的第一环，也是全部结论的依据。1915《论欧洲联邦口号》首提、1916《无产阶级革命的军事纲领》重申。<b>C 正确</b>。</p>"
+  },
+  {
+    title: "A 国际大联盟已经形成",
+    cls: "bad",
+    log: "A 与史实相反，且推出的是「同时胜利」",
+    ribbon: {k: 1, ok: false},
+    body: "<p>1914 年大战爆发、第二国际已经破产——「大联盟已经形成」与史实相反；况且联盟若真形成，推出的应是<b>联合行动、同时胜利</b>，恰与题干结论相反。<b>A 错误</b>。</p>"
+  },
+  {
+    title: "B 普选制创造新条件",
+    cls: "bad",
+    log: "B 是改良主义调子，方向相反",
+    ribbon: {k: 2, ok: false},
+    body: "<p>「普选制为社会主义革命创造新条件」走的是<b>议会改良</b>路子（伯恩施坦式），恰是列宁批判的对象；与「武装突破薄弱环节」的一国胜利论方向相反。<b>B 错误</b>。</p>"
+  },
+  {
+    title: "D 革命意识与经济水平正相关",
+    cls: "bad",
+    log: "D 若成立，革命应首先爆发于最发达国家",
+    ribbon: {k: 4, ok: false},
+    body: "<p>「正相关」预设革命按经济水平排座次——最发达国家先革命；而薄弱环节逻辑恰恰相反：矛盾集中在链条薄弱处，俄国正是<b>中等发展程度</b>的国家率先突破。<b>D 错误</b>。</p>"
+  },
+  {
+    title: "结论",
+    cls: "good",
+    log: "锁定 C：发展不平衡是依据",
+    body: "<p>答案 <b>C</b>。记忆锚点：垄断阶段 → <b>发展极不平衡</b> → 帝国主义链条有薄弱环节 → <b>一国或数国首先胜利</b>。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || (last ? '完成' : '第 ' + i + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "政治 2025·04 列宁「一国胜利论」的依据",
+  subtitle: "考点：一国胜利论 · 方法：三环推理链（不平衡 → 链条强弱 → 薄弱环节）",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」沿推理链展开：审题 → 立模型 → 对号 → 结论。",
+  snaps: snaps,
+  result: {
+    big: "答案 C",
+    html: "答案 <b>C</b>：垄断阶段 → <b>发展极不平衡</b> → 链条有薄弱环节 → <b>首先在一国或数国胜利</b>（1915《论欧洲联邦口号》首提，1916 重申）。A 与史实相反，B 是改良主义调子，D 的「正相关」会把革命推给最发达国家——与薄弱环节逻辑相反。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：列宁「一国胜利论」的依据</h2>
+<p>答案：<strong>C（资本主义的发展在各个国家是极不平衡的）</strong>。</p>
+<h3>第 0 步：先立模型——结论变了，是因为时代前提变了</h3>
+<p>先把新旧结论的对比立起来：马恩在自由竞争资本主义时代的判断是，社会主义革命将在主要资本主义国家<strong>大体同时</strong>发生（「同时胜利论」）——因为那时各国发展水平接近、危机大体同步。到垄断资本主义（帝国主义）时代，前提变了，结论跟着变。列宁的推理链分三环：</p>
+<table><thead><tr><th>环节</th><th>内容</th><th>作用</th></tr></thead><tbody><tr><td>① 前提</td><td>垄断阶段各国经济政治发展<strong>极不平衡</strong>（后起国家如德国、日本跳跃式赶超老牌国家）</td><td>全部推理的出发点</td></tr><tr><td>② 中间</td><td>不平衡 → 帝国主义统治体系的<strong>链条有强有弱</strong>，革命不会在各处同时成熟</td><td>由前提推出战场分布</td></tr><tr><td>③ 结论</td><td>社会主义可能<strong>在链条最薄弱的环节首先突破</strong>——「首先在一个或者几个国家内获得胜利」</td><td>题干引文</td></tr></tbody></table>
+<p>出处链：1915 年《论欧洲联邦口号》<strong>首次提出</strong>，1916 年《无产阶级革命的军事纲领》<strong>再次申明</strong>（本题引文）。整条链的第一环——也就是全部结论的依据——就是<strong>资本主义发展不平衡规律</strong>。选 C。</p>
+<h3>第 1 步：预判追问——为什么「不平衡」能推出「首先一国胜利」</h3>
+<p>因为「革命在哪里爆发」由<strong>统治链条的强弱</strong>决定，而不是按经济发展水平排座次：不平衡使矛盾集中在链条的薄弱处（各种矛盾交织、统治最脆弱的国家），突破自然从薄弱环节开始——一国或数国<strong>率先</strong>胜利，其余国家暂时留在旧体系里，这正是题干引文的完整含义。</p>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因</th></tr></thead><tbody><tr><td>A 世界各国无产阶级的国际大联盟已经形成</td><td>❌</td><td>与史实相反（1914 年大战爆发、第二国际已经破产）；且「联盟形成」即便成立，推出的应是「联合行动、同时胜利」，恰与题干结论相反</td></tr><tr><td>B 资本主义的普选制为社会主义革命创造了新条件</td><td>❌</td><td>「议会道路可行」是第二国际改良主义（伯恩施坦路线）的调子，恰是列宁批判的对象，与「武装突破薄弱环节」方向相反</td></tr><tr><td>C 资本主义的发展在各个国家是极不平衡的</td><td>✅</td><td>推理链第一环与全部依据：不平衡 → 链条强弱不均 → 薄弱环节首先突破</td></tr><tr><td>D 工人阶级的革命意识与经济发展水平呈正相关性</td><td>❌</td><td>若正相关，革命应首先爆发于<strong>最发达</strong>国家；薄弱环节逻辑恰恰相反——俄国正是中等发展程度的国家，「落后国家率先突破」正是由此获得理论空间</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 D（把「革命地点」与「发达程度」挂钩）</strong>：最像「正经分析」的干扰项。它预设革命与经济水平成正比，而列宁的洞见正是不平衡造成<strong>矛盾集中点</strong>——革命爆发的地点看链条强弱，不看座次高低。</li><li><strong>记错出处链</strong>：首提是 1915《论欧洲联邦口号》，1916《无产阶级革命的军事纲领》是<strong>重申</strong>；考「依据」时，两个文本共同指向的都是<strong>不平衡规律</strong>。</li></ul>
+<blockquote>记忆锚点：垄断阶段 → <strong>发展极不平衡</strong> → 帝国主义链条有薄弱环节 → <strong>社会主义在一国或数国首先胜利</strong>（1915《论欧洲联邦口号》首提，1916《无产阶级革命的军事纲领》重申）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

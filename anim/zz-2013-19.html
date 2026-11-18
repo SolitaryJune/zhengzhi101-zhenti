@@ -1,8 +1,89 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-19 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-19</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-19 · 资本的本质与贪欲（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼：贪欲为什么"长"在资本主义身上',
+    body: '<p>穆尔的纪录片把资本主义叫"贪欲之爱"。题目问的是：对金钱的贪欲为什么与资本主义<b>连为一体</b>——注意问的是<b>制度根源</b>，不是个人心理。在人性里找答案是陷阱，要在资本的本质规定里找。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行：资本的三环链条',
+    body: '<ul><li><b>资本是什么</b>：不是物，是能带来剩余价值的价值，体现剥削关系；</li><li><b>资本怎么活</b>：生命在于不断运动、不断增殖（G—W—G′），停下就"死"；</li><li><b>谁在开车</b>：资本家是人格化的资本——资本要求增殖，他就必须执行。</li></ul><p>贪欲是这三环链条的现象层表现：制度要求永远贪，人只是执行者。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true },
+    title: '选项 A：资本家是人格化的资本 —— 对',
+    body: '<p>把"贪"从品德问题转成<b>生产关系</b>问题：驱动资本家的不是私人欲望，而是资本增殖的职能在他身上执行。</p><p>A 对。</p>' },
+  { cls: 'bad', tag: 'B 排除', ribbon: { k: 2, ok: false },
+    title: '选项 B：赚钱体现了人的天然本性 —— 错',
+    body: '<p>本题要正面驳斥的<b>人性论</b>解释。追求增殖不是人的自然本性，而是资本主义私有制这一<b>特定生产关系</b>的产物：劳动力成为商品、货币转化为资本之后，"增殖"才成为社会的绝对律令。</p><p>把生产关系造成的冲动说成天然本性，等于把资本主义永恒化。B 错。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: '选项 C：资本的生命在于不断运动和不断增殖 —— 对',
+    body: '<p>资本一旦停止增殖就不再是资本——这种"必须永远贪下去"的运动性，正是贪欲与资本主义连为一体的机制。</p><p>C 对。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true },
+    title: '选项 D：追逐剩余价值是资本主义生产方式的绝对规律 —— 对',
+    body: '<p>剩余价值规律是资本主义的基本经济规律，决定生产的一切主要方面；"贪欲"就是这条规律在现象层面的表现。</p><p>D 对。</p>' },
+  { cls: 'key', tag: '陷阱拆解',
+    title: 'B 的迷惑点：把制度性冲动读成人性',
+    body: '<p>B 看起来"谁不爱钱"——但前资本主义社会里货币大多只是购买手段，赚钱并未成为全社会的绝对律令。同一个"人"，换一种生产关系就换一种行为动机，可见动机来自<b>制度</b>而非本性。</p><p>识破标志：凡用"天然""本性""永远如此"解释某种特定社会现象的选项，先怀疑它是把历史的东西永恒化。</p>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 ACD',
+    body: '<p>答案 <b>ACD</b>：资本家是人格化的资本（A）、资本的生命在于不断运动增殖（C）、追逐剩余价值是绝对规律（D）；B 把制度性冲动说成天然本性，是人性论陷阱。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2013·19】贪欲为什么长在资本身上（多选）',
+  subtitle: '考点：剩余价值与资本本质 · 人格化资本 · 绝对规律',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '<b>贪欲不写在基因里，写在资本里</b>：资本要增殖（C），资本家是人格化的资本（A），追逐剩余价值是资本主义生产方式的绝对规律（D）。<br>干扰项 B 用"天然本性"解释制度性冲动——动机随生产关系改变，恰恰证明它不是人性。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：贪欲为什么长在资本主义身上——资本不是钱，是关系</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——"贪欲"的根源在资本的本质，不在人性</h3>
+<p>穆尔把资本主义叫"贪欲之爱"，本题问的是这个"贪欲"为什么偏偏与资本主义连为一体。答案不在人性论里找，要在<strong>资本的本质规定</strong>里找。马克思的链条是三环相扣的：</p>
+<table><thead><tr><th>环节</th><th>原理</th><th>推出的后果</th></tr></thead><tbody><tr><td>资本是什么</td><td>资本不是物，是能带来剩余价值的价值，体现着剥削关系</td><td>拥有它的人必须不断追逐增殖，否则它就不成其为资本</td></tr><tr><td>资本怎么活</td><td>资本的生命在于不断运动、不断增殖（G—W—G'）</td><td>一旦停下，价值不再增殖，资本就死了——所以它必须永远贪</td></tr><tr><td>谁在开车</td><td>资本家是人格化的资本</td><td>资本家的贪不是个人品德，而是资本职能在人的身上的执行</td></tr></tbody></table>
+<p>第三环最关键：资本家赚钱不是因为他"天生爱钱"，而是因为他是<strong>资本的人格化</strong>——资本要求增殖，他就必须去追逐剩余价值。</p>
+<h3>逐项对号入座</h3>
+<ul><li><strong>A 对</strong>："资本家是人格化的资本"——把"贪欲"从个人品性问题转成生产关系问题：驱动资本家的是资本增殖的职能，不是他的私人欲望。</li><li><strong>C 对</strong>："资本的生命在于不断运动和不断增殖"——资本一旦停止增殖就不再是资本；这种"必须永远贪下去"的运动性，正是贪欲与资本主义"连为一体"的机制。</li><li><strong>D 对</strong>："追逐剩余价值是资本主义生产方式的绝对规律"——剩余价值规律是资本主义的基本经济规律，决定其生产的一切主要方面；"贪欲"就是这个规律在现象层面的表现。</li></ul>
+<h3>为什么 B 是干扰项</h3>
+<ul><li><strong>B 错</strong>："赚钱体现了人的天然本性"——这正是本题要正面驳斥的<strong>人性论解释</strong>。追求增殖不是人的自然本性，而是<strong>资本主义私有制这种特定生产关系</strong>的产物：在前资本主义社会，货币大多只是购买手段；只有当劳动力成为商品、货币转化为资本时，"赚钱—增殖"才成为社会运行的绝对律令。把生产关系造成的行为说成天然本性，就否认了它是历史地产生、也将历史地消亡的东西——这恰是资产阶级意识形态想把资本主义永恒化的手法。</li></ul>
+<blockquote>记忆锚点：贪欲不写在基因里，写在资本里——<strong>资本 = 带来剩余价值的价值</strong>（要增殖），<strong>资本家 = 人格化的资本</strong>（被迫贪），<strong>绝对规律 = 追逐剩余价值</strong>（贪的制度化）；说成"天然本性"（B）就上了人性论的当。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

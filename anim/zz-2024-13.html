@@ -1,8 +1,127 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-13 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-13</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2024·13 解放战争后期中共中央建立的制度</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链模板壳（无外部依赖），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：先抓「形势 → 需求 → 对策」因果链",
+    "cls": "key",
+    "body": "<p>题干不是在考名词，而是给了一条因果链：<b>形势</b>——1948 年解放区连成一片、城市解放、解放军正规化，全国胜利在望；<b>需求</b>——克服党内军内的无纪律无政府状态，把必须和可能集中的权力<b>集中于中央</b>；问落到哪个<b>制度</b>上。</p>",
+    "log": "形势→需求→对策，三段抓题"
+  },
+  {
+    "title": "先立机制：集中靠纪律落地",
+    "cls": "key",
+    "body": "<p>分散游击年代“各自为战、先斩后奏”的习惯，撑不起正规化大兵团作战和接管城市。集中权力靠什么落地？靠<b>纪律</b>：定期报告让中央掌握全局，重大事项先请示后行动——「加强纪律性，革命无不胜」正是这个语境。</p>",
+    "log": "集中 = 纪律：一报一请"
+  },
+  {
+    "title": "制度落点：1948 年两份文件",
+    "cls": "key",
+    "body": "<p><b>1948 年 1 月</b>毛泽东起草《关于建立报告制度》党内指示——各中央局、分局定期向中央作综合报告；<b>1948 年 9 月</b>中央政治局会议（九月会议）通过决议，划清必须请示与报告的事项——<b>请示报告制度</b>系统建立。</p>",
+    "log": "1948.1 指示 + 1948.9 决议"
+  },
+  {
+    "title": "A. 精兵简政制度——1941 抗战政策",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>精兵简政是 <b>1941 年</b>陕甘宁边区采纳<b>李鼎铭</b>建议实行的政策，解决的是抗战时期根据地的财政负担——时间在抗战、主题在精简机构，与 1948 年“集中权力、加强纪律”双不符。<b>不选</b>。</p>",
+    "log": "A = 1941 精兵简政 ✗"
+  },
+  {
+    "title": "B. 请示报告制度——正中 1948",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p><b>报告</b>让中央随时掌握全局，<b>请示</b>让重大行动先经中央批准——一报一请，权力顺着纪律管道流回中央；它是工作纪律而非新机构，能最快覆盖所有解放区和部队。<b>入选</b>。</p>",
+    "log": "B = 1948 请示报告制度 ✓"
+  },
+  {
+    "title": "C. 民主协商制度——方向相反",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>协商是<b>分权式</b>的民主形式，解决党外合作与建国筹备问题（后来走向 1949 年新政协）；题干要的却是<b>集中</b>——方向恰好相反。<b>不选</b>。</p>",
+    "log": "C = 协商分权，方向相反 ✗"
+  },
+  {
+    "title": "D. 党外通报制度——查无此项",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>被“通报”二字迷惑：「报告」真实存在，「<b>党外通报制度</b>」查无此项，属杜撰；且题干要的是党内向中央集中，不是向党外通报。<b>不选</b>。</p>",
+    "log": "D = 杜撰项 ✗"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>B</b>。记忆锚点：1948 胜利在望 → <b>加强纪律性</b> → <b>请示报告制度</b>（1948.1 指示 + 1948.9 决议）；精兵简政 = 1941 抗战根据地政策——形势变，制度跟着变。</p>",
+    "log": "答案 B：请示报告制度"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'))),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "2024·13 解放战争后期中共中央建立的制度",
+  subtitle: "考点：解放战争与党的政策 · 方法：形势→需求→对策，制度对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先抓题干因果链，再看集中权力落到哪个制度上。',
+  snaps: snaps,
+  result: {
+    big: "答案 B",
+    html: "答案 <b>B</b>：1948 年胜利在望，为克服无纪律无政府状态、把权力集中于中央，中共中央建立<b>请示报告制度</b>（1948.1《关于建立报告制度》指示 + 1948.9 九月会议决议）。A 精兵简政是 1941 年抗战根据地政策，C 民主协商是分权式形式（走向 1949 新政协），D 党外通报制度查无此项。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：解放战争后期中共中央建立的制度</h2>
+<p>答案：<strong>B（请示报告制度）</strong>。</p>
+<h3>第 0 步：先立机制——形势变，制度跟着变</h3>
+<p>制度题不能靠背制度名，要先读懂题干给出的<strong>形势 → 需求 → 对策</strong>因果链：</p>
+<ol><li><strong>形势</strong>：1948 年解放区连成一片、许多城市解放或即将解放，人民解放军正规化程度大为提高，全国胜利在望；</li><li><strong>需求</strong>：分散游击时期各根据地"各自为战"、先斩后奏的习惯，已不适应正规化大兵团作战和接管城市的需要——党内军内的<strong>无纪律无政府状态</strong>成了胜利的障碍；</li><li><strong>对策</strong>：把一切必须和可能集中的权力集中于中央。集中靠什么落地？靠<strong>纪律</strong>——定期报告、重大事项先请示后行动。这正是"军队向前进，生产长一寸，<strong>加强纪律性</strong>，革命无不胜"的语境。</li></ol>
+<h3>第 1 步：制度落点——1948 年的两份文件</h3>
+<ul><li><strong>1948 年 1 月</strong>：毛泽东起草《关于建立报告制度》的党内指示，要求各中央局、分局定期向中央作综合报告；</li><li><strong>1948 年 9 月</strong>：中央政治局会议（九月会议）通过关于请示报告制度的决议，划清哪些事项必须向中央请示、哪些必须报告——<strong>请示报告制度</strong>系统建立。</li></ul>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因</th></tr></thead><tbody><tr><td>A 精兵简政制度</td><td>❌</td><td>1941 年陕甘宁边区采纳李鼎铭建议，是抗战时期克服财政困难的根据地政策——时间、主题双不符</td></tr><tr><td>B 请示报告制度</td><td>✅</td><td>1948 年建立，目的就是克服无纪律无政府状态、集中权力于中央</td></tr><tr><td>C 民主协商制度</td><td>❌</td><td>方向相反：协商是分权式的民主形式（后来走向 1949 年新政协），题干要的是"集中"</td></tr><tr><td>D 党外通报制度</td><td>❌</td><td>杜撰项；且题干要的是党内向中央集中，不是向党外通报</td></tr></tbody></table>
+<h3>预判「为什么集中权力偏偏选『请示报告』」</h3>
+<p>集中的反面是各行其是，而请示报告恰好卡在两头：<strong>报告</strong>让中央随时掌握全局，<strong>请示</strong>让重大行动先经过中央批准——一报一请，权力就顺着纪律管道流回了中央。它不是人事安排（不需要新设机构），而是<strong>工作纪律</strong>，所以能最快覆盖所有解放区和部队。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：只认"制度"二字不核时间——精兵简政在抗战（1941），本题在解放战争后期（1948）；它精简的是机构，解决的是财政负担，不是纪律。</li><li><strong>误选 C</strong>：把"民主"当万能词。集中权力靠纪律，民主协商解决的是党外合作与建国筹备问题。</li><li><strong>误选 D</strong>：被"通报"二字骗——"报告"真实存在，"党外通报制度"查无此项，纯凑数。</li></ul>
+<blockquote>记忆锚点：1948 胜利在望 → <strong>加强纪律性</strong> → <strong>请示报告制度</strong>（1948.1 指示 + 1948.9 决议）；精兵简政 = 1941 抗战根据地政策。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

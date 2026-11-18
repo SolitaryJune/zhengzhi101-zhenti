@@ -1,8 +1,87 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-29 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-29</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-29 · 抗战胜利的三条渠（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼：胜利原因要与力量对比相容',
+    body: '<p>抗战是近代以来中华民族反抗外敌入侵第一次取得<b>完全胜利</b>的民族解放战争。判断"胜利原因"先把基本盘立起来：开战时中国弱、日本强——<b>敌强我弱</b>。凡与"国力强大"相容的解释都是反事实的。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行：胜利只可能来自三条渠道',
+    body: '<ul><li><b>领导核心</b>：全民族抗战要有主心骨——中流砥柱；</li><li><b>社会基础</b>：民族觉醒、民族团结，四万万同胞同仇敌忾；</li><li><b>外部条件</b>：国际反法西斯力量的同情与支持。</li></ul><p>以弱胜强 = 内部组织起来 + 核心领导 + 国际支援。三条渠对应三个选项。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true },
+    title: '选项 A：中国共产党发挥了中流砥柱作用 —— 对',
+    body: '<p>倡导建立抗日民族统一战线，开辟敌后战场、坚持持久战方针，使全民族抗战有了主心骨——教科书对胜利原因的第一条概括。</p><p>A 对。</p>' },
+  { cls: 'bad', tag: 'B 排除', ribbon: { k: 2, ok: false },
+    title: '选项 B：中国的国力空前强大 —— 错',
+    body: '<p>与基本盘直接冲突：开战时中国经济、军事、技术全面落后于日本。抗战恰恰是在<b>敌强我弱</b>条件下以弱胜强——靠持久战、全民动员和国际支援，不是靠国力。</p><p>用"赢了"倒推"本来就强"，是结果论倒推。B 错。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: '选项 C：得到国际反法西斯力量的同情和支持 —— 对',
+    body: '<p>世界反法西斯战争是一个整体：苏联出兵东北、盟国物资与人员支援、世界人民声援——胜利必不可少的外部条件。</p><p>C 对。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true },
+    title: '选项 D：空前的民族觉醒和民族团结 —— 对',
+    body: '<p>抗日民族统一战线把各阶级、各民族、海内外中华儿女凝聚起来——胜利最深厚的社会基础。</p><p>D 对。</p>' },
+  { cls: 'key', tag: '陷阱拆解',
+    title: 'B 的迷惑点：结果论倒推',
+    body: '<p>B 最顺口——"打赢了当然国力强"。但史实判断要回到<b>开战时的力量对比</b>：以弱胜强本身就是抗战最了不起的地方，把"强大"写进原因，等于抹掉了这段历史的真正逻辑。</p><p>识破标志：原因类选项先问"它成立吗"再问"它是原因吗"——与基本盘矛盾者直接出局。</p>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 ACD',
+    body: '<p>答案 <b>ACD</b>：中流砥柱（A）、民族觉醒团结（D）、国际反法西斯支持（C）；底板是敌强我弱，"国力空前强大"（B）与基本盘矛盾，必错。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2013·29】以弱胜强的三条渠（多选）',
+  subtitle: '考点：抗日战争 · 胜利原因 · 敌强我弱的底板',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '<b>以弱胜强靠组织，不靠体格</b>：中国共产党中流砥柱（A）、空前的民族觉醒与团结（D）、国际反法西斯力量支持（C）。<br>干扰项 B 用"胜利"倒推"国力强大"——开战时敌强我弱，正是这段历史的底板。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：抗战胜利的原因——在"敌强我弱"的底板上找答案</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——胜利原因必须与战争的力量对比相容</h3>
+<p>判断"胜利原因"题，先把战争的基本盘立起来：抗日战争爆发时，中国是弱国、半殖民地国家，日本是强国、工业化国家——<strong>敌强我弱</strong>是这个底板。因此任何与"国力强大"相容的解释都是反事实的；胜利只可能来自三类因素：把民族组织起来、凝聚起来（内部因素），有一个坚强的领导核心（中流砥柱），以及国际反法西斯力量的支持（外部因素）。三条渠道恰好对应 A、C、D。</p>
+<h3>逐项对号入座</h3>
+<ul><li><strong>A 对</strong>："中国共产党发挥了中流砥柱的作用"——提出并推动建立抗日民族统一战线，开辟敌后战场、坚持持久战方针，使全民族抗战有了主心骨；这是教科书对抗战胜利原因的第一条概括。</li><li><strong>C 对</strong>："得到了国际反法西斯力量的同情和支持"——世界反法西斯战争是一个整体：苏联出兵东北、盟国物资与人员支援、世界人民的声援，都是胜利的外部条件。</li><li><strong>D 对</strong>："中国实现了空前的民族觉醒和民族团结"——抗日民族统一战线把各阶级、各民族、海内外中华儿女凝聚起来，"四万万同胞同仇敌忾"，这是胜利最深厚的社会基础。</li></ul>
+<h3>为什么 B 是干扰项</h3>
+<ul><li><strong>B 错</strong>："中国的国力空前强大"——与基本盘直接冲突：当时中国经济、军事、技术全面落后于日本，靠"国力强大"取胜根本不成立。恰恰相反，抗战是在敌强我弱的条件下以弱胜强，靠的是持久战、全民动员和国际支援。B 的迷惑性在于用"胜利"倒推"强大"——赢了就以为本来就强，这是典型的结果论倒推；史实判断要回到开战时的力量对比。</li></ul>
+<blockquote>记忆锚点：抗战胜利三条渠——<strong>中流砥柱（中共领导，A）、民族团结觉醒（D）、国际反法西斯支持（C）</strong>；底板是敌强我弱，所以"国力空前强大"（B）必错。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

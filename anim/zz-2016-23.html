@@ -1,8 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2016-23 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2016-23</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2016·23 放活民间投资：政策目的落在「平等」上</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX，参照本站已完成动画），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：「目的」类题先定判别法",
+    "cls": "key",
+    "log": "题眼：放活民间投资进非竞争性领域，问的是政策目的",
+    "body": "<p>题干给的场景：「保障民间投资进入电网、电信、铁路等<b>非竞争性领域</b>」——过去由国有资本独占的领地，现在请民间资本进来并保障参与力度。问的是实施这些政策的<b>目的</b>。判别法先立起来：非公经济的障碍常不在「能不能进」，而在「进得<b>平不平等</b>」——答案必须与「平等」挂钩。</p>"
+  },
+  {
+    "title": "先立机制：两个毫不动摇推到三个平等",
+    "cls": "key",
+    "log": "机制：基本经济制度＋两个毫不动摇→三个平等",
+    "body": "<p>基本经济制度＝<b>公有制为主体、多种所有制经济共同发展</b>；政策基调＝「<b>两个毫不动摇</b>」。支持非公经济的规范表述落在三句：保证各种所有制经济<b>依法平等使用生产要素</b>＋<b>公开公平公正参与市场竞争</b>＋<b>同等受到法律保护</b>（权利、机会、规则平等）。放活民间投资正是把「平等」从口号落成规则。</p>"
+  },
+  {
+    "title": "A：允许各种所有制经济实行企业员工持股",
+    "cls": "bad",
+    "ribbon": {"k": 1, "ok": false},
+    "log": "混改试点手段，与「平等」不挂钩 → A 不选",
+    "body": "<p>员工持股是<b>混合所有制企业改革</b>中的一项试点措施，属「手段箱」里的个别工具；且「各种所有制经济<b>实行</b>员工持股」表述<b>绝对化</b>——政策是允许试点，不是全面实行。它是别的改革的手段，不是本政策的目的。<b>A 错误</b>。</p>"
+  },
+  {
+    "title": "B：鼓励所有民企建立现代企业制度",
+    "cls": "bad",
+    "ribbon": {"k": 2, "ok": false},
+    "log": "「所有」绝对化＋话题错位 → B 不选",
+    "body": "<p>「<b>所有</b>」一词绝对化——企业怎么治理是企业自身事务，政府只能引导不能包办；建立现代企业制度是企业<b>内部改革方向</b>，与「放活民间投资」的市场准入政策<b>话题错位</b>，同样不回答「目的」。<b>B 错误</b>。</p>"
+  },
+  {
+    "title": "C：保证公开公平公正参与市场竞争",
+    "cls": "good",
+    "ribbon": {"k": 3, "ok": true},
+    "log": "规范表述第二句原样命中 → C 对",
+    "body": "<p>民间资本进入电网、电信、铁路，要的正是<b>竞争规则上的一视同仁</b>——「公开公平公正参与市场竞争」是规范表述的组成部分，与题干场景严丝合缝。<b>C 正确</b>。</p>"
+  },
+  {
+    "title": "D：保证依法平等使用生产要素",
+    "cls": "good",
+    "ribbon": {"k": 4, "ok": true},
+    "log": "规范表述第一句原样命中 → D 对",
+    "body": "<p>土地、资金、信贷、准入等<b>生产要素</b>面前，各类所有制地位平等——「依法平等使用生产要素」是规范表述的另一半。C、D 是配套的两句，命题人常拆开单考一句。<b>D 正确</b>。</p>"
+  },
+  {
+    "title": "预判追问：放开民间投资会动摇公有制主体地位吗",
+    "cls": "key",
+    "log": "追问：平等≠私有化",
+    "body": "<p>不会。「两个毫不动摇」是一体两面：C、D 讲的是各类所有制<b>平等</b>参与竞争、使用要素，前提仍是公有制占主体——给民间资本松绑是把「平等市场主体」的待遇落到实处，而不是让私有经济取而代之。<b>平等 ≠ 私有化</b>，这正是「不能由此否定公有制主体地位」的边界。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "log": "锁定 CD",
+    "body": "<p>答案 <b>CD</b>：C（竞争公平）＋D（要素平等）＝规范表述的两句原样命中。A 是混改手段、B 有「所有」绝对化——都挂不到「平等」上。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "放活民间投资：政策目的落在「平等」上",
+  subtitle: "考点：基本经济制度 · 两个毫不动摇与三个平等 · 多选",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: '答案 CD',
+    html: "记忆锚点：非公政策的目的＝<b>三个平等</b>（依法平等使用生产要素、公开公平公正参与市场竞争、同等受到法律保护）；A 是混改手段、B 带「所有」绝对化——都挂不上「平等」；给民间资本「平等」<b>不否定公有制主体地位</b>。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：放活民间投资——「目的」类题为什么必须落在「平等」上</h2>
+<p>答案：<strong>CD</strong>。</p>
+<h3>第 0 步：先立机制——「两个毫不动摇」推到「三个平等」</h3>
+<p>我国基本经济制度是<strong>公有制为主体、多种所有制经济共同发展</strong>，对它的政策基调叫<strong>两个毫不动摇</strong>：既要毫不动摇巩固和发展公有制经济，也要毫不动摇鼓励、支持、引导非公有制经济发展。</p>
+<p>非公有制经济长期卡在哪儿？多数时候不在「能不能进」，而在<strong>进门时的身份</strong>：融资、用地、准入、竞争规则上被另眼相看。所以支持非公经济的规范表述集中在三句——保证各种所有制经济<strong>依法平等使用生产要素</strong>、<strong>公开公平公正参与市场竞争</strong>、<strong>同等受到法律保护</strong>（即权利平等、机会平等、规则平等）。</p>
+<p>题干给的场景是「保障民间投资进入电网、电信、铁路等<strong>非竞争性领域</strong>」——过去由国有资本独占的领地，现在请民间资本进来并保障其参与力度。问的是实施这些政策的<strong>目的</strong>：把「平等」从口号落成规则，让各类所有制在要素与市场面前一个标准。判别法由此确立：<strong>凡挂得上「平等」的选，挂不上的不选</strong>。</p>
+<h3>第 1 步：四个选项对号入座</h3>
+<ul><li><strong>A 允许各种所有制经济实行企业员工持股</strong> ❌：员工持股是<strong>混合所有制企业改革</strong>里的一项试点措施，属于「手段箱」里的个别工具；而且「各种所有制经济<strong>实行</strong>员工持股」表述绝对化——政策是「允许试点」不是「全面实行」。它是别的改革的手段，与「平等」不挂钩。</li><li><strong>B 鼓励所有民企建立现代企业制度</strong> ❌：「<strong>所有</strong>」绝对化——企业治理是企业的自身事务，政府只能引导不能包办；且建立现代企业制度是企业<strong>内部改革方向</strong>，同样不回答「放活民间投资」的目的。</li><li><strong>C 保证各种所有制经济公开公平公正参与市场竞争</strong> ✅：规范表述第二句原样命中——民间资本进电网、电信、铁路，要的正是<strong>竞争规则上的一视同仁</strong>。</li><li><strong>D 保证各种所有制经济依法平等使用生产要素</strong> ✅：规范表述第一句原样命中——土地、资金、信贷、准入等<strong>生产要素</strong>面前，公有制与非公有制经济地位平等。</li></ul>
+<h3>预判追问：放开民间投资会不会动摇公有制的主体地位</h3>
+<p>不会，这正是「两个毫不动摇」的一体两面：C、D 讲的是各类所有制<strong>平等</strong>参与竞争、使用要素，前提仍是公有制占主体——给民间资本松绑是把非公经济「平等市场主体」的待遇落到实处，而不是让私有经济取而代之。原库解析「不能由此否定公有制主体地位」说的就是这条边界：<strong>平等 ≠ 私有化</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：把「全面深化改革」大帽子下的任何措施都当成目的。判别法：题目问的是<strong>这些放活民间投资的政策</strong>的目的——员工持股是混改的手段，与「平等」二字对不上号。</li><li><strong>误选 B</strong>：只看「现代企业制度」这个词眼熟就选。属<strong>话题错位</strong>——企业内部治理改革不是对民间资本的市场准入政策。</li><li><strong>漏选 D</strong>：只记得「公平竞争」忘了「平等要素」。C、D 是<strong>配套的两句规范表述</strong>（竞争公平＋要素平等），命题人常拆开单考一句，两句都要背全。</li></ul>
+<blockquote>记忆锚点：非公政策的目的＝<strong>三个平等</strong>（依法平等使用生产要素、公开公平公正参与市场竞争、同等受到法律保护）；A 是混改手段、B 带「所有」绝对化——都挂不上「平等」；给民间资本「平等」<strong>不否定公有制主体地位</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

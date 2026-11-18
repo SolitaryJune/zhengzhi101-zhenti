@@ -1,8 +1,115 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-26 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-26</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-26 · 生态文明建设四大要求（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片 + 链式小图/小表（内联样式，自包含，
+   仅引用本地 ../assets 引擎，无任何外部请求；引擎默认渲染 stage.innerHTML）。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+/* 链式小图：items 用箭头串起来（时间线 / 四环链条） */
+function chain(items, color){
+  return '<div style="display:flex;gap:6px;align-items:stretch;flex-wrap:wrap;margin:8px 0">' +
+    items.map(function(t){
+      return '<div style="flex:1;min-width:110px;border:1.5px solid ' + color +
+        ';border-radius:8px;padding:6px 8px;background:' + color + '14;font-size:13px;color:#334155;text-align:center">' + t + '</div>';
+    }).join('<div style="align-self:center;color:#64748b;font-weight:700">→</div>') + '</div>';
+}
+/* 两栏小表：[左列, 右列, ok|bad|plain] */
+function rows(pairs){
+  return '<table style="border-collapse:collapse;width:100%;margin:6px 0">' + pairs.map(function(r){
+    var c = r[2] === 'ok' ? '#166534' : (r[2] === 'bad' ? '#b91c1c' : '#334155');
+    var bg = r[2] === 'ok' ? '#f0fdf4' : (r[2] === 'bad' ? '#fef2f2' : '#f8fafc');
+    return '<tr><td style="border:1px solid #e2e8f0;padding:5px 8px;font-size:13px;font-weight:700;background:' +
+      bg + ';color:' + c + ';white-space:nowrap">' + r[0] + '</td><td style="border:1px solid #e2e8f0;padding:5px 8px;font-size:13px;color:#334155">' +
+      r[1] + '</td></tr>';
+  }).join('') + '</table>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼：PM2.5 走了多远，题目问的是"新要求"',
+    body: '<p>材料主线是一条时间线：</p>' +
+      chain(['2011·10<br>多地灰霾<br>PM2.5 成热词', '2012·02<br>《环境空气质量标准》<br>新增 PM2.5 指标', '写入<br>政府工作报告<br>制度化现身', '十八大<br>纳入"五位一体"<br>总布局'], '#15803d') +
+      '<p>题目问十八大提出的生态文明建设<b>新要求</b>——先把部署清单立成体系，再逐项对号；环境议题已从技术问题上升为国家战略问题。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行：四大要求排成"空间—源头—末端—保障"一条链',
+    body: '<p>十八大对生态文明建设的部署不是散装四条，而是一条从开发到保障的完整链条：</p>' +
+      chain(['空间布局<br><b>优化国土空间<br>开发格局</b>（C）', '源头减量<br><b>全面促进<br>资源节约</b>（B）', '末端治理<br><b>加大生态与<br>环保力度</b>（A）', '制度保障<br><b>加强生态文明<br>制度建设</b>（D）'], '#0e7490') +
+      '<p>先划空间（不该开发的地方留住）→ 再在利用上省（源头减量）→ 再对坏掉的环境修复治理（末端补课）→ 最后靠制度把前三环<b>钉住</b>。缺任何一环，治理链条都不完整——这是"为什么全选"的机制。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true },
+    title: '选项 A：加大自然生态系统和环境保护力度 —— 对',
+    body: '<p><b>末端治理环</b>：对灰霾等大气污染最直接的回应——生态修复与污染治理的抓手。</p><p>A 对。</p>' },
+  { cls: 'good', tag: 'B 入选', ribbon: { k: 2, ok: true },
+    title: '选项 B：全面促进资源节约 —— 对',
+    body: '<p><b>源头减量环</b>：PM2.5 大量来自燃煤与机动车排放——节约资源能源就是从源头减排，"少烧就少排"。</p><p>B 对。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: '选项 C：优化国土空间开发格局 —— 对',
+    body: '<p><b>空间布局环</b>：产业、能源、城乡布局失衡是污染的结构性原因；生产、生活、生态空间先划好，"在哪开发、开发多少"有规矩，才是治本之策。</p><p>C 对。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true },
+    title: '选项 D：加强生态文明制度建设 —— 对',
+    body: '<p><b>制度保障环</b>：考核评价、生态补偿、责任追究把前三环钉住。材料里 PM2.5 指标入标准、随后写入政府工作报告——正是"用制度管环境"的现身。</p><p>D 对。</p>' },
+  { cls: 'key', tag: '命题逻辑',
+    title: '为什么全选：防漏 D，也认识"边界"',
+    body: '<p>题干材料恰好横跨各环节：标准修订与政府工作报告对应<b>制度（D）</b>，灰霾对应<b>治理（A）、源头（B）、布局（C）</b>——四项全有支撑，全选成立。</p>' +
+      rows([['最易漏', 'D"制度"像务虚的话——恰恰制度建设是十八大新增亮点，漏它前三环失去约束', 'bad'], ['防多', '同类题设干扰项时看出处："资源节约型、环境友好型社会"是十七大提法；"绿色发展"五大理念是十八届五中全会——都与"十八大四大要求"对不上', 'plain']]) +
+      '<p>四项均为十八大部署的原文表述，没有与政策表述冲突的选项。</p>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 ABCD',
+    body: '<p>答案 <b>ABCD</b>：优格局（C）→ 促节约（B）→ 强治理（A）→ 立制度（D）——四环相扣缺一不可；PM2.5 入标准入报告，正是"制度"一环现身。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2013·26】生态文明四环相扣（多选）',
+  subtitle: '考点：生态文明建设 · 五位一体 · 十八大四大要求',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '<b>从空间到制度，四环相扣</b>：优化国土空间开发格局（C）、全面促进资源节约（B）、加大自然生态系统和环境保护力度（A）、加强生态文明制度建设（D）。<br>PM2.5 从热词到入标准、入政府工作报告，恰是"制度"一环的现身。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：十八大生态文明建设"新要求"——四环相扣的完整清单</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——为什么恰好是这四项，它们之间是什么关系</h3>
+<p>材料主线先看懂：2011 年 10 月多地灰霾 → 2012 年 2 月修订《环境空气质量标准》增加 PM2.5 指标 → 随后写入政府工作报告 → 十八大把生态文明建设纳入中国特色社会主义建设<strong>"五位一体"</strong>总布局。这条线说明一件事：环境治理已经从技术议题上升为国家战略议题——既然要"建设"，就必须有一套<strong>可操作的部署</strong>。</p>
+<p>党的十八大报告对生态文明建设的部署，按"<strong>空间—源头—末端—保障</strong>"排成一条从开发到保障的完整链条：</p>
+<table><thead><tr><th>环节</th><th>要求</th><th>管什么</th><th>与 PM2.5 材料的对应</th></tr></thead><tbody><tr><td>空间布局</td><td>优化国土空间开发格局</td><td>生产、生活、生态空间总体安排——先划好"在哪开发、开发多少"</td><td>产业与能源布局失衡是灰霾的结构性原因，治本从格局入手</td></tr><tr><td>源头减量</td><td>全面促进资源节约</td><td>资源能源利用方式——少烧就少排</td><td>PM2.5 大量来自燃煤与机动车，节约即源头减排</td></tr><tr><td>末端治理</td><td>加大自然生态系统和环境保护力度</td><td>直接治理污染与生态退化</td><td>蓝天保卫最直接的抓手</td></tr><tr><td>制度保障</td><td>加强生态文明制度建设</td><td>考核评价、生态补偿、责任制——把前三环钉住</td><td>指标入标准、入政府工作报告，正是制度化的现身</td></tr></tbody></table>
+<p>四环是递进关系：先划空间（不该开发的地方留住），再在利用上省（源头减量），再对已经坏掉的环境修复治理（末端补课），最后靠制度把前三环<strong>钉住</strong>——没有制度，前三环随时可能被发展冲动冲掉。<strong>缺任何一环，治理链条都不完整。</strong></p>
+<h3>第一步：逐项对号</h3>
+<ul><li><strong>A 对</strong>："加大自然生态系统和环境保护力度"——末端治理环，对灰霾等污染最直接的回应；</li><li><strong>B 对</strong>："全面促进资源节约"——源头减量环，节约资源能源就是从源头减排；</li><li><strong>C 对</strong>："优化国土空间开发格局"——空间布局环，结构性治本之策；</li><li><strong>D 对</strong>："加强生态文明制度建设"——制度保障环，PM2.5 入标准、入政府工作报告正是"用制度管环境"的实例。</li></ul>
+<p>四项全部来自十八大部署的原文表述，且题干材料恰好横跨各环节（标准修订与政府工作报告对应 D，灰霾对应 A、B、C），全选成立。</p>
+<h3>第二步：全选题的防漏与防多</h3>
+<ul><li><strong>防漏</strong>：最容易漏掉的是 D——觉得"制度"是务虚的话、不像"建设"。恰恰制度建设（考核评价体系、生态补偿、责任追究）是十八大新增的亮点，是四环的最后一环；漏掉它，前三环就没有约束。</li><li><strong>防多（本题没有干扰项，但要知道边界）</strong>：换一次考试这类题就会设干扰项，判据是<strong>出处与层次</strong>——"建设资源节约型、环境友好型社会"是十七大提出的任务（层次是"两型社会"，不是十八大四项新要求的表述）；"绿色发展"作为五大发展理念是十八届五中全会提出的。题干问"十八大提出的生态文明建设新要求"，只有与这份清单对得上的才能选。</li></ul>
+<blockquote>记忆锚点：生态文明四大要求按链条记——<strong>优格局（C）→ 促节约（B）→ 强治理（A）→ 立制度（D）</strong>；材料里的 PM2.5 入标准入报告，正是"制度"一环现身。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

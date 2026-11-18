@@ -1,8 +1,85 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-19 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-19</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2009-19 · 手推磨与蒸汽磨——科技的历史身份</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：先把名言的推理链摆出来',
+    cls: 'key',
+    body: '<p>手推磨 → 封建主的社会；蒸汽磨 → 工业资本家的社会。链是：<b>技术 → 生产力 → 生产关系（生产方式）→ 社会形态</b>。答案就藏在这条链上。</p>' },
+  { title: '选项 A：历史上起推动作用的革命力量',
+    cls: 'good', k: 1, pick: true,
+    body: '<p>马克思原话：科学是“历史上起<b>推动作用的、革命的力量</b>”。名言正是它——工具升级带来社会形态更替，科技是推手。<b>入选</b>。</p>' },
+  { title: '选项 B：历史变革中的决定性力量',
+    cls: 'bad', k: 2, pick: false,
+    body: '<p>历史变革的<b>决定性</b>力量是社会基本矛盾运动（生产力—生产关系、经济基础—上层建筑）。科技要<b>被生产方式吸纳、在社会条件中运用</b>才起作用——把“第一生产力”偷换成“决定历史”＝科技决定论。<b>排除</b>。</p>' },
+  { title: '选项 C：推动生产方式变革的重要力量',
+    cls: 'good', k: 3, pick: true,
+    body: '<p>这正是推理链本身：科技（物化为新工具）→ 生产力变化 → <b>生产方式变革</b> → 社会形态变化。<b>入选</b>。</p>' },
+  { title: '选项 D：一切社会变革中的自主性力量',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p><b>“自主性”</b>意味着脱离社会条件独立起作用——科技的作用从来嵌在制度与生产关系里；<b>“一切”</b>社会变革也不只靠科技（还有阶级斗争、革命、改革）。双重绝对化 → <b>排除</b>。</p>' },
+  { title: '结论：AC',
+    cls: 'good',
+    body: '<p>A 是对科技历史作用的<b>定性</b>，C 是它起作用的<b>途径</b>——两层互补，答案 <b>AC</b>。B、D 都是把层级抬高一级的升格词陷阱（“决定性”“一切”“自主性”）。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2009-19 · 手推磨与蒸汽磨——科技的历史身份',
+  subtitle: '2009 年第 19 题（多选）· 考点：科学技术与生产力 · 推理链推演',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立“技术→生产力→生产关系→社会形态”推理链，再逐项判定。',
+  snaps: snaps,
+  result: {
+    big: '答案 AC',
+    html: '记忆锚点：科技 = <b>革命力量（A）+ 生产方式变革的推手（C）</b>；一旦升格为“决定性／一切／自主性”（B、D）就是夸大。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：手推磨与蒸汽磨——科技在历史中的"身份"到底有多大</h2>
+<p>答案：<strong>AC</strong>。</p>
+<h3>第 0 步：先立机制——马克思这句名言的推理链</h3>
+<p>"手推磨产生的是封建主的社会，蒸汽磨产生的是工业资本家的社会"（《哲学的贫困》）。先把推理链摆出来：</p>
+<p><strong>生产工具/技术（科技物化成果）→ 生产力水平 → 生产关系（生产方式）→ 社会形态</strong></p>
+<p>即：生产工具的升级（背后的推动者之一是科学技术）改变生产力，生产力决定人们在生产中结成什么样的关系，进而决定整个社会形态。所以马克思的另一句话——<strong>科学是"历史上起推动作用的、革命的力量"</strong>（A 成立）；科技通过生产力影响生产方式变革（C 成立）。答案就藏在这条链上，不需要背。</p>
+<h3>第 1 步：B 为什么错——"决定性力量"是被拔高的头衔</h3>
+<p>历史变革的<strong>决定性</strong>力量是什么？是社会基本矛盾运动——生产力与生产关系、经济基础与上层建筑的矛盾。科学技术要<strong>被生产方式吸纳、在社会条件中运用</strong>才能起作用：同样一台蒸汽磨，在不同的生产关系下后果不同。把科技单独抬成"历史变革中的决定性力量"，等于把"科技是第一生产力（在生产力诸要素中的地位）"偷换成"科技决定历史"——典型的"科技决定论"夸大。</p>
+<h3>第 2 步：D 为什么错——"自主性"是不存在的属性</h3>
+<p>"一切社会变革中的自主性力量"双重夸大：其一，"自主性"意味着脱离社会条件独立起作用，而科技的作用从来<strong>嵌在</strong>社会制度与生产关系之中；其二，"一切社会变革"也不只靠科技——阶级斗争、革命、改革都在场。"一切 + 自主"两个绝对化词叠加，排除没有悬念。</p>
+<h3>易错点</h3>
+<ul><li><strong>见"第一生产力"就选 B</strong>：邓小平讲"科学技术是第一生产力"，说的是科技在<strong>生产力诸要素中</strong>的地位；一跳到"历史变革中的决定性力量"就换了命题。</li><li><strong>全称词排除法</strong>：B 的"决定性"、D 的"一切""自主性"都是升格词——选项把原理的层级抬高一级，通常就是错项。</li><li><strong>漏 A</strong>：以为 A 与 C 重复——A 是对科技历史作用的定性（革命力量），C 是其起作用的途径（推动生产方式变革），两层互补。</li></ul>
+<blockquote>记忆锚点：科技 = <strong>革命力量（A）+ 生产方式变革的推手（C）</strong>；一旦升格为"决定性/一切/自主性"（B、D），就是夸大。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

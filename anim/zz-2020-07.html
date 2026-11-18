@@ -1,8 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-07 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-07</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2020·07 新时代做好人民政协工作的中心环节</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX，纯文本推理卡片），
+     外壳沿用 anim-engine.js + anim.css，只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼：问的是「中心环节」',
+    cls: 'key',
+    body: '<p>题干引 2019 年 9 月 20 日中央政协工作会议暨庆祝人民政协成立 70 周年大会讲话，问新时代做好人民政协工作的「<b>中心环节</b>」。总体要求是一串「把……作为……」的排比清单——每个关键表述各占一个<b>岗位</b>，先摆开清单再按题眼取词。</p>',
+    log: '审题：在总体要求的岗位清单里找「中心环节」'
+  },
+  {
+    title: '摆清单：五个岗位各就各位',
+    cls: 'key',
+    body: '<ul><li><b>主轴</b>：坚持和发展中国特色社会主义</li><li><b>中心环节</b>：加强思想政治引领、广泛凝聚共识</li><li><b>性质定位/着力点</b>：发挥好专门协商机构作用</li><li><b>履职要求</b>：提高政治协商、民主监督、参政议政水平</li><li><b>队伍要求</b>：强化政协委员责任担当</li></ul><p>四个选项各占一格，都「姓政协」——措辞排除不了谁，只能对岗位取词。</p>',
+    log: '岗位清单立好，选项各归各位'
+  },
+  {
+    title: '机制：为什么「凝聚共识」配居中',
+    cls: 'step',
+    body: '<p>政协是<b>统一战线的组织</b>，主题是<b>大团结大联合</b>，「人心是最大的政治」。思潮多样、诉求分化，先以思想政治引领<b>把人心聚起来</b>：共识立住了，协商才有共同语言、监督才有共同目标、参政才有共同方向——凝聚共识是三项职能发挥作用的<b>前提</b>，所以居「中心」。</p>',
+    log: '共识是协商监督参政的前提 → 配称中心环节'
+  },
+  {
+    title: 'B：思想政治引领、广泛凝聚共识',
+    cls: 'good',
+    ribbon: { k: 2, ok: true },
+    body: '<p>讲话原文明确：把加强思想政治引领、广泛凝聚共识<b>作为中心环节</b>——B 正落在「中心环节」的岗位上。<b>B 正确</b>。</p>',
+    log: 'B 对位「中心环节」 → 正确'
+  },
+  {
+    title: 'C：专门协商机构是「性质定位」',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>「专门协商机构」回答政协「<b>是什么</b>」，属性质定位与着力点——出镜率最高、最易抢答，但不占「中心环节」的岗位。<b>C 错误</b>。</p>',
+    log: 'C 是性质定位 → 排除'
+  },
+  {
+    title: 'A：三项职能水平是「履职要求」',
+    cls: 'bad',
+    ribbon: { k: 1, ok: false },
+    body: '<p>提高政治协商、民主监督、参政议政水平是<b>履职能力要求</b>——要求围绕中心环节展开，位置在下游，本身不居中。<b>A 错误</b>。</p>',
+    log: 'A 是履职要求 → 排除'
+  },
+  {
+    title: 'D：委员责任担当是「队伍要求」',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>强化政协委员责任担当落在<b>委员个人层面</b>，是清单里最具体、层级最低的队伍建设要求，谈不上「中心」。<b>D 错误</b>。</p>',
+    log: 'D 是队伍要求 → 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>B</b>。记忆锚点：中心环节=<b>加强思想政治引领、广泛凝聚共识</b>；主轴=坚持和发展中国特色社会主义；专门协商机构=性质定位；三项职能=履职要求；委员责任=队伍要求。</p>',
+    log: '锁定 B：凝聚共识为中心环节'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: i === 0 ? '审题' : (last ? '结论' : '分析'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '新时代做好人民政协工作的中心环节',
+  subtitle: '考点：人民政协与中央政协工作会议精神 · 方法：总体要求按「岗位」对号入座',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '记忆锚点：中心环节 = <b>加强思想政治引领、广泛凝聚共识</b>（统一战线主题是大团结大联合，人心是最大的政治）。C「专门协商机构」是性质定位，A「三项职能水平」是履职要求，D「委员责任担当」是队伍要求——四个词各占一个岗位，按题眼取词。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：新时代做好人民政协工作的「中心环节」是哪一项</h2>
+<p>答案：<strong>B（加强思想政治引领、广泛凝聚共识）</strong>。</p>
+<h3>第 0 步：先立框架——总体要求是一份「岗位清单」，题眼问的是哪个岗位</h3>
+<p>题干引的是 2019 年 9 月 20 日中央政协工作会议暨庆祝中国人民政治协商会议成立 70 周年大会讲话。这段「新时代加强和改进人民政协工作的总体要求」是一串排比句，每个关键表述在清单里各占一个<strong>固定岗位</strong>。做题前先把整张清单摆开：</p>
+<table><thead><tr><th>清单岗位</th><th>关键表述</th></tr></thead><tbody><tr><td>主轴</td><td>把坚持和发展中国特色社会主义作为巩固共同思想政治基础的主轴</td></tr><tr><td><strong>中心环节</strong>（题眼所在）</td><td>加强思想政治引领、广泛凝聚共识</td></tr><tr><td>性质定位 / 着力点</td><td>发挥好人民政协专门协商机构作用</td></tr><tr><td>履职要求</td><td>提高政治协商、民主监督、参政议政水平</td></tr><tr><td>队伍要求</td><td>强化政协委员责任担当</td></tr></tbody></table>
+<p>四个选项恰好各占一格，且<strong>全都与政协工作搭配得通</strong>——所以本题不能靠「读着顺不顺」排除，只能靠题眼「中心环节」去岗位上取词。</p>
+<h3>第 1 步：机制——为什么「中心环节」偏偏落在凝聚共识上</h3>
+<p>人民政协是<strong>统一战线的组织</strong>，统一战线的主题是<strong>大团结大联合</strong>。统一战线解决的是人心与力量的问题——「人心是最大的政治」。新时代社会思潮多样、利益诉求分化，把各方面人心聚拢起来，靠的就是<strong>思想政治引领</strong>与<strong>广泛凝聚共识</strong>：共识立住了，政治协商才有共同语言、民主监督才有共同目标、参政议政才有共同方向。也就是说，凝聚共识是三项职能发挥作用的<strong>前提</strong>，在清单里居「中心」，故讲话原文直接把它定为<strong>中心环节</strong>。</p>
+<h3>第 2 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对应岗位与理由</th></tr></thead><tbody><tr><td>A 提高政治协商、民主监督、参政议政水平</td><td>❌</td><td>履职<strong>要求</strong>——是围绕中心环节展开的下游任务，本身不居中</td></tr><tr><td>B 加强思想政治引领、广泛凝聚共识</td><td>✅</td><td><strong>中心环节</strong>（讲话原文口径）</td></tr><tr><td>C 发挥好人民政协专门协商机构作用</td><td>❌</td><td><strong>性质定位</strong>/着力点——回答政协「是什么」</td></tr><tr><td>D 强化政协委员责任担当</td><td>❌</td><td><strong>队伍要求</strong>——落到委员个人层面的最具体一条</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：「专门协商机构」是近年政协话语中出镜率最高的定位词，见到政协最容易抢答——但它回答的是政协「是什么」，题眼问的是工作「以什么为中心」，两码事。</li><li><strong>误选 A</strong>：三项职能背得最熟，但「提高水平」是对履职能力的要求——要求围着中心环节转，位置在下游。</li><li><strong>误选 D</strong>：把总体要求里落到「委员」的那句话当成中心——它是四项中层级最低、最具体的队伍建设要求。</li><li><strong>方法</strong>：「排比清单」型时政题，先把清单里每个关键词分好岗位，再按题眼取词；岗位感一建立，四个选项自动归位。</li></ul>
+<blockquote>记忆锚点：中心环节=<strong>加强思想政治引领、广泛凝聚共识</strong>；主轴=坚持和发展中国特色社会主义；专门协商机构=性质定位；政治协商、民主监督、参政议政=三项职能的履职要求；委员责任担当=队伍要求。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

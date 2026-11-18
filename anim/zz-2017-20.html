@@ -1,8 +1,125 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-20 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-20</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2017-20 资本有机构成提高的链条</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 链条图：本性 → 趋势 → 后果（三段，随步骤点亮） */
+function chain(active){
+  var seg = function(head, sub, on){
+    var bg = on ? '#fffbeb' : '#f8fafc';
+    var bd = on ? '#d97706' : '#cbd5e1';
+    return '<span style="display:inline-flex;flex-direction:column;gap:1px;border:2px solid ' + bd +
+      ';background:' + bg + ';border-radius:10px;padding:7px 12px;text-align:center">' +
+      '<b style="font-size:13px">' + head + '</b>' +
+      '<span style="font-size:11.5px;color:#475569">' + sub + '</span></span>';
+  };
+  var arrow = '<span style="font-size:18px;font-weight:700;color:#64748b">→</span>';
+  return '<div style="display:flex;gap:8px;align-items:center;width:max-content;margin:6px 0">' +
+    seg('资本本性', '追逐剩余价值＋竞争', active >= 1) + arrow +
+    seg('一般趋势', 'c:v 提高不可逆', active >= 2) + arrow +
+    seg('社会后果', '相对过剩人口', active >= 3) + '</div>';
+}
+
+/* c:v 格子：机器人上岗前后对比 */
+function cvBox(before){
+  var v = before ? 'v v v v' : 'c c c v v';
+  var cls = before ? '' : ' ok';
+  var cells = v.split(' ').map(function(ch){
+    var c = ch === 'c' ? ' ok' : '';
+    return '<span style="width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;' +
+      'border:2px solid ' + (ch === 'c' ? '#16a34a' : '#2563eb') +
+      ';background:' + (ch === 'c' ? '#f0fdf4' : '#eff6ff') +
+      ';border-radius:8px;font-weight:800;font-family:Menlo,monospace">' + ch + '</span>';
+  }).join('');
+  return '<div style="display:flex;gap:6px;align-items:center;width:max-content;margin:4px 0">' +
+    '<span style="font-size:12.5px;color:#475569;width:150px">' + (before ? '机器人上岗前' : '机器人上岗后') +
+    '</span>' + cells + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：机器换人 → "有机构成提高"',
+    cls: 'key',
+    body: '<p>材料：机器人广泛使用 → 资本有机构成不断提高。考点定位：<b>资本有机构成</b>（由技术构成决定并反映技术构成变化的 <code>c : v</code>）。题眼"就一般意义而言"——问趋势的性质与后果。</p>' },
+  { title: '先立机制：机器换人怎么抬升 c:v',
+    cls: 'key',
+    body: '<p>机器人上岗：设备、自动化线（不变资本 c）猛增，雇工（可变资本 v）相对缩水——有机构成 = 由技术构成决定并反映其变化的价值构成，机器换人是它的教科书案例。</p>' + cvBox(true) + cvBox(false) },
+  { title: '动力源：谁在推？资本的本性（D）',
+    cls: 'good',
+    body: '<p>追逐剩余价值是资本家的天然动机：先用机器省掉活劳动、提高劳动生产率者赚<b>超额剩余价值</b>；竞争又强制所有资本家跟进——推动力在<b>资本本性</b>里，不在工程师手里。<b>D 对。</b></p>' + chain(1) },
+  { title: '趋势形态：不以人的意志为转移（B）',
+    cls: 'good',
+    body: '<p>逐利动机＋竞争强制，使机器换人、c:v 上升不取决于个别老板的喜好，也不取决于工人的意愿——成为资本关系下的<b>客观趋势</b>。<b>B 对。</b></p>' + chain(2) },
+  { title: '社会后果：相对过剩人口（C）',
+    cls: 'good',
+    body: '<p>c 相对 v 上升 → 对劳动力的需求<b>相对下降</b> → 被机器排挤的工人滞留市场 → <b>相对过剩人口</b>（产业后备军）扩大。<b>C 对。</b></p>' + chain(3) },
+  { title: 'A：增长财富和消除贫困的根本途径？',
+    cls: 'bad',
+    body: '<p>错。一看后果：资本主义框架内它恰恰伴随失业与两极分化——<b>同时生产财富和生产贫困</b>；二看源泉：机器（c）只转移价值、<b>不创造剩余价值</b>，剩余价值的唯一源泉是活劳动。<b>A 错。</b></p>' },
+  { title: '结论：BCD',
+    cls: 'good',
+    body: '<p>三连对一错：本性（D）→ 趋势（B）→ 后果（C）；A 美化资本趋势又找错财富源泉。答案选 <b>BCD</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var optK = { 2: 1, 3: 2, 4: 3, 5: 4 }[i];
+  var optLetter = optK ? 'ABCD'[optK - 1] : '';
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: i === 0 ? '审题' : (i === 1 ? '机制' : (i === STEPS.length - 1 ? '结论' : '选项 ' + optLetter)),
+    log: s.title,
+    count: optK || 0,
+    ribbon: optK ? { k: optK, ok: s.cls !== 'bad' } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2017·20】机器人上岗之后：c:v 上升的三段链条',
+  subtitle: '考点：资本有机构成 · 相对过剩人口 · 多选题',
+  counterLabel: '已核选项',
+  ribbonTitle: '选项判定（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开：先拆 c:v 与机器换人，再沿"本性→趋势→后果"链条逐项判定。',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '记忆锚点：c:v ↑ 三连——由<b>资本本性</b>决定（D）→ <b>不以人的意志为转移的一般趋势</b>（B）→ 挤出<b>相对过剩人口</b>（C）；机器只转移价值、<b>不创造剩余价值</b>，更不是消除贫困的根本途径（A）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：机器人上岗之后——c:v 上升的三段链条</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——有机构成是什么、谁在推、推向哪</h3>
+<p>拆概念。资本构成有三重说法：<strong>技术构成</strong>（生产资料数量与劳动力数量的比例）、<strong>价值构成</strong>（不变资本 c 与可变资本 v 的比例）、<strong>有机构成</strong> = 由技术构成决定并反映技术构成变化的<strong>c : v</strong>。机器人替代工人是教科书案例：设备、自动化线（c）猛增，雇工（v）相对缩水——有机构成提高。</p>
+<p>再问"谁在推"。推动力不在工程师手里，而在<strong>资本的本性</strong>里：追逐剩余价值是资本家的天然动机——谁能先用机器省掉活劳动、提高劳动生产率，谁就赚到<strong>超额剩余价值</strong>；竞争又强制所有资本家跟进。于是"机器人在生产中广泛使用"不取决于个别老板的喜好，也不取决于工人的意愿，而成为资本关系下<strong>不以人的意志为转移的一般趋势</strong>。</p>
+<p>链条推向哪：c 相对 v 上升 → 资本对劳动力的需求<strong>相对下降</strong> → 被机器排挤的工人滞留在劳动力市场 → 形成<strong>相对过剩人口</strong>（产业后备军）。注意题眼"就一般意义而言"——问的是这一趋势在资本关系下的性质与后果，不是问机器人好不好用。</p>
+<h3>第 1 步：链条三段对号入座</h3>
+<table><thead><tr><th>链条</th><th>内容</th><th>对应选项</th></tr></thead><tbody><tr><td>动力源</td><td>追逐剩余价值的资本本性 + 竞争强制</td><td><strong>D 由资本的本性决定的</strong></td></tr><tr><td>趋势形态</td><td>客观、强制、个人好恶改变不了</td><td><strong>B 不以人的意志为转移的一般趋势</strong></td></tr><tr><td>社会后果</td><td>劳动力需求相对下降 → 相对过剩人口</td><td><strong>C 社会产生相对过剩人口的一个重要原因</strong></td></tr><tr><td>性质判断</td><td>不是普惠福音：伴随失业与两极分化</td><td><strong>A ❌（见下）</strong></td></tr></tbody></table>
+<h3>为什么 A 错（唯一排除点，多说一句）</h3>
+<ul><li>一看后果：在资本主义框架内，有机构成提高恰恰<strong>伴随</strong>相对过剩人口（失业）和两极分化——它同时生产财富和生产贫困，"消除贫困的根本途径"无从谈起。</li><li>二看源泉：机器（不变资本）只能<strong>转移</strong>、不能<strong>创造</strong>剩余价值，剩余价值的唯一源泉是活劳动；把 c:v 上升说成一个社会增长财富、消除贫困的根本途径，既美化了资本趋势，又找错了财富源泉。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：被"科技创造财富"的常识带偏。题眼在"就一般意义而言"——它生产财富的同时也生产失业与贫困（产业后备军），谈不上消除贫困。</li><li><strong>漏选 C</strong>：只看到机器人"省人"，没把"省下的人"接住——对劳动力需求相对下降，正是相对过剩人口的重要成因。</li><li><strong>漏选 D</strong>：以为技术进步是中性的、自发的。技术本身中性，但"机器人在生产中广泛使用"的动力来自资本逐利——分析资本范畴，动力源要到<strong>资本本性</strong>里找。</li><li><strong>漏选 B</strong>：把趋势当成政策选择。超额剩余价值诱惑 + 竞争强制，使 c:v 上升成为客观趋势，不以任何人的意志为转移。</li></ul>
+<blockquote>记忆锚点：有机构成 c:v ↑ 的三连——由<strong>资本本性</strong>决定（D）→ 成为<strong>不以人的意志为转移的一般趋势</strong>（B）→ 挤出<strong>相对过剩人口</strong>（C）；它不是消除贫困的根本途径（A 错），机器也不创造剩余价值。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

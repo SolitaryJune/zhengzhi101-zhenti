@@ -1,8 +1,73 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-04 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-04</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2024·04 列宁展望未来社会的科学态度</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 anim_math_concept 模板（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [{"title": "审题眼", "cls": "key", "tag": "审题", "body": "<p>引文两句话：<b>生产力发展速度「不知道也不可能知道」</b>；国家消亡「长短取决于……日期或具体形式<b>作为悬案</b>，因为还没有可供解决这些问题的材料」——但「<b>消亡的必然性</b>」是肯定的。拆开看：一半细节悬置，一半方向可把握。</p>", "log": "引文两半：细节悬置 + 方向可把握"}, {"title": "先立机制：方向可指、细节悬置", "cls": "key", "tag": "立机制", "body": "<p>经典作家展望未来社会的科学方法：依据历史规律揭示<b>发展方向、原则和基本特征</b>（消亡必然性、过程长期性）；不对<b>具体细节</b>（速度、日期、形式）作任意描绘——因为材料还不够。</p>", "log": "机制：只给方向不开药方"}, {"title": "D. 不对细节作具体描绘——入选", "cls": "good", "tag": "D ✓", "ribbon": {"k": 4, "ok": true}, "body": "<p>「悬案」「还没有材料」= 对细节<b>存而不论</b>——引文原意正是 D。列宁的克制：只把握趋势，不描绘蓝图。</p>", "log": "D 正是引文原意 → 正确"}, {"title": "A. 揭示了各项措施方式方法——说反", "cls": "bad", "tag": "A ✗", "ribbon": {"k": 1, "ok": false}, "body": "<p>「措施、方式、方法」＝细节层面，恰恰是列宁<b>明确不预言</b>的内容——把「不给细节」说成「揭示了细节」，方向正好说反。</p>", "log": "A 与引文方向相反"}, {"title": "B. 不存在普遍规律——否认规律", "cls": "bad", "tag": "B ✗", "ribbon": {"k": 2, "ok": false}, "body": "<p>列宁恰恰肯定「国家消亡的<b>必然性</b>」——必然性就是规律。「不描绘细节」被极端化成「没有规律」，错。</p>", "log": "B 否认了引文肯定的必然性"}, {"title": "C. 没提出方向原则特征——否认内容", "cls": "bad", "tag": "C ✗", "ribbon": {"k": 3, "ok": false}, "body": "<p>与引文相反：必然性＝<b>方向</b>，「这个过程是长期的」＝<b>过程特征</b>——方向、原则、基本特征都已经提出了。</p>", "log": "C 否认了已提出的内容"}, {"title": "结论", "cls": "good", "tag": "完成", "body": "<p>答案 <b>D</b>。记忆锚点：经典作家展望未来社会＝<b>方向可指、细节悬置</b>：必然性（方向）说死；速度、日期、形式（细节）留白。</p>", "log": "锁定 D：不描绘细节"}];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "2024·04 列宁展望未来社会的科学态度",
+  subtitle: "考点：经典作家展望未来社会的方法 · 方法：拆引文 → 对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」：把引文拆成「可把握的方向」与「悬置的细节」两半。",
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "答案 <b>D</b>：列宁不对历史发展的各种细节作具体描绘——「还没有可供解决这些问题的材料」。A 把「不给细节」说反成「揭示措施方法」，B 否认了引文肯定的「消亡必然性」（规律存在），C 否认了已提出的方向与特征（必然性 + 长期性）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：经典作家展望未来社会的科学态度</h2>
+<p>答案：<strong>D（不对历史发展的各种细节作具体描绘）</strong>。</p>
+<h3>第 0 步：先立机制——只把握方向与规律，不描绘细节</h3>
+<p>马克思主义展望未来社会的科学方法是：<strong>依据历史规律揭示发展方向、原则和基本特征</strong>，而不对具体细节作任意描绘。理由：</p>
+<ol><li>未来社会的具体样态取决于未来的实践条件，<strong>现在还没有可供解决这些问题的材料</strong>（列宁原话）；</li><li>但<strong>规律与趋势现在就能把握</strong>——所以列宁才敢肯定「国家消亡的<strong>必然性</strong>」；</li><li>对「速度快慢、日期长短、具体形式」这类细节，则明确说「不知道而且也不可能知道」，作为<strong>悬案</strong>。</li></ol>
+<p>引文的两句话正对应这套结构：一半是「不可知」的细节，一半是「可把握」的必然性。</p>
+<h3>第 1 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>与引文的关系</th></tr></thead><tbody><tr><td>A 揭示了各项措施、方式、方法</td><td>❌</td><td>「措施、方式、方法」＝细节层面，恰是列宁明确不预言的</td></tr><tr><td>B 不存在适用于各社会形态的普遍规律</td><td>❌</td><td>列宁恰恰肯定「消亡的<strong>必然性</strong>」——规律存在且被把握</td></tr><tr><td>C 没有提出方向、原则和基本特征</td><td>❌</td><td>与引文相反：必然性＝方向，「过程是长期的」＝特征</td></tr><tr><td>D 不对历史发展的各种细节作具体描绘</td><td>✅</td><td>「悬案」「还没有材料」＝对细节存而不论</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：把「展望未来」误当成「替未来立法」——经典作家的克制恰恰在于：只给方向，不开药方；A 说反了。</li><li><strong>误选 B/C 的共同点</strong>：把「不描绘细节」极端化成「规律也没有、特征也没有」——这是对科学展望方法的两个方向相反的曲解：一个否认规律（B），一个否认已提出的内容（C）。</li></ul>
+<blockquote>记忆锚点：经典作家展望未来社会＝<strong>方向可指、细节悬置</strong>：必然性（方向）说死，日期、速度、形式（细节）留白。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

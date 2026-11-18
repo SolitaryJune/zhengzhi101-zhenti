@@ -1,8 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-09 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-09</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2020·09 争得民族独立和人民解放必须首先做什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX，纯文本推理卡片），
+     外壳沿用 anim-engine.js + anim.css，只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼：「首先」二字是钥匙',
+    cls: 'key',
+    body: '<p>近代两大历史任务：①争取<b>民族独立、人民解放</b>；②实现<b>国家富强、人民富裕</b>。题问「要争得民族独立和人民解放，必须<b>首先</b>」做什么——问的是第一大任务里扫清障碍的第一步。</p>',
+    log: '审题：「首先」锁定第一大任务的第一步'
+  },
+  {
+    title: '先立模型：两大任务是前提与目的',
+    cls: 'key',
+    body: '<ul><li><b>任务①（前提）</b>：改变半殖民地半封建的屈辱地位 → 靠<b>革命</b>扫清障碍</li><li><b>任务②（目的）</b>：改变经济技术文化落后面貌 → 靠<b>建设</b>发展生产力</li></ul><p>①是②的前提：障碍不除，建设无从谈起——问①的「首先」，答案只能是革命。</p>',
+    log: '前提（革命）在先，目的（建设）在后'
+  },
+  {
+    title: '机制：两座大山＋历史反证',
+    cls: 'step',
+    body: '<p><b>障碍</b>：帝国主义控制中国政治经济命脉，封建势力与之勾结——两座大山挡住独立与解放。<b>反证</b>：洋务运动（器物）、戊戌变法（改良）、实业/教育救国全都失败，因为都不<b>触动</b>两座大山——绕开革命的路走不通，「首先」只能是革命。</p>',
+    log: '障碍决定顺序：先破后立'
+  },
+  {
+    title: 'D：进行反帝反封建的民主革命',
+    cls: 'good',
+    ribbon: { k: 4, ok: true },
+    body: '<p>推翻帝国主义、封建主义两座大山，争得民族独立和人民解放，第一步就是<b>反帝反封建的民主革命</b>。<b>D 正确</b>。</p>',
+    log: 'D 对位「首先」 → 正确'
+  },
+  {
+    title: 'C：把「目的」当成「首先」',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>「改变经济技术落后的面貌」属<b>第二大任务</b>范畴——因果倒置：它以革命（任务①）完成为前提，不是争得独立解放的「首先」。<b>C 错误</b>。</p>',
+    log: 'C 是目的，不是手段 → 排除'
+  },
+  {
+    title: 'A：土地制度只是革命的一项内容',
+    cls: 'bad',
+    ribbon: { k: 1, ok: false },
+    body: '<p>封建土地制度确是封建统治的经济基础，但「废除地主土地所有制」是反封建革命<b>要做的事之一</b>——包含于革命，不能与革命并列抢「首先」。<b>A 错误</b>。</p>',
+    log: 'A 是革命的内容之一 → 排除'
+  },
+  {
+    title: 'B：「教育救国」已被历史反证',
+    cls: 'bad',
+    ribbon: { k: 2, ok: false },
+    body: '<p>发展教育提高国民素质属「教育救国」路线——不动社会制度便无从奏效，正是历史反复证明<b>走不通的改良思路</b>。<b>B 错误</b>。</p>',
+    log: 'B 是改良思路 → 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>D</b>。记忆锚点：两大任务=前提（独立解放，靠革命）+目的（富强富裕，靠建设）；前提的「首先」=<b>反帝反封建的民主革命</b>；洋务、变法、教育/实业救国的失败是绕开革命走不通的反证。</p>',
+    log: '锁定 D：首先进行反帝反封建革命'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: i === 0 ? '审题' : (last ? '结论' : '分析'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '争得民族独立和人民解放，必须首先做什么',
+  subtitle: '考点：近代中国两大历史任务及其关系 · 方法：先立「前提—目的」模型再对号入座',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: '答案 D',
+    html: '记忆锚点：两大任务是<b>前提与目的</b>——民族独立、人民解放靠<b>革命</b>，国家富强、人民富裕靠<b>建设</b>；前提的「首先」= <b>进行反帝反封建的民主革命</b>。C 是因果倒置（目的当手段），A 是革命的内容之一，B 是走不通的改良思路。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：争得民族独立和人民解放，必须首先做什么</h2>
+<p>答案：<strong>D（进行反帝反封建的民主革命）</strong>。</p>
+<h3>第 0 步：先立框架——两大历史任务是「前提与目的」的因果链</h3>
+<p>近代以来中华民族面临两大历史任务：第一，争取<strong>民族独立、人民解放</strong>；第二，实现<strong>国家富强、人民富裕</strong>。二者不是并列的两件事，而是一段有先后依赖关系的链条：</p>
+<table><thead><tr><th>任务</th><th>针对什么</th><th>靠什么实现</th></tr></thead><tbody><tr><td>① 民族独立、人民解放</td><td>改变半殖民地半封建的屈辱地位，推翻帝国主义、封建主义的统治</td><td><strong>革命</strong>——扫清障碍</td></tr><tr><td>② 国家富强、人民富裕</td><td>改变经济技术文化落后的面貌</td><td><strong>建设</strong>——发展生产力</td></tr></tbody></table>
+<p><strong>①是②的前提</strong>：不经过革命推翻内外压迫，国家富强、人民富裕就无从谈起。题问「要争得民族独立和人民解放，必须<strong>首先</strong>」——「首先」二字已把答案锁在扫清障碍这一步，即革命。</p>
+<h3>第 1 步：机制——为什么「首先」只能是革命</h3>
+<ol><li><strong>障碍在哪</strong>：半殖民地半封建的社会性质决定了，帝国主义通过不平等条约控制中国的政治经济命脉，封建势力与之相勾结——这两座大山正是民族独立、人民解放的最大障碍；</li><li><strong>历史反证</strong>：绕开革命的路都试过、都碰壁——洋务运动学器物、戊戌变法行改良、实业救国与教育救国搞建设，全部失败，共同原因是不<strong>触动</strong>帝国主义和封建主义的统治秩序；</li><li><strong>顺序由此决定</strong>：先以革命推翻两座大山、争得独立解放，才谈得上改变落后面貌——「先破后立」的顺序由社会性质决定，不是主观偏好。</li></ol>
+<h3>第 2 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 废除封建地主土地所有制</td><td>❌</td><td>是反封建<strong>革命的一项内容</strong>——与革命是包含关系，不能并列抢「首先」</td></tr><tr><td>B 发展教育提高国民素质</td><td>❌</td><td>「教育救国」路线：不动社会制度便无从奏效，历史已反证</td></tr><tr><td>C 改变经济技术落后的面貌</td><td>❌</td><td>属第二大任务范畴——把「目的」当成「首先的手段」，因果倒置</td></tr><tr><td>D 进行反帝反封建的民主革命</td><td>✅</td><td>推翻两座大山、争得民族独立和人民解放的第一步</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：因果倒置——「改变落后面貌」是第二大任务，它以第一大任务的完成为前提；题干问的恰是第一大任务内部的「首先」。</li><li><strong>误选 A</strong>：土地制度确实是封建统治的经济基础，但「废除地主土地所有制」是革命要做的事<strong>之一</strong>——包含于革命，不是与革命并列的另一条路。</li><li><strong>误选 B</strong>：与 C 同属「绕开革命直接建设」的改良思路，正是近代历史反复证明走不通的路。</li><li><strong>方法</strong>：「两大历史任务」是史纲高频设空点——问「前提」「首先」取革命，问「目的」「必然要求」落富强富裕；先分清任务与顺序，再对选项。</li></ul>
+<blockquote>记忆锚点：两大任务=前提（独立解放，靠革命）+目的（富强富裕，靠建设）；前提的「首先」=<strong>进行反帝反封建的民主革命</strong>；洋务、变法、实业/教育救国的失败=绕开革命走不通的历史反证。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

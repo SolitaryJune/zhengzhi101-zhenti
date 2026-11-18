@@ -1,8 +1,134 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-09 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-09</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2017·09 甲午战后瓜分狂潮的集中表现</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 时间线卡片（史实类）
+function tl(rows){
+  return '<div>' + rows.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:86px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼',
+    cls: 'key',
+    body: '<p>题眼：1895 年甲午战败后，列强掀起<b>瓜分中国的狂潮</b>，问这股狂潮的"集中表现"。"瓜分"= 把中国领土像切西瓜一样切走——先立"瓜分对应什么动作"的机制，再对号选项。</p>',
+    log: '甲午战败 → 瓜分狂潮，问集中表现'
+  },
+  {
+    title: '先立机制：瓜分的两手动作',
+    cls: 'key',
+    body: '<p>列强动手"切"的动作只有两种：<b>抢占租借地</b>（强租港湾、驻军设防）+ <b>划分势力范围</b>（声明某区域"归我经营"）。' + tl([
+      ['德国', '强租胶州湾，山东为其势力范围'],
+      ['俄国', '强租旅顺、大连，长城以北和东北为其势力范围'],
+      ['英国', '强租威海卫、九龙新界，长江流域为其势力范围'],
+      ['法国', '强租广州湾，两广、云南为其势力范围'],
+      ['美国', '来晚一步，1899 年提"门户开放"，利益均沾'],
+    ]) + '</p>',
+    log: '强租租借地 + 划分势力范围 = 瓜分的两手'
+  },
+  {
+    title: '选项 A：两手动作全在',
+    cls: 'good',
+    ribbon: { k: 1, ok: true },
+    body: '<p>A"竞相租借港湾和划分势力范围"——<b>对</b>。租借港湾 = 抢租借地，划分势力范围 = 圈势力范围，正是机制里的两个动作，也是史实表中四国共同干的事。<b>A 正确</b>。</p>',
+    log: '租借港湾 + 势力范围 → A 正确'
+  },
+  {
+    title: '选项 B：经济动作≠领土瓜分',
+    cls: 'bad',
+    ribbon: { k: 2, ok: false },
+    body: '<p>B"外国资本在中国近代工业中争夺垄断地位"——这是<b>资本输出</b>（《马关条约》允许外国在华设厂），属经济侵略手段；瓜分是领土动作，两者不是一回事。<b>B 排除</b>。</p>',
+    log: '资本输出是经济侵略 → B 排除'
+  },
+  {
+    title: '选项 C：租界早就有了',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>C"设立完全由外国人直接控制和统治的租界"——租界自 1845 年《上海土地章程》前后已陆续设立，甲午前已存在半个世纪，不是 1895 年才掀起的狂潮。注意<b>租界 ≠ 租借地</b>。<b>C 排除</b>。</p>',
+    log: '租界早已存在，租界≠租借地 → C 排除'
+  },
+  {
+    title: '选项 D：前奏不是高潮',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>D"从侵占中国周边邻国发展到蚕食中国边疆地区"——侵占缅甸、越南、朝鲜、蚕食边疆发生在甲午战争<b>之前</b>，是瓜分的前奏。题问的是 1895 年后狂潮的表现。<b>D 排除</b>。</p>',
+    log: '时间错位：前奏≠高潮 → D 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>A（竞相租借港湾和划分势力范围）</b>。侵略升级链：蚕食边疆（前奏）→ 甲午战败 → 瓜分狂潮（高潮）→ 门户开放（均分）。三个概念辨析：<b>租界</b>（口岸管理区）≠ <b>租借地</b>（强租港湾领土）≠ <b>势力范围</b>（优先利益地盘）。</p>',
+    log: '锁定 A：租借港湾与划分势力范围'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '甲午战后瓜分狂潮的集中表现：租借港湾与划分势力范围',
+  subtitle: '考点：甲午战后列强瓜分中国狂潮 · 方法：先立"瓜分 = 什么动作"的机制',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐项对号入座。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：瓜分狂潮 = <b>强租租借地 + 划分势力范围</b>（德·胶州湾 / 俄·旅大 / 英·威海卫九龙 / 法·广州湾；美国 1899 门户开放利益均沾）。<b>租界 ≠ 租借地 ≠ 势力范围</b>；资本输出（B 项）是经济侵略，蚕食边疆（D 项）是甲午前的前奏，都不是 1895 年瓜分狂潮的表现。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：甲午战后列强"瓜分狂潮"的集中表现</h2>
+<p>答案：<strong>A（竞相租借港湾和划分势力范围）</strong>。</p>
+<h3>第 0 步：先立机制——"瓜分"落地时是什么动作</h3>
+<p>"瓜分"指把中国领土像切西瓜一样切走。列强动手"切"的方式在史实中只有两种：<strong>抢占租借地</strong>（强租港湾、驻军设防，把地盘攥在手里）和<strong>划分势力范围</strong>（声明某省某区域"归我经营"，别国不得插手）。1895 年甲午战败、《马关条约》签订后，三国干涉还辽暴露了清政府的虚弱，列强随即竞相施展这两手，史称"瓜分狂潮"。题眼问"集中表现"，就是问这两种动作，答案自然落到 A。</p>
+<h3>第 1 步：用史实核对——瓜分狂潮里各列强干了什么</h3>
+<table><thead><tr><th>列强</th><th>动作</th><th>得到什么</th></tr></thead><tbody><tr><td>德国</td><td>强租胶州湾</td><td>山东为其势力范围</td></tr><tr><td>俄国</td><td>强租旅顺、大连</td><td>长城以北和东北为其势力范围</td></tr><tr><td>英国</td><td>强租威海卫、九龙新界</td><td>长江流域为其势力范围</td></tr><tr><td>法国</td><td>强租广州湾</td><td>广东、广西、云南为其势力范围</td></tr></tbody></table>
+<p>美国来晚一步，1899 年提出"门户开放"政策，要求"利益均沾"、分享其他列强在华权益——它没抢到"切"的份额，转而求"均分"。这张表恰好证明：瓜分狂潮的标志性画面就是<strong>租借港湾 + 划分势力范围</strong>。</p>
+<h3>第 2 步：干扰项归因——每个错项对应哪种误解</h3>
+<table><thead><tr><th>选项</th><th>错在哪</th><th>对应误解</th></tr></thead><tbody><tr><td>B</td><td>外国资本在近代工业中争夺垄断地位，属于<strong>资本输出</strong>（《马关条约》允许外国在华设厂），是经济侵略手段，不是领土瓜分</td><td>把"经济侵略方式"混成"领土瓜分方式"</td></tr><tr><td>C</td><td>租界自 1845 年《上海土地章程》前后已陆续设立，到甲午战败前已存在半个世纪，不是 1895 年才掀起的狂潮</td><td>把"租界"与"租借地"混为一谈</td></tr><tr><td>D</td><td>侵占周边邻国（缅甸、越南、朝鲜）、蚕食中国边疆发生在甲午战争<strong>之前</strong>，是瓜分的前奏</td><td>时间错位：把前奏当高潮</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>租界 ≠ 租借地</strong>：租界是通商口岸里外国人管理的城区（早已存在）；租借地是强租的港湾领土（甲午后才成潮）。选 C 就是在这两者间打转。</li><li><strong>瓜分是领土动作，资本输出是经济动作</strong>：B 项描述的设厂、垄断是《马关条约》开辟的经济侵略新阶段，与"瓜分领土"不是一回事。</li><li>侵略是步步升级的过程：蚕食边疆（前奏）→ 甲午战败 → 瓜分狂潮（高潮），别把上一阶段当本题答案。</li></ul>
+<blockquote>记忆锚点：瓜分狂潮 = <strong>强租租借地 + 划分势力范围</strong>（德·胶州湾、俄·旅大、英·威海卫九龙、法·广州湾）；美国迟到，1899"门户开放"利益均沾；租界、租借地、势力范围三者不可混。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

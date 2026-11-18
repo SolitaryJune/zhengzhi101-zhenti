@@ -1,8 +1,128 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-07 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-07</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·07 按生产要素分配的根据：所有制决定分配</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链模板（政治站无 KaTeX 版）。引擎自绘题目卡；只维护下方题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域 ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链步骤定义：title / cls(key|good|bad) / body / ribbon / log
+var STEPS = [
+  {
+    title: '审题眼：问「根据」往哪找',
+    cls: 'key',
+    body: '<p>题眼是「<b>必要性和根据</b>」。问根据=问制度根源；考研政治里「根据/依据」类问题，答案永远落在<b>生产资料所有制</b>上——分配关系由所有制决定。</p>',
+    log: '问「根据」→ 往所有制里找制度根源'
+  },
+  {
+    title: '先立机制：所有制决定分配',
+    cls: 'key',
+    body: '<p>分配是所有制的<b>实现</b>：谁占有生产条件，谁就有权取得收入。<b>公有制</b>内凭劳动→按劳分配；生产要素归<b>不同主体所有</b>（私人资本、集体土地、专利技术……），被别人使用不能无偿→所有者凭<b>所有权</b>参与分配→按生产要素分配。</p>',
+    log: '公有制→按劳分配；多种要素所有制→按要素分配'
+  },
+  {
+    title: '对照我国现实：多种所有制并存',
+    cls: 'step',
+    body: '<p>我国社会主义初级阶段：公有制为主体、<b>多种所有制经济共同发展</b>——劳动、资本、技术、管理等要素分属不同所有者。这正是按生产要素分配得以存在的<b>现实土壤</b>，答案方向已锁定。</p>',
+    log: '初级阶段多种所有制并存 → 土地、资本、技术各归其主'
+  },
+  {
+    title: 'A 对号：多种所有制=制度根源',
+    cls: 'good',
+    body: '<p>「我国社会存在着生产要素的<b>多种所有制</b>」正是按要素分配的必要性和根据——多种要素所有制→按生产要素分配。<b>A 正确</b>。</p>',
+    ribbon: { k: 1, ok: true },
+    log: '多种要素所有制=根据 → 锁定 A'
+  },
+  {
+    title: 'B 过筛：地位描述答不了「根据」',
+    cls: 'bad',
+    body: '<p>「按要素分配是按劳分配的<b>补充</b>」是对二者<b>地位关系</b>的描述，回答不了「根据」；现行制度是按劳分配<b>为主体</b>、多种分配方式<b>并存</b>，二者由不同所有制分别决定，不是主从补充关系。<b>B 错误</b>。</p>',
+    ribbon: { k: 2, ok: false },
+    log: '描述地位≠根据，且「补充」表述已过时 → B 不选'
+  },
+  {
+    title: 'C 过筛：「有用」≠「有权分」',
+    cls: 'bad',
+    body: '<p>「要素转化为生产力」只说明它<b>有用</b>。反例：公有企业里的机器同样转化为生产力，却没人凭它分收入——中间缺了「<b>归不同主体所有</b>（所有权）」这个环节。<b>C 错误</b>。</p>',
+    ribbon: { k: 3, ok: false },
+    log: '缺所有权环节：有用≠有权分 → C 不选'
+  },
+  {
+    title: 'D 过筛：活劳动是价值唯一源泉',
+    cls: 'bad',
+    body: '<p>「要素是价值的源泉」撞了劳动价值论的底线：<b>活劳动</b>才是价值的唯一源泉，资本、土地等只是<b>财富（使用价值）</b>生产的条件。凭要素分收入凭的是<b>所有权</b>，不是「要素创造价值」。<b>D 错误</b>。</p>',
+    ribbon: { k: 4, ok: false },
+    log: '要素不创造价值：凭所有权分配≠凭创造价值 → D 不选'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>A</b>：实行按生产要素分配的根据是<b>我国社会存在着生产要素的多种所有制</b>。两件事分开记：<b>价值的创造</b>唯活劳动；<b>价值的分配</b>凭所有权。</p>',
+    log: '结论：多种要素所有制 → 选 A'
+  }
+];
+
+// 前 n 步卡片的累积 HTML
+function cardsUpTo(n){
+  return STEPS.slice(0, n).map(function(s, i){
+    return card(i + 1, s.cls, s.title, s.body);
+  }).join('');
+}
+
+var snaps = [
+  { cls: 'step', tag: '第 1 步', log: STEPS[0].log, count: 1, html: cardsUpTo(1) },
+  { cls: 'step', tag: '第 2 步', log: STEPS[1].log, count: 2, html: cardsUpTo(2) },
+  { cls: 'step', tag: '第 3 步', log: STEPS[2].log, count: 3, html: cardsUpTo(3) },
+  { cls: 'ok',   tag: 'A 对号', log: STEPS[3].log, count: 4, html: cardsUpTo(4), ribbon: STEPS[3].ribbon },
+  { cls: 'miss', tag: 'B 过筛', log: STEPS[4].log, count: 5, html: cardsUpTo(5), ribbon: STEPS[4].ribbon },
+  { cls: 'miss', tag: 'C 过筛', log: STEPS[5].log, count: 6, html: cardsUpTo(6), ribbon: STEPS[5].ribbon },
+  { cls: 'miss', tag: 'D 过筛', log: STEPS[6].log, count: 7, html: cardsUpTo(7), ribbon: STEPS[6].ribbon },
+  { cls: 'done', tag: '结论',   log: STEPS[7].log, count: 8, html: cardsUpTo(8), done: true }
+];
+
+AW.init({
+  title: '按生产要素分配的必要性和根据',
+  subtitle: '考点：按劳分配与按生产要素分配 · 方法：先立「所有制决定分配」，再逐项过筛',
+  counterLabel: '推理步',
+  ribbonTitle: '选项过筛（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链：立机制 → 对号 A → 过筛 B/C/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：分配由<b>所有制</b>决定——公有制→按劳分配；<b>多种要素所有制→按生产要素分配</b>（凭所有权）。最深的坑是 D：要素只是<b>财富（使用价值）</b>的源泉，<b>活劳动</b>才是价值的唯一源泉；C 的「有用」与分配之间缺的是「所有权」环节。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：按生产要素分配的「必要性和根据」藏在哪</h2>
+<p>答案：<strong>A（我国社会存在着生产要素的多种所有制）</strong>。</p>
+<h3>第 0 步：先立总纲——分配方式由所有制决定</h3>
+<p>这道题问的是「根据」，即制度层面的<strong>根源</strong>。考研政治里这类「根据/依据/必要性」题，答案永远往<strong>生产资料所有制</strong>里找，因为分配关系是由所有制关系决定的：谁占有生产条件，谁就有权取得收入。把这个总纲立起来，四个选项可以直接过筛：</p>
+<table><thead><tr><th>所有制状况</th><th>决定出的分配方式</th></tr></thead><tbody><tr><td>生产资料<strong>公有</strong>，劳动者共同占有</td><td>按劳分配——公有的生产资料不能作为个人分收入的凭据，凭的是劳动</td></tr><tr><td>生产要素分属<strong>不同所有者</strong>（私人资本、集体土地、专利技术、管理才能……）</td><td>要素被别人使用不能是无偿的，所有者凭<strong>所有权</strong>参与分配 → 按生产要素分配</td></tr></tbody></table>
+<p>我国社会主义初级阶段的基本经济制度是公有制为主体、多种所有制经济共同发展——劳动、资本、技术、管理等要素确实归<strong>不同主体</strong>所有，这是按生产要素分配得以存在的现实土壤。所以「必要性和根据」= <strong>存在生产要素的多种所有制</strong>，选 A。</p>
+<h3>第 1 步：干扰项逐个过筛——每项错在哪个环节</h3>
+<ul><li><strong>B「是按劳分配的补充」</strong>：错在两处。第一，答非所问——「补充」描述的是二者的<strong>地位关系</strong>，而题目问的是「根据」，地位描述当不了根源；第二，表述本身也不准——现行制度是按劳分配<strong>为主体</strong>、多种分配方式<strong>并存</strong>，二者分别由公有制与多种要素所有制决定，是「并列并存」不是「主从补充」。</li><li><strong>C「可以转化为生产力」</strong>：错在缺了中间环节。要素「有用」（参与使用价值生产、提高效率）只是它<strong>被使用</strong>的理由，不是它<strong>参与分配</strong>的理由。反例一想就通：公有企业里的机器同样转化为生产力，却没有谁凭这台机器分走收入——因为机器是公有的，缺的正是「归不同主体所有」这一环。</li><li><strong>D「是价值的源泉」</strong>：错在撞了劳动价值论的底线。<strong>活劳动是价值的唯一源泉</strong>，资本、土地、技术本身不创造价值，它们只是价值创造的物质条件、是<strong>财富（使用价值）</strong>的源泉。若 D 成立，「按要素分配」就变成了「要素创造了价值所以要素要分价值」，恰好歪曲了这门课的立场。</li></ul>
+<h3>第 2 步：预判追问——凭要素分钱，凭什么？</h3>
+<p>学习者最容易追问：资本家凭资本拿利润，总得有个说法吧？答案是：凭<strong>所有权</strong>，而不是凭「创造价值」。要把两件事分开——<strong>价值的创造</strong>（谁创造了价值：唯活劳动）与<strong>价值的分配</strong>（凭什么参与分配：凭生产要素的<strong>所有权</strong>及其投入）。承认按要素分配≠承认要素创造价值，前者是所有制关系决定的分配制度，后者是要被批判的「要素价值论」。C 的「有用」与 D 的「创造价值」正是分别漏掉、篡改了「所有权」这个关键词。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 D（顺着「钱生钱」的常识走）</strong>：常识直觉里资本能生钱，但政治经济学的分析立场是劳动价值论——D 恰是本题要排除的错误观点，也是最深的坑。</li><li><strong>误选 C（把「有用」当「有份」）</strong>：混淆「要素在生产中的作用」与「要素参与分配的依据」，中间缺了所有权环节。</li><li><strong>误选 B（背到过这句话）</strong>：旧教材语境里的表述有印象就选，既没审「根据」这个问法，也没注意它已被「并存」的表述替代。</li></ul>
+<blockquote>记忆锚点：所有制决定分配——公有制→按劳分配；<strong>多种要素所有制→按生产要素分配</strong>；要素参与分配凭<strong>所有权</strong>，不凭「有用」（C），更不凭「创造价值」（D）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

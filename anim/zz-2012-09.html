@@ -1,8 +1,89 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-09 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-09</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-09 · 近代反侵略斗争</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：「根本原因」——问根本就找内因',
+    cls: 'key',
+    body: '<p>19 世纪 40 年代起，列强屡屡发动侵略战争，妄图瓜分、灭亡中国，却始终未得逞。题问其<b>根本原因</b>——限定词是钥匙：问「根本」就在<b>内因层</b>取答案，外部条件再重要也不答「根本」。考点：近代反侵略斗争。</p>' },
+  { title: '立机制：外因是条件，内因是根据',
+    cls: 'key',
+    body: '<p>两层原因串成因果链：①外部——列强之间的矛盾和相互制约，让瓜分<b>难以协调</b>；②内部——<b>中华民族不屈不挠的反侵略斗争</b>，使灭亡瓜分中国成为不可能。关键反问：互制为什么能起作用？——因为抵抗把「硬吞中国」的代价抬到不可承受，列强才改走划分势力范围的「分而治之」。外因的作用建立在抵抗之上。</p>' },
+  { title: '选项 A：中西文化存在巨大差异',
+    cls: 'bad', k: 1, pick: false,
+    body: '<p>文化差异解释不了侵略战争的成败，「文化决定论」解释力为零，凑数干扰，<b>排除</b>。</p>' },
+  { title: '选项 B：中国经济政治发展不平衡',
+    cls: 'bad', k: 2, pick: false,
+    body: '<p>方向相反：不平衡是近代中国的社会状况，恰恰<b>被列强利用</b>来各自划分势力范围——它是列强实施瓜分的抓手，不是阻止瓜分的原因，<b>排除</b>。</p>' },
+  { title: '选项 C：帝国主义列强之间的矛盾和相互制约',
+    cls: 'bad', k: 3, pick: false,
+    body: '<p>史实里出现最多、最「像原因」，但解释的只是列强<b>内部</b>怎么互相拆台，不是中国为什么吞不下——外部条件，答「根本原因」错层，<b>排除</b>。</p>' },
+  { title: '选项 D：中华民族进行的不屈不挠的反侵略战争',
+    cls: 'good', k: 4, pick: true,
+    body: '<p>三元里抗英、义和团运动等一波接一波的斗争，让列强看到灭亡中国必遭无法承受的抵抗——教材明文的根本原因，<b>入选</b>。</p>' },
+  { title: '结论：根本原因找内因',
+    cls: 'good',
+    body: '<p>「根本」二字排除外部条件的 C；A 解释力为零、B 方向相反。</p><p><b>答案 D。</b>记忆锚点：中华民族不屈不挠的反侵略斗争＝根本原因；外因是条件，内因是根据。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2012-09 · 帝国主义为何未能灭亡瓜分中国',
+  subtitle: '2012 年第 9 题（单选）· 考点：近代反侵略斗争 · 逐项推演',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 正确 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立内外因分层机制，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 D',
+    html: '记忆锚点：问「根本原因」找<b>内因</b>——中华民族不屈不挠的反侵略斗争；列强之间的矛盾和相互制约只是外部条件：<b>外因是条件，内因是根据</b>。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：帝国主义为何吞不下中国——「根本原因」找内因</h2>
+<p>答案：<strong>D（中华民族进行的不屈不挠的反侵略战争）</strong>。</p>
+<h3>第 0 步：先立机制——「根本原因」的分析次序</h3>
+<p>先立框架再选：列强屡屡侵华、妄图瓜分灭亡中国而始终未得逞，原因是分层次的，教材把两层说得很清楚：</p>
+<table><thead><tr><th>层次</th><th>内容</th><th>地位</th></tr></thead><tbody><tr><td>外部条件</td><td>帝国主义列强之间的矛盾和相互制约</td><td>重要原因——让瓜分「难以协调」，但只起牵制作用</td></tr><tr><td>内部根本</td><td><strong>中华民族进行的不屈不挠的反侵略斗争</strong></td><td>决定性因素——使灭亡和瓜分中国成为不可能</td></tr></tbody></table>
+<p>「根本原因」这个限定词是解题钥匙：问「根本」就在<strong>内因层</strong>取答案，外部条件再重要也不答「根本」。</p>
+<h3>第 1 步：顺着反问链，为什么抵抗才是「根本」</h3>
+<p>把两层原因串成因果链看一遍：列强之间互相制约，为什么能牵制住瓜分行动？——因为任何一国想独吞或瓜分中国，都要先掂量<strong>灭亡中国的代价</strong>。而这个代价是谁造成的？三元里抗英、义和团运动等一波接一波的反侵略斗争，让列强看到中华民族不屈不挠的抵抗意志：硬吞中国必遭无法承受的反击。于是列强才退而求其次，改走「分而治之」、划分势力范围的路。</p>
+<p>也就是说，<strong>外部的相互制约之所以能起作用，前提是内部的抵抗把瓜分成本抬到了不可承受</strong>——外因是条件，内因是根据。民族意识的觉醒与全民抗争，才是瓜分灭亡始终只是图谋的决定性变量。</p>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 中西文化存在巨大差异</td><td>❌</td><td>文化差异解释不了侵略战争的成败，凑数干扰</td></tr><tr><td>B 中国经济政治发展不平衡</td><td>❌</td><td>是近代中国的社会状况，反而<strong>被列强利用</strong>来各自划分势力范围，方向相反</td></tr><tr><td>C 帝国主义列强之间的矛盾和相互制约</td><td>❌</td><td>重要原因但属<strong>外部条件</strong>，只能说明瓜分难以协调，答「根本原因」错层</td></tr><tr><td>D 中华民族进行的不屈不挠的反侵略战争</td><td>✅</td><td>教材明文的根本原因——抵抗使灭亡瓜分中国成为不可能</td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>选 C →「最有史料感的项就是原因」的误解</strong>：C 在史实叙述里出现频率很高（三国干涉还辽、瓜分狂潮中的均势博弈），最「像原因」。但它解释的只是列强<strong>内部</strong>怎么互相拆台，不是中国<strong>为什么吞不下</strong>——把外部牵制当成根本原因，是内外因不分的典型错误。</li><li><strong>选 B →「国情项总不会错」的误解</strong>：看到「经济政治发展不平衡」这种常见国情表述就选。但本题问的是<strong>阻止</strong>瓜分的原因，发展不平衡恰恰是列强<strong>实施</strong>瓜分的抓手之一，作用方向与题干相反。</li><li><strong>选 A →「文化决定论」的误解</strong>：用文化差异来解释军事政治斗争的胜负，解释力为零。</li></ul>
+<blockquote>记忆锚点：帝国主义未能灭亡和瓜分中国——根本原因=中华民族不屈不挠的反侵略斗争；列强互制只是外部条件，外因条件、内因根据。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

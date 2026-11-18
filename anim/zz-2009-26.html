@@ -1,8 +1,83 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-26 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-26</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2009-26 · 新民主主义文化：“民族的”专属内涵</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：三个定语先划地盘',
+    cls: 'key',
+    body: '<p>《新民主主义论》：文化是<b>民族的、科学的、大众的</b>。民族的＝反帝争独立＋中国作风中国气派；科学的＝反封建迷信；大众的＝为 90% 以上工农服务。题问“民族的”→ 只在第一行找。</p>' },
+  { title: '选项 A：反对外来的资本主义文化',
+    cls: 'bad', k: 1, pick: false,
+    body: '<p>扩大打击面：“民族的”反对的是<b>帝国主义的奴化思想与压迫</b>，不是“外来”本身——对外来进步文化是批判吸收、洋为中用。偷换对象 → <b>排除</b>。</p>' },
+  { title: '选项 B：反对帝国主义压迫，主张民族尊严独立',
+    cls: 'good', k: 2, pick: true,
+    body: '<p>“民族的”第一内涵<b>原文</b>：政治立场上反帝、争民族独立与尊严。<b>入选</b>。</p>' },
+  { title: '选项 C：形式和内容上有中国作风和中国气派',
+    cls: 'good', k: 3, pick: true,
+    body: '<p>“民族的”第二内涵<b>原文</b>：文化形态上的民族形式——反帝＋中国气派两半缺一不可。<b>入选</b>。</p>' },
+  { title: '选项 D：为全民族 90% 以上的工农大众服务',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p>句子本身没错，但这是<b>“大众的”</b>内涵——站错了定语的地盘。考归属不考对错 → <b>排除</b>。</p>' },
+  { title: '结论：BC',
+    cls: 'good',
+    body: '<p>“民族的”两半＝反帝（B）＋中国气派（C）——<b>答案 BC</b>；A 是把反帝扩大成排外，D 是“大众的”串门。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2009-26 · 新民主主义文化：“民族的”专属内涵',
+  subtitle: '2009 年第 26 题（多选）· 考点：新民主主义文化纲领 · 定语对号入座',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先划三个定语的地盘，再逐项判定归属。',
+  snaps: snaps,
+  result: {
+    big: '答案 BC',
+    html: '记忆锚点：<b>民族＝反帝＋中国气派；科学＝反封建迷信；大众＝为工农服务</b>。A 扩大化，D 站错了地盘。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：新民主主义文化——"民族的"专属内涵对号入座</h2>
+<p>答案：<strong>BC</strong>。</p>
+<h3>第 0 步：先立机制——三个定语各有"地盘"，答题就是分地盘</h3>
+<p>毛泽东《新民主主义论》：新民主主义的文化是<strong>民族的、科学的、大众的</strong>文化。这类题的唯一考法是"对号入座"，所以先把三个定语各自的地盘划清：</p>
+<table><thead><tr><th>定语</th><th>专属内涵</th></tr></thead><tbody><tr><td><strong>民族的</strong></td><td>① 反对帝国主义压迫，主张中华民族的尊严和独立；② 带有民族特性——在形式和内容上有中国作风和中国气派</td></tr><tr><td><strong>科学的</strong></td><td>反对一切封建思想和迷信思想，主张实事求是、客观真理</td></tr><tr><td><strong>大众的</strong></td><td>为全民族中 90% 以上的工农劳苦民众服务</td></tr></tbody></table>
+<p>题问"民族的"→ 只能在第一行的两个内涵里找答案。</p>
+<h3>第 1 步：B、C 入座，A、D 出局</h3>
+<ul><li><strong>B（反帝、民族尊严独立）</strong>：第一内涵原文，入选。</li><li><strong>C（中国作风和中国气派）</strong>：第二内涵原文——"民族的"不只是政治立场上的反帝，还包括文化形态上的民族形式，两层缺一不可，入选。</li><li><strong>A（反对外来的资本主义文化）</strong>：扩大打击面。"民族的"反对的是<strong>帝国主义的奴化思想与压迫</strong>；对外来文化（包括进步的外国文化）是批判吸收、洋为中用，不是一概排外。把"反帝"偷换成"反外来资本主义文化"，错。</li><li><strong>D（为 90% 以上工农大众服务）</strong>：这是"大众的"的内涵，串门了，不选。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>三定语互相串门</strong>：本题最大失分来源——D 就是典型，句子本身完全正确，只是站错了定语的地盘。</li><li><strong>误选 A</strong>：把"民族的"理解成文化上的闭关排外——注意它反对的对象是"帝国主义的压迫与奴化"，不是"外来"本身。</li><li><strong>判断技巧</strong>：选项内容越"正确"越要问一句"它属于哪个定语"——新民主主义文化题考归属不考对错。</li></ul>
+<blockquote>记忆锚点：<strong>民族＝反帝 + 中国气派；科学＝反封建迷信；大众＝为工农服务</strong>。B、C 是"民族的"的两半；D 是"大众的"，A 是扩大化。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

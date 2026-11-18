@@ -1,8 +1,125 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-07 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-07</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·07 为什么坚持公有制的主体地位</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（politics101 站约定，纯文本卡片，无 KaTeX）。
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 判定行
+function verdict(txt, ok){
+  return '<p><b style="color:' + (ok ? '#15803d' : '#b91c1c') + '">' + (ok ? '✓ ' : '✗ ') + txt + '</b></p>';
+}
+
+// 决定链条节点
+function chainNode(txt, root){
+  return '<span class="aw-box ' + (root ? 'hit' : '') + '" style="display:inline-block;margin:3px 2px;padding:4px 10px;font-size:12.5px;font-weight:700">' + txt + '</span>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：三层制度摆全，问「因为」',
+    cls: 'key',
+    body: '<p>题干把社会主义基本经济制度三层一次摆全：所有制、分配、市场经济体制，然后问「坚持公有制的<b>主体地位</b>，是因为」——找的是<b>根本理由</b>，不是一般性的好话。</p>',
+    log: '定位题型：问「因为」，找决定性的那句话' },
+  { title: '立机制：三层制度里，所有制是根',
+    cls: 'key',
+    body: '<p>马克思主义政治经济学的排序是固定的：生产资料所有制是生产关系的<b>基础和核心</b>。</p>' +
+          '<p>' + chainNode('生产资料所有制', true) + ' → ' + chainNode('人们在生产中的地位与关系') + ' → ' + chainNode('分配方式') + '</p>' +
+          '<p>生产资料<b>归谁所有</b>，决定生产<b>为谁进行</b>、产品<b>归谁分配</b>——再往上，决定社会的<b>基本性质和发展方向</b>。</p>',
+    log: '机制：所有制是根，往下决定分配，往上决定社会性质' },
+  { title: '推论：公有制占主体，性质才立得住',
+    cls: 'ok',
+    body: '<p>把机制放进题干：三层制度里<b>所有制层是根</b>。公有制占主体，社会的<b>社会主义性质</b>才立得住，按劳分配为主体、共同富裕的方向才有制度保证。选项 A 正是这条原理的<b>原句</b>。</p>',
+    log: '推论：主体地位的理由＝所有制决定社会性质' },
+  { title: 'A：原理原句，正中根本',
+    cls: 'good',
+    body: '<p>A「生产资料所有制决定社会的基本性质和发展方向」——回答的正是「为什么必须公有制<b>占主体</b>」这个根本问题。<b>A 正确</b>。</p>' +
+    verdict('A 所有制决定社会的基本性质和发展方向 —— 根本理由', true),
+    ribbon: { k: 1, ok: true },
+    log: 'A 命中：决定性的原理原句' },
+  { title: 'B：「都是基础」分不出主体',
+    cls: 'bad',
+    body: '<p>教材原句是「公有制经济<b>和非公有制经济都是</b>我国经济社会发展的重要基础」——既然两种所有制<b>都</b>是基础，这句话就解释不了为什么偏偏公有制「占主体」。<b>B 错误</b>（答非所问）。</p>' +
+    verdict('B 重要基础 —— 公与非公同样成立，答不了「主体」', false),
+    ribbon: { k: 2, ok: false },
+    log: 'B 似是而非：对公与非公同时成立' },
+  { title: 'C：「组成部分」是身份，不是依据',
+    cls: 'bad',
+    body: '<p>同一陷阱：教材原句「公有制经济和非公有制经济<b>都是</b>社会主义市场经济的重要组成部分」——「组成部分」是身份描述，不构成主体地位的理由。<b>C 错误</b>。</p>' +
+    verdict('C 重要组成部分 —— 身份描述，不是主体依据', false),
+    ribbon: { k: 3, ok: false },
+    log: 'C 同一陷阱：组成部分身份≠主体地位理由' },
+  { title: 'D：过度承诺',
+    cls: 'bad',
+    body: '<p>「使<b>一切社会成员</b>实现全面发展」——现阶段按劳分配为主体的分配仍存在差别，「一切社会成员全面发展」是远期目标，当下的分配方式给不出这个保证。<b>D 错误</b>（全称承诺落空）。</p>' +
+    verdict('D 一切社会成员全面发展 —— 现阶段给不出', false),
+    ribbon: { k: 4, ok: false },
+    log: 'D 过度承诺：全称表述超出现阶段制度' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>A：生产资料所有制决定社会的基本性质和发展方向</b>。方法复盘：问「因为」先找「根」——三层制度，所有制是根；「都是基础」「都是组成部分」对公与非公<b>同时成立</b>，答不了「为什么公是主体」。</p>',
+    log: '锁定 A：所有制的决定性原理' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || ((s.cls === 'good' || s.cls === 'ok') ? '命中' : (s.cls === 'bad' ? '排除' : '第 ' + (i + 1) + ' 步')),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "为什么坚持公有制的主体地位",
+  subtitle: "考点：社会主义基本经济制度 · 方法：三层制度找「根」，所有制决定社会性质",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A 2=B 3=C 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先立「所有制是根」的决定链，再推论，最后逐项排除。',
+  snaps: snaps,
+  result: {
+    big: "答案 A",
+    html: "三层制度，<b>所有制是根</b>——生产资料所有制决定社会的基本性质和发展方向，公有制占主体，社会主义性质才立得住。记忆锚点：「都是重要基础」「都是重要组成部分」对公与非公<b>同时成立</b>，答不了「为什么公是主体」；「一切社会成员全面发展」是全称承诺，现阶段给不出。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：坚持公有制主体地位的「根本理由」是哪一条</h2>
+<p>答案：<strong>A（生产资料所有制决定社会的基本性质和发展方向）</strong>。</p>
+<h3>第 0 步：机制先行——从「三层制度」里找出那层「根」</h3>
+<p>题干把社会主义基本经济制度三层一次摆全：<strong>所有制</strong>（公有制为主体、多种所有制经济共同发展）→ <strong>分配</strong>（按劳分配为主体、多种分配方式并存）→ <strong>体制</strong>（社会主义市场经济体制）。马克思主义政治经济学的排序是固定的：生产资料所有制是生产关系的<strong>基础和核心</strong>——生产资料归谁所有，决定生产为谁进行、产品归谁分配，再往上就决定这个社会的<strong>基本性质和发展方向</strong>。所有制定了，分配方式和交换方式跟着定。</p>
+<p>把这条原理放进题干：三层制度里，<strong>所有制层是根</strong>。公有制占主体，社会的社会主义性质才立得住，按劳分配为主体、共同富裕的方向才有制度保证——这就是「为什么必须坚持公有制主体地位」的根本答案。选项 A 就是这条原理的原文，问「因为」，答的必须是这种<strong>决定性</strong>的理由。</p>
+<h3>第 1 步：逐项裁定</h3>
+<table><thead><tr><th>选项</th><th>判定</th><th>归因</th></tr></thead><tbody><tr><td>A 生产资料所有制决定社会的基本性质和发展方向</td><td>✅</td><td>原理原句：公有制为主体 ⇒ 社会主义性质立得住，是「主体地位」的<strong>决定性</strong>依据</td></tr><tr><td>B 公有制是我国经济社会发展的重要基础</td><td>❌</td><td>似是而非：教材原句是「公有制经济<strong>和非公有制经济都是</strong>我国经济社会发展的重要基础」——「都是」的身份分不出谁「主体」，力度够不到根本原因</td></tr><tr><td>C 公有制经济是社会主义市场经济的重要组成部分</td><td>❌</td><td>同一陷阱：原句是「公有制经济和非公有制经济<strong>都是</strong>社会主义市场经济的重要组成部分」——「组成部分」是身份描述，不是主体地位的理由</td></tr><tr><td>D 由生产资料所有制决定的分配方式能使一切社会成员实现全面发展</td><td>❌</td><td>过度承诺：现阶段按劳分配为主体的分配仍存在差别；「一切社会成员实现全面发展」是远期目标，当下的分配方式给不出这个保证</td></tr></tbody></table>
+<h3>第 2 步：预判两个追问</h3>
+<ul><li><strong>「为什么所有制能决定社会性质？」</strong>——生产资料归谁所有决定生产目的：私人占有生产资料，生产为增殖利润服务，社会就是资本主义性质；公有制占主体，生产服从全体人民利益，社会才是社会主义性质。性质定了，发展方向（共同富裕）随之而定。</li><li><strong>「B、C 的话难道错了吗？」</strong>——话本身是教材语言，错在<strong>答非所问</strong>：它们对公有制和非公有制<strong>同样成立</strong>，既然两种所有制都「是基础」「是组成部分」，就解释不了为什么偏偏要公有制「占主体」。题问的是「主体地位」的<strong>根本依据</strong>，只有 A 够格。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：只顾眼熟——B、C 都摘自教材原句，但都把「对公与非公同样成立的身份表述」错当「只属于公有制的主体依据」。</li><li><strong>误选 D</strong>：被「全面发展」的宏大表述吸引——凡出现「一切社会成员」「都能」这类全称承诺，先核对现阶段的制度给不给得出。</li></ul>
+<blockquote>记忆锚点：三层制度，<strong>所有制是根</strong>——所有制决定社会的基本性质和发展方向，所以必须公有制占主体；「都是重要基础」「都是重要组成部分」对公与非公<strong>同时成立</strong>，答不了「为什么公是主体」。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

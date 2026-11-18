@@ -1,8 +1,107 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2019-30 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2019-30</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2019-30 社会主义核心价值观的重大意义 · 辐射半径动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+/* 辐射方向格子：[格内文字, 格下注, 颜色类 ok/miss/dim/''] */
+function cells(arr, w){
+  return '<div class="aw-cells" style="--cell:' + (w || 110) + 'px;--gap:10px">' +
+    arr.map(function(c){
+      return '<div class="aw-col"><div class="aw-box ' + (c[2] || '') + '">' + c[0] +
+             '</div><div class="aw-idx">' + c[1] + '</div></div>';
+    }).join('') + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：核心价值观"入宪"——问它的重大意义',
+    cls: 'key', sc: 'step', tag: '审题',
+    body: '<p>2018 年 3 月，十三届全国人大一次会议通过《宪法修正案》，"国家倡导社会主义核心价值观"写入宪法。</p><p>考点：<b>社会主义核心价值观的意义</b>。方法：不背意义清单，先立<b>定位</b>——它面向谁、服务什么；表述超出半径的，一律排除。</p>' },
+  { t: '立定位：立足国内、面向全体人民 → 三个辐射方向',
+    cls: 'key', sc: 'shift', tag: '定位',
+    log: '立框架：三个辐射方向各配一个关键词',
+    body: '<p>核心价值观回答"建设什么样的国家、建设什么样的社会、培育什么样的公民"——<b>立足国内、面向全体人民</b>的共同价值追求。意义沿三个方向辐射：</p>' +
+      cells([['价值遵循', '面向国家发展', 'ok'], ['最大公约数', '面向社会成员', 'ok'],
+             ['软实力', '面向国际竞争', 'ok'], ['行动指南？', '面向国际社会→越界', 'miss']], 108) +
+      '<p style="margin-top:8px"><b>绿色</b>=在"国内价值共识"半径内；<b>红色</b>=把国内价值观抬成国际角色的越界表述（B 的位置）。</p>' },
+  { t: '选项 A：坚持和发展中国特色社会主义的价值遵循 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A', ribbon: {k: 1, ok: true},
+    body: '<p>核心价值观为中国特色社会主义事业提供<b>价值方向与价值标准</b>——正落在"面向国家发展"的辐射上。</p><p><b>A 对</b>。</p>' },
+  { t: '选项 B：构建人类命运共同体的行动指南 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 B', ribbon: {k: 2, ok: false},
+    body: '<p>人类命运共同体讲的是<b>国际交往理念</b>；核心价值观面向的是<b>国内全体人民</b>的价值共识。</p><p>把国内价值观说成国际倡议的"行动指南"=张冠李戴——高频热词混搭是它的钓法。<b>B 错</b>。</p>' },
+  { t: '选项 C：增进社会团结和谐的最大公约数 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C', ribbon: {k: 3, ok: true},
+    body: '<p>"最大公约数"是"凝结着全体人民共同的价值追求"的形象说法：公约数越多（共识越广），社会越团结——"面向社会成员"的辐射。</p><p><b>C 对</b>。</p>' },
+  { t: '选项 D：提高国家文化软实力的迫切要求 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 D', ribbon: {k: 4, ok: true},
+    body: '<p>核心价值观是文化软实力的<b>内核与重要内容</b>——"面向国际竞争"的辐射。</p><p>注意：D 的主语仍是<b>我们自己</b>（滋养本国软实力），没有出圈——<b>D 对</b>。</p>' },
+  { t: '预判追问：同样涉"国际"，为什么 D 对而 B 错？',
+    cls: 'key', sc: 'shift', tag: '辨析',
+    log: '口径只有一条：看主语和对象——服务谁',
+    body: '<p><b>D</b>：核心价值观凝聚起来，提高的是<b>中国自己的</b>文化软实力，服务对象仍是中国特色社会主义实践——在半径内。</p><p><b>B</b>：让核心价值观去给国际社会当"指南"，等于把它变成<b>面向世界的公共产品</b>——超出"国内全体人民共同价值追求"的定位。盯住主语和对象，不被热词带跑。</p>' },
+  { t: '结论：ACD',
+    cls: 'good', sc: 'done', tag: '结论',
+    body: '<p>答案 <b>ACD</b>：价值遵循（A）· 最大公约数（C）· 软实力（D）。</p><p>判断口径：核心价值观的服务对象是中国特色社会主义实践——B 把它抬成"人类命运共同体的行动指南"，越界了，不选。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2019·30】社会主义核心价值观是什么（多选）',
+  subtitle: '考点：社会主义核心价值观 · 方法：先定"面向谁、服务什么"，再验表述是否在辐射半径内',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先立核心价值观的定位与三个辐射方向，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '记忆锚点：核心价值观三重意义——<b>价值遵循（A）、最大公约数（C）、软实力（D）</b>；它是国内价值共识，不是人类命运共同体的行动指南（B 错）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：核心价值观入宪的意义——先定"它面向谁、服务什么"，再验表述是否在半径内</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——核心价值观的定位决定意义的"辐射半径"</h3>
+<p>2018 年 3 月，十三届全国人大一次会议通过《宪法修正案》，把"国家倡导社会主义核心价值观"写入宪法。要做对这道意义题，先不背意义清单，先立<strong>定位</strong>：核心价值观回答的是"建设什么样的国家、建设什么样的社会、培育什么样的公民"——它是<strong>立足国内、面向全体人民</strong>的共同价值追求，凝结着全体人民的共同价值。</p>
+<p>定位一立住，它的意义就只能沿着三个<strong>辐射方向</strong>展开，每个方向一个关键词：</p>
+<table><thead><tr><th>辐射方向</th><th>对谁</th><th>意义（关键词）</th></tr></thead><tbody><tr><td>面向国家发展</td><td>中国特色社会主义事业</td><td>坚持和发展中国特色社会主义的<strong>价值遵循</strong></td></tr><tr><td>面向社会成员</td><td>全体人民</td><td>增进社会团结和谐的<strong>最大公约数</strong></td></tr><tr><td>面向国际竞争</td><td>国家文化</td><td>提高国家文化<strong>软实力</strong>的迫切要求</td></tr></tbody></table>
+<p>筛选标准随之确定：凡表述落在"国内价值共识"这条半径之内的，都对；把核心价值观抬到不属于它的位置（比如给它安一个国际角色）的，都错。</p>
+<h3>第 1 步：A~D 对号入座</h3>
+<ul><li><strong>A 对</strong>：坚持和发展中国特色社会主义的价值遵循——核心价值观为中国特色社会主义事业提供价值方向与价值标准，正落在"面向国家发展"的辐射上。</li><li><strong>B 错</strong>："构建人类命运共同体的行动指南"——构建人类命运共同体讲的是<strong>国际交往理念</strong>，是中国的全球治理主张；而核心价值观面向的是<strong>国内全体人民</strong>的价值共识。把一套国内价值观说成国际倡议的"行动指南"，是张冠李戴：核心价值观至多是其中体现出的共同价值背景，谈不上"指南"。"行动指南"四个字抬错了它的位置。</li><li><strong>C 对</strong>：增进社会团结和谐的最大公约数——"最大公约数"是对"凝结着全体人民共同的价值追求"的形象说法：公约数越多（共识越广），社会越团结。正落在"面向社会成员"的辐射上。</li><li><strong>D 对</strong>：提高国家文化软实力的迫切要求——核心价值观是文化软实力的内核与重要内容，文化软实力的竞争首先是价值观念的凝聚力。正落在"面向国际竞争"的辐射上。注意：D 说的是核心价值观<strong>滋养本国软实力</strong>，与 B 说的"给国际社会当指南"完全是两回事——前者在国内半径内，后者越界了。</li></ul>
+<h3>预判追问：同样是涉"国际"，为什么 D 对而 B 错？</h3>
+<p>口径只有一条：<strong>它面向谁、服务什么</strong>。D 的主体是我们自己——核心价值观凝聚起来，提高的是中国自己的文化软实力，服务对象仍然是中国特色社会主义实践，没有出圈；B 的对象换成了国际社会——让核心价值观去充当"人类命运共同体"的行动指南，等于把它变成面向世界的公共产品，超出了"国内全体人民共同价值追求"的定位。判断时盯住主语和对象，就不会被"人类命运共同体"这个高频热词带跑。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：把"人类命运共同体"与核心价值观这两个热词捆绑记忆。判断口径：核心价值观的服务对象是中国特色社会主义实践，不是国际公共产品——B 抬错了位置。</li><li><strong>漏选 D</strong>：见"国际"二字就以为出圈。其实 D 的落点是"提高国家文化软实力"，主语仍是本国，在半径之内。</li></ul>
+<blockquote>记忆锚点：核心价值观三重意义——<strong>价值遵循（A）、最大公约数（C）、软实力（D）</strong>；它是国内价值共识，不是人类命运共同体的行动指南（B 错）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,131 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-12 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-12</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2017·12 千里跃进大别山：战略进攻的序幕</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 时间线卡片（战争进程表）
+function tl(rows){
+  return '<div>' + rows.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:150px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼：给 1947.6 定位',
+    cls: 'key',
+    body: '<p>题眼：1947 年 6 月底，刘邓晋冀鲁豫野战军<b>中央突破、千里跃进大别山</b>，陈粟（东路·鲁豫皖）、陈谢（西路·豫西）相互策应，国民党陷入被动。判断"说明了什么"，先把这件事放进<b>解放战争进程表</b>。</p>',
+    log: '三军配合跃进大别山，先定刻度'
+  },
+  {
+    title: '立机制：解放战争三刻度',
+    cls: 'key',
+    body: tl([
+      ['战略防御', '1946.6—1947.6：粉碎国民党全面进攻与重点进攻，内线作战'],
+      ['战略进攻', '1947.6 起：刘邓跃进大别山揭开序幕，三军"品"字形外线作战'],
+      ['战略决战', '1948.9—1949.1：辽沈、淮海、平津三大战役'],
+    ]) + '<p>1947.6 的事落在第二个刻度：<b>从内线防御转入外线进攻，攻守易位</b>。</p>',
+    log: '1947.6 落在"战略进攻"刻度上'
+  },
+  {
+    title: '选项 B：序幕的定义性事件',
+    cls: 'good',
+    ribbon: { k: 2, ok: true },
+    body: '<p>B"人民解放战争战略进攻的序幕由此展开"——<b>对</b>。千里跃进大别山像一把尖刀插入国民党统治腹地，以无后方作战换取战略主动，正是转入战略进攻的开局，教科书表述即"揭开战略进攻的序幕"。<b>B 正确</b>。</p>',
+    log: '攻守易位 = 进攻序幕 → B 正确'
+  },
+  {
+    title: '选项 A：兵力尚未反超',
+    cls: 'bad',
+    ribbon: { k: 1, ok: false },
+    body: '<p>A"人民解放军在数量上已经超过国民党军队"——1947 年 6 月解放军约 <b>195 万</b>，国民党军约 <b>373 万</b>，仍是敌多我少；兵力反超要到 1948 年之后。敢于进攻 ≠ 数量占优。<b>A 排除</b>。</p>',
+    log: '195 万 vs 373 万 → A 排除'
+  },
+  {
+    title: '选项 C：把序幕提前当决战',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>C"战略决战的时机已经成熟"——战略决战是 <b>1948.9</b> 起的三大战役；1947 年 6 月距此还有一年多，决战时机尚未成熟。序幕是"开局"，决战是"收官"，C 把两个刻度混为一谈。<b>C 排除</b>。</p>',
+    log: '序幕≠决战 → C 排除'
+  },
+  {
+    title: '选项 D：分期框架串场',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>D"人民解放战争进入战略相持阶段"——"防御—相持—反攻"是<b>抗日战争</b>的分期；解放战争的分期是"防御—进攻—决战"，根本没有"相持阶段"。这是把另一场战争的框架移植过来。<b>D 排除</b>。</p>',
+    log: '相持只属于抗战 → D 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>B（人民解放战争战略进攻的序幕由此展开）</b>。记忆锚点：解放战争三刻度——1947.6 跃进大别山 = 战略进攻<b>序幕</b>；1948.9 三大战役 = 战略决战；1947 年兵力仍是敌多我少；"相持阶段"只属于抗日战争。</p>',
+    log: '锁定 B：战略进攻序幕'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '三军配合、千里跃进大别山：解放战争进程表上的位置',
+  subtitle: '考点：战略进攻序幕 vs 战略决战 · 方法：先立三刻度时间轴再定位',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」沿进程表逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '记忆锚点：<b>1947.6 刘邓大军千里跃进大别山 = 揭开人民解放军战略进攻的序幕</b>。三个干扰各错一格：A 兵力未反超（195 万 vs 373 万）、C 决战在 1948.9（序幕≠决战）、D"相持阶段"是抗战分期（框架串场）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：三军配合、千里跃进大别山——这个动作在历史进程表上的位置</h2>
+<p>答案：<strong>B（人民解放战争战略进攻的序幕由此展开）</strong>。</p>
+<h3>第 0 步：先立机制——解放战争的进程表，给 1947 年 6 月这件事定位</h3>
+<p>判断一个军事动作"说明了什么"，先把它放进<strong>战争进程时间轴</strong>：解放战争的分期是战略防御 → 战略进攻 → 战略决战，三个阶段各有刻度。1947 年 6 月的事，要先看它落在哪个刻度上：</p>
+<table><thead><tr><th>阶段</th><th>时间</th><th>标志事件</th></tr></thead><tbody><tr><td>战略防御</td><td>1946.6—1947.6</td><td>国民党全面进攻、重点进攻，解放军内线作战粉碎之</td></tr><tr><td><strong>战略进攻</strong></td><td><strong>1947.6 起</strong></td><td><strong>刘邓大军千里跃进大别山，揭开序幕</strong>；三军配合呈"品"字形阵势</td></tr><tr><td>战略决战</td><td>1948.9—1949.1</td><td>辽沈、淮海、平津三大战役</td></tr></tbody></table>
+<p>1947 年 6 月底，刘邓大军实施中央突破、千里跃进大别山，像一把尖刀插入国民党统治的腹地；陈粟（东路，鲁豫皖）、陈谢（西路，豫西）相互策应——从内线防御转入外线进攻，攻守态势从此易位。这正是战略进攻<strong>序幕</strong>的定义性事件，选 <strong>B</strong>。</p>
+<h3>第 1 步：干扰项归因——每个错项错在进程表的哪一格</h3>
+<table><thead><tr><th>选项</th><th>错在哪</th><th>对应误解</th></tr></thead><tbody><tr><td>A</td><td>1947 年 6 月解放军兵力（约 195 万）仍少于国民党军（约 373 万）；兵力反超要到 1948 年之后</td><td>以为敢于进攻 = 数量已占优</td></tr><tr><td>C</td><td>战略决战是 1948.9 起的三大战役；序幕 ≠ 决战，1947 年 6 月时决战时机尚未成熟</td><td>把"序幕"提前当成"决战"</td></tr><tr><td>D</td><td>"战略相持阶段"是<strong>抗日战争</strong>的分期概念（防御—相持—反攻），解放战争根本没有这个阶段</td><td>移植了另一场战争的分期框架</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>序幕 ≠ 决战</strong>：跃进大别山是转入进攻的"开局"，三大战役才是"收官"，两个刻度差一年多，C 项专门利用这个时间差。</li><li><strong>阶段分期别串场</strong>："防御—相持—反攻"是抗战的三阶段；解放战争是"防御—进攻—决战"，D 项是框架移植错误。</li><li>敢于进攻不等于兵力占优：跃进大别山是以无后方作战换取战略主动，恰说明数量仍处劣势，A 项与史实相反。</li></ul>
+<blockquote>记忆锚点：解放战争三刻度——<strong>1947.6 跃进大别山 = 战略进攻序幕</strong>；1948.9 三大战役 = 战略决战；兵力对比 1947 年仍是敌多我少；"相持阶段"只属于抗日战争。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

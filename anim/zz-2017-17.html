@@ -1,8 +1,117 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-17 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-17</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2017-17 显微镜与实践结构</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 三件套结构图：主体 →（中介）→ 客体 */
+function trio(map){
+  var box = function(label, word, color, bg){
+    return '<span style="display:inline-flex;flex-direction:column;align-items:center;gap:2px;' +
+      'border:2px solid ' + color + ';background:' + bg + ';border-radius:10px;padding:7px 12px">' +
+      '<b style="font-size:13.5px">' + label + '</b>' +
+      '<span style="font-size:12px;color:#475569">' + word + '</span></span>';
+  };
+  var arrow = '<span style="font-size:18px;font-weight:700;color:#64748b">→</span>';
+  return '<div style="display:flex;gap:10px;align-items:center;width:max-content;margin:6px 0">' +
+    box('主体', map.s, '#2563eb', '#eff6ff') +
+    '<span style="display:flex;flex-direction:column;align-items:center;font-size:11px;color:#92400e">' +
+    '<span style="font-weight:700">中介</span><span>' + map.m + '</span></span>' + arrow +
+    box('客体', map.o, '#0d9488', '#f0fdfa') + '</div>';
+}
+
+var SCENES = [
+  { s: '17世纪英国科学家', m: '显微镜', o: '软木塞→细胞' },
+  { s: '20世纪中叶科学家', m: 'X射线晶体学', o: 'DNA双螺旋' },
+  { s: '我国科学家', m: '冷冻电子显微镜', o: '剪接体三维结构' },
+];
+
+var STEPS = [
+  { title: '审题眼：一部"工具升级→认识突破"的编年史',
+    cls: 'key',
+    body: '<p>软木塞→细胞、X射线晶体学→DNA双螺旋、冷冻电镜→剪接体——每一幕都是<code>工具换代</code>换来了<code>认识跃迁</code>。考点定位：<b>实践的基本结构（主体—中介—客体）</b>与<b>实践是认识发展的动力</b>。</p>' },
+  { title: '先立机制：实践的"三件套"结构',
+    cls: 'key',
+    body: '<p>实践不是"人对世界"的两点一线，而是<b>主体—中介—客体</b>三者有机统一。把材料三幕各拆一遍：</p>' + trio(SCENES[0]) + trio(SCENES[1]) + trio(SCENES[2]) },
+  { title: '再立机制：中介换代 → 认识跃迁 = 认识发展的动力',
+    cls: 'key',
+    body: '<p>肉眼有放大倍数的天然上限，工具是<b>"感官的延长"</b>：实践提供认识工具、锻炼认识能力、提出新课题——工具每换一代，能"看见"的世界就深一层。题干原话"放大能力不断提升，认知随之深刻全面"就是这条原理的白话版。</p>' },
+  { title: 'A：主体、客体、中介三者统一 = 实践的基本结构',
+    cls: 'good',
+    body: '<p>对号入座：科学家=<b>主体</b>，细胞/DNA/剪接体=<b>客体</b>，显微镜等=<b>中介</b>。三列齐活、缺一不可——这正是实践基本结构的规范表述。<b>A 对。</b></p>' },
+  { title: 'B：主客体依靠中介系统才能相互作用',
+    cls: 'good',
+    body: '<p>没有显微镜，肉眼"够不着"细胞与分子——主客体的相互作用靠<b>中介系统搭桥</b>，桥有多长，作用就有多深。<b>B 对。</b></p>' },
+  { title: 'C：认识水平与实践条件的进步直接相关',
+    cls: 'good',
+    body: '<p>题干给出完整因果链：工具（实践条件）进步 → 认知深刻全面。"直接的关系"正是对这条链的概括。<b>C 对。</b></p>' },
+  { title: 'D：科学实验是"最基本"的实践活动？',
+    cls: 'bad',
+    body: '<p>错。<b>最基本的实践活动是物质生产实践</b>——它生产生存所需的物质资料，是其他一切活动的前提；社会政治实践居中，科学文化实践（含科学实验）是重要形式。材料"全是科学发现"是<b>戏份</b>，不是<b>地位</b>：出现得多 ≠ 最基本。<b>D 错。</b></p>' },
+  { title: '结论：ABC',
+    cls: 'good',
+    body: '<p>三对一错：A 是结构、B 是桥、C 是动力链；D 偷换"最基本"。答案选 <b>ABC</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var optK = { 3: 1, 4: 2, 5: 3, 6: 4 }[i];
+  var optLetter = optK ? 'ABCD'[optK - 1] : '';
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: i === 0 ? '审题' : (i <= 2 ? '机制' : (i === STEPS.length - 1 ? '结论' : '选项 ' + optLetter)),
+    log: s.title,
+    count: optK || 0,
+    ribbon: optK ? { k: optK, ok: s.cls !== 'bad' } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2017·17】显微镜史：主体—中介—客体的实践结构',
+  subtitle: '考点：实践的基本结构 · 实践是认识发展的动力 · 多选题',
+  counterLabel: '已核选项',
+  ribbonTitle: '选项判定（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开：先拆"三件套"结构与动力链，再逐项判定 A/B/C/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: '记忆锚点：实践三件套=<b>主体+客体+中介</b>（A）；中介是主客体相互作用的<b>桥</b>（B）；工具进步<b>直接</b>推着认识走（C）；<b>最基本实践=物质生产</b>——出现得多≠最基本，别把"最基本"让给科学实验（D）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：显微镜史 = 一部实践主体—中介—客体的教科书</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——实践从来是"三件套"，不是"两点一线"</h3>
+<p>马克思主义实践观里，实践活动不是"人对世界"的两点一线，而是<strong>主体、客体、中介三者有机统一</strong>的结构：主体（从事实践的人）借助<strong>中介系统</strong>（工具、仪器等）作用于<strong>客体</strong>（被认识、被改造的对象）。材料是一部科学史，把它翻译成实践观的语言，每一幕都是同一出戏：</p>
+<table><thead><tr><th>发现</th><th>主体（谁看）</th><th>中介（靠什么看）</th><th>客体（看什么）</th></tr></thead><tbody><tr><td>发现细胞</td><td>17 世纪英国科学家</td><td>显微镜</td><td>软木塞（植物细胞）</td></tr><tr><td>发现 DNA 双螺旋</td><td>20 世纪中叶科学家</td><td>X 射线晶体学</td><td>分子结构</td></tr><tr><td>剪接体三维结构</td><td>我国科学家</td><td>冷冻电子显微镜</td><td>亚细胞大分子</td></tr></tbody></table>
+<p>为什么要用"三件套"看？因为材料的题眼正是<strong>中介的换代</strong>：肉眼有放大倍数的天然上限，工具是"感官的延长"，每换一代观察工具，人能"看见"的世界就深一层。这正是<strong>实践是认识发展的动力</strong>：实践提供认识工具、锻炼认识能力、提出新课题。题干那句"放大能力和成像质量不断提升，人类对细胞的认知也随之深刻和全面"，就是这条原理的白话版。</p>
+<h3>第 1 步：四个选项对号入座</h3>
+<ul><li><strong>A 实践主体、客体和中介三者有机统一构成的实践的基本结构</strong> ✅：上表三列齐活——谁看、靠什么看、看什么，三者缺一不可，这正是实践基本结构的规范表述。</li><li><strong>B 实践的主体和客体正是依靠中介系统才能够相互作用</strong> ✅：没有显微镜，肉眼根本"够不着"细胞与分子——主客体之间的相互作用要靠中介系统搭桥，桥有多长，作用就有多深。</li><li><strong>C 人类认识水平的提高与实践条件的进步有直接的关系</strong> ✅：题干给出了完整的因果链——工具（实践条件）进步 → 认知随之深刻全面，"直接的关系"正是对这条链的概括。</li><li><strong>D 探索未知世界的科学实验是人类最基本的实践活动</strong> ❌：偷换"最基本"。人类<strong>最基本的实践活动是物质生产实践</strong>；科学实验是实践的重要形式，但"最基本"三个字不能给它。</li></ul>
+<h3>为什么 D 错（唯一排除点，多说一句）</h3>
+<p>实践的基本形式按基础地位排序：<strong>物质生产实践最基本</strong>——它生产人类生存所需的物质资料，是其他一切活动得以进行的前提；社会政治实践居中；科学文化实践（含科学实验）是重要形式、认识世界的高层次探索。材料"全是科学发现"容易让人把戏份当地位：<strong>出现得多 ≠ 最基本</strong>。"最基本"是物质生产的身份牌，不能挪给科学实验。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 D</strong>：被材料"科学发现唱主角"带偏，以为科学实验是实践的老大——混淆了"出现频率"与"基础地位"。</li><li><strong>漏选 A</strong>：只看见"显微镜厉害"，没意识到材料同时在演示实践的结构——主体、中介、客体三者同框。</li><li><strong>漏选 B</strong>：把中介只当"辅助工具"。其实主客体能否相互作用、作用到什么深度，取决于中介系统的水平——材料正是"中介换代 → 认识跃迁"的编年史。</li><li><strong>漏选 C</strong>：把"直接的关系"误读为"直接决定"而不敢选——题干已给出工具进步与认知提升的一一对应，"直接相关"是安全表述。</li></ul>
+<blockquote>记忆锚点：实践三件套 = 主体 + 客体 + 中介（A）；中介是主客体相互作用的桥（B）；工具进步直接推着认识走（C）；<strong>最基本实践 = 物质生产</strong>——别把"最基本"让给科学实验（D）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

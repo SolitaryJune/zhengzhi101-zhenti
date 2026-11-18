@@ -1,8 +1,87 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-32 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-32</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-32 · 神九蛟龙的里程碑量级（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼：里程碑的意义怎么说才不越界',
+    body: '<p>2012 年 6 月 24 日：航天员手动操控，神舟九号与天宫一号交会对接成功；同日蛟龙号下潜 7020 米。判断意义遵守两条：<b>看已实现的事实</b> + <b>表述不得超出事实边界</b>——"迈出一步、提供机会、创造可能性"是允许的量级，"完成了"要求整体收官。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行：量级标尺',
+    body: '<ul><li><b>事实</b>：一次载人交会对接成功 + 一次 7000 米级深潜海试；</li><li><b>允许的意义</b>：丰富实践、提供机会、创造新的可能性；</li><li><b>越界的意义</b>：完成某计划、实现长期飞行——需要工程或计划整体收官。</li></ul><p>四个选项在标尺两侧各站两个。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true },
+    title: '选项 A：丰富人类认识和开发宇宙的梦想和实践 —— 对',
+    body: '<p>交会对接是建设空间站的关键技术，直接充实人类探索太空的实践内容——"丰富"的量级与"成功对接一次"严格相称。</p><p>A 对。</p>' },
+  { cls: 'bad', tag: 'B 排除', ribbon: { k: 2, ok: false },
+    title: '选项 B：完成了"近地空间长期载人飞行"和"南海深部计划" —— 错',
+    body: '<p>两处越界：神九对接是"向建设空间站<b>迈出坚实一步</b>"，长期载人飞行依托空间站建成后的驻留，尚未实现；蛟龙号是 7000 米级<b>海试</b>，"南海深部计划"是大型科学研究计划，一次下潜不等于完成整个计划（且海试在太平洋马里亚纳海域）。</p><p>"完成了"配不上"迈出一步"——量级错配。B 错。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: '选项 C：为国际合作提供更多机会 —— 对',
+    body: '<p>载人交会对接与 7000 米级载人深潜都是国际公认的高端能力——能力每上一级，可参与的国际合作空间就多一分，表述留有余地。</p><p>C 对。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true },
+    title: '选项 D：为太空和大洋活动创造新的可能性 —— 对',
+    body: '<p>太空与大洋都是尚未充分开发利用的空间，两大成就把"能做什么"的边界向外推——"创造新的可能性"恰是里程碑的标准量级。</p><p>D 对。</p>' },
+  { cls: 'key', tag: '陷阱拆解',
+    title: 'B 的迷惑点：把"一步"说成"收官"',
+    body: '<p>B 用了两个真实存在的名词（长期载人飞行、南海深部计划），只是把"目标/计划"说成了"已完成"。核对法：回到题干自己的措辞——"向未来建设宇宙空间站<b>迈出坚实一步</b>"，题干已声明是进行时。</p><p>识破标志：科技成就题里，"完成了""实现了全程"这类强收束词，必须与工程整体进度对表。</p>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 ACD',
+    body: '<p>答案 <b>ACD</b>：丰富实践（A）、提供机会（C）、创造可能性（D）——量级都在"迈出一步"的边界内；B 把目标与计划说成"完成"，量级错配。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2013·32】上九天揽月，下五洋捉鳖（多选）',
+  subtitle: '考点：科技成就与时政 · 事实边界 · 意义量级标尺',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '<b>里程碑只说"一步、机会、可能性"，不说"完成"</b>：丰富认识开发宇宙的实践（A）、为国际合作提供更多机会（C）、为太空大洋活动创造新的可能性（D）。<br>干扰项 B 把"迈出一步"说成"完成了"长期飞行与南海深部计划——量级错配。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：神九对接与蛟龙深潜的里程碑意义——"实现"与"完成"的边界</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——里程碑的意义怎么说才不越界</h3>
+<p>判断科技成就的意义，规则有两条：一是<strong>看已实现的事实</strong>——2012 年 6 月 24 日神舟九号与天宫一号手动交会对接成功，蛟龙号同日下潜 7020 米；二是<strong>意义表述不得超出事实边界</strong>——"迈出一步""创造可能性""提供机会"是成就允许的意义量级，"完成了""实现了全过程"则要求工程或计划整体收官。四个选项正好在"事实边界"两侧各站两个。</p>
+<h3>逐项对号入座</h3>
+<ul><li><strong>A 对</strong>："丰富了人类认识和开发宇宙的梦想和实践"——交会对接是建设空间站的关键技术，直接充实了人类探索太空的实践内容；"丰富梦想和实践"的量级与"成功对接一次"的事实严格相称。</li><li><strong>C 对</strong>："为中国在太空和海底参与国际合作提供了更多机会"——载人交会对接与 7000 米级载人深潜都是国际公认的高端能力，能力每上一级，可参与的国际合作空间就多一分——表述留有余地，与事实相容。</li><li><strong>D 对</strong>："为中国在太空和大洋这两个尚未充分利用空间的活动创造了新的可能性"——太空与大洋都是尚未充分开发利用的空间，两大成就把"能做什么"的边界向外推——"创造新的可能性"恰是里程碑的标准量级。</li></ul>
+<h3>为什么 B 是干扰项</h3>
+<ul><li><strong>B 错</strong>："完成了'近地空间长期载人飞行'和'南海深部计划'"——两处都<strong>越界</strong>：其一，神九交会对接是"向未来建设宇宙空间站迈出坚实一步"，"近地空间长期载人飞行"依托空间站建成后的长期驻留，当时尚未实现，谈不上完成；其二，蛟龙号深潜是 7000 米级海试，而"南海深部计划"是海洋科学的大型研究计划，一次下潜试验不等于完成整个计划；且此次海试在太平洋马里亚纳海域进行，与南海并不重合。"完成了"是强收束词，配不上"迈出一步"的事实——量级错配。</li></ul>
+<blockquote>记忆锚点：科技意义题量级表——<strong>"丰富实践（A）、提供机会（C）、创造可能性（D）"是里程碑允许的说法；"完成了××计划/飞行"（B）要求整体收官，事实只到"迈出一步"，必错</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

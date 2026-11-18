@@ -1,8 +1,122 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-11 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-11</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·11 延安精神体现的党的宗旨</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 概念/配对卡片（依据 anim_math_concept_template；政治站纯文本，无 KaTeX） */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+function miniTable(rows){
+  var s = '<table style="border-collapse:collapse;margin:6px 0;font-size:13px">';
+  for(var i=0;i<rows.length;i++){
+    s += '<tr>';
+    for(var j=0;j<rows[i].length;j++){
+      s += '<td style="border:1px solid #cbd5e1;padding:3px 8px">' + rows[i][j] + '</td>';
+    }
+    s += '</tr>';
+  }
+  return s + '</table>';
+}
+
+var STEPS = [
+  { title: '审题眼：四个选项全是"真货"',
+    cls: 'key',
+    body: '<p>延安精神的四句话<b>每一句都真实存在</b>——本题不考辨真假，只考"<b>栏目配对</b>"：题干把"宗旨"这个栏位挖空，问哪一句填进去。问什么栏，答哪句话。</p>',
+    log: '真话干扰题：只判断归属，不判断对错' },
+  { title: '机制：延安精神四件套对照表',
+    cls: 'key',
+    body: '<p>四句话各占一个固定栏目，成对背：</p>' + miniTable([
+      ['栏目', '对应内容'],
+      ['政治方向', '坚定正确的政治方向'],
+      ['思想路线', '解放思想、实事求是'],
+      ['宗旨', '全心全意为人民服务'],
+      ['创业精神（作风）', '自力更生、艰苦奋斗']
+    ]) + '<p>党的根本宗旨本来就是<b>全心全意为人民服务</b>，延安时期"只见公仆不见官"的鱼水关系正是它的集中体现。</p>',
+    log: '查表：宗旨栏 = 全心全意为人民服务' },
+  { title: '选项 A：宗旨栏，正中答案位',
+    cls: 'good',
+    body: '<p>"<b>全心全意为人民服务</b>"——党的根本宗旨，延安精神最主要体现的正是这一栏。A 对。</p>',
+    ribbon: {k: 1, ok: true},
+    log: 'A：宗旨栏 → 选中' },
+  { title: '选项 B：方向栏，串栏了',
+    cls: 'bad',
+    body: '<p>"坚定正确的政治方向"确是延安精神的组成部分，但占的是<b>政治方向</b>栏。被题干"革命传统和作风"的字眼带偏就会选它。B 错。</p>',
+    ribbon: {k: 2, ok: false},
+    log: 'B：方向栏 ≠ 宗旨栏' },
+  { title: '选项 C：思想路线栏，"万能答案"也要让位',
+    cls: 'bad',
+    body: '<p>"解放思想、实事求是"占的是<b>思想路线</b>栏。它再"万能"，栏目对不上就不行。C 错。</p>',
+    ribbon: {k: 3, ok: false},
+    log: 'C：思想路线栏 ≠ 宗旨栏' },
+  { title: '选项 D：创业精神/作风栏，画面最浓不是宗旨',
+    cls: 'bad',
+    body: '<p>"自力更生、艰苦奋斗"占的是<b>创业精神（优良作风）</b>栏——大生产运动、南泥湾的画面感最浓，但那是作风，不是宗旨。D 错。</p>',
+    ribbon: {k: 4, ok: false},
+    log: 'D：作风栏 ≠ 宗旨栏' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>A</b>。' + miniTable([
+      ['A 为人民服务', '✓ 宗旨'],
+      ['B 政治方向', '✗ 方向栏'],
+      ['C 实事求是', '✗ 路线栏'],
+      ['D 艰苦奋斗', '✗ 作风栏']
+    ]) + '</p>',
+    log: '锁定 A：全心全意为人民服务' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '延安精神四件套：问宗旨，答"全心全意为人民服务"',
+  subtitle: '考点：延安精神与党的宗旨 · 方法：栏目—内容配对表，真话干扰只看归属',
+  counterLabel: '推理步',
+  ribbonTitle: '选项带（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链；序号带 1–4 对应选项 A–D。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：延安精神四件套 = <b>方向（坚定正确的政治方向）+ 路线（解放思想实事求是）+ 宗旨（全心全意为人民服务）+ 作风（自力更生艰苦奋斗）</b>。四个都是真话，配对才是考点。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：延安精神四件套——"宗旨"这一栏对应哪一句</h2>
+<p>答案：<strong>A（全心全意为人民服务）</strong>。</p>
+<h3>第 0 步：先立机制——延安精神是一个"四件套"配对表</h3>
+<p>延安精神的内容是四句话，每句话各占一个<strong>固定栏目</strong>，背成一张配对表再做题就稳了：</p>
+<table><thead><tr><th>栏目</th><th>对应内容</th></tr></thead><tbody><tr><td>政治方向</td><td>坚定正确的政治方向</td></tr><tr><td>思想路线</td><td>解放思想、实事求是</td></tr><tr><td><strong>根本宗旨</strong></td><td><strong>全心全意为人民服务</strong></td></tr><tr><td>创业精神（优良作风）</td><td>自力更生、艰苦奋斗</td></tr></tbody></table>
+<p>题干问"延安精神<strong>最主要体现了党的宗旨</strong>是"——查表：宗旨那一栏 = <strong>全心全意为人民服务</strong>（A）。配对不是随便凑的：党的根本宗旨本来就是全心全意为人民服务，延安精神恰恰最集中地体现了这一宗旨——延安时期党与人民的鱼水关系（"只见公仆不见官"）就是它的现实写照。问什么栏，答哪句话，这是本题的全部机关。</p>
+<h3>第 1 步：预判追问——四个选项都是"真货"，那错在哪？</h3>
+<p>这道题的干扰项有个鲜明特点：<strong>B、C、D 都是延安精神的真实组成部分，没有一句是编造的</strong>。所以本题不考"辨认真假"，只考"<strong>栏目配对</strong>"：题干把"宗旨"这个栏位挖空，四个选项填进去，只有 A 能和"宗旨"对上。这就是"真话干扰"题的通用解法——不判断对错，只判断<strong>归属</strong>；平时背的时候就必须按"栏目—内容"成对背，而不是背成四句散装的话。</p>
+<h3>第 2 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归属栏目</th></tr></thead><tbody><tr><td>A 全心全意为人民服务</td><td>✅</td><td><strong>根本宗旨</strong>——题干问的就是这一栏</td></tr><tr><td>B 坚定正确的政治方向</td><td>❌</td><td>政治方向栏</td></tr><tr><td>C 解放思想、实事求是</td><td>❌</td><td>思想路线栏</td></tr><tr><td>D 自力更生、艰苦奋斗</td><td>❌</td><td>创业精神（优良作风）栏</td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 B</strong>：被题干里"革命传统和作风"的字眼带偏，看到"政治方向"很有延安气息就选了。B 占的是"方向"栏，不是"宗旨"栏——气息不对栏目。</li><li><strong>误选 C</strong>：把"实事求是"当万能答案。它确实是延安精神的组成部分，但那是<strong>思想路线</strong>栏；题目问宗旨，万能答案也要让位给栏目配对。</li><li><strong>误选 D</strong>：被"自力更生、艰苦奋斗"的延安画面感带偏（大生产运动、南泥湾）。它是创业精神/优良作风栏——画面最浓，恰恰不是宗旨。</li></ul>
+<blockquote>记忆锚点：延安精神四件套 = <strong>方向（坚定正确的政治方向）+ 路线（解放思想实事求是）+ 宗旨（全心全意为人民服务）+ 作风（自力更生艰苦奋斗）</strong>；问宗旨，答"全心全意为人民服务"——四个都是真话，配对才是考点。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

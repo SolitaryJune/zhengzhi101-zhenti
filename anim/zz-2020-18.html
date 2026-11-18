@@ -1,8 +1,128 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-18 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-18</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2020·18 区块链与「现实社会关系」（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼：区块链动了社会关系的什么',
+    cls: 'key',
+    tag: '审题',
+    body: '<p>2019 年 10 月 24 日中央政治局集体学习区块链；专家观点：无中介的多方资产交易、价值传递网络，智能合约履约、降低信用建立成本。</p><p>设问落点：这些「相互联系的<b>延伸和变化</b>」表明人们的<b>现实社会关系</b>——延伸的是形式，根基没有换。</p>',
+    log: '审题：延伸的是形式'
+  },
+  {
+    title: '先立机制：社会关系一棵树，生产关系是根',
+    cls: 'key',
+    body: '<p>社会关系 = 实践活动中结成的全部关系：<b>经济（生产）关系、政治关系、思想文化关系</b>……其中生产关系最基本、起决定作用，其他关系归根到底由它派生、受它制约。</p><p>判定坐标：看技术改变的是「<b>形式</b>」还是「<b>根基</b>」。</p>',
+    log: '立坐标：形式可变，根基不移'
+  },
+  {
+    title: '把题干现象放进树里',
+    cls: 'step',
+    body: '<ul><li>变的：中介从机构换成<b>算法</b>、信用建立的方式更<b>高效</b>——交往的具体形式</li><li>不变的：资产交易、价值传递背后的<b>利益关系</b>仍由生产方式决定</li></ul><p>「降的是信用成本」——成本，不是关系的经济内容。</p>',
+    log: '变形式，不变利益根基'
+  },
+  {
+    title: 'A：归根到底受生产关系的制约 → 对',
+    cls: 'good',
+    ribbon: { k: 1, ok: true },
+    body: '<p>区块链上跑的是交易、价值、信用——说到底是<b>市场交换关系</b>，属生产关系的内容；新联系仍嵌入现实经济结构之中，只是连接方式换了。<b>A 对</b>。</p>',
+    log: 'A：换了中介，换不了根基 ✓'
+  },
+  {
+    title: 'B：具有多样性和复杂性 → 对',
+    cls: 'good',
+    ribbon: { k: 2, ok: true },
+    body: '<p>技术让交往形式空前丰富——交易、履约、协作等联系形态并存交织；形式每延伸一次，关系之网就多一层。题干「延伸和变化」说的正是这层。<b>B 对</b>。</p>',
+    log: 'B：形式延伸 → 关系多样复杂 ✓'
+  },
+  {
+    title: 'C：「单纯的经济和商业关系」 → 错',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>「<b>单纯</b>」二字把社会关系单薄化——现实社会关系包括经济、政治、法律、思想文化等多重维度，网络交往同样承载并生成非经济的关系。「单纯」与 B 的「多样性」直接矛盾。<b>C 错</b>。</p>',
+    log: 'C 单薄化，与多样性矛盾 ✗'
+  },
+  {
+    title: 'D：「信息技术构造的虚拟关系」 → 错',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>两处硬伤：①社会关系的<b>根据</b>在物质生产实践，不在信息技术——技术是条件与载体，不是构造者；②「虚拟」读成「不现实」就错了——网络交往是<b>现实的人</b>借助新技术实现的现实关系的延伸形式，题干明说是「现实社会关系」的延伸。<b>D 错</b>。</p>',
+    log: 'D 新形式 ≠ 新本质 ✗'
+  },
+  {
+    title: '结论：答案 AB',
+    cls: 'good',
+    tag: '结论',
+    body: '<p>答案 <b>AB</b>。病根总结：新技术类题目问「社会关系」，答案几乎总落在两句话——<b>形式变了，根基没变</b>（受生产关系制约）；形式一变，关系之网更<b>多样复杂</b>。「单纯化」（C）与「虚拟化」（D）两个极端都不成立。</p>',
+    log: '汇总：AB 入选，CD 排除'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '区块链带来的新联系与「现实社会关系」（多选）',
+  subtitle: '考点：生产关系是社会关系的基础 · 交往的形式与内容 · 方法：形式/根基二分',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先立「形式/根基」坐标，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 AB',
+    html: '记忆锚点：区块链改变交往<b>形式</b>（多样复杂 → B），不变交往<b>根基</b>（生产关系制约 → A）；现实社会关系既不「单纯」（C 错）也不「虚拟」（D 错）——新形式不是新根基。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：区块链带来的新联系与「现实社会关系」</h2>
+<p>答案：<strong>AB</strong>。</p>
+<h3>第 0 步：先立机制——社会关系是一棵树，生产关系是根</h3>
+<p>历史唯物主义里，「社会关系」指人们在<strong>实践活动中</strong>结成的全部关系的总和：经济（生产）关系、政治关系、思想文化关系……其中<strong>生产关系</strong>是最基本、起决定作用的一层，其他社会关系归根到底由它派生、受它制约。技术变革改变的是什么？把题干现象放进这棵树里看：</p>
+<table><thead><tr><th>题干现象</th><th>变了的层次</th><th>没变的层次</th></tr></thead><tbody><tr><td>无中介的多方资产交易、价值传递网络</td><td>交往的<strong>具体形式</strong>（中介从机构换成算法）</td><td>交往背后的<strong>利益关系</strong>仍由生产方式决定</td></tr><tr><td>智能合约履约、降低信用建立成本</td><td>信用建立的<strong>方式</strong>更高效</td><td>契约关系的内容仍是市场经济中生产关系的体现</td></tr></tbody></table>
+<p>题眼：「人与人之间相互联系的<strong>延伸和变化</strong>」——延伸的是形式，根基没有换。这是全部四个选项的判定坐标。</p>
+<h3>第 1 步：A、B 为什么对</h3>
+<ul><li><strong>A 对</strong>：区块链上跑的是资产交易、价值传递、信用——说到底是市场交换关系，属于生产关系的内容；新技术只换了「连接方式」，新联系仍嵌入现实经济结构之中，<strong>归根到底受生产关系制约</strong>；</li><li><strong>B 对</strong>：技术让交往形式空前丰富——交易、履约、协作等联系形态并存、交织，题干「相互联系的延伸和变化」说的正是这层：现实社会关系<strong>具有多样性和复杂性</strong>。形式每延伸一次，关系之网就多一层。</li></ul>
+<h3>第 2 步：C、D 错在哪</h3>
+<ul><li><strong>C 错</strong>：「是一种<strong>单纯</strong>的经济和商业关系」——把社会关系单薄化。现实社会关系包括经济、政治、法律、思想文化等多重维度，网络交往同样承载并生成非经济的关系；「单纯」二字与 B 的「多样性」直接矛盾，以偏概全；</li><li><strong>D 错</strong>：「是由信息技术构造的<strong>虚拟</strong>关系」——两处硬伤：其一，社会关系的<strong>根据</strong>在物质生产实践，不在信息技术，技术是条件与载体，不是关系的构造者；其二，「虚拟」读成「不现实」就错了——网络交往是<strong>现实的人</strong>借助新技术实现的现实社会关系的<strong>延伸形式</strong>，题干明说这是「现实社会关系」的延伸和变化，不是另起炉灶的虚拟王国。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：题干反复出现「资产交易」「价值传递」，容易顺势把「场景偏经济」当成「社会关系只是经济关系」——高频词正是诱饵；用 B 的「多样性」一照，「单纯」即穿帮。</li><li><strong>误选 D</strong>：被「区块链」「智能合约」等新词钓中，以为信息技术构造出了新的关系本质——新技术的产物是<strong>新形式</strong>，不是<strong>新根基</strong>。</li><li><strong>漏选 A</strong>：觉得 A 太宏观、接不上题干的区块链细节——恰恰相反，A 是全题的底层坐标：技术改变形式，生产关系决定内容；「降低信用成本」降的是成本，不是关系的经济内容。</li><li><strong>共性病根</strong>：新技术类题目问「社会关系」，答案几乎总落在两句话：<strong>形式变了，根基没变</strong>（受生产关系制约）；形式一变，关系之网更<strong>多样复杂</strong>。「单纯化」（C）与「虚拟化」（D）两个极端都不成立。</li></ul>
+<blockquote>记忆锚点：区块链改变交往<strong>形式</strong>（多样复杂 → B），不变交往<strong>根基</strong>（生产关系制约 → A）；现实社会关系既不「单纯」（C 错）也不「虚拟」（D 错）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

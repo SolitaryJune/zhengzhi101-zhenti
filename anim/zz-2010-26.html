@@ -1,8 +1,94 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-26 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-26</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-26 · 洋务运动失败的主要原因（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261117a">
+</head>
+<body>
+<!-- 概念/推理链模板：机制先行（中体西用路线图埋着失败种子）→ 三性逐项对号、C 症状出局（ABD） -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261117a"></script>
+<script>
+/* ================== 题目专属区域（依据 zz-2010-26 题干与 refAnalysis 编写） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼："自强""求富"三十多年，为何一场空',
+    body: '<p>题干：19 世纪下半叶，以"自强""求富"为目标的洋务运动历时 30 多年，问其<b>最终失败的主要原因</b>。</p><p>"主要"二字定标准：收<b>病根</b>，不收症状——先把路线图立起来看病根埋在哪。</p>',
+    log: '审题：问主要病根 → 先看路线图里埋了什么种子' },
+  { tag: '机制', cls: 'key', title: '机制先行："中体西用"路线图里的内在矛盾',
+    body: '<p>路线：<b>自强</b>办军事工业、<b>求富</b>办民用工业；指导思想<b>"中学为体，西学为用"</b>——封建制度之"体"不动，只引进西方技术之"用"。</p><p>矛盾就在这："用"是从先进制度里长出来的技术，硬装进封建的"体"必然变形——三处结构性硬伤由此展开。</p>',
+    log: '机制：体用分裂——新技术装进旧制度里变形，硬伤从这里长出来' },
+  { tag: '选项A', cls: 'good', title: 'A 指导思想的封建性 —— 根子（路线层）',
+    body: '<p>只想"补器物"，不触动封建制度：新生产力的"用"驮在旧制度的"体"上，注定两不对付。</p><p>三性之一，三性中的根子。<b>A 对</b>。</p>',
+    ribbon: { k: 1, ok: true },
+    log: 'A＝体（路线层）：封建之体驮不住近代之用，注定失败' },
+  { tag: '选项B', cls: 'good', title: 'B 对外国的依赖性 —— 命脉被掐（外部层）',
+    body: '<p>技术、设备甚至人才都仰赖列强——列强既扶植又控制，"师夷"却受制于夷，洋务事业成不了独立的工业体系。</p><p>三性之二，外部命脉级硬伤。<b>B 对</b>。</p>',
+    ribbon: { k: 2, ok: true },
+    log: 'B＝腿（外部层）：命脉在别人手里，做不大' },
+  { tag: '选项D', cls: 'good', title: 'D 洋务企业管理的腐朽性 —— 机体坏死（企业层）',
+    body: '<p>封建衙门式管理：官僚化、贪污盛行，企业缺乏活力，与近代企业管理背道而驰——别当它是"小节"，它直接作用在每个企业身上。</p><p>三性之三。<b>D 对</b>。</p>',
+    ribbon: { k: 4, ok: true },
+    log: 'D＝庙（企业层）：衙门式管理让企业做不好' },
+  { tag: '选项C', cls: 'bad', title: 'C 资金人才的匮乏性 —— 是症状，不是病根',
+    body: '<p>缺钱缺人是<b>真实存在</b>的困难，但它是 A、B、D 酿出来的<b>结果</b>：旧制度不产生近代积累、命脉在别人手里，才有资金人才饥荒。</p><p>病因制造困难，症状被困难造成——"主要原因"只收病根，<b>C 出局</b>。</p>',
+    ribbon: { k: 3, ok: false },
+    log: 'C 是症状：缺钱缺人是三性的结果，不是病因' },
+  { tag: '结论', cls: 'good', title: '收束：三性齐收，症状排除 —— ABD',
+    body: '<p>一条线收拢：<b>A</b> 在路线（为什么注定失败）、<b>B</b> 在命脉（为什么做不大）、<b>D</b> 在机体（为什么做不好）；<b>C</b> 是三者酿出的症状。</p><p>教材对洋务运动失败原因的标准表述正是"三性"：封建性、依赖性、腐朽性。</p>',
+    log: '结论：ABD——路线、命脉、机体三处病根，症状不入选' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag,
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon,
+    done: last,
+  };
+});
+
+AW.init({
+  title: 'zz-2010-26 · 洋务运动最终失败的主要原因（多选）',
+  subtitle: '考点：洋务运动失败"三性" —— 病根（主要）与症状（次要）之分',
+  ribbonTitle: '选项 A–D 逐个点亮（✓ 病根 / ✗ 症状）',
+  intro: '点击「▶ 播放」：先看"中体西用"路线图埋下的矛盾，再按体 → 腿 → 庙 → 症状逐项核对。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABD',
+    html: '记忆锚点：<b>败在"体"（指导思想封建性）、"腿"（对外国依赖性）、"庙"（企业管理腐朽性）</b>。<br>缺钱缺人是三性酿出的症状，不是病根——"主要原因"只收三性（教材标准表述：封建性、依赖性、腐朽性）。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：洋务运动败在"三性"——病根与症状要分清</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——路线图里就埋着失败的种子</h3>
+<p>洋务运动（19 世纪 60—90 年代）的路线是：以"自强"为旗号办军事工业，以"求富"为旗号办民用工业，指导思想是"<strong>中学为体，西学为用</strong>"——在封建制度这个"体"不动的前提下，引进西方的器物技术。失败不是输在某一场战役，而是路线图本身就带着结构性硬伤："用"是从先进制度里长出来的技术，硬装进封建的"体"里必然变形。这就是 A"指导思想的封建性"——三性中的第一条，也是根子。三十多年经营，甲午战败宣告破产。</p>
+<h3>三处硬伤逐项对号</h3>
+<ul><li><strong>A 对</strong>：指导思想封建性——根子上的病：只想"补器物"，不触动封建制度；体用分裂，新生产力的"用"驮在旧制度的"体"上，注定两不对付。</li><li><strong>B 对</strong>：对外国依赖性——命脉被掐：技术、设备甚至人才都仰赖列强，列强既扶植又控制；"师夷"却受制于夷，洋务事业成不了独立的工业体系。</li><li><strong>D 对</strong>：洋务企业管理的腐朽性——机体坏死：封建衙门式管理，官僚化、贪污盛行，企业缺乏活力，与近代企业管理背道而驰。</li><li><strong>C 错</strong>：资金人才的匮乏性——洋务企业确实常闹资金、人才饥荒，但缺钱缺人是<strong>经营中的困难与表现</strong>，不是教材所列失败的<strong>主要原因</strong>：真正的病根在制度（A）、命脉（B）、机体（D），不在钱袋。</li></ul>
+<h3>为什么 C 不能选——"主要原因"问的是病根</h3>
+<p>题干的关键词是"<strong>主要</strong>原因"。判断标准：一个因素是病因还是症状，看它是<strong>制造</strong>其他困难的源头，还是被其他困难<strong>造成</strong>的结果。洋务企业的资金人才饥荒，恰恰是封建性（旧制度不产生近代积累）、依赖性（命脉在别人手里）酿出来的结果——它是症状，不是病根。教材对洋务运动失败原因的标准表述正是"三性"：封建性、依赖性、腐朽性，C 不在其中。把症状当病因，是"原因题"最常见的失分动作。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：看到"资金匮乏"是史实就选——史实为真 ≠ 是主要原因；问病根不问症状。</li><li><strong>漏 D</strong>：把管理腐败当"小节"——衙门式管理让企业失去活力，是三性里直接作用在企业层面的硬伤，不能省。</li><li><strong>漏 B</strong>：只盯着"内因"（封建性、腐朽性），忘了洋务事业从头就挂在列强的技术设备供给上——依赖性是外部命脉级的硬伤。</li><li><strong>混淆层次</strong>：三性各有作用面——A 在路线（为什么注定失败）、B 在命脉（为什么做不大）、D 在机体（为什么做不好），合起来才是"主要"二字的完整分量。</li></ul>
+<blockquote>记忆锚点：败在"体"（封建性）、"腿"（依赖性）、"庙"（管理腐朽）；缺钱缺人是症状，不是病根——"主要"原因只收三性。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,109 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2019-29 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2019-29</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2019-29 1978 年农业农村面临的主要问题 · 时间线动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+/* 时间轴格子：[格内文字, 格下注, 颜色类 ok/miss/dim/''] */
+function cells(arr, w){
+  return '<div class="aw-cells" style="--cell:' + (w || 88) + 'px;--gap:10px">' +
+    arr.map(function(c){
+      return '<div class="aw-col"><div class="aw-box ' + (c[2] || '') + '">' + c[0] +
+             '</div><div class="aw-idx">' + c[1] + '</div></div>';
+    }).join('') + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：问的是"当时（1978，改革前）"的主要问题',
+    cls: 'key', sc: 'step', tag: '审题',
+    body: '<p>题干引十一届三中全会文件："农业近二十年发展速度不快，同人民的需要和四个现代化的需要之间存在极其尖锐的矛盾。"</p><p>考点：<b>农村经济体制改革的背景</b>。判断口径：入选的"问题"必须<b>①1978 时点上已存在</b>、且<b>②确实是束缚发展的病根</b>——两条都满足才算。</p>' },
+  { t: '画时间轴：候选事件各卡在哪个时点',
+    cls: 'key', sc: 'shift', tag: '时间轴',
+    log: '立时间轴：1952 土改 → 1958 公社化 → 1978 三中全会 → 1984 乡镇企业',
+    body: '<p>病根往哪找？用"生产关系是否适应生产力"的诊断框架，先画时间轴：</p>' +
+      cells([['1952', '土改完成·分地', 'ok'], ['1958', '公社化·归集体', 'ok'],
+             ['1978', '三中全会·本题', ''], ['1984', '乡镇企业崛起', 'dim']], 96) +
+      '<p style="margin-top:8px"><b>绿色</b>=1978 前已存在；<b>灰色</b>=改革后才出现。B 检 1952，C 检 1958，D 检 1984——D 的时间轴直接错位。</p>' },
+  { t: '选项 A：农民的温饱问题尚未完全解决 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A', ribbon: {k: 1, ok: true},
+    body: '<p>"近二十年发展不快、同人民需要存在尖锐矛盾"的直接后果与印证——产量上不去，大量农村人口<b>温饱没有保障</b>。</p><p>两条口径都满足：<b>A 对</b>。</p>' },
+  { t: '选项 B：农村的土地改革尚未完成 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 B', ribbon: {k: 2, ok: false},
+    body: '<p>土地改革 <b>1952 年就已基本完成</b>（农民分得土地）。注意分清两件事：<b>土改</b>=地主权变农民的地；<b>公社</b>=农民的地归集体。</p><p>1978 年的问题是集体统一经营<b>统得太死</b>，不是"还没分地"——时序错位 26 年，<b>B 错</b>。</p>' },
+  { t: '选项 C：人民公社体制亟待改革 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C', ribbon: {k: 3, ok: true},
+    body: '<p>"一大二公"、政社合一、平均主义"大锅饭"、干活"大呼隆"——<b>生产关系超越生产力水平</b>，多劳不能多得，农民没有积极性。</p><p>这正是"二十年不快"的<b>病根</b>，改革也首先从这里突破（家庭联产承包）——<b>C 对</b>。</p>' },
+  { t: '选项 D：乡镇企业管理体制亟待改革 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 D', ribbon: {k: 4, ok: false},
+    body: '<p>乡镇企业是改革开放后（<b>1984 年前后</b>）异军突起的<b>新事物</b>——1978 年改革前谈不上大规模乡镇企业，更谈不上"其管理体制"亟待改革。</p><p>拿改革后的事物反推改革前的问题，时序倒置——<b>D 错</b>。</p>' },
+  { t: '归因：为什么病根是体制，不是天灾、技术？',
+    cls: 'key', sc: 'shift', tag: '归因',
+    log: 'A 是果，C 是因——因与果凑齐答案 AC',
+    body: '<p>天灾、技术落后是长期常态变量，解释不了"矛盾为何在公社体制期内特别尖锐"；只有<b>体制性束缚</b>能同时解释"二十年不快"与"改革一包产就大增产"。</p><p>所以：<b>C 是因（病根）→ A 是果（温饱未解决）</b>，一因一果，恰好凑齐 AC。</p>' },
+  { t: '结论：AC',
+    cls: 'good', sc: 'done', tag: '结论',
+    body: '<p>答案 <b>AC</b>：温饱没解决（A，果）+ 人民公社体制亟待改革（C，因）。</p><p>两个干扰项都是时间轴错位：土改 1952 年已完成（B），乡镇企业 1984 年前后才崛起（D）——先画时间轴，时序错位的选项一眼排除。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2019·29】改革前农业农村面临的主要问题（多选）',
+  subtitle: '考点：农村经济体制改革 · 方法：先画时间轴排时序错位，再按"因—果"定位病根',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先立判断口径与 1952/1958/1978/1984 时间轴，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 AC',
+    html: '记忆锚点：1978 的病根两条——<b>温饱没解决（A，果）+ 人民公社体制（C，因）</b>；土改 1952 年已完成（B 错），乡镇企业 1984 年前后才崛起（D 错）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：1978 年农业农村的病根在哪——先立"诊断框架"，再按时间轴对号入座</h2>
+<p>答案：<strong>AC</strong>。</p>
+<h3>第 0 步：先立机制——"问题"必须满足两个条件</h3>
+<p>题干引十一届三中全会文件："我国农业近二十年来的发展速度不快，它同人民的需要和四个现代化的需要之间存在着极其尖锐的矛盾。"问的是<strong>当时（1978 年，改革前）</strong>农业和农村经济发展面临的<strong>主要问题</strong>。这里先立判断口径，一条表述要入选，必须同时满足两个条件：</p>
+<ul><li><strong>时点上已存在</strong>：1978 年之前就已经发生、并且持续了"近二十年"——不是改革后才出现的新事物；</li><li><strong>确实束缚发展</strong>：它是造成"发展速度不快、同人民需要存在尖锐矛盾"的<strong>病根</strong>，而不是无关痛痒的表象。</li></ul>
+<p>病根往哪找？用的是"生产关系—生产力"这一诊断框架：农业二十年徘徊，农民积极性起不来，先查<strong>生产关系是否超越了生产力水平</strong>。</p>
+<h3>第 1 步：画时间轴——三个候选问题各自卡在哪个时点</h3>
+<table><thead><tr><th>时间</th><th>事件</th><th>检验哪个选项</th></tr></thead><tbody><tr><td>1950–1952</td><td>土地改革基本完成，农民分得土地</td><td>B：土改早已完成</td></tr><tr><td>1958</td><td>人民公社化运动，"一大二公"、政社合一</td><td>C：体制束缚从此形成</td></tr><tr><td>1978</td><td>十一届三中全会，改革首先从农村突破</td><td>本题时间坐标</td></tr><tr><td>1984 前后</td><td>乡镇企业异军突起</td><td>D：改革后才出现</td></tr></tbody></table>
+<p>时间轴一画，两个干扰项的"时序错位"一目了然：B 的东西是 26 年前完成的，D 的东西是 6 年后才出现的——都不满足"时点上已存在"。</p>
+<h3>第 2 步：A~D 对号入座</h3>
+<ul><li><strong>A 对</strong>：农民的温饱问题尚未完全解决——这是"农业近二十年发展不快、同人民的需要存在极其尖锐矛盾"的直接后果与直接印证：产量上不去，大量农村人口温饱没有保障。满足两个条件。</li><li><strong>B 错</strong>："农村的土地改革尚未完成"——土地改革 1952 年就已基本完成。注意区分两件事：<strong>土改</strong>解决的是"土地从地主手里转到农民手里"（分地），<strong>合作化、人民公社</strong>解决的是"土地从农民手里归到集体手里"（归集体）。1978 年的问题是集体统一经营<strong>统得太死</strong>，不是"还没分地"——把"归集体"误记成"没分地"，才会误选 B。</li><li><strong>C 对</strong>：人民公社体制亟待改革——"一大二公"、政社合一、平均主义"大锅饭"、干活"大呼隆"，生产关系超越生产力水平，农民没有积极性，这正是"二十年发展不快"的<strong>病根</strong>。改革也正从这里突破：家庭联产承包责任制。</li><li><strong>D 错</strong>："乡镇企业管理体制亟待改革"——乡镇企业是改革开放后（1984 年前后）异军突起的新事物，1978 年改革前谈不上有大规模乡镇企业，更谈不上"其管理体制"亟待改革。拿改革后的新事物反推改革前的问题，属于时序倒置。</li></ul>
+<h3>预判追问：为什么病根是体制，而不是天灾、技术或土地所有制？</h3>
+<p>天灾、技术落后是长期存在的常态变量，解释不了"同人民需要的矛盾在体制期内特别尖锐"；而公社体制下，干多干少一个样，多劳不能多得，任何增产努力都被平均主义抵消——只有<strong>体制性束缚</strong>能同时解释"二十年不快"和"改革一包产就大增产"。所以病根定位在 C（体制），后果定位在 A（温饱），两者是"因"与"果"的关系，恰好凑齐答案 AC。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：把"土地归集体所有"误当成"农民没分过地"。土改（分地）与合作化（归集体）是先后两件事，1952 年土改已完成。</li><li><strong>误选 D</strong>：知道乡镇企业很重要，忘了它出现在<strong>改革之后</strong>——用后起事物反推改革前的问题，属于时序颠倒。</li></ul>
+<blockquote>记忆锚点：1978 年农业农村的病根两条——<strong>温饱没解决（A）+ 人民公社体制亟待改革（C）</strong>；土改 1952 年已完成（B 错），乡镇企业 1984 年前后才崛起（D 错）。做题先画时间轴，时序错位的选项一眼排除。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

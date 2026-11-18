@@ -1,8 +1,123 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-25 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-25</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·25 湿地保护的四层价值：理念、举措、生态、全球</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站（无 KaTeX）概念/推理链版：引擎 + 推理卡片累积展开，只改题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  {
+    "title": "审题眼：两组数字 + 一句定位",
+    "cls": "key",
+    "body": "<p>材料：湿地面积 <b>5635 万公顷</b>；《湿地公约》43 个国际湿地城市我国占 <b>13 个、全球最多</b>；定位「生态文明建设的重要内容」。问湿地保护「有利于」什么——湿地的系统功能贯穿四个层面，先立框架再逐项落座。</p>",
+    "log": "体量 + 国际认可，两组数字两层提示"
+  },
+  {
+    "title": "先立机制：湿地是多重功能叠加的生态系统",
+    "cls": "key",
+    "body": "<p>「地球之肾」＝涵养水源、净化水质、蓄洪防旱、调节气候、维护生物多样性。它既是<b>生态系统</b>，又是<b>生产生活条件</b>，还是<b>气候调节器</b>——一套系统多重功能，价值沿理念/举措/生态/全球四层展开。</p>",
+    "log": "系统属性先立，四层价值随之展开"
+  },
+  {
+    "title": "A：促进人与自然和谐共生 → 入选",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p>人与自然和谐共生是生态文明的<b>核心理念</b>，湿地是人类逐水而居、与自然打交道的直接界面——保护湿地就是这一理念的直接实践。<b>入选</b>。</p>",
+    "log": "A 理念层 ✓"
+  },
+  {
+    "title": "B：推行草原森林河流湖泊湿地休养生息 → 入选",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p>「休养生息」不是文学修辞，而是二十大报告的<b>正式部署用语</b>：推行草原、森林、河流、湖泊、湿地休养生息，湿地明确列在举措清单里。<b>入选</b>。</p>",
+    "log": "B 举措层 ✓（报告原文部署）"
+  },
+  {
+    "title": "C：提升生态系统多样性稳定性持续性 → 入选",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p>「三性」的标准落点是重要生态系统；湿地是典型重要生态系统，保护湿地即直接提升<b>多样性、稳定性、持续性</b>。<b>入选</b>。</p>",
+    "log": "C 生态层 ✓"
+  },
+  {
+    "title": "D：发挥湿地功能、推进可持续发展、应对气候变化 → 入选",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>湿地的蓄洪、固碳、调节气候等功能对应<b>可持续发展与气候议程</b>；材料后半段专门给国际数据（《湿地公约》入选全球最多）——全球维度就是提示。<b>入选</b>。</p>",
+    "log": "D 全球层 ✓（《湿地公约》线索）"
+  },
+  {
+    "title": "追问预答：为什么敢全选？",
+    "cls": "key",
+    "body": "<p>两个常见犹豫都被材料拆掉：B 的「休养生息」是<b>部署动词</b>不是修辞；D 有《湿地公约》的<b>国际线索</b>撑着。四项分落四个层面、互不冲突、<b>无绝对化用语</b>——多选题里没有「彻底」「唯一」一类字眼，全选成立。</p>",
+    "log": "四层互不冲突，无绝对化用语"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>ABCD</b>。记忆锚点：湿地保护四层＝<b>和谐共生（理念）＋休养生息（举措）＋三性（生态）＋可持续与气候（全球）</b>。</p>",
+    "log": "锁定 ABCD"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "湿地保护的四层价值：理念、举措、生态、全球",
+  subtitle: "考点：生态文明建设与湿地保护 · 方法：先立系统功能，再按四层对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABCD",
+    html: "湿地保护四层＝促进人与自然和谐共生（理念）＋推行休养生息（二十大部署举措）＋提升多样性稳定性持续性（生态）＋发挥湿地功能、推进可持续发展、应对气候变化（全球议程）。材料两组数字：国内体量提示 A/B/C，国际认可提示 D。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：湿地保护有利于什么——从湿地的系统功能推出四层价值</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——湿地是「多重功能叠加」的生态系统</h3>
+<p>做这道全选题，不能逐项「感觉对就选」，先把湿地的<strong>系统属性</strong>立起来：湿地被称为「地球之肾」，兼有<strong>涵养水源、净化水质、蓄洪防旱、调节气候、维护生物多样性</strong>等多重功能——它既是生态系统，又是生产生活资料，还是气候调节器。题干两组数字正是这个属性的注脚：<code>5635万公顷</code>（保护的<strong>体量</strong>）、<code>《湿地公约》43个国际湿地城市中我国占13个、全球最多</code>（国际<strong>认可</strong>）。一套系统、多重功能，价值判断就沿四个层面展开：</p>
+<table><thead><tr><th>层面</th><th>对应选项</th><th>依据</th></tr></thead><tbody><tr><td>理念层</td><td>A 促进人与自然和谐共生</td><td>人与自然和谐共生是生态文明的核心理念，湿地保护是其直接实践</td></tr><tr><td>举措层</td><td>B 推行草原森林河流湖泊湿地休养生息</td><td>二十大报告的正式部署用语，湿地列在其中</td></tr><tr><td>生态层</td><td>C 提升生态系统多样性、稳定性、持续性</td><td>湿地是重要生态系统，护湿地即提升「三性」</td></tr><tr><td>全球层</td><td>D 发挥湿地功能、推进可持续发展、应对气候变化</td><td>湿地蓄洪、固碳、调节气候，对应《湿地公约》全球议程</td></tr></tbody></table>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A</td><td>✅</td><td>「和谐共生」是生态文明的核心理念，湿地是人与自然关系的直接界面</td></tr><tr><td>B</td><td>✅</td><td>「休养生息」是报告原文的部署动词，不是文学修辞——草原、森林、河流、湖泊、湿地五类并举</td></tr><tr><td>C</td><td>✅</td><td>多样性、稳定性、持续性「三性」的标准落点是重要生态系统，湿地在列</td></tr><tr><td>D</td><td>✅</td><td>材料「《湿地公约》」就是提示：湿地的价值不止国内生态，还通向可持续发展与气候议程</td></tr></tbody></table>
+<h3>第 2 步：预判两个「为什么不敢选」</h3>
+<p><strong>为什么 B 敢选？</strong> 学习者最容易把「休养生息」当成比喻而漏选。判断尺：看它是否为<strong>正式部署用语</strong>——二十大报告原文即「推行草原森林河流湖泊湿地休养生息」，是举措清单的组成部分，与材料「生态文明建设的重要内容」直接衔接。</p>
+<p><strong>为什么 D 敢选？</strong> 只盯着国内生态价值就容易漏 D。材料后半段专门给国际数据（入选城市全球最多），暗示命题人要考湿地的<strong>全球维度</strong>：发挥湿地功能＝推进可持续发展＋应对气候变化，这正是《湿地公约》的议程语言。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选 B</strong>：把「休养生息」当文学化表述——它实为二十大报告的部署用语；干扰手法是借「不像术语」制造犹豫。</li><li><strong>漏选 D</strong>：思维停留在国内生态，忽略材料里《湿地公约》、全球入选最多这些国际线索。</li><li><strong>怀疑「全选」</strong>：多选题里四项若有绝对化用语（如「彻底解决」「唯一途径」）应警惕，但本题四项各自落在不同层面、互不冲突、无绝对化表述——全选成立。</li></ul>
+<blockquote>记忆锚点：湿地保护四层＝<strong>和谐共生（理念）＋休养生息（举措）＋三性（生态）＋可持续与气候（全球）</strong>；材料「国内体量＋国际认可」两组数字各暗示一半选项。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,73 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-01 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-01</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2024·01 理论创新的「魂脉」与「根脉」</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 anim_math_concept 模板（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [{"title": "审题眼", "cls": "key", "tag": "审题", "body": "<p>题干问「魂脉」和「根脉」是什么，并限定它是理论创新的<b>基础和前提</b>。题眼出自习近平总书记 2023 年 6 月文化传承发展座谈会讲话。考点锁定：<b>两个结合与理论创新</b>。</p>", "log": "锁定题眼：魂脉 + 根脉"}, {"title": "先立机制：两个结合", "cls": "key", "tag": "立机制", "body": "<p>谱写马克思主义中国化时代化新篇章 = 坚守好「魂」和「根」：<b>魂脉 = 马克思主义</b>（世界观方法论的魂，不能丢老祖宗）；<b>根脉 = 中华优秀传统文化</b>（文化血脉的根，创新植根本民族沃土）。魂根必然是「一个主义 + 一脉文化」的组合。</p>", "log": "机制：魂=主义，根=文化"}, {"title": "A. 马克思主义 + 中华优秀传统文化——入选", "cls": "good", "tag": "A ✓", "ribbon": {"k": 1, "ok": true}, "body": "<p>正是官方表述的原文对应：魂脉是<b>马克思主义</b>，根脉是<b>中华优秀传统文化</b>。「第二个结合」让马克思主义成为中国的、中华优秀传统文化成为现代的。</p>", "log": "A 与魂根机制完全对上 → 正确"}, {"title": "B. 两个「理想」的配对——排除", "cls": "bad", "tag": "B ✗", "ribbon": {"k": 2, "ok": false}, "body": "<p>「共产主义社会理想 + 天下大同理想」是<b>愿景层面</b>的凑对，形似「一高一低」，但魂脉根脉的官方表述里没有这一对。</p>", "log": "B 是理想配对，望文生义"}, {"title": "C. 两个「价值」的配对——排除", "cls": "bad", "tag": "C ✗", "ribbon": {"k": 3, "ok": false}, "body": "<p>「全人类共同价值 + 社会主义核心价值观」是<b>价值层面</b>的凑对——同形陷阱：干扰项都爱替魂根「找搭档」，但都不是原文对应。</p>", "log": "C 是价值配对，排除"}, {"title": "D. 共产党人的理想结构——排除", "cls": "bad", "tag": "D ✗", "ribbon": {"k": 4, "ok": false}, "body": "<p>「远大理想 + 共同理想」说的是共产党人自身的理想信念结构，与「魂脉/根脉」的配对对象<b>整体错位</b>。</p>", "log": "D 对象错位，排除"}, {"title": "结论", "cls": "good", "tag": "完成", "body": "<p>答案 <b>A</b>。记忆锚点：<b>魂脉 = 马克思主义，根脉 = 中华优秀传统文化</b>——守魂不能变、守根不能断，这是理论创新的基础和前提。</p>", "log": "锁定 A：魂脉=主义，根脉=文化"}];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "2024·01 理论创新的「魂脉」与「根脉」",
+  subtitle: "考点：两个结合 · 方法：先立「魂根」机制，再对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」沿推理链展开：立机制 → 对号 → 结论。",
+  snaps: snaps,
+  result: {
+    big: "答案 A",
+    html: "答案 <b>A</b>：魂脉 = <b>马克思主义</b>，根脉 = <b>中华优秀传统文化</b>。B/C/D 都是替魂根「找搭档」的望文生义项（理想配对、价值配对、理想结构），均无官方表述对应——「魂 + 根」= 一个主义 + 一脉文化。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：理论创新的「魂脉」与「根脉」各指什么</h2>
+<p>答案：<strong>A（马克思主义和中华优秀传统文化）</strong>。</p>
+<h3>第 0 步：先立机制——理论创新的「两个结合」</h3>
+<p>题干把「魂脉」「根脉」定位成理论创新的<strong>基础和前提</strong>。出处是习近平总书记 2023 年 6 月在文化传承发展座谈会上的讲话：谱写马克思主义中国化时代化新篇章，要坚守好这个「魂」和「根」。这里的机制是「两个结合」：</p>
+<table><thead><tr><th>名号</th><th>指什么</th><th>在理论创新中的地位</th></tr></thead><tbody><tr><td>魂脉</td><td>马克思主义</td><td>世界观、方法论的「魂」——创新不能丢了老祖宗</td></tr><tr><td>根脉</td><td>中华优秀传统文化</td><td>文化血脉的「根」——创新要植根本民族历史沃土</td></tr></tbody></table>
+<p>马克思主义提供立场观点方法，中华优秀传统文化提供思想滋养与文化土壤，二者结合才有「中国化时代化」的新篇章——所以「魂」与「根」必然是<strong>一个主义 + 一脉文化</strong>的组合。</p>
+<h3>第 1 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>组合</th><th>判断</th></tr></thead><tbody><tr><td>A 马克思主义 + 中华优秀传统文化</td><td>理论 + 文化</td><td>✅ 官方表述的原文对应</td></tr><tr><td>B 共产主义社会理想 + 「天下大同」理想</td><td>理想 + 理想</td><td>❌ 愿景层面的配对，不是魂根</td></tr><tr><td>C 全人类共同价值 + 社会主义核心价值观</td><td>价值 + 价值</td><td>❌ 价值层面的配对，不是魂根</td></tr><tr><td>D 远大理想 + 共同理想</td><td>理想 + 理想</td><td>❌ 共产党人自身的理想结构，对象错位</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 B/C/D 的共同套路</strong>：三对干扰项都是「一个高远的 + 一个现世的」式凑对，形似「一魂一根」，但「魂脉/根脉」是官方固定表述，只有 A 有明确对应，其余均为望文生义。</li><li><strong>魂根顺序记反</strong>：魂 = 马克思主义（守魂，不能变），根 = 中华优秀传统文化（守根，不能断）——方向记反不影响本题答案（选项内已配好），但会殃及论述题。</li></ul>
+<blockquote>记忆锚点：<strong>魂脉 = 马克思主义，根脉 = 中华优秀传统文化</strong>；「第二个结合」筑牢的是理论与文化的双重根基。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,135 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-12 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-12</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·12 资本主义工商业改造执行的政策</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），
+     模板复制自 408 tools/anim_concept_template.html，只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼',
+    cls: 'key',
+    body: '<p>邓小平谈的是对<b>资本主义工商业</b>（民族资本）的社会主义改造，问执行的是什么<b>政策</b>。改造题＝「对象—政策」对号题：对象划准，政策词才能选对。题干「资本家……起了有益的配合作用」还暗示：政策不是硬剥夺，是团结改造。</p>',
+    tag: '审题',
+    log: '审题：对象 = 资本主义工商业（民族资本），找专属政策词'
+  },
+  {
+    title: '先立模型：对象—政策对号表',
+    cls: 'key',
+    body: '<ul><li><b>农业</b> → 互助合作（互助组 → 初级社 → 高级社）</li><li><b>手工业</b> → 合作化（合作小组 → 供销合作社 → 生产合作社）</li><li><b>资本主义工商业（民族资本）</b> → <b>和平赎买</b>（加工订货统购包销 → 个别企业公私合营「四马分肥」→ 全行业公私合营「定息」）</li><li><b>官僚资本</b> → 没收（建国伊始宣布）</li></ul>',
+    tag: '建模',
+    log: '对号表立好：四个对象各守一个政策词'
+  },
+  {
+    title: '机制：为什么民族资本可以「赎买」',
+    cls: 'step',
+    body: '<p>民族资产阶级在社会主义革命阶段有<b>两面性</b>：既有剥削工人的一面，又有拥护宪法、愿意接受改造的一面。对两面性的阶级，政策是<b>给代价、给出路</b>：利润分步让渡——四马分肥（国家所得税、企业公积金、工人福利费、资方红利），全行业合营后改发<b>定息</b>，并把资本家改造成自食其力的劳动者。官僚资本是买办的封建的国家资本，没资格赎买，只能没收——「没收」与「赎买」是<b>对象不同</b>，不是矛盾。</p>',
+    tag: '机制',
+    log: '两面性 → 给代价给出路 → 和平赎买；官僚资本才没收'
+  },
+  {
+    title: 'C：和平赎买的政策',
+    cls: 'good',
+    ribbon: { k: 3, ok: true },
+    body: '<p>对资本主义工商业（民族资本）执行的政策就是<b>和平赎买</b>——国际共运史上没有先例的创举，才配得上题干「最光辉的胜利之一」。<b>C 正确</b>。</p>',
+    tag: '命中',
+    log: 'C 命中：和平赎买的政策'
+  },
+  {
+    title: 'A：词库串门',
+    cls: 'bad',
+    ribbon: { k: 1, ok: false },
+    body: '<p>「互助合作」是<b>农业</b>改造的政策词（积极引导农民组织起来），与资本主义工商业不是一个对象。三大改造的记忆词最易互相串门。<b>A 错误</b>。</p>',
+    tag: '排除',
+    log: 'A 互助合作只管农业 → 排除'
+  },
+  {
+    title: 'D：对象错位',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>「剥夺没收」确实存在，但对象是<b>官僚资本</b>（依附帝国主义、封建主义，垄断国民经济命脉的革命对象）；对民族资本用赎买。知道要「剥夺剥夺者」，还得看剥夺的是谁。<b>D 错误</b>。</p>',
+    tag: '排除',
+    log: 'D 没收的对象是官僚资本 → 排除'
+  },
+  {
+    title: 'B：时间与主题双错位',
+    cls: 'bad',
+    ribbon: { k: 2, ok: false },
+    body: '<p>「调整、巩固、充实、提高」是 <b>1961 年</b>八字方针，为克服国民经济困难而提，属于国民经济调整，与 1953—1956 年的社会主义改造不是一件事。<b>B 错误</b>。</p>',
+    tag: '排除',
+    log: 'B 八字方针属 1961 国民经济调整 → 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>C</b>。记忆锚点：对象—政策对号——农业＝互助合作，手工业＝合作化，资本主义工商业＝<b>和平赎买</b>（四马分肥→定息）；官僚资本＝没收。赎买是「对象（民族资本）＋政策（团结改造）」的匹配。</p>',
+    tag: '结论',
+    log: '锁定 C：和平赎买的政策'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag,
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+});
+
+AW.init({
+  title: '对资本主义工商业的社会主义改造执行的政策',
+  subtitle: '考点：资本主义工商业改造 · 方法：对象—政策对号（互助合作 / 合作化 / 和平赎买 / 没收）',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」先立对象—政策对号表，再逐项排查。',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '对资本主义工商业（民族资本）执行<b>和平赎买</b>的政策：两面性 → 给代价、给出路 → 四马分肥 → 定息。易混点：没收是给<b>官僚资本</b>的；互助合作只管<b>农业</b>；「调整、巩固、充实、提高」是 1961 年国民经济八字方针，不是改造政策。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：对资本主义工商业的改造为什么是「和平赎买」</h2>
+<p>答案：<strong>C（和平赎买的政策）</strong>。</p>
+<h3>第 0 步：先立模型——「对象—政策」对号表</h3>
+<p>社会主义改造考的是<strong>对象与政策词的绑定</strong>：三个改造对象各有一套专属政策词，命题把 A 对象的政策词安到 B 对象头上，就是标准干扰项。先把对号表立起来：</p>
+<table><thead><tr><th>改造对象</th><th>政策 / 方式</th><th>过渡形式</th></tr></thead><tbody><tr><td>农业</td><td><strong>互助合作</strong>（积极引导农民组织起来）</td><td>互助组 → 初级社 → 高级社</td></tr><tr><td>手工业</td><td><strong>合作化</strong></td><td>手工业生产合作小组 → 供销合作社 → 生产合作社</td></tr><tr><td>资本主义工商业（民族资本）</td><td><strong>和平赎买</strong></td><td>加工订货、统购包销（低级）→ 个别企业公私合营（四马分肥）→ 全行业公私合营（定息）</td></tr></tbody></table>
+<p>另有一个常来抢位的项：<strong>官僚资本</strong>——新中国成立初期对它实行<strong>没收</strong>（它依附帝国主义、封建主义，垄断国民经济命脉，是革命对象）。</p>
+<h3>第 1 步：为什么民族资本可以「赎买」、官僚资本要「没收」（预判追问）</h3>
+<ul><li><strong>两面性决定团结的可能</strong>：民族资产阶级在社会主义革命阶段有两面性——既有剥削工人取得利润的一面，又有拥护宪法、愿意接受社会主义改造的一面。对待两面性的阶级，政策不是消灭肉体而是<strong>改造人</strong>：给代价、给出路。</li><li><strong>赎买的形式</strong>：利润不一次剥夺而是分步让渡——个别企业公私合营时按「<strong>四马分肥</strong>」（国家所得税、企业公积金、工人福利费、资方红利）分配；全行业公私合营后改发<strong>定息</strong>，资本家拿固定股息；同时把资本家改造成自食其力的劳动者。</li><li><strong>官僚资本没资格赎买</strong>：它靠国家政权聚敛、压迫民族资本，性质是买办的封建的国家资本，建国伊始即宣布没收——「没收」与「赎买」是<strong>对象不同</strong>，不是矛盾。</li><li>题干引邓小平的话「资本家阶级中的进步分子和大多数人在接受改造方面也起了有益的配合作用」，正是「赎买＋团结」政策奏效的注脚。</li></ul>
+<h3>第 2 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归属</th></tr></thead><tbody><tr><td>A 互助合作的政策</td><td>❌</td><td>农业（农民）改造的政策词</td></tr><tr><td>B 调整巩固的政策</td><td>❌</td><td>1961 年「调整、巩固、充实、提高」八字方针，属于国民经济调整，不是改造政策</td></tr><tr><td>C 和平赎买的政策</td><td>✅</td><td>对资本主义工商业（民族资本）的政策</td></tr><tr><td>D 剥夺没收的政策</td><td>❌</td><td>对官僚资本的政策——对象错位</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 A（词库串门）</strong>：三大改造的记忆词最易互相串——「互助合作」只管农业。</li><li><strong>误选 D（对象错位）</strong>：知道社会主义要「剥夺剥夺者」，但没收的对象是<strong>官僚资本</strong>；对民族资本用赎买，是国际共运史上没有先例的创举，这才配得上题干「最光辉的胜利之一」。</li><li><strong>误选 B（时间与主题双错位）</strong>：八字方针是 1961 年为克服困难调整国民经济，与 1953—1956 年的改造不是一件事。</li></ul>
+<blockquote>记忆锚点：对象—政策对号——农业＝互助合作，手工业＝合作化，资本主义工商业＝<strong>和平赎买</strong>（四马分肥→定息）；官僚资本＝没收。赎买是「对象（民族资本）＋政策（团结改造）」的匹配，别与没收混同。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

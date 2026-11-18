@@ -1,8 +1,125 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-11 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-11</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2015·11 一战使先进分子对西方资产阶级民主主义产生怀疑</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 模板：anim_concept（概念/推理链卡片，政治站无 KaTeX 版）· 只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：因果链——谁暴露矛盾，就怀疑谁",
+    "cls": "key",
+    "body": "<p>题干主语是「<b>大战</b>」，谓语是「<b>使</b>先进分子……」——问一战直接促成的思想转折。规则：大战暴露<b>谁的</b>矛盾，先进分子就动摇对<b>谁</b>的迷信。考点：新文化运动与马克思主义传播的背景。</p>",
+    "log": "审题：大战→暴露矛盾→产生怀疑"
+  },
+  {
+    "title": "先立机制：时间线与因果链",
+    "cls": "key",
+    "body": "<p>新文化运动（1915 起）高举<b>民主与科学</b>，憧憬对象正是<b>西方资产阶级民主主义</b>（天赋人权、自由平等、共和国方案）。1914—1918 一战把这套文明「打回原形」：列强互相屠杀、生产凋敝；战后巴黎和会分赃更击碎「公理战胜强权」的幻想 → 怀疑西方道路，为接受马克思主义、转向俄国道路做准备。</p>",
+    "log": "资本主义文明矛盾暴露 → 怀疑西方"
+  },
+  {
+    "title": "A：对中国传统文化产生怀疑——方向反了",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>对传统文化的批判（新文化运动）在大战<b>之前</b>就已展开，不是大战的结果；大战动摇的是对<b>西方</b>文明的迷信。A 把怀疑对象挂错、时序弄反。<b>A 不选</b>。</p>",
+    "log": "批传统在前，疑西方在后 → A 不选"
+  },
+  {
+    "title": "B：对西方资产阶级民主主义产生怀疑",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p>大战让资本主义制度的<b>内在矛盾</b>充分暴露——自称「文明」的欧洲互相屠杀；先进分子重新审视：资产阶级共和国方案还是不是中国的出路？怀疑由此而生，因果链严丝合缝。<b>B 正确</b>。</p>",
+    "log": "暴露的是资本主义 → 怀疑西方民主主义 → 选 B"
+  },
+  {
+    "title": "C：认识到工人阶级的重要作用——时间接不上",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>「工人阶级登上政治舞台」的<b>本土证明</b>要等 <b>1919 年五四运动</b>（工人罢工声援展现力量）；十月革命给的是「走俄国人的路」的方向启示。两者都不是「大战」直接给予的认识——把五四的账记到一战头上。<b>C 不选</b>。</p>",
+    "log": "认识工人=五四运动的成果 → C 不选"
+  },
+  {
+    "title": "D：优先改造国民性——旧主张，非新转折",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>「改造国民性」是新文化运动<b>初期</b>的既有启蒙主张（陈独秀、鲁迅等的思路），不是大战催生的<b>新</b>认识；题眼在「大战改变了对<b>西方</b>的看法」。<b>D 不选</b>。</p>",
+    "log": "旧主张≠大战带来的新转折 → D 不选"
+  },
+  {
+    "title": "追问预判：十月革命同期，为何不选 C？",
+    "cls": "key",
+    "body": "<p>十月革命（1917）与一战同期，但给中国的是「<b>走俄国人的路</b>」的方向（马克思主义、劳工掌权）——属「另寻出路」；而「工人阶级的重要作用」得到<b>切身的本土证明</b>要靠五四运动。题干因果链挂在「大战」上：直接后果是<b>怀疑西方</b>，不是认识工人。</p>",
+    "log": "同期≠同因：十月给方向，五四给证明"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>B</b>：对西方资产阶级民主主义产生怀疑。一句斩干扰项：A 挂错对象、弄反时序，C 把五四成果提前，D 把旧主张当新转折。</p>",
+    "log": "锁定 B：怀疑西方资产阶级民主主义"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "一战使先进分子对西方资产阶级民主主义产生怀疑",
+  subtitle: "考点：史纲·新文化运动与十月革命 · 方法：抓「大战→暴露谁的矛盾→怀疑谁」因果链",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 B",
+    html: "记忆锚点：一战=西方文明矛盾的<b>现场直播</b>→先进分子对<b>西方资产阶级民主主义</b>产生怀疑→另寻出路（为马克思主义传播、走俄国人的路做铺垫）；认识工人阶级作用=<b>五四运动</b>。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：一战使中国先进分子对西方资产阶级民主主义产生怀疑</h2>
+<p>答案：<strong>B（对西方资产阶级民主主义产生怀疑）</strong>。</p>
+<h3>第 0 步：先立机制——「怀疑」的因果链：谁暴露矛盾，就怀疑谁</h3>
+<p>先把时间线立起来：新文化运动（1915 年起）高举<strong>民主与科学</strong>两面旗帜，先进分子憧憬的对象正是<strong>西方资产阶级民主主义</strong>——天赋人权、自由平等、资产阶级共和国方案。而 1914—1918 年的一战，恰是这套文明「被打回原形」的现场：</p>
+<ul><li>战争让资本主义制度的<strong>内在矛盾</strong>充分暴露：自称「文明」的欧洲列强互相屠杀，生产凋敝、社会动荡；</li><li>战后巴黎和会上列强的分赃（中国以战胜国身份反被宰割），进一步击碎「公理战胜强权」的幻想；</li><li>于是先进分子<strong>重新审视</strong>：西方资产阶级共和国方案还是不是中国的出路？——怀疑由此而生，为日后接受马克思主义、转向俄国道路准备了思想契机。</li></ul>
+<p>题干的因果链是「大战 → 暴露谁的矛盾 → 就动摇对谁的迷信」：暴露的是<strong>资本主义/西方文明</strong>的矛盾 → 怀疑的就是<strong>西方资产阶级民主主义</strong>。→ 选 <strong>B</strong>。</p>
+<h3>第 1 步：干扰项各自错在哪</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>错因与典型误解</th></tr></thead><tbody><tr><td>A 对中国传统文化产生怀疑</td><td>❌</td><td>方向反了：对传统文化的批判（新文化运动）在大战<strong>之前</strong>就已展开，不是大战的结果；大战动摇的是对<strong>西方</strong>文明的迷信</td></tr><tr><td>B 对西方资产阶级民主主义产生怀疑</td><td>✅</td><td>大战暴露资本主义文明矛盾 → 先进分子对西方道路产生怀疑、重新思考中国出路</td></tr><tr><td>C 认识到工人阶级的重要作用</td><td>❌</td><td>这一认识来自<strong>五四运动中工人阶级登上政治舞台</strong>（1919）与十月革命后的启示，时间和因果都接不到「大战」上</td></tr><tr><td>D 认识到必须优先改造国民性</td><td>❌</td><td>「改造国民性」是新文化运动<strong>初期</strong>的既有启蒙主张（陈独秀、鲁迅等），不是大战催生的<strong>新</strong>认识</td></tr></tbody></table>
+<h3>第 2 步：预判追问——十月革命也在这个时期，为什么不选 C？</h3>
+<p>十月革命（1917）确实与一战同期，但它给中国的启示是「<strong>走俄国人的路</strong>」：马克思主义、劳工掌权——这是<strong>另寻出路</strong>的方向；而「工人阶级的重要作用」在中国得到<strong>切身的、本土的证明</strong>，要等 1919 年五四运动：工人以罢工声援展现力量，先进分子才真正认识到工人阶级是革命的领导力量。题干的主语是「<strong>大战</strong>使中国的先进分子……」——这个因果链上挂的是「怀疑西方」（大战直接暴露其矛盾），不是「认识工人」（五四运动的成果）。把五四的账记到一战头上，正是 C 的典型误解。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 A（把「怀疑」挂错对象、弄反时序）</strong>：因果规则是「暴露谁的矛盾就怀疑谁」——大战暴露的是资本主义文明，不是传统文化；且批传统文化在前、怀疑西方在后，A 把时序也弄反了。</li><li><strong>选 C（把五四运动的成果提前）</strong>：C 是历史事实，但促成它的是五四运动（1919）与十月革命的道路启示，不是大战本身——时间与因果双重接不上。</li><li><strong>选 D（把旧主张当新转折）</strong>：改造国民性不是大战催生的新认识；题眼在「大战改变了对<strong>西方</strong>的看法」。</li></ul>
+<blockquote>记忆锚点：一战=西方文明矛盾的<strong>现场直播</strong>→先进分子对<strong>西方资产阶级民主主义</strong>产生怀疑→另寻出路（为马克思主义传播、走俄国人的路做铺垫）；认识工人阶级作用=<strong>五四运动</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

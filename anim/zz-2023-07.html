@@ -1,8 +1,130 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-07 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-07</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·07 总体国家安全观归根到底为了什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链卡片模板（政治站纯文本，无 KaTeX），只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+function miniTable(rows){
+  var s = '<table style="border-collapse:collapse;margin:6px 0;font-size:13px">';
+  for(var i=0;i<rows.length;i++){
+    s += '<tr>';
+    for(var j=0;j<rows[i].length;j++){
+      s += '<td style="border:1px solid #cbd5e1;padding:3px 8px">' + rows[i][j] + '</td>';
+    }
+    s += '</tr>';
+  }
+  return s + '</table>';
+}
+
+var STEPS = [
+  {
+    "title": "审题眼：「归根到底」＝只要链条最末端",
+    "cls": "key",
+    "body": "<p>「归根到底是为了」是<b>追问最终归宿</b>的设问：所有备选理由排成一条链——<b>背景 → 路径 → 过程目标 → 最终目的</b>——只取最末一节，中间环节一律让位。</p>",
+    "log": "归根到底 → 目的链最末端"
+  },
+  {
+    "title": "立机制：安全之「用」落在复兴上",
+    "cls": "key",
+    "body": "<p>二十大报告定位：<b>国家安全是民族复兴的根基</b>，社会稳定是国家强盛的前提；安全是发展的前提，发展是安全的保障。抓安全不是为了安全本身——是为保住「复兴」这条主线。</p>",
+    "log": "安全是根基 → 根基护的是复兴进程"
+  },
+  {
+    "title": "选项 A：那是背景层",
+    "cls": "bad",
+    "body": "<p>「顺应世界变化发展的新趋势」回答的是<b>为什么此时提出</b>（世界百年未有之大变局），是时代背景，不回答「为了什么」。<b>让位</b>。</p>",
+    "ribbon": { "k": 1, "ok": false },
+    "log": "A：背景层 → 让位"
+  },
+  {
+    "title": "选项 B：那是路径层",
+    "cls": "bad",
+    "body": "<p>「增强全民国家安全意识」是落实的<b>手段</b>（全民国家安全教育）；手段谈不到「归根到底」，层次比过程目标还靠前。<b>让位</b>。</p>",
+    "ribbon": { "k": 2, "ok": false },
+    "log": "B：路径层 → 让位"
+  },
+  {
+    "title": "选项 C：那是过程目标层",
+    "cls": "bad",
+    "body": "<p>「破解国家发展中遇到的安全难题」是<b>路上要做的事</b>——直接功能。但「做完事最终图什么」它答不了：破解难题，为的是不让复兴进程放缓或被打断。<b>让位</b>。</p>",
+    "ribbon": { "k": 3, "ok": false },
+    "log": "C：过程目标 → 再往深处问一层"
+  },
+  {
+    "title": "选项 D：最终目的层",
+    "cls": "good",
+    "body": "<p>「确保<b>中华民族伟大复兴进程</b>不被<b>迟滞</b>甚至<b>中断</b>」——定位句原话（迟滞＝放缓，中断＝打断），安全之「用」最终落在复兴进程上。<b>对</b>。</p>",
+    "ribbon": { "k": 4, "ok": true },
+    "log": "D：最终目的层 → 选中"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案选 <b>D</b>。" + miniTable([
+      ["A 新趋势", "✗ 背景"],
+      ["B 意识", "✗ 路径"],
+      ["C 破解难题", "✗ 过程目标"],
+      ["D 保复兴进程", "✓ 最终目的"]
+    ]) + "<p>C 与 D 是相邻两环：破解难题（手段）→ 保住复兴（目的）；「归根到底」选目的。</p>",
+    "log": "锁定 D：确保复兴进程不被迟滞甚至中断"
+  },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '总体国家安全观：归根到底为了什么',
+  subtitle: '考点：总体国家安全观 · 方法：背景/路径/过程目标/最终目的 四层定位法',
+  counterLabel: '推理步',
+  ribbonTitle: '选项带（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链；序号带 1–4 对应选项 A–D。',
+  snaps: snaps,
+  result: {
+    big: '答案 D',
+    html: '记忆锚点：<b>国家安全是民族复兴的根基</b>。凡「归根到底/最根本/最终」设问，选目的链最末端——确保中华民族伟大复兴进程不被迟滞甚至中断；背景、路径、过程目标一律让位。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解："归根到底"问归宿——总体国家安全观为复兴而立</h2>
+<p>答案：<strong>D（确保中华民族伟大复兴进程不被迟滞甚至中断）</strong>。</p>
+<h3>第 0 步：先立机制——"归根到底"设问的四层定位法</h3>
+<p>"归根到底是为了"是<strong>追问链条最末端</strong>的设问：它把所有备选理由排成一条链——<strong>背景 → 路径 → 过程目标 → 最终目的</strong>——只要链条最末端那一个，中间环节一律让位。判断之前先立这条链末端的定位句：二十大报告讲，<strong>国家安全是民族复兴的根基</strong>，社会稳定是国家强盛的前提；安全是发展的前提，发展是安全的保障。定位句已经点明：抓安全不是为了安全本身，安全之"用"最终落在"复兴"这条主线上——对应 D 的原话"确保中华民族伟大复兴进程<strong>不被迟滞甚至中断</strong>"（迟滞＝放缓，中断＝打断）。</p>
+<h3>第 1 步：预判追问——C 与 D 只差几个字，怎么切开？</h3>
+<p>C（破解国家发展中遇到的安全难题）与 D 是链条上<strong>相邻的两环</strong>：破解难题是"路上要做的事"——<strong>过程目标/直接功能</strong>；再往深处追问一层："破解难题为了什么？"——为了不让复兴进程因安全问题<strong>放缓</strong>（迟滞）甚至<strong>被打断</strong>（中断），这才是末端。做题规则：凡"归根到底 / 最根本 / 最终"设问，答案必须是<strong>目的链的最末一节</strong>；C 回答"做什么"，D 回答"为的到底是谁"。</p>
+<h3>第 2 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>所在层次</th><th>为什么让位</th></tr></thead><tbody><tr><td>A 顺应世界变化发展的新趋势</td><td>背景</td><td>回答"为什么此时提出"（百年未有之大变局），是提出的时代背景</td></tr><tr><td>B 增强全民国家安全意识</td><td>路径</td><td>落实的手段（全民国家安全教育），手段谈不到归宿</td></tr><tr><td>C 破解国家发展中遇到的安全难题</td><td>过程目标</td><td>直接功能；答不了"最终图什么"</td></tr><tr><td>D 确保中华民族伟大复兴进程不被迟滞甚至中断</td><td>最终目的</td><td>✅ 定位句原话；安全之"用"落在复兴进程上</td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 C</strong>（最高频）：把"直接目的"当"最终目的"。C、D 是相邻两环——破解难题（手段层）→ 保住复兴进程（目的层）。"归根到底"必须再往深处问一层。</li><li><strong>误选 B</strong>：把"全民国家安全教育日"式的具体工作混进来，层次比 C 还靠前——它是路径层。</li><li><strong>误选 A</strong>：把"提出的时代背景"当成"坚持的归宿"。背景回答"为什么此时提出"，不回答"为了什么"。</li></ul>
+<blockquote>记忆锚点：<strong>国家安全是民族复兴的根基</strong>；凡"归根到底/最根本/最终"设问，选目的链末端——确保中华民族伟大复兴进程不被迟滞甚至中断；背景、路径、过程目标一律让位。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

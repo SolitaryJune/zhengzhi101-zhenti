@@ -1,8 +1,91 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-27 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-27</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-27 · 洋务运动创办的新式学堂（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：机制先行 → 学堂清单 → 逐项推演 A–D → 干扰项归因 → 结论。
+   全中文、自包含，仅引用本地 ../assets 引擎与样式，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼："船坚炮利"＝被击痛的是器物',
+    body: '<p>「船坚炮利」「自强」「求富」——洋务派惊醒的来源是<b>船</b>与<b>炮</b>：被击痛的是<b>器物</b>层面，不是制度，也不是思想。</p><p>所以洋务运动学西方，始终锁定在「器」：引进技术、办军工民用企业、编练新式海陆军。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行：学堂是洋务事业的配套环节',
+    body: '<p>学堂不是独立存在的，企业要运转、军队要打仗，就需要<b>会造、会用、会沟通</b>的人。「器物定位」直接决定学堂只能有三类：</p><ul><li>看得懂外文（外交谈判、技术引进）→ 译员 → <b>翻译学堂</b>；</li><li>造得出机器（军工民用制造）→ 技术人才 → <b>工艺学堂</b>；</li><li>打得赢仗（海防练兵）→ 军官 → <b>军事学堂</b>。</li></ul><p>「语言—技术—军事」三个器物环节一条不落。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true },
+    title: 'A：翻译学堂——看得懂外文',
+    body: '<p><b>翻译学堂</b>——对。1862 年<b>京师同文馆</b>为第一所，另有广方言馆等，培养译员服务外交谈判与技术引进。</p>' },
+  { cls: 'good', tag: 'B 入选', ribbon: { k: 2, ok: true },
+    title: 'B：工艺学堂——造得出机器',
+    body: '<p><b>工艺学堂</b>——对。培养制造、矿务、电报等技术人才，与军工民用企业配套，服务「求富」。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: 'C：军事学堂——打得赢仗',
+    body: '<p><b>军事学堂</b>——对。福建<b>船政学堂</b>、天津<b>水师学堂</b>、天津<b>武备学堂</b>等，直接服务「自强」练兵造船。</p>' },
+  { cls: 'bad', tag: 'D 排除', ribbon: { k: 4, ok: false },
+    title: 'D：法政学堂——层面与时代都不合',
+    body: '<p><b>法政学堂</b>——<b>错</b>。培养法律政治人才，服务<b>制度与法律变革</b>，属「制」的层面，超出洋务「学器物」的定位。</p><p>时间线也对不上：洋务运动 19 世纪 60—90 年代专注练兵制器；对制度的触动要到甲午战败后的<b>维新变法</b>，法政学堂的普遍设立更是<b>清末新政</b>（1901 年后）预备立宪时期的事。</p>' },
+  { cls: 'key', tag: '干扰项',
+    title: 'D 的手法：时代错置',
+    body: '<p>D 把「办学堂培养法政人才」这一<b>后来的制度变革需求</b>，前移到洋务时期。</p><p>学习者一旦只记「洋务办过学堂」而不记「办的是哪三类」，就会被「也是新式学堂」的表面归类带偏。</p><p>判别口诀：<b>洋务学「器」（翻译、工艺、军事），维新与新政才学「制」（法政）</b>。</p>' },
+  { cls: 'good', tag: '结论', cls2: 'done',
+    title: '收束：答案 ABC',
+    body: '<p>答案 <b>ABC</b>：翻译（京师同文馆）＋工艺（制造技术）＋军事（船政、水师、武备）。</p><p>法政属「制度」层面、清末新政时期的事，不进洋务清单。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2012·27】洋务运动创办的新式学堂（多选）',
+  subtitle: '考点：中国近现代史 · 洋务运动 · 器物定位决定学堂清单 · 选项逐项推演',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: '洋务三学堂＝<b>翻译（京师同文馆）＋工艺（制造技术）＋军事（船政、水师、武备）</b>——「语言—技术—军事」三个器物环节一条不落。法政学堂服务制度变革，属维新与清末新政的「制」层面——D 是时代错置。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：洋务新式学堂为什么恰好是三类——器物定位决定清单</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——学什么，取决于洋务派要什么</h3>
+<p>洋务派"震惊于列强的船坚炮利"，主张学习西方以求"自强""求富"。注意这个惊醒的来源：不是羡慕西方的制度或思想，而是<strong>船（军事装备）</strong>与<strong>炮（武器技术）</strong>——被击痛的是<strong>器物</strong>层面。因此洋务运动学习西方，始终锁定在"器"的层面：引进技术、兴办军工民用企业、编练新式海陆军。</p>
+<p>学堂不是独立存在的，它是洋务事业的配套环节：企业要运转、军队要打仗，就需要人会造、会用、会沟通。于是"器物定位"直接决定了学堂只能有三类：</p>
+<table><thead><tr><th>洋务目标</th><th>缺什么人</th><th>对应学堂</th><th>代表</th></tr></thead><tbody><tr><td>看得懂外文（外交谈判、技术引进）</td><td>译员</td><td><strong>翻译学堂</strong></td><td>1862 年京师同文馆（第一所）、广方言馆</td></tr><tr><td>造得出机器（军工民用制造）</td><td>技术人才</td><td><strong>工艺学堂</strong></td><td>培养制造、矿务、电报等人才</td></tr><tr><td>打得赢仗（海防练兵）</td><td>军官</td><td><strong>军事学堂</strong></td><td>福建船政学堂、天津水师学堂、天津武备学堂</td></tr></tbody></table>
+<p>三类学堂分别对应"语言—技术—军事"三个器物环节，一条不落，这正是本题选 ABC 的机制依据，而不是死背清单。</p>
+<h3>第 1 步：为什么法政学堂不在这份清单上（唯一干扰项，值得多问一句"为什么"）</h3>
+<p>法政学堂培养的是法律、政治人才，服务的是<strong>制度与法律变革</strong>——这属于"制"的层面，超出了洋务派"学器物"的定位。从时间线看更清楚：洋务运动在 19 世纪 60—90 年代，专注练兵制器；对制度层面的触动要等到甲午战败后的维新变法，而法政学堂的普遍设立更是清末新政（1901 年后）预备立宪时期的事。也就是说，<strong>法政学堂在时代与层面两个坐标上都不属于洋务</strong>：时代上它是后来者，层面上学的是"制"不是"器"。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 D</strong>：D 的手法是<strong>时代错置</strong>——把"办学堂培养法政人才"这一后来制度变革的需求，前移到洋务时期。学习者一旦只记"洋务办过学堂"而不记"办的是哪三类"，就容易被"也是新式学堂"的表面归类带偏。判别口诀：洋务学"器"（翻译、工艺、军事），维新与新政才学"制"（法政）。</li></ul>
+<blockquote>记忆锚点：洋务三学堂＝<strong>翻译（同文馆）＋工艺（制造）＋军事（船政、水师、武备）</strong>；法政属"制度"层面、清末新政时期的事，不进洋务清单。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,145 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-02 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-02</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·02 五种社会形态的划分依据</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链卡片模板（政治站纯文本，无 KaTeX），只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+function miniTable(rows, head){
+  var s = '<table style="border-collapse:collapse;margin:6px 0;font-size:13px">';
+  for(var i=0;i<rows.length;i++){
+    s += '<tr>';
+    for(var j=0;j<rows[i].length;j++){
+      var bg = (head && i===0) ? '#f1f5f9' : 'transparent';
+      s += '<td style="border:1px solid #cbd5e1;padding:3px 8px;background:' + bg + '">' + rows[i][j] + '</td>';
+    }
+    s += '</tr>';
+  }
+  return s + '</table>';
+}
+
+var STEPS = [
+  {
+    "title": "审题眼：定义已经递到手上",
+    "cls": "key",
+    "body": "<p>题干自带定义：社会形态 = 同生产力一定阶段相适应的<b>经济基础 + 上层建筑</b>的统一体。问的是：原始→奴隶→封建→资本主义→共产主义五种形态，凭什么划出来的？——就是问这个统一体里，<b>谁负责「定性质、起名字」</b>。</p>",
+    "log": "问题=统一体里谁定名"
+  },
+  {
+    "title": "立机制：骨骼定名模型",
+    "cls": "key",
+    "body": "<p>统一体像一座建筑：<b>经济基础（占主导的生产关系总和）是骨骼</b>，上层建筑（政体、法律、观念）是皮肤。骨骼核心是<b>生产资料归谁占有</b>，占有类型一换，社会名字就换：</p>" + miniTable([
+      ["生产关系的性质（骨骼）", "形态名"],
+      ["奴隶主占有生产资料和奴隶本身", "奴隶社会"],
+      ["地主占有土地、剥削农民", "封建社会"],
+      ["资本家占有生产资料、雇佣劳动", "资本主义社会"],
+      ["生产资料公有制", "共产主义（社会主义=第一阶段）"]
+    ], true),
+    "log": "骨骼（生产关系性质）定名，皮肤不换名"
+  },
+  {
+    "title": "预判追问：为什么不是生产工具？",
+    "cls": "key",
+    "body": "<p>分清两个层次：<b>生产力决定形态的演变</b>——生产力变，旧生产关系迟早被撑破，这是动力；但生产力<b>不直接给形态命名</b>——同样的机器大工业，配资本主义生产关系才叫资本主义社会，不叫「机器社会」。按工具划出的石器/青铜/铁器时代是<b>技术文明分期</b>：测量「先进/落后」，不回答「这是什么社会」。测量器 ≠ 命名者。</p>",
+    "log": "生产力管演变，生产关系管定名"
+  },
+  {
+    "title": "选项 A：测量器不是命名者",
+    "cls": "bad",
+    "body": "<p>「生产工具的质量和数量」是<b>生产力发展水平的客观尺度</b>，划出的是技术/文明分期（石器时代、铁器时代），不是社会形态的质态之名。A <b>错</b>。</p>",
+    "ribbon": { "k": 1, "ok": false },
+    "log": "A：技术分期 ≠ 社会形态 → 排除"
+  },
+  {
+    "title": "选项 B：拿被决定的结果当依据",
+    "cls": "bad",
+    "body": "<p>「统治集团的阶级和政治属性」属<b>上层建筑</b>。注意因果方向：正因为生产关系是奴隶制，奴隶主阶级才成为统治集团——B 是被决定的<b>表现</b>；且政体（君主制/共和制）变了、形态名也不变。B <b>错</b>。</p>",
+    "ribbon": { "k": 2, "ok": false },
+    "log": "B：上层建筑被决定，不能反过来定名 → 排除"
+  },
+  {
+    "title": "选项 C：骨骼定名——正中靶心",
+    "cls": "good",
+    "body": "<p>「经济基础特别是<b>生产关系的性质</b>」——占有关系换类型，形态才换名：奴隶制占有→奴隶社会，地主占有→封建社会，资本占有→资本主义社会，公有制→共产主义。五形态的划分依据正是它，<b>C 对</b>。</p>",
+    "ribbon": { "k": 3, "ok": true },
+    "log": "C：生产关系性质定名 → 正确"
+  },
+  {
+    "title": "选项 D：回答的不是同一个问题",
+    "cls": "bad",
+    "body": "<p>「社会交往和分工的范围和水平」回答「联系有多广、分工有多细」，是历史演进动力的一个视角；它不回答「这是什么性质的社会」。D <b>错</b>。</p>",
+    "ribbon": { "k": 4, "ok": false },
+    "log": "D：交往分工是动力视角，非质态标准 → 排除"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案选 <b>C</b>。" + miniTable([
+      ["A 生产工具", "✗ 测水平的尺子"],
+      ["B 统治集团", "✗ 被决定的表现"],
+      ["C 生产关系性质", "✓ 骨骼定名"],
+      ["D 交往分工", "✗ 动力视角"]
+    ]) + "</p>",
+    "log": "锁定 C：经济基础特别是生产关系的性质"
+  },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "五种社会形态的划分依据是什么",
+  subtitle: "考点：社会形态 · 经济基础与上层建筑 · 方法：骨骼定名模型 → 预判追问 → 逐项排查",
+  counterLabel: '推理步',
+  ribbonTitle: '选项带（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链；序号带 1–4 对应选项 A–D。',
+  snaps: snaps,
+  result: {
+    big: "答案 C",
+    html: "记忆锚点：社会形态 = <b>经济基础（骨骼）+ 上层建筑（皮肤）</b>；骨骼（生产关系性质）定名，皮肤不换名。生产工具测水平（技术分期），生产关系定性质（形态之名）——测量器与命名者分开记。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：五种社会形态凭什么划分——生产关系的性质给社会"定名"</h2>
+<p>答案：<strong>C（经济基础特别是生产关系的性质）</strong>。</p>
+<h3>第 0 步：先立机制——"骨骼定名"模型</h3>
+<p>题干已把定义递到手上：社会形态是"同生产力发展一定阶段相适应的<strong>经济基础同上层建筑的统一体</strong>"。这个统一体像一座建筑：<strong>经济基础是骨骼</strong>（一个社会占主导地位的生产关系的总和），<strong>上层建筑是皮肤</strong>（政体、法律、观念形态）。给社会形态<strong>定性质、起名字</strong>的，只能是骨骼——因为生产关系的核心是<strong>生产资料归谁占有</strong>，占有关系的类型一换，社会的名字就跟着换：</p>
+<table><thead><tr><th>占主导的生产关系（骨骼）</th><th>社会形态名</th></tr></thead><tbody><tr><td>奴隶主占有生产资料和奴隶本身</td><td>奴隶社会</td></tr><tr><td>地主阶级占有土地、剥削农民</td><td>封建社会</td></tr><tr><td>资本家占有生产资料、雇佣劳动</td><td>资本主义社会</td></tr><tr><td>生产资料公有制</td><td>共产主义社会（社会主义是第一阶段）</td></tr></tbody></table>
+<p>所以五种社会形态的划分依据是<strong>经济基础特别是生产关系的性质</strong>。皮肤（上层建筑）千姿百态都不换名：同样是资本主义社会，政体可以是君主立宪也可以是共和制——形态名不变。</p>
+<h3>第 1 步：预判追问——为什么不是生产力（生产工具）？</h3>
+<p>最容易纠结的是 A。要分清两个层次：<strong>生产力决定形态的演变</strong>——生产力变了，旧生产关系迟早被撑破、新形态迟早出现，这是"决定"意义上的动力；但生产力<strong>不直接给形态命名</strong>——同样的机器大工业，配资本主义生产关系才叫资本主义社会，而不叫"机器社会"。按生产工具划出的石器/青铜/铁器时代，是<strong>技术文明分期</strong>，测量的是"先进/落后"，回答的不是"这是什么社会"。马克思讲"各种经济时代的区别在于怎样生产、用什么劳动资料生产"，说的是<strong>经济时代的技术测量器</strong>，与社会形态的<strong>定性标准</strong>是两句话，层次不同、并不矛盾。</p>
+<h3>第 2 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 生产工具的质量和数量</td><td>❌</td><td>是生产力发展水平的客观尺度，划出的是技术分期，不定形态之名</td></tr><tr><td>B 统治集团的阶级和政治属性</td><td>❌</td><td>属上层建筑；其阶级属性本身由生产关系决定——拿被决定的结果当依据</td></tr><tr><td>C 经济基础特别是生产关系的性质</td><td>✅</td><td>骨骼定名：占有关系换类型，形态才换名</td></tr><tr><td>D 人们社会交往和分工的范围和水平</td><td>❌</td><td>描述交往分工的发展水平，不是形态质态的划分标准</td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：把"劳动资料是生产力水平的测量器"扩大成"社会形态的划分标准"。测量先进落后的是工具，给社会定名的是生产关系——测量器 ≠ 命名者。</li><li><strong>误选 B</strong>：觉得"奴隶主国家、地主国家、资产阶级国家"听起来就像形态名。注意因果方向：<strong>正因为</strong>生产关系是奴隶制，奴隶主阶级才成为统治集团——B 是被决定的<strong>表现</strong>；而且政体（君主制/共和制）变了形态名也不变，上层建筑属性更当不了依据。</li><li><strong>误选 D</strong>：把"交往形式"视角当成五形态标准。交往与分工是说明历史演进动力的一个视角（马克思早期著作中用过"交往形式"概念），但它回答"联系有多广、分工有多细"，回答不了"这是什么性质的社会"。</li></ul>
+<blockquote>记忆锚点：社会形态 = <strong>经济基础（骨骼）+ 上层建筑（皮肤）</strong>；<strong>骨骼（生产关系性质）定名，皮肤不换名</strong>；生产工具测水平、生产关系定性质——测量器与命名者分开记。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

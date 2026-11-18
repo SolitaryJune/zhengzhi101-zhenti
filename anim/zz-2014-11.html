@@ -1,8 +1,158 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-11 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-11</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·11 「星星之火」三比喻：批评的是哪种悲观</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 408-zhenti/tools/anim_concept_template.html（政治站无 KaTeX 版，纯文本推理链/时间线卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 时间线格：宽格年份 + 底部注释（复用 aw-cells/aw-box/aw-idx 结构）
+function tl(ptr, cls, year, note){
+  return '<div class="aw-col" style="width:104px">' +
+         '<div class="aw-ptr">' + (ptr || '') + '</div>' +
+         '<div class="aw-box ' + cls + '" style="width:104px;height:40px;font-size:15px">' + year + '</div>' +
+         '<div class="aw-idx" style="white-space:normal;text-align:center;line-height:1.3">' + note + '</div></div>';
+}
+
+// 比喻小卡：上方比喻名，下方语义（绿色提示框）
+function tl2(name, quote, meaning){
+  return '<div class="aw-col" style="width:150px">' +
+         '<div class="aw-ptr">' + name + '</div>' +
+         '<div class="aw-box ok" style="width:150px;height:auto;min-height:44px;font-size:12.5px;font-family:inherit;line-height:1.4;padding:4px 6px">' + quote + '</div>' +
+         '<div class="aw-idx" style="white-space:normal;text-align:center;line-height:1.3">' + meaning + '</div></div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+function timelineRow(){
+  return '<div class="aw-cells">' +
+    tl('', 'dim', '1929 底', '悲观疑问冒头') +
+    tl('▼', 'hit', '1930.1', '《星星之火》回信') +
+    tl('', 'dim', '1930.6', '立三口号') +
+    tl('', 'dim', '1933', '御敌于国门之外') +
+    '</div>';
+}
+
+var STEPS = [
+  {
+    "title": "审题眼：引文出自哪里、问的是什么",
+    "cls": "key",
+    "body": "<p>题眼：1930 年《星星之火，可以燎原》结尾段——<b>航船、朝日、婴儿</b>三个比喻连用。问：这段话针对当时党内和红军中存在的什么？方法=<b>靶子定位</b>：比喻回译成问题 + 时间线对号。</p>",
+    "log": "三比喻在回应谁的什么情绪"
+  },
+  {
+    "title": "先立时间线：文章下笔在哪个时刻",
+    "cls": "key",
+    "body": "<p>《星星之火，可以燎原》本是 <b>1930 年 1 月 5 日毛泽东给林彪的回信</b>——起因是红军中有人对时局悲观。立三口号（1930.6）与「御敌于国门之外」（1933）都在文章<b>之后</b>。注：题干排作「1930 年 11 月」系排印之误，史实为 1930 年 1 月。</p>" + timelineRow(),
+    "log": "1930.1 写文，早于立三与 1933 口号"
+  },
+  {
+    "title": "比喻逐个翻译：它们共同回答什么",
+    "cls": "step",
+    "body": "<div class=\"aw-cells\">" +
+      tl2('航船', '已见桅杆尖头', '已见端倪，不远了') +
+      tl2('朝日', '喷薄欲出', '蓄势将出，必然升起') +
+      tl2('婴儿', '躁动于母腹', '快要成熟，必然降生') +
+      '</div><p>首句还先否定「可望而不可即的空的东西」——三个比喻共同说：<b>革命高潮快要到来，且不是空想</b>。</p>',
+    "log": "比喻=高潮将至的形象化回答"
+  },
+  {
+    "title": "B：比喻正面回应「红旗到底打得多久」",
+    "cls": "good",
+    "body": "<p>三个比喻乐观判断「高潮将至」，正面回击的是<b>看不到希望、怀疑红旗能否打下去</b>的悲观估量。文章正是为回答这个疑问而写——靶子即疑问本身。<b>B 正确</b>。</p>",
+    "ribbon": { "k": 2, "ok": true },
+    "log": "比喻回应悲观情绪 → 选 B"
+  },
+  {
+    "title": "C：文中确实批了，但不是这段的靶子",
+    "cls": "bad",
+    "body": "<p>最强干扰：文章确实批评了「先争取群众后建设政权」的理论，但那是<b>论述道路的另一处</b>针对路线主张的批评。口诀：<b>比喻回应情绪，条目回应主张</b>——引文全是比喻，指向情绪（看不到希望），不是主张。<b>C 错误</b>。</p>",
+    "ribbon": { "k": 3, "ok": false },
+    "log": "引文是比喻不是条目 → C 不选"
+  },
+  {
+    "title": "D：晚于文章的口号，且批的恰是其反面",
+    "cls": "bad",
+    "body": "<p>「一省或数省的首先胜利」是 1930 年 6 月立三路线的口号，晚于本文；立三=急于求成，本文批评的恰是其反面——<b>悲观观望</b>。<b>D 错误</b>。</p>",
+    "ribbon": { "k": 4, "ok": false },
+    "log": "时间在后、方向相反 → D 不选"
+  },
+  {
+    "title": "A：晚三年的口号，纯时间错位",
+    "cls": "bad",
+    "body": "<p>「御敌于国门之外」是 1933 年第五次反「围剿」中「左」倾错误的军事口号，与 1930 年的文章相隔三年，撞不到一起。<b>A 错误</b>。</p>",
+    "ribbon": { "k": 1, "ok": false },
+    "log": "1933 ≠ 1930 → A 不选"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>B</b>：针对「红旗到底打得多久」的悲观疑问。记忆锚点：《星星之火，可以燎原》（1930.1，答林彪）；航船/朝日/婴儿=高潮将至的形象化回答；<b>比喻回应情绪、条目回应主张</b>。</p>",
+    "log": "锁定 B：红旗到底打得多久"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'))),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "《星星之火，可以燎原》的比喻针对什么",
+  subtitle: "考点：中国革命道路 · 方法：时间线定位 1930.1 + 比喻回译成问题",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」沿时间线逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 B",
+    html: "记忆锚点：三比喻回应的是<b>「红旗到底打得多久」的悲观疑问</b>。区分技巧：比喻回应<b>情绪</b>，「先争取群众后建设政权」类条目回应<b>主张</b>——文中都批了，但引文这段的靶子是前者。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：三个比喻在回答谁——《星星之火，可以燎原》的靶子定位</h2>
+<p>答案：<strong>B（「红旗到底打得多久」的疑问）</strong>。</p>
+<h3>第 0 步：先立机制——毛著单选的通用解法是「靶子定位」</h3>
+<p>毛泽东的每一篇标志性文章都不是凭空写的，而是<strong>为回应党内一种具体思潮或主张而写</strong>。所以「这段话针对什么」这类题，本质是两步：先把引文<strong>回译成它所回应的问题</strong>，再用<strong>时间线</strong>把四个选项放到文章前后对号。不用背全文，机制就两条：</p>
+<ol><li><strong>靶子=文章下笔的动机</strong>。文章批评谁，开篇和结尾的情绪指向就是谁——引文出自哪一段，靶子就在那一段的对立面。</li><li><strong>比喻回应情绪，条目回应主张</strong>。引文若连用比喻（航船、朝日、婴儿），它回应的是一种<strong>估量和情绪</strong>；若引文列举路线条目，它回应的才是<strong>主张/理论</strong>。这一条是区分本题两个最强选项的钥匙。</li></ol>
+<h3>第 1 步：把三个比喻翻译回「它在回答什么问题」</h3>
+<p>引文的结构先拆开：首句否定 + 三个比喻。</p>
+<table><thead><tr><th>引文成分</th><th>语义</th><th>回答的是什么</th></tr></thead><tbody><tr><td>「绝不是……完全没有行动意义的、可望而不可即的一种空的东西」</td><td>否定「高潮只是空想」的说法</td><td>反驳<strong>看不见希望</strong>的悲观估计</td></tr><tr><td>航船：站海中已见桅杆尖头</td><td>距离不远，<strong>已见端倪</strong></td><td>高潮不是有没有的问题，是快到的问题</td></tr><tr><td>朝日：立于高山之巅已见喷薄欲出</td><td>蓄势将出</td><td>同上</td></tr><tr><td>婴儿：躁动于母腹中快要成熟</td><td>正在成熟，必然降生</td><td>同上</td></tr></tbody></table>
+<p>三个比喻共同回答一个疑问：<strong>革命高潮到底会不会来、红旗还打不打得下去</strong>。这个疑问不是虚构的——1930 年前后红军内确有人悲观（《星星之火，可以燎原》本是 1930 年 1 月 5 日毛泽东给林彪的回信）。比喻是对疑问的回答，故靶子=<strong>「红旗到底打得多久」的疑问</strong> → 选 B。</p>
+<h3>第 2 步：时间线对号——四个选项各自站在哪一年</h3>
+<table><thead><tr><th>时间</th><th>事件</th><th>与本文（1930.1）的关系</th></tr></thead><tbody><tr><td>1929 底-1930 初</td><td>红军中发出「红旗到底打得多久」的疑问</td><td><strong>在先，是本文的写作缘起</strong> ✅</td></tr><tr><td>1930.1.5</td><td>毛泽东写《星星之火，可以燎原》</td><td>—</td></tr><tr><td>1930.6 后</td><td>立三路线「一省或数省的首先胜利」</td><td>在后，且本文批的是其反面（悲观）</td></tr><tr><td>1933</td><td>第五次反「围剿」中「御敌于国门之外」</td><td>晚三年，「左」倾军事口号</td></tr></tbody></table>
+<h3>干扰项归因（每个错误选项对应一种误解）</h3>
+<ul><li><strong>误选 C「先争取群众后建设政权」（最强干扰）</strong>：误解是「文章批评过的都算这段话的靶子」。文章确实批评了这种理论，但那在<strong>论述道路的另一处</strong>；引文这段连用比喻、情绪指向「看不见希望」，回应的是<strong>悲观情绪</strong>而非路线主张。记住口诀：比喻回应情绪，条目回应主张。</li><li><strong>误选 D「一省或数省的首先胜利」</strong>：误解是「本文批立三路线」。立三口号 1930 年 6 月才出现，晚于本文；而且立三是急于求成，本文批评的恰是其反面——悲观观望。</li><li><strong>误选 A「御敌于国门之外」</strong>：纯时间错位，1933 年的口号撞不到 1930 年的文章。</li></ul>
+<h3>预判追问</h3>
+<ul><li><strong>题干为什么写「1930 年 11 月」？</strong> 原题与史实均为 <strong>1930 年 1 月</strong>（1 月 5 日给林彪的回信），「11 月」系排印之误；月份不影响作答，靶子判断靠引文内容。</li><li><strong>为什么不背原文也能做对？</strong> 因为比喻的语义方向（即将到来、看得见、正在成熟）本身就带乐观判断，凡是「批悲观念头」的选项只有 B 匹配。</li></ul>
+<blockquote>记忆锚点：《星星之火，可以燎原》（1930.1，答林彪）批的是<strong>「红旗到底打得多久」的悲观疑问</strong>；航船/朝日/婴儿三比喻=高潮将至的形象化回答；比喻回应情绪、条目回应主张。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

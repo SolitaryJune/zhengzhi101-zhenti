@@ -1,8 +1,101 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-32 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-32</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2026-32 · 农业新质生产力的三个体现（2026 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：先立"生产力三维度"的尺子',
+    cls: 'key',
+    body: '<p>2025 年中央一号文件首次提出"因地制宜发展<b>农业新质生产力</b>"。新质生产力由<b>技术革命性突破、生产要素创新性配置、产业深度转型升级</b>催生——平移到农业就是三体现：科技突破、要素集成、跨界突破。尺子：选项必须落在<b>生产力</b>维度内。</p>' },
+  { title: '先立机制：生产力 ≠ 生活品质',
+    cls: '',
+    body: '<p>题眼区分：新质生产力讲"生产的质态"（怎么生产、用什么要素、产出什么新产业）；乡村建设讲"生活品质"（宜居宜业和美乡村）。两个范畴分属不同的政策板块——A 与 B、C、D 就隔在这里。</p>' },
+  { title: '逐项分析 B：传统生产的科技突破',
+    cls: 'good',
+    ribbon: {k:1, ok:true},
+    body: '<p>B："农业传统生产的科技突破。"生物育种、农机装备、智慧农业对传统种养体系的科技改造——原创性、颠覆性创新在农业的落点。<b>技术维度</b>命中。✅ 选。</p>' },
+  { title: '逐项分析 C：生产要素的引入与集成',
+    cls: 'good',
+    ribbon: {k:2, ok:true},
+    body: '<p>C："农业生产要素引入与集成。"数据成新农资、无人机物联网成新农具、新品种新技术成新要素——引入 + 集成（创新性配置）提升全要素生产率。<b>要素维度</b>命中。✅ 选。</p>' },
+  { title: '逐项分析 D：向生物制造跨界突破',
+    cls: 'good',
+    ribbon: {k:3, ok:true},
+    body: '<p>D："农业向生物制造领域跨界突破。"农业不止"种和养"：向生物制造、生物质能源、合成生物延展——产业深度转型升级。<b>产业维度</b>命中。✅ 选。</p>' },
+  { title: '逐项分析 A：宜居品质是乡村建设',
+    cls: 'bad',
+    ribbon: {k:4, ok:false},
+    body: '<p>A："农村幸福宜居品质提升。"追问：这是生产力范畴吗？不是——属乡村建设行动、人居环境整治（宜居宜业和美乡村），讲<b>生活条件</b>非<b>生产能力</b>；主体是"农村（生活空间）"非"农业（产业）"。概念串门。❌ 不选。</p>' },
+  { title: '对号入座汇总',
+    cls: '',
+    body: '<p>A ❌ 生活范畴串门；B ✅ 技术突破；C ✅ 要素集成；D ✅ 产业跨界。→ 答案 <b>BCD</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>BCD</b>。三体现：科技突破、要素集成、跨界制造；"宜居品质"属乡村建设不属生产力（A 反）。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2026-32 农业新质生产力',
+  subtitle: '考点：2025 中央一号文件 · 新质生产力的三维度 · 生产力与生活品质之辨 —— 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '<b>B</b> 农业传统生产的科技突破（技术维度，生物育种等）；<b>C</b> 农业生产要素引入与集成（要素维度，创新性配置）；<b>D</b> 农业向生物制造领域跨界突破（产业维度）。<br><br><b>干扰项：</b>A"农村幸福宜居品质提升"属乡村建设（生活条件），不是生产力范畴——概念串门。<br><br><b>记忆锚点：</b>三体现 = 科技突破、要素集成、跨界制造；生产力讲"生产的质态"，不讲"宜居品质"。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：农业新质生产力的三个"体现"与一个"串门"选项</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——把"新质生产力"的定义投射到农业</h3>
+<p>新质生产力是<strong>创新起主导作用</strong>、具有高科技、高效能、高质量特征的先进生产力质态，由<strong>技术革命性突破、生产要素创新性配置、产业深度转型升级</strong>而催生。把这三个"催生维度"平移到农业，2025 年中央一号文件对"农业新质生产力"的官方表述就是——主要体现在：</p>
+<ol><li><strong>农业传统生产的科技突破</strong>（生物育种等）→ B；</li><li><strong>农业生产要素的引入与集成</strong>（数据、装备、新品种等创新性配置）→ C；</li><li><strong>农业向生物制造等领域的跨界突破</strong>（产业边界拓展）→ D。</li></ol>
+<p>判定尺子由此确立：选项必须落在<strong>生产力</strong>的三维度（技术、要素、产业）之内；A 讲"宜居品质"，属于乡村<strong>建设/生活</strong>范畴——维度走错。</p>
+<h3>第 1 步：B 对——传统生产的科技突破</h3>
+<p>生物育种、农机装备、智慧农业等对传统种养体系的科技改造，是原创性、颠覆性科技创新在农业的落点——"农业传统生产的科技突破"是农业新质生产力的第一个体现（技术维度）。</p>
+<h3>第 2 步：C 对——生产要素的引入与集成</h3>
+<p>数据成为新农资、无人机与物联网成为新农具、新品种新技术成为新要素——把新的生产要素<strong>引入</strong>农业并与既有要素<strong>集成</strong>（创新性配置），全要素生产率由此提升。这是新质生产力的要素维度。</p>
+<h3>第 3 步：D 对——向生物制造等领域跨界突破</h3>
+<p>农业不再止于"种和养"：向生物制造、生物质能源、合成生物等新领域延展，产业深度转型升级——"农业向生物制造领域的跨界突破"是产业维度的体现。</p>
+<h3>第 4 步：A 为什么错——"宜居品质"是乡村建设，不是生产力</h3>
+<p>A 说"农村幸福宜居品质提升"。追问：宜居品质是<strong>生产力范畴</strong>吗？不是——它属于乡村建设行动、农村人居环境整治（宜居宜业和美乡村），讲的是<strong>生活条件</strong>而非<strong>生产能力</strong>；主体也是"农村（生活空间）"而非"农业（产业）"。新质生产力的题眼在"生产的质态"，A 概念串门。</p>
+<h3>第 5 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对应维度</th></tr></thead><tbody><tr><td>A 农村幸福宜居品质提升</td><td>❌</td><td>乡村建设/生活范畴，非生产力</td></tr><tr><td>B 农业传统生产的科技突破</td><td>✅</td><td>技术突破维度</td></tr><tr><td>C 农业生产要素引入与集成</td><td>✅</td><td>要素配置维度</td></tr><tr><td>D 农业向生物制造跨界突破</td><td>✅</td><td>产业转型维度</td></tr></tbody></table>
+<p>→ 选 <strong>BCD</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：被"新""提升"等正能量词吸引。判定动作：回"生产力"定义——技术、要素、产业三维度，A 一个都不沾。</li><li><strong>漏选 D</strong>：以为"生物制造"不属于农业。恰恰是"农业向生物制造<strong>领域</strong>的跨界突破"的原文表述。</li><li><strong>混淆文件要点</strong>：2025 年一号文件首次提出"因地制宜发展农业新质生产力"，其"主要体现"三条与 B、C、D 一一对应；A 是另起炉灶的干扰项，与"宜居宜业和美乡村"的乡村建设话语混装。</li></ul>
+<blockquote>记忆锚点：农业新质生产力三体现——<strong>科技突破（B）、要素集成（C）、跨界制造（D）</strong>；"宜居品质"属乡村建设不属生产力（A 反）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

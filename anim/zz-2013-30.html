@@ -1,8 +1,88 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-30 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-30</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-30 · 基本制度确立的意义（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼：意义要放在转折上评',
+    body: '<p>第一代中央领导集体完成新民主主义革命、进行社会主义改造，1956 年确立社会主义基本制度。评其历史意义，坐标是这个转折本身——几千年私有制社会结束、劳动者地位翻转、此后发展的制度框架确定。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行：意义的三个角度 + 一个"不能说"',
+    body: '<ul><li><b>变革深度</b>：私有制 → 社会主义制度，根本性翻转；</li><li><b>奠基意义</b>：政权与制度框架由此确定；</li><li><b>社会地位</b>：劳动者从被剥削者变成国家主人；</li><li><b>探索进程</b>：第二次结合刚起步，不能说"完成"。</li></ul><p>三个角度给意义，一个进程防止"超载"。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true },
+    title: '选项 A：中国历史上最深刻最伟大的社会变革 —— 对',
+    body: '<p>从几千年私有制到社会主义公有制为主体，社会制度和人的地位发生根本性翻转，深度为历代变革所未有。</p><p>A 对。</p>' },
+  { cls: 'bad', tag: 'C 排除', ribbon: { k: 2, ok: false },
+    title: '选项 C：标志着"第二次结合"的完成 —— 错',
+    body: '<p>1956 年苏共二十大后，毛泽东提出"以苏为鉴"才<b>开始</b>探索马克思主义同中国实际的第二次结合，成果体现在《论十大关系》、八大等，此后长期延续。</p><p>基本制度确立为结合提供制度前提，但"确立基本制度"与"完成第二次结合"是两件事——把<b>起点</b>说成<b>终点</b>。C 错。</p>' },
+  { cls: 'good', tag: 'B 入选', ribbon: { k: 3, ok: true },
+    title: '选项 B：奠定根本政治前提和制度基础 —— 对',
+    body: '<p>党的重要文献的规范表述：人民当家作主的国家政权（政治前提）与社会主义基本制度（制度基础）都由此确立。</p><p>B 对。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true },
+    title: '选项 D：劳动人民真正成为国家的主人 —— 对',
+    body: '<p>剥削制度被消灭，劳动者从被剥削者变为国家和社会的主人——基本制度确立最直接的社会后果。</p><p>D 对。</p>' },
+  { cls: 'key', tag: '陷阱拆解',
+    title: 'C 的迷惑点：给"起点"戴上"终点"的帽子',
+    body: '<p>"第二次结合"这个词确实与 1956 年相关，所以 C 看起来头头是道。但结合的时序是：制度确立 → 提出"以苏为鉴" → 《论十大关系》、八大探索 → 长期延续。</p><p>识破标志：意义题里凡是出现"标志着……完成"这种强收束句式，先核对该进程此时是起点还是终点。</p>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 ABD',
+    body: '<p>答案 <b>ABD</b>：最深刻最伟大的变革（A）、根本政治前提和制度基础（B）、劳动人民成为国家主人（D）；C 把第二次结合的起点说成终点，超载。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2013·30】制度确立：意义三角度与一个超载项（多选）',
+  subtitle: '考点：社会主义制度的确立 · 历史意义 · 第二次结合的时序',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABD',
+    html: '<b>三重意义站得住，一个"完成"超载了</b>：最深刻最伟大的社会变革（A）、根本政治前提和制度基础（B）、劳动人民成为国家主人（D）。<br>干扰项 C："第二次结合"1956 年才起步探索，把起点说成终点必错。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：社会主义基本制度确立的历史意义——哪些说法"超载"了</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——意义要放在"从新民主主义到社会主义"的转折上评</h3>
+<p>1956 年生产资料私有制的社会主义改造基本完成，社会主义基本制度在我国确立。评它的历史意义，坐标是这个转折本身：几千年私有制社会结束了，劳动者的地位变了，此后中国一切发展的制度框架定了。三条意义正好对应三个角度：</p>
+<table><thead><tr><th>角度</th><th>判断</th><th>对应选项</th></tr></thead><tbody><tr><td>变革深度</td><td>是中国历史上最深刻最伟大的社会变革</td><td>A</td></tr><tr><td>奠基意义</td><td>为当代中国一切发展进步奠定根本政治前提和制度基础</td><td>B</td></tr><tr><td>社会地位</td><td>广大劳动人民真正成为国家的主人</td><td>D</td></tr><tr><td>探索进程</td><td>（不能说）马克思主义同中国实际"第二次结合"完成</td><td>C</td></tr></tbody></table>
+<h3>逐项对号入座</h3>
+<ul><li><strong>A 对</strong>："中国历史上最深刻最伟大的社会变革"——从几千年私有制到社会主义公有制为主体，社会制度和人的地位发生了根本性翻转，其深度为历代变革所未有。</li><li><strong>B 对</strong>："为当代中国一切发展进步奠定了根本政治前提和制度基础"——这是后来党的重要文献的规范表述：根本政治前提（人民当家作主的国家政权）和制度基础（社会主义基本制度）都由此确立。</li><li><strong>D 对</strong>："使广大劳动人民真正成为国家的主人"——剥削制度被消灭，劳动者从被剥削者变为国家和社会的主人，这是基本制度确立最直接的社会后果。</li></ul>
+<h3>为什么 C 是干扰项</h3>
+<ul><li><strong>C 错</strong>："标志着马克思主义同中国实际'第二次结合'的完成"——<strong>"第二次结合"是一个探索过程，没有在此时"完成"</strong>。1956 年苏共二十大以后，毛泽东提出"以苏为鉴"，才刚刚提出要进行马克思主义同中国实际的第二次结合，其探索成果体现在《论十大关系》、党的八大等之中，此后长期延续。基本制度的确立为这种结合提供了制度前提，但"确立基本制度"与"完成第二次结合"是两件事——把"起点"说成"终点"，是本题的埋伏。</li></ul>
+<blockquote>记忆锚点：制度确立三重意义——<strong>最深刻最伟大的变革（A）、根本政治前提和制度基础（B）、劳动人民成为国家主人（D）</strong>；"第二次结合"以 1956 年"以苏为鉴"为<strong>起点</strong>，不是在这里"完成"（C）——把起点说成终点必错。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

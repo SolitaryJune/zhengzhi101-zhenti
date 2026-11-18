@@ -1,8 +1,99 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-01 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-01</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2022-01 马克思主义为什么「行」——「根本原因」的归因定位</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261117a">
+</head>
+<body>
+<!-- 概念/推理链卡片动画（anim_math_concept 风格，政治站无 KaTeX 版），只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261117a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：问的是「根本原因」',
+    body: '<p>题干链条：「党为什么能、中国特色社会主义为什么好，<b>归根到底是因为马克思主义行</b>」。设问锁定两个词：<b>「行」</b>（理论真不真、管不管用）与<b>「根本原因」</b>（最底层的根据，不是派生表现）。凡问「根本原因」，都要答到<b>理论本身的性质</b>层面。</p>',
+    log: '设问要「行」的最底层根据' },
+  { tag: '模型', cls: 'key', title: '先立模型：马克思主义的特征清单',
+    body: '<p>教材标注的特征分四个层次：<b>科学性</b>（科学的世界观和方法论——辩证唯物主义与历史唯物主义，<b>根本属性</b>）、<b>人民性</b>（鲜明的政治立场——人民至上，<b>价值取向</b>）、<b>实践性</b>（从实践中来、到实践中去）、<b>发展性</b>（与时俱进、自觉的历史担当，<b>品格表现</b>）。归因题＝拿设问去清单里定位：哪一条才是「行」的根子。</p>',
+    log: '四条特征排层次，找最底层一条' },
+  { tag: '机制', cls: '', title: '归因链：行 → 管用 → 揭示规律',
+    body: '<p>「行」＝用它指导实践能够成功。理论要管用，前提是<b>正确揭示了客观规律</b>——只有认识是对的，用它武装的党才能「能」、走的路才「好」。其他特征都站在「科学」这个前提之上：立场有真落点、发展有底气，都因为认识了规律。所以归因要归到<b>链条最上游</b>。</p>',
+    log: '上游是科学，下游都是派生表现' },
+  { tag: 'A 项', cls: 'bad', ribbon: { k: 1, ok: false },
+    title: '选项 A：鲜明的政治立场',
+    body: '<p>「政治立场」回答的是<b>「为谁」</b>——立场鲜明解释马克思主义「代表谁」，但立场正确不等于理论「行」；把立场当根本原因，混淆了<b>价值取向</b>与<b>科学属性</b>。<b>A 错误</b>。</p>',
+    log: 'A 答「为谁」，够不到「行不行」' },
+  { tag: 'B 项', cls: 'bad', ribbon: { k: 2, ok: false },
+    title: '选项 B：自觉的历史担当',
+    body: '<p>「自觉的历史担当」讲的是使命感的<b>态度层面</b>，是理论品格的派生表现，够不到「根本」一层；属于把表现当根据的凑数项。<b>B 错误</b>。</p>',
+    log: 'B 是态度层面，排除' },
+  { tag: 'C 项', cls: 'good', ribbon: { k: 3, ok: true },
+    title: '选项 C：科学的世界观和方法论',
+    body: '<p>辩证唯物主义和历史唯物主义<b>正确揭示了自然界、人类社会和思维发展的一般规律</b>——正因为世界观和方法论是科学的，用它武装的党才能「能」、走的路才「好」。这是「行」的最底层根据。<b>C 正确</b>。</p>',
+    log: 'C=科学性=最底层根据，入选' },
+  { tag: 'D 项', cls: 'bad', ribbon: { k: 4, ok: false },
+    title: '选项 D：无产阶级政党自我革命的武器',
+    body: '<p>「自我革命」是中国共产党<b>自身建设</b>语境的表述，与「马克思主义是认识世界、改造世界的思想武器」搭配错位——张冠李戴的嫁接型干扰项。<b>D 错误</b>。</p>',
+    log: 'D 搭配错位，排除' },
+  { tag: '结论', cls: 'good', title: '结论：答案 C',
+    body: '<p>归因链条倒推：「行」→ 为什么管用 → 因为<b>科学</b> → 科学落在哪里 → <b>世界观和方法论</b>。立场（为谁）、担当（使命）都是派生表现，够不到「根本」。</p>',
+    log: '锁定 C：科学的世界观和方法论' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '马克思主义为什么「行」——归因定位',
+  subtitle: '2022 年第 1 题（单选）· 考点：马克思主义的科学性 · 方法：特征归因法（根本原因=最底层根据）',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先立特征清单与归因链，再逐项对号入座。',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '记忆锚点：马克思主义之所以<b>「行」</b>，根本在于它是<b>科学的世界观和方法论</b>（辩证唯物主义＋历史唯物主义，正确揭示自然界、人类社会、思维发展的一般规律）；A「政治立场」答「为谁」、B「历史担当」答使命感，均够不到「根本」；D「自我革命的武器」是词语嫁接的杜撰搭配。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：马克思主义为什么"行"——"根本原因"归因到哪一层</h2>
+<p>答案：<strong>C（马克思主义是科学的世界观和方法论）</strong>。</p>
+<h3>第 0 步：先立模型——归因题要归到"理论本身的性质"</h3>
+<p>设问是"马克思主义之所以'行'，<strong>根本原因</strong>在于"。归因题的解法：先列出理论属性的清单，再用"根本"二字筛选——<strong>根本原因＝最底层的根据</strong>，不是派生表现。教材给马克思主义标注的主要特征分属不同层次：</p>
+<table><thead><tr><th>属性</th><th>回答什么问题</th><th>层次</th></tr></thead><tbody><tr><td>科学性（科学的世界观和方法论）</td><td>理论<strong>真不真、管不管用</strong></td><td>根本属性</td></tr><tr><td>人民性（鲜明的政治立场）</td><td>理论<strong>为谁</strong>服务</td><td>价值取向</td></tr><tr><td>实践性</td><td>理论<strong>从实践中来、到实践中去</strong></td><td>实践品格</td></tr><tr><td>发展性（与时俱进、自觉的历史担当）</td><td>理论<strong>如何常青</strong></td><td>品格表现</td></tr></tbody></table>
+<h3>第 1 步：把"行"翻译成理论语言，找到归因链</h3>
+<p>题干的链条是"党'能'、路'好'，<strong>归根到底是因为马克思主义行</strong>"——"行"＝用它作指导，实践就能成功。一个理论要"行"，前提是它<strong>正确揭示了客观规律</strong>：只有对世界的认识是对的，用它武装的党才能"能"、走的路才"好"。这条链的最上游，就是<strong>辩证唯物主义和历史唯物主义这一科学的世界观和方法论</strong>——它正确揭示了自然界、人类社会和思维发展的一般规律，为认识世界、改造世界提供了根本方法。</p>
+<p><strong>预判追问：为什么其他特征够不到"根本"？</strong> 因为它们都站在"科学"这个前提之上：正因为认识了规律（科学），为人民服务的立场才有真落点（人民性）、穿越时代才仍然有效（发展性）。归因要归到链条的最上游；往下游任何一条挑，都是把表现当根据。</p>
+<h3>第 2 步：四个选项对号入座</h3>
+<table><thead><tr><th>选项</th><th>对错</th><th>归因</th></tr></thead><tbody><tr><td>A 具有鲜明的政治立场</td><td>❌</td><td>回答"为谁"（人民至上），是价值取向；立场鲜明解释"代表谁"，不解释"行不行"</td></tr><tr><td>B 具有自觉的历史担当</td><td>❌</td><td>使命感的<strong>态度层面</strong>，是派生表现，够不到"根本"一层</td></tr><tr><td>C 是科学的世界观和方法论</td><td>✅</td><td>正确揭示自然界、人类社会、思维发展的一般规律——"行"的最底层根据</td></tr><tr><td>D 是无产阶级政党自我革命的武器</td><td>❌</td><td>"自我革命"是党<strong>自身建设</strong>语境的表述，与"认识世界、改造世界的思想武器"搭配错位</td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：把"立场正确"当成"根本原因"——混淆了<strong>价值取向</strong>与<strong>科学属性</strong>："为谁服务"决定理论的阶级性，不决定它"行不行"。</li><li><strong>误选 B</strong>：把"使命担当"当根据——把<strong>态度表现</strong>误当<strong>理论根据</strong>，"根本"二字直接排掉它。</li><li><strong>误选 D</strong>：见"武器"就联想"革命武器"——"自我革命"是管党治党的专门表述，与"马克思主义是思想武器"是两个搭配，属<strong>词语嫁接型</strong>干扰项。</li></ul>
+<blockquote>记忆锚点：「行」→ 科学 → 落点在<strong>科学的世界观和方法论</strong>（辩证唯物主义＋历史唯物主义）；立场答"为谁"、担当答"使命"，都是派生表现，够不到"根本"。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

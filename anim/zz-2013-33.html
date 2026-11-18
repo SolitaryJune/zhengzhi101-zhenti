@@ -1,8 +1,144 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-33 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-33</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-33 上合组织北京峰会的主要成果</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- ============================================================
+     模板：概念/记忆/推理链类（anim_math_concept 同款结构，政治站无 KaTeX 版）
+     形态：逐步揭示推理链卡片，每步一张 .aw-stepcard；第 3 步内嵌
+     上合组织进程迷你时间线（史实/会议类考点）；序号带逐个点亮 A–D。
+     路径：本页位于 anim/{id}.html（站点一级目录之下），../assets/ 指向站点根 assets/。
+============================================================= -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 迷你时间线（史实/会议类考点：上合组织从成立到北京峰会的进程）
+function timeline(){
+  var rows = [
+    ['2001', '上合组织在上海成立', ''],
+    ['2002', '签署《宪章》：写明"不针对其他国家和国际组织"', ''],
+    ['2007', '签署《长期睦邻友好合作条约》', ''],
+    ['2012', '北京峰会（本题）：第二个十年首次峰会 · 立战略 · 签人文 · 扩圈子', 'key']
+  ];
+  var h = '<div style="margin:6px 0 2px">';
+  for(var i = 0; i < rows.length; i++){
+    var r = rows[i];
+    var bg = r[2] === 'key' ? '#fff7df' : '#f1f5f9';
+    var bd = r[2] === 'key' ? '#d9a514' : '#cbd5e1';
+    h += '<div style="display:flex;align-items:center;gap:8px;margin:4px 0">' +
+         '<span style="flex:none;min-width:52px;text-align:center;font-size:12.5px;font-weight:700;' +
+         'color:#334155;background:' + bg + ';border:1px solid ' + bd + ';border-radius:6px;padding:2px 6px">' +
+         r[0] + '</span>' +
+         '<span style="font-size:13.5px;color:#334155">' + r[1] + '</span></div>';
+  }
+  return h + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：成果清单题，先立"身份底账"再对号',
+    cls: 'key',
+    tag: '审题',
+    log: '拆出时间、事件、背景、问法：上合组织北京峰会"主要成果有"——多选，逐项对号入座。',
+    body: '<p><b>时间</b>：2012 年 6 月 6 日—7 日；<b>事件</b>：上海合作组织成员国元首理事会第十二次会议（北京）；<b>背景</b>：该组织发展进入<b>第二个十年的首次峰会</b>；<b>问法</b>："此次峰会的主要成果有"——成果清单题。时政成果题最忌"哪个眼熟选哪个"：先把组织的身份底账立起来，选项会自动归位。</p>' },
+  { title: '先立模型：一个身份，三本账',
+    cls: 'key',
+    tag: '模型',
+    log: '身份是"合作组织而非军事集团"；十年交接的峰会要办三本账：立战略、夯实人文、扩朋友圈。',
+    body: '<p><b>身份底账</b>：《宪章》写明上合组织<b>不针对其他国家和国际组织</b>，奉行不结盟、开放原则——它是安全（反恐）、经济、人文三大支柱的<b>区域性合作组织</b>，不是军事集团。"军事同盟"类选项可以先手起疑。</p><p><b>三本账</b>：第二个十年开局，峰会要<b>立战略</b>（十年怎么走）、<b>夯实人文</b>（第三大支柱）、<b>扩朋友圈</b>（观察员国＋对话伙伴）。</p>' },
+  { title: '历史坐标：宪章早把"不结盟"写死',
+    cls: 'key',
+    tag: '时间线',
+    log: '看清进程：2002 年宪章就定位为不结盟的合作组织，北京峰会是第二个十年的开局站。',
+    body: timeline() + '<p>这条线记住两点：一是<b>2002 年宪章</b>就把"不针对其他国家和国际组织"写死——组织的底色从未变过；二是<b>北京峰会是开局站</b>，开局站的任务就是立路线、打基础、交朋友。</p>' },
+  { title: 'B：战略账——首个中期发展战略规划',
+    cls: 'good',
+    tag: 'B ✓',
+    log: '峰会批准《上海合作组织中期发展战略规划》，组织成立以来第一份中长期战略规划。B 对。',
+    body: '<p>峰会<b>批准《上海合作组织中期发展战略规划》</b>——这是上合组织成立以来<b>第一份</b>中长期发展战略规划，给第二个十年画路线图。<b>别把"战略规划"当空话</b>：文件是真的，口径是"首次制定"，"首次"正是成果题的信号词。B 对。</p>',
+    ribbon: { k: 2, ok: true } },
+  { title: 'C：人文账——首个人文合作宣言',
+    cls: 'good',
+    tag: 'C ✓',
+    log: '峰会签署上合历史上首个人文合作宣言，人文交流第一次以宣言形式系统确定。C 对。',
+    body: '<p>峰会签署了上合组织历史上<b>首个人文合作宣言</b>：文化、教育、科技、卫生、旅游等人文交流第一次以宣言形式系统确定下来。<b>别只记得安全支柱</b>：上合的三大支柱是安全、经济、<b>人文</b>，人文正是本次峰会的开创性落点之一。C 对。</p>',
+    ribbon: { k: 3, ok: true } },
+  { title: 'D：开放账——观察员国、对话伙伴各进一人',
+    cls: 'good',
+    tag: 'D ✓',
+    log: '峰会决定给予阿富汗观察员地位、给予土耳其对话伙伴地位，两个圈子同时扩容。D 对。',
+    body: '<p>峰会决定<b>给予阿富汗观察员地位、给予土耳其对话伙伴地位</b>——观察员国与对话伙伴两个"朋友圈"同时扩容，正体现组织的开放原则。<b>动态信息按当年口径核对</b>：成员、观察员国、对话伙伴的增减随年份变，答题认 2012 年。D 对。</p>',
+    ribbon: { k: 4, ok: true } },
+  { title: 'A：身份冲突——"安全合作"≠"军事同盟"',
+    cls: 'bad',
+    tag: 'A ✗',
+    log: '上合的安全合作走反恐纲要与协作机制，不结盟、不针对第三方，没有军事同盟条约。',
+    body: '<p>上合最出名的是安全合作，但形式是：打击"三股势力"合作纲要、地区反恐怖机构、禁毒与信息安全协作——全是<b>协作机制</b>，不是<b>同盟义务</b>。军事同盟意味着"一国有难、共担军事义务"，与宪章"不针对其他国家和国际组织"直接抵触；本次峰会成果文件里<b>没有任何军事同盟条约</b>。"有安全合作"被偷换成"结军事同盟"，正是 A 的陷阱。A 错。</p>',
+    ribbon: { k: 1, ok: false } },
+  { title: '结论',
+    cls: 'good',
+    tag: '答案',
+    log: '三本账各进一程：立战略（B）、签人文（C）、扩圈子（D）；A 是拿"协作"冒充"结盟"。',
+    body: '<p>答案选 <b>BCD</b>。三件事一句记：<b>立战略（B）、签人文（C）、扩圈子（D）</b>；唯一排除点 A 是拿"协作机制"冒充"同盟义务"。防坑一句话：<b>上合合作不结盟，军事同盟从来没有</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: s.tag,
+    log: s.log,
+    count: i >= 3 ? Math.min(i - 2, 4) : 0,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon,
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2013-33 · 上合组织北京峰会的主要成果',
+  subtitle: '2013 年多选题 · 时政：身份底账模型 + "协作 ≠ 结盟"陷阱',
+  intro: '点击「▶ 播放」逐步展开成果推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已对号入座',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '记忆锚点：北京峰会三件事——<b>立</b>战略（首个《上海合作组织中期发展战略规划》）、<b>签</b>人文（首个人文合作宣言）、<b>扩</b>圈子（阿富汗观察员＋土耳其对话伙伴）；唯一排除点 A 是"协作冒充结盟"：宪章写明<b>不针对其他国家和国际组织</b>，安全合作靠反恐纲要与协作机制，军事同盟条约从来没有。防坑一句话：<b>上合合作不结盟</b>。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：上合组织北京峰会的成果清单——先立"身份底账"，再对号入座</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先建立模型——上合组织是个什么性质的组织</h3>
+<p>时政成果题最忌"哪个眼熟选哪个"。先把组织的身份底账立起来：《上海合作组织宪章》（2002 年签署）写明本组织<strong>不针对其他国家和国际组织</strong>，奉行不结盟、开放原则——它是一个以<strong>安全（反恐）、经济、人文</strong>为三大支柱的区域性<strong>合作组织</strong>，不是军事集团。身份一立，"军事同盟条约"这类选项可以先手排除一半。</p>
+<p>再看会议处境：2012 年 6 月 6 日至 7 日的北京峰会是元首理事会<strong>第十二次会议</strong>，也是上合组织<strong>进入第二个十年的首次峰会</strong>。十年交接的峰会要干什么？给下一个十年<strong>立战略</strong>（B 的来源）、把三大支柱逐个<strong>夯实</strong>（C 人文）、展示组织的<strong>开放性</strong>（D 扩圈）。三本账一摆，四个选项自动归位：</p>
+<table><thead><tr><th>账本</th><th>第二个十年开局要办的</th><th>对应选项</th></tr></thead><tbody><tr><td>战略账</td><td>未来十年怎么走，需要第一份路线图</td><td>B</td></tr><tr><td>人文账</td><td>第三大支柱（人文交流）要夯实</td><td>C</td></tr><tr><td>开放账</td><td>两个"朋友圈"（观察员国、对话伙伴）要扩容</td><td>D</td></tr></tbody></table>
+<h3>第 1 步：B、C、D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对应账本与依据</th></tr></thead><tbody><tr><td>B 首次制定了中长期战略规划</td><td>✅</td><td>战略账：峰会<strong>批准《上海合作组织中期发展战略规划》</strong>——这是该组织成立以来<strong>第一份</strong>中长期发展战略规划，第二个十年开局的路线图</td></tr><tr><td>C 签署了首个人文合作宣言</td><td>✅</td><td>人文账：峰会签署了上合组织历史上<strong>首个人文合作宣言</strong>，文化、教育、科技、卫生、旅游等人文交流第一次以宣言形式系统确定下来</td></tr><tr><td>D 增加了新的观察员国和对话伙伴国</td><td>✅</td><td>开放账：峰会<strong>决定给予阿富汗观察员地位、给予土耳其对话伙伴地位</strong>——观察员国与对话伙伴两个圈子同时扩容</td></tr><tr><td>A 签订了军事同盟条约</td><td>❌</td><td>与组织身份正面冲突：不结盟、不针对第三方——见第 2 步</td></tr></tbody></table>
+<p>→ 选 <strong>BCD</strong>。</p>
+<h3>第 2 步：为什么 A 错——"安全合作"≠"军事同盟"（唯一排除点，值得多说一句）</h3>
+<p>上合组织最出名的工作确实是安全合作，但它的安全合作形式是：打击"三股势力"（恐怖主义、分裂主义、极端主义）的合作纲要、地区反恐怖机构、禁毒与信息安全协作——全是<strong>协作机制</strong>，不是<strong>同盟义务</strong>。军事同盟意味着"一国有难、共担军事义务"，这与宪章"不针对其他国家和国际组织"的定位直接抵触；本次峰会签署的十余个成果文件里，没有任何军事同盟条约。A 的陷阱就是把<strong>"有安全合作"偷换成"结军事同盟"</strong>——"合作而非结盟"恰是上合组织与军事集团最本质的区别。</p>
+<h3>易错点：每个漏选/多选对应哪种误解</h3>
+<ul><li><strong>误选 A（多选）</strong>：把"安全合作是上合的重头戏"记成"上合是军事集团"。记住：安全合作靠反恐纲要与协作机制实现，组织底色是"不针对第三方"。</li><li><strong>漏选 B</strong>：以为"战略规划"太宏大、不像峰会成果。判断标准看文件：峰会确实批准了《中期发展战略规划》，且"首次制定"有明确口径——"首次""首个"正是成果题的信号词。</li><li><strong>漏选 C</strong>：只记得上合的"安全""经济"两大支柱，忘了<strong>人文是第三大支柱</strong>；人文领域第一次形成宣言文件，正是本次峰会的开创性成果之一。</li><li><strong>漏选 D</strong>：观察员国、对话伙伴的增减是最易过时的动态信息——正如本题参考分析提示的，<strong>核对成员、观察员国、对话伙伴变化要用当年信息</strong>：2012 年北京峰会，阿富汗入列观察员国、土耳其入列对话伙伴。</li></ul>
+<blockquote>记忆锚点：北京峰会三件事——<strong>立</strong>战略（首个中期发展战略规划）、<strong>签</strong>人文（首个人文合作宣言）、<strong>扩</strong>圈子（阿富汗观察员＋土耳其对话伙伴）；唯一排除点一句话：<strong>上合合作不结盟，军事同盟从来没有</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

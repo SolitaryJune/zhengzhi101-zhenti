@@ -1,8 +1,113 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-10 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-10</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2018-10 洋务运动的主要目的 · 中体西用分层动画</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- 复制自政治站概念模板（无 KaTeX 版，纯文本推理链卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+function tl(rows){
+  return '<div>' + rows.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:110px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：「主要目的」= 主观动机',
+    log: '问目的答主观层',
+    body: '<p>设问「洋务派兴办洋务新政的<b>主要目的</b>」——问的是<b>主观动机</b>，不是客观效果。动机去哪找？洋务派是清朝统治阶级内部的一部分人，动机要从<b>阶级立场</b>与<b>指导思想</b>里找。</p>' },
+  { tag: '机制', cls: 'key', title: '先立机制：「中体西用」=「目的手段之分」',
+    log: '体=目的层，用=手段层',
+    body: tl([
+      ['指导思想', '「中学为体，西学为用」——洋务兴办的总纲领'],
+      ['体 = 目的层', '中学（封建纲常名教与专制制度）为体：<b>必须保住的根本</b>'],
+      ['用 = 手段层', '西学（坚船利炮、生产技术）为用：<b>保住根本的工具</b>'],
+      ['阶级立场', '洋务派本身是封建统治集团的一部分——<b>阶级立场决定动机</b>，不可能以改造/推翻封建制度为目标'],
+    ]) },
+  { tag: '机制', cls: 'step', title: '手段清单再长，都汇回同一个「体」',
+    log: '自强求富→固统治',
+    body: '<p>把题干列的举措逐项归位：兴办近代企业（军工标榜「<b>自强</b>」、民用标榜「<b>求富</b>」）、建立新式海陆军、创办新式学堂、派遣留学生——每一条都是「用」：<b>镇起义、御外侮、育人才</b>，最终服务「自强求富以固统治」。<b>目的只有一个落点：维护封建统治。</b></p>' },
+  { tag: '选项A', cls: 'bad', ribbon: { k: 1, ok: false }, title: 'A：对外妥协是处境，不是宗旨',
+    log: 'A 用对外态度代替根本目的',
+    body: '<p>A「迎合帝国主义」——洋务派对外确有妥协的一面，但那是手段与处境层面的描述，替代不了「兴办洋务的宗旨」。<b>排除</b>。</p>' },
+  { tag: '选项B', cls: 'good', ribbon: { k: 2, ok: true }, title: 'B：「体」就位——维护封建统治，当选',
+    log: 'B 落在目的层',
+    body: '<p>B「维护封建统治」——正是「中体西用」里的<b>「体」</b>：保住封建专制制度和清王朝统治。手段清单（自强、求富、海陆军、学堂、留学生）全部汇向它。<b>当选</b>。</p>' },
+  { tag: '选项C', cls: 'bad', ribbon: { k: 3, ok: false }, title: 'C：派系之争是背景板，不是发动机',
+    log: 'C 把斗争背景当行动目的',
+    body: '<p>C「对抗顽固派」——洋务派与顽固派的分歧（要不要学西方技术）是发起洋务的现实<b>背景</b>与阻力来源，不是他们动手办洋务的动机。<b>排除</b>。</p>' },
+  { tag: '选项D', cls: 'bad', ribbon: { k: 4, ok: false }, title: 'D：客观效果≠主观目的——最典型陷阱',
+    log: 'D 把客观效果当主观目的',
+    body: '<p>D「发展资本主义」——洋务运动<b>客观上</b>诱导了民族资本主义产生、开启近代化，但洋务派没有预料也不追求这个结果：他们要培育的恰恰不是一种终将瓦解封建制度的生产关系。<b>排除</b>。</p>' },
+  { tag: '追问', cls: 'key', title: '预判追问：为什么 D 最有迷惑性',
+    log: '设问规律：目的→主观，影响→客观',
+    body: '<p>「洋务运动开启了中国近代化」是教材的<b>正面评价</b>，看到 D 就顺手选，正是栽在主客观不分。记一条设问规律：凡问「<b>目的/意图/初衷</b>」→答主观层；凡问「<b>影响/意义/作用</b>」→答客观层。本题问前者。</p>' },
+  { tag: '结论', cls: 'good', title: '结论：中体西用一句带走',
+    log: '锁定 B：维护封建统治',
+    body: '<p>答案 <b>B</b>。记忆锚点：<b>中体西用——体=封建统治（目的），用=西方技术（手段）</b>；洋务派=地主阶级开明派，动机不出本阶级；客观效果≠主观目的；问目的答主观，问影响答客观。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: s.tag,
+    log: s.log,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2018·10】洋务派兴办洋务新政的主要目的',
+  subtitle: '单选 1 分 · 考点：洋务运动 · 中体西用 · 方法：体用之分=目的手段之分，问目的答主观层',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 当选 / ✗ 干扰）',
+  intro: '点击「▶ 播放」逐步展开推理链：先立「中体西用」的体用分层，再逐个选项归位。',
+  snaps: snaps,
+  result: {
+    big: '答案 B：维护封建统治',
+    html: '「中学为体，西学为用」就是答案图纸：<b>体=目的层（封建统治），用=手段层（西方技术）</b>。军工「自强」、民用「求富」、海陆军、学堂、留学生——手段清单全部汇回同一个「体」。A 是对外妥协的处境描述，C 是派系斗争的背景板，D 是<b>客观效果</b>（客观上诱导民族资本主义产生）——主观目的≠客观效果。设问规律：<b>问目的答主观，问影响答客观</b>。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：从「中体西用」读出洋务派的主观目的</h2>
+<p>答案：<strong>B（维护封建统治）</strong>。</p>
+<h3>第 0 步：先立机制——「体用之分」就是「目的手段之分」</h3>
+<p>洋务运动（19 世纪 60—90 年代）的主角是<strong>清朝统治阶级内部</strong>的洋务派（奕䜣、曾国藩、李鸿章、左宗棠、张之洞等）。他们兴办洋务事业的指导思想是<strong>「中学为体，西学为用」</strong>——这句话本身就是本题答案的图纸：</p>
+<ul><li><strong>「体」= 目的层</strong>：中学（封建纲常名教与专制制度）为体，是必须保住的根本；</li><li><strong>「用」= 手段层</strong>：西学（坚船利炮、生产技术）为用，是保住根本的工具。</li></ul>
+<p>再看洋务派自设的旗号：军事工业标榜<strong>「自强」</strong>，民用企业标榜<strong>「求富」</strong>——「强」与「富」为了谁？洋务派本身就是封建统治集团的一部分：办军工镇压农民起义、建新式海陆军抵御外侮、办新式学堂派留学生培养「中体西用」人才——手段清单再长，最后都汇回同一个落点：<strong>修补并维护清王朝的封建统治</strong>。阶级立场决定动机，他们不可能以改造或推翻封建制度为目标。</p>
+<h3>第 1 步：题眼定层——问「目的」答主观层</h3>
+<p>设问问「兴办洋务新政的<strong>主要目的</strong>」＝<strong>主观动机</strong>，落在「体」上：维护封建统治。选 <strong>B</strong>。</p>
+<h3>第 2 步：干扰项归因</h3>
+<table><thead><tr><th>选项</th><th>错在哪</th><th>对应的误解</th></tr></thead><tbody><tr><td>A 迎合帝国主义</td><td>洋务派对外确有妥协的一面，但那是手段与处境，不是兴办洋务的宗旨</td><td>用「对外态度」代替「根本目的」</td></tr><tr><td>C 对抗顽固派</td><td>与顽固派的派系之争是发起洋务的现实<strong>背景</strong>，不是动机</td><td>把斗争背景当行动目的</td></tr><tr><td>D 发展资本主义</td><td>洋务运动<strong>客观上</strong>诱导民族资本主义产生、开启近代化</td><td><strong>把客观效果当主观目的</strong>（本题最典型陷阱）</td></tr></tbody></table>
+<h3>预判追问：为什么 D 最有迷惑性</h3>
+<p>「洋务运动开启了中国近代化」是教材的正面评价，很多同学由此顺手选 D。辨析的关键在<strong>主观与客观的分层</strong>：客观效果（近代工业出现、民族资本主义被诱导产生）是洋务派没有预料也不追求的——他们要的是「自强」「求富」以固统治，而不是培育一种终将瓦解封建制度的生产关系。由此记一条真题设问规律：凡问「<strong>目的</strong>」「<strong>意图</strong>」「<strong>初衷</strong>」，答主观层；凡问「<strong>影响</strong>」「<strong>意义</strong>」「<strong>作用</strong>」，才答客观层。本题问的是前者。</p>
+<h3>易错点</h3>
+<ul><li><strong>把正面评价当动机选 D</strong>：近代化是客观效果，洋务派主观上恰恰要维护旧制度——「客观效果≠主观目的」。</li><li><strong>拿派系斗争选 C</strong>：与顽固派的分歧（要不要学西方技术）是背景板，不是发动机。</li><li><strong>用对外妥协选 A</strong>：「迎合帝国主义」是对外关系层面的描述，替代不了「目的」的规范表述。</li></ul>
+<blockquote>记忆锚点：<strong>中体西用——体=封建统治（目的），用=西方技术（手段）</strong>；洋务派=地主阶级开明派，动机不出本阶级；问目的答主观，问影响答客观。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

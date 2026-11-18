@@ -1,8 +1,102 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-02 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-02</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·02 为什么能以史为鉴：历史规律的客观性</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼',
+    cls: 'key',
+    body: '<p>题眼：「历史是最好的教科书」，问人们<b>为什么能够</b>从历史中汲取经验教训。不是问历史有什么规律，而是问<b>借鉴何以可能</b>。考点：历史规律的客观性。</p>',
+    log: '追问前提：借鉴何以可能' },
+  { title: '立模型：借鉴的因果链',
+    cls: 'key',
+    body: '<p>借鉴成立 ← 历史事件背后有<b>可重复、可认识</b>的规律 ← 规律<b>不以人的意志为转移</b>（客观）。四个干扰项都在这条链的不同环节上动手脚。</p>',
+    log: '链条：事件 → 规律 → 客观 → 可借鉴' },
+  { title: 'A：循环论',
+    cls: 'bad',
+    body: '<p>「循环往复」是循环论。历史是<b>螺旋式上升、波浪式前进</b>，借鉴不等于历史重演。<b>A 错误</b>。</p>',
+    ribbon: { k: 1, ok: false },
+    log: 'A 是循环论' },
+  { title: 'B：抹平两类规律的差别',
+    cls: 'bad',
+    body: '<p>历史规律与自然规律<b>都客观</b>，但历史规律形成于<b>人的有意识的活动</b>之中，实现方式不同——「惊人相似」抹平了本质区别，且答非所问。<b>B 错误</b>。</p>',
+    ribbon: { k: 2, ok: false },
+    log: 'B 抹平两类规律的差别' },
+  { title: 'C：规律客观 → 可借鉴',
+    cls: 'good',
+    body: '<p>历史发展存在<b>不以人的意志为转移</b>的客观规律 → 过去与今天的情境受同一规律支配 → 经验教训才有约束力和参考价值。正中题眼，<b>C 正确</b>。</p>',
+    ribbon: { k: 3, ok: true },
+    log: 'C 命中：规律客观 → 可借鉴' },
+  { title: 'D：完全掌握绝对化',
+    cls: 'bad',
+    body: '<p>「已经完全掌握」绝对化。借鉴只需规律<b>客观存在</b>，不要求认识完备；人的认识本来就是逐步深化的。<b>D 错误</b>。</p>',
+    ribbon: { k: 4, ok: false },
+    log: 'D 绝对化' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>C</b>。记忆锚点：经验可借鉴 ← 历史有规律 ← 规律<b>客观</b>；历史规律通过<b>人的有意识活动</b>实现，与自然规律实现方式不同；「总是 / 完全」多为绝对化陷阱。</p>',
+    log: '锁定 C：历史发展规律的客观性' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "为什么能「以史为鉴」：历史规律的客观性",
+  subtitle: "考点：历史规律的客观性（不以人的意志为转移） · 方法：借鉴何以可能的因果链",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A 2=B 3=C 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」沿因果链逐项排查。',
+  snaps: snaps,
+  result: {
+    big: "答案 C",
+    html: "能借鉴历史，基础在于历史发展存在<b>不以人的意志为转移的客观规律</b>。记忆锚点：历史规律都客观，但<b>通过人的有意识活动实现</b>；「循环往复」是循环论，「完全掌握」是绝对化。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：为什么能「以史为鉴」——历史规律的客观性</h2>
+<p>答案：<strong>C</strong>。</p>
+<h3>第 0 步：先立因果链——「借鉴经验」何以可能</h3>
+<p>题干问的不是「历史有什么规律」，而是一个更前置的问题：人们凭什么能从历史中汲取经验教训？「借鉴」要成立，逻辑上必须先有一条链：历史不是一堆互不相干的偶然事件 → 事件背后有<strong>可重复、可认识</strong>的规律 → 规律<strong>不以人的意志为转移</strong>（客观的）→ 所以过去的经验教训对今天才有约束力和参考价值。四个干扰项，都是在这条链的不同环节上动手脚。</p>
+<h3>第 1 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>卡在哪一环</th></tr></thead><tbody><tr><td>A 历史总是在循环往复中不断向前发展</td><td>❌</td><td>「循环往复」是循环论——历史是螺旋式上升、波浪式前进；借鉴不等于历史重演</td></tr><tr><td>B 历史规律和自然规律存在着惊人的相似性</td><td>❌</td><td>二者都是客观规律，但历史规律形成于<strong>人的有意识的活动</strong>之中，实现方式不同；「惊人相似」抹平了本质区别</td></tr><tr><td>C 人类历史发展存在着不以人的意志为转移的规律</td><td>✅</td><td>规律客观 → 过去与今天的情境受同一规律支配 → 经验教训才可借鉴</td></tr><tr><td>D 人类已经完全掌握了历史发展的内在规律</td><td>❌</td><td>「完全掌握」绝对化；借鉴历史只需要规律<strong>客观存在</strong>，不要求认识完备</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 D（把「借鉴」想得太重）</strong>：误以为要「先彻底掌握规律、再用历史」，于是选「完全掌握」。实际上题干只问借鉴的<strong>基础</strong>——是规律的客观存在，不是人的认识完备程度；认识本来就是逐步深化的，「完全」一词自己就露了馅。</li><li><strong>选 B（把「都是规律」当成答案）</strong>：知道历史规律与自然规律都客观，就顺手选了「相似性」。但题干落点是<strong>历史规律本身的客观性</strong>（C），比较历史规律与自然规律像不像，答非所问。</li><li><strong>选 A（对「鉴」的望文生义）</strong>：把「以史为鉴」理解成历史会循环重演，落入循环论。</li></ul>
+<blockquote>记忆锚点：经验可借鉴 ← 历史有规律 ← 规律<strong>客观</strong>（不以人的意志为转移）；历史规律 ≠ 自然规律：都客观，但历史规律<strong>通过人的有意识活动实现</strong>；「总是 / 完全」类字眼多为绝对化陷阱。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,94 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-05 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-05</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-05 · 农村根据地长期存在与发展的根本原因</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 概念/推理链类：先立"存在条件三层结构"机制，再逐项对号（对应 2011 年第 5 题，答案 A） */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼："根本原因"＝只要总根源',
+    cls: 'key',
+    body: '<p>1927 年大革命失败，工作重心转向农村、建立根据地。题眼是"<b>根本原因</b>"——问的是派生出其他一切条件的<b>第一环</b>，不是"条件清单"。考点：红色政权（农村根据地）存在条件的<b>分层</b>。</p>' },
+  { title: '立机制：三层结构，一层一层看',
+    cls: 'key',
+    body: '<p><b>第一层·根本原因</b>：中国是政治、经济、文化发展<b>极不平衡</b>的半殖民地半封建大国。<br><b>第二层·客观条件</b>：大革命影响留下良好群众基础；全国革命形势继续向前发展。<br><b>第三层·主观条件</b>：相当力量正式红军；党的领导及正确政策。</p>' },
+  { title: '追问：不平衡性凭什么是"总根源"',
+    cls: 'key',
+    body: '<p>它一个源头派生出三件事：①发展不平衡→军阀割据混战，白色政权之间留出<b>薄弱环节</b>；②地方性农业经济→农村<b>不依赖城市</b>也能独立坚持；③大国幅员→革命力量有<b>回旋余地</b>。"农村包围城市"的可能性全从这块土壤长出来。</p>' },
+  { title: '选项 A：极不平衡的半殖民地半封建大国',
+    cls: 'good', k: 1, pick: true,
+    body: '<p>教材明文的<b>根本原因</b>，站在派生链的第一环——第二、三层的条件都由它派生。没有 A，其余条件无从谈起。<b>入选</b>。</p>' },
+  { title: '选项 B：良好群众基础＋革命形势继续发展',
+    cls: 'bad', k: 2, pick: false,
+    body: '<p>在条件清单里，但属<b>客观条件</b>。追问一层：群众基础正来自大革命影响在各地的<b>不平衡</b>；形势发展正因军阀混战留出缝隙——B 是 A 的<b>派生结果</b>，低一层，<b>排除</b>。</p>' },
+  { title: '选项 C：相当力量正式红军的存在',
+    cls: 'bad', k: 3, pick: false,
+    body: '<p><b>主观条件</b>：回答"靠什么把可能变成现实"，回答不了"可能性从哪里来"。没有客观土壤，红军再强也无处扎根，<b>排除</b>。</p>' },
+  { title: '选项 D：党的领导及其正确的政策',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p>同为<b>主观条件</b>：主观努力再大，也造不出客观土壤——是原因链上靠后的环节，不是第一因，<b>排除</b>。</p>' },
+  { title: '结论：总根只有一条',
+    cls: 'good',
+    body: '<p>B 是 A 结的果，C、D 是摘果子的人——四项里只有 A 站在"总根源"层。</p><p><b>答案 A。</b></p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2011-05 · 农村根据地长期存在与发展的根本原因',
+  subtitle: '2011 年第 5 题（单选）· 考点：农村革命根据地 · 条件分层 → 逐项对号',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 正确 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立"条件三层结构"，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：<b>不平衡的半殖民地半封建大国</b>＝白色政权的裂痕＋农村不依赖城市＋大国的回旋余地。三层结构：<b>根本原因</b>（不平衡）→ 客观条件（群众基础、革命形势）→ 主观条件（红军、党的领导）；问"根本原因"只取第一层。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：农村根据地长期存在与发展的"根本原因"——先分层，再对号</h2>
+<p>答案：<strong>A（中国是一个政治、经济、文化发展极不平衡的半殖民地半封建的大国）</strong>。</p>
+<h3>第 0 步：先立机制——红色政权存在条件的三层结构</h3>
+<p>1927 年大革命失败后，党的工作重心转向农村、建立根据地。农村革命根据地（红色政权）为什么"能够"在中国长期存在和发展？教材给出一串条件，但它们<strong>不在同一个层级</strong>，题眼"根本原因"只问第一层：</p>
+<table><thead><tr><th>层级</th><th>条件</th><th>回答的问题</th></tr></thead><tbody><tr><td><strong>根本原因</strong></td><td>中国是政治、经济、文化发展<strong>极不平衡</strong>的半殖民地半封建大国</td><td>一切可能性的总根源</td></tr><tr><td>客观条件</td><td>大革命影响留下的良好群众基础；全国革命形势继续向前发展</td><td>现实土壤已备好</td></tr><tr><td>主观条件</td><td>相当力量正式红军的存在；党的领导及正确政策</td><td>人为努力把可能变现实</td></tr></tbody></table>
+<p>不平衡性为什么是"根本"？它一个源头派生出三件事：一是经济政治发展的不平衡造成反动统治内部的<strong>长期分裂与混战</strong>（军阀割据），白色政权之间留出<strong>薄弱环节</strong>；二是地方性农业经济使广大农村<strong>不依赖城市</strong>也能自给自足，根据地可以独立坚持；三是大国幅员辽阔，革命力量有<strong>回旋余地</strong>。"农村包围城市"整条道路的可能性，都从这块土壤里长出来。</p>
+<h3>第 1 步：预判追问——B 就在条件清单里，为什么不能当"根本原因"</h3>
+<p>B 项"良好的群众基础和革命形势的继续向前发展"确实是教材条件清单的内容（客观条件），但追问一层：群众基础从哪来？正是大革命在各地影响深浅<strong>不平衡</strong>的产物——影响深的地方群众基础就好；革命形势为什么会继续发展？恰恰因为大国不平衡、军阀混战给革命留下了缝隙。也就是说，<strong>B 是 A 派生出来的结果</strong>，比 A 低一个层级。题问"根本原因"，答案只能取派生链的第一环。</p>
+<h3>第 2 步：预判追问——C、D 这么重要，为什么也只是枝叶</h3>
+<p>红军的存在（C）与党的领导（D）是<strong>主观条件</strong>：它们回答"靠什么力量把可能变成现实"，回答不了"可能性本身从哪里来"。再强的红军，在平衡统一、无缝可钻的统治格局下也无处扎根；主观努力再大，也造不出客观土壤。所以它们是"存在和发展"的<strong>支撑条件</strong>，不是"根本原因"。</p>
+<h3>第 3 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>内容</th><th>判定</th><th>归层</th></tr></thead><tbody><tr><td>A</td><td>政治经济文化发展极不平衡的半殖民地半封建大国</td><td>✅</td><td>根本原因（第一层）</td></tr><tr><td>B</td><td>良好群众基础＋革命形势继续发展</td><td>❌</td><td>客观条件（派生于 A）</td></tr><tr><td>C</td><td>相当力量正式红军的存在</td><td>❌</td><td>主观条件</td></tr><tr><td>D</td><td>党的领导及其正确的政策</td><td>❌</td><td>主观条件</td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 B</strong>：把"条件清单里有"当成"它就是根本"——没分清"客观条件"与"根本原因"两个层级，背了清单没背层级。</li><li><strong>误选 C</strong>：把"靠什么坚持"当成"为什么存在"——主观条件让可能变现实，解释不了可能性的来源。</li><li><strong>误选 D</strong>：同上——党的领导再正确，也是原因链上靠后的环节，不是第一因。</li></ul>
+<blockquote>记忆锚点：一句总根——<strong>不平衡的半殖民地半封建大国</strong>（白色政权的裂痕＋农村不依赖城市＋大国的回旋余地）；群众基础与革命形势是它结的果，红军与党的领导是摘果子的人。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

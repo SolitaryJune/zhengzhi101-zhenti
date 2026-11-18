@@ -1,8 +1,124 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-24 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-24</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·24 进博会的定位：窗口、平台、公共产品</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站（无 KaTeX）概念/推理链版：引擎 + 推理卡片累积展开，只改题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  {
+    "title": "审题眼：「以进口为主题」是特殊性质",
+    "cls": "key",
+    "body": "<p>材料：2018—2022 连续五届<b>世界上首个以进口为主题</b>的国家级展会，前四届累计意向成交额 735.2 亿美元。进口为主 = 不是推销本国产品的展销会，而是<b>主动打开本国市场</b>、让全球商品服务进得来的通道。</p>",
+    "log": "性质先立：进口为主 = 开市场"
+  },
+  {
+    "title": "B：对经济——构建新发展格局的窗口 → 入选",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p>进口联通<b>国内国际两个市场、两种资源</b>，正是国内国际双循环的链接窗口——新发展格局是开放的双循环，不是封闭的国内循环。<b>入选</b>。</p>",
+    "log": "B 联通两个市场 ✓"
+  },
+  {
+    "title": "C：对战略——推进高水平对外开放的平台 → 入选",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p>连续五届、越办越好，是主动扩大开放的<b>制度化实招</b>而非一时举措——高水平对外开放的标志性平台。<b>入选</b>。</p>",
+    "log": "C 开放实招 ✓"
+  },
+  {
+    "title": "D：对世界——全球共享的国际公共产品 → 入选",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>不设门槛、面向各国企业开放，成果全球共享——<b>不是中国一家的会</b>，是各方共享机遇的载体。<b>入选</b>。</p>",
+    "log": "D 全球共享 ✓"
+  },
+  {
+    "title": "A：世界经济增长的引擎 → 不选",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>拔高干扰：「引擎」要求主体有<b>带动全球总需求</b>的体量与机制；进博会是贸易展会<b>通道和平台</b>，撑不起驱动世界经济增长的角色。<b>不选</b>。</p>",
+    "log": "A 把平台吹成引擎 ✗"
+  },
+  {
+    "title": "追问预答：735.2 亿美元为什么推不出引擎？",
+    "cls": "key",
+    "body": "<p>数字证明的是<b>吸引力和贡献</b>，不改变主体的<b>性质</b>。引擎说的是「驱动增长的功能角色」——展会通道再热闹也是通道。尺子：<b>主体能力与说法的匹配度</b>。</p>",
+    "log": "贡献大 ≠ 引擎"
+  },
+  {
+    "title": "干扰项归因：拔高式干扰",
+    "cls": "bad",
+    "body": "<p>B/C/D 都有官方权威表述支撑；A 的手法是<b>把「平台」吹成「引擎」</b>——利用材料的排面（首个、连续五届、亮眼数字）诱你顺势拔高。答定位题只认权威表述，不认气势。</p>",
+    "log": "A：借气势拔高"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>BCD</b>。记忆锚点：进博会三定位 = <b>新发展格局的窗口＋高水平对外开放的平台＋全球共享的国际公共产品</b>；「引擎」是拔高干扰。</p>",
+    "log": "锁定 BCD"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "进博会的定位：窗口、平台、公共产品",
+  subtitle: "考点：高水平对外开放与进博会定位 · 方法：性质先立 + 主体与说法匹配度",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 BCD",
+    html: "进博会三定位：构建新发展格局的窗口（联通两个市场）＋推进高水平对外开放的平台（制度化实招）＋全球共享的国际公共产品（各国共享）。A「世界经济增长引擎」是把平台吹成引擎的拔高干扰——贡献大不等于引擎。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：进博会的定位——窗口、平台、公共产品</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——「以进口为主题」意味着什么</h3>
+<p>判断进博会「已成为」什么，先把它的<strong>特殊性质</strong>立起来：世界上首个以<strong>进口</strong>为主题的国家级展会。进口为主，说明它不是推销本国产品的展销会，而是<strong>主动打开本国市场、让全球商品服务进得来</strong>的通道——这一个性质，把三重定位全部推出来：</p>
+<table><thead><tr><th>站位</th><th>定位</th><th>机制</th></tr></thead><tbody><tr><td>对中国经济</td><td><strong>构建新发展格局的窗口</strong>（B）</td><td>进口联通国内国际两个市场、两种资源，正是国内国际双循环的链接窗口</td></tr><tr><td>对开放战略</td><td><strong>推进高水平对外开放的平台</strong>（C）</td><td>连续五届、越办越好，是主动扩大开放的制度化实招，而非一时举措</td></tr><tr><td>对世界经济</td><td><strong>全球共享的国际公共产品</strong>（D）</td><td>不设门槛、面向各国企业开放，成果全球共享——不是中国一家的会</td></tr></tbody></table>
+<p>材料里「连续五届、前四届累计意向成交额735.2亿美元」是这三重定位的证据：办得成、留得住、有人来。</p>
+<h3>第 1 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 世界经济增长的引擎</td><td>❌</td><td>拔高干扰：单个展会是通道和平台，撑不起「带动全球增长的引擎」的角色，见下</td></tr><tr><td>B 我国构建新发展格局的窗口</td><td>✅</td><td>以进口联通两个市场、两种资源，官方对进博会功能的权威表述</td></tr><tr><td>C 我国推进高水平对外开放的平台</td><td>✅</td><td>连续举办、越办越好，是高水平对外开放的标志性平台</td></tr><tr><td>D 全球共享的国际公共产品</td><td>✅</td><td>面向各国企业开放、成果全球共享，官方对进博会性质的权威表述</td></tr></tbody></table>
+<h3>第 2 步：A 为什么「过了」——拔高式干扰的判断尺</h3>
+<p>判断夸大项的尺子是<strong>主体能力与说法的匹配度</strong>。「世界经济增长的引擎」要求主体有带动全球总需求的体量和机制（如大国经济体量、全球产业链核心地位）；进博会是一个<strong>贸易展会平台</strong>，贡献大（735.2亿美元成交）不等于能驱动世界经济增长。A 的手法是<strong>把「平台」吹成「引擎」</strong>——拔高式干扰。</p>
+<p><strong>追问预答</strong>：既然数字这么亮眼，为什么推不出「引擎」？数字证明的是吸引力和贡献，<strong>不改变主体的性质</strong>；引擎说的是「驱动增长的功能角色」，展会通道再热闹也是通道。</p>
+<h3>易错点</h3>
+<ul><li><strong>犹豫 B</strong>：把「新发展格局」误读为只管国内循环——恰恰相反，以进口为主题的博览会正是联通国内大循环与国际循环的那扇窗，新发展格局是<strong>开放的</strong>双循环。</li><li><strong>选 A</strong>：被「首个」「连续五届」「735.2亿美元」的气势带偏——排面再大，定位表述仍要与主体匹配，「引擎」超出展会所能承担的角色。</li></ul>
+<blockquote>记忆锚点：进博会三定位 = <strong>新发展格局的窗口＋高水平对外开放的平台＋全球共享的国际公共产品</strong>；「引擎」是把平台吹成引擎的拔高干扰。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,155 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-16 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-16</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2009·16 尼泊尔制宪会议选举第一大党</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链动画（政治站无 KaTeX）：卡片 + 引擎格子工具画四党对号行，只写 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行可加宽的格子（引擎 cellRow 固定 44px 宽放不下党名简称，这里自定义行）
+function boxRow(items, ptrMap, sub){
+  var row = AW.el('div', 'aw-cells');
+  items.forEach(function(it, i){
+    var col = AW.el('div', 'aw-col');
+    col.style.width = it.w || '88px';
+    if(ptrMap && ptrMap[i + 1]) col.appendChild(AW.el('div', 'aw-ptr', ptrMap[i + 1]));
+    var box = AW.el('div', 'aw-box' + (it.c ? ' ' + it.c : ''), it.t);
+    box.style.width = it.w || '88px';
+    col.appendChild(box);
+    if(sub) col.appendChild(AW.el('div', 'aw-idx', sub[i] || ''));
+    row.appendChild(col);
+  });
+  return row;
+}
+
+// 四党对号行：格子放党名简称，格下放定位
+function partyRow(state){
+  return boxRow([
+    { t: '毛主义', c: state[0] },
+    { t: '联合马列', c: state[1] },
+    { t: '大会党', c: state[2] },
+    { t: '民族民主', c: state[3] }
+  ], null, ['第一大党', '位居其后', '老牌不敌', '席位寥寥']);
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：三点定位",
+    "cls": "key",
+    "body": "<p>国际时政题的答题单元是三件套：<b>哪国（尼泊尔）+ 哪年（2008 年 4 月中旬）+ 什么事（制宪会议选举）</b>。三点齐了，问「一举成为第一大党」的是谁——纯识记，用背景链钉牢再对号。</p>",
+    "log": "国别+年份+事件，三点定位"
+  },
+  {
+    "title": "立背景链：选举排在哪一环",
+    "cls": "key",
+    "body": "<p>2006《全面和平协议》结束十年内战 → 2007 年底定废王建共 → <b>2008-04 制宪会议选举</b>（选宪法起草者与首届共和政府）→ 5 月宣布共和国。这场选举是「共和元年」的政治起点。</p>",
+    "log": "内战→废王→选举→共和国"
+  },
+  {
+    "title": "四党上桌",
+    "cls": "key",
+    "body": "<p>把四个选项摆成一排，格子放党名、格下先占位：</p>" +
+      partyRow(['dim', 'dim', 'dim', 'dim']) +
+      "<p>注意 A、B 开头都是「尼泊尔共产党」——命题人故意并排两支尼共，差别全在括号后缀。</p>",
+    "log": "四党一排，两个「尼共」先分家"
+  },
+  {
+    "title": "B 正确：黑马夺魁",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p>尼泊尔共产党（<b>毛主义</b>）——十年内战的领导力量、刚由武装斗争转入政治进程——一举成为<b>第一大党</b>；主席普拉昌达同年 8 月出任共和国首任总理。<b>B 正确</b>。</p>",
+    "log": "毛主义第一大党 → B ✓"
+  },
+  {
+    "title": "A：另一支尼共",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>尼泊尔共产党（<b>联合马列</b>）长期走议会道路，名字正式度高、存在感稳定，但 2008 年的新闻主角不是它——黑马才上头条，上头条才进真题。<b>A 错误</b>。</p>",
+    "log": "A=另一支尼共，位居其后 ✗"
+  },
+  {
+    "title": "C：老牌不敌黑马",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p><b>大会党</b>是历史最久的传统大党，容易按「大党必胜」惯性去选；但这场选举的议题是「结束王权、共和新政」，风头完全被毛主义拿走。<b>C 错误</b>。</p>",
+    "log": "C=传统大党失利 ✗"
+  },
+  {
+    "title": "D：废王年的保王党",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p><b>民族民主党</b>与君主制绑定较深、实力有限——在一场「废王」选举中天然边缘化，席位寥寥，谈不上「一举」夺魁。<b>D 错误</b>。</p>",
+    "log": "D=保王色彩小党 ✗"
+  },
+  {
+    "title": "结论：答案 B",
+    "cls": "good",
+    "body": "<p>对号收尾：四党各自归位，第一大党只有毛主义。三词互相锁死——<b>毛主义第一大党 / 共和元年 / 普拉昌达组阁</b>，见一推二，识记题就靠这张卡免疫。</p>",
+    "log": "锁定 B：尼共（毛主义）"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  title: "2008 年尼泊尔制宪会议选举：第一大党",
+  subtitle: "2009 年第 16 题（单选）· 考点：国际时事 · 方法：三点定位 + 背景链记忆 + 两个「尼共」辨析",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先立背景链，再让四党逐一对号。',
+  result: {
+    big: "答案 B（尼共毛主义）",
+    html: "记忆锚点：尼泊尔 2008 = <b>毛主义第一大党</b> + <b>共和元年</b> + <b>普拉昌达首任总理</b>；联合马列是另一支尼共，别张冠李戴。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：国际时政识记题——用「国别 + 年份 + 事件」三点定位，用背景链加固记忆</h2>
+<p>答案：<strong>B（尼泊尔共产党(毛主义)）</strong>。</p>
+<h3>第 0 步：先立背景链——这场选举为什么值得出题</h3>
+<p>国际时政题的答题单元是三件套：<strong>哪国、哪年、什么事</strong>。题干给出：尼泊尔、2008 年 4 月中旬、<strong>制宪会议选举</strong>。单看一场小国选举似乎不必出题，把它在背景链上的位置摆出来就明白选材逻辑了：</p>
+<ol><li>2006 年《全面和平协议》签署，十年内战结束，武装斗争转入和平进程；</li><li>2007 年底各党敲定废除君主制、实行共和；</li><li><strong>2008 年 4 月制宪会议选举</strong>——选出负责起草新宪法、组建首届共和政府的制宪会议；</li><li>2008 年 5 月制宪会议宣布成立共和国，延续两百多年的君主制终结；</li><li>选举第一大党的领导人普拉昌达于同年 8 月出任共和国首任总理。</li></ol>
+<p>一年之内「选举翻盘 + 废王建共 + 游击队领导人组阁」三连发，事件新、变化大——这正是年度国际时政的选材口味，也是本题的记忆抓手。</p>
+<h3>第 1 步：四党对号表</h3>
+<table><thead><tr><th>政党</th><th>政治底色</th><th>选举结局</th><th>对应选项</th></tr></thead><tbody><tr><td><strong>尼泊尔共产党（毛主义）</strong></td><td>十年内战的领导力量，刚由武装斗争转入政治进程</td><td><strong>一举成为第一大党</strong>，随后主导组阁</td><td><strong>B ✓</strong></td></tr><tr><td>尼泊尔共产党（联合马列）</td><td>走议会道路的左翼老牌力量</td><td>位居毛主义党之后</td><td>A</td></tr><tr><td>尼泊尔大会党</td><td>尼泊尔历史最久的传统大党</td><td>同样不敌毛主义党</td><td>C</td></tr><tr><td>尼泊尔民族民主党</td><td>与君主制绑定较深的老党，实力有限</td><td>席位寥寥</td><td>D</td></tr></tbody></table>
+<h3>第 2 步：两个「尼共」的分辨（本题唯一设障点）</h3>
+<p>选项 A 与 B 开头都是「尼泊尔共产党」，差别全在括号里的后缀——这是命题人故意并排的两支力量：</p>
+<ul><li><strong>联合马列</strong>：长期走议会道路的「体制内」老牌左翼，名字正式度高、存在感一直稳定，但 2008 年的新闻主角不是它；</li><li><strong>毛主义</strong>（名称源自毛泽东主义）：以十年武装斗争震动全国、刚转入和平政治，选举中一夜翻盘成第一大党——<strong>黑马才上头条，上头条才进真题</strong>。</li></ul>
+<p>其余两党按底色归位即可：大会党再老牌，也顶不住「结束王权、共和新政」议题下毛主义党的声势；民族民主党与王权绑定，在废王选举中天然边缘化。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A（名称正式度错觉）</strong>：以为「联合马列」听着更「正规」就当是大党——识记题认新闻事实，不认名称气质；两个「尼共」张冠李戴是本题主陷阱。</li><li><strong>误选 C（大党必胜惯性）</strong>：按「老牌大党赢面大」的常识去猜——这场选举恰恰是反常规的一届，常识在识记题面前无效。</li><li><strong>误选 D（凑数心态）</strong>：民族民主党保王色彩重，在「废王」选举中席位寥寥，绝无可能「一举」成为第一大党。</li><li><strong>总病根</strong>：国际时政没有推导过程，唯一可靠的是把当年头条钉成卡片——「毛主义第一大党 / 共和国成立 / 普拉昌达组阁」三件事互相锁死，见一推二。</li></ul>
+<blockquote>记忆锚点：尼泊尔 2008 = <strong>毛主义第一大党</strong> + <strong>共和元年</strong> + <strong>普拉昌达首任总理</strong>；联合马列是另一支尼共，别张冠李戴。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

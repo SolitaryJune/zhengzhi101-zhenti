@@ -1,8 +1,151 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-12 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-12</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·12 「打扫灰尘、洗脸」：批评与自我批评的比喻</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 408-zhenti/tools/anim_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 「毛病→工具」对位小卡：红框毛病 + 绿框清除工具
+function pair(cls, problem, tool){
+  return '<div class="aw-col" style="width:170px">' +
+         '<div class="aw-box miss" style="width:170px;height:auto;min-height:34px;font-size:12.5px;font-family:inherit;line-height:1.35;padding:3px 6px">' + problem + '</div>' +
+         '<div class="aw-ptr" style="color:#64748b">↓ 用</div>' +
+         '<div class="aw-box ' + cls + '" style="width:170px;height:auto;min-height:34px;font-size:12.5px;font-family:inherit;line-height:1.35;padding:3px 6px">' + tool + '</div>' +
+         '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+function pairRow(){
+  return '<div class="aw-cells">' +
+    pair('dim', '教条/经验主义', '理论联系实际') +
+    pair('dim', '脱离群众', '密切联系群众') +
+    pair('ok', '思想沾染灰尘', '批评与自我批评') +
+    '</div>';
+}
+
+var STEPS = [
+  {
+    "title": "审题眼：比喻出自哪份文献",
+    "cls": "key",
+    "body": "<p>「房子应该经常打扫……脸是应该经常洗的……我们同志的思想，我们党的工作，也会沾染灰尘的，也应该打扫和洗涤」——出自 <b>1945 年中共七大</b>毛泽东《论联合政府》政治报告。问：这段话反映的是哪条优良作风？方法=<b>比喻的本体定位</b>。</p>",
+    "log": "七大报告的原话，先定位出处"
+  },
+  {
+    "title": "先立机制：三大作风=三台「清除毛病的机器」",
+    "cls": "key",
+    "body": "<p>七大把优良作风概括为三条，各针对一类毛病、各配一套清除工具——作风题不是选「好作风」，是选<b>对位的那个</b>：</p>" + pairRow(),
+    "log": "毛病—工具一一对应"
+  },
+  {
+    "title": "拆比喻的机制：灰尘=什么？打扫=什么？",
+    "cls": "step",
+    "body": "<p>题干逻辑链：「不打扫→积满灰尘；不洗→灰尘满面」→ <b>思想和工作会不断沾染错误倾向，且不可能一次除净</b> → 所以要一个<b>经常性的、向内发力的清除机制</b>：揭发缺点错误、开展自我检讨与相互批评——这正是「批评与自我批评」的定义（整风运动同款机制：「惩前毖后、治病救人」）。</p>",
+    "log": "灰尘=缺点错误，打扫=批评与自我批评"
+  },
+  {
+    "title": "问一：灰尘落在谁身上",
+    "cls": "step",
+    "body": "<p>「我们同志的<b>思想</b>、我们党的<b>工作</b>」——对象是党<b>自身机体内部</b>的思想与工作。不是党群关系（排除 C 密切联系群众），也不是认识与实际的关系（排除 B 理论联系实际）。</p>",
+    "log": "对象在党内，不在群众与认识层面"
+  },
+  {
+    "title": "问二：「打扫和洗涤」是什么动作",
+    "cls": "step",
+    "body": "<p>打扫/洗涤=揭发、检讨、纠正——这是<b>批评与自我批评</b>的动作；既不是「不畏艰难、勤俭节约」（排除 A 艰苦奋斗），也不是「深入群众」。两个问句都指向同一条 → <b>D 正确</b>。</p>",
+    "ribbon": { "k": 4, "ok": true },
+    "log": "动作对位唯一 → 选 D"
+  },
+  {
+    "title": "A：生活意象 ≠ 生活作风",
+    "cls": "bad",
+    "body": "<p>误选 A 的误解：见「房子、脸」这类生活意象就想到生活作风。艰苦奋斗讲的是不畏艰难、勤俭节约的精神状态，与「清除思想灰尘」的动作无关——意象越生活化，越要查它的<b>动作</b>是什么。<b>A 错误</b>。</p>",
+    "ribbon": { "k": 1, "ok": false },
+    "log": "意象生活化≠艰苦奋斗 → A 不选"
+  },
+  {
+    "title": "B：认识层面与题眼无关",
+    "cls": "bad",
+    "body": "<p>误选 B 的误解：「思想出问题=认识问题=理论联系实际」——该作风针对教条/经验主义（认识与实际脱节），意象是「矢」与「的」；题干没出现理论与实际的关系。<b>B 错误</b>。</p>",
+    "ribbon": { "k": 2, "ok": false },
+    "log": "无认识脱节 → B 不选"
+  },
+  {
+    "title": "C：比喻对象（群众）不在场",
+    "cls": "bad",
+    "body": "<p>误选 C 的误解：「党的作风=党群关系」。但题眼是党<b>自身</b>的思想与工作，题里没有「群众」的位置——比喻对象不在场，直接排除。<b>C 错误</b>。</p>",
+    "ribbon": { "k": 3, "ok": false },
+    "log": "对象不在场 → C 不选"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>D</b>：批评与自我批评的优良作风。记忆锚点：七大三大作风=理论联系实际、密切联系群众、<b>批评与自我批评</b>；「打扫房子、洗脸」挂在<b>批评与自我批评</b>名下——灰尘即缺点错误，常扫常洗。</p>",
+    "log": "锁定 D：批评与自我批评"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'))),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "「打扫灰尘、洗脸」= 哪条优良作风",
+  subtitle: "考点：党的建设（中共七大三大作风） · 方法：比喻的本体定位——对象+动作双对位",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐张展开「毛病—工具」对位推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "记忆锚点：「打扫房子、洗脸」=<b>批评与自我批评</b>——灰尘即思想与工作中的缺点错误，清除机制必须<b>经常性、向内发力</b>（整风同款：惩前毖后、治病救人）。作风比喻题＝对象与动作双对位，不凭「好作风」语感选。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「打扫灰尘、洗脸」挂在哪条作风名下——比喻的本体定位法</h2>
+<p>答案：<strong>D（批评与自我批评的优良作风）</strong>。</p>
+<h3>第 0 步：先立机制——作风不是口号清单，而是一套「清除毛病的工具」</h3>
+<p>中共七大（1945 年，毛泽东作《论联合政府》政治报告）把党在长期革命中形成的优良作风概括为三条：<strong>理论和实践相结合、和人民群众紧密地联系在一起、（批评与）自我批评</strong>。三大作风各针对一类毛病，各配一套「清除工具」：</p>
+<table><thead><tr><th>毛病</th><th>对应的作风</th><th>常考意象</th></tr></thead><tbody><tr><td>教条主义、经验主义（认识脱节）</td><td>理论和实践相结合</td><td>「有的放矢」「实事求是」</td></tr><tr><td>脱离群众（关系脱节）</td><td>密切联系群众</td><td>鱼水、种子与土地</td></tr><tr><td><strong>思想沾染灰尘、缺点错误</strong></td><td><strong>批评与自我批评</strong></td><td><strong>「打扫房子」「洗脸」</strong></td></tr></tbody></table>
+<p>比喻的机制要拆到位：题干的逻辑链是「不打扫→积满灰尘；不洗→灰尘满面」→ <strong>思想和工作会不断沾染错误倾向，且不可能一次除净</strong> → 所以要一个<strong>经常性的、向内发力的清除机制</strong>——这正是「批评与自我批评」的定义：揭发缺点错误、开展自我检讨与相互批评，以保持党的先进性。整风运动用的也是这套机制（「惩前毖后、治病救人」）。</p>
+<h3>第 1 步：抓比喻的本体——两个问句锁定归属</h3>
+<p>判断比喻对应哪条作风，问两个问题：</p>
+<ol><li><strong>灰尘落在谁身上？</strong>——「我们同志的思想、我们党的工作」：是党<strong>自身机体内部</strong>的思想与工作，不是党群关系（排 C），不是认识与实际的关系（排 B）。</li><li><strong>「打扫和洗涤」是什么动作？</strong>——揭发、检讨、纠正，即<strong>批评与自我批评</strong>的动作；不是「不畏艰难、勤俭节约」（排 A），也不是「深入群众」（排 C）。</li></ol>
+<p>本体对位唯一落在 D 上 → 选 <strong>D</strong>。</p>
+<h3>第 2 步：干扰项归因（每个错误选项对应一种误解）</h3>
+<ul><li><strong>误选 A「艰苦奋斗」</strong>：误解是「见『房子、脸』这类生活意象就想到生活作风」。艰苦奋斗讲的是不畏艰难、勤俭节约的精神状态，与「清除思想灰尘」的动作无关——意象越生活化，越要查它的动作是什么。</li><li><strong>误选 B「理论联系实际」</strong>：误解是「思想出了问题=认识问题=理论联系实际」。这条作风针对的是教条主义/经验主义（认识与实际脱节），意象是「矢」与「的」；题干没出现理论与实际的关系。</li><li><strong>误选 C「密切联系群众」</strong>：误解是「党的作风=党群关系」。题干比喻的对象是党自身的思想与工作，题眼里没有「群众」的位置——比喻对象不在场，直接排除。</li></ul>
+<h3>预判追问</h3>
+<ul><li><strong>为什么不能选「都是好作风所以随便一条」？</strong> 四个选项都是党的作风体系内的真命题，这类题考的不是「好不好」，而是<strong>比喻与作风的对位</strong>——原话出自哪个报告、挂在哪条名下，是史纲的固定考点。</li><li><strong>「三大作风」与「艰苦奋斗」什么关系？</strong> 艰苦奋斗属于党的优良传统/作风体系（西柏坡「两个务必」语境），但不在七大「三大作风」的表述之内——考试以七大盘点为准。</li></ul>
+<blockquote>记忆锚点：七大三大作风=<strong>理论联系实际、密切联系群众、批评与自我批评</strong>；「打扫房子、洗脸」=<strong>批评与自我批评</strong>——灰尘即缺点错误，常扫常洗，惩前毖后、治病救人。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

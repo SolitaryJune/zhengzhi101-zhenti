@@ -1,8 +1,132 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-12 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-12</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2026·12 三大战役决定性胜利表明了什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版）：只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行时间轴 / 要素格
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: "审题眼：「表明」类题先排时间轴",
+    cls: "key",
+    log: "题眼：意义归属——事件的意义半径决定它能「表明」什么",
+    body: "<p>1948 年秋，人民解放军先后发动<b>辽沈、淮海、平津</b>三大战役，历时四个多月取得决定性胜利。「表明／标志着」类题，第一步不是看选项，而是先把 1947—1949 年时间轴立起来，让每个候选结论<b>各归各位</b>。</p>"
+  },
+  {
+    title: "排时间轴：四个节点各归各位",
+    cls: "key",
+    log: "大别山 1947.6 → 三大战役 1948.9-1949.1 → 七届二中全会 1949.3 → 解放南京 1949.4.23",
+    body: cells([
+      { t: "挺进大别山<br>战略进攻序幕", l: "1947.6" },
+      { t: "<b>三大战役</b><br>歼灭改编 154 万余人", l: "1948.9-1949.1", c: "ok" },
+      { t: "七届二中全会<br>工作重心转向城市", l: "1949.3" },
+      { t: "解放南京<br>22 年统治覆灭", l: "1949.4.23" }
+    ])
+  },
+  {
+    title: "A 对号：落在决战半径内",
+    cls: "good",
+    log: "歼灭改编 154 万余人，主力基本丧失 → A 正确",
+    ribbon: { k: 1, ok: true },
+    body: "<p>三大战役共<b>歼灭和改编国民党军队 154 万余人</b>，国民党赖以维持统治的主要军事力量在三大决战中基本丧失。注意教材措辞的分寸：「<b>基本上</b>被摧毁」——江南残部要靠渡江战役解决。<b>A 正确</b>。</p>"
+  },
+  {
+    title: "B 排除：重心进城属七届二中全会",
+    cls: "bad",
+    log: "重心转移是 1949.3 七届二中全会的自觉部署 → B 排除",
+    ribbon: { k: 2, ok: false },
+    body: "<p>「中国革命重心已经从农村转向城市」——时间错位：工作重心转移是 1949 年 3 月<b>七届二中全会</b>自觉<b>部署</b>的，不是三大战役自动「表明」的结论。<b>B 错误</b>。</p>"
+  },
+  {
+    title: "C 排除：统治覆灭以解放南京为标志",
+    cls: "bad",
+    log: "军事主力被摧毁 ≠ 政权覆灭，中间隔着渡江战役 → C 排除",
+    ribbon: { k: 3, ok: false },
+    body: "<p>「延续 22 年之久的反动统治已经覆灭」——事件错位：政权覆灭以统治中枢被攻克为标志，即 1949 年 4 月 23 日<b>解放南京</b>。「打垮主力 → 政权倒台」中间还隔着渡江战役。<b>C 错误</b>。</p>"
+  },
+  {
+    title: "D 排除：拿「因」当「果」",
+    cls: "bad",
+    log: "全国性反攻 1947.6 大别山已开始，在三大战役之前 → D 排除",
+    ribbon: { k: 4, ok: false },
+    body: "<p>「立刻转入全国性反攻的形势已经成熟」——全国性反攻 1947 年 6 月<b>刘邓大军挺进大别山</b>就已揭开序幕，在三大战役<b>之前</b>。D 字面最贴近军事话题，但因果颠倒：反攻是三大战役的「因」，不是它「表明」的「果」。<b>D 错误</b>。</p>"
+  },
+  {
+    title: "结论",
+    cls: "good",
+    log: "锁定 A：国民党主要军事力量基本上被摧毁",
+    body: "<p>答案 <b>A</b>。「表明」只落在战略决战的作用半径内——军事力量对比的根本改变；政权覆灭、重心进城都是其后别的事件的意义。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+});
+
+AW.init({
+  title: "政治 2026·12 三大战役决定性胜利表明了什么",
+  subtitle: "考点：三大战役 · 方法：时间轴排位——「表明」只落在战略决战的意义半径内",
+  counterLabel: "推理步",
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」逐步展开推理链。",
+  snaps: snaps,
+  result: {
+    big: "答案 A",
+    html: "三大战役（1948.9—1949.1）歼灭改编国民党军 <b>154 万余人</b> → <b>主要军事力量基本上被摧毁</b>（A）。记忆锚点：反攻序幕 → 挺进大别山（1947.6）；重心进城 → 七届二中全会（1949.3）；22 年统治覆灭 → 解放南京（1949.4.23）。选 <b>A</b>。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：三大战役决定性胜利「表明」了什么</h2>
+<p>答案：<strong>A（国民党主要军事力量基本上被摧毁）</strong>。</p>
+<h3>第 0 步：先立模型——「表明／标志着」类题的解法</h3>
+<p>「表明」类题的本质是<strong>意义归属</strong>：一个事件的意义半径有多大，它的「表明」就只能落在这个半径之内，不能把别的事件的意义记到它头上。所以第一步不是看选项，而是先把 1947—1949 年解放战争的时间轴立起来，让每个候选结论「各归各位」：</p>
+<table><thead><tr><th>时间</th><th>事件</th><th>它「表明」什么</th></tr></thead><tbody><tr><td>1947 年 6 月</td><td>刘邓大军千里跃进大别山</td><td>揭开战略进攻序幕，全国性反攻展开</td></tr><tr><td>1948.9—1949.1</td><td><strong>辽沈、淮海、平津三大战役</strong></td><td>共歼灭和改编国民党军队 154 万余人，<strong>国民党主要军事力量基本上被摧毁</strong></td></tr><tr><td>1949 年 3 月</td><td>七届二中全会</td><td>部署党的工作重心由乡村转向城市</td></tr><tr><td>1949 年 4 月 23 日</td><td>人民解放军占领南京</td><td>统治中国 22 年的国民党反动统治覆灭（1927—1949）</td></tr></tbody></table>
+<p>三大战役是什么性质的事件？<strong>战略决战</strong>——国共两军主力在东北、华东、华北三个战场正面碰撞，一锤定音。决战的直接后果只可能是<strong>军事力量对比</strong>的根本改变；至于政权覆灭、重心进城，都是决战<strong>之后</strong>另外的事件去完成的。这个「作用半径」想清楚，四个选项只剩一个落在半径内。</p>
+<h3>第 1 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因</th></tr></thead><tbody><tr><td>A 国民党主要军事力量基本上被摧毁</td><td>✅</td><td>歼灭改编 154 万余人，国民党赖以维持统治的主力在三大决战中基本丧失——正好落在「战略决战」的半径内</td></tr><tr><td>B 中国革命重心已经从农村转向城市</td><td>❌</td><td>时间错位：重心转移是 1949 年 3 月七届二中全会<strong>自觉部署</strong>的</td></tr><tr><td>C 延续 22 年之久的反动统治已经覆灭</td><td>❌</td><td>事件错位：以 1949 年 4 月 23 日<strong>解放南京</strong>为标志</td></tr><tr><td>D 人民解放军立刻转入全国性反攻的形势已经成熟</td><td>❌</td><td>时间错位＋顺序颠倒：全国性反攻 1947 年 6 月已开始，在三大战役<strong>之前</strong></td></tr></tbody></table>
+<h3>第 2 步：预判「为什么」——三个追问提前答掉</h3>
+<ul><li><strong>为什么「主力基本被摧毁」而不说「全部被消灭」？</strong> 决战打掉的是赖以维持统治的主要力量，长江以南尚有残部要靠渡江战役解决——所以教材措辞是「基本上被摧毁」，「基本」二字恰是标准表述的分寸。</li><li><strong>为什么军事胜利不直接等于政权覆灭？</strong> 政权覆灭以统治中枢所在地被攻克为标志——1949 年 4 月 23 日占领南京总统府才是那个标志；「军事主力被摧毁 → 政权覆灭」中间还隔着渡江战役。</li><li><strong>为什么 D 错得最隐蔽？</strong> 「反攻」「胜利」「成熟」字面最贴近军事话题，但因果顺序反了：先有大别山反攻（1947.6）拉开序幕，才有条件打三大战役——D 把「果」当成了三大战役「表明」的「果」，实际它是三大战役的「因」。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>选 C（「决定性胜利」与「覆灭」感觉相连）</strong>：情绪上顺势推进，把「打垮主力」直接跳到「政权倒台」——中间隔着渡江战役与占领南京。</li><li><strong>选 B（胜利后自然「进城」）</strong>：重心转移不是三大战役自动「表明」的结论，而是七届二中全会的一项自觉部署，时间也在其后的 1949 年 3 月。</li><li><strong>选 D（「反攻」字面贴近军事胜利）</strong>：反攻在三大战役之前就已展开——拿「因」当「果」。</li></ul>
+<blockquote>记忆锚点：三大战役（1948.9—1949.1）＝战略决战 → 主力<strong>基本</strong>被摧毁；挺进大别山（1947.6）＝反攻序幕；七届二中全会（1949.3）＝重心进城；解放南京（1949.4.23）＝ 22 年统治覆灭。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,111 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-08 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-08</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2018-08 两岸关系和平发展的政治基础 · 功能定位动画</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- 复制自政治站概念模板（无 KaTeX 版，纯文本推理链卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+function tl(rows){
+  return '<div>' + rows.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:110px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：「政治基础」= 前提性功能',
+    log: '基础=地基，不是目标/纽带/方法',
+    body: '<p>设问锁定「两岸关系和平发展的<b>政治基础</b>」。基础回答的是：<b>凭什么</b>能和平发展——要找<b>前提性、地基性</b>的东西；「发展成什么样（目标）」「靠什么增进感情（纽带）」「用什么方式谈（方法）」都不叫基础。先立这个功能定义，再给四个选项归位。</p>' },
+  { tag: '机制', cls: 'key', title: '先立机制：九二共识为什么配当基础',
+    log: '1992 年海协会与海基会达成口头表述共识，体现一个中国原则',
+    body: tl([
+      ['1992 年', '海峡两岸关系协会（海协会）与台湾海峡交流基金会（海基会）在事务性商谈中，达成各自以<b>口头方式</b>表述「海峡两岸均坚持一个中国原则」的共识——史称<b>「九二共识」</b>'],
+      ['要害', '体现<b>一个中国原则</b>：两岸同属一个中国，不是「两个国家」，也不是「一中一台」'],
+      ['为什么是前提', '一切交往都先要回答「跟谁谈、以什么身份谈」：承认一个中国=一家人内部商谈；否认它、搞「台独」=地基被抽掉'],
+      ['警示', '<b>基础不牢，地动山摇</b>——前提没了，和平发展无从谈起'],
+    ]) },
+  { tag: '机制', cls: 'step', title: '配套关系：基础为什么是「两件事」',
+    log: '坚持共识＋反对分裂，一枚硬币的两面',
+    body: '<p>完整的政治基础是两句：<b>坚持「九二共识」</b>（正面确认两岸同属一国）＋<b>反对「台独」</b>（划出底线，排除毁掉前提的分裂行径）。坚持共识与反对分裂互为表里——共识被架空，分裂就乘虚而入；只记一句都算不完整。</p>' },
+  { tag: '选项A', cls: 'bad', ribbon: { k: 1, ok: false }, title: 'A：目标/愿景——地基不是长出来的果实',
+    log: 'A 是目标层，排除',
+    body: '<p>A「深化两岸利益融合，共创两岸互利双赢，增进两岸同胞福祉」——是两岸关系和平发展的<b>目标与成果</b>，建立在基础<b>之上</b>，因果不能倒置。<b>排除</b>。</p>' },
+  { tag: '选项B', cls: 'bad', ribbon: { k: 2, ok: false }, title: 'B：方法/态度——通用逻辑不「特有」',
+    log: 'B 是方法层，排除',
+    body: '<p>B「相互尊重，求同存异」——放之四海而皆准的双边交往方法，恰恰说明它<b>未触及「一个中国」</b>这个两岸关系特有的政治前提。<b>排除</b>。</p>' },
+  { tag: '选项C', cls: 'bad', ribbon: { k: 3, ok: false }, title: 'C：纽带/民心工程——结果是果，前提是因',
+    log: 'C 是认同纽带，排除',
+    body: '<p>C「增强两岸同胞的民族认同、文化认同、国家认同」——是长期争取的<b>方向与结果</b>，不是当下交往的政治前提：没有前提，协商机制都不存在，认同建设无从展开。<b>排除</b>。</p>' },
+  { tag: '选项D', cls: 'good', ribbon: { k: 4, ok: true }, title: 'D：前提本身——当选',
+    log: 'D=九二共识＋反台独，基础就位',
+    body: '<p>D「坚持『九二共识』，反对『台独』」——<b>前提本身</b>：正面确认两岸同属一国，底线排除分裂行径。少了它一切免谈，<b>当选</b>。</p>' },
+  { tag: '追问', cls: 'key', title: '预判追问：为什么 C 最有迷惑性',
+    log: '认同是长期结果，共识是当下前提',
+    body: '<p>「认同」听起来比「共识」更根本——认同都建立了还愁不统一？方向恰好反了：<b>认同是长期争取的结果，九二共识是当下交往的前提</b>。通用判定法：凡问「基础」「前提」「根本保证」，先找「<b>少了它一切免谈</b>」的那一项，而不是「有了它更好」的那一项。</p>' },
+  { tag: '结论', cls: 'good', title: '结论：功能定位口诀带走',
+    log: '锁定 D：政治基础',
+    body: '<p>答案 <b>D</b>。功能定位口诀：目标（利益融合）→ 方法（求同存异）→ 纽带（三认同）→ <b>基础（九二共识＋反台独）</b>。四个选项都是正面表述，考的不是对错，是<b>功能归位</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: s.tag,
+    log: s.log,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2018·08】两岸关系和平发展的政治基础',
+  subtitle: '单选 1 分 · 考点：九二共识 · 一个中国原则 · 方法：按「功能定位」给选项归位，基础=少了它一切免谈',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 当选 / ✗ 干扰）',
+  intro: '点击「▶ 播放」逐步展开推理链：先立「基础=前提」的功能定义，再给四个选项归位。',
+  snaps: snaps,
+  result: {
+    big: '答案 D：坚持「九二共识」，反对「台独」',
+    html: '政治基础=<b>坚持「九二共识」、反对「台独」</b>——九二共识体现一个中国原则（两岸同属一国，不是「两个国家」也不是「一中一台」），坚持共识与反对分裂互为表里，<b>基础不牢，地动山摇</b>。功能定位口诀：目标（利益融合）、方法（求同存异）、纽带（三认同）、<b>基础（九二共识＋反台独）</b>；凡问「基础/前提」，找「少了它一切免谈」的那一项。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「政治基础」= 两岸关系凭什么能和平发展</h2>
+<p>答案：<strong>D（坚持「九二共识」，反对「台独」）</strong>。</p>
+<h3>第 0 步：先立机制——「基础」在题干里是什么功能</h3>
+<p>「政治基础」回答的是：两岸关系<strong>凭什么</strong>能和平发展——要找<strong>前提性、地基性</strong>的东西，而不是目标、方法或感情纽带。1992 年，海峡两岸关系协会与台湾海峡交流基金会在事务性商谈中，达成各自以口头方式表述「海峡两岸均坚持一个中国原则」的共识，史称<strong>「九二共识」</strong>。它的要害是体现<strong>一个中国原则</strong>：两岸同属一个中国，不是「两个国家」，也不是「一中一台」。</p>
+<p>为什么它配当「基础」？两岸之间的一切交往——经贸合作、人员往来、协商谈判——都要先回答「跟谁谈、以什么身份谈」这个前提：承认一个中国，两岸是一家人的内部商谈；否认它、搞「台独」分裂，商谈的地基就被抽掉，和平发展无从谈起。所以教材的警示是「<strong>基础不牢，地动山摇</strong>」。与九二共识配套的是<strong>反对「台独」</strong>——坚持共识与反对分裂是一枚硬币的两面，合起来才是完整的政治基础。</p>
+<h3>第 1 步：按「功能定位」给选项归位</h3>
+<p>四个选项都是两岸关系里的正面表述，做错的根源是没分清各自承担的功能：</p>
+<table><thead><tr><th>选项</th><th>功能定位</th><th>为什么不是「基础」</th></tr></thead><tbody><tr><td>A 深化利益融合、共创互利双赢、增进同胞福祉</td><td>目标/愿景</td><td>目标建立在基础<strong>之上</strong>，是和平发展推进后的果实</td></tr><tr><td>B 相互尊重，求同存异</td><td>方法/态度</td><td>任何双边关系都适用，未触及「一个中国」这个特有前提</td></tr><tr><td>C 增强民族认同、文化认同、国家认同</td><td>纽带/民心工程</td><td>长期争取的方向与结果，不是当下交往的政治前提</td></tr><tr><td>D 坚持「九二共识」，反对「台独」</td><td><strong>政治基础</strong></td><td><strong>前提本身：确认两岸同属一国；分裂必毁前提，当选</strong></td></tr></tbody></table>
+<h3>预判追问：为什么 C 最有迷惑性</h3>
+<p>「认同」听起来比「共识」更根本——认同都建立了，还愁不统一？方向恰好反了：<strong>认同是长期争取的结果，九二共识是当下交往的前提</strong>。没有政治前提，官方层面的协商机制都不存在，「增进认同」的各项工作根本无从展开。由此得出做这类题的通用判定：凡问「基础」「前提」「根本保证」，先找「<strong>少了它一切免谈</strong>」的那一项，而不是「有了它更好」的那一项。</p>
+<h3>易错点</h3>
+<ul><li><strong>把成果当地基选 A</strong>：互利双赢是和平发展<strong>推进之后</strong>的收获，因果倒置——地基不会是长出来的果实。</li><li><strong>用通用双边关系逻辑选 B</strong>：「相互尊重、求同存异」放之四海而皆准，恰说明它不「特有」——政治基础必须落到一个中国原则这个专属前提。</li><li><strong>混淆层次选 C</strong>：认同是「争取民心」的工作方向，与「政治前提」不同层——前提先立，认同才谈得上。</li></ul>
+<blockquote>记忆锚点：两岸关系和平发展的<strong>政治基础=坚持「九二共识」、反对「台独」</strong>；功能定位口诀——目标（利益融合）、方法（求同存异）、纽带（三认同）、基础（九二共识＋反台独）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

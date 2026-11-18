@@ -1,8 +1,89 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-24 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-24</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2017-24 环保督查：“以督政为主”改了什么</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：两个转变',
+    cls: 'key',
+    body: '<p>材料两个转变：<code>环保部门牵头 → 中央主导</code>、<code>以查企业为主 → 查督并举、以督政为主</code>。考点定位：<b>环境监管模式变革的功能</b>——"有利于"类题目，看机制改写谁的责任。</p>' },
+  { title: '先立机制：督政改写责任链条',
+    cls: 'key',
+    body: '<p>旧链条：企业排污→环保部门罚企业，政府当裁判。新链条：板子打在<b>地方党政领导</b>身上——<code>督政 → 问责领导 → 落实主体责任 → 纳入干部考核</code>。三个"有利于"都在这条链上。</p>' },
+  { title: 'A：有利于"处理好政府与市场的关系"？',
+    cls: 'bad',
+    body: '<p>对象错位。"政府与市场关系"是<b>经济体制改革的核心问题</b>，讲资源配置谁说了算；环保督查是政府监管问责体系的内部建设，不触碰政府与市场的分工。<b>A 错。</b></p>' },
+  { title: 'B：强化领导责任和监管责任',
+    cls: 'good',
+    body: '<p>"督政"的直接功能：地方党政领导被约谈、被问责——环境责任<b>由虚变实</b>。<b>B 对。</b></p>' },
+  { title: 'C：落实环境保护主体责任',
+    cls: 'good',
+    body: '<p>领导责任压实后，地方政府对辖区环境质量的<b>主体责任</b>才能层层落地。<b>C 对。</b></p>' },
+  { title: 'D：完善领导干部目标责任考核制度',
+    cls: 'good',
+    body: '<p>督查结果与"官帽子"挂钩：把生态环保纳入<b>领导干部目标责任考核</b>，督政才有抓手。<b>D 对。</b></p>' },
+  { title: '结论：BCD',
+    cls: 'good',
+    body: '<p>同一条链的三个环节：强化领导监管责任（B）→落实主体责任（C）→纳入干部考核（D）；A 是经济体制改革的核心问题，对象错位。答案选 <b>BCD</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var optK = { 2: 1, 3: 2, 4: 3, 5: 4 }[i];
+  var optLetter = optK ? 'ABCD'[optK - 1] : '';
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: i === 0 ? '审题' : (i === 1 ? '机制' : (i === STEPS.length - 1 ? '结论' : '选项 ' + optLetter)),
+    log: s.title,
+    count: optK || 0,
+    ribbon: optK ? { k: optK, ok: s.cls !== 'bad' } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2017·24】环保督查：从"查企业"到"督政为主"',
+  subtitle: '考点：生态文明制度体系 · 环境监管模式变革 · 多选题',
+  counterLabel: '已核选项',
+  ribbonTitle: '选项判定（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先看督查机制改写谁的责任，再逐项判定 A/B/C/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '记忆锚点：督政=问责政府——<b>强化领导监管责任（B）→落实主体责任（C）→纳入领导干部目标考核（D）</b>；政府与市场关系（A）是经济体制改革核心问题，对象错位。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：从"查企业"到"督政为主"——督查机制改的是什么</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——"以督政为主"四个字改写了责任链条</h3>
+<p>把材料的关键变化拎出来：督查主体从<strong>环保部门</strong>升格为<strong>中央</strong>，对象从<strong>以查企业为主</strong>变为"查督并举、<strong>以督政为主</strong>"。以前的监管逻辑是"企业排污→环保部门处罚企业"，政府当裁判；现在把政府本身拉进被问责的位置——环保不力的板子直接打在<strong>地方党委政府的领导责任</strong>上。这一改动解释了机制的全部功能：只有"督政"，才能把环境责任一级压一级地落实下去。</p>
+<p>顺着这条责任链条读四个选项：督政直接指向<strong>强化领导责任和监管责任</strong>（B）；地方政府负责人被问责后，必须把<strong>环境保护主体责任</strong>层层落实到位（C）；要让责任落实可量化、可追责，就要把它纳入<strong>领导干部目标责任考核制度</strong>（D）。三条选项是"督政→问责→考核"的同一条链上的三个环节。</p>
+<h3>第 1 步：四个选项对号入座</h3>
+<ul><li><strong>A 处理好政府与市场的关系</strong> ❌：对象错位。"政府与市场关系"是<strong>经济体制改革的核心问题</strong>，处理的是资源配置中谁说了算；环保督查是政府监管与问责体系内部的建设，不涉及政府与市场在资源配置中的分工。</li><li><strong>B 强化领导责任和监管责任</strong> ✅："督政"的直接功能——地方党政领导被点名、被约谈、被问责，责任由虚变实。</li><li><strong>C 落实环境保护主体责任</strong> ✅：领导责任压实后，环保主体责任（地方政府对辖区环境质量负责）才能落地。</li><li><strong>D 完善领导干部目标责任考核制度</strong> ✅："以督政为主"倒逼考核体系把生态环保纳入领导干部目标责任考核——督查结果与官帽子挂钩。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：最像"正确废话"的干扰项。识别法：看机制作用对象——督查问责的对象是<strong>政府和干部</strong>，不是市场主体的激励结构；凡机制不直接触碰的关系，不是它的"有利于"。</li><li><strong>漏选 D</strong>："查督并举"中的"督"容易只理解为督促企业；其实督政的核心抓手正是<strong>考核制度</strong>——把环保表现写进干部的成绩单。</li><li><strong>漏选 B、C</strong>：把"环保督查"窄化为"抓排污企业"，没抓住材料明示的"从查企业为主转变为以督政为主"这一题眼，责任链条自然接不上。</li></ul>
+<blockquote>记忆锚点：督政=问责政府而非企业：<strong>强化领导监管责任（B）→落实主体责任（C）→纳入领导干部目标考核（D）</strong>；政府与市场关系（A）是经济体制改革核心，与督查机制无关。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

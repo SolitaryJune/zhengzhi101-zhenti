@@ -1,8 +1,88 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-33 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-33</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2024-33 · 沙伊北京对话：三层意义与一个陷阱</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：先立机制——斡旋凭什么办成，意义就落在哪几层',
+    cls: 'key',
+    body: '<p>事实链：2023 年 3 月 6–10 日，在中方支持下，沙特与伊朗在北京对话；3 月 10 日中沙伊三方发表联合声明，宣布沙伊<b>同意恢复外交关系</b>——二十大后中国外交“大手笔”。办成的底气在斡旋的<b>性质</b>：促进对话协商、推动政治解决，不谋求阵营对抗、不经营势力范围——不拉偏架、不夹带私货，两边都听得进。意义由近及远推三层：<b>范式层（新路）→ 地区层（缓和）→ 世界层（示范）</b>；再预装一张校验卡：见“最终、彻底、根本”等<b>绝对化词眼</b>先打问号。</p>' },
+  { title: '选项 A：创造调解冲突的新范式，提供新思路',
+    cls: 'good', k: 1, pick: true,
+    body: '<p><b>范式层</b>：对话协商、政治解决的标志性成功案例——区别于拉偏架、阵营对抗、外部强加方案的旧路。<b>成立 → 入选</b>。</p>' },
+  { title: '选项 B：使沙伊矛盾得以最终解决',
+    cls: 'bad', k: 2, pick: false,
+    body: '<p><b>“最终解决”绝对化</b>：复交只是和解<b>迈出的重要一步</b>，教派纷争、地缘竞争等深层分歧仍在。第三方能促成的是复交与打开进程，矛盾的最终化解只能取决于当事国自身。<b>程度失真 → 排除</b>。</p>' },
+  { title: '选项 C：助力中东地区实现和平、稳定与安全',
+    cls: 'good', k: 3, pick: true,
+    body: '<p><b>地区层</b>：两个地区大国握手言和，引领中东“和解潮”，落在地区和平、稳定与安全上。<b>成立 → 入选</b>。</p>' },
+  { title: '选项 D：为国际社会注入和平合作的正能量',
+    cls: 'good', k: 4, pick: true,
+    body: '<p><b>世界层</b>：不结盟、不对抗的中国方案给动荡世界做了示范——“助力”“注入”描述外溢影响，做到即成立。<b>成立 → 入选</b>。</p>' },
+  { title: '易错点：为什么 C、D 能选而 B 不能',
+    cls: 'bad',
+    body: '<p>区别在<b>承诺的边界</b>：C“助力”、D“注入”说的是斡旋事件的<b>外溢影响</b>，做到即成立；B“使……得以最终解决”把一个<b>尚未完成、也无法由第三方包办</b>的结果说成了已完成——不是“说得小了”，是“说得满了”。另两种误判：<b>漏 A</b>——觉得“新范式”是空话，其实“对话协商化解分歧的新路”恰是本题最核心的意义；<b>惯性全选</b>——多选不等于全选，干扰项套路分两种：换词与绝对化（本题 B）。</p>' },
+  { title: '结论：ACD——“最终解决”见绝对就存疑',
+    cls: 'good',
+    body: '<p>三层意义对号：<b>A 范式层 · C 地区层 · D 世界层</b>；B 落在校验卡上。</p><p><b>答案 ACD。</b></p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: s.cls === 'bad' ? 'miss' : (last ? 'done' : 'step'),
+    tag: last ? '结论' : (s.cls === 'bad' ? (s.pick === false ? '✗ 排除' : '易错') : (s.cls === 'key' ? '审题' : (s.pick ? '✓ 入选' : '辨析'))),
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2024-33 · 沙伊北京对话：三层意义与一个陷阱',
+  subtitle: '2024 年第 33 题（多选）· 考点：中国斡旋沙伊和解与大国外交 · 意义从斡旋的性质里推出来',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立斡旋的性质，再推三层意义，最后排查绝对化陷阱。',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '记忆锚点：斡旋性质＝<b>对话协商、政治解决、不谋阵营对抗与势力范围</b>；三层意义＝<b>新范式（当事国）、和平稳定（地区）、正能量（世界）</b>；“最终解决”见绝对化词眼必排。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：沙伊北京对话——意义从"斡旋的性质"里推出来</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——中国式斡旋凭什么办成，意义就落在哪几层</h3>
+<p>先把题干的事实链立起来：2023 年 3 月 6 日至 10 日，在中方支持下，沙特与伊朗在北京举行对话；3 月 10 日，中沙伊三方签署并发表联合声明，宣布沙伊双方<strong>同意恢复外交关系</strong>——党的二十大后中国外交的"大手笔"。沙特与伊朗长期对立、分属地区两大阵营，这对"老冤家"能坐到同一张桌子前，靠的不是谁口才好，而是中方斡旋的<strong>性质</strong>：促进对话协商、推动政治解决，不谋求阵营对抗、不经营势力范围——不拉偏架、不夹带私货，中方的斡旋才被两边都接受。</p>
+<p>意义不是背出来的，是从这个性质<strong>推</strong>出来的，由近及远落在三层：对当事国、走出什么<strong>新路</strong>（范式层）；对地区、带来什么<strong>缓和</strong>（地区层）；对世界、提供什么<strong>示范</strong>（世界层）。同时预装一张"校验卡"：意义类选项里出现<strong>绝对化词眼</strong>——"最终""彻底""根本消除"——一律先打问号。外交斡旋能促成的是复交、缓和、打开进程；矛盾的<strong>最终</strong>化解只能取决于当事国自身，第三方担保不了。</p>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对号依据</th></tr></thead><tbody><tr><td>A 创造了调解冲突的新范式，为其他热点问题解决提供新思路</td><td>✅</td><td>范式层：对话协商、政治解决的标志性成功案例——区别于拉偏架、阵营对抗、外部强加方案的旧路</td></tr><tr><td>B 使沙伊矛盾得以最终解决</td><td>❌</td><td>"最终解决"绝对化：复交是和解<strong>迈出的重要一步</strong>，教派纷争、地缘竞争等深层分歧仍在，进程才刚开始</td></tr><tr><td>C 助力中东地区实现和平、稳定与安全</td><td>✅</td><td>地区层：两个地区大国握手言和，带动中东"和解潮"</td></tr><tr><td>D 为国际社会注入和平合作的正能量</td><td>✅</td><td>世界层：不结盟不对抗的中国方案给动荡世界做了示范</td></tr></tbody></table>
+<p>→ 选 <strong>ACD</strong>。</p>
+<h3>为什么 C、D 能选而 B 不能选（预判追问）</h3>
+<p>追问一层：为什么同为"和平"字眼，C、D 成立、B 不成立？区别在<strong>承诺的边界</strong>。C 说"助力"、D 说"注入"——描述的是斡旋事件的<strong>外溢影响</strong>，做到即可成立；B 说"使……得以最终解决"——把一个尚未完成、也无法由第三方包办的结果说成了<strong>已完成</strong>。沙伊几十年的积怨，复交只是把对抗的门关上、把对话的门打开，关系后续如何走，钥匙握在当事国手里。所以 B 不是"说得小了"，而是"说得满了"——程度失真，必排。</p>
+<h3>易错点：每种误判对应哪种误解</h3>
+<ul><li><strong>误选 B</strong>：看到"恢复外交关系"就以为尘埃落定。本题设误套路不是换词，而是<strong>绝对化</strong>——凡"最终、彻底、根本"修饰矛盾或问题的解决，先打问号再判断。</li><li><strong>漏选 A（觉得"新范式"是空话）</strong>：意义题不看"够不够具体"，看是否落在"性质推出的落位表"里——"对话协商化解分歧的新路"恰是本题最核心的意义。</li><li><strong>惯性全选</strong>：多选不等于全选。时政多选的干扰项有两种典型套路——<strong>换词</strong>（成套表述里偷换词）与<strong>绝对化</strong>（本题 B）。先识别套路，排除才有依据。</li></ul>
+<blockquote>记忆锚点：斡旋性质 = <strong>对话协商、政治解决、不谋阵营对抗与势力范围</strong>；三层意义 = 新范式（当事国）、和平稳定（地区）、正能量（世界）；"最终解决"见绝对化词眼必排。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

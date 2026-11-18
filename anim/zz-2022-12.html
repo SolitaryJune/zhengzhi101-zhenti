@@ -1,8 +1,120 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-12 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-12</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2022 · 「第二次结合」——从革命道路到建设道路</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链版（政治站无 KaTeX）：引用 ../assets/anim-engine.js + ../assets/anim.css，只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每步完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：1956.4 + 设问「目的是」",
+    "cls": "key",
+    "body": "<p>时间锚：<b>1956 年 4 月</b>，毛泽东提出把马列主义基本原理同中国具体实际进行「第二次结合」。设问问「目的是」——结合的目的由<b>当时的主要课题</b>决定，先看 1956 年春中国站在哪。</p>",
+    "log": "先找 1956 年的主要课题"
+  },
+  {
+    "title": "立模型：两次结合的分工",
+    "cls": "key",
+    "body": "<p>第一次结合（民主革命时期）：照搬俄式城市暴动屡屡失败 → 找到<b>革命道路</b>（农村包围城市）。第二次结合（1956）：苏共二十大暴露苏联模式弊端，<b>「以苏为鉴」</b>；国内改造即将收官——要找的是<b>建设道路</b>。两次同构：照搬不行 → 结合实际 → 找自己的路。</p>",
+    "log": "课题决定目的"
+  },
+  {
+    "title": "选项 C：找出在中国怎样建设社会主义的道路",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p>革命课题已结账，「怎样建设社会主义」摆上桌面；国际上苏联模式又暴露弊端——第二次结合的目标就是<b>找出适合中国国情的建设道路</b>，《论十大关系》是开篇之作。<b>C 正确</b>。</p>",
+    "log": "C = 建设道路，入选"
+  },
+  {
+    "title": "选项 A：加强党的自身建设",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>党建（延安整风、「两个务必」等）解决的是<b>组织</b>问题；「结合」解决的是<b>道路</b>问题——议题错位。<b>A 错误</b>。</p>",
+    "log": "A 是党建议题，排除"
+  },
+  {
+    "title": "选项 B：为社会主义改造创造条件",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>1956 年是改造<b>收官年</b>（即将基本完成）——为改造「创造条件」至少要早两三年，时间倒挂；且改造属「变革」课题，不是「建设」课题。<b>B 错误</b>。</p>",
+    "log": "B 时间倒挂，排除"
+  },
+  {
+    "title": "选项 D：全面建设社会主义现代化强国",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>「全面建强」是后来的奋斗表述——1956 年还在<b>探索道路的起点</b>，程度远超当时阶段目标。历史设问要贴合当时语境。<b>D 错误</b>。</p>",
+    "log": "D 程度超前，排除"
+  },
+  {
+    "title": "结论：答案 C",
+    "cls": "good",
+    "body": "<p>一次结合 = 革命道路（农村包围城市）；二次结合 = 建设道路（以苏为鉴、《论十大关系》）。题眼就在「<b>建设</b>」二字：1956 年的主要课题已经从革命换成了建设。</p>",
+    "log": "锁定 C：找建设道路"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  "title": "「第二次结合」的目的是什么",
+  "subtitle": "2022 年第 12 题（单选）· 考点：马克思主义中国化第二次结合 · 方法：课题决定目的",
+  "counterLabel": "推理步",
+  "ribbonTitle": "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  "intro": "点击「▶ 播放」：对照两次结合的分工，看 1956 年的主要课题是什么。",
+  "result": {
+    "big": "答案 C",
+    "html": "记忆锚点：一次结合 = <b>革命道路</b>（农村包围城市）；二次结合 = <b>建设道路</b>（以苏为鉴、《论十大关系》）——目的就是「找出在中国怎样建设社会主义的道路」。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「第二次结合」的目的——从革命道路转向建设道路</h2>
+<p>答案：<strong>C（找出在中国怎样建设社会主义的道路）</strong>。</p>
+<h3>第 0 步：先立模型——两次「结合」的分工</h3>
+<p>「马克思主义基本原理同中国具体实际相结合」考过两次结合，框架是<strong>对照</strong>：每次结合各解决一个时代的课题，目的由当时的<strong>主要课题</strong>决定。</p>
+<table><thead><tr><th></th><th>第一次结合</th><th>第二次结合</th></tr></thead><tbody><tr><td>提出时期</td><td>民主革命时期</td><td><strong>1956 年 4 月</strong>（毛泽东《论十大关系》前后）</td></tr><tr><td>时代课题</td><td>中国<strong>革命</strong>走什么路</td><td>中国<strong>建设</strong>社会主义走什么路</td></tr><tr><td>背景痛点</td><td>照搬俄式城市暴动屡屡失败</td><td>苏共二十大暴露苏联模式弊端，「以苏为鉴」</td></tr><tr><td>结晶</td><td>农村包围城市、武装夺取政权</td><td>调动一切积极因素，探索适合中国的建设道路</td></tr></tbody></table>
+<h3>第 1 步：1956 年的时间锚里藏着答案</h3>
+<p>设问问「目的是」，先看 1956 年春中国站在哪里，两个条件同时到位：其一，社会主义改造<strong>即将基本完成</strong>——革命与变革的课题收尾，「怎样建设社会主义」这个全新课题摆上桌面；其二，苏共二十大批判斯大林，苏联模式的弊端公开化——<strong>照抄苏联不行了</strong>。两个条件叠加，毛泽东提出把马列基本原理同中国具体实际进行「第二次结合」，目标是<strong>找出适合中国国情的建设社会主义的道路</strong>，《论十大关系》就是这次结合的开篇之作。</p>
+<h3>第 2 步：四个选项对号入座</h3>
+<table><thead><tr><th>选项</th><th>对错</th><th>病灶</th></tr></thead><tbody><tr><td>A 加强中国共产党的自身建设</td><td>❌</td><td>党建（整风、党的建设项目）解决「组织」问题；结合解决的是「道路」问题</td></tr><tr><td>B 为社会主义改造创造条件</td><td>❌</td><td>1956 年改造<strong>已基本完成</strong>——时间倒挂；且改造属「变革」课题，非「建设」课题</td></tr><tr><td>C 找出在中国怎样建设社会主义的道路</td><td>✅</td><td>与时代课题（建设）+ 国际背景（以苏为鉴）严丝合缝</td></tr><tr><td>D 全面建设社会主义现代化强国</td><td>❌</td><td>「全面建强」是后来的奋斗表述；1956 还在探索道路的起点，程度超前</td></tr></tbody></table>
+<h3>为什么「建设」二字是判定词眼（多说一句）</h3>
+<p>两次结合的<strong>结构完全同构</strong>：都是「照搬不行 → 结合实际 → 找自己的路」——第一次照搬的是俄式城市暴动，找到的是革命道路；第二次照搬的是苏联模式，要找的是建设道路。结合的目的永远由当时的主要矛盾决定：1956 年革命课题已结账，主要课题换成「建设怎么搞」。抓住「课题决定目的」，A（党建）、B（改造条件）、D（建成强国）都不在 1956 年的课题清单上。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：见「毛泽东 1956」就联想党建话题——混淆了<strong>党的建设项目</strong>与<strong>道路探索项目</strong>两个议题。</li><li><strong>误选 B</strong>：对改造完成时点不敏感——1956 年是改造收官年，为改造「创造条件」至少要早两三年，方向反了。</li><li><strong>误选 D</strong>：把「目的」理解得越宏大越好——历史设问要贴合当时语境，「全面建设现代化强国」远超 1956 年的阶段目标。</li></ul>
+<blockquote>记忆锚点：一次结合 = <strong>革命道路</strong>（农村包围城市）；二次结合 = <strong>建设道路</strong>（以苏为鉴、《论十大关系》）——目的就是「找出在中国怎样建设社会主义的道路」，题眼是「<strong>建设</strong>」。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

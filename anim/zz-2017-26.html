@@ -1,8 +1,118 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-26 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-26</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2017-26 四个“着力”：熔炉定律与四个层面</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261117a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261117a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+function layerGrid(items){
+  return '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:6px 0">' + items.map(function(it){
+    return '<div style="border:2px solid ' + it[2] + ';border-radius:10px;padding:6px 8px;font-size:12.5px;background:' + it[3] + '">' +
+           '<div style="font-weight:700;color:' + it[2] + '">' + it[0] + '</div><div>' + it[1] + '</div></div>';
+  }).join('') + '</div>';
+}
+
+function checkRow(rows){
+  return '<table style="width:100%;border-collapse:collapse;font-size:13px;margin:6px 0">' +
+    rows.map(function(r){
+      return '<tr><td style="border:1px solid #cbd5e1;padding:4px 8px;font-weight:700;width:22%">' + r[0] +
+             '</td><td style="border:1px solid #cbd5e1;padding:4px 8px">' + r[1] + '</td>' +
+             '<td style="border:1px solid #cbd5e1;padding:4px 8px;text-align:center;color:#16a34a;font-weight:700;width:14%">' + r[2] + '</td></tr>';
+    }).join('') + '</table>';
+}
+
+var STEPS = [
+  { title: '审题眼：两份文件 + “主要内容”',
+    cls: 'key',
+    body: '<p>题眼：<code>十八届六中全会通过《关于新形势下党内政治生活的若干准则》《中国共产党党内监督条例》</code>，问加强和规范党内政治生活的<b>主要内容</b>——即四个“着力”。</p>' },
+  { title: '先立机制：熔炉不旺，生态就坏',
+    cls: 'key',
+    body: '<p>从严治党的武器（批评与自我批评、民主集中制、铁的纪律）都在<b>党内政治生活</b>这个熔炉里淬炼使用——所以“严肃党内政治生活是<b>全面从严治党的基础</b>”。四个“着力”各占一个层面：</p>' +
+          layerGrid([
+            ['核心（A）', '护核心、保统一', '#2563eb', '#eff6ff'],
+            ['自身（B）', '“四自”能力', '#2563eb', '#eff6ff'],
+            ['执政（C）', '执政水平·拒腐防变', '#2563eb', '#eff6ff'],
+            ['生活（D）', '“四性”', '#2563eb', '#eff6ff'],
+          ]) },
+  { title: 'A：核心层面——维护党中央权威',
+    cls: 'good',
+    body: '<p>讲政治的首位要求：<b>维护党中央权威、保证党的团结统一、保持先进性和纯洁性</b>——回答“向谁看齐”。<b>A 对。</b></p>' },
+  { title: 'B：自身层面——“四自”能力',
+    cls: 'good',
+    body: '<p><b>自我净化、自我完善、自我革新、自我提高</b>——党不靠外部力量解决自身问题的机制，自我革命的制度化表达，回答“靠什么修”。<b>B 对。</b></p>' },
+  { title: 'C：执政层面——两大课题的完整并列',
+    cls: 'good',
+    body: '<p><b>提高领导水平和执政水平 + 增强拒腐防变、抵御风险能力</b>——执政能力建设与反腐避险并举，勿误认旧提法，回答“执政要过什么关”。<b>C 对。</b></p>' },
+  { title: 'D：生活层面——“四性”',
+    cls: 'good',
+    body: '<p><b>政治性、时代性、原则性、战斗性</b>——对熔炉本身的要求：政治生活立起来，前三条才有着落，回答“火从哪来”。<b>D 对。</b></p>' },
+  { title: '结论：ABCD——三道检查全过',
+    cls: 'good',
+    body: '<p>全选不靠胆子大，靠检验：</p>' +
+          checkRow([
+            ['同源', '四条都出自六中全会《准则》同一口径', '过'],
+            ['同向', '同指一个目标：把政治生活熔炉烧旺', '过'],
+            ['不重不斥', '核心/自身/执政/生活各管一段', '过'],
+          ]) + '<p>三道检查全过，全收。答案选 <b>ABCD</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var ribbonMap = { 2: 1, 3: 2, 4: 3, 5: 4 }; // 步序→选项序：A→1、B→2、C→3、D→4
+  var optLetter = ribbonMap[i] ? 'ABCD'[ribbonMap[i] - 1] : '';
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: i === 0 ? '审题' : (i === 1 ? '机制' : (i === STEPS.length - 1 ? '结论' : '选项 ' + optLetter)),
+    log: s.title,
+    count: i,
+    ribbon: ribbonMap[i] ? { k: ribbonMap[i], ok: true } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2017·26】四个“着力”：新形势下党内政治生活的新要求',
+  subtitle: '考点：十八届六中全会 · 全面从严治党 · 多选题（全选）',
+  counterLabel: '进度',
+  ribbonTitle: '选项判定（✓ 对）',
+  intro: '点击「▶ 播放」：先立“熔炉”机制与四层面结构，再逐条核对四个“着力”，最后用三道检查收全选。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '记忆锚点：四个“着力” = <b>护核心（A）+ “四自”能力（B）+ 执政水平/拒腐防变（C）+ “四性”生活（D）</b>——核心、自身、执政、生活四层面各管一段；全选靠<b>同源 + 同向 + 不重不斥</b>三道检查，不靠胆子大。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：四个“着力”——一条熔炉定律，四个层面各管一段</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——从严治党为什么从“政治生活”抓起</h3>
+<p>先把底座立起来。题干给了一句定纲的话：严肃党内政治生活是党的优良传统和政治优势，也是<strong>全面从严治党的基础</strong>。为什么“基础”是它？因为党要管党、从严治党，最终要靠一个能<strong>运转起来的机制</strong>：批评与自我批评、民主集中制、铁的纪律，这些管党治党的武器都在党内政治生活这个“<strong>熔炉</strong>”里淬炼和使用。熔炉不旺，生态就坏——纪律松弛、个人主义、腐化滋生的口子都从这里打开。所以党的十八届六中全会审议通过《关于新形势下党内政治生活的若干准则》和《中国共产党党内监督条例》，把加强和规范党内政治生活立为新形势下管党治党的头号抓手。</p>
+<p>《准则》提出的新要求，集中体现为四个“<strong>着力</strong>”。抓结构，不是背清单：四条各占一个层面——<strong>核心（A）— 自身机制（B）— 执政课题（C）— 生活属性（D）</strong>，从“保谁”到“靠谁”再到“管什么”，层层展开、互为支撑。</p>
+<h3>第 1 步：四个选项对号入座</h3>
+<ul><li><strong>A 着力维护党中央权威，保证党的团结统一、保持党的先进性和纯洁性</strong> ✅：<strong>核心层面</strong>——讲政治的首位要求：护核心、保统一、守先进纯洁，回答“向谁看齐”。</li><li><strong>B 着力增强党自我净化、自我完善、自我革新、自我提高能力</strong> ✅：<strong>自身机制层面</strong>——“四自”能力是党不靠外部力量解决自身问题的机制，即自我革命的制度化表达，回答“靠什么修”。</li><li><strong>C 着力提高党的领导水平和执政水平，增强拒腐防变和抵御风险能力</strong> ✅：<strong>执政课题层面</strong>——“两大课题”的完整并列：执政能力建设 + 拒腐防变、抵御风险，回答“执政要过什么关”。</li><li><strong>D 着力增强党内政治生活的政治性、时代性、原则性和战斗性</strong> ✅：<strong>生活属性层面</strong>——“四性”是对熔炉本身的要求：政治生活立起来，前三条才有着落，回答“火从哪来”。</li></ul>
+<h3>第 2 步：预判“为什么”——全选题靠检验法，不靠胆子大</h3>
+<p>全选题最怕“总觉得有凑数项”，判别靠三道检查：<strong>同源</strong>——四条是否出自同一口径（都是六中全会《准则》对加强和规范党内政治生活的要求，无一条来自别的文件）；<strong>同向</strong>——是否指向同一目标（都是把党内政治生活这个熔炉重新烧旺）；<strong>不重不斥</strong>——四个层面各管一段（核心、自身、执政、生活），无重复、无对立。三道检查全过，全收。反过来，真被剔出去的选项必然“越界”——跳到外交、经济等别的领域，或把“约束要求”偷换成“奋斗目标”。本题四条都在“党内政治生活”这一个场域内，没有越界项。</p>
+<h3>易错点：每个犹豫点对应哪种误解</h3>
+<ul><li><strong>漏选 D</strong>：只盯“党要变成什么样”，漏掉对“生活本身”的要求。“政治性、时代性、原则性、战斗性”恰是《准则》最直接的关键词，对准原文即可确认。</li><li><strong>犹豫 C</strong>：把“提高领导水平和执政水平”误当旧提法不敢收。注意 C 是“执政水平 + 拒腐防变 + 抵御风险”的<strong>完整并列</strong>——两大课题一并出现，正是新要求的组成部分。</li><li><strong>漏选 B</strong>：把“四自”能力记成学习感悟类表述而漏收。它是自我革命的机制语言，属于规范党内政治生活的目标层面。</li><li><strong>不敢全选</strong>：全选靠“同源 + 同向 + 不重不斥”三道检查替代感觉——检查通过就全收。</li></ul>
+<blockquote>记忆锚点：四个“着力” = <strong>护核心（A）+ “四自”能力（B）+ 执政水平/拒腐防变（C）+ “四性”生活（D）</strong>——核心、自身、执政、生活四层面各管一段；底座是熔炉理论：严肃党内政治生活 = 全面从严治党的基础。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

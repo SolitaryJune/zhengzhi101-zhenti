@@ -1,8 +1,140 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-31 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-31</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2014-31 四句诗一个魂：爱国主义优良传统（全选 ABCD）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- ============================================================
+     模板：概念/记忆/推理链类（anim_math_concept 同款结构，政治站无 KaTeX 版）
+     形态：逐步揭示推理链卡片；第 3 步内嵌"诗人—情感指向"对号小表；
+     序号带逐个点亮 A–D（本题四项全对，带全绿）。
+     路径：本页位于 anim/{id}.html，../assets/ 指向站点根 assets/。
+============================================================= -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 诗人—情感指向对号小表
+function verseTable(){
+  var rows = [
+    ['A', '谭嗣同 · 甲午战后', '四万万人齐下泪，天涯何处是神州', '悲山河破碎 → 忧国忧民'],
+    ['B', '鲁迅 · 青年立志', '寄意寒星荃不察，我以我血荐轩辕', '荐热血于民族 → 捍卫尊严'],
+    ['C', '陆游 · 罢官闲居', '位卑未敢忘忧国，事定犹须待阖棺', '位卑仍忧国 → 家国担当'],
+    ['D', '林则徐 · 遭贬赴戍', '苟利国家生死以，岂因祸福避趋之', '国事高于祸福 → 生死以之']
+  ];
+  var h = '<div style="margin:6px 0 2px">';
+  for(var i = 0; i < rows.length; i++){
+    var r = rows[i];
+    h += '<div style="display:flex;align-items:center;gap:8px;margin:4px 0">' +
+         '<span style="flex:none;width:22px;height:22px;border-radius:50%;text-align:center;line-height:22px;' +
+         'font-size:12.5px;font-weight:700;color:#fff;background:#0e9488">' + r[0] + '</span>' +
+         '<span style="flex:none;min-width:118px;font-size:12.5px;font-weight:700;color:#334155;' +
+         'background:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;padding:2px 6px">' + r[1] + '</span>' +
+         '<span style="flex:1;font-size:13px;color:#475569;line-height:1.5">' + r[2] +
+         '<span style="color:#0e9488;font-weight:700"> ─ ' + r[3] + '</span></span></div>';
+  }
+  return h + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：考点是"归类"，不是背名句',
+    cls: 'key', tag: '审题',
+    log: '四句诗四个朝代，考的是把诗句归进爱国主义优良传统的内涵清单——多选题，逐句对号。',
+    body: '<p>题干只给一句话：爱国主义优良传统"源远流长、内涵极为丰富"，下列诗句<b>反映</b>这一传统的有。注意动词是"反映"——考的是把具体诗句<b>归类</b>到传统的内涵清单里，不是考文学常识；谁写的、什么时候写的都只是辅助线索。</p>' },
+  { title: '先立机制：一杆判诗标尺',
+    cls: 'key', tag: '标尺',
+    log: '标尺只有一条：情感是否指向国家民族的命运——不看悲喜、不看地位、不看朝代。',
+    body: '<p>教材归纳爱国主义优良传统的内涵：维护民族团结与祖国统一、抵御外侮<b>捍卫民族尊严</b>、<b>忧国忧民</b>以天下为己任、开发建设祖国等。判诗的标尺由此而来：<b>诗中的情感是否指向国家民族的命运</b>。四句诗作者、朝代、境遇各异，恰好各覆盖一个侧面——这正是命题人选句的用意。</p>' },
+  { title: '四句对号小表：作者—情感—侧面',
+    cls: 'key', tag: '对号',
+    log: '表格对号：每句的情感都指向国家民族命运，先全局看一遍。',
+    body: verseTable() + '<p style="margin-top:6px">一眼可见：没有一句的情感落在个人小得失上——全选的轮廓已经出现，下面逐句确证。</p>' },
+  { title: 'A：忧国之泪（谭嗣同）',
+    cls: 'good', tag: 'A ✓',
+    ribbon: { k: 1, ok: true },
+    log: '泪因"神州"而落：山河破碎之痛 → 忧国忧民、以天下为己任 → A 选。',
+    body: '<p>"四万万人齐下泪，天涯何处是神州"写于甲午战败、列强瓜分之际。表面是泪与绝望，但泪因"神州"而落——悲恸的对象是<b>国家命运</b>，不是个人得失。亡国之痛恰是<b>忧国忧民</b>的极端形态。<b>A 正确</b>。</p>' },
+  { title: 'B：荐血之誓（鲁迅）',
+    cls: 'good', tag: 'B ✓',
+    ribbon: { k: 2, ok: true },
+    log: '"轩辕"即中华民族，誓以热血相荐 → 献身民族、捍卫尊严 → B 选。',
+    body: '<p>"寄意寒星荃不察，我以我血荐轩辕"出自《自题小像》。关键在读懂"荐"：把热血<b>献给</b>"轩辕"——即中华民族。这是青年鲁迅的救国誓言，对应传统中的<b>献身民族、捍卫民族尊严</b>。<b>B 正确</b>。</p>' },
+  { title: 'C：位卑之忧（陆游）',
+    cls: 'good', tag: 'C ✓',
+    ribbon: { k: 3, ok: true },
+    log: '罢官闲居仍"不敢忘忧国"：爱国传统的群众性 → C 选。',
+    body: '<p>"位卑未敢忘忧国，事定犹须待阖棺"出自《病起书怀》。陆游此时罢官闲居、地位卑微，仍心系国事——爱国主义从来不是"肉食者谋之"的专属品，普通人"位卑"的家国担当正是传统<b>群众性</b>的注脚。<b>C 正确</b>。</p>' },
+  { title: 'D：生死之诺（林则徐）',
+    cls: 'good', tag: 'D ✓',
+    ribbon: { k: 4, ok: true },
+    log: '"岂因祸福避趋之"＝不因个人祸福趋利避害：国家利益至上 → D 选。',
+    body: '<p>"苟利国家生死以，岂因祸福避趋之"是林则徐虎门销烟后遭贬、赴戍途中口占。句意是：只要有利于国家，生死尚且置之度外，<b>更不会因个人祸福而趋避</b>——把国家利益置于个人祸福之上。<b>D 正确</b>。</p>' },
+  { title: '排雷：两个最容易漏的点',
+    cls: 'key', tag: '排雷',
+    log: '为什么"悲歌"也算爱国？为什么"位卑"也算主体？——都过得了标尺。',
+    body: '<p><b>怕漏 A</b>：把"悲"当成与爱国对立的情绪——错了，A 的悲对象是山河破碎，<b>痛感来自爱国</b>。<b>怕漏 C</b>：以为爱国大义须由显赫人物承担——错了，C 恰说明传统<b>人人可为</b>。两个疑点都用同一杆标尺量过：情感指向国家民族者，皆为爱国。</p>' },
+  { title: '结论',
+    cls: 'good', tag: '答案',
+    log: '四句四个侧面，全过标尺 → 锁定 ABCD（全选）。',
+    body: '<p>答案 <b>ABCD</b>（全选）：忧国之泪（A）、荐血之誓（B）、位卑之忧（C）、生死之诺（D）——四句正好覆盖爱国主义优良传统的四个侧面。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag,
+    log: s.log,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: 'zz-2014-31 · 四句诗一个魂：爱国主义的四副面孔',
+  subtitle: '2014 年多选题 · 考点：爱国主义优良传统 · 方法：一杆标尺（情感指向国家民族）量四句诗',
+  intro: '点击「▶ 播放」逐步展开推理链；右侧序号带逐个标记 A–D 的对号结果。',
+  ribbonTitle: '选项 A–D（1=A · 2=B · 3=C · 4=D；✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '推理步',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD（全选）',
+    html: '记忆锚点：四句四个侧面——<b>忧国之泪（A）、荐血之誓（B）、位卑之忧（C）、生死之诺（D）</b>。判诗只看一件事：<b>情感是否指向国家民族的命运</b>——"似消极"（A）、"位卑微"（C）都不妨碍这一点，全选。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：四句诗一个魂——爱国主义优良传统的判诗标尺</h2>
+<p>答案：<strong>ABCD（全选）</strong>。</p>
+<h3>第 0 步：先立机制——判诗为什么不能靠"背名句"</h3>
+<p>这道题考的不是文学史，而是一次<strong>归类</strong>：把四句具体的诗，归进"爱国主义优良传统"的内涵清单里。教材给这份清单列的条目是——维护民族团结与祖国统一、抵御外侮<strong>捍卫民族尊严</strong>、<strong>忧国忧民</strong>以天下为己任、开发建设祖国等。</p>
+<p>归类要有一杆<strong>标尺</strong>。这杆标尺不是"诗句写得悲还是壮"，而是：<strong>诗中的情感是否指向国家民族的命运</strong>。四句诗作者不同、朝代不同、境遇不同，恰好各自覆盖清单里的一个侧面——这正是命题人选这四句的原因。标尺在手，逐句对号。</p>
+<h3>第 1 步：逐句对号</h3>
+<table><thead><tr><th>诗句</th><th>作者与背景</th><th>情感指向什么</th><th>对应的传统侧面</th></tr></thead><tbody><tr><td>A 四万万人齐下泪，天涯何处是神州</td><td>谭嗣同，甲午战败、列强瓜分之际</td><td>悲的是<strong>山河破碎、国家存亡</strong></td><td>忧国忧民、以天下为己任</td></tr><tr><td>B 寄意寒星荃不察，我以我血荐轩辕</td><td>鲁迅《自题小像》，青年立志</td><td>誓把热血献给<strong>民族</strong></td><td>献身民族、捍卫民族尊严</td></tr><tr><td>C 位卑未敢忘忧国，事定犹须待阖棺</td><td>陆游《病起书怀》，罢官闲居仍忧国</td><td>地位卑微仍心系<strong>国事</strong></td><td>人人可为的家国担当</td></tr><tr><td>D 苟利国家生死以，岂因祸福避趋之</td><td>林则徐，虎门销烟后遭贬赴戍</td><td>国家利益置于<strong>个人祸福之上</strong></td><td>为国不计生死利害</td></tr></tbody></table>
+<p>四句全部落在标尺之内 → 全选。</p>
+<h3>第 2 步：预判两个"为什么"</h3>
+<ul><li><strong>为什么 A 的"悲歌"也算爱国？</strong> 诗句表面是泪与绝望，但泪因"神州"而落——悲恸的对象是国家命运，不是个人得失。<strong>痛感来自爱国</strong>，这是最深的一层感情。</li><li><strong>为什么 C 的"位卑"者也算主体？</strong> 爱国主义从来不是"肉食者谋之"的专属品，陆游罢官后仍"不敢忘忧国"，恰恰说明爱国传统具有<strong>群众性</strong>——普通人的忧国之思同样是这个传统的组成部分。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>漏选 A</strong>（误判"太消极"）：把悲看成与爱国对立的情绪，没看出悲的对象是山河破碎——亡国之痛恰是忧国忧民的极端形态。</li><li><strong>漏选 C</strong>（误判"主体不够格"）：以为爱国大义须由显赫人物承担，忽略了传统的群众性一面。</li><li><strong>漏选 B</strong>（只知"血荐轩辕"是名句不知其义）：不清楚"轩辕"即指中华民族，热血所荐正是国家民族。</li><li><strong>漏选 D</strong>（觉得与"祸福避趋"相连像明哲保身）：其实诗句说的是"岂因祸福避趋之"——<strong>不</strong>因个人祸福而趋避，恰是国家利益至上的宣言。</li></ul>
+<blockquote>记忆锚点：判诗只看一件事——<strong>情感是否指向国家民族的命运</strong>；四句四个侧面——忧国之泪（A）、荐血之誓（B）、位卑之忧（C）、生死之诺（D），无一例外，全选。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

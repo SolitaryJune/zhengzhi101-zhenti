@@ -1,8 +1,120 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2016-18 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2016-18</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2016·18 「人生代代无穷已」：时间的一维性</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX，参照本站已完成动画），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "log": "题眼：江月还在，看月的人代代老去",
+    "body": "<p>「人生代代无穷已，江月年年望相似」：江月年年还在，看月的人却一代代老去——时间<b>只有一个方向</b>，过去→现在→未来，<b>不可倒转</b>。找「蕴含相同哲理」的诗句，中心思想必须落在「流逝、一去不返、机会不再」这一层。</p>"
+  },
+  {
+    "title": "先立机制与判别标准",
+    "cls": "key",
+    "log": "机制：一维性=只进不退",
+    "body": "<p>时间的特点是<b>一维</b>：<b>不可逆</b>。识别标准由此确定：诗句中心思想必须带出「<b>不可逆</b>」三个字；泛泛写日月风雨不算数。C 诗句历来作「征兆」解，先圈成重点嫌疑对象，最后重点核对。</p>"
+  },
+  {
+    "title": "A：白首方悔读书迟",
+    "cls": "good",
+    "ribbon": {"k": 1, "ok": true},
+    "log": "「悔」=过去回不来 → A 对",
+    "body": "<p>黑发→白首，时间单向流逝；「<b>悔</b>」字点睛——少年光阴过去了就回不来，晚了就是晚了。不可逆＋错过不再，正中一维性。<b>A 正确</b>。</p>"
+  },
+  {
+    "title": "B：莫待无花空折枝",
+    "cls": "good",
+    "ribbon": {"k": 2, "ok": true},
+    "log": "「莫待」建立在机会不回头上 → B 对",
+    "body": "<p>花期不等人，「堪折」到「无花」是一条<b>单行道</b>——正因为时间不可逆、时机不重现，才要「直须折」。劝人抓当下，正建立在一维性之上。<b>B 正确</b>。</p>"
+  },
+  {
+    "title": "C：山雨欲来风满楼",
+    "cls": "bad",
+    "ribbon": {"k": 3, "ok": false},
+    "log": "落点在征兆=联系，非不可逆 → C 不选",
+    "body": "<p>风满楼是山雨的<b>前兆</b>——哲理落在<b>事物的普遍联系</b>（征兆与结果的客观联系）上，没有「过去回不去」的意涵，说的是「将要发生」，不是「逝去不返」。<b>C 错误</b>。</p>"
+  },
+  {
+    "title": "D：物换星移几度秋",
+    "cls": "good",
+    "ribbon": {"k": 4, "ok": true},
+    "log": "物换星移=光阴单向流转 → D 对",
+    "body": "<p>王勃《滕王阁诗》名句：日复一日、物换星移，光阴流转而人事全非——与「代代无穷已，年年望相似」同一款对照：<b>时间只管向前</b>。<b>D 正确</b>。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "log": "锁定 ABD",
+    "body": "<p>答案 <b>ABD</b>。C 是最像的干扰项：它也写「日沉」。判别不看有没有日月，看<b>中心思想落在哪个原理</b>——征兆（联系）≠流逝（时间）。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "「人生代代无穷已」：时间的一维性",
+  subtitle: "考点：时间与空间 · 时间一维性（不可逆性） · 多选",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABD',
+    html: "记忆锚点：一维性=<b>只进不退</b>；判别口诀——找「悔」「莫待」「几度秋」这类<b>回不去</b>的字眼；「欲来／满楼」是<b>征兆（联系）</b>，不是流逝（时间）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：时间一维性——「过去」为什么回不去</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——一维性是什么，判别标准是什么</h3>
+<p>时间的特点是<strong>一维</strong>：只有一个方向——从过去、现在流向未来，<strong>不可倒转、不可逆转</strong>。张若虚的对照正在这里：江月年年还在，看月的人却一代代老去、逝去——时间只进不退，逝去的不再回来。哲学上叫"时间的不可逆性"。</p>
+<p>由此得出识别标准：一句诗要"蕴含<strong>相同</strong>哲理"，中心思想必须落在<strong>"时光流逝、一去不返、机会不再"</strong>这一层。泛泛写日月风雨不算数——标准先立，再逐句查表。</p>
+<h3>第 1 步：逐句检验——"不可逆"有没有出现</h3>
+<table><thead><tr><th>诗句</th><th>落点</th><th>判断</th></tr></thead><tbody><tr><td>A 黑发不知勤学早，白首方悔读书迟</td><td>逝去不可返＋"悔"字点睛</td><td>✅</td></tr><tr><td>B 花开堪折直须折，莫待无花空折枝</td><td>花期不等人，时机不重现</td><td>✅</td></tr><tr><td>C 溪云初起日沉阁，山雨欲来风满楼</td><td>征兆→<strong>普遍联系</strong></td><td>❌</td></tr><tr><td>D 闲云潭影日悠悠，物换星移几度秋</td><td>光阴单向流转、人事全非</td><td>✅</td></tr></tbody></table>
+<ul><li><strong>A</strong> ✅：黑发→白首，时间单向流逝；"悔"字点睛——少年光阴过去了就回不来，晚了就是晚了。</li><li><strong>B</strong> ✅："堪折"到"无花"是一条单行道；正因为时间不可逆、机会不回头，才要"直须折"——劝人抓当下，正建立在一维性之上。</li><li><strong>C</strong> ❌：风满楼是山雨的<strong>前兆</strong>——哲理落在<strong>事物的普遍联系</strong>（征兆与结果的客观联系）与现象预示变化上，没有"过去回不去"的任何意涵。</li><li><strong>D</strong> ✅：王勃《滕王阁诗》名句——日复一日、物换星移，光阴流转而人事全非，与题干两句同款对照：时间只管向前。</li></ul>
+<h3>第 2 步：C 为什么最容易被误判</h3>
+<p>C 是最像的干扰项：它也写"日沉"，也显出"时间感"。判别不看有没有提到日月风雨，而看<strong>诗句的中心思想落在哪个原理上</strong>——"山雨欲来风满楼"历来用作"事情发生前的征兆"，指向联系的观点；它说的是"将要发生"，不是"逝去不返"，与"人生代代无穷已"的感叹不在同一层。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：看到"日沉""雨来"就以为是写时间流逝。判别口诀：找"悔""莫待""几度秋"这类"回不去"的字眼。</li><li><strong>漏选 B</strong>：以为劝人及时行动只是处世格言。"莫待"二字正建立在"机会不回头"之上。</li><li><strong>混淆原理</strong>：时间一维性（不可逆）≠ 空间三维性 ≠ 联系的普遍性——先问落点，再对原理。</li></ul>
+<blockquote>记忆锚点：一维性=<strong>只进不退</strong>；"欲来/满楼"是征兆（联系），不是流逝（时间）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,158 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-29 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-29</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2009-29 · 和谐社会“诚信友爱”的内涵对号</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链动画（政治站无 KaTeX）：地盘图 + 界定拆半 + 逐项对号，只写 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行可加宽的格子（引擎 cellRow 固定 44px 宽，放不下中文短语，这里自定义行）
+function boxRow(items, ptrMap){
+  var row = AW.el('div', 'aw-cells');
+  items.forEach(function(it, i){
+    var col = AW.el('div', 'aw-col');
+    col.style.width = it.w || '110px';
+    if(ptrMap && ptrMap[i + 1]) col.appendChild(AW.el('div', 'aw-ptr', ptrMap[i + 1]));
+    var box = AW.el('div', 'aw-box' + (it.c ? ' ' + it.c : ''), it.t);
+    box.style.width = it.w || '110px';
+    col.appendChild(box);
+    row.appendChild(col);
+  });
+  return row;
+}
+
+// 地盘图：六特征各管一个关系层面（第一步卡片用）
+function territoryRow(){
+  return boxRow([
+    { t: '社会秩序·生活状态', c: 'dim', w: '150px' },
+    { t: '人与人之间', c: 'ok', w: '150px' },
+    { t: '人与自然', c: 'dim', w: '150px' }
+  ], { 1: '安定有序', 2: '诚信友爱 ←本题', 3: '和谐相处' });
+}
+
+// 界定拆半：诚信友爱的权威界定一拆两半（第二步卡片用）
+function definitionRow(){
+  return boxRow([
+    { t: '互帮互助 诚实守信', c: 'ok', w: '150px' },
+    { t: '平等友爱 融洽相处', c: 'ok', w: '150px' }
+  ], { 1: '前半句·诚信（B）', 2: '后半句·友爱（D）' });
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：六特征是六块地盘，内涵以权威界定为准",
+    "cls": "key",
+    "body": "<p>社会主义和谐社会总要求六句话：<b>民主法治、公平正义、诚信友爱、充满活力、安定有序、人与自然和谐相处</b>——它们不是六个好词的堆砌，而是各管一个<b>关系层面</b>：</p>" +
+      territoryRow().outerHTML +
+      "<p>本题只查一行。判定动作不是“这句话好不好”，而是“这句话住在哪一行界定的地盘里”。</p>",
+    "log": "六特征按关系层面分地盘，先圈出「人与人」这一行"
+  },
+  {
+    "title": "亮标尺：诚信友爱的界定一拆两半",
+    "cls": "key",
+    "body": "<p>权威界定原文：诚信友爱，就是<b>全社会互帮互助、诚实守信</b>，<b>全体人民平等友爱、融洽相处</b>。</p>" +
+      definitionRow().outerHTML +
+      "<p>前半句主语「全社会」讲<b>诚信</b>，后半句主语「全体人民」讲<b>友爱</b>——两句全落在人与人之间。对照「安定有序」的界定：机制健全、<b>管理完善</b>、<b>秩序良好</b>、人民群众<b>安居乐业</b>、安定团结——记住这一行，A、C 的户口在里面。</p>",
+    "log": "界定拆两半：诚信（B 的户口）＋友爱（D 的户口）"
+  },
+  {
+    "title": "选项 A：全社会管理完善、秩序良好",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>「管理完善、秩序良好」是<b>安定有序</b>界定里的原句——句子是真的，地盘站错了。内涵题只问“住在哪一行”，不问“对不对” → <b>排除</b>。</p>",
+    "log": "A 是安定有序的原句：句子真、地盘错"
+  },
+  {
+    "title": "选项 B：全社会互帮互助、诚实守信",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p>与界定<b>前半句逐字对应</b>，连主语「全社会」都一致——管的是人与人的诚信关系 → <b>入选</b>。</p>",
+    "log": "B＝界定前半句：诚信这一半，入选"
+  },
+  {
+    "title": "选项 C：全体人民生活富裕、安居乐业",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>「安居乐业」住在<b>安定有序</b>那一行；「生活富裕」在六特征界定里<b>根本没有出处</b>。诚信友爱管人际关系的温度、不管生活水平——用“和谐＝富裕”的直觉顶替界定是本题最典型的误选 → <b>排除</b>。</p>",
+    "log": "C：安居乐业串门、生活富裕无出处"
+  },
+  {
+    "title": "选项 D：全体人民平等友爱、融洽相处",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>与界定<b>后半句逐字对应</b>，主语「全体人民」也一致——平等友爱、融洽相处，全是人际关系的温度 → <b>入选</b>。</p>",
+    "log": "D＝界定后半句：友爱这一半，入选"
+  },
+  {
+    "title": "结论：BD",
+    "cls": "good",
+    "body": "<p>B＋D 正好拼出界定全文的两半：<b>诚信（互帮互助、诚实守信）＋友爱（平等友爱、融洽相处）</b>——<b>答案 BD</b>。A、C 是「安定有序」地盘里的真句子，串门不选。</p>",
+    "log": "锁定 BD：诚信＋友爱，两半各领一户"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  title: "和谐社会“诚信友爱”的内涵对号",
+  subtitle: "2009 年第 29 题（多选）· 考点：社会主义和谐社会总要求 · 方法：六特征分地盘＋权威界定拆两半",
+  counterLabel: '推理步',
+  ribbonTitle: '选项判定（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先分地盘、拆界定，再逐项对号。',
+  result: {
+    big: "答案 BD",
+    html: "记忆锚点：<b>诚信友爱只管人际关系</b>——互助守信（B）＋平等融洽（D）；「管理完善／秩序良好／安居乐业」住在<b>安定有序</b>的地盘（A、C 错）。内涵题先问“住在哪一行”，不问“对不对”。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：和谐社会六特征——“诚信友爱”的内涵只装人际关系的两句界定</h2>
+<p>答案：<strong>BD</strong>。</p>
+<h3>第 0 步：先立机制——六句话不是六个好词，是按“关系层面”分的六块地盘</h3>
+<p>社会主义和谐社会的总要求是六句话：民主法治、公平正义、诚信友爱、充满活力、安定有序、人与自然和谐相处。这六句话各管一个<strong>关系层面</strong>，谁也不替谁代言：</p>
+<table><thead><tr><th>关系层面</th><th>对应特征</th></tr></thead><tbody><tr><td>社会秩序与生活状态</td><td><strong>安定有序</strong></td></tr><tr><td>人与人之间的关系</td><td><strong>诚信友爱</strong></td></tr><tr><td>人与自然</td><td>人与自然和谐相处</td></tr></tbody></table>
+<p>“内涵”类题目的判定标尺只有一条：<strong>权威界定原文</strong>。诚信友爱的界定是——</p>
+<blockquote>诚信友爱，就是全社会<strong>互帮互助、诚实守信</strong>，全体人民<strong>平等友爱、融洽相处</strong>。</blockquote>
+<p>前半句讲<strong>诚信</strong>（主语是全社会），后半句讲<strong>友爱</strong>（主语是全体人民），两句全落在<strong>人与人之间</strong>——这就是“诚信友爱”的完整户口。安定有序的界定则是“社会组织机制健全、社会管理完善、社会秩序良好、人民群众安居乐业、社会保持安定团结”。</p>
+<h3>第 1 步：先答掉一个必问的“为什么”——句子是真的，为什么不能选</h3>
+<p>本题最大的陷阱不在“假选项”，而在<strong>真句子的归属</strong>。A、C 用的全是官方语言里的真句子，但内涵题问的是“<strong>其中‘诚信友爱’的内涵包括</strong>”——判定动作不是“这句话好不好、像不像和谐社会”，而是“这句话住在哪一行界定的地盘里”。A 的“管理完善、秩序良好”是<strong>安定有序</strong>界定里的原句，C 的“安居乐业”也在<strong>安定有序</strong>那一行——句子真、地盘错，照样排除。</p>
+<h3>第 2 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判定</th><th>归属与理由</th></tr></thead><tbody><tr><td>A 全社会管理完善、秩序良好</td><td>❌</td><td>“管理完善、秩序良好”＝<strong>安定有序</strong>界定原句，串门了</td></tr><tr><td>B 全社会互帮互助、诚实守信</td><td>✅</td><td>与界定<strong>前半句逐字对应</strong>——诚信这一半</td></tr><tr><td>C 全体人民生活富裕、安居乐业</td><td>❌</td><td>“安居乐业”住在<strong>安定有序</strong>；“生活富裕”在六特征界定里<strong>无出处</strong></td></tr><tr><td>D 全体人民平等友爱、融洽相处</td><td>✅</td><td>与界定<strong>后半句逐字对应</strong>——友爱这一半</td></tr></tbody></table>
+<p>B＋D 正好拼出界定全文的两半：<strong>诚信＋友爱</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A——“真句子即内涵”</strong>：把官方语言里出现过的句子都当成所在题目的内涵，忽略了出处归属。此题考查的就是“对号”，不是“判断真假”。</li><li><strong>误选 C——“和谐＝富裕”的直觉替代</strong>：用生活想象顶替权威界定。诚信友爱管的是人际关系的<strong>温度</strong>（互助、守信、平等、融洽），不管生活水平；生活层面的诉求归“安定有序”那一行，“生活富裕”甚至无界定出处。</li><li><strong>漏选 B 或 D——只背半句</strong>：界定有主语之分，前半句主语“全社会”领诚信（B），后半句主语“全体人民”领友爱（D）。背全两句，四个选项自动落位。</li></ul>
+<blockquote>记忆锚点：<strong>诚信友爱只管人际关系</strong>——互助守信（B）＋平等融洽（D）；“管理完善／秩序良好／安居乐业”住在<strong>安定有序</strong>的地盘（A、C 错）。内涵题先问“住在哪一行”，不问“对不对”。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

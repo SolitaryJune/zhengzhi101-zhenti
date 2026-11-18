@@ -1,8 +1,140 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2016-04 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2016-04</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2016·04 金融资本膨胀的制度条件</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画（推理链卡片，纯文本无 KaTeX，走 anim-engine），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>题干：70 年代以来金融资本急剧膨胀 → 一方面促进发展，一方面造成经济过度虚拟化。设问「快速发展壮大的<b>重要制度条件</b>」——考政策与规制层面的安排，不是技术或产业现象。</p>",
+    "log": "题眼 =「制度条件」四个字"
+  },
+  {
+    "title": "先立模型：技术 → 制度 → 结果 三层",
+    "cls": "key",
+    "body": "<p><b>技术层</b>（信息通讯）提供<b>可能性</b> → <b>制度层</b>（放松管制 + 新工具）打开闸门 → <b>结果层</b>（资本涌向金融、虚拟化膨胀）。设问问的正是中间那道闸门。</p>",
+    "log": "三层定位：基础 / 条件 / 后果"
+  },
+  {
+    "title": "选项 A：把结果当条件",
+    "cls": "bad",
+    "body": "<p>去工业化、大力发展现代服务业是金融膨胀<b>之后</b>的产业格局变化（虚拟化的表现）——因果倒置，结果层冒充条件层。<b>A 排除</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "log": "A 是后果不是条件"
+  },
+  {
+    "title": "选项 B：技术 ≠ 制度，时间也对不上",
+    "cls": "bad",
+    "body": "<p>技术创新是<b>物质技术基础</b>（可能性），不是制度安排；「互联网金融」是 21 世纪的现象，答不了「70 年代以来」的设问——层次与时间双错位。<b>B 排除</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    },
+    "log": "B 基础冒充制度 + 时间错位"
+  },
+  {
+    "title": "选项 C：半真半假的组合项",
+    "cls": "bad",
+    "body": "<p>「放松金融监管」沾边，但组合里掺进「<b>全面私有化</b>」——那是产权层面的变革，不是金融资本膨胀的核心制度条件；混入错项即整项排除。<b>C 排除</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    },
+    "log": "C 混入错项，排除"
+  },
+  {
+    "title": "选项 D：闸门所在",
+    "cls": "good",
+    "body": "<p><b>金融自由化</b>（放开利率、汇率、资本流动管制）+ <b>金融创新</b>（衍生品、资产证券化）→ 资本大规模流向金融领域——正是打开闸门的制度安排，缺一不可。<b>D 正确</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": true
+    },
+    "log": "D = 放开闸门的制度安排"
+  },
+  {
+    "title": "定调：膨胀没有改变本质",
+    "cls": "key",
+    "body": "<p>金融资本再膨胀，<b>垄断资本主义追求剩余价值的本质没有变</b>——虚拟经济只是剩余价值分配形式的新花样。这是本章常考的定调句。</p>",
+    "log": "形式在变，本质未变"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>D</b>。记忆锚点：金融资本膨胀 = 技术可能 × 制度放开；「制度条件」→ <b>金融自由化 + 金融创新</b>；技术是基础、去工业化是后果、「全面私有化」是产权层凑数项。</p>",
+    "log": "锁定 D：金融自由化与金融创新"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "金融资本膨胀的制度条件",
+  subtitle: "考点：金融垄断资本主义（金融自由化 · 金融创新） · 方法：技术→制度→结果 三层定位",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "记忆锚点：金融资本急剧膨胀的<b>制度条件</b> = <b>金融自由化</b>（放松利率、汇率、资本流动管制）+ <b>金融创新</b>（衍生品、资产证券化）。分层排雷：技术创新 = 物质基础，去工业化 / 服务业化 = 产业后果，「全面私有化」 = 产权层凑数项——都不是「制度条件」；且膨胀未改变追求剩余价值的本质。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：金融资本膨胀的「制度条件」是哪一层</h2>
+<p>答案：<strong>D（金融自由化与金融创新）</strong>。</p>
+<h3>第 0 步：先立机制——同一件事的三层：技术 → 制度 → 结果</h3>
+<p>题干给了一个现象（金融资本急剧膨胀、经济过度虚拟化），设问的是它"快速发展壮大的<strong>重要制度条件</strong>"。要把这类题做稳，先把一条因果链立起来——西方金融资本的膨胀是三层叠加的结果：</p>
+<table><thead><tr><th>层</th><th>内容</th><th>性质</th></tr></thead><tbody><tr><td><strong>技术层</strong></td><td>信息技术、电子通讯、数据处理手段</td><td>物质技术<strong>基础</strong>：让全球资金瞬间调拨<strong>成为可能</strong></td></tr><tr><td><strong>制度层</strong></td><td>金融自由化 + 金融创新</td><td>政策与规制安排：把管制的闸门<strong>打开</strong>，可能变成现实</td></tr><tr><td><strong>结果层</strong></td><td>资本涌向金融领域、虚拟经济膨胀、去工业化</td><td>现象本身：题干描述的"一方面促进发展、一方面过度虚拟化"</td></tr></tbody></table>
+<p>设问问的是中间那道闸门——<strong>制度条件</strong>。这个定位一立住，四个选项各归各层，答案自然浮出。</p>
+<h3>第 1 步：制度层的两件武器是怎么"催大"金融资本的</h3>
+<p>20 世纪 70 年代以来（滞胀危机之后，新自由主义抬头），西方国家做了两件事：</p>
+<ol><li><strong>金融自由化</strong>——<strong>放松金融管制</strong>：放开利率与汇率管制、取消资本流动限制、放宽金融机构的业务边界。钱能更自由地跨国界、跨市场流动，这是"制度放行"；</li><li><strong>金融创新</strong>——<strong>造出新工具</strong>：金融衍生品、资产证券化、各种杠杆工具层出不穷，资本不必经过实体生产也能"自我繁殖"。</li></ol>
+<p>两者叠加，资本从生产领域大规模流向金融领域，虚拟经济急剧膨胀——这正是教材口径：<strong>金融自由化与金融创新是金融资本快速发展壮大的重要制度条件</strong>。选 <strong>D</strong>。</p>
+<h3>第 2 步：干扰项归因——每个错误选项都"住错了层"</h3>
+<ul><li><strong>误选 A——把结果当条件</strong>：去工业化、大力发展现代服务业，是金融膨胀<strong>之后</strong>的产业格局变化（经济虚拟化的表现），属于结果层。因果倒置：不是它们催生了金融膨胀，而是金融膨胀造成了它们。</li><li><strong>误选 B——把技术基础当制度，且时间对不上</strong>：技术创新确实提供了可能性，但"可能性"是物质技术基础，不是制度安排；"互联网金融"更是 21 世纪才兴起的现象，题干问的是 70 年代以来金融资本膨胀的条件——层次与时间双双错位。</li><li><strong>误选 C——半真半假的组合项</strong>：「放松金融监管」确实沾金融自由化的边，但组合里掺进了「<strong>全面私有化</strong>」——那是产权层面（所有制）的变革，不是金融资本膨胀的核心制度条件。教材的口径是"金融自由化与金融创新"作为一个整体；组合项只要混入一个错项，整项即排除。这是命题人惯用的"以相近词凑对"手法。</li><li>（D 为什么对：两项都落在制度层，且缺一不可——只放开管制没有新工具，膨胀有限；只有新工具而管制不松，工具也出不来、用不上。）</li></ul>
+<h3>为什么金融资本膨胀"没改变"什么</h3>
+<p>题干那句"一方面促进发展，一方面造成经济过度虚拟化"还有一层用意：金融资本再膨胀，<strong>垄断资本主义追求剩余价值的本质没有变</strong>——虚拟经济只是剩余价值分配形式的新花样，不是新制度。这也是本章常考的定调句。</p>
+<blockquote>记忆锚点：金融资本膨胀 = <strong>技术可能 × 制度放开</strong>；「制度条件」四个字 → <strong>金融自由化 + 金融创新</strong>；技术是基础、去工业化是后果、"全面私有化"是产权层的凑数项——都不是"制度条件"。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

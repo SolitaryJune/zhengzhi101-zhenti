@@ -1,8 +1,97 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-23 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-23</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2015-23 数字里的农村经营制度 · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念推理链模板（无 KaTeX 版）：引擎外壳 + 只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：材料全是数字，先分组',
+    cls: 'key', sc: 'step', tag: '审题',
+    body: '<p>材料给出：约 <b>1.9 亿户</b>家庭经营 <b>92.5%</b> 的承包地；合作社 <b>68.9 万个</b>、产业化经营组织 <b>30 余万个</b>、约 <b>2556 万亩</b>耕地由企业租赁。</p><p>数字题别急着看选项——先把数字翻成两句话。</p>',
+    log: '两组数字：一组讲基本盘，一组讲新主体' },
+  { t: '机制卡：判断底线是"三权分置"',
+    cls: 'key', sc: 'shift', tag: '机制',
+    body: '<p>农村土地产权三层：<b>集体所有权</b>——不动；农户<b>承包权</b>——稳定；土地<b>经营权</b>——可流转。</p><p>材料里一切新变化（租赁、流转、入股）都发生在<b>经营权</b>层面，所有权与承包权一寸未动。</p>',
+    log: '流转动的只是经营权；所有权、承包权稳住' },
+  { t: '数字组 1 → 选项 A：家庭承包仍是基本形式 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A', ribbon: { k: 1, ok: true },
+    body: '<p>约 1.9 亿户农民家庭经营着 92.5% 的承包地——绝大多数耕地仍由<b>家庭</b>经营，基本盘没有变。</p><p><b>A 对</b>。</p>',
+    log: '92.5% 在家庭手里 → A 选' },
+  { t: '数字组 2 → 选项 C：经营主体多样化 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C', ribbon: { k: 3, ok: true },
+    body: '<p>农户之外：合作社 68.9 万个、产业化经营组织 30 余万个、企业租赁 2556 万亩——<b>多种经营主体并存</b>，材料罗列后半串数字正是为了证明这一点。</p><p><b>C 对</b>。</p>',
+    log: '合作社、产业化组织、企业租赁并存 → C 选' },
+  { t: '选项 B：集体所有权性质已经变化 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 B', ribbon: { k: 2, ok: false },
+    body: '<p>变的只是<b>经营权</b>层面（租赁、流转）；土地仍归<b>集体所有</b>——"所有权性质已经发生变化"直接踩了制度红线。</p><p><b>B 不选</b>。</p>',
+    log: '所有权没变，变的只是经营权 → B 不选' },
+  { t: '选项 D：流转使农民失去承包权 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 D', ribbon: { k: 4, ok: false },
+    body: '<p>三权分置的设计恰恰是<b>流转经营权、保留承包权</b>：经营权放手给合作社或企业，承包权仍稳稳留在农户手里。"失去了承包权"与制度设计正好相反。</p><p><b>D 不选</b>。</p>',
+    log: '流转经营权 ≠ 丢掉承包权 → D 不选' },
+  { t: '结论：AC',
+    cls: 'good', sc: 'done', tag: '结论',
+    body: '<p>答案 <b>AC</b>：基本盘没变（A）+ 主体多样化（C）；B、D 都把"经营权流转"误当成产权变动。</p>',
+    log: '变的是经营权，不变的是基本形式 → 锁定 AC' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2015·23】材料数字表明我国农村（多选）',
+  subtitle: '考点：农村基本经营制度与"三权分置" · 数字分组再对号',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先把数字分成两组，再用三权分置兜底判干扰项。',
+  snaps: snaps,
+  result: {
+    big: '答案 AC',
+    html: '记忆锚点：家庭承包仍是<b>基本形式</b>（A），经营主体<b>多样化</b>（C）；集体所有权不变（B 错），流转经营权不丢承包权（D 错）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：材料数字题——从一串数据读出农村经营制度的变与不变</h2>
+<p>答案：<strong>AC</strong>。</p>
+<h3>第 0 步：先立机制——数字先分组，再用"三权分置"兜底</h3>
+<p>材料通篇是数字，做题第一步不是急着读选项，而是把数字<strong>翻译成两句话</strong>：</p>
+<ul><li>约 <strong>1.9 亿户</strong>农民家庭经营着 <strong>92.5%</strong> 的承包地 → 绝大多数耕地仍由家庭经营，家庭承包经营这个<strong>基本盘没有动</strong>；</li><li>合作社 <strong>68.9 万个</strong>、产业化经营组织 <strong>30 余万个</strong>、约 <strong>2556 万亩</strong>耕地由企业租赁 → 农户之外冒出了大批新型主体，经营形式<strong>变多了</strong>。</li></ul>
+<p>判断"变与不变"的底线，是农村土地产权的<strong>三权分置</strong>：<strong>集体所有权</strong>（不动）、农户<strong>承包权</strong>（稳定）、土地<strong>经营权</strong>（可流转）。材料里一切"新气象"都发生在经营权层面——租赁、流转、入股，动的都是经营权；所有权与承包权一寸未动。</p>
+<h3>第 1 步：逐项对号入座</h3>
+<ul><li><strong>A 家庭承包经营仍然是最基本的经营形式 ✅</strong>：92.5% 的耕地由约 1.9 亿户家庭经营——基本形式没有变。</li><li><strong>B 土地的集体所有权性质已经发生变化 ❌</strong>：变的只是经营权层面（租赁、流转）；土地仍归集体所有，"已经发生变化"直接踩了制度红线。</li><li><strong>C 农业经营主体呈现多样化趋势 ✅</strong>：农户、合作社、产业化经营组织、租赁企业并存——材料罗列后半串数字正是为了证明"多样化"。</li><li><strong>D 土地经营权的流转使农民失去了对土地的承包权 ❌</strong>：三权分置的设计恰恰是<strong>流转经营权、保留承包权</strong>——经营权放手给合作社或企业，承包权仍稳稳留在农户手里。"失去了承包权"与制度设计正好相反。</li></ul>
+<p>→ 选 <strong>AC</strong>。</p>
+<h3>易错点：每个失误对应哪种误解</h3>
+<ul><li><strong>误选 B、D</strong>：共同的误解是把"经营权流转"当成"产权变动"——以为土地一经转手，所有权或承包权就跟着换人。三权分置的核心正是让经营权活起来、让所有权与承包权稳下来；凡说"所有权变了""承包权丢了"的表述都不成立。</li><li><strong>漏选 C</strong>：只盯着 92.5% 的主导数字得出 A，忽略了后半段合作社与企业租赁的数字——那些不是凑数的背景信息，是"多样化"的证据。</li></ul>
+<blockquote>记忆锚点：家庭承包仍是<strong>基本形式</strong>（A），经营主体<strong>多样化</strong>（C）；集体所有权不变（B 错）、流转经营权不丢承包权（D 错）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

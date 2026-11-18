@@ -1,8 +1,159 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-04 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-04</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·04 垄断组织的最低可接受价格</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链卡片模板（政治站纯文本，无 KaTeX），只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+function miniTable(rows, head){
+  var s = '<table style="border-collapse:collapse;margin:6px 0;font-size:13px">';
+  for(var i=0;i<rows.length;i++){
+    s += '<tr>';
+    for(var j=0;j<rows[i].length;j++){
+      var bg = (head && i===0) ? '#f1f5f9' : 'transparent';
+      s += '<td style="border:1px solid #cbd5e1;padding:3px 8px;background:' + bg + '">' + rows[i][j] + '</td>';
+    }
+    s += '</tr>';
+  }
+  return s + '</table>';
+}
+
+var STEPS = [
+  {
+    "title": "审题眼：问的是「底线」不是「手段」",
+    "cls": "key",
+    "body": "<p>题干三段信息：①垄断组织用<b>垄断价格</b>获取垄断利润；②交易中获利高低<b>受很多因素影响</b>（价格可能被压下去）；③问「避免<b>净亏损</b>」的<b>最低</b>可接受价。题眼是最后四个字——问的是底线，不是获利手段。</p>",
+    "log": "题眼=避免净亏损的最低价"
+  },
+  {
+    "title": "立机制：三个价格台阶",
+    "cls": "key",
+    "body": "<p>摆出三个概念，从低到高：</p>" + miniTable([
+      ["价格", "构成", "含义"],
+      ["成本价格", "c + v（垫付的不变资本+可变资本）", "收回本钱的线"],
+      ["生产价格", "成本价格 + 平均利润", "自由竞争的「正常利润线」"],
+      ["垄断价格", "成本价格 + 垄断利润", "垄断组织「想卖」的价位"]
+    ], true) + "<p>卖价从垄断价往下压，压到哪条线以下才算亏？接着算。</p>",
+    "log": "成本价 < 生产价 < 垄断价，三条线排好"
+  },
+  {
+    "title": "数值推演：价格被压到哪才亏",
+    "cls": "key",
+    "body": "<p>设 c + v = 100，平均利润 = 20，垄断利润 = 50：</p>" + miniTable([
+      ["卖价", "处境", "判断"],
+      ["150", "赚足垄断利润", "最理想"],
+      ["130", "高于生产价格 120", "照样赚"],
+      ["110", "低于生产价格", "少赚，不亏——本钱 100 已收回"],
+      ["95", "低于成本价格 100", "净亏损——连本都收不回"]
+    ], true) + "<p>分界清楚：卖价 ≥ 成本价格 → 成本已补偿，至多少赚；卖价 < 成本价格 → 垫付的 c + v 收不回，才是<b>净亏损</b>。</p>",
+    "log": "95 亏、110 不亏 → 生死线画在成本价格"
+  },
+  {
+    "title": "预判追问：低于生产价格为什么不算亏？",
+    "cls": "key",
+    "body": "<p>生产价格 = 成本价格 + <b>平均利润</b>，平均利润是自由竞争阶段按资本量分得的「正常份额」。低于它只是<b>赚得比正常份额少</b>，本钱没折损——<b>少赚 ≠ 亏损</b>。位置关系：生产价格 > 成本价格，<b>生死线永远在正常利润线下面</b>。把「低于平均利润」当成「亏损」，正是本题最大的陷阱。</p>",
+    "log": "少赚≠亏：两条线要分开"
+  },
+  {
+    "title": "选项 A：成本价格——生死线",
+    "cls": "good",
+    "body": "<p>成本价格（c + v）是<b>垫付资本的补偿线</b>：低于它才净亏损，不低于它就谈不上亏。所以「避免净亏损的最低可接受价」= 成本价格。<b>A 对</b>。</p>",
+    "ribbon": { "k": 1, "ok": true },
+    "log": "A：c+v 补偿线 → 正确"
+  },
+  {
+    "title": "选项 B：正常利润线不是生死线",
+    "cls": "bad",
+    "body": "<p>生产价格是「正常利润线」：卖价落在成本价格与生产价格之间——平均利润拿不满，但本钱已收回，<b>少赚不亏</b>，垄断组织完全能接受。混淆「利润为零的界线」与「利润低于平均水平的界线」就选了它。B <b>错</b>。</p>",
+    "ribbon": { "k": 2, "ok": false },
+    "log": "B：低于它只是少赚 → 排除"
+  },
+  {
+    "title": "选项 C：垄断低价是进货手段",
+    "cls": "bad",
+    "body": "<p>垄断低价是垄断组织<b>买进</b>原材料时把买价压到价值以下的<b>手段</b>；题问的是它<b>卖出</b>时的价格底线——拿进货手段答卖货底线，方向就错了。C <b>错</b>。</p>",
+    "ribbon": { "k": 3, "ok": false },
+    "log": "C：买进手段≠卖出底线 → 排除"
+  },
+  {
+    "title": "选项 D：垄断高价是抬价手段",
+    "cls": "bad",
+    "body": "<p>垄断高价是卖出时把卖价抬到价值以上的<b>手段</b>，是「想卖多高」；题目问「最低接受多少」，正好相反方向。手段与底线分开记。D <b>错</b>。</p>",
+    "ribbon": { "k": 4, "ok": false },
+    "log": "D：手段与底线方向相反 → 排除"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案选 <b>A</b>。" + miniTable([
+      ["A 成本价格", "✓ 生死线：低于它才净亏"],
+      ["B 生产价格", "✗ 正常利润线：低它只少赚"],
+      ["C 垄断低价", "✗ 买进手段"],
+      ["D 垄断高价", "✗ 卖出手段"]
+    ]) + "</p>",
+    "log": "锁定 A：成本价格是最低可接受价"
+  },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "垄断组织避免净亏损的最低价格是什么",
+  subtitle: "考点：成本价格 / 生产价格 / 垄断价格 · 方法：三条线排台阶 → 价格压缩推演 → 逐项排查",
+  counterLabel: '推理步',
+  ribbonTitle: '选项带（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链；序号带 1–4 对应选项 A–D。',
+  snaps: snaps,
+  result: {
+    big: "答案 A",
+    html: "记忆锚点：两条线——<b>成本价格 = 生死线</b>（c + v，低于它才净亏损），<b>生产价格 = 正常利润线</b>（低于它只是少赚）；垄断高价/低价是<b>手段</b>，成本价格是<b>底线</b>——手段与底线分开记。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：垄断定价的两条线——低于成本价格才叫净亏损</h2>
+<p>答案：<strong>A（成本价格）</strong>。</p>
+<h3>第 0 步：先立机制——三个价格概念摆上桌</h3>
+<p>垄断组织靠<strong>垄断价格</strong>获利：卖货用<strong>垄断高价</strong>（价值以上卖出），进货用<strong>垄断低价</strong>（价值以下买进），两头夹出<strong>垄断利润</strong>。要把"最低能接受什么价"问清楚，先摆出三个价格台阶：</p>
+<table><thead><tr><th>价格</th><th>构成</th><th>含义</th></tr></thead><tbody><tr><td><strong>成本价格</strong></td><td>c + v（垫付的不变资本 + 可变资本）</td><td>收回本钱的线</td></tr><tr><td><strong>生产价格</strong></td><td>成本价格 + 平均利润</td><td>自由竞争阶段利润率平均化后的"正常利润线"</td></tr><tr><td><strong>垄断价格</strong></td><td>成本价格 + 垄断利润</td><td>垄断组织"想卖"的价位</td></tr></tbody></table>
+<h3>第 1 步：数值推演——价格被压到哪一条线才算"净亏损"</h3>
+<p>设垫付成本 c + v = 100，平均利润 = 20，垄断利润 = 50，则成本价格 = 100、生产价格 = 120、垄断价格 = 150。市场交易中获利高低受竞争、供需等因素影响，卖价可能被从 150 一路压下来：</p>
+<table><thead><tr><th>卖价</th><th>处境</th><th>判断</th></tr></thead><tbody><tr><td>150</td><td>赚足垄断利润</td><td>最理想</td></tr><tr><td>130</td><td>低于垄断价、高于生产价格</td><td>照样赚</td></tr><tr><td>110</td><td>低于生产价格（平均利润拿不满）</td><td><strong>少赚，不亏</strong>——本钱 100 已收回</td></tr><tr><td>95</td><td>低于成本价格</td><td><strong>净亏损</strong>——连本钱都收不回</td></tr></tbody></table>
+<p>分界清清楚楚：卖价只要 ≥ 100，成本已补偿，至多少赚；卖价 &lt; 100，垫付的 c + v 都收不回，才叫<strong>净亏损</strong>。所以"避免净亏损"的最低可接受价 = <strong>成本价格</strong>。</p>
+<h3>第 2 步：预判追问——为什么"低于生产价格"不算亏？</h3>
+<p>这是本题最大的陷阱。生产价格 = 成本价格 + <strong>平均利润</strong>，平均利润是自由竞争阶段资本家按资本量分得的"正常份额"。低于平均利润只是<strong>赚得比"正常份额"少</strong>，本钱并没有折损——少赚 ≠ 亏损。两条线的位置关系：生产价格 = 成本价格 + 平均利润 &gt; 成本价格，<strong>生死线永远在正常利润线下面</strong>。把"低于平均利润"误当成"亏损"，就会掉进 B。</p>
+<h3>第 3 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 成本价格</td><td>✅</td><td>c + v 的补偿线；低于它才净亏损，是"最低可接受价"</td></tr><tr><td>B 生产价格</td><td>❌</td><td>正常利润线；低于它但高于成本价只是少赚</td></tr><tr><td>C 垄断低价</td><td>❌</td><td>垄断组织<strong>买进</strong>时压价的手段，不是卖出时的底线</td></tr><tr><td>D 垄断高价</td><td>❌</td><td>垄断组织<strong>卖出</strong>时抬价的手段，与"最低接受价"方向相反</td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 B</strong>：混淆"利润为零的界线"（成本价格）与"利润低于平均水平的界线"（生产价格）。把自由竞争阶段的平均利润当成垄断阶段"不亏"的前提——实际垄断组织获利"高低受很多因素影响"，跌破平均利润完全可能也完全可以接受。</li><li><strong>误选 C / 误选 D</strong>：把"获利<strong>手段</strong>"当"价格<strong>底线</strong>"。垄断低价是进货时把买价压到价值以下、垄断高价是出货时把卖价抬到价值以上，都是"往有利方向使劲"的手段；题目问的是"最低能接受什么"，问的是底线，不是手段。</li><li><strong>概念回退</strong>：还有人用"平均利润率下降""竞争失败"等枝节解释，忘了题眼只在"避免<strong>净亏损</strong>"四个字——净亏损的定义就是收不回成本价格。</li></ul>
+<blockquote>记忆锚点：两条线——<strong>成本价格 = 生死线（c + v，低于它才净亏损）</strong>，生产价格 = 正常利润线（低于它只是少赚）；垄断高价/低价是<strong>手段</strong>，成本价格是<strong>底线</strong>——手段与底线分开记。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

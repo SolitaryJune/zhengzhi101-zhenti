@@ -1,8 +1,130 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-08 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-08</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-08 · 保障人民基本文化权益的主要途径</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 推理链：每一步的完整内容（引擎按步数截取显示；s.cls: key=关键/good=正确/bad=排除） */
+var STEPS = [
+  {
+    "cls": "key",
+    "tag": "审题眼",
+    "title": "审题眼：\u201c基本\u201d文化权益靠什么保障",
+    "body": "<p>题干背景：精神文化需求日益增长，要靠深化文化体制改革激发活力，<b>保障人民的基本文化权益</b>。</p><p>两处题眼：①\u201c<b>基本</b>\u201d权益——人人平等享有的那份底线需求；②问的是\u201c<b>主要途径</b>\u201d——靠什么保，不是问目标、不是问布局。</p>"
+  },
+  {
+    "cls": "key",
+    "tag": "两分法",
+    "title": "文化体制改革的两分法：事业 vs 产业",
+    "body": "<p>按<b>谁来主导、为谁服务</b>分成两类：</p><p><b>公益性文化事业</b>：政府主导、追求社会效益，满足<b>基本</b>需求（保基本、兜底线、促公平）；</p><p><b>经营性文化产业</b>：市场主导、追求经济效益，满足<b>多样化、个性化</b>需求。</p>"
+  },
+  {
+    "cls": "key",
+    "tag": "追问",
+    "title": "为什么\u201c基本\u201d权益不能靠市场兜底",
+    "body": "<p>基本权益的特点：<b>人人平等</b>享有，不能看\u201c买不买得起\u201d的脸色。</p><p>市场只为付得起钱的人服务，弱势群体、偏远地区会被先淘汰在外——兜不住底线。所以\u201c保基本\u201d只能落在<b>政府主导</b>的那一类。</p>"
+  },
+  {
+    "cls": "bad",
+    "tag": "A 排除",
+    "title": "选项 A：繁荣社会主义文化，提高文化软实力",
+    "body": "<p><b>A 错</b>：这是文化建设的<b>总体目标</b>层，回答\u201c文化强不强、软实力大不大\u201d。</p><p>题问的是\u201c基本权益<b>靠什么保障</b>\u201d的途径——层次错位，答非所问。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    }
+  },
+  {
+    "cls": "bad",
+    "tag": "B 排除",
+    "title": "选项 B：协调发展公益性文化事业与经营性文化产业",
+    "body": "<p><b>B 错</b>：表述本身没错，但这是体制改革的<b>总体布局</b>（两手抓、两手都要硬）。</p><p>题干问\u201c基本权益\u201d的<b>主要</b>途径——主要靠的是<b>公益性这一手</b>；把两手并列当保障途径，就答偏了。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    }
+  },
+  {
+    "cls": "good",
+    "tag": "C 入选",
+    "title": "选项 C：发展公益性事业，建立政府主导的公共文化体系",
+    "body": "<p><b>C 对</b>：公共博物馆、图书馆、文化馆、农家书屋、广播电视村村通……不靠门票、不挑消费者，组织起来就是<b>政府主导的公共文化服务体系</b>。</p><p>公益性事业是内容，公共文化服务体系是组织形式——与\u201c保基本、兜底线\u201d一一对应。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": true
+    }
+  },
+  {
+    "cls": "bad",
+    "tag": "D 排除",
+    "title": "选项 D：在市场竞争中发展壮大文化事业",
+    "body": "<p><b>D 错</b>：双重张冠李戴——①在市场竞争中发展壮大的应是<b>文化产业</b>，\u201c文化事业\u201d恰恰由政府主导、不进市场搏杀；②拿市场竞争保\u201c基本\u201d，兜不住底线。</p><p>关键词锁定：事业 = 公益 / 政府 / 社会效益；产业 = 经营 / 市场 / 经济效益。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    }
+  },
+  {
+    "cls": "good",
+    "tag": "结论",
+    "title": "收束：答案 C",
+    "body": "<p>保障人民基本文化权益的主要途径 = <b>发展公益性文化事业，建立政府主导的公共文化服务体系</b> → 选 <b>C</b>。</p><p>记忆锚点：基本 ↔ 事业 / 政府主导；多样 ↔ 产业 / 市场竞争。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '干扰项' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: "保障人民基本文化权益的主要途径",
+  subtitle: "考点：公益性文化事业与经营性文化产业的两分法 · 选项逐项推演",
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个裁定 A–D。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已裁定',
+  snaps: snaps,
+  result: {"big": "答案 C", "html": "保障人民基本文化权益的主要途径 = <b>发展公益性事业，建立政府主导的公共文化体系</b>。<br>搭配记忆：基本 ↔ 公益 / 政府；多样 ↔ 产业 / 市场。A 是目标层、B 是总体布局、D 张冠李戴。"}
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：保障人民基本文化权益的主要途径——“基本”靠事业，“多样”靠产业</h2>
+<p>答案：<strong>C</strong>。</p>
+<h3>第 0 步：先立机制——文化体制改革的“两分法”</h3>
+<p>深化文化体制改革，第一刀是按<strong>谁来主导、为谁服务</strong>把文化单位分成两类；这一分法就是本题四个选项的坐标系：</p>
+<table><thead><tr><th>类别</th><th>谁主导</th><th>追求什么</th><th>满足什么需求</th></tr></thead><tbody><tr><td>公益性文化事业</td><td><strong>政府</strong>主导</td><td>社会效益</td><td><strong>基本</strong>文化需求（保基本、兜底线、促公平）</td></tr><tr><td>经营性文化产业</td><td><strong>市场</strong>主导</td><td>经济效益</td><td><strong>多样化、个性化</strong>需求</td></tr></tbody></table>
+<p>题眼是“<strong>基本</strong>文化权益”。基本权益的特点：人人<strong>平等</strong>享有，不能看“买不买得起”的脸色——而市场只为付得起钱的人服务，兜不住底线。顺着两分法找，答案只能落在<strong>政府主导</strong>的那一类。</p>
+<h3>第 1 步：对号入座——政府主导的那一类长什么样</h3>
+<p>政府主导、免费或低价、覆盖城乡的公共文化产品，组织起来就是<strong>公共文化服务体系</strong>：公共博物馆、图书馆、文化馆、农家书屋、广播电视村村通、农村电影放映……它们不靠门票、不挑消费者，承担的正是“保基本、兜底线”的功能。C 项“发展公益性事业，建立政府主导的公共文化体系”与机制一一对应：公益性事业是内容，公共文化服务体系是它的组织形式，选 <strong>C</strong>。</p>
+<h3>第 2 步：三个干扰项各坏在哪一层</h3>
+<ul><li><strong>A（繁荣社会主义文化，提高文化软实力）</strong>：这是文化建设的<strong>总体目标</strong>层，回答“文化强不强、软实力大不大”；题问的是“基本权益<strong>靠什么保障</strong>”的<strong>途径</strong>——层次错位，答非所问。</li><li><strong>B（协调发展公益性文化事业，经营性文化产业）</strong>：表述本身没错，但它是文化体制改革的<strong>总体布局</strong>（两手抓、两手都要硬）；题干问的是“基本权益”的<strong>主要</strong>途径——主要靠的是<strong>公益性这一手</strong>，把两手并列当成保障途径，就答偏了。</li><li><strong>D（调动社会力量在市场竞争中发展壮大文化事业）</strong>：双重张冠李戴——①在市场竞争中发展壮大的应是<strong>文化产业</strong>，“文化事业”恰恰由政府主导、不进市场搏杀；②拿市场竞争保“基本”，弱势群体、偏远地区会先被市场淘汰在外，兜不了底。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>把“基本”与“多样”混搭 → 误选 B</strong>：基本需求主要靠事业保障，多样化需求靠产业满足；两者是分工，不是并列担当。</li><li><strong>“事业”“产业”关键词错位 → 误选 D</strong>：事业 = 公益 / 政府 / 社会效益，产业 = 经营 / 市场 / 经济效益，逐词锁定。</li><li><strong>被“软实力”等大词吸引 → 误选 A</strong>：目标层表述再漂亮，也替代不了“途径”这个问法。</li></ul>
+<blockquote>记忆锚点：保基本找<strong>事业</strong>（政府主导的公共文化服务体系），多样化找<strong>产业</strong>（市场竞争）；A 是目标，B 是布局，D 张冠李戴。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

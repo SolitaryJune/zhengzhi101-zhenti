@@ -1,8 +1,103 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2025-17 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2025-17</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2025-17 · 人与病毒协同进化 → 人与自然（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼', count: 0,
+    log: '先拆材料：病毒先在并不断改造人类基因组，人类积极对抗并把病毒序列"接管"进宿主调控系统。',
+    title: '审题眼：一段生物学材料，问的是人与自然',
+    body: '<p>材料两个动作：<b>病毒"利用和改造"人类基因组</b>（先在的客观力量）；<b>人类免疫系统"积极对抗"并把病毒序列"接管"进宿主遗传调控系统</b>（主体的能动应对）。</p><p>题干把这种关系叫"协同进化"，再让你类推人与自然关系。考点：<b>自然界的先在性与客观规律 vs 人的能动性与选择性</b>。</p>' },
+  { cls: 'key', tag: '机制先行', count: 0,
+    log: '材料里两个角色一动一静，正好对应自然界先在性、人的能动性两条原理。',
+    title: '机制先行：材料里的两个角色对应两条哲学原理',
+    body: '<ul><li><b>病毒先在</b> → 自然界的<b>先在性</b>与<b>客观规律性</b>：不以人的意志为转移，划定能动活动的边界；</li><li><b>人类接管</b> → 人的<b>能动性、选择性</b>：但注意"接管"的方式是顺应宿主遗传调控系统——不是消灭规律，而是<b>顺应规律</b>。</li></ul><p>两个角色一动一静，答案 CD 的雏形已经在这句话里："以实现协同进化"。</p>' },
+  { cls: 'bad', tag: 'A 排除', ribbon: { k: 1, ok: false }, count: 0,
+    log: 'A 说"纯粹是生物演变"——人与自然的关系以实践为中介，不纯粹，排除。',
+    title: '选项 A：纯粹是自然界的生物演变过程 —— 错',
+    body: '<p>"纯粹"二字即破绽。人与自然的关系以<b>实践</b>为中介，是人改造对象世界的<b>历史的、社会的</b>关系，不是纯生物学过程。</p><p>题干自己就是反例：人类"积极对抗""接管"病毒序列，都是能动的实践活动——哪里"纯粹生物演变"？A 抹掉了实践中介。</p>' },
+  { cls: 'bad', tag: 'B 排除', ribbon: { k: 2, ok: false }, count: 0,
+    log: 'B 说社会规律"由生物规律决定"——自然规律只能制约、不能决定社会规律，排除。',
+    title: '选项 B：社会规律由生物进化规律所决定 —— 错',
+    body: '<p>"为基础"与"所决定"一字之差：前者是<b>前提条件</b>，后者是<b>支配关系</b>。</p><p>社会规律是<b>人们自己的社会行动的规律</b>，性质（经由有意识的活动实现）与自然规律根本不同。自然规律制约、影响社会活动，但制约 ≠ 决定。B 是把"前提"偷换成"决定"的自然主义错误。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true }, count: 1,
+    log: 'C 入选："接管"正是顺应宿主遗传调控系统——尊重客观规律是和谐共生的基础。',
+    title: '选项 C：和谐共生以自然界客观规律为基础 —— 对',
+    body: '<p>"接管"为什么成立？病毒序列必须<b>顺应宿主细胞的遗传调控系统</b>才能被纳入——这正是"按客观规律办事"。</p><p>对人与自然：尊重自然、顺应自然，以自然界的客观规律为<b>基础</b>，才有和谐共生。C 是材料机制的原样哲学翻译。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true }, count: 2,
+    log: 'D 入选：病毒先在（先在性）、人类选择应对方式（选择性），结果是协同进化（动态统一）。',
+    title: '选项 D：人的选择性与自然界先在性动态统一 —— 对',
+    body: '<p>病毒早已存在并先行改造（<b>先在性</b>），人类选择对抗或接管的方式（<b>选择性</b>），最终结果是"协同进化"（<b>动态统一</b>）。</p><p>先在性划定边界，选择性在边界内施展，二者在过程中互相成就——D 与材料逐字对应。</p>' },
+  { cls: 'key', tag: '陷阱对比', count: 2,
+    log: '对比病根：A 用"纯粹"抹掉实践，B 用"决定"取代社会规律；C、D 各守一端。',
+    title: 'C、D 与 A、B 各错在哪：一对"取代"，一对"纯粹"',
+    body: '<ul><li><b>B</b> 把自然规律的<b>制约</b>夸成对社会规律的<b>决定</b>——取代了社会规律的独立性质；</li><li><b>A</b> 用"纯粹生物演变"抹掉实践中介——取消了人的能动地位；</li><li><b>C、D</b> 恰好各守一端：C 守<b>客观基础</b>，D 守<b>能动与先在的统一</b>，二者合起来才是"人与自然关系"的完整表述。</li></ul>' },
+  { cls: 'good', tag: '结论', count: 2,
+    log: '收束：答案 CD——规律是基础，人在边界内能动选择。',
+    title: '收束：答案 CD',
+    body: '<p>答案 <b>CD</b>：和谐共生以自然规律为基础（C）＋选择性与先在性动态统一（D）。</p><p>两个干扰项的病根：A"纯粹"抹实践，B"决定"抬自然。记住分工——<b>规律是基础，人选择性应对</b>。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    count: s.count,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2025·17】人与病毒协同进化 → 人与自然关系（多选）',
+  subtitle: '考点：自然界的先在性与客观规律 · 人的能动性与选择性 · 选项逐项推演',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已确认正确项',
+  snaps: snaps,
+  result: {
+    big: '答案 CD',
+    html: '<b>病毒先在，人类应对，协同进化</b>：自然规律是和谐共生的基础（C），人的选择性与自然界先在性动态统一（D）。<br>两个干扰项各病一处——A"纯粹"抹掉实践中介，B"决定"取代社会规律独立性质。制约 ≠ 决定，基础 ≠ 包办。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：从"人毒协同进化"读出人与自然的两条铁律</h2>
+<p>答案：<strong>CD</strong>。</p>
+<h3>第 0 步：先立机制——这段材料里藏着两个角色</h3>
+<p>题干讲人类与病毒的持久斗争，看似生物学，其实是把<strong>人与自然关系的全部要素</strong>搬到了显微镜下：</p>
+<ul><li><strong>病毒先在</strong>：病毒早已存在、不断"利用和改造"人类基因组——这是<strong>自然界的先在性与客观制约</strong>，不以人的好恶为转移；</li><li><strong>人类应对</strong>：免疫系统"积极对抗"，或清除病毒，或把整合进基因组的病毒序列"<strong>接管</strong>"进宿主的遗传调控系统——这是<strong>人的能动性与选择性</strong>，且注意"接管"一词：人不是消灭规律，而是<strong>顺应规律</strong>把它纳入自己的运转（这就是"协同进化"）。</li></ul>
+<p>于是两条结论自然浮出：能动活动要<strong>以客观规律为基础</strong>（C），能动选择要与先在制约<strong>动态统一</strong>（D）。</p>
+<h3>第 1 步：为什么 B 错——"为基础"与"所决定"一字之差</h3>
+<p>B 说人类社会活动的规律"由生物进化的规律所决定"。追问一句：病毒序列被接管，能推出社会规律被生物规律决定吗？不能。社会规律是<strong>人们自己的社会行动的规律</strong>，它的性质（通过人的有意识活动实现）与自然规律（自发盲目实现）根本不同。自然规律制约、影响社会活动，但<strong>制约 ≠ 决定</strong>——承认"基础、前提"不等于承认"支配、决定"。B 把"前提条件"偷换成"决定关系"，是自然主义的典型错误。</p>
+<h3>第 2 步：为什么 A 错——抹掉了"实践"这个中介</h3>
+<p>A 说人与自然的关系"纯粹是自然界的生物演变过程"。"纯粹"二字就是破绽：人与自然的关系以<strong>实践</strong>为中介，是人改造对象世界的<strong>历史的、社会的</strong>关系，不是纯生物学过程。题干自己就否定了 A——人类免疫系统"积极对抗"、人类对病毒序列加以"接管"，都是主体能动的实践活动，哪里"纯粹生物演变"？</p>
+<h3>第 3 步：C、D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对号处</th></tr></thead><tbody><tr><td>C 和谐共生以自然界客观规律为基础</td><td>✅</td><td>"接管"= 顺应宿主遗传调控系统办事；尊重自然规律是和谐共生的前提</td></tr><tr><td>D 人的选择性与自然界先在性动态统一</td><td>✅</td><td>病毒先在（先在性），人类选择对抗与接管方式（选择性），结果是"协同进化"（动态统一）</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：被"人类基因组被病毒改造"的生物学叙述带偏，以为社会规律也归自然规律管。记住：人来源于自然界，但社会规律是独立性质的规律。</li><li><strong>漏选 D</strong>：只看到"先在性"看不到"选择性"。题干中人类的应对方式是可以选择的（清除或接管），先在性划定边界，选择性在边界内活动，二者在"协同进化"中统一。</li></ul>
+<blockquote>记忆锚点：<strong>先在性是前提（C），能动性是特色（D），社会规律不被自然规律包办（B 反），人与自然的关系经实践中介、不"纯粹"（A 反）。</strong></blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

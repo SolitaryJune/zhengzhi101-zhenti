@@ -1,8 +1,94 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-30 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-30</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2017-30 拆一个“灋”字</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：《说文解字》释"灋"',
+    cls: 'key',
+    body: '<p>材料：<code>"灋，刑也，平之如水，从水；廌，所以触不直者去之，从去"</code>。考点定位：<b>从古文字材料读古人对法律的理解和诉求</b>——答案只能从材料里长出来。</p>' },
+  { title: '先立机制：拆字——三个部件三层观念',
+    cls: 'key',
+    body: '<div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0">' +
+      '<div class="aw-box ok" style="padding:8px 12px">水 = 平之如水</div>' +
+      '<div class="aw-box ok" style="padding:8px 12px">廌 = 獬豸触不直者</div>' +
+      '<div class="aw-box ok" style="padding:8px 12px">去 = 去掉不直者</div></div>' +
+      '<p>水→<b>公平</b>；廌→<b>正义神圣</b>（天然公正的裁判者）；去→<b>惩恶</b>。伏笔：古代"法"主要表现为"刑"——工具属性，与现代法治不同。</p>' },
+  { title: 'A：法律寄托惩恶扬善、匡扶正义的价值追求',
+    cls: 'good',
+    body: '<p>对应"廌触<b>不直者</b>去之"：触的是不直者（惩恶），依据的是"直"（正义）——价值内核正是惩恶扬善、匡扶正义。<b>A 对。</b></p>' },
+  { title: 'B：法律体现君权神授的思想？',
+    cls: 'bad',
+    body: '<p>材料里无"君"、无"神授"的任何字面落点；"灋"的意象是水（公平）与獬豸（正义）——材料外概念硬塞进来。<b>B 错。</b></p>' },
+  { title: 'C：法律富含公平如水、正义神圣的意蕴',
+    cls: 'good',
+    body: '<p>"<b>平之如水</b>"直接对应公平如水；獬豸"<b>公正不阿、善断是非曲直</b>"对应正义神圣——两个部件合成 C 的两个关键词。<b>C 对。</b></p>' },
+  { title: 'D：法律具有至高无上的地位？',
+    cls: 'bad',
+    body: '<p>题干明示古代"法"主要表现为"刑"——刑是统治工具，古人并无"法律至上"观念；这是现代法治语境的说法，材料支撑不了。<b>D 错。</b></p>' },
+  { title: '结论：AC',
+    cls: 'good',
+    body: '<p>读得出的：意蕴（C）与诉求（A）；读不出的：君权神授（B）、法律至上（D）。答案选 <b>AC</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var optK = { 2: 1, 3: 2, 4: 3, 5: 4 }[i];
+  var optLetter = optK ? 'ABCD'[optK - 1] : '';
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: i === 0 ? '审题' : (i === 1 ? '拆字' : (i === STEPS.length - 1 ? '结论' : '选项 ' + optLetter)),
+    log: s.title,
+    count: optK || 0,
+    ribbon: optK ? { k: optK, ok: s.cls !== 'bad' } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2017·30】拆“灋”：古人对法律的理解和诉求',
+  subtitle: '考点：法律的含义 · 从材料读观念 · 多选题',
+  counterLabel: '已核选项',
+  ribbonTitle: '选项判定（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先把"灋"拆成三个部件，再逐项核对读得出与读不出。',
+  snaps: snaps,
+  result: {
+    big: '答案 AC',
+    html: '记忆锚点：拆"灋"=<b>水=公平如水 + 廌=正义神圣 + 去=惩恶扬善</b>（C、A）；材料无君权神授（B），古代法主"刑"、谈不上至上（D）——材料题每个选项都要找字面落点。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：拆一个"灋"字——古人把法律理解成了什么</h2>
+<p>答案：<strong>AC</strong>。</p>
+<h3>第 0 步：先立机制——材料题的铁律：答案只能从材料里长出来</h3>
+<p>这是一道"从古文字材料读观念"的题，解法是<strong>拆字</strong>：《说文解字》释"灋"由三个部件构成，每个部件携带一层观念。</p>
+<p>第一个部件"<strong>水</strong>"——"平之如水"：法律像水面一样平，一视同仁、不偏不倚——这是<strong>公平</strong>的观念。第二个部件"<strong>廌</strong>"——神话中的独角兽獬豸，"公正不阿，善断是非曲直"，见人就触"不直者"：由一个神话中天然公正的裁判者来断案——这是<strong>正义神圣</strong>的观念，法律肩负明断是非、扶正祛邪的使命。第三个部件"<strong>去</strong>"——把"不直者"（坏人坏事）去掉：惩恶。</p>
+<p>三个部件合起来，古人对法的理解与诉求就出来了：<strong>法律富含公平如水、正义神圣的意蕴（C）</strong>，寄托着<strong>惩恶扬善、匡扶正义的价值追求（A）</strong>。注意题干还有一处伏笔："在古代，'法'主要表现为'刑'或'刑律'"——这说明古法与现代"法律至上"的法治观念相距甚远，古人从未把法抬到"至高无上的地位"；而"君权神授"在材料里更是无迹可寻。这道题同时考"读得出什么"和"读不出什么"。</p>
+<h3>第 1 步：四个选项对号入座</h3>
+<ul><li><strong>A 法律寄托着惩恶扬善、匡扶正义的价值追求</strong> ✅："廌触不直者去之"——触的是"不直者"（惩恶），依据的是"直"（正义）——惩恶扬善、匡扶正义正是这个意象的价值内核。</li><li><strong>B 法律体现了君权神授的思想</strong> ❌：材料中无"君"、无"神"授权的任何信息；"灋"的意象是水（公平）与獬豸（正义），与"君权神授"不沾边——属于把材料外的概念硬塞进来。</li><li><strong>C 法律富含着公平如水、正义神圣的深刻意蕴</strong> ✅："平之如水"直接对应<strong>公平如水</strong>；獬豸"公正不阿、善断是非曲直"对应<strong>正义神圣</strong>——两个部件正好合成 C 的两个关键词。</li><li><strong>D 法律具有至高无上的地位</strong> ❌：题干明示古代"法"主要表现为"刑"——刑是君主统治的工具，古人并无"法律至上"观念；"至高无上"是现代法治语境的说法，材料支撑不了。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 D</strong>：被"公平正义很神圣"的情绪推过去，顺手把"法律地位至高无上"也勾上。区分两个问题：材料讲的是法的<strong>精神意蕴</strong>（A、C），不是法的<strong>效力地位</strong>（D）——古代法恰恰只是刑与工具。</li><li><strong>误选 B</strong>：联想过度。见到古代政治就套"君权神授"，忘了材料题的第一纪律：每个选项都要能在材料里找到字面落点。</li><li><strong>漏选 A 或 C</strong>：只抓住一个部件。C 对应"水+廌"的意象，A 对应"廌触不直者去之"的行为指向——两个选项是同一组意象的"意蕴"与"诉求"两面，缺一即不全。</li></ul>
+<blockquote>记忆锚点：拆"灋"三部件——<strong>水=公平如水（C），廌=正义神圣·善断曲直（C），去=去掉不直者=惩恶扬善（A）</strong>；材料里没有君权神授（B），古代法主"刑"、谈不上至上（D）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

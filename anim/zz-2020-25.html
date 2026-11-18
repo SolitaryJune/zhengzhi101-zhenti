@@ -1,8 +1,77 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-25 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-25</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2020-25 以国家公园为主体的自然保护地体系的意义（多选） · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 anim_math_concept_template（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: "审题眼：从一条演进线读出“体系升级”", cls: "key", sc: "step", tag: "审题", log: "时间线：1956 → 2750 处 → 十八届三中全会 → 10 处试点", body: "<p>演进线：<b>1956</b> 年第一个自然保护区（<b>鼎湖山</b>）→ 全国 <b>2750</b> 个保护区 → 十八届三中全会决定<b>“建立国家公园体制”</b> → <b>10</b> 处体制试点。设问：建立以国家公园为主体的自然保护地体系的<b>意义</b>。</p>" },
+  { t: "机制先行：意义 = 想解决的问题 + 想达到的目标", cls: "key", sc: "shift", tag: "机制", log: "碎片化保护 → 统一体系；意义按四层核对", body: "<p>过去以自然保护区为主的保护<b>碎片化</b>（各自为政、交叉重叠、有空缺），升级方向：把保护等级最高、生态价值最大的<b>国家公园</b>立为“主体”，带动整个体系。意义按四层核对：<b>宏观目标—保护对象—根本关系—安全底线</b>。</p>" },
+  { t: "选项 A：推进自然生态保护、建设美丽中国 —— 对", cls: "good", sc: "ok", tag: "选项 A", ribbon: { k: 1, ok: true }, log: "宏观目标：制度抓手", body: "<p>建立国家公园体制、重构保护地体系，是<b>推进自然生态保护、建设美丽中国</b>的制度抓手——宏观目标层。A 对。</p>" },
+  { t: "选项 B：保护重要的自然生态系统和独特的自然遗产 —— 对", cls: "good", sc: "ok", tag: "选项 B", ribbon: { k: 2, ok: true }, log: "保护对象：最直接的一层", body: "<p>国家公园守护生态系统的<b>完整性、原真性</b>与<b>独特的自然遗产</b>——“重要”“独特”两个限定词恰与“主体”地位呼应——保护对象层。B 对。</p>" },
+  { t: "选项 C：促进人与自然和谐共生 —— 对", cls: "good", sc: "ok", tag: "选项 C", ribbon: { k: 3, ok: true }, log: "根本关系：生态文明核心要义", body: "<p>给自然留下恢复空间、给子孙留下生态资产——<b>促进人与自然和谐共生</b>的制度落实，生态文明的核心要义——根本关系层。C 对。</p>" },
+  { t: "选项 D：维护国家生态安全 —— 对", cls: "good", sc: "ok", tag: "选项 D", ribbon: { k: 4, ok: true }, log: "安全底线：生态红线即安全线", body: "<p>生态是<b>国家安全</b>的重要组成部分，守住生态红线就是<b>维护国家生态安全</b>——安全底线层。D 对。</p>" },
+  { t: "结论：ABCD——四层各就各位", cls: "good", sc: "step", tag: "结论", log: "目标·对象·关系·安全，四层都在射程内", body: "<p>答案 <b>ABCD</b>：美丽中国（A·目标）+ 生态系统与自然遗产（B·对象）+ 和谐共生（C·关系）+ 国家生态安全（D·安全）。</p><p>四项层次不同、互不冲突，都是自然保护地部署的规范表述——找不到矛盾点，全选。</p>" }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "【2020·25】以国家公园为主体的自然保护地体系的意义（多选）",
+  subtitle: "考点：生态文明 · 自然保护地体系“主体”定位",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）",
+  intro: "点击「▶ 播放」：先从演进线看懂“体系升级”，再按目标—对象—关系—安全四层核对意义。",
+  snaps: snaps,
+  result: {
+    big: "答案 ABCD",
+    html: "记忆锚点：四重意义 = <b>建设美丽中国（A·目标）· 保护生态系统与自然遗产（B·对象）· 人与自然和谐共生（C·关系）· 维护国家生态安全（D·安全）</b>；1956 鼎湖山是起点，十八届三中全会是转折。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：以国家公园为主体的自然保护地体系"意义"的四个维度</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——从题干数据读出"体系升级"这件事</h3>
+<p>题干给了一条演进线：<strong>1956 年</strong>第一个自然保护区（鼎湖山）→ 全国 <strong>2750 个</strong>自然保护区 → 十八届三中全会决定"<strong>建立国家公园体制</strong>" → <strong>10 处</strong>体制试点。这条线的机制含义是：过去以自然保护区为主的保护是<strong>碎片化</strong>的（各自为政、交叉重叠、还有保护空缺），现在要升级为<strong>以国家公园为主体</strong>的统一自然保护地体系——国家公园保护等级最高、生态价值最大，先把最核心的整起来，再带动整个体系。</p>
+<p>判断"意义"题的思路随之确定：一项制度的意义，就是它<strong>想解决的问题</strong>与<strong>想达到的目标</strong>。体系升级要解决"保护碎片化"，要达成的是生态文明的大目标——四个维度自然浮出来。</p>
+<h3>第 1 步：四项对号入座</h3>
+<table><thead><tr><th>选项</th><th>维度</th><th>对应机制</th></tr></thead><tbody><tr><td>A 推进自然生态保护、建设美丽中国</td><td>宏观目标</td><td>体系化保护是建设美丽中国的<strong>制度抓手</strong></td></tr><tr><td>B 保护重要的自然生态系统和独特的自然遗产</td><td>保护对象</td><td>国家公园守护生态系统的<strong>完整性、原真性</strong>与独特自然遗产——最直接的对象</td></tr><tr><td>C 促进人与自然和谐共生</td><td>根本关系</td><td>给自然留下恢复空间、给子孙留下生态资产——生态文明的<strong>核心要义</strong></td></tr><tr><td>D 维护国家生态安全</td><td>安全底线</td><td>生态是国家安全的重要组成部分，守住红线就是<strong>维护国家生态安全</strong></td></tr></tbody></table>
+<h3>第 2 步：预判"为什么能全选"</h3>
+<ul><li>四项<strong>层次不同、互不冲突</strong>：A 是宏观目标，B 是直接对象，C 是根本关系，D 是安全底线——从对象到目标到安全，正好构成"意义"的完整链条，没有哪项越出"建立以国家公园为主体的自然保护地体系"这个部署的射程。</li><li>逆向检验：如果某项错，它必须与"自然保护地"的定位相矛盾（比如时点错位、主体错位、把别的制度的功劳算过来）。本题四项全是生态文明与自然保护地部署的规范表述，找不到矛盾点。</li><li>"主体"二字再看一眼：以<strong>国家公园</strong>为主体，不是说自然保护区不重要了，而是<strong>保护强度最高、生态价值最大的那一块</strong>要由国家公园扛起——所以 B 的"重要""独特"两个限定词恰与"主体"地位呼应，不是凑数的好话。</li></ul>
+<h3>易错点：典型误解与排查要点</h3>
+<ul><li><strong>不敢全选</strong>：对应"多选题必有一错"的机械直觉。意义类题的检查点是"每项是否确有出处、层次是否落在射程内"，不是凑错项。</li><li><strong>漏选 B</strong>：把"意义"理解成只有宏观口号（美丽中国、和谐共生），忽视<strong>保护对象</strong>这个最直接的层次——制度意义首先是"它到底保住了什么"。</li><li><strong>漏选 D</strong>：不了解<strong>生态安全是总体国家安全观的组成部分</strong>，觉得"安全"话题与环保不沾边——其实生态红线就是国家安全线。</li><li><strong>把 B 混成 A</strong>：分不清"对象"与"目标"——保住生态系统和自然遗产（B）是手段层，建设美丽中国（A）是目标层，两者各算一条意义。</li></ul>
+<blockquote>记忆锚点：1956 鼎湖山起点、十八届三中全会转折；四重意义 = <strong>美丽中国（A）· 生态系统与自然遗产（B）· 人与自然和谐共生（C）· 国家生态安全（D）</strong>——目标·对象·关系·安全，四层全选。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,144 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-15 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-15</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2009·15 神舟七号首次实现</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链动画（政治站无 KaTeX）：卡片 + 引擎格子工具画航天里程碑时间轴，只写 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 里程碑时间轴：年份在上、飞行器在格、首次在下（ptr 行反用在格下注记）
+function mileRow(state, sub){
+  var row = AW.el('div', 'aw-cells');
+  var names = ['神五', '神六', '嫦娥', '神七'];
+  var years = { 1: '2003', 2: '2005', 3: '2007', 4: '2008' };
+  names.forEach(function(nm, i){
+    var col = AW.el('div', 'aw-col');
+    col.style.width = '64px';
+    col.appendChild(AW.el('div', 'aw-ptr', years[i + 1]));
+    var box = AW.el('div', 'aw-box' + (state[i] ? ' ' + state[i] : ''), nm);
+    box.style.width = '64px';
+    col.appendChild(box);
+    col.appendChild(AW.el('div', 'aw-idx', (sub && sub[i]) || ''));
+    row.appendChild(col);
+  });
+  return row;
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：两个锚点",
+    "cls": "key",
+    "body": "<p>题干给两个锚：<b>2008 年 9 月 25 日</b>发射、<b>神舟七号</b>。问「首次实现了」什么——这个「首次」必须同时满足：挂在<b>神染名下</b>、发生在<b>神七这次飞行</b>。不满足即出局。</p>",
+    "log": "首次=神染名下 × 神七当年"
+  },
+  {
+    "title": "立轴：里程碑排队",
+    "cls": "key",
+    "body": "<p>载人航天与探月是两条并行工程线，各台阶的「首次」互不重复。轴上年份、格中飞行器、格下首次：</p>" +
+      mileRow(['dim', 'dim', 'dim', 'dim'], ['载人', '多天', '绕月', '出舱']) +
+      "<p>两个「神」字头的线别串门：嫦娥是月球卫星，不是载人飞船。</p>",
+    "log": "神五/神六/嫦娥/神七 各占一阶"
+  },
+  {
+    "title": "神七这一阶：D 正确",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>9 月 27 日，翟志刚着舱外服走出轨道舱、太空挥舞五星红旗——中国航天员<b>首次出舱活动</b>（太空行走）。「我已出舱，感觉良好」就是神七的名场面。<b>D 正确</b>。</p>",
+    "log": "翟志刚出舱 → D ✓"
+  },
+  {
+    "title": "A：挂在神五名下",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>首次<b>载人飞行</b>是 2003 年神舟五号（杨利伟）——比神七早整整五年，挂不到神染名下。<b>A 错误</b>。</p>",
+    "log": "A 属神五 2003 ✗"
+  },
+  {
+    "title": "B：挂在嫦娥名下",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>首次<b>绕月探测</b>是 2007 年嫦娥一号——属探月工程线，连「神舟」系列都不是，更不满足题干「航天飞船」的限定。<b>B 错误</b>。</p>",
+    "log": "B 属嫦娥 2007（探月线）✗"
+  },
+  {
+    "title": "C：早已有之",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p><b>天地对话</b>（地面与在轨航天员通话）从神五起就是载人飞行标配，神六还与家人天地通话——排不进任何「首次」的专属名单。<b>C 错误</b>。</p>",
+    "log": "C 非新里程碑 ✗"
+  },
+  {
+    "title": "神六补位",
+    "cls": "good",
+    "body": "<p>表格里剩下的神六也有专属台阶：<b>多人多天</b>载人飞行（费俊龙、聂海胜，2005）——它没进选项，但补全谱系，防止漏记。</p>",
+    "log": "神六=多人多天，补全谱系"
+  },
+  {
+    "title": "结论：答案 D",
+    "cls": "good",
+    "body": "<p>一轴定音：<b>神五载人(03) → 神六多天(05) → 嫦娥绕月(07) → 神七出舱(08)</b>。出舱是后续交会对接、空间站的前置技术，2008 年的头条里程碑非它莫属。</p>",
+    "log": "锁定 D：出舱活动"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  title: "神舟七号：首次实现了什么",
+  subtitle: "2009 年第 15 题（单选）· 考点：神舟七号出舱活动 · 方法：里程碑时间轴，每个「首次」挂对飞行器与年份",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先立里程碑时间轴，再逐项挂回各自的飞行器。',
+  result: {
+    big: "答案 D（出舱活动）",
+    html: "记忆锚点：神五 2003 <b>载人</b> → 神六 2005 <b>多人多天</b> → 嫦娥 2007 <b>绕月</b>（探月线）→ <b>神七 2008 出舱</b>。口诀「神七一飞，太空漫步」。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：航天里程碑题——每个「首次」都要挂对飞行器与年份</h2>
+<p>答案：<strong>D（出舱活动）</strong>。</p>
+<h3>第 0 步：先立机制——「首次」是按里程碑排队的</h3>
+<p>航天类时政题不考技术原理，考的是<strong>里程碑顺序</strong>：中国载人航天与探月工程是按台阶走的，每个台阶各有一个专属「首次」，谁也不重复、谁也不能提前。题干给了两个锚点：<strong>2008 年 9 月 25 日</strong>发射、<strong>神舟七号</strong>——所以题问的「首次」必须同时满足两个约束：挂在<strong>神染名下</strong>、发生在<strong>神七那次飞行</strong>中。这一句审题就把排除法启动了：四个选项里凡是别的飞行器/别的年份的成果，直接出局。</p>
+<h3>第 1 步：里程碑对号表</h3>
+<table><thead><tr><th>飞行器</th><th>时间</th><th>专属「首次」</th><th>对应选项</th></tr></thead><tbody><tr><td>神舟五号</td><td>2003-10</td><td><strong>首次载人飞行</strong>（杨利伟）</td><td>A</td></tr><tr><td>神舟六号</td><td>2005-10</td><td>多人多天载人飞行（费俊龙、聂海胜）</td><td>—</td></tr><tr><td>嫦娥一号</td><td>2007-10</td><td><strong>首次绕月探测</strong>（探月工程线，月球卫星，不是载人飞船）</td><td>B</td></tr><tr><td><strong>神舟七号</strong></td><td><strong>2008-09</strong></td><td><strong>首次出舱活动（太空行走，翟志刚）</strong></td><td><strong>D ✓</strong></td></tr></tbody></table>
+<p>注意表里还有一条暗线：<strong>天地对话</strong>（地面与在轨航天员通话）早在神舟五号阶段就已建立，神六又做过与家人的天地通话——它根本排不进任何一个「首次」的专属名单，对应选项 C。</p>
+<h3>第 2 步：为什么神七的答案是「出舱」</h3>
+<p>神舟七号乘组翟志刚、刘伯明、景海鹏；飞行第 2 天（9 月 27 日）翟志刚身着舱外航天服走出轨道舱、在太空挥舞五星红旗——中国航天员<strong>第一次离开飞船进入开放太空</strong>。此前所有飞行中人始终被「关」在舱内，神七跨出的是从「乘飞船」到「太空行走」的台阶；空间出舱又是后续交会对接、建空间站的前置技术，所以它当之无愧是 2008 年的头条里程碑。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A（载人飞行）</strong>：把「载人航天」这个大工程的起点误当作 2008 年的成果——首次载人是神舟五号 2003 年，比神七早整整五年。</li><li><strong>误选 B（绕月探测）</strong>：绕月属于<strong>探月工程</strong>（嫦娥一号，2007 年发射），连「神舟」系列都不是，也不满足题干「航天飞船」的限定；两条工程线并行推进、最易串线。</li><li><strong>误选 C（天地对话）</strong>：以为出舱才需要天地通信，其实天地通信链路从神五起就是载人飞行的标配，谈不上「首次」。</li><li><strong>总病根</strong>：把不同阶段、不同工程的成果混到同一个时间点。识记题靠一张对号表免疫：先分工程线，再钉年份。</li></ul>
+<blockquote>记忆锚点：神五载人（03）→ 神六多人多天（05）→ 嫦娥绕月（07，探月线）→ <strong>神七出舱（08）</strong>；口诀「神七一飞，太空漫步」。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

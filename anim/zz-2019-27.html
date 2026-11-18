@@ -1,8 +1,141 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2019-27 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2019-27</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2019·27 为什么是井冈山：选址四维条件</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链/时间线卡片），
+     引用 ../assets/anim-engine.js，只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+// 时间线一行
+function tl(time, text){
+  return '<p><b>[' + time + ']</b> ' + text + '</p>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: "审题眼：选址是「打不动城市」之后的选择",
+    cls: "key",
+    body: "<p>1927 年大革命失败，秋收起义攻打长沙受挫——强攻大城市这条路走不通。题问毛泽东<b>为什么选中井冈山</b>：把红色政权存在的条件，落到一块具体的土地上。</p>",
+    log: "先审题：考农村包围城市道路的选址逻辑"
+  },
+  {
+    title: "时间线：1927 从受挫到上山",
+    cls: "step",
+    body: tl('1927.9', '湘赣边界秋收起义，进攻长沙受挫——大城市敌人力量强大。') +
+      tl('1927.9', '文家市决策：转兵农村——方向从「城市中心」变为「农村」。') +
+      tl('1927.9 底', '三湾改编（支部建在连上）——部队完成整编。') +
+      tl('1927.10', '引兵井冈山，创建以宁冈为中心的革命根据地——选址落定。'),
+    log: "起义受挫 → 转兵 → 整编 → 上山"
+  },
+  {
+    title: "立机制：一块根据地「站得住」的四个维度",
+    cls: "key",
+    body: "<p>红色政权要在敌强我弱中长期存在，四个维度缺一不可：<b>政治</b>两头——要有群众基础、敌人统治要薄弱；<b>军事</b>——地形可守；<b>经济</b>——养得起部队。四个选项恰好各占一个位置：A 群众、B 地形、C 给养、D 敌情。</p>",
+    log: "立四维：群众 · 地形 · 给养 · 敌情"
+  },
+  {
+    title: "选项 A：有较好的群众基础",
+    cls: "good",
+    ribbon: { k: 1, ok: true },
+    body: "<p>大革命时期湘赣边界农民运动兴起、影响尚存，红军一到就有群众接应——<b>政治维度之一</b>。<b>A 入选</b>。</p>",
+    log: "A：群众基础 → 政治维度 ✓"
+  },
+  {
+    title: "选项 B：地势险要且易守难攻",
+    cls: "good",
+    ribbon: { k: 2, ok: true },
+    body: "<p>罗霄山脉中段山高林密，进可攻、退可守——弱小的红军需要地形保护，<b>军事维度</b>。<b>B 入选</b>。</p>",
+    log: "B：地形屏障 → 军事维度 ✓"
+  },
+  {
+    title: "选项 C：易于部队筹粮筹款",
+    cls: "good",
+    ribbon: { k: 3, ok: true },
+    body: "<p>周围各县农产丰富、自给自足，能支撑长期驻留的军队供给——<b>经济维度</b>，最易被忽略：根据地要<b>养活军队、长期经营</b>，太穷养不起兵。<b>C 入选</b>。</p>",
+    log: "C：筹粮筹款 → 经济维度 ✓（最易漏）"
+  },
+  {
+    title: "选项 D：敌人的统治力量比较薄弱",
+    cls: "good",
+    ribbon: { k: 4, ok: true },
+    body: "<p>地处湘赣两省交界、远离中心城市——反动统治的<b>缝隙地带</b>，政治维度之二。<b>D 入选</b>。</p>",
+    log: "D：统治薄弱 → 政治维度 ✓"
+  },
+  {
+    title: "追问：为什么四条缺一不可、C 偏偏不能漏",
+    cls: "step",
+    body: "<p>再险要的地形、再好的群众，没有粮食和经费也守不住——四条是<b>完整条件组</b>，少一条红色政权都难长期立足。且不是越穷越好：「偏僻穷困 = 根据地」是刻板印象，选中的地区恰恰要<b>农产丰富</b>。</p>",
+    log: "条件组要成套 → 别按刻板印象漏掉经济维度"
+  },
+  {
+    title: "结论",
+    cls: "good",
+    body: "<p>答案 <b>ABCD</b>。记忆锚点：井冈山选址四条 = <b>群众基础（A）+ 地形险要（B）+ 筹粮筹款（C）+ 敌人薄弱（D）</b>——政治、军事、经济三维度齐全，全选。</p>",
+    log: "锁定 ABCD：四维条件全占"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "为什么是井冈山：红色政权选址的四维条件",
+  subtitle: "考点：井冈山革命根据地 · 方法：时间线定位决策，再按「群众·地形·给养·敌情」对号",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先走 1927 时间线，再看选址四维条件如何各占一项。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABCD",
+    html: "记忆锚点：井冈山选址四条——<b>群众基础（A）+ 地形险要（B）+ 筹粮筹款（C）+ 敌人薄弱（D）</b>，政治、军事、经济三维度齐全，全选；最易漏 C（不是越穷越好，要农产丰富养得起兵）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：为什么是井冈山——红色政权选址的条件组落到一块具体的土地上</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立时间线——选址是"打不动城市"之后的现实选择</h3>
+<p>把 1927 年这条轴立起来，选址决策才有语境：</p>
+<table><thead><tr><th>时间</th><th>事件</th><th>对选址的意义</th></tr></thead><tbody><tr><td>1927.9</td><td>湘赣边界秋收起义，攻打长沙受挫</td><td>强攻大城市这条路走不通</td></tr><tr><td>1927.9</td><td>文家市决策转兵农村</td><td>方向从"城市中心"转向"农村"</td></tr><tr><td>1927.9 底</td><td>三湾改编（支部建在连上）</td><td>部队完成整编，党指挥枪</td></tr><tr><td>1927.10</td><td>引兵井冈山，以宁冈为中心创建根据地</td><td>选址落地：农村包围城市的起点</td></tr></tbody></table>
+<h3>第 1 步：再立机制——一块根据地"站得住"需要四个维度</h3>
+<p>红色政权要在敌强我弱的环境里长期存在，四个维度缺一不可：<strong>政治上</strong>要有群众基础、敌方统治要薄弱（进出的两头条件）；<strong>军事上</strong>要地形可守；<strong>经济上</strong>要养得起部队。井冈山恰好四条全占——题目问"是因为这个地区"如何，就是在考这组条件的落地。</p>
+<h3>第 2 步：A~D 对号入座</h3>
+<ul><li><strong>A 有较好的群众基础</strong>：大革命时期湘赣边界农民运动兴起、影响尚存，红军一到就有群众接应——政治维度之一。</li><li><strong>B 地势险要且易守难攻</strong>：罗霄山脉中段山高林密，进可攻、退可守——弱小的红军需要地形保护，军事维度。</li><li><strong>C 易于部队筹粮筹款</strong>：周围各县农产丰富、自给自足，能支撑长期驻留的军队供给——经济维度。</li><li><strong>D 敌人的统治力量比较薄弱</strong>：地处湘赣两省交界、远离中心城市，是反动统治的缝隙地带——政治维度之二。</li></ul>
+<p>→ 四条齐备，选 <strong>ABCD</strong>。</p>
+<h3>第 3 步：预判追问——哪条最容易被漏？为什么偏偏不能漏 C？</h3>
+<p>考生容易只记"群众基础好 + 敌人弱"两条政治理由。但根据地不是打了游击就走，要<strong>养活军队、长期经营</strong>——再险要的地形、再好的群众，没有粮食和经费也守不住。而且恰恰不是越穷越好：太穷的地方养不起兵，选中的地区要<strong>农产丰富</strong>。C 是四条里唯一的"常识层"依据，也最容易因"偏僻穷困 = 革命根据地"的刻板印象被漏掉。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选 C</strong>：把"偏僻穷困"当成根据地的特征——事实相反，根据地要能自给自足；这是对选址逻辑中"经济维度"的遗漏。</li><li><strong>漏选 B 或 D</strong>：只背"群众基础"一条——敌弱（缝隙地带）与地险（军事屏障）分别是政治、军事维度，少一条红色政权都难以长期立足。</li></ul>
+<blockquote>记忆锚点：井冈山选址四条 = <strong>群众基础（A）+ 地形险要（B）+ 筹粮筹款（C）+ 敌人薄弱（D）</strong>——政治、军事、经济三维度齐全，全选。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

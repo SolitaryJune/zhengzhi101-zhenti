@@ -1,8 +1,123 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-26 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-26</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·26 传统文化与马克思主义：契合而非同源</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站（无 KaTeX）概念/推理链版：引擎 + 推理卡片累积展开，只改题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  {
+    "title": "审题眼：一组古语 + 一个关系问题",
+    "cls": "key",
+    "body": "<p>材料列举：天下为公、民为邦本、为政以德、革故鼎新、任人唯贤、天人合一、自强不息、厚德载物、讲信修睦、亲仁善邻——问这些思想观念「怎么样」。先立关系模型：马克思主义（19 世纪欧洲）与传统文化（数千年中华文明）来源不同，靠「契合」结合。</p>",
+    "log": "十个观念，一句定性原文等着对号"
+  },
+  {
+    "title": "先立机制：契合 ≠ 同源",
+    "cls": "key",
+    "body": "<p>「第二个结合」的前提：<b>两个独立体系存在相通的智慧成分</b>（民本↔人民立场、天人合一↔人与自然和谐），结合时互相成就。所以凡把「契合」说成「一脉相承」「完整体现」的，都在偷换关系或拔高程度——词眼现形。</p>",
+    "log": "模型先立：契合是相通，不是同宗"
+  },
+  {
+    "title": "B：同科学社会主义价值观主张高度契合 → 入选",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p>二十大报告定性原文：这些思想观念「<b>同科学社会主义价值观主张具有高度契合性</b>」——这就是「结合」的可能性所在。<b>入选</b>。</p>",
+    "log": "B 报告原文：高度契合性 ✓"
+  },
+  {
+    "title": "D：体现中国人民的四观 → 入选",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>同一句报告：这些观念是中国人民在长期生产生活中积累的「<b>宇宙观、天下观、社会观、道德观</b>」的重要体现——说的是观念本身，与 B 同出一段。<b>入选</b>。</p>",
+    "log": "D 报告原文：四观的重要体现 ✓"
+  },
+  {
+    "title": "A：与马克思理论一脉相承 → 不选",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>「一脉相承」讲<b>同一源流内部的代际传承</b>（马克思主义→中国化时代化成果）；传统文化比马克思主义早两千多年，是被「结合」的对象，不在这一脉上。<b>不选</b>——契合≠同源。</p>",
+    "log": "A 把契合偷换成同源 ✗"
+  },
+  {
+    "title": "C：完整体现马克思主义的立场观点方法 → 不选",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>传统文化有契合成分，也有等级纲常一类的<b>历史局限</b>；须经<b>创造性转化、创新性发展</b>才能与马克思主义相贯通。「完整体现」把局部契合说成整体等同。<b>不选</b>——绝对化拔高。</p>",
+    "log": "C 用「完全」拔高 ✗"
+  },
+  {
+    "title": "追问预答：契合为什么推不出一脉相承？",
+    "cls": "key",
+    "body": "<p>契合说的是<b>两个体系之间存在相通处</b>；一脉相承说的是<b>同一理论源流的内部传承</b>。结合的前提恰恰是来源不同——若同源，就谈不上「两个结合」。C 同理：相通≠等同，转化之后才贯通。</p>",
+    "log": "相通 ≠ 同源 ≠ 等同"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>BD</b>。记忆锚点：传统文化与马克思主义＝<b>高度契合（B）＋四观体现（D）</b>；「一脉相承」（A）偷换同源、「完整体现」（C）绝对化拔高。</p>",
+    "log": "锁定 BD"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "传统文化与马克思主义：契合而非同源",
+  subtitle: "考点：第二个结合 · 方法：先立「契合」关系模型，再抓词眼排查偷换",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 BD",
+    html: "二十大报告定性原文两句：这些思想观念体现着中国人民的宇宙观、天下观、社会观、道德观（D），同科学社会主义价值观主张具有高度契合性（B）。A「一脉相承」把契合偷换成同源继承——结合的前提恰是来源不同；C「完整体现」绝对化拔高——须创造性转化、创新性发展才能贯通。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：中华优秀传统文化的思想观念与马克思主义是什么关系</h2>
+<p>答案：<strong>BD</strong>。</p>
+<h3>第 0 步：先立机制——「相结合」的关系是「契合」，不是「同源」</h3>
+<p>做这道题先把「第二个结合」的关系模型立起来：马克思主义与中华优秀传统文化是<strong>两个来源不同的思想体系</strong>——前者诞生于 19 世纪的欧洲，后者植根于中国数千年的农耕文明。二者能结合，靠的不是血缘上的「同宗」，而是二十大报告说的「<strong>高度契合</strong>」：存在相通的智慧成分，结合时互相成就。模型一立，词眼立刻现形——凡把「契合」说成「一脉相承」「完整体现」的，都在偷换关系或拔高程度。</p>
+<table><thead><tr><th>关系表述</th><th>对错</th><th>为什么</th></tr></thead><tbody><tr><td>同科学社会主义价值观主张高度契合（B）</td><td>✅</td><td>二十大报告对这组观念的定性原文之一</td></tr><tr><td>体现中国人民的宇宙观、天下观、社会观、道德观（D）</td><td>✅</td><td>同一段报告原文：长期生产生活中积累的「四观」的重要体现</td></tr><tr><td>与马克思主义理论一脉相承（A）</td><td>❌</td><td>「一脉相承」讲同一源流的代际传承；传统文化比马克思主义早两千多年，不在这一脉上</td></tr><tr><td>完整体现马克思主义的立场观点方法（C）</td><td>❌</td><td>传统文化有契合成分也有历史局限，须经创造性转化、创新性发展才能贯通——「完全」是绝对化</td></tr></tbody></table>
+<h3>第 1 步：B、D 为什么是原文落点</h3>
+<p>题干列举的 <code>天下为公、民为邦本、为政以德、革故鼎新、任人唯贤、天人合一、自强不息、厚德载物、讲信修睦、亲仁善邻</code>，在二十大报告里的完整表述是两句：它们是「中国人民在长期生产生活中积累的<strong>宇宙观、天下观、社会观、道德观</strong>的重要体现」（D），并且「<strong>同科学社会主义价值观主张具有高度契合性</strong>」（B）。两个正确项不是泛泛的赞美，而是报告对这组观念的<strong>定性原文</strong>——记住「四观＋契合」这组搭配，选项可直接对号。</p>
+<h3>第 2 步：A、C 的偷换手法拆解</h3>
+<p><strong>A 的手法：把「契合」偷换成「同源继承」。</strong> 追问预答：既然高度契合，为什么不能说「一脉相承」？契合说的是<strong>两个独立体系之间存在相通处</strong>（民本与人民立场、天人合一与人与自然和谐）；一脉相承说的是<strong>同一理论源流内部的传承</strong>（马克思主义→中国化时代化的成果）。中华优秀传统文化是被「结合」的对象，不是这条源流上的一环——结合的前提恰恰是来源不同。</p>
+<p><strong>C 的手法：用「完全」做绝对化拔高。</strong> 传统文化中确有与马克思主义立场观点方法相通的智慧，但它是历史产物，既有精华也有时代局限，要经创造性转化、创新性发展才能与马克思主义相贯通。「完整体现」把局部契合说成整体等同——凡见「完全」「彻底」修饰两个不同质的东西，先按绝对化干扰排查。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 A</strong>：被「相结合」带出「同源」联想——干扰正是利用「契合」与「承」的语感相近偷换关系。</li><li><strong>选 C</strong>：想强调传统文化「了不起」而接受「完整体现」——夸它的正确姿势是 B、D 的原文表述，不是把它说成马克思主义本身。</li><li><strong>漏选 D</strong>：只盯着「与马克思主义的关系」，忽略 D 说的是这组观念<strong>本身</strong>体现「四观」，与 B 同出报告同一段。</li></ul>
+<blockquote>记忆锚点：传统文化与马克思主义＝<strong>高度契合（B）＋四观体现（D）</strong>；「一脉相承」不跨文明，「完整体现」必绝对——两个词眼见一次防一次。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

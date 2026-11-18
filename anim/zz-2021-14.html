@@ -1,8 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-14 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-14</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·14 新时代爱国主义教育的着力点</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），
+     模板复制自 408 tools/anim_concept_template.html，只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼',
+    cls: 'key',
+    body: '<p>中共中央、国务院印发《新时代爱国主义教育实施纲要》（2019.11），题问「<b>着力点</b>」是——典型<b>帽子题</b>：每个定位词（主题 / 着力点 / 要求）各绑一条内容，报帽子找人对号。</p>',
+    log: '审题：认「着力点」这顶帽子'
+  },
+  {
+    title: '先立框架：帽子分层表',
+    cls: 'key',
+    body: '<p><b>鲜明主题</b>＝实现中华民族伟大复兴的中国梦；<b>着力点</b>＝<b>坚持维护祖国统一和民族团结</b>；<b>格局要求</b>＝立足中国又面向世界（与扩大对外开放结合）。各归各位，勿混。</p>',
+    log: '三顶帽子：主题 / 着力点 / 要求'
+  },
+  {
+    title: '机制：为什么着力点落在统一与团结',
+    cls: 'step',
+    body: '<p>国家统一和民族团结是各族人民的<b>最高利益</b>所在；爱国不是抽象口号，它最直接、最现实地落在反分裂促统一、各民族像<b>石榴籽</b>一样抱在一起的行动上——教育的着力点自然在此。</p>',
+    log: '最高利益 ＋ 最直接的检验场 → 着力于统一与团结'
+  },
+  {
+    title: 'A：着力点',
+    cls: 'good',
+    ribbon: { k: 1, ok: true },
+    body: '<p>纲要定点：坚持把<b>维护祖国统一和民族团结</b>作为着力点——独占「着力点」这格。<b>A 正确</b>。</p>',
+    log: 'A 命中：维护祖国统一和民族团结'
+  },
+  {
+    title: 'C：主题不是着力点',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>「中国梦」出现频率最高、最容易被顺手选。但它是<b>鲜明主题</b>——主题答「朝什么目标」，着力点答「从哪里着力」，两顶帽子不能互换。<b>C 错误</b>。</p>',
+    log: 'C 占「主题」格 → 排除'
+  },
+  {
+    title: 'B：治国方略串场',
+    cls: 'bad',
+    ribbon: { k: 2, ok: false },
+    body: '<p>「依法治国和以德治国相结合」是<b>治国理政方略</b>，属于另一个体系，不在爱国主义教育的帽子表里——词库串门。<b>B 错误</b>。</p>',
+    log: 'B 方略串场 → 排除'
+  },
+  {
+    title: 'D：要求不是着力点',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>「立足中国又面向世界」讲<b>格局</b>——爱国主义要与扩大对外开放结合，答「眼光放多开」，不答「从哪里着力」。<b>D 错误</b>。</p>',
+    log: 'D 是格局要求 → 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>A</b>。记忆锚点：新时代爱国主义教育——<b>主题＝中国梦；着力点＝维护祖国统一和民族团结</b>；立足中国又面向世界＝格局要求；依法治国与以德治国相结合＝治国方略。帽子题认准固定搭配。</p>',
+    log: '锁定 A：坚持维护祖国统一和民族团结'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || (i === 0 ? '审题' : (last ? '结论' : '分析')),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '新时代爱国主义教育的着力点',
+  subtitle: '考点：新时代爱国主义教育实施纲要 · 方法：主题 / 着力点 / 要求帽子对号法',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」先立帽子表，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '新时代爱国主义教育的<b>着力点</b>＝坚持维护祖国统一和民族团结（各族人民的最高利益、爱国主义最直接的检验场）。记忆锚点：中国梦是<b>主题</b>、依法治国以德治国是<b>方略</b>、立足中国面向世界是<b>要求</b>——「着力点」这顶帽子只给统一和团结。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：新时代爱国主义教育的「着力点」</h2>
+<p>答案：<strong>A（坚持维护祖国统一和民族团结）</strong>。</p>
+<h3>第 0 步：先立框架——爱国主义教育的「帽子」分层表</h3>
+<p>《新时代爱国主义教育实施纲要》（中共中央、国务院 2019 年 11 月印发）把爱国主义教育的内容分成若干层，<strong>每一层配一个专属定位词</strong>——这是典型的「帽子题」：命题人报出帽子（着力点），让你找出占这顶帽子的人。先把帽子体系立起来：</p>
+<table><thead><tr><th>定位词</th><th>对应内容</th></tr></thead><tbody><tr><td><strong>鲜明主题</strong></td><td>实现中华民族伟大复兴的中国梦</td></tr><tr><td><strong>着力点</strong></td><td><strong>坚持维护祖国统一和民族团结</strong></td></tr><tr><td>格局要求</td><td>立足中国又面向世界（把弘扬爱国主义精神与扩大对外开放结合起来）</td></tr></tbody></table>
+<p>题干问「着力点是」，只需在表里找占这一格的人——A 独占此格。</p>
+<h3>第 1 步：为什么着力点落在「统一和民族团结」（预判追问）</h3>
+<ul><li><strong>最高利益所在</strong>：国家统一和民族团结是各族人民的<strong>最高利益</strong>——没有统一与团结，发展、复兴都失去承载的容器。</li><li><strong>最直接、最现实的检验场</strong>：爱国不是抽象口号，它具体落在维护祖国统一（反分裂、推进统一大业）和维护民族团结（各民族像石榴籽一样紧紧抱在一起）的行动上——这是当代中国爱国主义精神最直接、最现实的体现，教育当然要着力于此。</li><li><strong>本质的落点</strong>：新时代爱国主义的本质是坚持爱国和爱党、爱社会主义高度统一；这一本质要落地，首先就落在统一与团结上。</li></ul>
+<h3>第 2 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归属</th></tr></thead><tbody><tr><td>A 坚持维护祖国统一和民族团结</td><td>✅</td><td>纲要定点：着力点</td></tr><tr><td>B 坚持依法治国和以德治国相结合</td><td>❌</td><td>治国理政的<strong>方略</strong>，不在爱国主义教育的帽子体系里</td></tr><tr><td>C 坚持实现中华民族伟大复兴的中国梦</td><td>❌</td><td>占「<strong>鲜明主题</strong>」格，不是着力点</td></tr><tr><td>D 坚持立足中国又面向世界</td><td>❌</td><td><strong>格局要求</strong>（爱国与对外开放相结合），层级不对</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 C（最常见：主题 ≠ 着力点）</strong>：「中国梦」出现频率最高、最容易被顺手选中。但主题回答「朝着什么目标教育」，着力点回答「从哪里着力」——两顶帽子不能互换。</li><li><strong>误选 B（方略串场）</strong>：依法治国和以德治国相结合是治国方略，属于治国理政的另一个体系；看到「法治＋德治」就当成思修通用答案，是典型的词库串门。</li><li><strong>误选 D（要求当着力点）</strong>：立足中国又面向世界讲的是<strong>格局</strong>——爱国主义要与扩大对外开放结合；它讲「眼光放多开」，不回答「从哪里着力」。</li></ul>
+<blockquote>记忆锚点：新时代爱国主义教育——<strong>主题＝中国梦；着力点＝维护祖国统一和民族团结</strong>；立足中国又面向世界＝格局要求；依法治国与以德治国相结合＝治国方略。帽子题认准固定搭配，各归各位。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

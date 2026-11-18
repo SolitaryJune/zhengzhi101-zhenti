@@ -1,8 +1,152 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-13 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-13</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2009·13 马克思主义中国化理论成果的精髓</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链动画（政治站无 KaTeX）：卡片推理链 + 引擎格子工具画流程行，只写 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行可加宽的格子（引擎 cellRow 固定 44px 宽，放不下中文短语，这里自定义行）
+function boxRow(items, ptrMap){
+  var row = AW.el('div', 'aw-cells');
+  items.forEach(function(it, i){
+    var col = AW.el('div', 'aw-col');
+    col.style.width = it.w || '96px';
+    if(ptrMap && ptrMap[i + 1]) col.appendChild(AW.el('div', 'aw-ptr', ptrMap[i + 1]));
+    var box = AW.el('div', 'aw-box' + (it.c ? ' ' + it.c : ''), it.t);
+    box.style.width = it.w || '96px';
+    col.appendChild(box);
+    row.appendChild(col);
+  });
+  return row;
+}
+
+// 思想路线流程行（第二步卡片用）
+function flowRow(){
+  return boxRow([
+    { t: '从实际出发', c: 'ok' },
+    { t: '理论联系实际', c: 'ok' },
+    { t: '实践检验', c: 'ok' }
+  ], { 1: '① 出发', 2: '② 联系', 3: '③ 检验' });
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：固定问法「精髓」",
+    "cls": "key",
+    "body": "<p>「马克思主义中国化理论成果的<b>精髓</b>」是教材的固定命名考点——先背死，再用机制理解为什么其他提法顶替不了它。</p>",
+    "log": "「精髓」= 固定命名，先锁定再理解"
+  },
+  {
+    "title": "立机制：中国化靠「结合」落地",
+    "cls": "key",
+    "body": "<p>普遍原理搬进中国，关键在<b>同中国具体实际相结合</b>。这个结合动作有一条标准流程（党的思想路线），每一步都靠同一个内核支撑：</p>" +
+      flowRow().outerHTML +
+      "<p>内核就是<b>实事求是</b>：从「实事」中「求」出规律之「是」，再按规律办事。</p>",
+    "log": "结合的流程与内核 = 实事求是"
+  },
+  {
+    "title": "C 正确：靠「贯穿」定义",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p>「精髓」由<b>贯穿</b>二字定义：实事求是贯穿中国化理论成果形成发展的<b>全过程</b>、体现在<b>各个基本观点</b>之中。<b>C 正确</b>——凡不具备贯穿地位的提法都顶替不了它。</p>",
+    "log": "精髓=贯穿全过程 → 实事求是"
+  },
+  {
+    "title": "验证：三代成果一脉相承",
+    "cls": "good",
+    "body": "<p>毛泽东思想：活的灵魂三基本点之一（实事求是、群众路线、独立自主）；中国特色社会主义理论体系：重新确立思想路线、解放思想与实事求是相统一。每代成果换题目不换方法内核——「一脉相承」的脉就是它。</p>",
+    "log": "毛→邓→此后：同一条方法主线"
+  },
+  {
+    "title": "A：一环换整链",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>理论联系实际是思想路线流程的<b>中间一环</b>。精髓贯穿全流程，一环顶不了整链——被贯穿者当不了贯穿者。<b>A 错误</b>。</p>",
+    "log": "A 是流程中的一环，排除"
+  },
+  {
+    "title": "B：前提顶不了内核",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>解放思想是实事求是的<b>前提条件</b>：先破除教条束缚，才求得规律。它在逻辑上「在前」，是通往精髓的路径，不是精髓本身。<b>B 错误</b>。</p>",
+    "log": "B 是前提不是内核，排除"
+  },
+  {
+    "title": "D：品质答不了「精髓」",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>与时俱进是马克思主义的<b>理论品质</b>，说的是这门理论自身的气质；题干问的是中国化「结合」动作靠什么支撑——问法对不上。<b>D 错误</b>。</p>",
+    "log": "D 是理论品质，排除"
+  },
+  {
+    "title": "结论：答案 C",
+    "cls": "good",
+    "body": "<p>完整链条：固定问法「精髓」→ 结合的枢纽 → 贯穿全过程 → <b>实事求是</b>。前提（解放思想）、一环（理论联系实际）、品质（与时俱进）围着它转，都替换不了它。</p>",
+    "log": "锁定 C：实事求是"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  title: "马克思主义中国化理论成果的精髓",
+  subtitle: "2009 年第 13 题（单选）· 考点：实事求是思想路线 · 方法：立机制看「贯穿」，再逐项归位",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先立「结合的枢纽」机制，再验证贯穿性，最后逐项排除。',
+  result: {
+    big: "答案 C（实事求是）",
+    html: "记忆锚点：见「精髓」→ 答<b>实事求是</b>；解放思想是前提、理论联系实际是一环、与时俱进是品质——三个都围着它转，都替换不了它。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「精髓」问的是把普遍原理接到中国大地上的那个枢纽</h2>
+<p>答案：<strong>C（实事求是）</strong>。</p>
+<h3>第 0 步：先立机制——「中国化」这道题究竟在问什么</h3>
+<p>马克思主义诞生于 19 世纪的欧洲，搬进中国要回答两个问题：一是<strong>用不用</strong>——用，普遍真理不存在过时问题；二是<strong>怎么用</strong>——必须同中国具体实际相结合，这正是「中国化」的全部着力点。而「结合」这个动作有一条标准流程，教材把它概括为党的思想路线：</p>
+<p>一切从实际出发 → 理论联系实际 → 在实践中检验真理和发展真理</p>
+<p>这条流程里每一步都靠同一个内核撑着：<strong>实事求是</strong>——「实事」是客观存在的一切事物，「求」是研究探寻，「是」是内部联系即规律性。抽掉它，「结合」就无从下手。所以「精髓」不是形容词堆出来的，而是由「贯穿」二字定义的：实事求是贯穿于马克思主义中国化各个理论成果形成和发展的<strong>全过程</strong>，体现在各个理论成果的<strong>各个基本观点</strong>之中。凡不具备这种贯穿地位的提法，都替换不了它——这是判断四个选项的总标尺。</p>
+<h3>第 1 步：用三代成果验证「贯穿性」</h3>
+<table><thead><tr><th>理论成果</th><th>实事求是的地位</th></tr></thead><tbody><tr><td>毛泽东思想</td><td>毛泽东用它概括党的思想路线；它是毛泽东思想<strong>活的灵魂</strong>（实事求是、群众路线、独立自主）三个基本方面之一</td></tr><tr><td>中国特色社会主义理论体系</td><td>邓小平重新确立这条路线，主张解放思想与实事求是相统一；此后各成果仍以它为精髓</td></tr></tbody></table>
+<p>每一代成果都在不同历史条件下回答新问题，但「从实际出发、按规律办事」这个方法内核一以贯之——「一脉相承」的脉，就是实事求是这条主线。题干问的「精髓」，正是对这条主线的固定命名。</p>
+<h3>第 2 步：其余三项各在各的位置上</h3>
+<table><thead><tr><th>选项</th><th>它的真实身份</th><th>替换不了「精髓」的原因</th></tr></thead><tbody><tr><td>A 理论联系实际</td><td>思想路线流程的<strong>中间一环</strong>（方法要求）</td><td>一环不等于整条链：精髓贯穿全流程，A 只是流程中的一步</td></tr><tr><td>B 解放思想</td><td>实事求是的<strong>前提与条件</strong>（先破除教条束缚才能求得规律）</td><td>逻辑上「在前」：通往精髓的路径不是精髓本身</td></tr><tr><td>D 与时俱进</td><td>马克思主义的<strong>理论品质</strong></td><td>回答的是「这门理论什么气质」，答不了「结合的枢纽是什么」这个固定问法</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 A（内容最「实」的诱惑）</strong>：理论联系实际确实离答案最近，但命题正是在「一环」与「整链」之间设卡。解法：回忆思想路线是一条三步流程，A 只是其中一步，被贯穿者当不了贯穿者。</li><li><strong>选 B（口号最响的诱惑）</strong>：解放思想是改革开放时期最响亮的提法，容易先入为主；但它是「为了做到实事求是」的条件——前提地位不等于精髓地位。</li><li><strong>选 D（字面最像的诱惑）</strong>：「品质」「精髓」「灵魂」字面都是「根本属性」家族，最具迷惑性；但「与时俱进」说的是理论自身的属性，而题干问的是中国化「结合」动作靠什么支撑——枢纽只有实事求是。</li></ul>
+<blockquote>记忆锚点：见「马克思主义中国化理论成果的精髓」→ 填<strong>实事求是</strong>；它在两处被立为根本——思想路线的内核 + 活的灵魂三基本点之一；解放思想是前提、理论联系实际是一环、与时俱进是品质，三者都替换不了它。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

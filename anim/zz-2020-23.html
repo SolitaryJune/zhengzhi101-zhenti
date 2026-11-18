@@ -1,8 +1,79 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-23 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-23</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2020-23 深圳建设先行示范区的意义（多选） · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 anim_math_concept_template（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: "审题眼：设问动词是“有利于”", cls: "key", sc: "step", tag: "审题", log: "锁定设问：建设先行示范区有利于什么", body: "<p>题眼：2019 年 8 月中共中央、国务院印发《意见》，要求深圳建设<b>高质量发展高地、法治城市示范、城市文明典范、民生幸福标杆、可持续发展先锋</b>。设问：支持深圳建设先行示范区<b>有利于</b>什么。</p>" },
+  { t: "机制先行：把文件放上时间轴", cls: "key", sc: "shift", tag: "机制", log: "时间锚点：2019.8 印发 · 小康收官在 2020", body: "<p>《意见》印发于 <b>2019 年 8 月</b>，全面建成小康社会收官在 <b>2020 年</b>——文件的定位是“<b>后小康时代</b>”的落子：不是补小康短板，而是面向<b>第二个百年</b>，为强国建设<b>先行探路、提供样板</b>。</p><p>区位加成：深圳毗邻港澳 → 与大湾区战略、“一国两制”事业天然联动。</p>" },
+  { t: "选项 A：在更高起点、更高层次、更高目标上推进改革开放 —— 对", cls: "good", sc: "ok", tag: "选项 A", ribbon: { k: 1, ok: true }, log: "排头兵的升级版定位", body: "<p>深圳是改革开放<b>排头兵和重要窗口</b>——示范区建设让改革开放<b>在更高起点、更高层次、更高目标上推进</b>。A 对。</p>" },
+  { t: "选项 B：更好实施粤港澳大湾区战略，丰富“一国两制”事业发展新实践 —— 对", cls: "good", sc: "ok", tag: "选项 B", ribbon: { k: 2, ok: true }, log: "区位决定的联动角色", body: "<p>深圳<b>毗邻港澳</b>——示范区建设与<b>粤港澳大湾区</b>战略、<b>“一国两制”</b>事业新实践天然联动。B 对。</p>" },
+  { t: "选项 C：破解制约建成小康社会的重点难点问题 —— 错", cls: "bad", sc: "miss", tag: "选项 C", ribbon: { k: 3, ok: false }, log: "时点错位 + 定位错位", body: "<p><b>时点错位</b>：2019.8 距全面建成小康社会只剩收官一步，“建成小康”的重点难点正由脱贫攻坚等硬仗收尾；<b>定位错位</b>：示范区瞄准强国建设新路径，是“向前看”的探路工程，不是小康验收。<b>C 错</b>。</p>" },
+  { t: "选项 D：率先探索全面建设社会主义现代化强国新路径 —— 对", cls: "good", sc: "ok", tag: "选项 D", ribbon: { k: 4, ok: true }, log: "“先行示范”四个字的直接对应", body: "<p>“先行示范”= <b>先</b>于全国一步、为强国建设之<b>路</b>作<b>示</b>范——<b>率先探索全面建设社会主义现代化强国新路径</b>。D 对。</p>" },
+  { t: "结论：ABD", cls: "good", sc: "step", tag: "结论", log: "汇总：A、B、D 入选，C 排除", body: "<p>答案 <b>ABD</b>：更高起点推改革开放（A）+ 湾区与“一国两制”新实践（B）+ 率先探路强国建设（D）。</p><p>C 错在把 2019 年的示范区拉回“建成小康”的旧时点——时点、定位双双错位。</p>" }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "【2020·23】深圳建设先行示范区的意义（多选）",
+  subtitle: "考点：先行示范区定位 · 时间轴定位法",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）",
+  intro: "点击「▶ 播放」：先把《意见》放上时间轴，看“先行示范”面向的是哪条路，再逐项对号。",
+  snaps: snaps,
+  result: {
+    big: "答案 ABD",
+    html: "记忆锚点：2019 年 8 月定调 → 更高起点推改革开放（A）+ 湾区与“一国两制”新实践（B）+ 率先探路强国建设（D）；“建成小康”是当时的收官任务、不是示范区定位（C 错）——先上时间轴，再勾选项。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：先行示范区"示"的是哪个路子的范——时间轴定位法</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——把文件放到时间轴上看定位</h3>
+<p>多选题选项四个全像"好话"，硬背记不全，要靠<strong>机制</strong>把错项挤出来。这道题的机制是<strong>时间轴</strong>：《关于支持深圳建设中国特色社会主义先行示范区的意见》印发于 <strong>2019 年 8 月</strong>，而全面建成小康社会的收官时点是 <strong>2020 年</strong>——也就是说，这份文件的定位是"<strong>后小康时代</strong>"的落子。深圳的任务不是补小康的短板（那是脱贫攻坚等攻坚战役的主战场），而是面向<strong>第二个百年</strong>：为建设社会主义现代化强国<strong>先行探路、提供样板</strong>。这就是"先行示范"四个字的分量——<strong>先</strong>于全国一步，<strong>示</strong>强国建设之路的<strong>范</strong>。</p>
+<p>再看区位这层机制：深圳毗邻港澳，天然承担与<strong>粤港澳大湾区</strong>战略、<strong>"一国两制"</strong>事业联动的角色——文件把深圳定位为湾区引擎之一，让"一国两制"在毗邻地区有了新的实践载体。</p>
+<h3>第 1 步：设问动词是"有利于"——四项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对应机制</th></tr></thead><tbody><tr><td>A 在更高起点、更高层次、更高目标上推进改革开放</td><td>对</td><td>深圳是改革开放<strong>排头兵和重要窗口</strong>，示范区让改革开放升级推进</td></tr><tr><td>B 更好实施粤港澳大湾区战略，丰富"一国两制"事业发展新实践</td><td>对</td><td><strong>毗邻港澳</strong>的区位决定了与湾区战略、"一国两制"新实践联动</td></tr><tr><td>C 破解制约建成小康社会的重点难点问题</td><td>错</td><td><strong>时点错位 + 定位错位</strong>（见下一步）</td></tr><tr><td>D 率先探索全面建设社会主义现代化强国新路径</td><td>对</td><td>"先行示范"的直接对应——为强国建设<strong>率先探路</strong></td></tr></tbody></table>
+<h3>第 2 步：为什么 C 错（唯一排除点，把"为什么"答透）</h3>
+<p>C 项错在<strong>双重错位</strong>：</p>
+<ul><li><strong>时点错位</strong>：2019 年 8 月距全面建成小康社会只剩收官一步。建成小康的"重点难点问题"此时正在由全国层面的脱贫攻坚等硬仗收尾，不需要、也不可能由一份面向未来的示范区文件来"破解"。</li><li><strong>定位错位</strong>：示范区瞄准的是<strong>强国建设新路径</strong>的先行探索，是"向前看"的探路工程，不是"回头看"的小康验收。题干里"高质量发展高地、法治城市示范、城市文明典范、民生幸福标杆、可持续发展先锋"五个定位，没有一条挂在"建成小康"上。</li></ul>
+<p>一句话：<strong>C 是把 2019 年的示范区拉回"建成小康"的旧时点</strong>——时点、定位都对不上。</p>
+<h3>易错点：干扰项对应哪种误解</h3>
+<ul><li><strong>误选 C</strong>：典型误解是"<strong>高频词联想</strong>"——看到"小康社会"这个熟词就顺手勾上。破解办法就是时间轴：先问"这份文件印发时，小康处于什么阶段"，C 立刻藏不住。</li><li><strong>漏选 B</strong>：典型误解是把"一国两制"当成<strong>香港专属话题</strong>，意识不到深圳毗邻港澳，示范区建设与大湾区战略、"一国两制"新实践天然捆绑。</li><li><strong>漏选 D</strong>：把"先行示范"泛化理解为"经济搞得好的样板"，丢掉题眼——示范的对象是<strong>强国建设新路径</strong>。</li><li><strong>全选冲动</strong>：多选题"看着都像好话就全勾"的直觉不靠谱——本题恰有 C 一个错项，判断依据是机制（时间轴 + 定位），不是选项的语气。</li></ul>
+<blockquote>记忆锚点：2019 年 8 月定调 → 更高起点推改革开放（A）+ 湾区与"一国两制"新实践（B）+ 率先探路强国建设（D）；"建成小康"是当时的收官任务，不是示范区的定位（C 错）——先上时间轴，再勾选项。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

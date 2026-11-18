@@ -1,8 +1,125 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2016-25 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2016-25</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2016·25 简政放权：权力「减法」怎么换市场「乘法」</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX，参照本站已完成动画），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：从材料数字读出病灶",
+    "cls": "key",
+    "log": "题眼：101 次会议 46 次部署简政放权、800 多项审批取消下放",
+    "body": "<p>材料给的账本很具体：101 次国务院常务会议、46 次部署简政放权、取消下放 <b>800 多项</b>行政审批。审批过繁意味着什么——政府替市场做了本该市场做的决定，<b>每道章都是一道交易成本</b>。「大道至简，有权不可任性」＝权力要克制；「减法换乘法」＝权责再配置的杠杆效应。问的是「旨在」，四个选项是这条因果链上的四个层面。</p>"
+  },
+  {
+    "title": "先立机制：政府与市场的分工逻辑",
+    "cls": "key",
+    "log": "机制：市场决定性作用＋更好发挥政府作用",
+    "body": "<p>社会主义市场经济的核心课题是<b>政府与市场的关系</b>：使市场在资源配置中起<b>决定性作用</b>，同时<b>更好发挥政府作用</b>。简政放权就是冲病灶去的——把不该由政府管的放给市场，把该管的（宏观调控、市场监管、公共服务）管得更好。记住这条因果链：<b>减审批→降成本→放活力→顺体制</b>。</p>"
+  },
+  {
+    "title": "A：处理好政府与市场关系，完善市场经济体制",
+    "cls": "good",
+    "ribbon": {"k": 1, "ok": true},
+    "log": "总定位层 → A 对",
+    "body": "<p>简政放权本身就是政府<b>自我革命</b>、理顺「看不见的手」与「看得见的手」关系的一招，落点是<b>体制层面</b>的完善——这是整场改革的总定位。<b>A 正确</b>。</p>"
+  },
+  {
+    "title": "B：减少审批环节，降低市场交易成本",
+    "cls": "good",
+    "ribbon": {"k": 2, "ok": true},
+    "log": "直接效果层，与材料数字对账 → B 对",
+    "body": "<p>800 多项审批取消下放，企业办事的<b>显性成本</b>（时间、跑腿）与<b>隐性成本</b>（等待、打点）同步下降——「减法」的第一笔账，与材料数字直接呼应。<b>B 正确</b>。</p>"
+  },
+  {
+    "title": "C：激发市场主体内在活力和社会创造力",
+    "cls": "good",
+    "ribbon": {"k": 3, "ok": true},
+    "log": "「乘法」落点 → C 对",
+    "body": "<p>门槛降下来，创业创新涌上来——活力不是政府「给」的，是政府<b>松绑</b>后市场自己释放的，这正是「<b>乘法</b>」二字的含义。<b>C 正确</b>。</p>"
+  },
+  {
+    "title": "D：提高政府治理能力和治理水平",
+    "cls": "good",
+    "ribbon": {"k": 4, "ok": true},
+    "log": "政府自身层：减事项≠甩手 → D 对",
+    "body": "<p>放权不是「缩编甩手」：把不该管的放出去，才能把该管的<b>管得更好</b>——「减」事项与「提」能力是同一过程的两侧，这是政府<b>治理现代化</b>的自我提升。<b>D 正确</b>。</p>"
+  },
+  {
+    "title": "预判追问：简政放权是政府从经济里退出吗",
+    "cls": "key",
+    "log": "追问：放的是「不该管的」，该管的要管得更好",
+    "body": "<p>不是，也不可能是。放的是「<b>不该管、管不好</b>」的事——市场能自主调节的一律放；但<b>该管的事</b>（市场监管、公共服务、宏观调控）反而要管得更好。所以 A（理顺关系）、D（提高治理）与 B（降成本）、C（激活力）并不矛盾：前者是<b>政府自己的转型</b>，后者是<b>市场端的释放</b>——一体两面，缺了哪层都不完整。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "log": "锁定 ABCD",
+    "body": "<p>答案 <b>ABCD</b>：四项分居「体制（A）—成本（B）—活力（C）—治理（D）」四个层面，逻辑各居其位，无一干扰——目的题四项同向时，不要自设陷阱。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "简政放权：权力「减法」怎么换市场「乘法」",
+  subtitle: "考点：政府与市场 · 简政放权 · 多选",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: "记忆锚点：减法（审批）→乘法（活力）；目的不是政府退出，而是<b>好政府＋活市场</b>——体制（A）、成本（B）、活力（C）、治理（D）四层全要。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：简政放权——权力「减法」换市场「乘法」的完整账</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——「减法」和「乘法」是同一场政府与市场的权责再配置</h3>
+<p>社会主义市场经济的核心课题是<strong>政府与市场的关系</strong>：使市场在资源配置中起<strong>决定性作用</strong>，同时<strong>更好发挥政府作用</strong>。题干给的病灶很具体——101 次国务院常务会议里 46 次部署简政放权，取消下放 800 多项行政审批。审批过繁意味着什么？政府替市场做了本该由市场做的决定：每道章都是一道交易成本，每个环节都在磨掉企业的进入意愿。</p>
+<p>「大道至简，有权不可任性」说的是<strong>权力要克制</strong>；「减法换乘法」说的是<strong>杠杆效应</strong>——审批少一道，市场上万千主体各活一步。「旨在」问的就是这场改革要达到的目的，四个选项恰好是这条因果链上的四个层面，逐层拆开看。</p>
+<h3>第 1 步：四个选项对号入座</h3>
+<ul><li><strong>A 处理好政府与市场关系，加快完善社会主义市场经济体制</strong> ✅：<strong>总定位层</strong>。简政放权本身就是政府自我革命、理顺「看不见的手」与「看得见的手」关系的一招，落点是体制层面的完善。</li><li><strong>B 减少审批环节，降低市场交易成本</strong> ✅：<strong>直接效果层</strong>，与材料数字直接对账——800 多项审批取消下放，企业办事的显性成本（时间、跑腿）与隐性成本（打点、等待）同步下降，这是「减法」的第一笔账。</li><li><strong>C 激发市场主体内在活力和社会创造力</strong> ✅：<strong>乘法落点层</strong>。门槛降下来，创业创新涌上来——活力不是政府「给」的，是政府<strong>松绑</strong>后市场自己释放的，这正是「乘法」二字的含义。</li><li><strong>D 提高政府治理能力和治理水平</strong> ✅：<strong>政府自身层</strong>。放权不是「缩编甩手」：把不该管的放出去，才能把该管的（宏观调控、市场监管、公共服务）管得更好——「减」事项与「提」能力是同一过程的两侧，这是政府<strong>治理现代化</strong>的自我提升。</li></ul>
+<h3>预判追问：简政放权是政府从经济里退出吗</h3>
+<p>不是，也不可能是。放的是「不该管、管不好」的事——市场能自主调节的一律放；但<strong>该管的事</strong>（市场监管、公共服务、宏观调控）反而要管得更好，原库解析「完善公共服务和监管，并非政府完全退出经济活动」就是这个边界。所以 A（理顺关系）和 D（提高治理）与 B（降成本）、C（激活力）并不矛盾：前者管的是<strong>政府自己的转型</strong>，后者管的是<strong>市场端的释放</strong>——一体两面。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选 D</strong>：把简政放权理解成「政府管得越少越好」。减的是<strong>审批事项</strong>，提的是<strong>治理水平</strong>——把放权当成「甩手」，就会漏掉政府自身改革这一层。</li><li><strong>漏选 B</strong>：只停在口号层面（「有权不可任性」），没算交易成本这笔具体账。B 恰与材料的「46 次会议、800 多项审批」直接呼应。</li><li><strong>多选题不敢全选</strong>：本题四项分居「体制—成本—活力—治理」四个层面，逻辑各居其位，没有程度词超载或话题错位的干扰项——这类「目的题」四项同向时不要自设陷阱。</li></ul>
+<blockquote>记忆锚点：减法（审批）→ 乘法（活力）；目的不是政府退出，而是<strong>好政府＋活市场</strong>——体制（A）、成本（B）、活力（C）、治理（D）四层全要。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

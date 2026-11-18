@@ -1,8 +1,121 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-18 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-18</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·18 价值评价为什么因人而异</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 概念/推理链卡片（同 anim/zz-2023-10 外壳；政治站纯文本，无 KaTeX） */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+function miniTable(rows){
+  var s = '<table style="border-collapse:collapse;margin:6px 0;font-size:13px">';
+  for(var i=0;i<rows.length;i++){
+    s += '<tr>';
+    for(var j=0;j<rows[i].length;j++){
+      s += '<td style="border:1px solid #cbd5e1;padding:3px 8px">' + rows[i][j] + '</td>';
+    }
+    s += '</tr>';
+  }
+  return s + '</table>';
+}
+
+var STEPS = [
+  { title: '审题眼：同一座庐山，为什么评价各不同',
+    cls: 'key',
+    body: '<p>「横看成岭侧成峰，远近高低各不同，不识庐山真面目，只缘身在此山中。」客体（庐山）没变，变的是<b>看的人的位置与视角</b>。考点：价值评价的主体性。</p>',
+    log: '客体没变，主客体关系在变' },
+  { title: '先立机制：评价的对象是「价值关系」',
+    cls: 'key',
+    body: '<p>事实认识回答「是什么」；<b>价值评价</b>回答「对主体有什么意义」。评价的对象不是客体本身，而是<b>主客体之间的价值关系</b>——客体属性与主体需要之间的关系。两条规则：评价离不开<b>主体</b>（位置、需要、视角），也离不开<b>客体固有属性</b>（庐山自有形貌）。</p>',
+    log: '评价 = 主客体价值关系的反映' },
+  { title: '选项 A：客体没有固有本质和特性',
+    cls: 'bad',
+    body: '<p>评价以客体固有属性为基础——庐山形貌客观存在，谁来看都是同一座山。差异来自<b>关系变化</b>，不是客体「没有特性」。A 错（主观主义：把主体性绝对化）。</p>',
+    ribbon: {k: 1, ok: false},
+    log: 'A ✗：客体制约的底线在' },
+  { title: '选项 B：评价与主体直接相关',
+    cls: 'good',
+    body: '<p>横、侧、远、近、高、低说的全是<b>观察者的位置与视角</b>——主体状态直接参与评价。B 对。</p>',
+    ribbon: {k: 2, ok: true},
+    log: 'B ✓：主体直接参与' },
+  { title: '选项 C：评价没有正确错误、善恶之分',
+    cls: 'bad',
+    body: '<p>评价有正误之分：如实反映主客体价值关系的评价才成立。「不识庐山真面目」恰恰承认了有「真面目」可识——若无对错，「不识」二字无从谈起。C 错（相对主义：多元 ≠ 无是非）。</p>',
+    ribbon: {k: 3, ok: false},
+    log: 'C ✗：主体性 ≠ 无对错' },
+  { title: '选项 D：评价随主客体相互关系而变化',
+    cls: 'good',
+    body: '<p>角度、距离、高度一变，<b>主客体关系</b>就变，「岭」与「峰」的评价随之改变——正是诗前两句的含义。D 对。</p>',
+    ribbon: {k: 4, ok: true},
+    log: 'D ✓：随关系而变' },
+  { title: '追问一步：因人而异 ≠ 无对错',
+    cls: 'key',
+    body: '<p>评价的<b>主体性</b>与<b>真理性</b>不冲突：评价可能出错，正因为它要以对<b>客体状况</b>和<b>主体需要</b>两方面的正确认识为前提。「只缘身在此山中」——身在山中（关系受限）才看不清，恰好说明存在看对的「真面目」。</p>',
+    log: '评价有差异，也有正误' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>BD</b>。' + miniTable([
+      ['A 客体无特性', '✗ 庐山自有形貌'],
+      ['B 与主体直接相关', '✓ 位置视角参与'],
+      ['C 评价无对错', '✗ 有「真面目」可识'],
+      ['D 随主客体关系变化', '✓ 关系变评价变']
+    ]) + '</p>',
+    log: '锁定 BD' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '价值评价的主体性：评价差异的根源在主客体关系',
+  subtitle: '考点：价值评价 · 方法：先立「评价对象是价值关系」，再逐项排查',
+  counterLabel: '推理步',
+  ribbonTitle: '选项带（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链；序号带 1–4 对应选项 A–D。',
+  snaps: snaps,
+  result: {
+    big: '答案 BD',
+    html: '记忆锚点：评价差异的根源 = <b>主客体价值关系变了</b>。客体制约的底线在（A 错）、主体直接参与（B 对）、有正误之分（C 错——主体性 ≠ 无对错）、随关系而变（D 对）。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：价值评价为什么因人而异——先分清评价的对象是什么</h2>
+<p>答案：<strong>BD</strong>。</p>
+<h3>第 0 步：先立机制——评价的对象是「价值关系」，不是客体本身</h3>
+<p>认识有两类：<strong>事实认识</strong>回答对象「是什么、怎么样」；<strong>价值评价</strong>回答对象「对主体有什么意义」。评价的对象不是客体本身，而是<strong>主客体之间的价值关系</strong>——即客体属性与主体需要之间的关系。这一条机制推出两条规则：</p>
+<ul><li><strong>评价离不开主体</strong>：同一个客体，对不同主体、或主体所处的位置/需要/视角不同，呈现的意义就不同——评价结果天然带着主体的印记；</li><li><strong>评价也离不开客体</strong>：评价以客体固有的属性为基础，客体不是任人打扮的——庐山自有形貌，谁来看它都是同一座山。</li></ul>
+<p>苏轼这首诗恰好是这套机制的完整标本：<strong>客体没变</strong>（庐山还是那座庐山），<strong>变的是主体</strong>——横看、侧看、远看、近看、高看、低看，说的是观察者的位置与视角，即<strong>主客体相互关系</strong>变了；于是「岭」与「峰」的评价随之不同。所以评价差异的根源，不是客体没有特性，而是主体与客体的关系在变。</p>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>依据</th></tr></thead><tbody><tr><td>A 评价客体没有自身固有的本质和特性</td><td>❌</td><td>评价以客体固有属性为基础；庐山形貌客观存在，差异来自关系变化，不是客体「没有特性」</td></tr><tr><td>B 评价过程与评价主体有着直接的关系</td><td>✅</td><td>横、侧、远、近、高、低说的全是观察者的位置与视角——主体状态直接参与评价</td></tr><tr><td>C 评价没有正确与错误、善与恶的区别</td><td>❌</td><td>评价有正误之分：如实反映主客体价值关系的评价才成立——「不识庐山真面目」就承认了有「真面目」可识</td></tr><tr><td>D 评价结果随主客体的相互关系而变化</td><td>✅</td><td>角度、距离、高度一变，主客体关系就变，「岭」「峰」的评价随之改变</td></tr></tbody></table>
+<p>→ 对的是 B、D，选 <strong>BD</strong>。</p>
+<h3>第 2 步：为什么「评价因人而异」推不出「评价无对错」</h3>
+<p>这是本题最容易追问的一步：既然评价随主体而变，为什么 C 错？因为<strong>主体性</strong>与<strong>真理性</strong>并不冲突。价值评价之所以可能出错，恰恰因为它要以两方面的正确认识为前提：一是对<strong>客体状况</strong>的认识，二是对<strong>主体需要</strong>的认识。把握不准，评价就失真；把握准确，评价就成立。「不识庐山真面目，只缘身在此山中」这一句本身就是证据：苏轼承认存在「真面目」（有正确评价可言），只是身在山中、关系受限而看不清。若一切评价无对错，「不识」二字便无从谈起。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A（主观主义）</strong>：从「横看成岭侧成峰」读出「评价因人而异」，就顺手以为客体没有固有属性——把评价的<strong>主体性</strong>绝对化，滑向取消客体制约的主观主义。庐山不会因为你看的角度不同，就换一座山。</li><li><strong>误选 C（相对主义）</strong>：把「评价多元」混同于「评价无是非」——价值评价同样有正确与错误，区别只在于是否如实反映了主客体之间的价值关系。多元 ≠ 无对错。</li><li><strong>漏选 B、D（只见客体不见关系）</strong>：只盯着「客体有固有属性」这半句，忽略题干横、侧、远、近、高、低描绘的全是<strong>主体所处关系</strong>的变化，于是把主体性一半漏掉。</li></ul>
+<blockquote>记忆锚点：评价差异的根源 = <strong>主客体价值关系变了</strong>——客体制约的底线在（A 错）、主体直接参与（B 对）、有正误之分（C 错）、随关系而变（D 对）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

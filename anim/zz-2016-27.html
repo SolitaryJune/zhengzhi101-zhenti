@@ -1,8 +1,132 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2016-27 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2016-27</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2016·27 「有心杀贼，无力回天」：戊戌维新失败原因</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "时间线：103 天的力量对比",
+    "cls": "key",
+    "log": "1898-6-11 诏书 → 9-21 政变",
+    "body": "<p><b>1898-6-11</b> 光绪颁《定国是诏》开始变法 → 新政 103 天 → <b>9-21</b> 慈禧发动政变、六君子喋血菜市口。力量对比：守旧势力握<b>军政实权</b>，光绪皇帝<b>没有实权</b>——谭嗣同的「无力回天」就从这里来。</p>"
+  },
+  {
+    "title": "先立机制：改革成败的公式",
+    "cls": "key",
+    "log": "机制：对面力量 vs 自己敢不敢彻底",
+    "body": "<p>自上而下的改革能否成功，取决于<b>改革派力量 vs 守旧派力量</b>，以及改革派<b>敢不敢彻底</b>。答案要成对给出：客观侧（对面太强）＋主观侧（自身太软——资产阶级的软弱性三件套：不敢触动封建经济基础、惧怕群众、把希望押在没有实权的皇帝身上）。</p>"
+  },
+  {
+    "title": "A：全面学习西学、彻底否定中学",
+    "cls": "bad",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "log": "史实错置：维新派托古改制 → A 不选",
+    "body": "<p>不符合史实：维新派恰恰<b>托古改制</b>，打着孔子旗号宣传变法（康有为《孔子改制考》）——哪来「彻底否定中学」？「激烈反传统」的记忆标签属于后来的<b>新文化运动</b>；即便如此也没有「彻底否定」。且变法败于<b>力量对比与自身软弱</b>，不败于「学得太猛」。<b>A 错误</b>。</p>"
+  },
+  {
+    "title": "B：遭到以慈禧太后为首的守旧势力镇压",
+    "cls": "good",
+    "ribbon": {
+      "k": 2,
+      "ok": true
+    },
+    "log": "客观侧：戊戌政变 → B 对",
+    "body": "<p>守旧势力牢牢掌握军政实权，政变一起，新政尽废——<b>客观原因</b>，力量对比的「对面」一侧。<b>B 正确</b>。</p>"
+  },
+  {
+    "title": "C：惧怕群众，寄望于无实权的皇帝",
+    "cls": "good",
+    "ribbon": {
+      "k": 3,
+      "ok": true
+    },
+    "log": "主观侧两连 → C 对",
+    "body": "<p>脱离群众使维新派没有任何可依靠的社会力量，只能仰仗一个「<b>无实权的皇帝</b>」——把变革押在空头支票上。<b>C 正确</b>。</p>"
+  },
+  {
+    "title": "D：不敢触动封建主义的经济基础",
+    "cls": "good",
+    "ribbon": {
+      "k": 4,
+      "ok": true
+    },
+    "log": "主观深层：软弱性的根 → D 对",
+    "body": "<p>民族资产阶级的软弱性决定维新派不敢否定封建土地所有制（通篇<b>不提土地问题</b>）、不敢彻底反封建——改革的根基先天不稳。<b>D 正确</b>。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "log": "锁定 BCD",
+    "body": "<p>答案 <b>BCD</b>。此类原因题的固定骨架：<b>客观（对面）＋主观（自身）</b>成对作答；A 是把新文化运动的特征错置到维新派头上。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "「有心杀贼，无力回天」：戊戌维新失败原因",
+  subtitle: "考点：戊戌维新运动 · 失败原因（主客观两侧） · 多选（时间线）",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: "记忆锚点：无力回天=<b>对面太强（B）+自己太软（C、D）</b>；软弱性三件套：不动封建根基、怕群众、押无实权皇帝；维新派<b>托古改制</b>，「彻底否定中学」是张冠李戴。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「无力回天」——戊戌维新失败的原因要分主客观两侧</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——变法成败的力量对比公式</h3>
+<p>一场自上而下的改革能否成功，取决于<strong>改革派的力量 vs 守旧派的力量</strong>，以及改革派自身<strong>敢不敢彻底</strong>。把戊戌年的力量对比摆出来：</p>
+<ul><li>客观侧：慈禧太后为首的守旧势力牢牢握有军政实权，维新派依靠的<strong>光绪皇帝没有实权</strong>；</li><li>主观侧：维新派是民族资产阶级上层代表，<strong>先天软弱</strong>——经济上不敢触动封建主义的经济基础（甚至不提土地问题），政治上不敢根本否定君主制度，组织上把全部希望寄托于无实权的皇帝，对人民群众<strong>惧怕并脱离</strong>（怕群众、不敢发动）。</li></ul>
+<p>两侧合起来，103 天的变法在守旧势力的反扑面前毫无还手之力——"有心杀贼，无力回天"。</p>
+<h3>第 1 步：四个选项对号入座</h3>
+<ul><li><strong>B 遭到以慈禧太后为首的强大守旧势力的反击和镇压</strong> ✅：客观原因——力量对比的"对面"一侧，戊戌政变直接终结变法。</li><li><strong>C 惧怕人民群众，把改革的全部希望寄托在一个没有实权的皇帝身上</strong> ✅：主观原因两连——脱离群众使维新派没有任何可依靠的社会力量，只能仰仗一个"无实权的皇帝"，等于把变革押在空头支票上。</li><li><strong>D 不敢触动封建主义的经济基础</strong> ✅：主观原因的深层——民族资产阶级的软弱性决定了维新派不敢否定封建土地所有制、不敢彻底反封建，改革的根基因此先天不稳。</li><li><strong>A 提倡全面学习"西学"，彻底否定"中学"</strong> ❌：不符合史实。维新派恰恰<strong>托古改制</strong>，打着孔子的旗号宣传变法（《孔子改制考》），哪来"彻底否定中学"？更关键的是： A 描述的"激进反传统"即使存在，也不是失败原因——变法败于<strong>力量对比</strong>与<strong>自身软弱</strong>，不败于"学得太猛"。</li></ul>
+<h3>第 2 步：预判追问——A 会不会与哪一运动混淆</h3>
+<p>"激烈否定传统"的记忆标签属于<strong>新文化运动</strong>（民主与科学、批判旧礼教），而且即便新文化运动也没有"彻底否定"传统。戊戌维新派是改良派，借孔子说话还来不及，谈不上彻底否定中学——A 是把两个历史时期的特征错置。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：把维新派当成"激进反传统"的代表。史实抓手：托古改制、借孔子之名行变法之实。</li><li><strong>漏选 D</strong>：只想到"被镇压"（B）这一层。软弱性三件套——不敢触动经济基础（D）、惧怕群众、依赖无实权皇帝（C）——缺一不成其为"无力回天"。</li><li><strong>主客观不分</strong>：答题框架要成对给出——客观（守旧势力强大，B）＋主观（自身软弱，C、D），这是此类原因题的固定骨架。</li></ul>
+<blockquote>记忆锚点：无力回天=<strong>对面太强（B）+自己太软（C、D）</strong>；软弱性三件套：不动封建根基、怕群众、押无实权皇帝；维新派托古改制，"彻底否定中学"是张冠李戴。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

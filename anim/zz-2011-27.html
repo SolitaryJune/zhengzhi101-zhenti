@@ -1,8 +1,78 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-27 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-27</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-27 · 归还台澎的国际文件（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·史实/时间线动画：先把四份战时文件立成"各管一段"的分工表，
+   再逐份对号（动作方向：吐出来/照着办/管欧洲/做交易）。全中文、自包含，仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var S1 = card(1, 'key', '审题眼：谁"明确规定"了台澎归还',
+  '<p>二战后期盟国文件一件接一件，问法却很准：<b>明确规定将台湾、澎湖列岛归还中国</b>的是哪几份。</p><p>解法：先分诊——每份文件<b>各管一段</b>，再查谁正面写进了这件事。</p>');
+var S2 = card(2, 'key', '机制先行：四份文件分工表',
+  '<p><b>1943.11 德黑兰</b>——对德作战（欧洲方向）；<b>1943.12 开罗</b>——对日领土处分；<b>1945.2 雅尔塔</b>——苏联出兵对价；<b>1945.7 波茨坦</b>——对日最后通牒。</p><p>归还的法律链条两环扣成：<b>开罗定内容、波茨坦定执行</b>。</p>');
+var S3 = card(3, 'good', '选项 B《开罗宣言》：正面写明归还 —— 对',
+  '<p>写明"<b>日本所窃取于中国之领土</b>，如东北、台湾、澎湖列岛等<b>归还中国</b>"。</p><p>第一手依据，动作是"<b>吐出来</b>"。B 对。</p>');
+var S4 = card(4, 'good', '选项 D《波茨坦公告》：重申开罗条件 —— 对',
+  '<p>它不另列清单——第八条重申"<b>《开罗宣言》之条件必将实施</b>"，日本投降时接受的就是这条。</p><p>第二手依据（执行确认），动作是"<b>照着办</b>"。D 对。</p>');
+var S5 = card(5, 'bad', '选项 A《德黑兰宣言》：管欧洲方向 —— 错',
+  '<p>内容是对德作战、开辟<b>第二战场</b>、战后合作——欧洲方向的事务。</p><p>根本不碰远东领土处分。A 错。</p>');
+var S6 = card(6, 'bad', '选项 C《雅尔塔协定》：涉华 ≠ 涉台澎归还 —— 错',
+  '<p>雅尔塔确实拿中国主权做了<b>交易</b>：外蒙古现状、旅大港口、中东铁路权益——换苏联出兵。</p><p>但"<b>交易</b>"（苏联出兵换东北权益）≠"<b>归还</b>"（日本吐出侵占领土）——恰好绕开台澎。C 错。</p>');
+var S7 = card(7, 'key', '陷阱复盘：涉华 ≠ 涉台澎归还',
+  '<p>C 迷惑性最高——涉华是真的，但处分的是外蒙古与东北权益。</p><p>另一坑：只选 B 漏 D——"必将实施"正是让归还<b>落地</b>的明确规定，别断掉执行环。</p>');
+var S8 = card(8, 'good', '收束：答案 BD',
+  '<p>答案 <b>BD</b>：开罗"吐出来"、波茨坦"照着办"。</p><p>德黑兰管欧洲（A）、雅尔塔做交易（C）——涉台澎归还的只有"开罗 + 波茨坦"这对组合。</p>');
+
+var snaps = [
+  { cls: 'step', tag: '审题眼', log: '问的是"明确规定台澎归还"——先给四份文件分诊', html: S1, count: 0 },
+  { cls: 'step', tag: '立机制', log: '各管一段：德黑兰欧洲、开罗领土、雅尔塔对价、波茨坦通牒', html: S1 + S2, count: 0 },
+  { cls: 'ok',   tag: 'B 入选', log: 'B 开罗宣言：正面写明台澎归还中国——"吐出来"', html: S1 + S2 + S3, count: 1, ribbon: { k: 2, ok: true } },
+  { cls: 'ok',   tag: 'D 入选', log: 'D 波茨坦公告：第八条重申开罗条件必将实施——"照着办"', html: S1 + S2 + S3 + S4, count: 2, ribbon: { k: 4, ok: true } },
+  { cls: 'miss', tag: 'A 排除', log: 'A 德黑兰宣言：管对德作战的欧洲方向，不碰远东领土', html: S1 + S2 + S3 + S4 + S5, count: 3, ribbon: { k: 1, ok: false } },
+  { cls: 'miss', tag: 'C 排除', log: 'C 雅尔塔协定：涉华是交易（外蒙、东北权益），不涉台澎归还', html: S1 + S2 + S3 + S4 + S5 + S6, count: 4, ribbon: { k: 3, ok: false } },
+  { cls: 'step', tag: '陷阱',   log: '复盘：涉华≠涉台澎归还；只选 B 会断掉执行环', html: S1 + S2 + S3 + S4 + S5 + S6 + S7, count: 4 },
+  { cls: 'done', tag: '结论',   log: '法律链条两环：开罗定内容 + 波茨坦定执行——答案 BD', html: S1 + S2 + S3 + S4 + S5 + S6 + S7 + S8, count: 4, done: true }
+];
+
+AW.init({
+  title: '【2011·27】明确规定台澎归还中国的国际文件（多选）',
+  subtitle: '考点：二战战时文件分工 · 开罗宣言与波茨坦公告 · 干扰项归因',
+  intro: '点击「▶ 播放」或按 → 先分诊四份文件，再逐份对号；右侧序号带实时标记对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已判定',
+  snaps: snaps,
+  result: {
+    big: '答案 BD',
+    html: '<b>动作方向记法</b>：开罗宣言"吐出来"（正面写明归还）、波茨坦公告"照着办"（必将实施）。<br>两个排除：德黑兰管欧洲（A）、雅尔塔做交易（C）——涉华 ≠ 涉台澎归还，交易 ≠ 归还。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：二战文件谁管"台澎归还"——先分诊再对号</h2>
+<p>答案：<strong>BD</strong>。</p>
+<h3>第 0 步：先立机制——战时文件各管一段，先分方向再查内容</h3>
+<p>二战后期盟国接连开会，产出一系列文件；它们不是重复表态，而是<strong>各有分工</strong>：对德作战归德黑兰方向，对日领土处分归开罗，苏联出兵的对价归雅尔塔，对日最后通牒归波茨坦。问"明确规定台澎归还中国"，就是查哪几份文件<strong>正面写进</strong>了这件事：</p>
+<table><thead><tr><th>时间</th><th>文件</th><th>管什么</th><th>涉台澎归还</th></tr></thead><tbody><tr><td>1943.11</td><td>《德黑兰宣言》</td><td>对德作战、开辟第二战场、战后合作</td><td>❌（欧洲方向）</td></tr><tr><td>1943.12</td><td>《开罗宣言》</td><td>日本所窃取于中国之领土（东北、台湾、澎湖列岛等）归还中国</td><td>✅（正面写明）</td></tr><tr><td>1945.2</td><td>《雅尔塔协定》</td><td>苏联对日参战条件（外蒙古现状、旅大港口、中东路等）</td><td>❌（涉华不涉台澎归还）</td></tr><tr><td>1945.7</td><td>《波茨坦公告》</td><td>勒令日本投降；第八条重申"《开罗宣言》之条件必将实施"</td><td>✅（执行确认）</td></tr></tbody></table>
+<h3>第 1 步：两份正确文件的"动作方向"不同</h3>
+<ul><li><strong>B《开罗宣言》</strong>：第一手依据——正面写明"日本所窃取于中国之领土，如东北、台湾、澎湖列岛等归还中国"。动作是"<strong>吐出来</strong>"。</li><li><strong>D《波茨坦公告》</strong>：第二手依据——它不另列清单，而是在第八条把开罗条件固定下来："《开罗宣言》之条件必将实施"。日本投降时接受的就是这条。动作是"<strong>照着办</strong>"。归还的法律链条由两环扣成：<strong>开罗定内容、波茨坦定执行</strong>——只选 B 就断了执行环。</li></ul>
+<h3>第 2 步：预判"为什么雅尔塔不算"</h3>
+<p>C 迷惑性最高：雅尔塔确实拿中国主权做了交易（维持外蒙古现状、旅大港口、中东铁路权益换苏联出兵），容易顺手选上。区分要领：雅尔塔谈的是"苏联出兵换东北权益"——是<strong>交易</strong>；开罗谈的是"日本吐出侵占领土"——是<strong>归还</strong>。涉华 ≠ 涉台澎归还，两码事。A《德黑兰宣言》则干脆是欧洲方向的文件，根本不碰远东领土处分。</p>
+<h3>易错点</h3>
+<ul><li><strong>把"涉华文件"当"涉台澎文件"→ 误选 C</strong>：雅尔塔涉华，但处分的是外蒙古与东北权益，恰好绕开台澎。</li><li><strong>只选 B 漏 D</strong>：以为只有"正面写明"才算"明确规定"——波茨坦的"必将实施"正是让归还落地的明确规定。</li><li><strong>在"宣言/公告是不是条约"上抠字眼</strong>：题目问的是国际文件的规定内容，名称之争不改变答案。</li></ul>
+<blockquote>记忆锚点：开罗"吐出来"（B）、波茨坦"照着办"（D）；德黑兰管欧洲（A）、雅尔塔做交易（C）——涉台澎归还的只有"开罗 + 波茨坦"这对组合。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

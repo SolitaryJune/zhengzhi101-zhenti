@@ -1,8 +1,88 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-33 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-33</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2018-33 「金砖+」新在哪：扩的是朋友圈，不是南北对话 · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- 复制自政治站概念模板（无 KaTeX 版，纯文本推理链卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：「金砖+」开启了，问重大意义',
+    body: '<p>题干三个信息点：场合（2017 年 9 月厦门会晤期间的<b>新兴市场国家与发展中国家对话会</b>）、动作（金砖五国＋受邀的<b>埃及、几内亚、墨西哥、塔吉克斯坦、泰国</b>五国出席）、新词（开启<b>「金砖+」合作模式</b>）。先立定位，再拆名单，最后对号入座。</p>' },
+  { tag: '定位', cls: 'key', title: '定位：金砖＝南南合作平台',
+    body: '<p>金砖国家合作机制＝<b>新兴市场国家和发展中国家</b>的合作机制，属于<b>南南合作</b>范畴（发展中国家之间相互合作），不是发展中国家与发达国家之间的南北对话。判断意义的关键只有一句：<b>「+」进来的都是谁。</b></p>' },
+  { tag: '拆名单', cls: 'key', title: '拆名单：受邀五国清一色发展中国家',
+    body: '<p>埃及、几内亚（非洲），墨西哥（拉美），塔吉克斯坦、泰国（亚洲）——<b>五国全是发展中国家</b>，横跨亚非拉。桌上没有发达国家 → 这是南南合作的扩圈；这一条直接决定 A 的生死，也撑起 D 的「全面提升」。</p>' },
+  { tag: '选项 D', cls: 'good', title: 'D 全面提升金砖机制的代表性和影响力 ✓（机制层）',
+    body: '<p>圈从五国扩成「金砖＋广大发展中国家」的<b>同心圆</b>，覆盖人口、地域骤增——「全面」正来自扩圈的广度。<b>D 对。</b></p>' },
+  { tag: '选项 C', cls: 'good', title: 'C 对南南合作形成有机补充 ✓（南南合作层）',
+    body: '<p>金砖本身就是南南合作平台，「金砖+」给它添了<b>新伙伴、新议题</b>——是扩充补充，不是另起炉灶。<b>C 对。</b></p>' },
+  { tag: '选项 B', cls: 'good', title: 'B 进一步推动全球治理体系的改善 ✓（全球治理层）',
+    body: '<p>更多发展中国家被组织起来、集体发声，全球治理体系朝着<b>更加公正合理</b>的方向再进一步。三层递进：机制扩容（D）→ 南南合作（C）→ 全球治理（B）。<b>B 对。</b></p>' },
+  { tag: '选项 A', cls: 'bad', title: 'A 破解了南北对话的僵局 ✗（「北」根本不在场）',
+    body: '<p><b>南北对话</b>＝发展中国家<b>与发达国家</b>的谈判；<b>南南合作</b>＝发展中国家<b>之间</b>的合作。对话会上坐的全是发展中国家——没有「北」在场上，南北对话根本不在本题场域，僵局也并未因此打破。干扰手法：把「南南合作」偷换成「南北对话」。<b>A 错。</b></p>' },
+  { tag: '结论', cls: 'good', title: '结论：BCD',
+    body: '<p>桌上全是发展中国家 → 南南合作（C）；扩圈 → 代表性影响力全面提升（D）→ 全球治理进一步改善（B）；南北对话不在场（A 排除）。答案选 <b>BCD</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: s.tag,
+    log: s.title,
+    count: i + 1,
+    ribbon: { k: i + 1, ok: s.cls !== 'bad' },
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2018·33】「金砖+」新在哪：扩的是朋友圈，不是南北对话',
+  subtitle: '多选题 · 考点：金砖国家合作 · 「金砖+」模式 · 南南合作与全球治理',
+  counterLabel: '推理步',
+  ribbonTitle: '步骤进度（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链：先定位金砖平台，再拆受邀名单，最后逐项判定 A/B/C/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '记忆锚点：「金砖+」＝同心圆扩圈；判断南北还是南南，先看<b>桌上坐的是谁</b>——受邀五国全是发展中国家 → 南南合作（C）；扩圈三层意义：<b>机制代表性影响力提升（D）→ 南南合作有机补充（C）→ 全球治理体系改善（B）</b>；「破解南北对话僵局」是把南南合作偷换成南北对话，排除。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「金砖+」新在哪——扩的是朋友圈，不是南北对话</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——金砖是什么平台、「+」加进来的都是谁</h3>
+<p>判断一项外交举措的意义，先立两个底座，再让选项对号入座：</p>
+<table><thead><tr><th>底座</th><th>内容</th></tr></thead><tbody><tr><td>金砖机制是什么</td><td><strong>新兴市场国家和发展中国家的合作机制</strong>，属于<strong>南南合作</strong>范畴——发展中国家之间的合作，不是与发达国家的谈判</td></tr><tr><td>「金砖+」做了什么</td><td>厦门会晤期间举办新兴市场国家与发展中国家对话会，金砖五国＋受邀的埃及、几内亚、墨西哥、塔吉克斯坦、泰国五国，从「五国小圈」扩成「金砖＋广大发展中国家」的<strong>同心圆</strong></td></tr></tbody></table>
+<p>再看受邀名单：埃及、几内亚（非洲），墨西哥（拉美），塔吉克斯坦、泰国（亚洲）——<strong>五国清一色是发展中国家</strong>，横跨亚非拉。这一条直接决定 A 的生死，也撑起 D 的「全面提升」。</p>
+<h3>第 1 步：三个「对」顺着扩圈机制浮出</h3>
+<ul><li><strong>D 全面提升了金砖机制的代表性和影响力</strong> ✅：圈从五国扩到发展中国家大家庭，覆盖的人口、地域骤增——「全面」正来自扩圈的广度，这是机制层最直接的结果。</li><li><strong>C 对南南合作形成了有机补充</strong> ✅：金砖本身就是南南合作平台，「金砖+」给它添了新伙伴、新议题——是扩充补充，不是另起炉灶，这是南南合作层的结果。</li><li><strong>B 进一步推动了全球治理体系的改善</strong> ✅：更多发展中国家被组织起来、集体发声，全球治理体系朝着更加公正合理的方向再进一步，这是全球治理层的结果。</li></ul>
+<p>三层递进：<strong>机制扩容（D）→ 南南合作补充（C）→ 全球治理改善（B）</strong>，答案 <strong>BCD</strong>。</p>
+<h3>第 2 步：为什么 A 错（唯一排除点，多说一句）</h3>
+<p><strong>南北对话</strong>是发展中国家<strong>与发达国家</strong>之间就国际经济政治重大问题进行的谈判；<strong>南南合作</strong>是发展中国家<strong>之间</strong>的合作。「金砖+」对话会上坐的全是发展中国家——没有「北」在场上，南北对话根本不在本题的场域里，「破解南北对话的僵局」更无从谈起（僵局也并未因这次对话会打破）。A 的手法是<strong>把「南南合作」偷换成「南北对话」</strong>：两个词都带「南」，范畴却完全不同。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：看到「发展中国家议题」就联想到「改善南北关系」。判断是不是南北对话，先看<strong>桌上坐的是谁</strong>——全是发展中国家，就是南南合作。</li><li><strong>漏选 D</strong>：觉得「全面提升」说得太大。恰恰相反，五国进圈、横跨亚非拉，覆盖面扩大正是「代表性、影响力提升」的事实依据。</li><li><strong>三个正确项关系记乱</strong>：D 是金砖机制自身的变化，C 是对南南合作的贡献，B 是对全球治理的意义——由近及远三层，不是并列的同义反复。</li></ul>
+<blockquote>记忆锚点：「金砖+」＝同心圆扩圈；桌上全是发展中国家 → 南南合作（C），不涉南北对话（A 排除）；扩圈 → 代表性影响力全面提升（D）→ 全球治理体系进一步改善（B）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,91 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-25 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-25</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2014-25 · 政社分开的箭头方向：社会组织"接得住"什么（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261117a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261117a"></script>
+<script>
+/* ================== 题目专属区域（依据 zz-2014-25 题干与 refAnalysis 编写） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：脱钩＋培育，两句话画出改革方向',
+    body: '<p>题眼：《决定》要求行业协会商会与行政机关<b>真正脱钩</b>、重点培育四类社会组织，问发挥社会组织积极作用「可以」带来什么。考点：<b>政社分开、转变政府职能、社会治理</b>。</p>' },
+  { tag: '机制·箭头', cls: 'key', title: '机制：权力的流向——从政府流向社会',
+    body: '<p>底层逻辑是<b>政社分开、转变政府职能</b>：政府把管不了、管不好、不该管的事交给社会，从全能型、管制型转向服务型、有限型。箭头＝<b>放权给社会</b>，不是收权给政府。顺箭头的选项对，逆箭头的选项错。</p>' },
+  { tag: '机制·三效果', cls: 'key', title: '机制：接得住之后的三重效果',
+    body: '<p>①政府从直接操办转为购买服务、监督引导——<b>成本降</b>；②公民在组织化参与中获得归属——<b>认同增</b>；③政府治理与社会调节、居民自治良性互动——<b>治理升</b>。四个选项全落在这三重效果上。</p>' },
+  { tag: 'A', cls: 'good', k: 1, pick: true, title: 'A 降低政府治理成本 → 成本降',
+    body: '<p>社会组织承接公共服务与行业自律，政府从「事事亲为」变为「购买服务＋监督引导」，直接操办的成本降下来。<b>入选</b> ✅。</p>' },
+  { tag: 'B', cls: 'bad', k: 2, pick: false, title: 'B 扩大政府管理权限 → 箭头画反了',
+    body: '<p>与改革方向<b>正好相反</b>：脱钩、培育社会组织的实质是<b>简政放权</b>，收缩政府不该管的事。「扩大权限」把放权的箭头画成了收权。<b>不选</b> ✗。</p>' },
+  { tag: 'C', cls: 'good', k: 3, pick: true, title: 'C 增强公民对社会的认同感 → 认同增',
+    body: '<p>社区服务、公益慈善类组织让公民在参与公共生活、互助服务中生成归属感与认同感——认同是在组织化参与中长出来的。<b>入选</b> ✅。</p>' },
+  { tag: 'D', cls: 'good', k: 4, pick: true, title: 'D 提高社会治理水平 → 治理升',
+    body: '<p>多元主体共治（政府＋社会组织＋公民）正是治理现代化的要义——单靠政府一家的「管理」变不成多方参与的「治理」。<b>入选</b> ✅。</p>' },
+  { tag: '辨析', cls: 'key', title: '预判追问：「政府引导」不等于「扩权」',
+    body: '<p>政府今后还要引导、规范社会组织，是扩权吗？——不是：引导、规范是职能<b>方式</b>的转变（审批式直接管理→依法监管、提供服务），管的事变少、方式改变，权限总量在收缩。把社会组织当政府延伸手臂的行政化旧思维，恰恰是脱钩要破除的——B 站在旧思维一边。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：政社分开＝放权',
+    body: '<p>成本降（A）＋认同增（C）＋治理升（D）顺箭头全对；B「扩大权限」逆箭头出局。<b>答案 ACD。</b></p>' },
+];
+
+var nJudge = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nJudge++;
+  var sn = {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag,
+    log: s.title,
+    count: nJudge,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, (x.tag ? x.tag + ' · ' : '') + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: !!s.pick };
+  return sn;
+});
+
+AW.init({
+  title: 'zz-2014-25 · 政社分开的箭头方向',
+  subtitle: '2014 年第 25 题（多选）· 考点：政社分开与社会治理 · 顺放权箭头的对，逆箭头的错',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先立「权力从政府流向社会」的箭头，再逐项裁决。',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '记忆锚点：政社分开＝<b>放权</b>——成本降（A）、认同增（C）、治理升（D）；凡见「扩大政府权限」方向即反，必错（B）。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：政社分开的箭头方向——社会组织"接得住"什么</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——改革改的是"权力的流向"</h3>
+<p>《决定》两句话画出了改革方向：限期实现行业协会商会与行政机关<strong>真正脱钩</strong>；重点培育和优先发展科技类、公益慈善类、城乡社区服务类等社会组织。底层逻辑是<strong>政社分开、转变政府职能</strong>：政府把管不了、管不好、不该管的事交给社会，从全能型、管制型转向服务型、有限型。权力的流向画成箭头就是：<strong>从政府流向社会</strong>（放权）——而不是从社会流向政府（收权）。</p>
+<p>社会组织"接得住"之后，三重效果顺着这条箭头自然出来：①政府从直接操办转为购买服务、监督引导——<strong>成本降</strong>；②公民在组织化参与中获得归属——<strong>认同增</strong>；③政府治理与社会调节、居民自治良性互动——<strong>治理升</strong>。四个选项全部落在这条箭头上裁决：顺着箭头的对，逆着箭头的错。</p>
+<h3>第 1 步：逐项裁决</h3>
+<ul><li><strong>A 降低政府治理成本</strong> ✅：社会组织承接公共服务与行业自律，政府从"事事亲为"变为"购买服务＋监督引导"，直接操办的成本降下来。</li><li><strong>B 扩大政府管理权限</strong> ❌：与改革方向<strong>正好相反</strong>——脱钩、培育社会组织的实质是简政放权，收缩政府不该管的事；"扩大权限"是把箭头画反了。</li><li><strong>C 增强公民对社会的认同感</strong> ✅：社区服务、公益慈善类组织让公民在参与公共生活、互助服务中生成归属感与认同感——认同是在组织化参与中长出来的。</li><li><strong>D 提高社会治理水平</strong> ✅：多元主体共治（政府＋社会组织＋公民）正是治理现代化的要义——单靠政府一家的"管理"变不成多方参与的"治理"。</li></ul>
+<h3>第 2 步：预判「为什么"政府引导"不等于"扩权"」</h3>
+<p>有人会想：政府今后还要引导、规范社会组织，这难道不是权限的扩大？——不是。引导、规范是职能<strong>方式的转变</strong>：从"审批式直接管理"转为"依法监管、提供服务"，管的事变少了、管的方式变了，权限总量在收缩而非扩张。反过来，"把社会组织当成政府的延伸手臂、什么都由政府直接操办"才是本题要破除的<strong>行政化旧思维</strong>——脱钩脱的就是这个，B 恰好站在旧思维一边。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：把"政府加强对社会的引导"偷换成"扩大管理权限"。方向题一个词定生死：放权（改革方向）与扩权（B）互为反命题。</li><li><strong>漏选 A</strong>：以为"降低成本"格局太小。购买服务替代直接操办，省下的正是机构与人员运转的直接成本——这是政社分开最直观的收益。</li></ul>
+<blockquote>记忆锚点：政社分开＝<strong>放权</strong>——成本降（A）、认同增（C）、治理升（D）；凡见"扩大政府权限"方向即反，必错。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

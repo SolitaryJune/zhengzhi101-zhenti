@@ -1,8 +1,101 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-19 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-19</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2026-19 · 具身智能与人类认知能力（2026 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：先天之争 → 三条材料线索',
+    cls: 'key',
+    body: '<p>题干先摆千年之争：认知是<b>理性先天自带</b>还是<b>来自外部经验</b>？再亮立场："智慧并非独立的依赖思维而产生……是大脑、身体、环境交织作用的结果"。抓三根线：<b>"长期进步中"（实践）</b>、<b>具身智能（新工具）</b>、<b>"交织作用"（互动）</b>。</p>' },
+  { title: '先立机制：认识能力的"三个随"',
+    cls: '',
+    body: '<p>马克思主义认识论：认识<b>从实践中来</b>（不是头脑自产）、<b>随实践发展</b>（历史地生成）、<b>在主客交互中深化</b>。认知工具（文字→望远镜→AI）是这条路的放大器。四个选项就是往这三根柱子＋一根工具上对号。</p>' },
+  { title: '逐项分析 A：随生活实践的发展而发展',
+    cls: 'good',
+    ribbon: {k:1, ok:true},
+    body: '<p>A：认识能力随生活实践的发展而发展。材料"在<b>长期进步中</b>对外部世界的适应"＝白话版：每代人的认知都建立在改造世界的实践积累之上，实践是认识的来源和发展动力。✅ 选。</p>' },
+  { title: '逐项分析 B：随具身智能发展而"系统退化"？',
+    cls: 'bad',
+    ribbon: {k:2, ok:false},
+    body: '<p>B：认知能力"随着具身智能的发展而<b>系统退化</b>"。追问：材料哪句支持退化？一句没有——通篇是"优化""革新""学习""进步"。具身智能是认知的<b>延伸与增强</b>，不是削弱；"退化说"是流行吐槽冒充哲学结论。❌ 不选。</p>' },
+  { title: '逐项分析 C：随认知工具的变革而深化',
+    cls: 'good',
+    ribbon: {k:3, ok:true},
+    body: '<p>C：认识能力随认知工具的变革而深化。文字、望远镜、显微镜、AI——每次工具变革都<b>延伸感官、增强大脑</b>。材料"让机器像人类一样学习和思考的<b>认知革新</b>"正是工具深化认识的当代注脚，"随着人工智能的发展"直接点名。✅ 选。</p>' },
+  { title: '逐项分析 D：随与外部世界互动的加深而演进',
+    cls: 'good',
+    ribbon: {k:4, ok:true},
+    body: '<p>D：认识能力随与外部世界互动的加深而演进。"大脑、身体、环境<b>交织作用</b>"——认识是主体与客体交互的产物，不是闭门想出来的；"具象的<b>互动和反馈</b>，不断优化"——互动越深、反馈越勤，演进越快。✅ 选。</p>' },
+  { title: '对号入座汇总',
+    cls: '',
+    body: '<p>A ✅ 实践发展；B ❌ 退化无据、方向相反；C ✅ 工具深化；D ✅ 互动演进。→ 答案 <b>ACD</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>ACD</b>。认知能力三个随：随实践（A）、随工具（C）、随互动（D）——工具是放大器不是替代者，"退化说"在材料里找不到一个字（B 反）。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2026-19 具身智能：认识能力的"三个随"',
+  subtitle: '考点：实践与认识 · 认知工具的变革 · 主体与外部世界的互动 —— 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '<b>A</b> 随生活实践的发展而发展——"长期进步中对外部世界的适应"。<br><b>C</b> 随认知工具的变革而深化——具身智能＝新型认知工具（"认知革新"）。<br><b>D</b> 随与外部世界互动的加深而演进——"大脑、身体、环境交织作用""互动和反馈"。<br><br><b>干扰项：</b>B"系统退化"材料无据、学理无据——材料通篇"优化、革新、学习"，具身智能是认知的延伸与增强。<br><br><b>记忆锚点：</b>随实践发展、随工具深化、随互动演进；"退化说"＝社会情绪不是哲学结论。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：具身智能与人类认知能力的"三个随"</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——认识能力从哪里来、靠什么长</h3>
+<p>题干先摆出哲学史上的千年之争：认知能力是<strong>理性先天自带</strong>的，还是<strong>从外部经验中来</strong>的？然后亮出科学家的立场："人的智慧并非独立的依赖思维而产生，而是在长期进步中对外部世界的适应，是大脑、身体、环境交织作用的结果。"这句话就是马克思主义认识论的白话版：</p>
+<ul><li>认识<strong>从实践中来</strong>——不是头脑里自产的，是在与外部世界的交往中获得；</li><li>认识<strong>随实践发展</strong>——"长期进步中的适应"说明能力是历史地生成的、可成长的；</li><li>认识<strong>靠交往深化</strong>——主体（大脑、身体）与客体（环境）相互作用，认识才能演进。</li></ul>
+<p>再补一件工具：具身智能"通过具象的互动和反馈，不断优化决策与行动"——它的哲学身份是<strong>新型认知工具</strong>，像文字、望远镜、显微镜一样，是认识能力的延伸与放大器。机制立住，四个选项就是往这三根柱子上对号。</p>
+<h3>第 1 步：A 对——认识随生活实践的发展而发展</h3>
+<p>材料说智慧"在<strong>长期进步中</strong>对外部世界的适应"，翻译过来：每一代人的认知能力都建立在改造世界的实践积累之上。实践是认识的来源和发展动力——离了生活实践，认识就是无源之水。A 与材料原话严丝合缝。</p>
+<h3>第 2 步：C 对——认识随认知工具的变革而深化</h3>
+<p>从结绳记事到文字印刷，从望远镜、显微镜到今天的具身智能，<strong>每一次认知工具的变革都把人类的认识推向更深处</strong>：工具延伸了感官、增强了大脑。材料说具身智能"某种程度上实现了让机器像人类一样学习和思考的认知革新"——"认知革新"四个字正是"工具变革深化认识"的当代注脚。C 的关键词"认知工具"在题干里直接给出（"随着人工智能的发展"），是三根柱子中材料痕迹最明显的一根。</p>
+<h3>第 3 步：D 对——认识随与外部世界互动的加深而演进</h3>
+<p>"大脑、身体、环境<strong>交织作用</strong>"——认识不是闭门造车想出来的，是主体与外部世界<strong>互动</strong>的产物；"具象的<strong>互动和反馈</strong>，不断优化"——互动越深、反馈越勤，认识演进越快。人机互动、环境反馈都在参与塑造认知结构，D 是材料三个短语里复现次数最多的一条线。</p>
+<h3>第 4 步：B 为什么错——"系统退化"是材料外的私货</h3>
+<p>B 说认知能力"随着具身智能的发展而<strong>系统退化</strong>"。追问一句：材料里哪句话支持"退化"？一句都没有——通篇是"优化""革新""学习""进步"。具身智能是人类认知的<strong>延伸与增强</strong>，不是替代或削弱；"系统退化"是把"AI 让人变懒变笨"的流行吐槽直接搬进了哲学命题。材料无据、学理无据、方向相反，B 必须排除。</p>
+<h3>第 5 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>材料对号处</th></tr></thead><tbody><tr><td>A 随生活实践发展而发展</td><td>✅</td><td>"长期进步中对外部世界的适应"</td></tr><tr><td>B 随具身智能发展而系统退化</td><td>❌</td><td>材料全是"优化、革新、学习"，退化无据</td></tr><tr><td>C 随认知工具变革而深化</td><td>✅</td><td>具身智能＝新型认知工具，"认知革新"</td></tr><tr><td>D 随与外部世界互动加深而演进</td><td>✅</td><td>"大脑、身体、环境交织作用""互动和反馈"</td></tr></tbody></table>
+<p>→ 选 <strong>ACD</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：把"AI 让人变笨"的社会情绪代入题目。多选题的判据是<strong>材料＋原理</strong>，舆论焦虑不是哲学结论——材料明说"不断优化"，与"退化"正好相反。</li><li><strong>漏选 C</strong>：只把具身智能当"新闻里的新事物"看，没识别它的哲学身份——认知工具。看到"认知革新""让机器学习思考"就应联想到工具变革深化认识。</li><li><strong>漏选 D</strong>：没抓住"具象的互动和反馈"这个短语——它就是"与外部世界互动"的材料原词，也是 D 的直接证据。</li></ul>
+<blockquote>记忆锚点：认识能力<strong>随实践发展（A）、随工具深化（C）、随互动演进（D）</strong>；"退化说"在材料里找不到一个字（B 反）——工具是放大器，不是替代者。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

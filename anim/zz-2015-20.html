@@ -1,8 +1,112 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-20 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-20</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2015-20 · 相对过剩人口：积累怎么"生产"过剩，"相对"相对在哪（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261118a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261118a"></script>
+<script>
+/* ================== 题目专属区域（依据 zz-2015-20 题干与答案 ABC 编写） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 因果链一行：格子放环节，格下放含义；末格高亮结论 */
+function chainRow(classes){
+  var names = ['资本积累', '有机构成↑', '需求相对↓', '供给却在↑', '相对过剩人口'];
+  var jobs  = ['c:v 变化', '不变资本占比大', '要的工人少了', '找饭碗的多了', '产业后备军'];
+  var row = AW.el('div', 'aw-cells');
+  names.forEach(function(name, i){
+    var col = AW.el('div', 'aw-col');
+    col.style.width = (i === 4 ? '104px' : '84px');
+    var box = AW.el('div', 'aw-box' + (classes && classes[i] ? ' ' + classes[i] : ''), name);
+    box.style.width = (i === 4 ? '104px' : '84px');
+    col.appendChild(box);
+    col.appendChild(AW.el('div', 'aw-idx', jobs[i]));
+    if (i < names.length - 1){
+      col.appendChild(AW.el('div', 'aw-idx', '→'));
+    }
+    row.appendChild(col);
+  });
+  return row;
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：引文三句话，一条机制链能全串起来',
+    body: '<p>马克思这段引文信息密度大，别逐字硬读。先立机制链，再看引文里"不断地生产出""超过资本增殖的平均需要""反过来成为杠杆、一个条件"各落在链上哪个位置——选项自然对号。</p>' },
+  { tag: '机制·因果链', cls: 'key', title: '机制：积累如何两头一挤，"挤"出相对过剩人口',
+    body: '<p>资本积累 → 有机构成提高（不变资本占比增大、可变资本相对减少）→ 对劳动力的需求<b>相对下降</b>；而积累过程中劳动力供给却在扩大。两头一挤：</p>' +
+      chainRow(['dim', 'dim', 'dim', 'dim', 'hit']) +
+      '<p>工人人口的供给<b>相对于资本增殖的需要</b>而过剩——这就是产业后备军。</p>' },
+  { tag: 'C', cls: 'good', k: 3, pick: true, title: 'C 积累必然导致供给相对资本需要而过剩 → 必然产物',
+    body: '<p>引文原话："过剩的工人人口是……（资本主义基础上的财富发展的）<b>必然产物</b>。"链条本身是必然的：有机构成提高是积累的一般趋势，过剩人口随之被"生产"出来。<b>入选</b> ✅。</p>' },
+  { tag: 'B', cls: 'good', k: 2, pick: true, title: 'B "相对"＝不为资本价值增殖所需要 → 标尺在增殖',
+    body: '<p>"超过<b>资本增殖的平均需要</b>的"——过剩的标尺不是"社会养不养得活"，而是增殖需要：超过平均需要的工人才算"过剩"。人口没变、增殖需要变了，过剩就出现——所以叫<b>相对</b>过剩人口。<b>入选</b> ✅。</p>' },
+  { tag: 'A', cls: 'good', k: 1, pick: true, title: 'A 周期性特征需要过剩人口规律与之相适应 → 杠杆与条件',
+    body: '<p>引文后半句："反过来又成为资本主义积累的<b>杠杆</b>，甚至成为资本主义生产方式<b>存在的一个条件</b>。"高涨期后备军随时供应追加劳动力，危机期接住被排挤者、向在业工人施压——没有这支"蓄水池"，危机与高涨交替的周期转不动。<b>入选</b> ✅。</p>' },
+  { tag: 'D', cls: 'bad', k: 4, pick: false, title: 'D 失业规模呈现越来越大的趋势 → 无根据引申',
+    body: '<p>"不断地并且同它的能力和规模成比例地生产出"说的是<b>资本积累本身</b>在生产过剩人口，不等于失业规模<b>单调递增</b>；过剩人口随周期时增时减。引文表明的是<b>必然性</b>（必然产物）与<b>功能性</b>（杠杆、条件），"越来越大"是把修饰积累的词错安到失业规模头上。<b>不选</b> ❌。</p>' },
+  { tag: '辨析', cls: 'key', title: '预判追问：为什么是"相对"过剩、不是绝对养不活',
+    body: '<p>标尺只有一个：资本增殖的平均需要。社会总财富再多，只要这批工人<b>不为增殖所需要</b>，相对资本而言就是过剩的——与人口绝对数量、别国对比统统无关。漏选 A 的同学多只见因果链前半段（生产出过剩人口），漏了后半段（杠杆、条件）——那正是 A 的出处。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：必然产物 + 相对标尺 + 周期杠杆',
+    body: '<p>必然产物（C）＋相对标尺（B）＋周期杠杆（A），排除过度引申的 D——<b>答案 ABC。</b></p>' },
+];
+
+var nJudge = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nJudge++;
+  var sn = {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag,
+    log: s.title,
+    count: nJudge,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, (x.tag ? x.tag + ' · ' : '') + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: !!s.pick };
+  return sn;
+});
+
+AW.init({
+  title: 'zz-2015-20 · 相对过剩人口的论断表明什么',
+  subtitle: '2015 年第 20 题（多选）· 考点：相对过剩人口 · 方法：先立"积累→有机构成↑→需求相对↓＋供给↑"因果链，引文三句对号',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先立机制链，再让引文与选项逐一对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: '记忆锚点：相对过剩人口＝积累的<b>必然产物（C）</b>＋以增殖需要为标尺的<b>"相对"（B）</b>＋周期运转的<b>杠杆与条件（A）</b>；"越来越大的趋势"（D）是过度引申。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：相对过剩人口——积累怎样"生产"出过剩，"相对"相对在哪</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——一条因果链把引文串起来</h3>
+<p>马克思这段引文信息密度大，先别逐字纠缠，把它放进<strong>资本积累的机制链</strong>里读：资本积累→资本有机构成提高（不变资本占比增大、可变资本相对减少）→对劳动力的需求<strong>相对</strong>下降；而积累过程中劳动力的供给却在扩大。两头一挤——<strong>工人人口的供给相对于资本增殖的需要而过剩</strong>。引文里的三个关键短语都能在这条链上找到位置："不断地……生产出"是<strong>必然产物</strong>（C）；"超过资本增殖的平均需要的"是<strong>相对</strong>的标尺（B）；"反过来又成为积累的杠杆、甚至生产方式存在的一个条件"是<strong>功能性</strong>——周期运转离不开这支后备军（A）。</p>
+<h3>第 1 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>引文依据</th><th>判定</th></tr></thead><tbody><tr><td>A 周期性特征需要相对过剩人口规律与之相适应</td><td>"成为资本主义积累的杠杆，甚至成为生产方式存在的一个条件"</td><td>✅</td></tr><tr><td>B 过剩是"相对的"，因为不为资本价值增殖所需要</td><td>"超过资本增殖的平均需要的"——标尺是增殖需要</td><td>✅</td></tr><tr><td>C 积累必然导致工人人口供给相对于资本需要而过剩</td><td>"过剩的工人人口是……财富发展的必然产物"</td><td>✅</td></tr><tr><td>D 失业规模呈现越来越大的趋势</td><td>引文只讲必然性与功能性，无"单调增大"之说</td><td>❌</td></tr></tbody></table>
+<h3>第 2 步：预判三个"为什么"</h3>
+<p><strong>为什么"过剩"是相对的不是绝对的？</strong> 标尺不是"社会养不养得活这么多人"，而是<strong>资本价值增殖的平均需要</strong>——超过这个平均需要的工人才算"过剩"。人口没变，增殖需要变了，过剩就出现：所以是相对过剩人口（产业后备军），而非绝对过剩。</p>
+<p><strong>为什么周期性运转需要这支后备军？</strong> 资本主义生产是危机与高涨交替的周期运动：高涨期资本突然扩张，要<strong>随时</strong>抓到追加劳动力，后备军即时供应；危机期资本排斥工人，后备军接住被排挤者、再向在业工人施压。没有这支"蓄水池"，周期的两段都转不动——这就是"杠杆"与"存在的一个条件"的含义。</p>
+<p><strong>为什么 D 错？</strong> "不断地并且同它的能力和规模成比例地生产出"说的是<strong>资本积累本身</strong>在生产过剩人口，不等于失业规模<strong>单调递增</strong>；过剩人口随周期时增时减。论断表明的是过剩人口的<strong>必然性</strong>（必然产物）与<strong>功能性</strong>（杠杆、条件），"越来越大的趋势"是无根据的引申。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 D</strong>：被"不断地""成比例地"迷惑，推出规模单向增大。把引文里修饰"资本积累"的词错安到"失业规模"头上，是过度引申。</li><li><strong>漏选 B</strong>：以为"相对"指"相对于别国人口"或"相对过去更多"。标尺只有一个——资本增殖的平均需要。</li><li><strong>漏选 A</strong>：只见"生产出过剩人口"（因果前半段），漏看"反过来成为杠杆、条件"（因果后半段）——后半段恰是 A 的出处。</li></ul>
+<blockquote>记忆锚点：相对过剩人口＝积累的<strong>必然产物</strong>（C）＋以增殖需要为标尺的"相对"（B）＋周期运转的<strong>杠杆与条件</strong>（A）；"越来越大的趋势"（D）是过度引申。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,151 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-14 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-14</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·14 「好人法」与道德：法律是道德的支撑</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 408-zhenti/tools/anim_concept_template.html（政治站无 KaTeX 版，纯文本机制链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 因果链小格：红=负向事件，绿=正向事件
+function chain(cls, txt, note){
+  return '<div class="aw-col" style="width:118px">' +
+         '<div class="aw-box ' + cls + '" style="width:118px;height:auto;min-height:40px;font-size:12.5px;font-family:inherit;line-height:1.35;padding:4px 5px">' + txt + '</div>' +
+         '<div class="aw-idx" style="white-space:normal;text-align:center;line-height:1.3">' + note + '</div></div>';
+}
+
+function causalRow(){
+  return '<div class="aw-cells">' +
+    chain('miss', '扶老被诬', '彭宇案：行善有风险') +
+    chain('miss', '好人寒心', '道德号召力被压低') +
+    chain('ok', '好人法出台', '2013 深圳救助人规定') +
+    chain('ok', '善行有底气', '正能量释放') +
+    '</div>';
+}
+
+// 机理对比小卡：道德/法律
+function mech(name, cls, lines){
+  return '<div class="aw-col" style="width:190px">' +
+         '<div class="aw-ptr">' + name + '</div>' +
+         '<div class="aw-box ' + cls + '" style="width:190px;height:auto;font-size:12.5px;font-family:inherit;line-height:1.5;padding:6px 8px;text-align:left">' + lines + '</div>' +
+         '</div>';
+}
+
+var STEPS = [
+  {
+    "title": "审题眼：从案例到考点",
+    "cls": "key",
+    "body": "<p>题眼：「彭宇案→扶老被诬」让<b>助人为乐遭遇道德考验</b>；2013.8.1《深圳特区救助人权益保护规定》填补立法空白，媒体称其「释放道德正能量」。问：法律<b>之所以</b>能释放道德正能量，是因为法律对道德来说是什么？方法=先把机制链走通，再查教材标准表述。</p>",
+    "log": "先走机制链，再对位标准表述"
+  },
+  {
+    "title": "先立机制：两种规范的分工",
+    "cls": "key",
+    "body": "<p>道德与法律都是行为规范，但作用机理不同——道德靠<b>内在自律</b>引人向上（抬上限），法律靠<b>外在他律</b>禁人为恶（守底线）；道德对失德者缺硬约束，法律管不到道德高地。二者相辅相成、<b>相互支撑、不可替代</b>：</p>" +
+      mech('道德', 'ok', '内在自律<br>良心·舆论<br>抬高上限') +
+      mech('法律', 'step', '外在他律<br>国家强制力<br>守住底线') ,
+    "log": "自律抬上限、他律守底线"
+  },
+  {
+    "title": "走机制链：正能量是怎么被释放的",
+    "cls": "step",
+    "body": "<p>从彭宇案到好人法，因果链一目了然：</p>" + causalRow(),
+    "log": "风险被制度挡掉，善行重新有底气"
+  },
+  {
+    "title": "提炼机制：法律为道德做了哪件事",
+    "cls": "step",
+    "body": "<p>整条链里法律只做一件事：用强制力把「行善被反噬」的风险<b>制度化地挡掉</b>，为道德<b>践行</b>托底护航——保障他人者谓之「<b>支撑</b>」。题问「法律之所以释放道德正能量」＝法律为道德提供制度保障与强制后盾 → <b>D 正确</b>。</p>",
+    "ribbon": { "k": 4, "ok": true },
+    "log": "为善行撑腰 → 选 D"
+  },
+  {
+    "title": "B：「基础」错在颠倒论证方向",
+    "cls": "bad",
+    "body": "<p>误选 B 的误解：「道德要求靠法律才成立」。但道德的基础是<b>社会经济关系</b>（道德由经济基础决定），法律不是道德的根据；材料里法律给的是<b>保障</b>，不是<b>根据</b>。<b>B 错误</b>。</p>",
+    "ribbon": { "k": 2, "ok": false },
+    "log": "道德的基础是经济关系 → B 不选"
+  },
+  {
+    "title": "C：「前提」错在顺序说反",
+    "cls": "bad",
+    "body": "<p>误选 C 的误解：「先有法律才有道德」。规范演进史是<b>道德先于成文法律</b>：有了共同体生活就有善恶评判，国家立法是后来的事——「前提」把顺序说反了。<b>C 错误</b>。</p>",
+    "ribbon": { "k": 3, "ok": false },
+    "log": "道德先于法律出现 → C 不选"
+  },
+  {
+    "title": "A：「归宿」错在把配合当吸收",
+    "cls": "bad",
+    "body": "<p>误选 A 的误解：被「依法治国与以德治国相结合」带偏。相结合是<b>并行配合</b>，不等于道德最终变成法律、被法律吸收；两种规范长期并存，谁也不是谁的终点。<b>A 错误</b>。</p>",
+    "ribbon": { "k": 1, "ok": false },
+    "log": "结合≠归宿 → A 不选"
+  },
+  {
+    "title": "结论：B 与 D 只差一个词，为何一错一对",
+    "cls": "good",
+    "body": "<p>看<b>依赖方向</b>：道德的内容（善恶标准）不依赖法律成立——没有好人法，助人为乐依然是道德要求；但道德的<b>践行</b>需要法律托底。<b>道德不需要法律来定义，但道德践行需要法律来保障</b>——保障谓之「支撑」。答案 <b>D</b>。</p>",
+    "log": "依赖单向：定义不靠法律、践行靠法律"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'))),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "「好人法」为什么能释放道德正能量",
+  subtitle: "考点：思想道德修养——法律与道德的关系 · 方法：机制链 + 依赖方向辨析",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」沿「风险→寒心→立法→托底」的机制链逐步推理。',
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "记忆锚点：<b>法律是道德的支撑</b>——道德=内在自律（抬上限），法律=外在他律（守底线），二者相互支撑、不可替代；法律为道德<b>践行</b>托底护航（好人法即例证），但道德的内容由<b>社会经济关系</b>决定，不依赖法律成立。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「好人法」为什么能释放道德正能量——法律给道德「撑腰」的机制</h2>
+<p>答案：<strong>D（法律是道德的支撑）</strong>。</p>
+<h3>第 0 步：先立机制——两种规范怎么分工，又怎么互相配合</h3>
+<p>道德与法律都是调节社会行为的行为规范，但作用机理不同：</p>
+<table><thead><tr><th></th><th>道德</th><th>法律</th></tr></thead><tbody><tr><td>作用方式</td><td>内在的<strong>自律</strong>（良心、舆论评价）</td><td>外在的<strong>他律</strong>（国家强制力）</td></tr><tr><td>力量方向</td><td>引人向上，抬高<strong>上限</strong></td><td>禁人为恶，守住<strong>底线</strong></td></tr><tr><td>弱点</td><td>对失德、反噬善行者缺乏硬约束</td><td>只能划定底线，管不到道德高地</td></tr></tbody></table>
+<p>二者<strong>相辅相成、相互支撑、不可替代</strong>。用本案把机制走一遍：从「彭宇案」到「扶老被诬」，反噬的是<strong>善行的成本与风险</strong>——好人做好事可能被诬陷、败诉赔钱，于是「助人为乐」的道德号召力被现实压低。2013 年《深圳特区救助人权益保护规定》登场：它用立法把救助人的风险<strong>制度化地挡掉</strong>（减轻救助人的举证与赔偿责任），好人重新「扶得起」——善行有了底气，道德正能量被释放。这条链里法律做的事只有一件：<strong>用强制力为道德践行托底护航</strong>。这就是「支撑」的确切含义。</p>
+<h3>第 1 步：题问对位——「释放正能量」= 法律在为道德做什么</h3>
+<p>题问「法律之所以释放道德正能量，是因为」→ 转译为「法律为道德提供了什么」→ 提供制度保障、强制后盾，为善行<strong>撑腰</strong> → <strong>法律是道德的支撑</strong> → 选 <strong>D</strong>。</p>
+<h3>第 2 步：干扰项归因（每个错误选项对应一种误解）</h3>
+<ul><li><strong>误选 B「法律是道德的基础」</strong>：误解是「道德要求靠法律才成立」。但道德的基础是<strong>社会经济关系</strong>（道德由经济基础决定并随之变化），法律不是道德的根据；说「法律是道德的基础」颠倒了论证方向。材料里法律给的是<strong>保障</strong>，不是<strong>根据</strong>。</li><li><strong>误选 C「法律是道德的前提」</strong>：误解是「先有法律才有道德」。从规范演进看，<strong>道德先于成文法律</strong>出现——有了共同体生活就有善恶评判，国家立法是后来的事；「前提」把顺序说反了。</li><li><strong>误选 A「法律是道德的归宿」</strong>：误解是被「依法治国与以德治国相结合」带偏。二者相结合是<strong>并行配合</strong>，不等于道德最终要变成法律、被法律吸收；两种规范长期并存，谁也不是谁的终点。</li></ul>
+<h3>预判追问：B 与 D 只差一个词，为什么一错一对</h3>
+<p>看<strong>依赖方向</strong>：道德的内容（善恶标准、助人为乐的要求）不依赖法律才成立——没有《救助人权益保护规定》，助人为乐依然是道德要求；但道德的<strong>践行</strong>在现实中会遇到风险（诬陷、赔偿），此时法律以强制力为践行托底。依赖是单向的：<strong>道德不需要法律来定义，但道德践行需要法律来保障</strong>——保障他人者谓之「支撑」，故 D 对、B 错。</p>
+<blockquote>记忆锚点：道德=内在自律（抬上限），法律=外在他律（守底线）；二者相互支撑、不可替代；教材标准表述是「<strong>法律是道德的支撑</strong>」——《深圳特区救助人权益保护规定》（2013，首部好人法）即例证。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

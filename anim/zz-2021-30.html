@@ -1,8 +1,143 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-30 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-30</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·30 编纂民法典的重大意义</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>民法典 7 编 1260 条、从摇篮到坟墓，被称为「社会生活的百科全书」。求一部法律的「重大意义」，机制上问它<b>把什么定型、改变了什么</b>——落在四个互不重叠的维度：对制度、对治理、对经济、对人民。</p>",
+    "log": "机制：意义 = 把什么定型"
+  },
+  {
+    "title": "先立机制：全选题的结构信号",
+    "cls": "key",
+    "body": "<p>四个维度各占一层，恰好承载四个选项；且四项全是<b>权威表述的复述</b>——分层不重叠 + 权威表述，这是全选题的识别信号。先按维度分架，再逐一对号。</p>",
+    "log": "信号：分层不重叠 + 权威表述"
+  },
+  {
+    "title": "A：基本经济制度与高质量发展",
+    "cls": "good",
+    "body": "<p><b>经济维度</b>——物权编安放产权、合同编安放交易规则，市场经济本质上是法治经济；产权保护本身就是高质量发展的要件。<b>A 正确</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": true
+    },
+    "log": "A ✓ 经济维度：物权 + 合同"
+  },
+  {
+    "title": "B：依法治国与治理现代化",
+    "cls": "good",
+    "body": "<p><b>治理维度</b>——法典是国家治理在民事领域的总纲，全面依法治国有了民事「母法」，治理体系与能力有了总依据。<b>B 正确</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": true
+    },
+    "log": "B ✓ 治理维度：民事领域总纲"
+  },
+  {
+    "title": "C：坚持和完善中国特色社会主义制度",
+    "cls": "good",
+    "body": "<p><b>制度维度</b>——民事法律制度是中国特色社会主义制度的重要组成部分，法典把相关制度以法的形式定型。<b>C 正确</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": true
+    },
+    "log": "C ✓ 制度维度：制度定型于法"
+  },
+  {
+    "title": "D：增进人民福祉、维护根本利益",
+    "cls": "good",
+    "body": "<p><b>人民维度</b>——人格权独立成编、隐私与个人信息入典，从摇篮到坟墓护住民事权益，直接回应人民关切。<b>D 正确</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": true
+    },
+    "log": "D ✓ 人民维度：人格权独立成编"
+  },
+  {
+    "title": "预判追问：管民事的怎么扯到经济？",
+    "cls": "key",
+    "body": "<p>凭「<b>民事即市场</b>」这条通道：市场里交换的双方是平等民事主体——物权是产权的制度化、合同是交易规则的制度化，基本经济制度必须靠民事法律来表达和守护。同理，民事「母法」立起来，国家治理在最大一块社会面上才有总依据——A、B 不是拔高，是顺流推出的。</p>",
+    "log": "追问：民事即市场 → 经济与治理"
+  },
+  {
+    "title": "干扰归因",
+    "cls": "bad",
+    "body": "<p>怀疑「太顺、不敢全选」：四项分层不重叠且是权威表述复述，越像背过的原文越应全选。把 A 当干扰：觉得「民法典管民事不管经济」——物权与合同恰是基本经济制度的法律表达。</p>",
+    "log": "病灶：不敢全选 / 割裂民事与经济"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>ABCD</b>。记忆锚点：民法典意义四维——<b>固制度、强治理、稳经济、护人民</b>；「民事即市场」把经济维度接进来。</p>",
+    "log": "锁定 ABCD：四维各占一层"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "编纂民法典的重大意义",
+  subtitle: "2021 年第 30 题（多选）· 考点：民法典与全面依法治国 · 四维意义分层对号",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立制度、治理、经济、人民四维模型，再逐项对号，最后答掉「民事怎么通经济」的追问。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABCD",
+    html: "记忆锚点：四维——<b>固制度（坚持完善中国特色社会主义制度）、强治理（依法治国与治理现代化）、稳经济（基本经济制度与高质量发展）、护人民（增进福祉、维护根本利益）</b>；分层不重叠，全选；「民事即市场」是经济维度的推理通道。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：编纂民法典的重大意义——一部法典的四个维度</h2>
+<p>答案：<strong>ABCD（全选）</strong>。</p>
+<h3>第 0 步：先立机制——一部法律的意义，从「它把什么定型」推出来</h3>
+<p>先立机制：问一部法律的「重大意义」，不能背口号，要问它<strong>把什么固定下来、改变了什么</strong>。民法典 7 编 1260 条、从摇篮到坟墓覆盖民事生活全部领域，被称为「社会生活的百科全书」，它至少在四个方向上把东西定了型——对<strong>制度</strong>（民事法律制度是中国特色社会主义制度的组成部分，法典以法的形式将其定型）、对<strong>治理</strong>（全面依法治国有了民事领域的总依据）、对<strong>经济</strong>（产权与交易规则有了总章程）、对<strong>人民</strong>（民事权益有了从生到死的保障书）。四个维度互不重叠、各占一层，恰好承载四个选项——加上四项全是权威表述的复述，这就是全选题的结构信号。</p>
+<h3>第 1 步：四个维度逐一对号</h3>
+<table><thead><tr><th>维度</th><th>选项</th><th>法典凭什么撑起这一条</th><th>判定</th></tr></thead><tbody><tr><td>经济维度</td><td>A</td><td>物权编安放产权、合同编安放交易规则——市场经济本质上是法治经济</td><td>✅</td></tr><tr><td>治理维度</td><td>B</td><td>全面依法治国、国家治理体系和治理能力现代化有了民事领域总依据</td><td>✅</td></tr><tr><td>制度维度</td><td>C</td><td>民事法律制度以法典形式定型，是中国特色社会主义制度的现实需要</td><td>✅</td></tr><tr><td>人民维度</td><td>D</td><td>人格权独立成编、隐私与个人信息入典，增进福祉、维护根本利益</td><td>✅</td></tr></tbody></table>
+<p>四维全部成立 → <strong>ABCD</strong>。</p>
+<h3>第 2 步：预判「民法典管民事，凭什么扯到经济与国家治理？」</h3>
+<p>这是本题最值得提前答掉的一问。<strong>凭「民事即市场」这条通道</strong>：市场经济里，交换的双方是平等的民事主体——物权是产权的制度化，合同是交易规则的制度化，所以基本经济制度（公有制为主体、多种所有制共同发展，产权保护）必须靠民事法律来表达和守护，民法典因此是「坚持和完善社会主义基本经济制度、推动经济高质量发展的客观要求」。同理，法治国家先要有一部管得住最日常社会关系的法，民事「母法」立起来，国家治理在最大的一块社会面上才有总依据——A、B 两条不是「拔高」，而是从法典的实际内容顺流推出来的。</p>
+<h3>易错点</h3>
+<ul><li><strong>「太顺、不敢全选」</strong>：全选题的识别信号是选项分层不重叠（制度、治理、经济、人民各占一层）且都是权威表述的复述——本题四项正合此形，越像「背过的原文」越应全选。</li><li><strong>把 A 当干扰</strong>：觉得「民法典管民事、不管经济」——物权与合同恰恰是基本经济制度的法律表达，产权保护本身就是高质量发展的要件。</li></ul>
+<blockquote>记忆锚点：民法典意义四维——<strong>固制度、强治理、稳经济、护人民</strong>；「民事即市场」把经济维度接进来；全选先看分层是否互斥。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,136 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-10 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-10</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·10 新三民主义为何成为国共合作的政治基础</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链模板（政治站无 KaTeX 版）。引擎自绘题目卡；只维护下方题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域 ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 两党纲领对照表小工具
+function vsTable(){
+  return '<table class="aw-table"><tr><th></th><th>中共二大民主革命纲领</th><th>新三民主义（一大宣言新解释）</th></tr>' +
+    '<tr><td>对外</td><td>推翻国际帝国主义的压迫</td><td>民族主义新解：反帝、中华民族自求解放</td></tr>' +
+    '<tr><td>对内</td><td>打倒军阀，建真正的民主共和国</td><td>民权主义新解：民权为一般平民所共有</td></tr>' +
+    '<tr><td>经济</td><td>——</td><td>民生主义新解：平均地权 + 节制资本</td></tr></table>';
+}
+
+// 推理链步骤定义
+var STEPS = [
+  {
+    title: '审题眼：「政治基础」问什么',
+    cls: 'key',
+    body: '<p>题干问：新三民主义成为第一次国共合作的政治基础，「<b>究其原因</b>」是什么。两个政党要合作，必须有<b>共同的政治目标</b>——一起打谁、一起建什么。所以答案要落在「<b>政纲一致</b>」上。</p>',
+    log: '问「基础的原因」→ 找共同目标（政纲一致）'
+  },
+  {
+    title: '先立机制：合作需要一面共同的旗子',
+    cls: 'key',
+    body: '<p>「政治基础」的实质=共同敌人+共同任务。1924 年两边的纲领摆上桌：中共二大定了<b>民主革命纲领</b>（最低纲领），国民党一大对三民主义作出<b>新解释</b>——能不能合作，就看两张表重不重合。</p>',
+    log: '政治基础=共同敌人+共同任务'
+  },
+  {
+    title: '对照：两张纲领表高度重合',
+    cls: 'step',
+    body: vsTable() + '<p>反帝一致、民权面向平民、任务同为民主革命——目标高度重合，两党才有并肩作战的共同旗子。</p>',
+    log: '逐行对照：敌人相同、任务相同'
+  },
+  {
+    title: 'C 对号：政纲基本一致=合作的基础',
+    cls: 'good',
+    body: '<p>「新三民主义的政纲<b>同中国共产党在民主革命阶段的纲领基本一致</b>」——共同敌人（帝国主义、军阀）、共同任务（民主革命），这就是政治基础的<b>原因</b>。<b>C 正确</b>。</p>',
+    ribbon: { k: 3, ok: true },
+    log: '政纲基本一致 → 锁定 C'
+  },
+  {
+    title: 'B 过筛：三大政策是手段，不是基础',
+    cls: 'bad',
+    body: '<p>最强干扰项。「联俄、联共、扶助农工」确实是新三民主义的内容，但它是贯彻主义的<b>政策/手段</b>，回答「怎么干」；「政治基础」回答「为什么能合作」——靠<b>政纲（目标）一致</b>。政策≠政纲。<b>B 错误</b>。</p>',
+    ribbon: { k: 2, ok: false },
+    log: '政策（手段）≠政纲（目标）→ B 不选'
+  },
+  {
+    title: 'A 过筛：只见军阀，漏了反帝',
+    cls: 'bad',
+    body: '<p>「把斗争的矛头直指向北洋军阀」<b>不全面且不中要害</b>：民族主义新解释的核心首先落在<b>反帝</b>（中华民族自求解放）；单说反军阀也解释不了「国共合作」这件事本身。<b>A 错误</b>。</p>',
+    ribbon: { k: 1, ok: false },
+    log: '概括不了全貌，更说不清合作 → A 不选'
+  },
+  {
+    title: 'D 过筛：平均地权是旧表述',
+    cls: 'bad',
+    body: '<p>「把民主主义概括为『平均地权』」——「平均地权」是<b>旧</b>三民主义民生主义的表述；一大宣言的<b>新</b>解释是「平均地权 + <b>节制资本</b>」，且这仍只是民生一义，概括不了整个政纲。<b>D 错误</b>。</p>',
+    ribbon: { k: 4, ok: false },
+    log: '退回旧三民主义的旧表述 → D 不选'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>C</b>：新三民主义成为第一次国共合作政治基础的原因，是它的政纲<b>同中共在民主革命阶段的纲领基本一致</b>。分两层挂：政纲一致=基础（C）；三大政策=政策保证（B，强干扰）。</p>',
+    log: '结论：政纲一致=合作基础 → 选 C'
+  }
+];
+
+// 前 n 步卡片的累积 HTML
+function cardsUpTo(n){
+  return STEPS.slice(0, n).map(function(s, i){
+    return card(i + 1, s.cls, s.title, s.body);
+  }).join('');
+}
+
+var snaps = [
+  { cls: 'step', tag: '第 1 步', log: STEPS[0].log, count: 1, html: cardsUpTo(1) },
+  { cls: 'step', tag: '第 2 步', log: STEPS[1].log, count: 2, html: cardsUpTo(2) },
+  { cls: 'step', tag: '第 3 步', log: STEPS[2].log, count: 3, html: cardsUpTo(3) },
+  { cls: 'ok',   tag: 'C 对号', log: STEPS[3].log, count: 4, html: cardsUpTo(4), ribbon: STEPS[3].ribbon },
+  { cls: 'miss', tag: 'B 过筛', log: STEPS[4].log, count: 5, html: cardsUpTo(5), ribbon: STEPS[4].ribbon },
+  { cls: 'miss', tag: 'A 过筛', log: STEPS[5].log, count: 6, html: cardsUpTo(6), ribbon: STEPS[5].ribbon },
+  { cls: 'miss', tag: 'D 过筛', log: STEPS[6].log, count: 7, html: cardsUpTo(7), ribbon: STEPS[6].ribbon },
+  { cls: 'done', tag: '结论',   log: STEPS[7].log, count: 8, html: cardsUpTo(8), done: true }
+];
+
+AW.init({
+  title: '新三民主义为什么能当国共合作的政治基础',
+  subtitle: '考点：第一次国共合作 · 方法：先立「政治基础=共同目标」机制，再对照两党纲领逐项过筛',
+  counterLabel: '推理步',
+  ribbonTitle: '选项过筛（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开：机制 → 对照表 → 对号 C → 过筛 B/A/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '记忆锚点：合作的政治基础 = <b>政纲一致</b>——新三民主义（反帝、民权平民共有、平均地权+节制资本）与中共二大民主革命纲领<b>基本一致</b>；三大政策（B）是<b>政策手段</b>，不是「基础」本身。识别新旧三民主义看三点：民族重提反帝、民权扩到平民共有、民生加节制资本。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：新三民主义凭什么成为第一次国共合作的政治基础</h2>
+<p>答案：<strong>C（同中国共产党在民主革命阶段的纲领基本一致）</strong>。</p>
+<h3>第 0 步：先立机制——「政治基础」的成立条件是什么</h3>
+<p>两个政党要合作，总得有一面共同的旗子：<strong>一起打谁、一起建什么</strong>。这就是「政治基础」的实质——<strong>共同的奋斗目标（政纲一致）</strong>。把 1924 年两边的纲领摆到一张桌上对照：</p>
+<table><thead><tr><th></th><th>中共民主革命纲领（二大最低纲领）</th><th>新三民主义（国民党一大宣言的新解释）</th></tr></thead><tbody><tr><td>对外</td><td>推翻国际帝国主义的压迫</td><td>民族主义新解：反帝，中华民族自求解放</td></tr><tr><td>对内</td><td>打倒军阀，统一中国为真正的民主共和国</td><td>民权主义新解：民权为一般平民所共有</td></tr><tr><td>经济</td><td>——（民生诉求体现于反帝反军阀后的建设）</td><td>民生主义新解：平均地权 + <strong>节制资本</strong></td></tr></tbody></table>
+<p>两表对照：<strong>共同敌人（帝国主义、军阀）、共同任务（民主革命）</strong>——新三民主义与中共在民主革命阶段的纲领<strong>基本一致</strong>，两党才有并肩作战的共同旗子。这就是它成为第一次国共合作政治基础的<strong>原因</strong>，选 C。</p>
+<h3>第 1 步：干扰项逐个过筛——每个错项对应一种误解</h3>
+<ul><li><strong>B「体现了联俄、联共、扶助农工三大革命政策」</strong>：最强干扰项，必须讲透。三大政策确实属于新三民主义（是它的革命精神所在），但它是贯彻主义的<strong>政策/手段</strong>，回答的是「怎么干」；而「政治基础」回答的是「为什么能合作」——靠的是<strong>政纲（目标）一致</strong>。政策≠政纲，手段≠基础。考场上遇到「基础/原因/根据」类问法，优先找「目标一致」项。</li><li><strong>A「把斗争的矛头直指向北洋军阀」</strong>：错在<strong>不全面且不中要害</strong>。新三民主义民族主义的新解释，核心首先落在<strong>反帝</strong>（中华民族自求解放）；「直指军阀」既概括不了新三民主义的全貌，更解释不了「国共合作」——中共二大纲领同样反军阀，这说不清为什么非得是「合作」的基础。</li><li><strong>D「把民主主义概括为『平均地权』」</strong>：错在<strong>退回了旧版</strong>。「平均地权」是<strong>旧</strong>三民主义民生主义的表述；一大宣言的<strong>新</strong>解释是「平均地权 + 节制资本」，且这仍属民生一义，概括不了整个政纲。识别「新旧三民主义」的关键差异点（民族重提反帝、民权扩到平民共有、民生加节制资本）是本考点的常设考法。</li></ul>
+<h3>第 2 步：预判追问——为什么不能说「三大政策就是基础」</h3>
+<p>学习者最可能追问：教材不是说「新三民主义以三大政策为精神」吗？两个说法各有分工，不矛盾：<strong>三大政策</strong>说明新三民主义的革命性与实行方向（联俄联共意味着愿意与苏俄、中共携手），是它<strong>能被中共接受</strong>的加分项；但「政治基础」的标准表述始终是「<strong>政纲基本一致</strong>」——共同敌人、共同任务，才谈得上共同奋斗。记忆时分两层挂：政纲一致=合作的基础（C）；三大政策=政策的保证（B，强干扰不选）。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B（背熟「联俄、联共、扶助农工」就冲它去）</strong>：记住了政策口号，忘了题干问的是「成为政治基础<strong>的原因</strong>」——把手段当成了基础。</li><li><strong>误选 A（只见军阀不见帝国主义）</strong>：民族主义新解释的核心首先是反帝；且单说反军阀解释不了「合作」。</li><li><strong>误选 D（新旧不分）</strong>：没识别出「平均地权」单独出现是旧三民主义的旧表述，新民生主义多了「节制资本」。</li></ul>
+<blockquote>记忆锚点：合作的政治基础 = <strong>政纲一致</strong>——新三民主义（反帝、民权平民共有、平均地权+节制资本）与中共二大民主革命纲领<strong>基本一致</strong>（C）；三大政策（B）是政策手段，不是「基础」本身。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

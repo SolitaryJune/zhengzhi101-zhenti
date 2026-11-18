@@ -1,8 +1,122 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-04 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-04</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-04 · 剩余价值率三步算法</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/计算推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 推理链：每一步的完整内容（引擎按步数截取显示；s.cls: key=关键/good=正确/bad=排除） */
+var STEPS = [
+  {
+    "cls": "key",
+    "tag": "审题眼",
+    "title": "审题眼：三个已知量",
+    "body": "<p>预付资本 <b>100 万</b>；每次投资利润 <b>15 万</b>；预付资本有机构成 <b>4:1</b>。</p><p>求：剩余价值率 m′。解题链条固定三步：预付资本 →（按 c:v）拆出 v → m′=m/v。</p>"
+  },
+  {
+    "cls": "key",
+    "tag": "立机制",
+    "title": "立机制：m′=m/v，分母只有可变资本",
+    "body": "<p><b>剩余价值率 m′ = m / v</b>——反映剥削程度，分母<b>只取可变资本 v</b>（工资），不是全部预付资本。</p><p><b>有机构成 c:v</b>：不变资本（机器原料）:可变资本（工资）——它是命题人递来的“拆分器”。利润是剩余价值的转化形式，本题口径利润 15 万即 m。</p>"
+  },
+  {
+    "cls": "key",
+    "tag": "拆资本",
+    "title": "第 1 步：把 100 万按 4:1 拆开",
+    "body": "<p>总份数 4+1=5 份，每份 20 万：</p><table><tr><th>项目</th><th>计算</th><th>金额</th></tr><tr><td>不变资本 c</td><td>100×4/5</td><td>80 万</td></tr><tr><td><b>可变资本 v</b></td><td>100×1/5</td><td><b>20 万</b></td></tr><tr><td>利润（即 m）</td><td>题干给定</td><td>15 万</td></tr></table><p>v=20 万——唯一定位，不许心算错。</p>"
+  },
+  {
+    "cls": "bad",
+    "tag": "A 排除",
+    "title": "选项 A：50% 从哪来",
+    "body": "<p><b>A 错</b>：对应“把 c:v 口算错”一类——如把 v 拆成 30 万再算 15/30。</p><p>认准“4:1 → 五份里占一份”，v=20 万。</p>",
+    "ribbon": {"k": 1, "ok": false}
+  },
+  {
+    "cls": "good",
+    "tag": "B 入选",
+    "title": "选项 B：75% —— 套定义",
+    "body": "<p><b>B 对</b>：m′ = m / v = <b>15 ÷ 20 = 75%</b>。</p><p>分母只有可变资本 v（劳动力），因为只有 v 创造价值增殖——m′ 反映剥削程度。</p>",
+    "ribbon": {"k": 2, "ok": true}
+  },
+  {
+    "cls": "bad",
+    "tag": "C 排除",
+    "title": "选项 C：100% 从哪来",
+    "body": "<p><b>C 错</b>：把题给的<b>利润 15 万误当可变资本 v</b>，算出 15/15=100%。</p><p>利润不是工资——v 是预付的可变资本，必须从有机构成里拆出来，题干没直接给。</p>",
+    "ribbon": {"k": 3, "ok": false}
+  },
+  {
+    "cls": "bad",
+    "tag": "D 排除",
+    "title": "选项 D：125% 从哪来",
+    "body": "<p><b>D 错</b>：同样是拆分口径算错后的凑数项（如把 v 拆成 12 万，15/12=125%）。</p><p>顺带记：利润率 p′=p/(c+v)=15/100=<b>15%</b>——分母是全部预付资本，与 m′ 分母不同，本题选项里根本没放 15%。</p>",
+    "ribbon": {"k": 4, "ok": false}
+  },
+  {
+    "cls": "good",
+    "tag": "结论",
+    "title": "收束：答案 B（75%）",
+    "body": "<p>三步链条：预付资本 → c:v=4:1 拆出 v=20 万 → m′=15/20=<b>75%</b>。</p><p><b>答案 B。</b>记忆锚点：v=总资本×1/5；m′=m/v 分母只有 v；利润率分母是 (c+v)=100 万、p′=15%，两率别串用。</p>"
+  }
+];
+
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.ribbon) nPick++;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '排除' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: "剩余价值率三步算法：100 万、利润 15 万、有机构成 4:1",
+  subtitle: "考点：资本有机构成 · 剩余价值率 m′=m/v · 计算推理链",
+  intro: '点击「▶ 播放」或按 → 逐步展开计算推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确答案 / ✗ 干扰项）',
+  counterLabel: '已对号选项',
+  snaps: snaps,
+  result: {"big": "答案 B（75%）", "html": "c:v=4:1 ⇒ v=100×1/5=<b>20 万</b>；m′=m/v=15/20=<b>75%</b>。<br>易错：C 把利润当 v（15/15=100%）；利润率 p′=15/100=15% 分母是全部预付资本，与 m′ 分母不同、别串用。"}
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：100 万、利润 15 万、有机构成 4:1——三步算出剩余价值率</h2>
+<p>答案：<strong>B（75%）</strong>。</p>
+<h3>第 0 步：先立机制——剩余价值率的定义与资本有机构成</h3>
+<p>两个概念先立稳，计算顺序自然出来：</p>
+<ul><li><strong>剩余价值率</strong> <code>m′ = m / v</code>：剩余价值与可变资本的比率，反映剥削程度。分母<strong>只取可变资本 v</strong>（购买劳动力的那部分），不是全部预付资本。</li><li><strong>资本有机构成</strong> <code>c : v</code>：不变资本（机器、原料）与可变资本（工资）之比。它就是命题人递给你的"拆分器"——告诉你 100 万里两种资本各占多少。</li><li><strong>利润 p 与剩余价值 m</strong>：利润是剩余价值的转化形式，本题按教学口径直接把"利润 15 万"当作 m 使用（不涉及利润率平均化）。</li></ul>
+<p>于是解题链条固定为三步：<strong>预付资本 →（按 c:v）拆出 v → m′ = m/v</strong>。</p>
+<h3>第 1 步：把 100 万按 4:1 拆开</h3>
+<p>有机构成 c:v = 4:1，总份数 4+1 = 5 份，每份 20 万：</p>
+<table><thead><tr><th>项目</th><th>计算</th><th>金额</th></tr></thead><tbody><tr><td>不变资本 c</td><td>100 × 4/5</td><td>80 万</td></tr><tr><td>可变资本 v</td><td>100 × 1/5</td><td><strong>20 万</strong></td></tr><tr><td>利润（本题口径下即 m）</td><td>题干给定</td><td>15 万</td></tr></tbody></table>
+<h3>第 2 步：套定义</h3>
+<p><code>m′ = m / v = 15 ÷ 20 = 75%</code>。</p>
+<h3>易错点</h3>
+<ul><li><strong>混淆两个率</strong>：利润率 <code>p′ = p/(c+v) = 15/100 = 15%</code>，分母是全部预付资本；剩余价值率分母<strong>只有 v</strong>。两个率分母不同，别串用——本题选项里根本没放 15%，就是逼你走对分母。</li><li><strong>误选 C（100%）</strong>：把题给的利润 15 万误当可变资本 v，算出 15/15=100%。"利润"不是工资——v 是<strong>预付</strong>的可变资本，必须从有机构成里拆出来，题干没直接给。</li><li><strong>误选 A（50%）/D（125%）</strong>：把 c:v 口算错（如把 v 拆成 30 万、12 万）导致 m′ 随之错。认准"4:1 → 五份里占一份"，v=20 万是唯一定位。</li><li>追问：为什么 m′ 反映"剥削程度"？因为只有 v（劳动力）才创造价值增殖，m 对 v 之比正是"新创造价值中工人无偿部分与工资所得部分"之比——c 在分母里出现只会稀释这个含义。</li></ul>
+<blockquote>记忆锚点：有机构成 4:1 ⇒ v = 总资本的 1/5 = 20 万；<code>m′ = m/v = 15/20 = 75%</code>；利润率分母是 (c+v)，两者别串用。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

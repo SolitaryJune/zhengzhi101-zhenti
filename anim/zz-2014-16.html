@@ -1,8 +1,119 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-16 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-16</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·16 中美新型大国关系的内涵：三句话十四字</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>题眼：2013 年 6 月安纳伯格「庄园会晤」，习近平「<b>将内涵概括为</b>」——要的是那次会晤给出的<b>官方原文</b>。「内涵」回答「这种关系是什么」，不是「怎么做」。</p>",
+    "log": "抓题干动词：概括为内涵"
+  },
+  {
+    "title": "立背景：不走大国对抗老路",
+    "cls": "key",
+    "body": "<p>守成大国与新兴大国常滑向对抗（「国强必霸」旧逻辑）。中国提出走新路——新型大国关系。这决定了内涵第一句必是「<b>不冲突、不对抗</b>」。</p>",
+    "log": "新路 = 不对抗打头"
+  },
+  {
+    "title": "C：三句话十四字",
+    "cls": "good",
+    "body": "<p>官方内涵 = <b>不冲突、不对抗、相互尊重、合作共赢</b>：主观上不做对抗选项；尊重彼此核心利益与道路选择；摒弃零和思维谋共赢。<b>C 正确</b>。</p>",
+    "ribbon": { "k": 3, "ok": true },
+    "log": "三句话原文 → 选 C"
+  },
+  {
+    "title": "B：是「怎么做」不是「是什么」",
+    "cls": "bad",
+    "body": "<p>最强干扰。「加强对话、增加互信、发展合作、管控分歧」都是中美关系语境的真话，但属于<b>推进关系的努力方向</b>（操作层），回答「怎么干」而非「是什么」。<b>B 错误</b>。</p>",
+    "ribbon": { "k": 2, "ok": false },
+    "log": "做法 ≠ 内涵 → B 不选"
+  },
+  {
+    "title": "A：拼凑表述",
+    "cls": "bad",
+    "body": "<p>「友好伙伴」并非双方达成的定位用语，整句不是官方内涵概括——同话题语句挪用拼凑的干扰项。<b>A 错误</b>。</p>",
+    "ribbon": { "k": 1, "ok": false },
+    "log": "拼凑项 → A 不选"
+  },
+  {
+    "title": "D：更像别国关系的描述语",
+    "cls": "bad",
+    "body": "<p>「平等互利、密切协作、相互支持」更接近中俄等双边关系的常用描述语，不是中美新型大国关系的三句话原文。<b>D 错误</b>。</p>",
+    "ribbon": { "k": 4, "ok": false },
+    "log": "混装表述 → D 不选"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>C</b>：内涵 = <b>不冲突、不对抗、相互尊重、合作共赢</b>（三句话十四字）。记忆锚点：2013.6 安纳伯格庄园会晤；「加强对话、管控分歧」类是推进做法，不是内涵；时政题抓原文配对，不靠语感。</p>",
+    "log": "锁定 C：三句话十四字"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "中美新型大国关系的内涵概括",
+  subtitle: "考点：2013 年时政（庄园会晤） · 方法：先立背景，再对官方原文",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 C",
+    html: "记忆锚点：2013.6 安纳伯格庄园会晤——内涵 = <b>不冲突、不对抗、相互尊重、合作共赢</b>（三句话十四字）。B 是最强干扰：对话、互信、合作、管控分歧属于<b>推进做法</b>，回答「怎么干」而非「是什么」。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：中美新型大国关系的内涵概括</h2>
+<p>答案：<strong>C（不冲突、不对抗、相互尊重、合作共赢）</strong>。</p>
+<h3>第 0 步：先立背景——为什么提出「新型大国关系」</h3>
+<p>大国兴衰史上，守成大国与新兴大国往往走向对抗（所谓「国强必霸」的旧逻辑）。中国提出走一条新路：两国关系不重蹈冲突对抗的覆辙。2013 年 6 月，习近平与美国总统奥巴马在美国加州<strong>安纳伯格庄园</strong>会晤（「庄园会晤」），把中美新型大国关系的内涵概括为三句话：</p>
+<table><thead><tr><th>内涵（三句话）</th><th>针对什么</th></tr></thead><tbody><tr><td><strong>不冲突、不对抗</strong></td><td>打破「国强必霸/守成国与新兴国必战」的旧逻辑——主观上不做对抗的选项</td></tr><tr><td><strong>相互尊重</strong></td><td>尊重彼此核心利益和重大关切，尊重各自选择的发展道路</td></tr><tr><td><strong>合作共赢</strong></td><td>摒弃零和思维，以合作谋共同利益</td></tr></tbody></table>
+<p>→ 选 C。</p>
+<h3>第 1 步：干扰项各自错在哪</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>错因归因</th></tr></thead><tbody><tr><td>A 共同发展、合作共赢、友好伙伴、相互尊重</td><td>❌</td><td><strong>拼凑表述</strong>：「友好伙伴」并非双方达成的定位用语，整体不是官方内涵概括</td></tr><tr><td>B 加强对话、增加互信、发展合作、管控分歧</td><td>❌</td><td><strong>最强干扰</strong>：四个短语都是中美关系语境里的真话，但属于推进关系的<strong>努力方向/做法</strong>（怎么干），不是对「内涵」的概括</td></tr><tr><td>D 相互尊重、平等互利、密切协作、相互支持</td><td>❌</td><td><strong>拼凑表述</strong>：这组词更接近对中俄等双边关系的描述语，不是中美新型大国关系的三句话</td></tr></tbody></table>
+<h3>第 2 步：预判追问——「内涵」和「做法」为什么是两回事</h3>
+<p>时政概念题最常见的一类干扰是<strong>挪用同一话题的其他官方语句</strong>。「内涵」回答「这种关系<strong>是什么</strong>」，官方原文固定为三句话；「做法/努力方向」回答「<strong>怎么干</strong>」，对话、互信、合作、管控分歧都属于这一层。题干的动词是「<strong>将内涵概括为</strong>」——答案必须是那次会晤给出的三句话原文。辨析要领：抓题干的动词，别被「像官方话」迷惑。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B（最常见）</strong>：句子都「很像官方」，靠语感选——时政题恰恰不能靠语感，要靠<strong>原文配对</strong>；B 是「做法」层，答「怎么干」而非「是什么」。</li><li><strong>记成四个词、五个词</strong>：内涵固定是三句话、十四个字——「不冲突不对抗、相互尊重、合作共赢」，别与其他关系的表述（如「平等互利、密切协作」）混装。</li></ul>
+<blockquote>记忆锚点：2013.6 安纳伯格庄园会晤，中美新型大国关系内涵 = <strong>不冲突不对抗、相互尊重、合作共赢</strong>（三句话十四字）；「加强对话、管控分歧」类是推进做法，不是内涵。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

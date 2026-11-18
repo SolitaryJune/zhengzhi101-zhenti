@@ -1,8 +1,137 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-11 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-11</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2009·11 科学发展观根本方法</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>科学发展观四要素「对号」题，题眼是「<b>根本方法</b>」。命题人年年在这张要素表上换位置提问——先把表背死，再按位对号。</p>",
+    "log": "要素定位题，题眼 = 「方法」"
+  },
+  {
+    "title": "立模型：四张名片",
+    "cls": "key",
+    "body": "<p>十七大表述一一对位：<b>第一要义</b>是发展（要不要发展）、<b>核心</b>是以人为本（为谁发展）、<b>基本要求</b>是全面协调可持续（实现什么样的发展）、<b>根本方法</b>是统筹兼顾（怎样发展）。</p>",
+    "log": "四张名片：要义/核心/要求/方法"
+  },
+  {
+    "title": "为什么「方法」落在统筹兼顾",
+    "cls": "key",
+    "body": "<p>「方法」回答<b>操作层</b>问题：发展千头万绪怎么摆平？答案 = 统筹城乡、区域、经济社会发展、人与自然、国内发展与对外开放（「五个统筹」）——总揽全局、兼顾各方。方向和标准不是方法。</p>",
+    "log": "操作层问题 → 统筹兼顾"
+  },
+  {
+    "title": "对号：C 正确",
+    "cls": "good",
+    "body": "<p><b>统筹兼顾</b>占「根本方法」位。<b>C 正确</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": true
+    },
+    "log": "统筹兼顾 = 根本方法 → C"
+  },
+  {
+    "title": "A：占「要义」位",
+    "cls": "bad",
+    "body": "<p>「把发展作为第一要义」占<b>第一要义</b>位，回答「要不要发展」——是方向，不是方法。<b>A 错误</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "log": "A 占要义位"
+  },
+  {
+    "title": "B：占「核心」位",
+    "cls": "bad",
+    "body": "<p>以人为本占<b>核心</b>位，回答「为谁发展、靠谁发展」——是价值立场。地位高不等于题眼对得上。<b>B 错误</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    },
+    "log": "B 占核心位"
+  },
+  {
+    "title": "D：占「基本要求」位",
+    "cls": "bad",
+    "body": "<p>「协调可持续」是「<b>全面协调可持续</b>」的半截，占<b>基本要求</b>位，回答「实现什么样的发展」——是要求不是方法。<b>D 错误</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "log": "D 占基本要求位"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>C</b>。见「方法」找「统筹」——一句口诀钉死四张名片。</p>",
+    "log": "锁定 C"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "科学发展观：四要素对号",
+  subtitle: "考点：科学发展观 · 方法：四张名片一一对位，题眼「根本方法」",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 C（统筹兼顾）",
+    html: "记忆锚点：<b>要义发展、核心人为本、基本要求全面协调可持续、根本方法统筹兼顾</b>。A/B/D 各占一位——要义、核心、要求；只有「根本方法」位上是统筹兼顾。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：科学发展观的「根本方法」——一个理论四张名片，按位对号</h2>
+<p>答案：<strong>C（统筹兼顾）</strong>。</p>
+<h3>第 0 步：先立机制——这套题考的是「要素表」，不是理解题</h3>
+<p>科学发展观（党的十七大写入党章）有一张固定的「要素表」，命题人年年都在这张表上<strong>换位置提问</strong>：今年问「根本方法」，明年可能问「第一要义」。解法不是逐项理解，而是把四张「名片」的对应关系背死，再按题眼对号：</p>
+<table><thead><tr><th>要素位</th><th>内容</th><th>回答的问题</th></tr></thead><tbody><tr><td>第一要义</td><td>发展</td><td>要不要发展</td></tr><tr><td>核心</td><td>以人为本</td><td>为谁发展、靠谁发展</td></tr><tr><td>基本要求</td><td>全面协调可持续</td><td>实现什么样的发展</td></tr><tr><td>根本方法</td><td>统筹兼顾</td><td><strong>怎样发展</strong></td></tr></tbody></table>
+<h3>第 1 步：题眼是「方法」二字——为什么根本方法是统筹兼顾</h3>
+<p>「方法」回答的是<strong>操作层</strong>问题：发展千头万绪，怎么摆平各方面关系？答案是统筹——统筹城乡发展、区域发展、经济社会发展、人与自然和谐发展、国内发展和对外开放（「五个统筹」），总揽全局、兼顾各方。而「发展」「以人为本」「全面协调可持续」分别回答要不要发展、为谁发展、实现什么样的发展——它们是<strong>方向和标准</strong>，不是操作方法。问「方法」就只能落在统筹兼顾上。</p>
+<h3>第 2 步：四个选项按位对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>占的是哪个位置</th></tr></thead><tbody><tr><td>A 把发展作为第一要义</td><td>❌</td><td>占「第一要义」的位置——题眼不是「要义」</td></tr><tr><td>B 以人为本</td><td>❌</td><td>占「核心」的位置——价值立场，不是方法</td></tr><tr><td>C 统筹兼顾</td><td>✅</td><td>占「根本方法」的位置</td></tr><tr><td>D 协调可持续</td><td>❌</td><td>属「全面协调可持续」，占「基本要求」的位置</td></tr></tbody></table>
+<h3>易错点：每个干扰项的病因</h3>
+<ul><li><strong>误选 D 的根源</strong>：「可持续」字眼看着最像「怎么干」，但「全面协调可持续」整体是<strong>基本要求</strong>——说的是实现什么样的发展，是要求不是方法；且选项只截了半句「协调可持续」，更易被当成独立提法。</li><li><strong>误选 B 的根源</strong>：觉得「以人为本」地位最高就选它——地位高低与题眼无关，考的是<strong>位置对应</strong>。</li><li><strong>四要素张冠李戴</strong>：这类题唯一解法是把名片表背死；命题人换一个问法，答案就换一个字母。</li></ul>
+<blockquote>记忆锚点：一句口诀——<strong>要义发展、核心人为本、基本要求全面协调可持续、根本方法统筹兼顾</strong>；见「方法」找「统筹」。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

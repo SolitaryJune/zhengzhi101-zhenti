@@ -1,8 +1,88 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-13 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-13</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-13 · 人生目的</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：「根本指向和人生追求」落在哪一层',
+    cls: 'key',
+    body: '<p>题干定义：人生目的=人在人生实践中关于自身行为的<b>根本指向和人生追求</b>。「指向」「追求」都落在目的/动机层面——它认识和回答的根本问题是什么？考点：人生观三要素的分工。</p>' },
+  { title: '立机制：三要素各答一问，目的是核心',
+    cls: 'key',
+    body: '<p><b>人生目的</b>答「人为什么活着」——决定人生道路、人生态度、价值标准，其余两者由它统领；<b>人生态度</b>答「怎样对待生活与境遇」；<b>人生价值</b>答「怎样的人生才有意义」。</p>' },
+  { title: '选项 A：人为什么活着',
+    cls: 'good', k: 1, pick: true,
+    body: '<p>「根本指向与人生追求」就是活着的<b>目的/动机</b>层面——人生目的回答的根本问题，<b>入选</b>。</p>' },
+  { title: '选项 B：人如何对待生活',
+    cls: 'bad', k: 2, pick: false,
+    body: '<p>这是<b>人生态度</b>回答的问题——进取还是消极、乐观还是悲观，不是「根本指向」，<b>排除</b>。</p>' },
+  { title: '选项 C：怎样对待人生境遇',
+    cls: 'bad', k: 3, pick: false,
+    body: '<p>顺境逆境如何面对——与 B 是一回事的两面（总体态度与境遇中的态度），仍属<b>人生态度</b>层面，<b>排除</b>。</p>' },
+  { title: '选项 D：怎样选择人生道路',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p>「道路」与「指向」字面最像，但<b>目的先于道路</b>：为什么活着决定走什么路——D 是派生结果，不是目的回答的根据问题，<b>排除</b>。</p>' },
+  { title: '结论：为什么活=人生目的',
+    cls: 'good',
+    body: '<p>B、C 双双归人生态度，D 是派生结果，只有 A 站在「根本指向」层。</p><p><b>答案 A。</b>记忆锚点：目的=为什么活；态度=怎么活；价值=怎样活才有意义。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2012-13 · 人生目的回答的根本问题',
+  subtitle: '2012 年第 13 题（单选）· 考点：人生目的 · 逐项推演',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 正确 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立人生观三要素分工，再逐项对号入座。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：<b>目的</b>答「为什么活着」（核心，决定其余）、<b>态度</b>答「怎样对待生活」、<b>价值</b>答「怎样活着才有意义」。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：人生观三要素各答一问——人生目的答「为什么活」</h2>
+<p>答案：<strong>A（人为什么活着）</strong>。</p>
+<h3>第 0 步：先立机制——人生观内部的三重分工</h3>
+<p>人生观是关于人生目的、人生态度、人生价值等的总观点，三要素各答一问、各有分工：</p>
+<table><thead><tr><th>要素</th><th>回答的根本问题</th><th>表现</th></tr></thead><tbody><tr><td>人生目的</td><td>人<strong>为什么</strong>活着</td><td>决定人生道路、人生态度、价值标准</td></tr><tr><td>人生态度</td><td>人<strong>怎样对待</strong>生活与境遇</td><td>乐观/悲观、进取/消极</td></tr><tr><td>人生价值</td><td>怎样的人生<strong>才有意义</strong></td><td>评价人生的标准</td></tr></tbody></table>
+<p><strong>人生目的是核心</strong>：它规定人生活动的根本指向和人生追求，其余两者都由它统领——目的定了，走什么路、抱着什么态度、用什么标准衡量一生，才随之确定。</p>
+<h3>第 1 步：题干定义指向哪一问</h3>
+<p>题干给的定义是「人生目的是人在人生实践中关于自身行为的<strong>根本指向和人生追求</strong>」——「根本指向」「追求」都落在<strong>目的/动机</strong>层面：活着到底为了什么。它认识和回答的根本问题就是「<strong>人为什么活着</strong>」，选 <strong>A</strong>。</p>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 人为什么活着</td><td>✅</td><td>人生目的回答的根本问题</td></tr><tr><td>B 人如何对待生活</td><td>❌</td><td><strong>人生态度</strong>回答的问题</td></tr><tr><td>C 怎样对待人生境遇</td><td>❌</td><td>顺境逆境如何面对，仍属<strong>人生态度</strong>层面</td></tr><tr><td>D 怎样选择人生道路</td><td>❌</td><td>是目的的<strong>派生结果</strong>：为什么活着决定走什么路</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 D（「道路」与「指向」字面最像）</strong>：「根本指向」易被误读成「选哪条路」——但目的先于道路、决定道路，D 是结果不是根据，把派生项当根本问题就上当了。</li><li><strong>B、C 双双归态度</strong>：「对待生活」与「对待境遇」是一回事的两面（总体态度与顺逆境中的态度），都不是「根本指向」。</li><li><strong>三问对应是本题全部考点</strong>：目的=为什么活；态度=怎么活（对境遇）；价值=怎样活有意义——背熟对应表即可秒杀。</li></ul>
+<blockquote>记忆锚点：目的答「为什么活着」、态度答「怎样对待生活」、价值答「怎样活着才有意义」；人生目的是人生观的核心，其余两者由它统领。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,108 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-34 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-34</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2024-34 · 调查研究：两问两条原理链（分析题）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+function chain(items){
+  var out = [];
+  for (var i = 0; i < items.length; i++){
+    out.push('<span class="aw-box ' + (items[i][1] || '') +
+      '" style="width:auto;height:auto;padding:6px 12px;font-size:14px;font-family:inherit;white-space:nowrap">' +
+      items[i][0] + '</span>');
+  }
+  return '<div class="aw-cells" style="gap:6px;flex-wrap:wrap">' +
+    out.join('<span style="align-self:center;color:#64748b;font-weight:700">→</span>') + '</div>';
+}
+var STEPS = [
+  { title: '审题：一道材料、两问、两条原理链',
+    cls: 'key',
+    body: '<p>材料只给一个（调查研究），设问两条。审题先定位：<b>（1）问“为什么调查不自然产生科学观点”</b>→ 认识论：感性认识与理性认识的辩证关系（第一次飞跃）；<b>（2）问“为什么解决一个能推动解决一类”</b>→ 唯物辩证法：矛盾普遍性与特殊性的辩证关系。材料关键句对号：“并不自然产生”隔着一道加工工序；“解剖麻雀”“举一反三”说的是个案藏共性。</p>' +
+          '<p>' + chain([['实践', ''], ['感性认识（调查取材）', 'ok'], ['理性认识（研究加工）', 'ok'], ['回到实践检验', 'dim']]) + '</p>' },
+  { title: '第（1）问·机制①：调查是取材——感性材料是前提',
+    cls: 'step',
+    body: '<p>调查＝深入一线，<b>全面、客观、准确</b>地掌握情况，获得的是<b>感性材料</b>——形成正确认识的前提，没有调查就没有发言权。<b>材料对应</b>：习近平基层考察舀起一瓢水尝水质、向技术人员问插秧机原理与价格、向出租车司机征询打车难——都是取第一手感性材料。</p>' },
+  { title: '第（1）问·机制②：研究是加工——感性不会自动升格为理性',
+    cls: 'step',
+    body: '<p>这就是“并不自然产生”的机理：感性认识反映的是<b>现象和外部联系</b>，零散、表面、真假混杂。从材料到结论必须插入一道<b>加工工序</b>：对材料“<b>去粗取精、去伪存真、由此及彼、由表及里</b>”地改造制作，形成概念、判断、推理——实现从感性认识到理性认识的<b>第一次飞跃</b>。<b>材料对应</b>：福建林改抓住“山要怎么分、树要怎么砍、钱从哪里来、单家独户怎么办”四个难题深入调研，推出针对性改革举措。</p>' },
+  { title: '第（1）问·机制③：理性认识回到实践——调查与研究统筹',
+    cls: 'step',
+    body: '<p>飞跃得到的对策还须<b>回到实践中检验、修正和发展</b>。只调查不研究——提不出有效对策；只研究不调查——无源之水、无本之木。把调查和研究<b>统筹起来</b>，调研才成为获得真知灼见的源头活水、领导干部的基本功。</p>' },
+  { title: '第（2）问·机制①：矛盾普遍性寓于特殊性之中',
+    cls: 'step',
+    body: '<p>“解决一个问题”针对的是<b>特殊性（个性）</b>；“解决一类问题”靠的是从中把握的<b>普遍性（共性）</b>。共性与个性互相联结：<b>普遍性寓于特殊性之中</b>——任何一个具体问题都不孤立存在，它身上带着同类问题共有的规律。</p>' },
+  { title: '第（2）问·机制②：解剖麻雀、举一反三——个别→一般→个别',
+    cls: 'step',
+    body: '<p>认识秩序两段：<b>个别→一般</b>——解剖麻雀，把个案研究透，提炼同类问题的共同规律；<b>一般→个别</b>——用一般规律指导同类问题，并结合各自差异<b>具体问题具体分析</b>。</p>' +
+          '<p>' + chain([['解决一个问题（个案）', 'hit'], ['提炼共同规律（一般）', 'ok'], ['举一反三解一类（个案）', 'ok']]) + '</p>' },
+  { title: '第（2）问·材料对应：民生细节里的共性',
+    cls: 'step',
+    body: '<p>就业、教育、医疗、托育、养老、住房千头万绪，实质是“<b>人民群众最关心的现实问题</b>”这一共性在不同领域的表现；从最细微的事项问起、从易忽视的细节与易梗阻的程序切入，正是抓特殊性中的普遍性。这样从“解决一个问题”到“解决一类问题”，调研的<b>系统性、预见性、创造性、实效性</b>大大增强。</p>' },
+  { title: '结论：两问答题框架',
+    cls: 'good',
+    body: '<table><tr><th>问</th><th>原理内核</th><th>材料对应</th><th>关键得分点</th></tr>' +
+          '<tr><td>（1）5 分</td><td>感性→理性的第一次飞跃；理性认识回到实践</td><td>舀水尝水＝取材；林改四难题＝加工出对策</td><td>十六字改造制作；调查与研究统筹</td></tr>' +
+          '<tr><td>（2）5 分</td><td>普遍性寓于特殊性之中</td><td>解剖麻雀、举一反三</td><td>个别→一般→个别；具体分析差异</td></tr></table>' +
+          '<p>作答骨架：原理 → 材料对应 → 方法论落点，两问都走这三步。<b>（1）调查给材料、研究出结论；（2）个案藏共性、举一反三。</b></p>' },
+];
+var nPt = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  nPt++;
+  return {
+    cls: last ? 'done' : (s.cls === 'key' ? 'shift' : (s.cls || 'step')),
+    tag: last ? '框架' : (s.cls === 'key' ? '审题' : '展开'),
+    log: s.title,
+    count: nPt,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+});
+AW.init({
+  title: 'zz-2024-34 · 调查研究：两问两条原理链',
+  subtitle: '2024 年第 34 题（分析题，10 分）· 考点：感性理性认识飞跃 ＋ 矛盾普遍性与特殊性',
+  counterLabel: '要点',
+  intro: '点击「▶ 播放」：先审题定位两条原理链，再按“原理→材料→落点”逐段展开，最后汇总答题框架。',
+  snaps: snaps,
+  result: {
+    big: '（1）第一次飞跃　（2）共性寓于个性',
+    html: '<b>（1）</b>调查取感性材料 → 十六字改造制作实现第一次飞跃 → 理性认识回到实践检验；调查与研究统筹才有有效对策。<br><b>（2）</b>普遍性寓于特殊性之中 → 解剖麻雀（个别→一般）→ 举一反三、具体分析差异（一般→个别）→ 系统性、预见性、创造性、实效性增强。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：调查研究——两问两条原理链（10 分分析题）</h2>
+<p>这是一道马原综合材料题，材料只给一个（调查研究），设问两条：第（1）问 5 分落在<strong>认识论</strong>（感性认识与理性认识的辩证关系），第（2）问 5 分落在<strong>唯物辩证法</strong>（矛盾普遍性与特殊性的辩证关系）。两问共用的作答骨架都是"<strong>原理 → 材料对应 → 方法论落点</strong>"三步：先亮原理内核，再回材料找对应句，最后落到"怎么做"。</p>
+<h3>第 0 步：审题——把材料读成两条问题链</h3>
+<table><thead><tr><th>材料关键句</th><th>指向的原理</th></tr></thead><tbody><tr><td>"调查是……掌握情况的过程，并不自然产生科学观点、得出正确结论"</td><td>感性认识与理性认识之间隔着"研究"这道加工工序</td></tr><tr><td>"解剖麻雀式的调研""举一反三""从解决一个问题到解决一类问题"</td><td>个案（特殊性）中藏着同类问题（普遍性）</td></tr></tbody></table>
+<p>第（1）问问"为什么不会自然产生"，落点是<strong>认识过程的第一次飞跃</strong>；第（2）问问"为什么能推动"，落点是<strong>共性寓于个性</strong>。定位准了，原理才不会串门。</p>
+<h3>第（1）问：为什么调查不会"自然产生"科学观点、正确结论</h3>
+<p><strong>原理层。</strong> 认识的运动走"实践 → 感性认识 → 理性认识 → 回到实践"的路线，调查只负责第一段：</p>
+<ol><li><strong>调查是取材</strong>：深入一线，全面、客观、准确地掌握情况，获得的是<strong>感性材料</strong>——它是形成正确认识的前提（没有调查就没有发言权）；</li><li><strong>但感性认识有天然的局限</strong>：它反映的是事物的现象和外部联系，零散、表面、真假混杂——材料自己不会"升格"为观点，这就是"并不自然产生"的机理；</li><li><strong>中间必须插入"研究"这道加工工序</strong>：运用科学方法对材料进行"<strong>去粗取精、去伪存真、由此及彼、由表及里</strong>"的改造制作，形成概念、判断、推理，实现从感性认识到理性认识的<strong>第一次飞跃</strong>；</li><li><strong>理性认识还须回到实践</strong>：接受检验、修正和发展——只调查不研究，提不出有效对策；只研究不调查，决策就是无源之水、无本之木。<strong>调查与研究统筹起来</strong>，调研才成为获得真知灼见的源头活水。</li></ol>
+<p><strong>材料对应。</strong> 习近平基层考察舀起一瓢水尝水质、向技术人员问插秧机原理与价格，是"取材"；福建林改抓住"山要怎么分、树要怎么砍、钱从哪里来、单家独户怎么办"四个难题深入调研后推出针对性改革举措，是"加工出对策"的完整链条。</p>
+<h3>第（2）问：为什么"解决一个问题"能推动"解决一类问题"</h3>
+<p><strong>原理层。</strong> 矛盾的<strong>普遍性（共性）寓于特殊性（个性）之中</strong>，特殊性中包含着普遍性：任何一个具体问题都不是孤立的，它身上带着同类问题共有的规律。由此推出认识的秩序：</p>
+<ol><li><strong>个别 → 一般</strong>：解剖麻雀——把一个个案研究透，从"解决一个问题"中提炼出同类问题的共同规律；</li><li><strong>一般 → 个别</strong>：举一反三——用一般规律指导同类问题，并结合各自差异<strong>具体问题具体分析</strong>，推广落实。</li></ol>
+<p><strong>材料对应。</strong> 就业、教育、医疗、托育、养老、住房等民生问题千头万绪，实质是"人民群众最关心的现实问题"这一共性在不同领域的表现；从最细微的事项问起（细节、易梗阻的程序切入），正是抓住特殊性中的普遍性。这样从"解决一个问题"到"解决一类问题"，调查研究的<strong>系统性、预见性、创造性、实效性</strong>就大大增强。</p>
+<h3>答题框架速览</h3>
+<table><thead><tr><th>问</th><th>原理内核</th><th>材料对应</th><th>关键得分点</th></tr></thead><tbody><tr><td>（1）</td><td>感性→理性的第一次飞跃；理性认识回到实践检验</td><td>舀水尝水＝取材；林改四难题＝加工出对策</td><td>十六字改造制作；调查与研究统筹</td></tr><tr><td>（2）</td><td>普遍性寓于特殊性之中</td><td>解剖麻雀、举一反三</td><td>个别→一般→个别；具体分析差异</td></tr></tbody></table>
+<h3>常见失分点</h3>
+<ul><li><strong>第（1）问只答"调查很重要"</strong>：题干问的是"为什么不会自然产生"，必须答出感性认识的局限与"研究"这道加工工序（十六字），漏了就丢原理分；</li><li><strong>第（2）问串成实践与认识的关系</strong>：材料给的是"个案到同类"，对号入座的是共性与个性的辩证关系，不是实践—认识循环；</li><li><strong>原理与材料两张皮</strong>：只背原理不点"解剖麻雀""举一反三""四个难题"，材料对应分拿不到；分析题的分量一半在"用原理读材料"。</li></ul>
+<blockquote>记忆锚点：调查给材料、研究出结论——十六字改造制作打通第一次飞跃、理性认识回到实践；个案藏共性——解剖一只麻雀，举一反三解决一类问题。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

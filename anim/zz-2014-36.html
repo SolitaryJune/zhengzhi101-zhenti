@@ -1,8 +1,161 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-36 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-36</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2014-36 动画：实事求是评价领袖与「两个不能否定」（分析题两问拆解）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- ============================================================
+     模板：概念/记忆/推理链类（anim_math_concept 同款结构，政治站无 KaTeX 版）
+     形态：逐步揭示推理链卡片；第 2 步内嵌"实事求是钥匙"图（三齿），
+     第 8 步内嵌"两个历史时期"接续链图；序号带点亮第(1)问三点与第(2)问三点。
+     路径：本页位于 anim/{id}.html，../assets/ 指向站点根 assets/。
+============================================================= -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// "实事求是钥匙"三齿图：全面历史辩证 · 主流支流 · 反对两个极端
+function keyDiagram(){
+  var teeth = [
+    ['全面 · 历史 · 辩证', '放回历史条件中看，功过都要看到，不用今天标准苛求前人', '#0e9488'],
+    ['分清主流与支流', '定性看主流：主流是什么，对象就「是什么」；支流承认并吸取教训，不颠倒主次', '#155e75'],
+    ['反对两个极端', '全盘肯定（神化）✗ · 全盘否定（历史虚无）✗', '#b45309']
+  ];
+  var h = '<div style="font-size:13px;font-weight:800;color:#155e75;margin:2px 0 6px">🔑 一把钥匙：实事求是的方法论（两问共用）</div>';
+  h += '<div style="margin:2px 0">';
+  for(var i = 0; i < teeth.length; i++){
+    var nd = teeth[i];
+    h += '<div style="display:flex;align-items:stretch;gap:0;margin:0">' +
+         '<div style="flex:none;width:130px;text-align:center;padding:5px 6px;background:' + nd[2] +
+         ';color:#fff;border-radius:8px;font-size:12.5px;font-weight:700">' + nd[0] + '</div>' +
+         '<div style="flex:1;display:flex;align-items:center;padding-left:10px;font-size:12.5px;color:#475569">' + nd[1] + '</div></div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+// "两个历史时期"接续链图
+function periodsChain(){
+  var h = '<div style="display:flex;align-items:stretch;gap:6px;margin:6px 0 2px">';
+  h += '<div style="flex:1;border:2px solid #155e75;border-radius:10px;padding:6px 8px;background:#eff6ff">' +
+       '<div style="font-weight:800;font-size:13px;color:#155e75">改革开放前（探索奠基）</div>' +
+       '<div style="font-size:12px;color:#475569;margin-top:3px">确立社会主义基本制度 · 建立独立工业体系 · 提供正反两方面经验</div></div>';
+  h += '<div style="display:flex;flex-direction:column;justify-content:center;color:#d9a514;font-weight:800;font-size:12px;text-align:center">提供<br>前提 ↓</div>';
+  h += '<div style="flex:1;border:2px solid #0e9488;border-radius:10px;padding:6px 8px;background:#f0fdfa">' +
+       '<div style="font-weight:800;font-size:13px;color:#0e9488">改革开放后（坚持改革发展）</div>' +
+       '<div style="font-size:12px;color:#475569;margin-top:3px">思想指导、方针政策有重大区别 · 但都是社会主义建设的实践探索</div></div>';
+  h += '</div>';
+  h += '<div style="display:flex;gap:6px;margin-top:4px">' +
+       '<div style="flex:1;text-align:center;background:#fee2e2;color:#b91c1c;border-radius:8px;font-size:12.5px;font-weight:800;padding:4px">✗ 不能用后否定前</div>' +
+       '<div style="flex:1;text-align:center;background:#fee2e2;color:#b91c1c;border-radius:8px;font-size:12.5px;font-weight:800;padding:4px">✗ 不能用前否定后</div></div>';
+  h += '<div style="font-size:12.5px;color:#155e75;font-weight:700;margin-top:4px">⇢ 决不是彼此割裂的，更不是根本对立——同一制度前提下的两段探索</div>';
+  return h;
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：分析题两问怎么拆',
+    cls: 'key', tag: '审题',
+    log: '第(1)问答毛主席像为什么"永远要保留下去"（5 分）；第(2)问答"两个不能否定"的内涵与意义（5 分）。',
+    body: '<p>材料一是 1980 年邓小平答法拉奇：像要<b>永远保留</b>，但「过去挂得太多，并不是一件严肃的事情」；材料二是习近平论改革开放前后<b>两个历史时期</b>：「决不是彼此割裂的，更不是根本对立」。两问表面一个谈人、一个谈时期，实际<b>共用一把钥匙</b>。</p>' },
+  { title: '先立机制：一把钥匙——实事求是的方法论',
+    cls: 'key', tag: '机制',
+    log: '全面历史辩证地看、分清主流支流、反对全盘肯定与全盘否定两个极端——第(1)问用在"人"上，第(2)问用在"时期"上。',
+    body: keyDiagram() },
+  { title: '第(1)问得分点①：功绩是第一位的',
+    cls: 'good', tag: '得分点①',
+    ribbon: { k: 1, ok: true },
+    log: '领导革命胜利、缔造新中国、确立社会主义制度——「没有毛主席，至少中国人民还要在黑暗中摸索更长时间」。',
+    body: '<p>材料一的定性句是答题主骨：「毛主席一生大部分时间做了非常好的事情」「多次从危机中把党和国家<b>挽救过来</b>」。对应史实：领导新民主主义革命胜利、缔造新中国、确立社会主义基本制度——功绩是<b>第一位的</b>，这是「永远保留下去」的根基。</p>' },
+  { title: '第(1)问得分点②：最伟大的功绩——马列主义同中国实际结合',
+    cls: 'good', tag: '得分点②',
+    ribbon: { k: 2, ok: true },
+    log: '「把马列主义的原理同中国革命的实际结合起来，指出了中国夺取革命胜利的道路」——毛泽东思想具有长期指导意义。',
+    body: '<p>邓小平点明的「最伟大功绩」原文要背住：<b>把马列主义原理同中国革命实际相结合</b>，指出了中国夺取革命胜利的道路。它留下的不只是具体胜利，更是<b>毛泽东思想</b>这笔长期起指导作用的理论遗产——「五十年代后期之前，他提出的一些根本的原理是非常正确的」。</p>' },
+  { title: '第(1)问得分点③：评价方法——主流支流，实事求是',
+    cls: 'good', tag: '得分点③',
+    ribbon: { k: 3, ok: true },
+    log: '纠正「挂得太多」是纠形式主义，坚持「永远保留」是护历史地位——错误要实事求是分析，但属支流。',
+    body: '<p>「挂得太多不严肃」与「永远保留」<b>并不矛盾</b>：前者纠正<b>形式主义</b>（到处都挂），后者维护<b>历史地位</b>。评价领袖要全面、历史、辩证：晚年错误要<b>实事求是地分析</b>、吸取教训，但它属<b>支流</b>，不能颠倒主次——三个得分点答满 5 分。</p>' },
+  { title: '第(2)问得分点①：性质相同——都是社会主义建设的实践探索',
+    cls: 'good', tag: '得分点①',
+    ribbon: { k: 4, ok: true },
+    log: '改革开放前后都是党领导人民进行社会主义建设的实践探索——同一条道路上的两段，不是两种对立选择。',
+    body: '<p>「两个不能否定」的立足点先说清：两个时期都是党领导人民进行<b>社会主义建设的实践探索</b>，本质上是<b>同一条探索道路</b>上的两段——定性相同，这是「不能互否」的前提。社会主义建设没有现成答案，曲折是探索中的代价。</p>' },
+  { title: '第(2)问得分点②：相互联系——前提、基础、经验一脉相承',
+    cls: 'good', tag: '得分点②',
+    ribbon: { k: 5, ok: true },
+    log: '前一时期提供制度前提、物质基础与正反经验；后一时期是对前一时期的坚持、改革、发展。',
+    body: periodsChain() },
+  { title: '第(2)问得分点③：意义——实事求是、统一思想、推向前进',
+    cls: 'good', tag: '得分点③',
+    ribbon: { k: 6, ok: true },
+    log: '承认重大区别但不承认割裂对立；坚持实事求是、分清主流支流，坚定道路自信，把事业继续推向前进。',
+    body: '<p>意义四连：坚持<b>实事求是</b>思想路线、<b>分清主流支流</b>，正确看待党的历史；<b>统一思想</b>、坚定中国特色社会主义<b>道路自信</b>；总结正反经验、坚持真理修正错误；在新的基础上<b>把党和人民事业继续推向前进</b>。三点答满 5 分。</p>' },
+  { title: '结论',
+    cls: 'good', tag: '答案',
+    log: '一把钥匙开两把锁：评价领袖功绩第一位、错误属支流；评价时期同为探索、前后接续、不能互否。',
+    body: '<p>答案定稿：第(1)问——<b>功绩第一位</b>（救党救国、制度奠基）＋<b>最伟大功绩</b>（马列主义同中国实际结合、思想长期管用）＋<b>主流支流方法</b>；第(2)问——两个时期<b>同为实践探索、相互联系、有重大区别但不对立</b>，意义在实事求是、统一思想、坚定道路自信、推向前进。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag,
+    log: s.log,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: 'zz-2014-36 · 实事求是评价领袖与「两个不能否定」',
+  subtitle: '2014 年分析题（10 分）· 考点：科学评价历史人物 · 改革开放前后两个历史时期 · 两问拆解',
+  intro: '点击「▶ 播放」逐步展开：先立"实事求是钥匙"机制，再对号入座——第(1)问评价领袖、第(2)问评价时期；右侧序号带点亮得分点。',
+  ribbonTitle: '得分点（①②③=第(1)问 · ④⑤⑥=第(2)问）',
+  counterLabel: '推进步',
+  snaps: snaps,
+  result: {
+    big: '一把钥匙（实事求是）开两把锁：评价领袖 · 评价时期',
+    html: '第(1)问：毛主席像「永远要保留下去」——毛泽东<b>功绩是第一位的</b>（夺取革命胜利、缔造新中国、确立社会主义制度），<b>最伟大功绩</b>是把马列主义同中国革命实际结合、毛泽东思想具有长期指导意义；评价领袖全面历史辩证，<b>功绩主流、错误支流</b>。第(2)问：改革开放前后<b>都是社会主义建设的实践探索</b>，前者提供<b>制度前提、物质基础、正反经验</b>，后者是坚持、改革、发展——决不彼此割裂、更不根本对立，<b>不能互相否定</b>；意义＝实事求是、分清主流支流、统一思想、坚定道路自信、把事业推向前进。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：一把钥匙开两把锁——实事求是评价领袖与两个历史时期</h2>
+<p>答案要点：第(1)问——毛主席像"永远要保留下去"，因为毛泽东的<strong>功绩是第一位的</strong>：他领导党和人民夺取革命胜利、缔造新中国、确立社会主义制度，最伟大功绩是<strong>把马列主义原理同中国革命实际相结合</strong>，指出了中国夺取革命胜利的道路；毛泽东思想具有<strong>长期指导意义</strong>。评价领袖要<strong>全面、历史、辩证</strong>：功绩是主流，错误是支流，晚年错误要实事求是分析，但不能因此否定其历史地位。第(2)问——改革开放前后两个时期都是党领导人民进行<strong>社会主义建设的实践探索</strong>，相互联系又有重大区别，<strong>决不是彼此割裂、更不是根本对立</strong>；"两个不能否定"要求坚持实事求是、分清主流支流，总结正反经验，把党和人民事业继续推向前进。</p>
+<h3>第 0 步：先立机制——评价"人"与"时期"共用一把钥匙</h3>
+<p>两问看似一个谈人（毛泽东）、一个谈时期（改革开放前后），其实是<strong>同一把钥匙开两把锁</strong>。这把钥匙就是<strong>实事求是的方法论</strong>：</p>
+<ul><li><strong>全面、历史、辩证</strong>：把评价对象放回它所处的历史条件中，功绩与错误、成就与曲折都要看到，不用今天的标准苛求前人；</li><li><strong>分清主流与支流</strong>：决定定性的是主流——主流是什么，对象就"是什么"；支流要承认、要吸取教训，但不能颠倒主次；</li><li><strong>反对两个极端</strong>：全盘肯定（神化）与全盘否定（历史虚无）都违背实事求是。</li></ul>
+<p>第(1)问把钥匙用在<strong>人</strong>上：功绩主流、错误支流；第(2)问把钥匙用在<strong>时期</strong>上：两个时期都是探索，谁也否定不了谁。机制立好，两问只是对号入座。</p>
+<h3>第(1)问：为什么毛主席像"永远要保留下去"（5 分）</h3>
+<table><thead><tr><th>论据</th><th>材料对应</th><th>展开</th></tr></thead><tbody><tr><td>功绩是第一位的</td><td>"一生大部分时间做了非常好的事情""多次从危机中把党和国家挽救过来"</td><td>领导新民主主义革命胜利、缔造新中国、确立社会主义基本制度——"没有毛主席，至少我们中国人民还要在黑暗中摸索更长的时间"</td></tr><tr><td>最伟大的功绩</td><td>"把马列主义的原理同中国革命的实际结合起来，指出了中国夺取革命胜利的道路"</td><td>独立探索农村包围城市、武装夺取政权的道路——理论联系实际的方法论遗产</td></tr><tr><td>思想的长期指导意义</td><td>"五十年代后期之前……他提出的一些根本的原理是非常正确的"</td><td>毛泽东思想是党的宝贵精神财富，其立场、观点、方法至今仍是党的指导思想</td></tr><tr><td>评价方法的示范</td><td>"过去挂得太多，并不是一件严肃的事情"</td><td>纠正的是<strong>形式主义</strong>（到处都挂），维护的是<strong>历史地位</strong>（永远保留）——两者并不矛盾</td></tr></tbody></table>
+<p>注意：承认"永远保留"<strong>不等于</strong>全盘肯定。同一访谈里邓小平正视晚年错误，只是把它放在<strong>支流</strong>位置——坚持真理、修正错误，正是材料 2 所说"分清主流和支流"的示范。</p>
+<h3>第(2)问："两个不能否定"的深刻内涵及意义（5 分）</h3>
+<ul><li><strong>性质相同</strong>：改革开放前与后，都是党领导人民进行<strong>社会主义建设的实践探索</strong>——同一条探索道路上的两段，不是两种对立选择的分野。</li><li><strong>相互联系</strong>：前一时期为后一时期提供<strong>制度前提</strong>（社会主义基本制度）、<strong>物质基础</strong>（独立的工业体系等）和<strong>正反两方面经验</strong>；后一时期是对前一时期的<strong>坚持、改革、发展</strong>。</li><li><strong>有重大区别但不对立</strong>：思想指导、方针政策、实际工作上有很大差别，差别要承认；但差别是<strong>探索中的调整</strong>，不是"彼此割裂""根本对立"——所以既不能用后否定前，也不能用前否定后。</li><li><strong>意义</strong>：坚持<strong>实事求是</strong>思想路线、分清主流支流，正确看待党的历史；统一思想、坚定中国特色社会主义<strong>道路自信</strong>；总结正反经验、坚持真理修正错误，在新的基础上<strong>把党和人民事业继续推向前进</strong>。</li></ul>
+<h3>预判三个"为什么"</h3>
+<ul><li><strong>为什么"挂得太多"与"永远保留"不矛盾？</strong> 层次不同：前者是<strong>形式问题</strong>（泛滥反而不严肃、不尊重），后者是<strong>历史地位问题</strong>（功绩与思想遗产必须承认）——分开层次，纠正前者丝毫不动摇后者。</li><li><strong>为什么两个时期不能互相否定？</strong> 两个时期在<strong>同一个制度前提下</strong>前后接续：否定前一时期，后一时期的制度前提和物质基础就悬空；否定后一时期，前一时期探索的成果与意义也被抹杀——互相否定等于否定党领导人民走过的整条路。</li><li><strong>为什么强调"都是实践探索"？</strong> 社会主义建设没有现成答案，曲折是探索中的代价；定性为"探索"，才能既承认成就又吸取教训，避免全盘肯定或全盘否定两个极端。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>第(1)问全盘肯定</strong>：只讲功绩、不谈"实事求是分析错误"——神化式评价违背实事求是，也不是邓小平答法拉奇的口径。</li><li><strong>第(1)问全盘否定</strong>：抓住晚年错误否定历史地位——把<strong>支流</strong>当成主流，是历史虚无主义的典型误区。</li><li><strong>第(1)问漏毛泽东思想的长期指导意义</strong>：只列具体功绩，漏掉理论遗产这一长期得分点。</li><li><strong>第(2)问把"重大区别"扩大成"对立"</strong>：承认差别不等于承认割裂——题眼是"决不是彼此割裂的，更不是根本对立"。</li><li><strong>第(2)问漏"相互联系"的具体内容</strong>：只喊"不能互否"而说不出<strong>制度前提、物质基础、经验教训</strong>，内涵就空了。</li><li><strong>第(2)问只复述不谈意义</strong>：漏掉"实事求是、分清主流支流、统一思想、推向前进"——意义部分占一半分值。</li></ul>
+<blockquote>记忆锚点：一把钥匙＝<strong>实事求是</strong>（全面历史辩证＋主流支流＋反对两个极端）；开锁一＝功绩第一位、错误属支流、思想长期管用；开锁二＝两个时期<strong>同为探索、前后接续、不能互否</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

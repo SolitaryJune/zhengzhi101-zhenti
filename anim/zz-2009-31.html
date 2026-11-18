@@ -1,8 +1,138 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-31 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-31</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2009-31 · 汶川抗震救灾体现什么（全选题证据链）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链动画（政治站无 KaTeX）：论据清单 + 四论点逐项挂证据，只写 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行可加宽的格子（引擎 cellRow 固定 44px 宽，放不下中文短语，这里自定义行）
+function boxRow(items, ptrMap){
+  var row = AW.el('div', 'aw-cells');
+  items.forEach(function(it, i){
+    var col = AW.el('div', 'aw-col');
+    col.style.width = it.w || '110px';
+    if(ptrMap && ptrMap[i + 1]) col.appendChild(AW.el('div', 'aw-ptr', ptrMap[i + 1]));
+    var box = AW.el('div', 'aw-box' + (it.c ? ' ' + it.c : ''), it.t);
+    box.style.width = it.w || '110px';
+    col.appendChild(box);
+    row.appendChild(col);
+  });
+  return row;
+}
+
+// 论据清单行：材料事实四条线（第二步卡片用）
+function factsRow(){
+  return boxRow([
+    { t: '举国动员', c: 'ok', w: '120px' },
+    { t: '生命第一', c: 'ok', w: '120px' },
+    { t: '数字救援', c: 'ok', w: '120px' },
+    { t: '全国协作', c: 'ok', w: '120px' }
+  ], { 1: '论据①', 2: '论据②', 3: '论据③④', 4: '论据⑤' });
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：“体现类”＝材料是论据、选项是论点",
+    "cls": "key",
+    "body": "<p>题干问“这些事实<b>生动地体现了</b>什么”——这是论证题：逐项在材料里找对应事实，<b>有据即选</b>。多选题并不“必有一错”，全选与否由证据决定、不由惯性决定。先立事实清单：</p>" +
+      factsRow().outerHTML +
+      "<p>四条论据：党中央国务院统一领导、举国动员／把抢救生命放在第一位／84017 人救出、140 万被困群众解救／430 多万伤病员救治、1 万多名重伤员转送 20 省区市 375 家医院。</p>",
+    "log": "先立论据清单，再逐项验证四个论点"
+  },
+  {
+    "title": "选项 A：社会主义制度珍爱生命、保护人民的性质",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p>证据：党中央国务院统一领导、全党全军全国人民众志成城、举全国之力救人（84017 人获救）。跨省区调集资源、不计成本投入——这种动员效率与“生命至上”的价值取向，正是<b>制度性质的事实呈现</b> → <b>入选</b>。</p>",
+    "log": "A＝举国动员证制度性质：有据，选"
+  },
+  {
+    "title": "选项 B：中华民族关爱生命、崇尚理性的民族品格",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p>证据：「只要有一线希望就尽百倍努力」＝不放弃；1 万多名重伤员按轻重分级、快速转送 375 家医院＝<b>有组织、有规划的科学施救</b>——“崇尚理性”与救灾不矛盾，理性就体现在科学组织上；加上「众志成城」，民族品格整体呈现 → <b>入选</b>。</p>",
+    "log": "B＝不放弃＋科学施救证民族品格：有据，选"
+  },
+  {
+    "title": "选项 C：党和政府全心全意为人民服务的根本宗旨",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p>证据：坚持<b>把抢救人的生命放在第一位</b>、430 多万伤病员及时救治。宗旨不用喊口号——领导决策与救治行动本身就是宗旨的事实化表达 → <b>入选</b>。</p>",
+    "log": "C＝生命第一证党的宗旨：有据，选"
+  },
+  {
+    "title": "选项 D：社会主义核心价值体系建设的重大成效",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>证据：以人为本的价值观在灾难中转化为<b>全民自觉行动</b>——普通民众、军队、医护共同投入救援，1 万多名重伤员快速转送全国 375 家医院。“成效”提示你找“理念→实践”的证据：理念变成了实践，落点就在材料里 → <b>入选</b>。</p>",
+    "log": "D＝理念变行动证价值体系成效：有据，选"
+  },
+  {
+    "title": "结论：ABCD（全选）",
+    "cls": "good",
+    "body": "<p>四项各有多处事实支撑，无一落空——<b>答案 ABCD</b>。提醒：全选题的自查法不是“找出最像错的那个”，而是<b>逐项找证据、找得到就选</b>；“多选必有一错”的惯性反而丢分。</p>",
+    "log": "锁定 ABCD：四条线各有落点，全选"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  title: "汶川抗震救灾体现什么（全选题证据链）",
+  subtitle: "2009 年第 31 题（多选）· 考点：抗震救灾与人权保障 · 方法：论据清单＋逐项挂证据",
+  counterLabel: '推理步',
+  ribbonTitle: '选项判定（1=A · 2=B · 3=C · 4=D；✓ 有据入选）',
+  intro: '点击「▶ 播放」：先立事实清单，再给四个论点逐项挂证据。',
+  result: {
+    big: "答案 ABCD",
+    html: "记忆锚点：“体现类”＝<b>逐项找材料对应，有据即选</b>；制度性质、民族品格、党的宗旨、价值体系四条线各有落点。别让“多选必有一错”的惯性替你排除。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：汶川抗震救灾——“体现类”全选题靠逐项挂证据链立证</h2>
+<p>答案：<strong>ABCD（全选）</strong>。</p>
+<h3>第 0 步：先立机制——“体现”类题目的论证结构：材料是论据，选项是论点</h3>
+<p>题干问“这些事实<strong>生动地体现了</strong>什么”——这是论证题，不是背诵题：<strong>材料里的每一条事实是论据，四个选项是要验证的论点</strong>。判定规则只有一条：逐项在材料里找对应事实，<strong>有据即选</strong>。多选题并不“必有一错”，全选与否由证据决定，不由惯性决定。先把论据清单立起来——</p>
+<table><thead><tr><th>材料事实</th><th>它证明了什么</th></tr></thead><tbody><tr><td>党中央国务院统一领导、全党全军全国人民众志成城</td><td>举国动员的制度力量</td></tr><tr><td>坚持把抢救人的生命放在第一位，一线希望百倍努力</td><td>生命至上的价值取向</td></tr><tr><td>84017 人从废墟中救出、140 万被困群众解救</td><td>救援力度落在实处</td></tr><tr><td>430 多万伤病员及时救治、1 万多名重伤员转送 20 省区市 375 家医院</td><td>全国协作、科学组织，不放弃任何一个人</td></tr></tbody></table>
+<h3>第 1 步：四个论点逐一挂证据</h3>
+<ul><li><strong>A 社会主义制度珍爱生命、保护人民的性质</strong>：举全国之力救人——跨省区调集资源、不计成本投入，这种动员效率与“生命至上”的价值取向，是制度性质的事实呈现 ✅</li><li><strong>B 中华民族关爱生命、崇尚理性的民族品格</strong>：先答掉一个追问——“崇尚理性”和救灾矛盾吗？不矛盾：“只要有一线希望就尽百倍努力”是<strong>不放弃</strong>，1 万多名重伤员按轻重分级、快速转送 375 家医院是<strong>有组织、有规划的科学施救</strong>，正是理性精神；加上“众志成城”，民族品格整体呈现 ✅</li><li><strong>C 党和政府全心全意为人民服务的根本宗旨</strong>：党中央国务院统一领导、把抢救生命放在第一位——宗旨不用喊口号，直接由领导决策与救治行动事实化 ✅</li><li><strong>D 社会主义核心价值体系建设的重大成效</strong>：以人为本的价值观在灾难中转化为<strong>全民自觉行动</strong>（普通民众、军队、医护共同投入救援）——理念变成实践，成效有了实证 ✅</li></ul>
+<p>四项各有多处事实支撑，无一落空 → <strong>ABCD</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>强行排除一个——“多选必有一错”的惯性</strong>：多选题并非必有干扰项，当年此题四项全部成立。全选题的自查法不是“找出最像错的那个”，而是逐项找证据，找得到就选。</li><li><strong>漏选 D——觉得“核心价值体系”抽象难对号</strong>：抽象概念也有事实落点——全民救人的自觉行动正是价值观<strong>变成效</strong>的呈现；“成效”二字提示你找“理念→实践”的证据，材料里全是。</li><li><strong>漏选 B——逐词硬抠“理性”</strong>：把“理性”错当成与情感化的救灾场面无关。理性＝科学组织施救、不放弃又不蛮干；B 讲的是民族品格的整体呈现，不必逐词硬抠。</li></ul>
+<blockquote>记忆锚点：“体现类”题目＝<strong>逐项找材料对应，有据即选</strong>；制度性质、民族品格、党的宗旨、价值体系四条线在本题材料中各有落点，全选。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

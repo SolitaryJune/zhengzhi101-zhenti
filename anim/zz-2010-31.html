@@ -1,8 +1,131 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-31 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-31</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2010·31 公民的政治权利和自由 · 分格判定</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/记忆/推理链类模板（政治站无 KaTeX，纯文本推理链卡片），只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼：尺子写在题干里',
+    cls: 'key',
+    log: '先立尺子：是否"作为国家政治生活主体、直接参加国家政治生活"',
+    body: '<p>题干已给出判定标准——政治权利和自由是公民<b>作为国家政治生活主体、依法参加国家政治生活</b>的权利和自由。判每个选项只问一句：它是不是<b>直接参与政治生活</b>的权利？</p>'
+  },
+  {
+    title: '机制先行：基本权利按内容分格',
+    cls: 'key',
+    log: '分格框架：政治权利和自由 / 人身自由 / 宗教信仰 / 社会经济文化，各放各的',
+    body: '<p>宪法基本权利按<b>权利指向的领域</b>分格：政治权利和自由（参与政治生活）、人身自由（人身安全与尊严）、宗教信仰自由（精神世界）、社会经济文化权利（生存与发展）。</p>' +
+          '<p>分格的根据不是"哪个重要"，而是<b>权利直接指向什么</b>。政治这一格里只有两件：<b>选人</b>（选举权和被选举权）+<b>说话</b>（六大政治自由）。</p>'
+  },
+  {
+    title: 'A：选举权和被选举权 —— 对',
+    cls: 'good',
+    log: 'A 落格：选人大代表、被选为代表——参加国家权力机关的组成',
+    body: '<p>选举人大代表、被选为代表——直接参加国家权力机关的组成，是参加国家政治生活的<b>最基本政治权利</b>。"选人"件。<b>A 对</b>。</p>',
+    ribbon: { k: 1, ok: true }
+  },
+  {
+    title: 'B：政治自由 —— 对',
+    cls: 'good',
+    log: 'B 落格：言论、出版、集会、结社、游行、示威——表达政治意愿',
+    body: '<p>言论、出版、集会、结社、游行、示威<b>六大政治自由</b>，都是公民表达政治意愿、参加政治活动的形式自由。"说话"件。<b>B 对</b>。</p>',
+    ribbon: { k: 2, ok: true }
+  },
+  {
+    title: 'C：人身自由权 —— 错（"前提"不是"本格"）',
+    cls: 'bad',
+    log: 'C 出格：指向人身安全与尊严，不指向政治生活',
+    body: '<p>人身自由、人格尊严、住宅、通信——指向<b>个人生活领域</b>。它确实是行使其他一切权利的<b>前提和基础</b>，但"很基础"不等于"很政治"，<b>"是前提"≠"是本格"</b>。<b>C 错</b>。</p>',
+    ribbon: { k: 3, ok: false }
+  },
+  {
+    title: 'D：宗教信仰自由权 —— 错（话题政治 ≠ 权利政治）',
+    cls: 'bad',
+    log: 'D 出格：信仰属于精神世界，不是参加政治生活的权利',
+    body: '<p>宗教话题常出现在政治新闻里，但那是<b>国家管理宗教事务</b>的一面；公民"信仰或不信仰宗教"是<b>精神生活自由</b>，不指向政治参与。<b>D 错</b>。</p>',
+    ribbon: { k: 4, ok: false }
+  },
+  {
+    title: '复核：两个干扰项各对应一种误解',
+    cls: 'key',
+    log: '归因：C = "重要=政治"；D = "话题政治"；另有"把政治自由缩成言论自由"漏选 B',
+    body: '<p><b>多选 C</b> 的误解：把"前提和基础"当成本格成员——判断只看权利指向的领域；<b>漏选 B</b> 的误解：把六大政治自由缩成"言论自由"一项——六项并列才叫政治自由；<b>误判 A</b> 的误解：把选班委也当选举权——宪法上的选举权特指<b>人大代表的选举与被选举</b>。</p>'
+  },
+  {
+    title: '结论：AB',
+    cls: 'good',
+    log: '锁定答案 AB：选人 + 说话，政治权利两件套',
+    body: '<p>答案 <b>AB</b>。政治权利和自由这一格只放两件：<b>选人</b>（选举权和被选举权）+<b>说话</b>（六大政治自由）；人身自由（C）、宗教信仰（D）是隔壁抽屉。</p>',
+    ribbon: { k: 5, ok: true }
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var judged = 0;
+  for(var j = 2; j <= i && j <= 5; j++){ judged++; }
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (STEPS[i].cls === 'bad' ? 'miss' : (STEPS[i].cls === 'good' ? 'ok' : 'step')),
+    tag: s.tag || (i === 0 ? '审题' : (i === 1 ? '机制' : '第 ' + i + ' 步')),
+    log: s.log,
+    count: judged,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2010·31】政治权利和自由具体包括什么（多选）',
+  subtitle: '考点：公民政治权利与自由 · 方法：先分格，再逐项对号',
+  counterLabel: '已判定选项',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D · 5=结论；✓ 属于 / ✗ 不属于）',
+  intro: '点击「▶ 播放」先立分格框架，再拿题干尺子逐项判定。',
+  snaps: snaps,
+  result: {
+    big: '答案 AB',
+    html: '记忆锚点：<b>政治权利两件套——选人（选举权和被选举权）+ 说话（六大政治自由）</b>；人身自由、宗教信仰是隔壁的抽屉。C 的迷惑点：<b>"是前提"不等于"是本格"</b>；D 的迷惑点：<b>话题政治 ≠ 权利政治</b>。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：政治权利和自由的范围——宪法基本权利按内容"分格"</h2>
+<p>答案：<strong>AB</strong>。</p>
+<h3>第 0 步：先立机制——基本权利为什么按内容分格</h3>
+<p>宪法第二章把公民的基本权利按<strong>权利指向的对象</strong>分成几格存放：平等权；<strong>政治权利和自由</strong>；<strong>人身自由</strong>（人身自由、人格尊严、住宅、通信）；<strong>宗教信仰自由</strong>；社会经济权利（劳动权、休息权、物质帮助权）；文化教育权利；特定主体的权利保护。分格的根据不是"哪个更重要"，而是<strong>权利直接指向什么领域</strong>：政治权利和自由这一格，指向的是<strong>国家政治生活本身</strong>——公民以国家主人身份参与政治的那部分权利。</p>
+<p>题干把这把尺子直接写在了题面上："作为国家政治生活主体依法享有的<strong>参加国家政治生活</strong>的权利和自由"。所以判每个选项，只问一句话：它是不是公民<strong>直接参与政治生活</strong>的权利？</p>
+<p>这一格里只放两件东西：</p>
+<table><thead><tr><th>件</th><th>内容</th><th>参与政治生活的方式</th></tr></thead><tbody><tr><td>选人</td><td>选举权和被选举权</td><td>选举人大代表、被选为代表——参加国家权力机关的组成，<strong>最基本的政治权利</strong></td></tr><tr><td>说话</td><td>政治自由（言论、出版、集会、结社、游行、示威）</td><td>表达政治意愿、参加政治活动的形式自由</td></tr></tbody></table>
+<h3>第 1 步：逐项对号入座</h3>
+<ul><li><strong>A 对</strong>：选举权和被选举权——"选人"件，参加国家政治生活最基本的政治权利，稳稳落在这一格。</li><li><strong>B 对</strong>：政治自由——"说话"件，六大政治自由都是表达政治意愿、参加政治生活的自由，同属这一格。</li><li><strong>C 错</strong>：人身自由权——属于"人身自由"格，指向个人生活的人身安全与尊严，不指向政治生活。</li><li><strong>D 错</strong>：宗教信仰自由权——属于信仰领域的独立一格，指向精神世界，与政治参与没有直接对应关系。</li></ul>
+<h3>第 2 步：为什么 C、D 最有迷惑性（预判"为什么"）</h3>
+<ul><li><strong>C 的迷惑在"基础"二字</strong>：人身自由是行使其他一切权利的<strong>前提和基础</strong>——没有它，政治权利也无从谈起。考生容易把"很基础、很重要"错当成"很政治"。但"是前提"不等于"是本格"：它保障的是个人生活领域，分格看，它放在隔壁。</li><li><strong>D 的迷惑在"话题"二字</strong>：宗教话题常出现在政治新闻里（国家管理宗教事务），但那是<strong>国家行为</strong>的一面；"信仰或不信仰宗教"是公民的<strong>精神生活自由</strong>，不是参加政治生活的权利。话题政治 ≠ 权利政治。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>把"前提"当"本格" → 多选 C</strong>：对应"重要 = 政治"的误解。判断口径只看权利指向的领域，不看重要性。</li><li><strong>把"政治自由"缩成"言论自由" → 漏选 B</strong>：政治自由是言论、出版、集会、结社、游行、示威六项并列的整体，不能只认其中一项。</li><li><strong>把"选举权"广义化</strong>：宪法上的选举权和被选举权特指<strong>选举/被选为人大代表</strong>；选班委、选业委会成员不在此列。A 恰恰因为指向国家权力机关才属于政治权利。</li></ul>
+<blockquote>记忆锚点：政治权利两件套——<strong>选人（选举权和被选举权）+ 说话（六大政治自由）</strong>；人身自由、宗教信仰是隔壁的抽屉；"是前提"不等于"是本格"。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

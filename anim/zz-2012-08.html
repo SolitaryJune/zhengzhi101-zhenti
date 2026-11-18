@@ -1,8 +1,88 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-08 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-08</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-08 · 民族区域自治制度</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：「历史依据」四个字是分层钥匙',
+    cls: 'key',
+    body: '<p>邓小平：中国不搞民族共和联邦，而采民族区域自治，「这个制度比较好，适合中国的情况」。题问实行这个制度的<b>历史依据</b>——引文交代的是道路选择，题眼在「历史」二字。考点：民族区域自治制度。</p>' },
+  { title: '立机制：制度成立依据分三层，问哪层取哪条',
+    cls: 'key',
+    body: '<p>①<b>历史依据</b>：统一的多民族国家的长期存在和发展——自治的国家框架从历史里长出来；②<b>现实条件</b>：大杂居、小聚居、相互交错的分布格局——自治地域单元是现成的；③<b>政治基础</b>：近代共同反抗外来侵略中形成的爱国主义精神——各族愿同在一个国家内自治的认同。三层都真实，命题专考<b>对号</b>。</p>' },
+  { title: '选项 A：各民族聚居区发展的不平衡性',
+    cls: 'bad', k: 1, pick: false,
+    body: '<p>教材依据清单里没有这一条，凑数干扰项，<b>排除</b>。</p>' },
+  { title: '选项 B：统一的多民族国家的长期存在和发展',
+    cls: 'good', k: 2, pick: true,
+    body: '<p>自治地方设在全国统一国家境内，前提是这个统一的多民族国家<b>历史上早已形成并长期发展</b>——各民族共同缔造统一国家，自治是在既成格局内做的制度安排，教材明文的历史依据，<b>入选</b>。</p>' },
+  { title: '选项 C：各民族大杂居、小聚居的人口分布格局',
+    cls: 'bad', k: 3, pick: false,
+    body: '<p>内容真实、最眼熟，但它是<b>当下</b>的分布状态——属现实条件层；「真实依据即可选」是误解，层级放错，<b>排除</b>。</p>' },
+  { title: '选项 D：近代以来各民族在共同反抗外来侵略斗争中形成的爱国主义精神',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p>内容也真实，但它形成于近代、说的是政治认同——属<b>政治基础</b>层；「历史＝近代斗争史」把历史依据窄化了，层级放错，<b>排除</b>。</p>' },
+  { title: '结论：C、D 都是真的，但都站错了层',
+    cls: 'good',
+    body: '<p>「历史依据」问从历史里长出来的地基，只有 B 有历史纵深。</p><p><b>答案 B。</b>记忆锚点：历史＝统一多民族国家长期存在和发展；现实＝大杂居小聚居；政治＝共同斗争的爱国主义。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2012-08 · 民族区域自治的历史依据',
+  subtitle: '2012 年第 8 题（单选）· 考点：民族区域自治制度 · 逐项推演',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 正确 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立依据三层机制，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '记忆锚点：依据三层——<b>历史</b>＝统一多民族国家长期存在和发展；<b>现实</b>＝大杂居小聚居；<b>政治</b>＝共同斗争的爱国主义。问哪层取哪条。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：民族区域自治的「历史依据」是哪一层</h2>
+<p>答案：<strong>B（统一的多民族国家的长期存在和发展）</strong>。</p>
+<h3>第 0 步：先立机制——一个制度的成立依据是分层的</h3>
+<p>先想清楚这个制度为什么立得住：民族区域自治，是在<strong>国家统一领导</strong>下，把各少数民族聚居的地方设为自治地方。它能成立，靠的不是单条理由，而是三层依据叠在一起，缺一层制度就悬空：</p>
+<table><thead><tr><th>依据层</th><th>内容</th><th>回答什么问题</th></tr></thead><tbody><tr><td>历史依据</td><td><strong>统一的多民族国家的长期存在和发展</strong></td><td>自治的地方背景从哪来——统一国家格局历史上早已形成</td></tr><tr><td>现实条件</td><td>各民族大杂居、小聚居、相互交错的分布格局</td><td>自治的地域单元怎么划——聚居区是现成的</td></tr><tr><td>政治基础</td><td>近代以来各民族在共同反抗外来侵略斗争中形成的爱国主义精神</td><td>各族为什么愿意同在一个国家内自治——政治认同</td></tr></tbody></table>
+<p>题眼是「<strong>历史依据</strong>」四个字：问的是从历史中长出来的那层地基。命题在 C、D 放了两条<strong>内容真实</strong>的依据，专考你会不会按层对号。</p>
+<h3>第 1 步：为什么「历史依据」落在 B</h3>
+<p>民族区域自治不搞民族共和联邦制，它有个前提：这片土地上存在一个<strong>早已形成并长期发展的统一的多民族国家</strong>——各民族在几千年交往交流交融中共同缔造了统一国家，自治是在这个既成格局内做的制度安排。没有「长期存在和发展」这个历史事实，就没有今天的自治框架可依托。这就是「历史依据」的确切含义：不是历史上发生过的一般事件，而是制度赖以立起的<strong>历史地基</strong>。</p>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 各民族聚居区发展的不平衡性</td><td>❌</td><td>教材依据清单里没有这一条，凑数干扰</td></tr><tr><td>B 统一的多民族国家的长期存在和发展</td><td>✅</td><td>教材明文的「历史依据」——统一格局先于自治制度存在</td></tr><tr><td>C 各民族大杂居、小聚居的人口分布格局</td><td>❌</td><td>内容真实，但它是当下的分布状态，属<strong>现实条件</strong>层，层级放错</td></tr><tr><td>D 近代以来各民族在共同反抗外来侵略斗争中形成的爱国主义精神</td><td>❌</td><td>内容也真实，但它是近代形成的政治认同，属<strong>政治基础</strong>层，层级放错</td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>选 C（最眼熟）→「真实依据即可选」的误解</strong>：C 是分布格局中最常被引用的一条，很多人背过「大杂居、小聚居」就顺手选它。但它是<strong>现实条件</strong>——说的是「今天长什么样」，不是「从历史里长出来什么」。命题把三条真依据并排放，考的就是分层对号，问哪层取哪条。</li><li><strong>选 D →「历史=近代斗争史」的误解</strong>：把「历史依据」窄化成「反侵略斗争史」。D 形成的确实是<strong>政治认同</strong>（各民族愿意共处于一个国家），但认同是政治基础层，不是历史依据层。</li><li><strong>被邓小平引文带向联邦制比较</strong>：引文的作用是交代中国<strong>不采联邦制</strong>的道路选择，题问的却是「历史依据」，引文不改变三层依据的归属。</li></ul>
+<blockquote>记忆锚点：历史=统一多民族国家长期存在和发展；现实=大杂居小聚居；政治=共同斗争的爱国主义——问哪层取哪条。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,93 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-23 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-23</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>2018·23 混合所有制经济：一条高铁看四个「有利于」</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- 复制自 anim_math_concept_template（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：杭绍台高铁的股比表',
+    cls: 'key',
+    log: '题眼：民营 51% 控股 + 风险分担、利益共享',
+    body: '<p>材料给了最好模型：总投资 400 亿+，<b>民营联合体 51%、中国铁路总公司 15%、各级地方政府 34%</b>——民营资本首次控股高铁，「风险分担、利益共享」。把它抽象化：混合所有制＝各类资本<b>交叉持股、相互融合</b>的实现形式。</p>' },
+  { title: '先立机制：四种资本放进同一家公司会发生什么',
+    cls: 'key',
+    body: '<p>判断「有利于什么」的标尺：看国有资本、集体资本、非公有资本<b>混在一起</b>之后，市场准入、资本效率、国有资本功能、公司治理各发生什么变化。本题四个选项各管一层，先立四层框架。</p>' },
+  { title: 'A：各种所有制企业公平参与市场竞争',
+    cls: 'good',
+    body: '<p>民营资本可以<b>控股</b>高铁项目——市场准入上国有、民营站上同一条起跑线，「两个毫不动摇」在项目层面落地。<b>A 对。</b></p>' },
+  { title: 'B：各种所有制资本取长补短、互相促进、共同发展',
+    cls: 'good',
+    body: '<p>这是混合所有制的<b>定位原文</b>：国有资本有规模信用优势，民营资本机制灵活效率高——混在一起正好互补共进。<b>B 对。</b></p>' },
+  { title: 'C：发挥国有资本的带动力和影响力',
+    cls: 'good',
+    body: '<p>国有资本以 15%+34% 的股权<b>撬动</b>更大规模社会资本投向国家需要的领域——放大国有资本功能，增强影响力、带动力。<b>C 对。</b></p>' },
+  { title: 'D：改善企业股权结构和公司治理结构',
+    cls: 'good',
+    body: '<p>股权从一股独大变成<b>多元制衡</b>（民营控股、国资参股、地方持股），董事会权力结构随之改善、治理更规范。<b>D 对。</b></p>' },
+  { title: '结论：ABCD',
+    cls: 'good',
+    body: '<p>四个角度各管一层：市场准入（A）＋所有制定位（B）＋国有资本功能（C）＋公司治理（D），无干扰项。护栏：混改<b>不自动改变公有制主体地位</b>。答案选 <b>ABCD</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var optK = { 2: 1, 3: 2, 4: 3, 5: 4 }[i];
+  var optLetter = optK ? 'ABCD'[optK - 1] : '';
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: i === 0 ? '审题' : (i === 1 ? '机制' : (i === STEPS.length - 1 ? '结论' : '选项 ' + optLetter)),
+    log: s.log || s.title,
+    count: optK || 0,
+    ribbon: optK ? { k: optK, ok: s.cls !== 'bad' } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2018·23】混合所有制经济：一条高铁看四个「有利于」',
+  subtitle: '考点：混合所有制经济 · 基本经济制度的实现形式 · 多选题',
+  counterLabel: '已核选项',
+  ribbonTitle: '选项判定（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链：先用杭绍台高铁的股比立机制，再逐项判定 A/B/C/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '记忆锚点：混合所有制＝各类资本<b>交叉持股、相互融合</b>；四个有利于＝公平竞争（A）＋取长补短共同发展（B）＋国有资本带动力（C）＋股权治理改善（D）；护栏——不自动改变<b>公有制主体地位</b>。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：混合所有制经济好在哪——沿着杭绍台高铁的资金结构想一遍</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——一条高铁的股比说明了什么</h3>
+<p>材料给了本题最好的模型：杭绍台高铁总投资超 400 亿元，<strong>民营联合体 51%、中国铁路总公司 15%、各级地方政府 34%</strong>——民营资本第一次控股高铁，且「风险分担、利益共享」。把这个案例抽象化：所谓混合所有制经济，就是<strong>国有资本、集体资本、非公有资本交叉持股、相互融合</strong>的所有制实现形式。它被定位为「基本经济制度的重要实现形式」，判断它的作用，就看这四种资本放进同一个公司里会发生什么。</p>
+<h3>第 1 步：四个正确项逐一对号</h3>
+<ul><li><strong>A 各种所有制企业公平参与市场竞争</strong> ✅：民营资本可以控股高铁项目，说明市场准入上国有、民营站在同一条起跑线上——「两个毫不动摇」在项目层面的落地。</li><li><strong>B 各种所有制资本取长补短、互相促进、共同发展</strong> ✅：这是混合所有制的<strong>定位原文</strong>。国有资本有规模和信用优势，民营资本有机制灵活、效率高的长处，混在一起正好互补。</li><li><strong>C 发挥国有资本的带动力和影响力</strong> ✅：国有资本以少量股权（本案 15%＋地方政府）撬动更大规模的社会资本投资国家需要的领域——放大国有资本功能，增强其影响力、带动力。</li><li><strong>D 改善企业股权结构和公司治理结构</strong> ✅：股权从一股独大变成多元制衡（民营 51% 控股、国资参股、地方持股），董事会里的权力结构随之改善，治理更规范。</li></ul>
+<h3>第 2 步：一条护栏——「有利于」不等于「改变性质」</h3>
+<p>参考解析特别提示：混合所有制有助于各类资本取长补短、共同发展，但<strong>不会自动改变公有制的主体地位</strong>——发展混合所有制是为了让基本经济制度更好地实现，不是公变私、也不是私变公。本题四项全是「有利于」，所以全选；但护栏要在脑中常备，防止在别的题里被「混合所有制会动摇公有制主体地位」这类反向说法带偏。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选 C 或 D</strong>：以为只有 A、B 是「教科书定位」。其实带动力/影响力（C）是国有资本「以小带大」的功能性收益，治理改善（D）是股权多元化的直接效果，都在「有利于」清单内。</li><li><strong>误把全选题当排除题</strong>：本题没有设错项——四个选项分别对应「市场准入（A）、所有制定位（B）、国有资本功能（C）、公司治理（D）」四个角度，各管一层，互不重复。</li><li><strong>把 51% 控股读成「私有化信号」</strong>：案例强调的恰恰是风险分担、利益共享的机制设计，方向是<strong>共同发展</strong>，不是谁吃掉谁。</li></ul>
+<blockquote>记忆锚点：混合所有制＝各类资本交叉持股、相互融合；四个有利于＝公平竞争（A）＋取长补短共同发展（B）＋国有资本带动力（C）＋股权治理改善（D）；护栏——不自动改变公有制主体地位。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,152 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2025-14 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2025-14</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2025·14 隐私权的体系定位</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行要素格（体系链条类用）
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：「属于」＝找上位概念",
+    "cls": "key",
+    "log": "题眼：问体系归属，不是问相似场景",
+    "body": "<p>移动支付信息、消费记录被非法使用＝<b>隐私被侵害</b>；但问法是「隐私权<b>属于</b>（）」——体系定位题，要在权利谱系里找一个能<b>装下它</b>的上位概念，不是找场景相近的邻居。</p>"
+  },
+  {
+    "title": "隐私是什么：《民法典》第 1032 条",
+    "cls": "key",
+    "log": "定义：私人生活安宁＋三私密",
+    "body": "<p>隐私＝<b>私人生活安宁</b>＋不愿为他人知晓的<b>私密空间、私密活动、私密信息</b>；任何组织或个人不得以<b>刺探、侵扰、泄露、公开</b>等方式侵害。禁止这些行为，因为它们冒犯的是「人的<b>体面与安宁</b>」。</p>"
+  },
+  {
+    "title": "体系链条：隐私权长在人格尊严这棵树上",
+    "cls": "key",
+    "log": "模型：人格尊严 → 人格权 → 隐私权",
+    "body": "<p>" + cells([
+      {"t": "人格尊严<br>（宪法 38 条）", "l": "上位", "c": "hit"},
+      {"t": "人格权<br>（民法典）", "l": "中位", "c": "dim"},
+      {"t": "隐私权<br>（具体人格权）", "l": "本题", "c": "ok"},
+      {"t": "个人信息权益", "l": "同根基", "c": "dim"}
+    ]) + "<p>「体面与安宁」正是宪法<b>人格尊严</b>条款在民事领域的展开。</p>"
+  },
+  {
+    "title": "C 对号入座：人格尊严权",
+    "cls": "good",
+    "log": "隐私权是人格尊严的具体化 → 选 C",
+    "ribbon": {
+      "k": 3,
+      "ok": true
+    },
+    "body": "<p>隐私权＝<b>人格尊严权</b>在私生活安宁与私密信息维度的具体化；个人信息保护同样以人格尊严为根基。C 能装下题干全部对象。<b>C 正确</b>。</p>"
+  },
+  {
+    "title": "A 生命健康权：物质性人格权",
+    "cls": "bad",
+    "log": "A 保护身体，不保护体面安宁",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "body": "<p>生命健康权属<b>物质性</b>人格权（生命权、身体权、健康权），保护身体存续与机能；隐私是<b>精神性</b>权益——把「敏感信息」当成「健康信息」才会选它。<b>A 错误</b>。</p>"
+  },
+  {
+    "title": "B 民主管理权：政治权利层级",
+    "cls": "bad",
+    "log": "B 与人格权不同层级",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    },
+    "body": "<p>民主管理权属<b>政治权利/民主权利</b>（选举、监督、基层群众自治中参与管理），讲参与国家和社会事务，与私人生活安宁无关——不同层级，装不下。<b>B 错误</b>。</p>"
+  },
+  {
+    "title": "D 通信自由权：交叉而非包含",
+    "cls": "bad",
+    "log": "D 只覆盖通信场景，装不下题干对象",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "body": "<p>通信自由与通信秘密（宪法 40 条）是<b>独立</b>权利类型，与隐私是<b>交叉关系</b>：通信内容算私密信息，但移动支付、消费记录装不进「通信」的框。「属于」要的是能覆盖全部对象的上位概念。<b>D 错误</b>。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "log": "锁定 C：人格尊严权",
+    "body": "<p>答案 <b>C</b>。记忆锚点：隐私权＝<b>人格尊严权</b>（人格权）下的具体权利——私人生活安宁＋私密空间/活动/信息；通信自由是相邻但独立的类型；个人信息保护同以人格尊严为根基。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  "title": "政治 2025·14 隐私权的体系定位",
+  "subtitle": "考点：隐私权属于哪类权利 · 方法：上位概念检索",
+  "counterLabel": "推理步",
+  "ribbonTitle": "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  "intro": "点击「▶ 播放」逐步展开推理链。",
+  "snaps": snaps,
+  "result": {
+    "big": "答案 C",
+    "html": "记忆锚点：隐私权＝<b>人格尊严权</b>（人格权）下的具体权利——私人生活安宁＋私密空间/活动/信息。A 是物质性人格权，B 是政治权利，D（通信自由）与隐私只是<b>交叉</b>而非包含——「属于」问的是体系位置，选能装下题干全部对象的上位概念。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：隐私权在公民权利体系中的位置</h2>
+<p>答案：<strong>C（人格尊严权）</strong>。</p>
+<h3>第 0 步：先立模型——「属于」是在问体系归属，不是问相似场景</h3>
+<p>题干给的场景（移动支付信息、信用卡消费记录被非法使用）都是<strong>隐私被侵害</strong>；但问法是「隐私权<strong>属于</strong>（）」——这是体系定位题，要在权利谱系里给隐私权找一个能<strong>装下它</strong>的上位概念，而不是找一个场景相近的邻居。</p>
+<h3>第 1 步：隐私权为什么长在「人格尊严」这棵树上</h3>
+<p>《民法典》第一千零三十二条：自然人享有隐私权，任何组织或者个人不得以刺探、侵扰、泄露、公开等方式侵害；隐私是自然人的<strong>私人生活安宁</strong>和不愿为他人知晓的<strong>私密空间、私密活动、私密信息</strong>。刺探、泄露之所以被禁止，是因为它冒犯的是「人之所以为人的<strong>体面与安宁</strong>」——这正是宪法第三十八条「公民的人格尊严不受侵犯」在民事领域的落实。所以体系链条是：</p>
+<p><strong>人格尊严（宪法）→ 人格权（民法典）→ 隐私权（具体人格权）</strong></p>
+<p>个人信息权益同样以人格尊严为基础——故选 C。</p>
+<h3>第 2 步：四个选项在体系里各在哪一层</h3>
+<table><thead><tr><th>选项</th><th>体系位置</th><th>判断</th></tr></thead><tbody><tr><td>A 生命健康权</td><td>物质性人格权（生命权、身体权、健康权），保护身体存续与机能</td><td>❌ 隐私是精神性权益</td></tr><tr><td>B 民主管理权</td><td>政治权利/民主权利（选举、监督、基层群众自治中参与管理）</td><td>❌ 与人格权不同层级</td></tr><tr><td>C 人格尊严权</td><td>隐私权的上位概念</td><td>✅</td></tr><tr><td>D 通信自由权</td><td>宪法第四十条的独立权利类型（通信自由与通信秘密）</td><td>❌ 与隐私交叉而非包含</td></tr></tbody></table>
+<h3>第 3 步：预判追问——D 和隐私这么像，为什么不选 D</h3>
+<p>通信秘密被偷看，确实可能同时构成侵犯隐私——两者是<strong>交叉关系</strong>：通信内容属于私密信息，但通信自由权本身只覆盖「通信」这一个场景。题干里的对象是移动支付信息、消费记录，装不进「通信」的框，却能装进「人格尊严」的框。「属于」要的是<strong>能覆盖题干全部对象的上位概念</strong>，这是 C 胜出、D 落选的根本原因。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 D（看到「信息泄露」就联想到通信）</strong>：场景相似≠权利同层；先问「哪个概念能装下题干全部对象」。</li><li><strong>选 A（把「敏感信息」当成健康信息）</strong>：人格权内部要分物质性/精神性，隐私属精神性。</li><li><strong>选 B（把「受法律保护的自由」泛化成民主权利）</strong>：民主管理权讲的是参与国家和社会事务的管理，与私人生活无关。</li></ul>
+<blockquote>记忆锚点：隐私权＝<strong>人格尊严权</strong>（人格权）下的具体权利；通信自由是相邻但独立的类型；个人信息保护同以人格尊严为根基。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

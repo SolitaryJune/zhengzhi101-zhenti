@@ -1,8 +1,102 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-31 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-31</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2020-31 权利行使的界限·四关卡模型</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：题干末句直接点名考点',
+    body: '<p>自媒体时代人人都有"麦克风"、处处都是"直播间"，但"这支麦克风并不是可以随心所欲使用的，<b>应以法律的相关规定为界限</b>"。</p>' +
+          '<p>题眼"以法律的相关规定为界限"→ 考点：<b>依法行使法律权利的界限要求</b>。四个选项拿"四关卡"模型对号入座。</p>' },
+  { tag: '机制', cls: 'key', title: '先立模型：权利从法律来，界限也从法律来',
+    body: '<p>权利由法律确认和保障，行使的边界同样由法律划定。依法行使权利 = 四道关卡：</p>' +
+          '<ul><li><b>主体合格</b>——行使者确有该权利、有相应权利能力；</li>' +
+          '<li><b>目的正当</b>——不以损害他人为目的；</li>' +
+          '<li><b>程序正当</b>——按法定方式与步骤行使；</li>' +
+          '<li><b>限度合法</b>——不损害国家利益、社会公共利益和他人合法权益。</li></ul>' },
+  { tag: 'A', cls: 'good', title: 'A 对：不能超过法定限度 = "限度合法"关卡',
+    body: '<p><b>权利行使不能超过法定的限度</b>——题干"以法律的相关规定为界限"直接点题。</p>' +
+          '<p>表达权同样止步于法定红线：诽谤他人、泄露国家秘密、编造传播谣言，越线即滥用权利。✅</p>' },
+  { tag: 'B', cls: 'bad', title: 'B 错："方式具有唯一性"与法理相反',
+    body: '<p>"权利行使的方式具有<b>唯一性</b>"——法律为权利行使<b>划定边界</b>，而不是<b>规定唯一路径</b>。</p>' +
+          '<p>同一项权利可通过多种合法方式行使（书面、口头、网络发表、提起诉讼……）。"依法"约束的是<b>合法性</b>，不是<b>方式数量</b>——把"依法"偷换成"唯一"，正是这个干扰项的手法。❌</p>' },
+  { tag: 'C', cls: 'good', title: 'C 对：目的正当 = "目的"关卡',
+    body: '<p><b>权利行使要有目的的正当性</b>——借"人人都有麦克风"之名，行损害他人名誉、干扰社会秩序之实，就突破了目的边界。</p>' +
+          '<p>行使权利的动机不能指向损害国家利益、社会公共利益和他人合法权益。✅</p>' },
+  { tag: 'D', cls: 'good', title: 'D 对：程序正当 = "程序"关卡',
+    body: '<p><b>权利行使要遵循程序正当的原则</b>——即便目的正当，也要按法定方式与步骤行使（依法举报、依法诉讼，而非私自曝光他人隐私）。</p>' +
+          '<p>程序是权利兑现的轨道，越轨行使即使"有理"也不受保护。✅</p>' },
+  { tag: '为什么', cls: 'key', title: '预判追问：界限与方式多样矛盾吗？',
+    body: '<p>不矛盾，反而一体两面：</p>' +
+          '<ul><li>正因为法律<b>只划边不指路</b>，边界之内的方式才是多样的；</li>' +
+          '<li>也正因为方式可选，才更需要<b>目的、程序、限度</b>三道关卡约束"怎么选"。</li></ul>' +
+          '<p>若方式真的唯一（B），权利反而无法有效行使，"界限"之说也就无从谈起。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：四关卡对号入座完毕',
+    body: '<p><b>A</b>（限度合法）✅ · <b>C</b>（目的正当）✅ · <b>D</b>（程序正当）✅ · <b>B</b>（方式唯一性）❌</p>' +
+          '<p>答案 <b>ACD</b>。唯一排除点就是 B 的"唯一性"偷换。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    ribbon: { k: i + 1, ok: s.cls !== 'bad' },
+    done: last,
+  };
+});
+
+AW.init({
+  title: '麦克风有边界：依法行使权利的四关卡模型',
+  subtitle: '2020 年多选题第 31 题 · 考点：法律权利的行使（界限）',
+  intro: '点击「▶ 播放」逐步展开：先立"四关卡"模型，再逐项对号入座。',
+  counterLabel: '推理步',
+  ribbonTitle: '推理步骤（✓ 正确项 / ✗ 排除项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '依法行使权利四关卡：<b>主体合格 + 目的正当（C）+ 程序正当（D）+ 限度合法（A）</b>。<br>' +
+          'B 错在把"依法"偷换成"方式唯一"——法律只划边不指路，边界之内方式多样。<br>' +
+          '记忆锚点：<b>麦克风有边界，握法不止一种</b>。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：依法行使权利的"界限"由哪几道关卡构成</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——权利从法律来，界限也从法律来</h3>
+<p>权利不是"想怎么用就怎么用"的通行证。权利由法律确认和保障，其行使的边界同样由法律划定。依法行使法律权利，在法理上是一套完整的"四关卡"模型：</p>
+<table><thead><tr><th>关卡</th><th>含义</th><th>违反它的典型情形</th></tr></thead><tbody><tr><td>主体合格</td><td>行使者确有该权利、有相应权利能力</td><td>无权者冒用权利</td></tr><tr><td>目的正当</td><td>行使权利不能以损害他人为目的</td><td>借"表达"之名行诽谤侵权之实</td></tr><tr><td>程序正当</td><td>按法律规定的方式、步骤行使</td><td>绕开法定程序"维权"</td></tr><tr><td>限度合法</td><td>不得超出法定限度，不损害国家利益、社会公共利益和他人合法权益</td><td>言论自由越过诽谤、泄密红线</td></tr></tbody></table>
+<p>题干把情境放在自媒体时代：人人都有"麦克风"，表达权是真实存在的——但"这支麦克风并不是可以随心所欲使用的，应以法律的相关规定为界限"。题眼一句话直接把考点指向"界限"，四个选项就是拿这四道关卡（外加一个反向干扰项）来对号入座。</p>
+<h3>第 1 步：A~D 对号入座</h3>
+<ul><li><strong>A 对</strong>：<strong>权利行使不能超过法定的限度</strong>——直接对应"限度合法"这道关卡。题干"以法律的相关规定为界限"说的就是它：表达权同样止步于诽谤他人、泄露国家秘密、传播谣言等法定红线。</li><li><strong>C 对</strong>：<strong>权利行使要有目的的正当性</strong>——对应"目的正当"。若借"人人都有麦克风"之名，行损害他人名誉、干扰社会秩序之实，就突破了目的边界。</li><li><strong>D 对</strong>：<strong>权利行使要遵循程序正当的原则</strong>——对应"程序正当"。即便目的正当，也要按法定方式与步骤行使权利（如依法举报、依法诉讼，而非私自曝光他人隐私）。</li><li><strong>B 错</strong>：<strong>"权利行使的方式具有唯一性"</strong>——与法理和事实都相反。法律在合法范围内为权利行使<strong>划定边界</strong>，而不是<strong>规定唯一路径</strong>：同一项权利可以通过多种合法方式行使（书面、口头、网络发表、提起诉讼……）。"依法"约束的是<strong>合法性</strong>，不是<strong>方式数量</strong>——把"依法"偷换成"唯一"，正是这个干扰项的手法。</li></ul>
+<p>→ 需要 A、C、D，选 <strong>ACD</strong>。</p>
+<h3>预判"为什么"：界限与多样性矛盾吗</h3>
+<p>不矛盾，反而一体两面。正因为法律只划边不指路，边界之内的方式才是多样的；也正因为方式可选，才更需要目的、程序、限度三道关卡去约束"怎么选"。若方式真的唯一（B），权利反而无法有效行使，"界限"之说也就无从谈起。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：把"依法行使"听成"有且仅有一种法定方式"——界限约束的是合法性而非方式数量，这是本题唯一的排除点。</li><li><strong>漏选 A</strong>：以为"界限"是空泛的口号、不含具体选项——题干末句"以法律的相关规定为界限"直接点题，A 是最贴题干的一项。</li><li><strong>漏选 C、D</strong>：以为"目的""程序"只是道德修养或办事技巧，不属"法律界限"——实际上它们与限度一起构成依法行使权利的完整要求，缺一不可。</li></ul>
+<blockquote>记忆锚点：依法行使四关卡 = <strong>主体合格 + 目的正当（C）+ 程序正当（D）+ 限度合法（A）</strong>；依法 ≠ 唯一（B 错），方式多样——麦克风有边界，握法不止一种。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,100 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-37 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-37</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-37 · 郭明义：人生价值的统一与「简单中的伟大」</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* 分析题答题思路推演：立机制 → 问(1)三层 → 问(2)三要点 → 收口（得分点序号带） */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+function twoStruct(){
+  return '<div style="display:flex;gap:10px;flex-wrap:wrap;margin:2px 0 10px">' +
+    '<div style="flex:1;min-width:210px;border:1.5px solid var(--amber);border-radius:10px;padding:8px 10px;background:#fffbeb">' +
+    '<b style="color:#92400e">社会价值</b><br><span style="font-size:13px;color:#78350f">个人对社会的责任和贡献<br>（评价人生价值主要看它）</span></div>' +
+    '<div style="flex:1;min-width:210px;border:1.5px solid #2563eb;border-radius:10px;padding:8px 10px;background:#eff6ff">' +
+    '<b style="color:#1d4ed8">自我价值</b><br><span style="font-size:13px;color:#1e3a8a">社会对个人的尊重和满足<br>（个体生存发展的必要条件）</span></div>' +
+    '</div><p style="font-size:13.5px;color:#334155">二者<b>辩证统一</b>：社会价值是实现自我价值的基础——「给人温暖」与「给自己幸福」是同一过程的两个侧面。</p>';
+}
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：两问 6＋4，钥匙都在材料数字里',
+    body: '<p>第(1)问：如何理解「<b>给人温暖就是给自己幸福</b>」（6 分）；第(2)问：为什么说是「<b>简单中的伟大</b>」（4 分）。</p>' +
+          '<p>材料先摆了一个反问——「你这么做值不值得？」（40 平米旧房对照 12 万元捐款）——这个问法把幸福单一化成物质回报，正是要被分析的对象。考点：人生价值与道德实践。</p>' },
+  { tag: '立机制', cls: 'key', title: '立机制：人生价值的两重结构',
+    body: twoStruct() },
+  { tag: '问(1)①', cls: 'good', k: 1, pick: true, title: '问(1) 第①层：结构——「给人温暖」＝创造社会价值',
+    body: '<p>帮助他人、服务社会是个人对社会的<b>责任和贡献</b>：20 年 55 次献血捐血小板近 6 万毫升、16 年捐款 12 万元资助 180 多名特困生、15 年每天提前 2 小时上班（≈多奉献 5 年工作量）——全是社会价值的清单。</p>' },
+  { tag: '问(1)②', cls: 'good', k: 2, pick: true, title: '问(1) 第②层：幸福——精神满足不能只用物质衡量',
+    body: '<p>幸福的内涵不只是物质享受，更包括<b>精神上的充实与满足</b>。他的自述就是幸福观的直接陈述：「换来孩子幸福的笑脸……这样的人生，我无怨无悔」——在奉献中实现自身价值并获得精神满足，即「<b>给自己幸福</b>」。</p>' },
+  { tag: '问(1)③', cls: 'good', k: 3, pick: true, title: '问(1) 第③层：标准——评价人生价值主要看贡献',
+    body: '<p>住 40 平米旧房的他成为吸引汇聚更多人的「<b>磁石</b>」——衡量尺度不是物质所得，而是对社会、对人民的贡献。</p>' +
+          '<p><b>收口</b>：统一不是交换——不是「我帮你、社会欠我」，而是创造社会价值的过程同时实现自我价值。</p>' },
+  { tag: '问(2)①', cls: 'good', k: 4, pick: true, title: '问(2) 要点①：「简单」＝普通岗位的日常善举',
+    body: '<p>岗位只是采场<b>公路管理员</b>；事是献血、捐款、助学这类人人做得起的「小事」——伟大不以事情惊天动地为前提。</p>' },
+  { tag: '问(2)②', cls: 'good', k: 5, pick: true, title: '问(2) 要点②：「不简单」＝长期坚持的量的积累',
+    body: '<p>15 年、20 年、16 年的持续投入，把小事做成规模——<b>坚持</b>让日常善举由量变走向质变。</p>' },
+  { tag: '问(2)③', cls: 'good', k: 6, pick: true, title: '问(2) 要点③：「伟大」＝榜样感召的放大效应',
+    body: '<p>8 次发起捐献造血干细胞倡议得 <b>1700 多人</b>响应；「爱心联队」从 <b>12 人发展到 2800 多人</b>、资助特困生 1000 多名——个体善行<b>感召带动</b>他人，汇聚成改善社会关系的巨大道德力量。</p>' },
+  { tag: '收口', cls: 'good', title: '收口：伟大在日常实践和对人民的持续贡献中',
+    body: '<p>第(1)问：人生价值是<b>自我价值与社会价值的统一</b>，幸福≠物质所得；第(2)问：<b>平凡善行 × 长期坚持 × 榜样感召</b>＝「简单中的伟大」。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: s.tag,
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2011-37 · 「给人温暖就是给自己幸福」答题推演',
+  subtitle: '2011 年第 37 题（分析题 10 分）· 人生价值与道德实践 · 按问给框架',
+  counterLabel: '得分点',
+  ribbonTitle: '答题得分点（✓ 已覆盖）',
+  intro: '点击「▶ 播放」：先立人生价值两重结构，再按问逐层作答、对号入座。',
+  snaps: snaps,
+  result: {
+    big: '两问框架',
+    html: '第(1)问（6 分）：人生价值＝<b>社会价值（贡献）＋自我价值（满足）</b>，二者辩证统一，评价主要看贡献，幸福≠物质所得。<br>第(2)问（4 分）：「简单中的伟大」＝<b>平凡善行 × 长期坚持 × 榜样感召</b>，量变积成道德质变。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「给人温暖就是给自己幸福」——人生价值两重结构的统一</h2>
+<p>题型：分析题（10 分），两问 6＋4。答题要点：第(1)问的原理是<strong>人生自我价值与社会价值的辩证统一</strong>——「给人温暖」是创造社会价值，「给自己幸福」是在奉献中实现自我价值、获得精神满足，幸福不能只用物质所得衡量；第(2)问是<strong>平凡善行 × 长期坚持 × 榜样感召</strong>——伟大在日常实践和对人民的持续贡献中生成。</p>
+<h3>第 0 步：先立机制——「值不值得」这个问法错在哪</h3>
+<p>材料里有人问郭明义「你这么做究竟值不值得」，潜台词是把幸福单一化成物质回报（用 40 平米旧房对照 12 万元捐款）。这个问法本身就是要被分析的对象：它丢掉了人生价值的另一半。先立模型——<strong>人生价值包含两重结构</strong>：</p>
+<table><thead><tr><th>结构</th><th>含义</th><th>材料对应</th></tr></thead><tbody><tr><td>社会价值</td><td>个人对社会的<strong>责任和贡献</strong></td><td>20 年献血捐血小板近 6 万毫升、16 年捐款 12 万元、资助 180 多名特困生、15 年每天提前 2 小时上班（≈多奉献 5 年工作量）</td></tr><tr><td>自我价值</td><td>社会对个人的<strong>尊重和满足</strong></td><td>「换来孩子幸福的笑脸……这样的人生，我无怨无悔」——奉献中获得的精神满足</td></tr></tbody></table>
+<p>二者辩证统一，社会价值是实现自我价值的基础，评价人生价值<strong>主要看贡献</strong>。立起模型后，「给人温暖就是给自己幸福」就不再是一句抒情口号，而是一个价值论命题：创造社会价值的过程，同时就是实现自我价值的过程——是<strong>同一过程的两个侧面</strong>，不是「我帮你、社会欠我」的交换。</p>
+<h3>第(1)问：如何理解「给人温暖就是给自己幸福」（6 分）</h3>
+<p>按「原理→材料→结论」三层作答：</p>
+<ol><li><strong>结构层</strong>：人生价值是自我价值与社会价值的统一；「给人温暖」（帮他人、暖社会）正是创造社会价值。</li><li><strong>幸福层</strong>：幸福的内涵不只是物质享受，更包括精神上的充实与满足；帮助他人、服务社会能实现自身价值并获得精神满足——他的引文就是幸福观的直接陈述。</li><li><strong>标准层</strong>：评价一个人的人生价值，主要看他对社会、对人民的贡献，而不是物质所得——所以住 40 平米旧房的他，反而成为吸引越来越多人的「磁石」。</li></ol>
+<p><strong>预判追问：强调社会价值是否否定自我价值？</strong> 不否定。自我价值是个体生存发展的必要条件；题眼在「统一」而非只有一面——郭明义感到「幸福」恰恰证明正当的自我满足可以在奉献中实现，二者不是交换关系。</p>
+<h3>第(2)问：为什么说是「简单中的伟大」（4 分）</h3>
+<p>把「简单」和「伟大」拆开对号，「伟大」的生成机制就出来了：</p>
+<ul><li><strong>「简单」</strong>：都是普通人在普通岗位做得起的日常善举——岗位只是采场公路管理员，事是献血、捐款、助学这类「小事」；</li><li><strong>「不简单」：长期坚持</strong>——15 年、20 年、16 年的持续投入，把小事做成规模；</li><li><strong>「伟大」：榜样感召的放大效应</strong>——8 次发起捐献造血干细胞倡议得到 1700 多人响应，「爱心联队」从 12 人发展到 2800 多人、资助特困生 1000 多名：个体善行<strong>感召带动</strong>他人，由量的积累汇聚成改善社会关系的巨大道德力量，推进社会稳定和谐。</li></ul>
+<p>收口：伟大不在于事情惊天动地，而在于<strong>价值方向正确 + 持续贡献人民</strong>——伟大存在于日常实践和对人民的持续贡献之中。</p>
+<h3>易错点</h3>
+<ul><li><strong>第(1)问答成「助人为乐是美德」的空话</strong>：必须落到自我价值与社会价值统一的原理结构，并说明幸福为什么不能只用物质衡量，否则 6 分只剩空泛表述的分。</li><li><strong>把「给人温暖」与「给自己幸福」说成交换报偿</strong>：不是「我帮你、社会欠我」，而是奉献过程本身实现自我价值——关系是「统一」，不是「交换」。</li><li><strong>第(2)问只答「他很高尚」</strong>：要点出「平凡 → 伟大」的生成机制（坚持、积累、感召），并用材料数字链支撑，答不出机制就没有层次。</li></ul>
+<blockquote>记忆锚点：<strong>人生价值 = 社会价值（贡献）＋自我价值（满足）</strong>，评价主要看贡献，幸福≠物质所得；<strong>伟大 = 平凡善行 × 长期坚持 × 榜样感召</strong>，量变积成道德质变。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

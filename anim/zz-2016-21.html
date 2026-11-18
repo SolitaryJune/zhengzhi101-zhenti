@@ -1,8 +1,128 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2016-21 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2016-21</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2016·21 科学社会主义超越空想社会主义之处</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX，参照本站已完成动画），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：「超越」是个筛子",
+    "cls": "key",
+    "log": "题眼：超越＝空想做不到而科学做到",
+    "body": "<p>1516《乌托邦》→ 空想诞生；1848《共产党宣言》→ 科学诞生，社会主义实现<b>从空想到科学的飞跃</b>。题目问「超越之处」，先立筛子：<b>空想做不到、而科学做到了</b>的才入选；两家<b>共有</b>的不算超越；空想<b>独有</b>的更不算。</p>"
+  },
+  {
+    "title": "先立机制：学说站稳要两条腿",
+    "cls": "key",
+    "log": "机制：凭什么灭亡＋靠谁实现，两条腿",
+    "body": "<p>判断空想还是科学，看两个致命问题：①<b>凭什么资本主义必然灭亡？</b>——要从生产方式<b>内在矛盾</b>论证，不能只骂「不理性不人道」；②<b>靠谁、走哪条路实现理想？</b>——要找到现实力量与现实道路，不能靠试验和统治者开恩。空想两条腿都软；科学靠<b>唯物史观＋剩余价值学说</b>两大发现同时补齐。</p>"
+  },
+  {
+    "title": "C：揭示了资本主义必然灭亡的经济根源",
+    "cls": "good",
+    "ribbon": {"k": 3, "ok": true},
+    "log": "判据①：空想只会骂，科学论证了根源 → C 对",
+    "body": "<p>空想批判资本主义停留在道德控诉；科学用<b>剩余价值学说</b>论证了灭亡的<b>经济根源</b>（生产社会化 vs 私人占有）——判据①命中：空想做不到。<b>C 正确</b>。</p>"
+  },
+  {
+    "title": "A：找到了实现理想社会的现实道路",
+    "cls": "good",
+    "ribbon": {"k": 1, "ok": true},
+    "log": "判据②：现实力量＋现实道路 → A 对",
+    "body": "<p>空想靠示范试验（欧文「新和谐公社」）与统治者开恩；科学找到<b>无产阶级</b>这一现实力量与<b>阶级斗争、社会革命</b>这条现实道路——判据②命中。<b>A 正确</b>。</p>"
+  },
+  {
+    "title": "D：对资本主义进行了无情的批判",
+    "cls": "bad",
+    "ribbon": {"k": 4, "ok": false},
+    "log": "两家共有，谈不上超越 → D 不选",
+    "body": "<p>圣西门、傅立叶、欧文的批判恰以「无情、深刻」著称，马克思也承认继承了它——批判资本主义是两家<b>共有的历史贡献</b>。共有 ⇒ 不是「超越之处」。<b>D 错误</b>。</p>"
+  },
+  {
+    "title": "B：对未来社会进行了细致的描绘",
+    "cls": "bad",
+    "ribbon": {"k": 2, "ok": false},
+    "log": "空想独有、恰是被扬弃的局限 → B 不选",
+    "body": "<p>细致描绘恰是<b>空想性的标志</b>：在现实中找不到变革力量，只能在书斋里把蓝图越画越细。马克思恩格斯拒绝详细蓝图——未来社会从现实运动中产生，描绘越细越空想。B 是<b>被扬弃的对象</b>，不是超越。<b>B 错误</b>。</p>"
+  },
+  {
+    "title": "预判追问：细致描绘不是优点吗",
+    "cls": "key",
+    "log": "追问：蓝图越细＝离现实越远",
+    "body": "<p>对未来社会的设想只能以对<b>现实矛盾的分析</b>为依据。空想的细致描绘恰恰暴露了它「没有现实道路」的软肋——命题人用 B 考「空想的特点 vs 科学的态度」这一对照，方向别搞反。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "log": "锁定 AC",
+    "body": "<p>答案 <b>AC</b>：剩余价值学说论证灭亡的经济根源（C）＋找到现实道路（A）。D 是共有批判，B 是空想特点。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "科学社会主义超越空想社会主义之处",
+  subtitle: "考点：空想社会主义 · 从空想到科学 · 多选",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: '答案 AC',
+    html: "记忆锚点：超越＝空想做不到的两件事——<b>论证灭亡的经济根源（剩余价值学说）＋找到现实道路（唯物史观＋无产阶级）</b>；D 是<b>共有</b>批判，B 是<b>空想特点</b>（被扬弃的对象）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：从空想到科学的飞跃——「超越」超在哪里，先立两条腿的模型</h2>
+<p>答案：<strong>AC</strong>。</p>
+<h3>第 0 步：先立机制——一种社会主义学说要"站稳"，得有两条腿</h3>
+<p>判断一种社会主义是空想还是科学，不看它批判得狠不狠、蓝图画得美不美，而看它有没有回答两个致命问题：</p>
+<ol><li><strong>凭什么资本主义必然灭亡？</strong>——得从资本主义生产方式的<strong>内在矛盾</strong>（生产社会化 vs 私人占有）中论证出来，而不是诉诸理性、道德的谴责；</li><li><strong>靠谁、走哪条路实现理想？</strong>——得找到<strong>现实的社会力量</strong>（无产阶级）与<strong>现实道路</strong>（阶级斗争、社会革命），而不是指望统治者的良心、富人的捐助。</li></ol>
+<p>空想社会主义恰恰这两条腿都是软的：批判资本主义只停留在"不理性、不人道"的道德控诉；实现途径靠示范试验（欧文办"新和谐公社"）与统治者开恩。科学社会主义靠<strong>两大发现</strong>站稳：<strong>唯物史观</strong>揭示社会发展一般规律，<strong>剩余价值学说</strong>揭示资本主义剥削秘密与灭亡的经济根源——两条腿同时补齐，才有"从空想到科学的飞跃"。</p>
+<h3>第 1 步：把"超越之处"的定义立成判据</h3>
+<p>题目问"科学社会主义<strong>超越</strong>空想社会主义之处"，判据由此确定：<strong>空想做不到、而科学做到了</strong>的事才入选；两家<strong>共有</strong>的事（都批判资本主义）不算超越；空想<strong>独有甚至做得更多</strong>的事（细致描绘未来）更不算——那恰恰是要被扬弃的空想性。</p>
+<h3>第 2 步：四个选项过判据</h3>
+<ul><li><strong>A 找到了实现理想社会的现实道路</strong> ✅：空想靠试验与开恩，科学找到无产阶级这一现实力量与阶级斗争这条现实道路——判据 2，空想做不到的。</li><li><strong>B 对未来社会进行了细致的描绘</strong> ❌：这是<strong>空想社会主义的特点</strong>——正因为在现实中找不到变革力量，才只能在书斋里把蓝图越画越细。马克思恩格斯恰恰拒绝画出详细蓝图：未来社会是从现实运动中产生的，描绘越细越空想。B 是被扬弃的对象，不是超越。</li><li><strong>C 揭示了资本主义必然灭亡的经济根源</strong> ✅：空想只会骂"不合理"，科学用剩余价值学说论证了灭亡的<strong>经济根源</strong>（生产社会化与私人占有的矛盾）——判据 1，空想做不到的。</li><li><strong>D 对资本主义进行了无情的批判</strong> ❌：这是两家<strong>共有的</strong>——空想三大家（圣西门、傅立叶、欧文）的批判恰恰以"无情、深刻"著称，马克思也承认继承了它。共有 ⇒ 谈不上"超越"。</li></ul>
+<h3>预判追问：B 为什么"反而错"</h3>
+<p>细致描绘未来不是优点吗？对空想社会主义来说，它是<strong>局限的标志</strong>：没有现实道路时，只能靠想象补齐；马克思恩格斯认为对未来社会的设想只能以对现实矛盾的分析为依据，不搞"详细蓝图"。命题人用 B 考"空想的特点 vs 科学的态度"这一对照。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 D</strong>：把"共同点"当"超越之处"。判据一立就排掉：批判资本主义是两家共有的历史贡献。</li><li><strong>误选 B</strong>：以为描绘越细越好。细致描绘恰是空想性的体现，是科学社会主义要<strong>扬弃</strong>的东西。</li><li><strong>漏选 C</strong>：只记"找到现实道路"漏了理论根基。两大发现中，剩余价值学说对应 C，唯物史观支撑 A 的"现实道路"判断。</li></ul>
+<blockquote>记忆锚点：超越 = 空想<strong>做不到</strong>的两件事——<strong>C 论证了灭亡的经济根源（剩余价值学说）＋ A 找到现实道路（唯物史观＋无产阶级）</strong>；D 是共有批判、B 是空想特点。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

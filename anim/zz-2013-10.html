@@ -1,8 +1,104 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-10 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-10</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-10 · 安泰离不开大地：血肉联系</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 推理链：每步一个快照；s.cls: key=关键/good=正确/bad=排除；ribbon 点亮序号带 */
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    log: '先看题眼：1948 年刘少奇讲安泰神话，问“强调党始终要”什么。',
+    title: '审题眼：神话在强调什么',
+    body: '<p>1948 年 10 月刘少奇对华北记者团讲希腊神话：巨人安泰是<b>地神之子</b>，只要<b>身不离地</b>，就能从大地母亲那里不断吸取力量、所向无敌；一旦离开大地，就毫无力量——被对手赫拉克勒斯举到半空扼死。</p><p>问：借这一神话强调党始终要什么？第一步永远是<b>拆对应关系</b>。</p>' },
+  { cls: 'key', tag: '立机制',
+    log: '立机制：安泰=党，大地母亲=人民群众，身不离地=植根人民。',
+    title: '立机制：角色映射——安泰↔党，大地↔人民',
+    body: '<ul><li>巨人安泰（地神之子）→ <b>中国共产党</b>；</li><li>大地母亲 → <b>人民群众</b>；</li><li>身不离地、吸取力量 → 党<b>植根人民</b>，从群众中汲取智慧和力量；</li><li>被举到半空、被扼死 → 党<b>脱离群众</b>，失去力量根基、招致失败；</li><li>对手赫拉克勒斯 → 敌对势力——只能趁你“离地”时下手。</li></ul><p>映射一摆出来，主旨清楚：力量的来源在“大地”。</p>' },
+  { cls: 'bad', tag: 'A 排除', ribbon: { k: 1, ok: false },
+    log: 'A 排除：理论联系实际是认识论命题，神话里没有“理论”这个角色。',
+    title: '选项 A：坚持理论联系实际',
+    body: '<p><b>A 错</b>：这是党的三大优良作风之一，本身正确——但答非所问。</p><p>它讲认识论（理论接受实践检验、反教条主义）；神话里没有“理论”角色，大地给安泰的是<b>力量</b>，不是真理。干扰性最强，喻体对不上。</p>' },
+  { cls: 'bad', tag: 'B 排除', ribbon: { k: 2, ok: false },
+    log: 'B 排除：神话讲力量从哪来（源头），不是政策对不对（结果）。',
+    title: '选项 B：保持党的方针政策的正确',
+    body: '<p><b>B 错</b>：政策正确与否是工作层面的要求。</p><p>神话讲的是力量<b>从哪里来</b>（源头问题），不是决策<b>对不对</b>（结果问题）——喻体里没有“政策”。</p>' },
+  { cls: 'bad', tag: 'C 排除', ribbon: { k: 3, ok: false },
+    log: 'C 排除：安泰之败在自己离开大地，外因通过内因起作用。',
+    title: '选项 C：保持对敌人的高度警惕',
+    body: '<p><b>C 错</b>：被赫拉克勒斯带偏了。</p><p>安泰之败不在敌人多狡猾，而在<b>自己离开了大地</b>——外因通过内因起作用，敌人只是趁隙者；故事重心在安泰与大地，不在对手。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true },
+    log: 'D 入选：大地母亲=人民群众，身不离地=血肉联系。',
+    title: '选项 D：保持同人民群众的血肉联系',
+    body: '<p><b>D 对</b>：大地母亲 = 人民群众，身不离地 = 血肉联系。</p><p>群众观点与群众路线的经典比喻——党的力量来自人民，与映射严丝合缝。</p>' },
+  { cls: 'key', tag: '追问',
+    log: '追问：为什么 1948 年讲？胜利前夜打预防针——执政后最怕脱离群众。',
+    title: '追问：为什么偏偏在 1948 年讲',
+    body: '<p>1948 年革命胜利在望，党即将从领导革命的党走向执政党。讲安泰是提前打预防针：<b>越接近胜利、越要防止被“举离地面”</b>——胜利后的居功自傲、掌权后的脱离群众才是最大危险。</p><p>时间背景反过来印证主旨：讲的是党群关系，不是认识论、不是防敌。</p>' },
+  { cls: 'good', tag: '结论',
+    log: '收束：答案 D——安泰离不开大地，党离不开人民。',
+    title: '收束：答案 D',
+    body: '<p>安泰↔党；大地↔人民；离地被杀↔脱离群众必败。<b>答案 D。</b></p><p>记忆锚点：身不离地 = 血肉联系；党的力量来自人民。此类比喻题第一步都是先拆对应关系，再对选项。</p>' }
+];
+
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.ribbon) nPick++;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2013·10】安泰离不开大地：党要保持同人民群众的血肉联系',
+  subtitle: '考点：群众路线 · 比喻题拆对应关系 · 选项逐项推演',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已对号选项',
+  snaps: snaps,
+  result: {
+    big: '答案 D',
+    html: '安泰↔党、大地母亲↔人民群众、离地被扼死↔脱离群众——神话强调党始终保持<b>同人民群众的血肉联系</b>。<br>易错：A“理论联系实际”是优良作风但喻体对不上（大地给的是力量不是真理）；B 神话讲源头不讲政策对错；C 安泰之败在自己离地——外因通过内因起作用。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：安泰离不开大地——党必须保持同人民群众的血肉联系</h2>
+<p>答案：<strong>D（保持同人民群众的血肉联系）</strong>。</p>
+<h3>第 0 步：先立机制——神话隐喻题，先做"角色映射"</h3>
+<p>讲神话、打比方的题，解法固定：<strong>先把神话拆成角色，一一对应到现实，比喻义自动浮出</strong>，再拿结论去量选项。安泰神话的映射是：</p>
+<table><thead><tr><th>神话元素</th><th>对应含义</th></tr></thead><tbody><tr><td>巨人安泰（地神之子）</td><td>中国共产党</td></tr><tr><td>大地母亲</td><td>人民群众</td></tr><tr><td>身不离地 → 力量无穷</td><td>党植根人民，从群众中汲取智慧和力量</td></tr><tr><td>被举到半空 → 被扼死</td><td>党脱离群众，就失去力量根基、招致失败</td></tr><tr><td>对手赫拉克勒斯</td><td>敌对势力——只能趁你"离地"时下手</td></tr></tbody></table>
+<p>映射一摆出来，故事主旨就清楚了：<strong>力量的来源在"大地"</strong>。刘少奇借它强调的，是党与人民群众的关系——离开人民，党什么都不是。</p>
+<h3>第 1 步：逐项对号</h3>
+<ul><li><strong>A 坚持理论联系实际</strong> ❌：这是党的三大优良作风之一（认识论命题：理论接受实践检验、反教条主义）。但神话里没有"理论"这个角色——大地给安泰的是<strong>力量</strong>，不是真理。</li><li><strong>B 保持党的方针政策的正确</strong> ❌：政策对不对是工作层面的要求；神话讲的是力量<strong>从哪里来</strong>（源头问题），不是决策<strong>对不对</strong>（结果问题）。</li><li><strong>C 保持对敌人的高度警惕</strong> ❌：被赫拉克勒斯带偏了。安泰之败不在敌人多狡猾，而在<strong>自己离开了大地</strong>——外因通过内因起作用，敌人只是趁隙者。</li><li><strong>D 保持同人民群众的血肉联系</strong> ✅：大地母亲 = 人民群众，身不离地 = 血肉联系——群众观点与群众路线的经典比喻，与映射严丝合缝。</li></ul>
+<h3>第 2 步：为什么偏偏在 1948 年讲这个故事</h3>
+<p>1948 年 10 月，革命胜利在望，党即将从领导革命的党走向执政党。刘少奇对华北记者团讲安泰，是提前打预防针：<strong>越接近胜利、越要防止被"举离地面"</strong>——胜利后的居功自傲、掌权后的脱离群众，才是最危险的事。时间背景反过来印证主旨：不是讲认识论，不是讲防敌，而是讲党群关系。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：三大作风背得熟，见到"党要……"就想填"理论联系实际"。区分两个"联系"：<strong>理论联系实际</strong>是思想路线（怎么想才对），<strong>联系群众</strong>是政治立场（力量从哪来）；判据是看喻体——"大地母亲"只能对应人民群众。</li><li><strong>误选 C</strong>：把注意力放在"搏斗""对手"上，读成了军事寓言。故事重心从来不在对手，而在安泰<strong>与大地</strong>的关系。</li><li><strong>误选 B</strong>：把党的一切要求都往"政策正确"上收。神话强调的是依存关系，不是某项工作做得好不好。</li></ul>
+<blockquote>记忆锚点：安泰离不开大地，党离不开人民——大地 = 母亲 = 人民群众；身不离地 = 血肉联系；离地 = 脱离群众、失去力量。此类神话/名言题第一步都是先拆对应关系，再对选项。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

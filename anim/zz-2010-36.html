@@ -1,8 +1,110 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-36 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-36</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-36 "历史新纪元"·答题框架</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 年份节点（时间线卡片用）
+function yearNode(y, txt, hot){
+  return '<div style="flex:1 1 108px;min-width:108px;border:1px solid ' + (hot ? '#d97706' : '#e2e8f0') +
+         ';border-radius:8px;padding:5px 7px;background:' + (hot ? '#fffbeb' : '#f8fafc') + '">' +
+         '<b style="color:' + (hot ? '#b45309' : '#334155') + '">' + y + '</b><br>' +
+         '<span style="font-size:12.5px;color:#475569">' + txt + '</span></div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：两问都指向"新中国成立的历史意义"',
+    body: '<p>问(1) 从孙中山到新中国，考"<b>继承与完成</b>"的链条；问(2) "新纪元"考意义的<b>多维展开</b>。宋庆龄"不会再回头了"是点题句。</p>' },
+  { tag: '原理', cls: '', title: '机制先行：两大历史任务与时间线',
+    body: '<p>近代中国两大历史任务：<b>求得民族独立和人民解放</b>（第一任务·前提）、<b>实现国家繁荣富强和人民共同富裕</b>（第二任务·目的）。</p>' +
+          '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
+          yearNode('1840', '鸦片战争，沦为半殖民地半封建社会') +
+          yearNode('1911', '辛亥革命推翻帝制、创立民国（努力开始，夙愿未竟）') +
+          yearNode('1949', '新中国成立——第一任务基本完成', true) +
+          yearNode('1956', '社会主义改造完成——制度确立（另一节点）') +
+          '</div>' },
+  { tag: '问(1)', cls: 'good', title: '问(1) 框架①：孙中山的努力是什么、为何未竟',
+    body: '<ul><li><b>努力</b>：喊出"振兴中华"，领导辛亥革命推翻清王朝、结束两千年君主专制制度、开创完全意义上的近代民族民主革命、创立中华民国；</li>' +
+          '<li><b>未竟</b>：受历史条件与阶级局限，没有改变半殖民地半封建的社会性质，反帝反封建任务没有完成——民族独立、人民解放的夙愿未能实现。</li></ul>' },
+  { tag: '问(1)', cls: 'good', title: '问(1) 框架②：果实如何结成——继承者的完成',
+    body: '<p>中国共产党人是孙中山革命事业<b>最坚定的支持者、最忠诚的合作者、最忠实的继承者</b>：领导新民主主义革命取得胜利、建立中华人民共和国，实现了<b>民族独立和人民解放</b>——"振兴中华"的夙愿由此成真，所以"孙中山的努力终于结了果实"。</p>' },
+  { tag: '骨架', cls: 'key', title: '问(2) 骨架："新纪元"按五个维度展开',
+    body: '<p>每个维度都按"<b>结束什么—实现什么</b>"来答：民族 → 人民 → 国家 → 前提 → 世界。</p>' },
+  { tag: '问(2)', cls: 'good', title: '问(2) 框架①②：民族独立 + 人民当家作主',
+    body: '<ul><li><b>民族</b>：结束资本-帝国主义压迫奴役中国的历史，一洗百年屈辱，实现民族独立（材料："100 多年的浴血奋战终于夺取了中国革命的伟大胜利"）；</li>' +
+          '<li><b>人民</b>：结束封建专制统治的历史，人民成为国家、社会和自己命运的主人，政权性质根本改变。</li></ul>' },
+  { tag: '问(2)', cls: 'good', title: '问(2) 框架③④⑤：统一团结 + 前提 + 世界',
+    body: '<ul><li><b>国家</b>：实现国家基本统一、各民族空前团结（材料：56 根民族团结柱"共同擎起祖国繁荣富强"）；</li>' +
+          '<li><b>前提</b>：为实现第二历史任务——国家繁荣富强、人民共同富裕——扫清障碍、创造根本政治前提；</li>' +
+          '<li><b>世界</b>：改变世界政治力量对比，壮大世界和平、民主和社会主义的力量。</li></ul>' },
+  { tag: '辨析', cls: '', title: '辨析两个历史节点，防止张冠李戴',
+    body: '<p><b>1949</b> = 政权层面"站起来"，提供<b>政治前提</b>——本题"新纪元"答这里；<b>1956</b> = 社会主义改造完成、基本制度确立，提供<b>制度基础</b>——可作延伸提及，但不能拿它顶替"新纪元"。</p>' },
+  { tag: '失分', cls: 'bad', title: '常见失分点：每种丢分对应什么误解',
+    body: '<ul><li><b>(1)只讲孙中山伟大</b>——不讲"未竟之业 + 中共继承"，"果实"逻辑断链，三段（努力、未竟、继承）缺一不可；</li>' +
+          '<li><b>(2)答成社会主义制度确立或改革开放</b>——节点错位，1949 的意义被稀释；</li>' +
+          '<li><b>漏"人民当家作主""为富强创造前提"维度</b>——新纪元是多维展开，只答"独立了"只得一小部分分。</li></ul>' },
+  { tag: '结论', cls: 'good', title: '收束：锚点句',
+    body: '<p>两大任务两步走：<b>1949 政治前提（站起来），1956 制度基础（立起来）</b>；"果实" = 继承者完成了开创者未竟的事业。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.title,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    ribbon: { k: i + 1, ok: s.cls !== 'bad' },
+    done: last,
+  };
+});
+
+AW.init({
+  title: '"孙中山的努力终于结了果实"与"历史新纪元"',
+  subtitle: '2010 年分析题第 36 题 · 考点：新中国成立的历史意义 · 两大历史任务',
+  intro: '点击「▶ 播放」逐步展开答题框架（原理 → 材料对应 → 展开）。',
+  ribbonTitle: '答题要点逐条点亮',
+  snaps: snaps,
+  result: {
+    big: '继承未竟 · 开启新纪元',
+    html: '问(1)：孙中山立志振兴中华、领导辛亥革命但夙愿未竟；中国共产党领导人民完成反帝反封建任务、建立新中国，实现民族独立与人民解放。<br>' +
+          '问(2)：结束半殖民地半封建历史、人民当家作主、国家统一民族团结、为富强创造根本政治前提、改变世界政治格局——五维展开。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解："孙中山的努力终于结了果实"与"历史新纪元"</h2>
+<h3>第 0 步：先立机制——近代中国两大历史任务</h3>
+<p>理解本题的一切钥匙：近代中国面临两大历史任务——<strong>求得民族独立和人民解放</strong>（第一任务，前提）、<strong>实现国家繁荣富强和人民共同富裕</strong>（第二任务，目的）。1949 年新中国成立是第一任务的<strong>基本完成</strong>、第二任务的<strong>前提创造</strong>。先摆时间线：</p>
+<table><thead><tr><th>时间</th><th>节点</th><th>与本题的关系</th></tr></thead><tbody><tr><td>1840</td><td>鸦片战争，沦为半殖民地半封建社会</td><td>两大任务由此提出</td></tr><tr><td>1911</td><td>辛亥革命推翻帝制、创立民国</td><td>"孙中山的努力"开始，但夙愿未竟</td></tr><tr><td>1949</td><td>新中国成立</td><td>"果实"结成——第一任务基本完成</td></tr><tr><td>1956</td><td>社会主义改造完成、基本制度确立</td><td>另一节点，提供制度基础（勿与本题混）</td></tr></tbody></table>
+<h3>第 1 步：问(1) 如何理解"孙中山的努力终于结了果实"</h3>
+<ol><li><strong>努力是什么</strong>：孙中山喊出"振兴中华"，领导辛亥革命推翻清王朝、结束两千年君主专制制度、开创完全意义上的近代民族民主革命、创立中华民国；</li><li><strong>为何未竟</strong>：由于历史条件与阶级局限，辛亥革命没有改变半殖民地半封建的社会性质，反帝反封建任务没有完成，民族独立、人民解放的夙愿未能实现；</li><li><strong>果实如何结成</strong>：中国共产党人是孙中山革命事业<strong>最坚定的支持者、最忠诚的合作者、最忠实的继承者</strong>，领导新民主主义革命取得胜利、建立中华人民共和国，实现了民族独立和人民解放——孙中山"振兴中华"的夙愿由此成真，所以宋庆龄说"这一次不会再回头了"。</li></ol>
+<h3>第 2 步：问(2) 为什么说新中国成立开启"历史新纪元"</h3>
+<p>按"结束什么—实现什么"分五个维度展开：</p>
+<ol><li><strong>民族</strong>：结束资本-帝国主义压迫奴役中国的历史，一洗百年屈辱，实现民族独立（材料："100 多年的浴血奋战终于夺取了中国革命的伟大胜利"）；</li><li><strong>人民</strong>：结束封建专制统治的历史，人民成为国家、社会和自己命运的主人，政权性质根本改变；</li><li><strong>国家</strong>：实现国家基本统一、各民族空前团结（材料：56 根民族团结柱"共同擎起祖国繁荣富强"）；</li><li><strong>前提</strong>：为实现第二历史任务——国家繁荣富强、人民共同富裕——扫清障碍、创造根本政治前提；</li><li><strong>世界</strong>：改变世界政治力量对比，壮大世界和平、民主和社会主义的力量。</li></ol>
+<h3>第 3 步：辨析两个历史节点，防止张冠李戴</h3>
+<p>1949 = 政权层面"站起来"，提供<strong>政治前提</strong>——本题问的"新纪元"答这里；1956 = 社会主义改造完成、社会主义基本制度确立，提供<strong>制度基础</strong>——可以作为延伸提及，但不能拿它顶替"新纪元"的答案。</p>
+<h3>易错点：每种丢分对应什么误解</h3>
+<ul><li><strong>(1)只讲孙中山伟大、不讲"未竟之业 + 中共继承"</strong>："果实"的逻辑链断在中间——必须答出努力、未竟、继承三段；</li><li><strong>(2)把"新纪元"答成社会主义制度确立或改革开放</strong>：节点错位，1949 的意义被 1956 或 1978 稀释；</li><li><strong>漏"人民当家作主"或"为富强创造前提"维度</strong>：新纪元是多维展开，只答"独立了"只得一小部分分。</li></ul>
+<blockquote>记忆锚点：两大任务两步走——1949 政治前提（站起来），1956 制度基础（立起来）；"果实" = 继承者完成了开创者未竟的事业。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

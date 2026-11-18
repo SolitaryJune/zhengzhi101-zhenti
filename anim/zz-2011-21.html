@@ -1,8 +1,77 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-21 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-21</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-21 · 两大理论成果的一脉相承（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：先立"不变量 vs 变量"机制，再对 A–D 逐项判定。
+   全中文、自包含，仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var S1 = card(1, 'key', '审题眼："一脉相承"承的是什么',
+  '<p>毛泽东思想与中国特色社会主义理论体系，是马克思主义中国化的<b>两大理论成果</b>。题问二者"一脉相承"体现在哪些<b>共同点</b>。</p><p>判定前先回答一个问题：从革命年代到改革开放，什么换了、什么换不了？</p>');
+var S2 = card(2, 'key', '机制先行：不变量 vs 变量',
+  '<p><b>不变量</b>：理论基础——都以马克思主义基本原理为根；理论精髓——都贯穿实事求是。这条"认路的方法"贯穿两个时期，丢不得。</p><p><b>变量</b>：时代在变（战争与革命 → 和平与发展），任务在变（革命、改造 → 建设与改革）。"与时俱进"变的正是这些。题问"相承"，去找不变量。</p>');
+var S3 = card(3, 'good', '选项 A：共同的马克思主义理论基础 —— 对',
+  '<p>两大成果都从马克思主义基本原理出发、坚持科学社会主义方向——这是"脉"的<b>源头</b>。</p><p>A 属于不变量。A 对。</p>');
+var S4 = card(4, 'good', '选项 C：共同的实事求是的理论精髓 —— 对',
+  '<p>一切从实际出发、理论联系实际——农村包围城市是实事求是走出来的，中国特色社会主义也是实事求是干出来的。</p><p>C 是"脉"的<b>魂</b>。C 对。</p>');
+var S5 = card(5, 'bad', '选项 B：共同的革命和建设的根本任务 —— 错',
+  '<p>任务在变：新民主主义革命、社会主义改造是一段；改革开放、现代化建设是另一段——<b>任务清单并不相同</b>。</p><p>毛泽东思想创立时并无"建设中国特色社会主义"的任务——B 把后来才有的任务<b>倒灌回共同点</b>。B 错。</p>');
+var S6 = card(6, 'bad', '选项 D：共同的和平与发展的时代背景 —— 错',
+  '<p>毛泽东思想形成于<b>战争与革命</b>的时代；"和平与发展成为时代主题"是改革开放以后的判断。</p><p>D 恰是两大成果的<b>差异</b>项，却冒充共同点。D 错。</p>');
+var S7 = card(7, 'key', '陷阱复盘：一个倒灌、一个冒充',
+  '<p>B 的机关：<b>倒灌</b>——把"与时俱进"的新任务说成两时期的共同点；D 的机关：<b>冒充</b>——把时代差异说成时代共性。</p><p>口诀：见"一脉相承"先背不变量——原理、精髓、立场方法；凡具体任务、具体时代，一律属于变量。</p>');
+var S8 = card(8, 'good', '收束：答案 AC',
+  '<p>答案 <b>AC</b>：共同的马克思主义理论基础（A）+ 共同的实事求是精髓（C）。</p><p>承的是魂，不是清单——任务会换（B 错）、时代会变（D 错）。</p>');
+
+var snaps = [
+  { cls: 'step', tag: '审题眼', log: '题眼"一脉相承"——先问什么换了、什么换不了', html: S1, count: 0 },
+  { cls: 'step', tag: '立机制', log: '不变量=原理+精髓，变量=任务+时代；相承找不变量', html: S1 + S2, count: 0 },
+  { cls: 'ok',   tag: 'A 入选', log: 'A 不变量：都以马克思主义基本原理为根', html: S1 + S2 + S3, count: 1, ribbon: { k: 1, ok: true } },
+  { cls: 'ok',   tag: 'C 入选', log: 'C 不变量：实事求是贯穿两个时期', html: S1 + S2 + S3 + S4, count: 2, ribbon: { k: 3, ok: true } },
+  { cls: 'miss', tag: 'B 排除', log: 'B 变量：两段历史任务不同，把新任务倒灌回共同点是机关', html: S1 + S2 + S3 + S4 + S5, count: 3, ribbon: { k: 2, ok: false } },
+  { cls: 'miss', tag: 'D 排除', log: 'D 变量：时代判断恰恰相反，差异项冒充共同点', html: S1 + S2 + S3 + S4 + S5 + S6, count: 4, ribbon: { k: 4, ok: false } },
+  { cls: 'step', tag: '陷阱',   log: '复盘 B 倒灌、D 冒充：具体任务与时代一律是变量', html: S1 + S2 + S3 + S4 + S5 + S6 + S7, count: 4 },
+  { cls: 'done', tag: '结论',   log: '四项判定完毕：答案 AC', html: S1 + S2 + S3 + S4 + S5 + S6 + S7 + S8, count: 4, done: true }
+];
+
+AW.init({
+  title: '【2011·21】两大理论成果的一脉相承（多选）',
+  subtitle: '考点：马克思主义中国化理论成果 · 不变量与变量 · 选项逐项判定',
+  intro: '点击「▶ 播放」或按 → 逐步判定 A–D；右侧序号带实时标记对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 AC',
+    html: '<b>脉 = 原理 + 精髓</b>：共同的马克思主义理论基础（A）、共同的实事求是精髓（C）。<br>任务清单不同（B）、时代背景不同（D）——承的是魂，不是清单；"与时俱进"变的恰是 B、D 这类变量。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：两大理论成果"一脉相承"的脉在哪里</h2>
+<p>答案：<strong>AC</strong>。</p>
+<h3>第 0 步：先立机制——"相承"承什么，得先分清不变量与变量</h3>
+<p>毛泽东思想与中国特色社会主义理论体系，是马克思主义中国化（把马克思主义基本原理同中国具体实际相结合）的<strong>两大理论成果</strong>。判断"一脉相承"的方法不是逐句找相同字眼，而是先问：从革命年代走到改革开放，<strong>哪些东西换不了、哪些东西必然换</strong>？</p>
+<ul><li><strong>换不了的（不变量）</strong>：一是世界观和方法论的根——都以马克思主义基本原理为理论基础；二是贯穿始终的精髓——实事求是，一切从实际出发。无论革命还是建设，这条"认路的方法"不能丢，这正是"脉"的源头与魂。</li><li><strong>必然换的（变量）</strong>：时代在变（战争与革命 → 和平与发展），任务也在变（革命、改造 → 建设与改革）。成果要"与时俱进"，恰恰体现在变量上。</li></ul>
+<p>所以"一脉相承"承的是<strong>魂</strong>（原理 + 精髓），"与时俱进"变的是<strong>叶</strong>（任务 + 时代）。题问"一脉相承"，就去找不变量。</p>
+<h3>第 1 步：A–D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>属于不变量还是变量</th><th>判定</th></tr></thead><tbody><tr><td>A 马克思主义的理论基础</td><td>不变量：两成果同出一源</td><td>✅</td></tr><tr><td>C 实事求是的理论精髓</td><td>不变量：活的灵魂贯穿始终</td><td>✅</td></tr><tr><td>B 革命和建设的根本任务</td><td>变量：两段历史任务各不相同</td><td>❌</td></tr><tr><td>D 和平与发展的时代背景</td><td>变量：时代判断恰恰不同</td><td>❌</td></tr></tbody></table>
+<p>→ 承的是原理与精髓，选 <strong>AC</strong>。</p>
+<h3>易错点：B、D 各对应一种典型误解</h3>
+<ul><li><strong>误选 B（把后来才有的任务倒灌回共同点）</strong>：毛泽东思想创立时根本没有"建设中国特色社会主义"的任务——任务清单是两段历史各自开出来的，属于"与时俱进"的部分，不是"一脉相承"的部分。</li><li><strong>误选 D（把时代差异冒充时代共性）</strong>："和平与发展是时代主题"是改革开放以后对时代的判断；毛泽东思想形成于战争与革命年代。D 恰是两大成果的<strong>差异</strong>项，方向完全反了。</li></ul>
+<blockquote>记忆锚点：脉 = 马克思主义原理（A）+ 实事求是精髓（C）；任务（B）会换、时代（D）会变——承魂不承清单。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

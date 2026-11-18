@@ -1,8 +1,137 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-26 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-26</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·26 「石榴籽一样紧紧抱在一起」旨在</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>「像石榴籽一样紧紧抱在一起」——比喻的核心是<b>抱团</b>：各民族既不能散，也不能隔。题目问「旨在」（目的所在），要看这个比喻在哪些层面立目标。先把「抱团」的支撑层搭出来。</p>",
+    "log": "核心比喻：抱团 = 不散 + 不隔"
+  },
+  {
+    "title": "先立机制：抱团的四层支撑",
+    "cls": "key",
+    "body": "<p>要让「抱团」成立需要四个支撑：<b>关系</b>（处得好）、<b>精神</b>（认得齐）、<b>意识</b>（贴得紧）、<b>情感</b>（走得亲）。由外到内、由制度到情感，四层恰好承载四个选项。</p>",
+    "log": "四层：关系 / 精神 / 意识 / 情感"
+  },
+  {
+    "title": "A：巩固社会主义民族关系",
+    "cls": "good",
+    "body": "<p>平等团结互助和谐的社会主义民族关系是「抱团」的<b>关系层</b>落点——民族关系格局先要巩固。<b>A 正确</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": true
+    },
+    "log": "A ✓ 关系层"
+  },
+  {
+    "title": "B：建设共有精神家园",
+    "cls": "good",
+    "body": "<p>文化认同是最深层次的认同——<b>共有精神家园</b>是抱团的思想地基，精神层支撑。<b>B 正确</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": true
+    },
+    "log": "B ✓ 精神层：文化认同最深"
+  },
+  {
+    "title": "C：铸牢中华民族共同体意识",
+    "cls": "good",
+    "body": "<p>石榴籽的「核」就是<b>共同体意识</b>——这是十九大报告「铸牢中华民族共同体意识」的直接落点，意识层支撑。<b>C 正确</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": true
+    },
+    "log": "C ✓ 意识层：石榴籽的核"
+  },
+  {
+    "title": "D：大家庭中手足相亲、守望相助",
+    "cls": "good",
+    "body": "<p>「中华民族大家庭」「手足相亲、守望相助」正是石榴籽意象的<b>情感层</b>表达——各民族走得亲、帮得上。<b>D 正确</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": true
+    },
+    "log": "D ✓ 情感层：手足相亲"
+  },
+  {
+    "title": "干扰归因",
+    "cls": "bad",
+    "body": "<p>怀疑 C 与 D 重复：一个讲「意识」（内核），一个讲「情感状态」（表现），层次不同不重复。漏 B：觉得「精神家园」太虚——民族团结的关键恰在文化认同，最「虚」的一层最根本。</p>",
+    "log": "病灶：层次误判为重复 / 漏掉文化认同"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>ABCD</b>。记忆锚点：石榴籽四层——<b>关系团结、精神家园、共同体意识、手足相助</b>；各占一层即各选。</p>",
+    "log": "锁定 ABCD：四层支撑全收"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "「促进各民族像石榴籽一样紧紧抱在一起」旨在",
+  subtitle: "2021 年第 26 题（多选）· 考点：民族团结进步 · 铸牢中华民族共同体意识 · 分层对号推演",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先搭「抱团」的四层支撑，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABCD",
+    html: "记忆锚点：石榴籽四层——<b>关系团结（民族关系）、精神家园（文化认同）、共同体意识（内核）、手足相助（情感）</b>。C 是意识内核、D 是情感表现，层次不同不重复，四项全选。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「石榴籽」比喻的四层落点——全选的底气在哪</h2>
+<p>答案：<strong>ABCD</strong>（全选）。</p>
+<h3>第 0 步：先立机制——一个比喻在立什么目标</h3>
+<p>「促进各民族像石榴籽一样紧紧抱在一起」，比喻的核心是<strong>抱团</strong>：各民族既不能散（分裂），也不能隔（疏离）。题目问「旨在」——问的是这句话<strong>目的何在</strong>。转译方法：把「抱团」拆成需要支撑的几个层面，每个层面就是一个「旨在」。要让抱团成立，需要四层：<strong>关系</strong>（处得好——制度层面的民族关系格局）、<strong>精神</strong>（认得齐——文化认同）、<strong>意识</strong>（贴得紧——对共同体的自觉认同）、<strong>情感</strong>（走得亲——亲情式的互助）。四个选项恰好一层一个，这是全选题最常见的结构。</p>
+<h3>第 1 步：四个选项逐层入座</h3>
+<table><thead><tr><th>层面</th><th>选项</th><th>落点</th><th>判定</th></tr></thead><tbody><tr><td>关系层</td><td>A 巩固和发展平等团结互助和谐的社会主义民族关系</td><td>民族关系格局的巩固，抱团的制度地基</td><td>✅</td></tr><tr><td>精神层</td><td>B 建设各民族共有精神家园</td><td>文化认同是<strong>最深层次</strong>的认同，思想地基</td><td>✅</td></tr><tr><td>意识层</td><td>C 铸牢中华民族共同体意识</td><td>石榴籽的「核」，十九大报告的直接表述</td><td>✅</td></tr><tr><td>情感层</td><td>D 使各民族在中华民族大家庭中手足相亲、守望相助</td><td>大家庭、手足、守望相助正是石榴籽意象的情感表达</td><td>✅</td></tr></tbody></table>
+<p>四层由外到内、由制度到情感，共同支撑同一个「抱团」目标 → <strong>ABCD</strong>。</p>
+<h3>第 2 步：预判「为什么不漏一个」——「旨在」类题的选项口径</h3>
+<p>「旨在／意在」类题干不是让你挑「最直接的手段」，而是问<strong>这句话承载的全部目的</strong>。这句话写入十九大报告时，官方口径就是一整组：巩固民族关系、建设共有精神家园、铸牢中华民族共同体意识（报告新提法、题眼本体）、促进各民族交往交流交融。C 与题干同源——「石榴籽」比喻在报告里正是接在「铸牢中华民族共同体意识」之后说的，四个选项都是这一段的规范表述，没有一个是命题人杜撰的「凑数项」。凡「旨在、目的、意义」类全选题，先搭分层框架再逐层收拢：各占一层即各选。</p>
+<h3>易错点</h3>
+<ul><li><strong>怀疑 C 与 D 重复而漏选一个</strong>：C 讲「意识」（内核——把自己认作中华民族一员），D 讲「情感状态」（表现——手足相亲、守望相助）。意识是里、情感是表，层次不同并不重复。</li><li><strong>漏 B（嫌「精神家园」太虚）</strong>：民族团结的关键恰在文化认同——认同是最深层次的认同，最「虚」的一层其实最根本。</li><li><strong>漏 A（觉得是老话不新鲜）</strong>：平等团结互助和谐的民族关系是抱团的<strong>制度前提</strong>，关系层不巩固，其他三层无从谈起。</li></ul>
+<blockquote>记忆锚点：石榴籽四层——<strong>关系团结、精神家园、共同体意识、手足相助</strong>；「旨在」类题先分层再收拢，一层一选项。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

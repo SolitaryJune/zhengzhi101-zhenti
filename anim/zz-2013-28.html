@@ -1,8 +1,130 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-28 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-28</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-28 · 王明"左"倾错误清单（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片 + 左右坐标/时间轴小图（内联样式，自包含，
+   仅引用本地 ../assets 引擎，无任何外部请求；引擎默认渲染 stage.innerHTML）。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+/* 左右坐标小图：两顶帽子的时间轴 */
+function twoHats(){
+  return '<div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0">' +
+    '<div style="flex:1;min-width:220px;border:1.5px solid #c0392b;border-radius:8px;padding:8px 10px;background:#c0392b10;font-size:13px;color:#334155">' +
+      '<b style="color:#b91c1c">帽一："左"倾教条主义</b><br>1931·1（六届四中全会）— 1935·1（遵义会议）<br>关门主义 · 打击面过宽 · 军事冒险' +
+    '</div>' +
+    '<div style="flex:1;min-width:220px;border:1.5px solid #d97706;border-radius:8px;padding:8px 10px;background:#d9770612;font-size:13px;color:#334155">' +
+      '<b style="color:#92400e">帽二：右倾错误</b><br>抗战初期（1937 年底之后，长江局）<br>"一切经过统一战线、一切服从统一战线"' +
+    '</div>' +
+  '</div>';
+}
+/* 两栏小表：[左列, 右列, ok|bad|plain] */
+function rows(pairs){
+  return '<table style="border-collapse:collapse;width:100%;margin:6px 0">' + pairs.map(function(r){
+    var c = r[2] === 'ok' ? '#166534' : (r[2] === 'bad' ? '#b91c1c' : '#334155');
+    var bg = r[2] === 'ok' ? '#f0fdf4' : (r[2] === 'bad' ? '#fef2f2' : '#f8fafc');
+    return '<tr><td style="border:1px solid #e2e8f0;padding:5px 8px;font-size:13px;font-weight:700;background:' +
+      bg + ';color:' + c + ';white-space:nowrap">' + r[0] + '</td><td style="border:1px solid #e2e8f0;padding:5px 8px;font-size:13px;color:#334155">' +
+      r[1] + '</td></tr>';
+  }).join('') + '</table>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼：锁定时间窗 1931.1—1935.1',
+    body: '<p>题目问的是<b>1931 年 1 月至 1935 年 1 月</b>、以王明为代表的"左"倾错误的主要表现。时间窗是审题核心：王明一生犯过方向相反的两顶帽子——</p>' +
+      twoHats() +
+      '<p>同一个人、两种方向的错误。本题只问第一顶："左"倾。凡右倾的内容，不管口号多真实，都因<b>期不对</b>而必须排除——先立尺子，再逐项过。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行："左"与右方向相反，根子在教条主义',
+    body: rows([
+      ['"左"倾', '急躁冒进、超越阶段、打击面过宽——关门主义、树敌过多、军事冒险', 'bad'],
+      ['右倾', '落后于形势、妥协退让、放弃领导权——迁就同盟者、让步过多', 'plain']
+    ]) +
+      '<p>"左"倾错误的根子在<b>教条主义</b>：照搬苏联"城市中心"的革命道路与共产国际"中间势力最危险"的论断，由此派生出政治路线、同盟者政策、军事战略三方面表现——恰好对应 B、A、C 三个选项。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true },
+    title: '选项 A：排斥和打击中间势力 —— 对',
+    body: '<p>"左"倾关门主义的典型：把中间派别当"最危险的敌人"（"一切斗争，否认联合"），拒绝团结。铁证：福建事变中十九路军抗日反蒋，"左"倾领导者不仅不予支援反而指责，坐视其失败——革命力量陷入孤立。</p><p>A 对。</p>' },
+  { cls: 'good', tag: 'B 入选', ribbon: { k: 2, ok: true },
+    title: '选项 B：将反帝反封建与反资产阶级并列 —— 对',
+    body: '<p>"左"倾政治路线的典型：民主革命阶段本该团结资产阶级共同反帝反封建，它却把资产阶级一并列为革命对象——<b>混淆了民主革命与社会主义革命的界限</b>，超越阶段、树敌过多。</p><p>B 对。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: '选项 C：集中力量攻打大城市 —— 对',
+    body: '<p>"左"倾军事冒险主义的典型：无视敌强我弱，强令红军攻打赣州等中心城市，反"围剿"中又打阵地战硬拼——第五次反"围剿"失败、根据地丧失、被迫长征。1935 年 1 月遵义会议首先纠正的正是军事路线与组织路线。</p><p>C 对。</p>' },
+  { cls: 'bad', tag: 'D 排除', ribbon: { k: 4, ok: false },
+    title: '选项 D：主张"一切经过统一战线" —— 错',
+    body: '<p>这个口号<b>真实存在</b>，但它是王明抗战初期（1937 年底之后）<b>右</b>倾错误的口号——对国民党让步过多、放弃独立自主和领导权。</p>' +
+      rows([
+        ['方向拧反', '1931—1935 的"左"倾是关门主义、破坏统一战线（打击中间势力），哪里谈得上"一切经过"它？', 'bad'],
+        ['时间错位', '口号属于 1937 年之后的右倾时期，不在本题的 1931—1935 时间窗内', 'bad']
+      ]) + '<p>时间与方向双重错位，双重排除。D 错。</p>' },
+  { cls: 'key', tag: '陷阱拆解',
+    title: 'D 的迷惑点：每个字都对，只是"期不对"',
+    body: '<p>D 最难防——看到"王明 + 统一战线"就想选。识破标志：史实类选项先核对<b>时间与方向</b>两把尺子。</p>' +
+      rows([
+        ['别混淆左右', '放弃领导权、让步过多的统一战线主张是右；拒绝联合、破坏统一战线的关门主义是"左"。D 属前者', 'plain'],
+        ['别漏 C', '攻打大城市不是"战术细节"——军事冒险主义恰是"左"倾危害最直接的表现（丢根据地、被迫长征）', 'ok']
+      ]) +
+      '<p>王明两副面孔，张冠李戴的年份就是错误答案。</p>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 ABC',
+    body: '<p>答案 <b>ABC</b>："左"倾三张面孔——关门打击中间势力（A）、反帝反封建与反资产阶级并列（B）、冒险攻打大城市（C），全是 1931—1935 的表现；D"一切经过统一战线"是抗战初期右倾口号，方向相反、时间错位。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2013·28】王明的"左"倾三张面孔（多选）',
+  subtitle: '考点：土地革命与"左"倾错误 · 左右之分 · 时间窗核对',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: '<b>"左"倾三张面孔</b>：关门主义排斥打击中间势力（A）、反帝反封建与反资产阶级并列（B）、军事冒险攻打大城市（C）。<br>干扰项 D"一切经过统一战线"是王明抗战初期右倾口号——口号没错，期不对即错。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：王明"左"倾错误的主要表现——用"左右坐标 + 时间轴"辨认</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——辨认史实类选项要先立两把尺子</h3>
+<p>史实类多选题最怕张冠李戴，所以先立两把尺子，再逐项过：</p>
+<p><strong>尺子一：方向坐标——"左"与右是方向相反的两种错误。</strong>"左"＝急躁冒进、超越阶段、打击面过宽（关门主义、树敌过多、军事冒险）；右＝落后于形势、妥协退让、放弃领导权（迁就同盟者、让步过多）。</p>
+<p><strong>尺子二：时间轴——王明一生犯过方向相反的两顶帽子。</strong></p>
+<table><thead><tr><th>时期</th><th>性质</th><th>典型口号与表现</th></tr></thead><tbody><tr><td>1931 年 1 月（六届四中全会）—1935 年 1 月（遵义会议）</td><td><strong>"左"倾</strong>教条主义</td><td>把中间势力当"最危险的敌人"、反帝反封建与反资产阶级并列、军事冒险攻打大城市</td></tr><tr><td>抗战初期（1937 年底之后，长江局）</td><td><strong>右</strong>倾错误</td><td>"一切经过统一战线、一切服从统一战线"——对国民党让步过多，放弃独立自主和领导权</td></tr></tbody></table>
+<p>本题问的是<strong>第一段：1931—1935 的"左"倾</strong>。所以凡属于右倾的内容，不管口号本身多真实，都因"期不对"而必须排除——这正是 D 的陷阱所在。</p>
+<h3>第一步：1931—1935"左"倾的三类表现逐项对号</h3>
+<p>"左"倾错误的根子在<strong>教条主义</strong>：照搬苏联"城市中心"的革命道路和共产国际"中间势力最危险"的论断，由此派生出政治、同盟者政策、军事三方面的表现：</p>
+<table><thead><tr><th>方面</th><th>表现</th><th>选项</th></tr></thead><tbody><tr><td>政治路线</td><td>将反帝反封建与反资产阶级并列——民主革命阶段本该团结资产阶级共同反帝反封建，它却把资产阶级一并列为革命对象，混淆了民主革命与社会主义革命的界限</td><td>B</td></tr><tr><td>同盟者政策</td><td>排斥和打击中间势力——把中间派别当"最危险的敌人"（"一切斗争，否认联合"的关门主义），福建事变中的十九路军抗日反蒋力量不予支援，革命陷入孤立</td><td>A</td></tr><tr><td>军事战略</td><td>集中力量攻打大城市——无视敌强我弱，强令红军攻打赣州等中心城市，后又在反"围剿"中打阵地战硬拼，第五次反"围剿"失败、被迫长征</td><td>C</td></tr></tbody></table>
+<h3>第二步：D 为什么是干扰项——每个字都对，只是"期不对"</h3>
+<ul><li><strong>D 错</strong>："主张'一切经过统一战线'"——这个口号<strong>真实存在</strong>，但它是王明在抗战初期（1937 年底之后）<strong>右</strong>倾错误的口号。而且方向上完全拧反了：1931—1935 的"左"倾恰恰是<strong>关门主义、破坏统一战线</strong>（打击中间势力），哪里谈得上"一切经过"它？时间（1931—35 对 1937）与方向（"左"对右）双重错位，双重排除。</li></ul>
+<h3>易错点：每个干扰项背后的误解</h3>
+<ul><li><strong>误选 D（时间错位）</strong>：看到"王明 + 统一战线"就顺手选上。识破标志：史实类选项先核对<strong>时间与方向</strong>两把尺子——口号没错，期不对照样错。</li><li><strong>"左"右混淆</strong>：以为"主张统一战线"就是右倾的所有内容、或者见到"统一战线"字样就懵。判据在实质：放弃领导权、让步过多的统一战线主张是右；拒绝联合、破坏统一战线的关门主义是"左"。D 属前者。</li><li><strong>漏选 C（把军事细节不当路线）</strong>：以为攻打大城市只是战术问题。恰恰军事冒险主义是"左"倾危害最直接的表现——第五次反"围剿"失败、根据地丧失、被迫长征，1935 年 1 月遵义会议首先纠正的就是军事路线和组织路线。</li></ul>
+<blockquote>记忆锚点：王明两副面孔——<strong>"左"倾（1931—1935）：关门打击中间势力（A）、反帝反封建与反资产阶级并列（B）、冒险攻打大城市（C）</strong>；<strong>右倾（抗战初期）："一切经过统一战线"（D）</strong>。本题问"左"，期不对即错。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

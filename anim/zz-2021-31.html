@@ -1,8 +1,143 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-31 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-31</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·31 法律是否具有权威取决于什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>法律权威 = 法律在社会生活中的<b>作用力、影响力和公信力</b>，是法律应有的尊严和生命。追问机制：人们凭什么服一部法？来源只有三个，且共同落点在<b>本国立法、治理、实施</b>之内——权威是「国内法运行」的概念。</p>",
+    "log": "关键词：作用力、影响力、公信力"
+  },
+  {
+    "title": "先立机制：权威三来源",
+    "cls": "key",
+    "body": "<p><b>法本身立得住</b>（科学程度）、<b>法在治理中站得住</b>（地位和作用）、<b>法在实施中信得住</b>（实施程度）——三条都在一国法律生活之内；跑到「国际认可」去找权威，方向就偏了。</p>",
+    "log": "三来源：自身 / 治理 / 实施"
+  },
+  {
+    "title": "A：实践中的实施程度",
+    "cls": "good",
+    "body": "<p>纸面的法变成现实的法，公信力才累积起来——「徒法不足以自行」，<b>实施程度</b>是权威的试金石。<b>A 正确</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": true
+    },
+    "log": "A ✓ 实施中信得住"
+  },
+  {
+    "title": "B：法律本身的科学程度",
+    "cls": "good",
+    "body": "<p>内容合理、体系严密，法才配得上尊严——<b>科学立法</b>是权威的自身根基。<b>B 正确</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": true
+    },
+    "log": "B ✓ 法本身立得住"
+  },
+  {
+    "title": "C：在国家和社会治理体系中的地位和作用",
+    "cls": "good",
+    "body": "<p>法律是不是治国理政的基本方式、有没有最高权威的位置——<b>治理中的地位与作用</b>决定其分量。<b>C 正确</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": true
+    },
+    "log": "C ✓ 治理中站得住"
+  },
+  {
+    "title": "D：被国际社会认可和尊崇？",
+    "cls": "bad",
+    "body": "<p>法律权威是<b>国内法运行</b>的概念，指向本国公民与社会对法律的服从与信仰；国际认可属涉外影响，不是权威的构成来源。<b>D 错误</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "log": "D ✗ 国际认可≠权威来源"
+  },
+  {
+    "title": "预判追问：国际声誉好不是权威高的表现吗？",
+    "cls": "key",
+    "body": "<p>把<b>构成来源</b>与<b>外在表现</b>混成了一件事。权威的定义域是题干原文「法律在<b>社会生活</b>中」的作用力、影响力、公信力——定义域里没有「外国」的位置；国际认可至多是本国法治建设得好的<b>外溢结果</b>，是果不是因。把果当因，就是这个干扰项的全部骗术。</p>",
+    "log": "追问：国际认可是果不是因"
+  },
+  {
+    "title": "干扰归因",
+    "cls": "bad",
+    "body": "<p>误选 D：被「尊崇」二字迷惑——权威的三个关键词全部发生在本国社会生活中，外国怎么看改变不了法在本国的分量。漏 A：以为「科学立法」就够——再科学的法不实施也只是纸面，实施程度才是试金石。</p>",
+    "log": "病灶：权威混声誉 / 漏掉实施"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>ABC</b>。记忆锚点：法律权威三来源——<b>法自身科学、治理中有地位、实施中兑现</b>；「国际认可」是果不是因。</p>",
+    "log": "锁定 ABC：三来源全在法律生活内"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "法律是否具有权威取决于什么",
+  subtitle: "2021 年第 31 题（多选）· 考点：法律权威的来源 · 「国际认可」陷阱辨析 · 逐项对号推演",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立权威三来源机制，再逐项对号，最后答掉「国际声誉算不算」的追问。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABC",
+    html: "记忆锚点：法律权威取决于<b>法律本身的科学程度、在国家和社会治理体系中的地位和作用、在实践中的实施程度</b>——全在一国法律生活之内；「被国际社会认可和尊崇」是把外溢结果当构成来源的障眼项，是果不是因。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：法律权威从哪里来——三个来源与一个「涉外」陷阱</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——「权威」的三个来源全在一国法律生活之内</h3>
+<p>先把题干定义拆开：法律权威是法律在社会生活中的<strong>作用力、影响力和公信力</strong>，是法律应有的尊严和生命。追问机制：人们凭什么服一部法？来源只有三个——其一，<strong>法本身立得住</strong>：内容合理、体系严密，法律本身的科学程度决定了它配不配得上尊严；其二，<strong>法在治理中站得住</strong>：法律在国家和社会治理体系中的地位和作用，是不是治国理政的基本方式、有没有最高权威的位置；其三，<strong>法在实施中信得住</strong>：纸面的法变成现实的法，公信力才随实施程度累积起来。注意这三个来源的<strong>共同落点</strong>：全部发生在本国的立法、治理与实施之内——权威是「国内法运行」的概念，这个共同点正是排除 D 的依据。</p>
+<h3>第 1 步：三个来源 + 一个陷阱对号入座</h3>
+<table><thead><tr><th>来源</th><th>选项</th><th>机制</th><th>判定</th></tr></thead><tbody><tr><td>法在实施中信得住</td><td>A</td><td>法律在实践中的实施程度——「徒法不足以自行」，实施是权威的试金石</td><td>✅</td></tr><tr><td>法本身立得住</td><td>B</td><td>法律本身的科学程度——内容合理、体系严密才配得上尊严</td><td>✅</td></tr><tr><td>法在治理中站得住</td><td>C</td><td>在国家和社会治理体系中的地位和作用——治国理政基本方式的分量</td><td>✅</td></tr><tr><td>涉外影响（不在来源之列）</td><td>D</td><td>法律被国际社会认可和尊崇的程度——属涉外声誉，不是权威的构成来源</td><td>❌</td></tr></tbody></table>
+<p>三个来源全在法律生活内部 → <strong>ABC</strong>。</p>
+<h3>第 2 步：预判「国际声誉好，不正是权威高的表现吗？」——D 为什么必须排除</h3>
+<p>这是本题唯一的排除点，值得多说一句。有人会拿「一部法被国际认可，说明它有权威」来为 D 辩护——这句话把<strong>构成来源</strong>和<strong>外在表现</strong>混成了一件事。机制上分两层看：第一层，权威的定义域是题干原文「法律在<strong>社会生活</strong>中的作用力、影响力、公信力」，即本国公民与社会对法律的服从与信仰，这个定义域里根本没有「外国」的位置；第二层，国际认可至多是本国法治建设得好的<strong>外溢结果</strong>，它是「果」不是「因」——一部法在本国的权威由科学程度、治理地位、实施程度三件事构成，外国怎么看，改变不了法在本国的分量。把果当因、把涉外影响当构成来源，就是这个干扰项的全部骗术。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 D</strong>：被「尊崇」二字迷惑——权威的三个关键词（作用力、影响力、公信力）全部发生在本国社会生活中，国际认可是外溢结果而非构成来源。</li><li><strong>漏 A</strong>：以为「科学立法」就够了——再科学的法不实施也只是纸面，实施程度才是权威的试金石。</li></ul>
+<blockquote>记忆锚点：法律权威三来源——<strong>法自身科学、治理中有地位、实施中兑现</strong>；权威说到底是国内法生活的事，「国际认可」是果不是因。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

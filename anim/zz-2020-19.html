@@ -1,8 +1,79 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-19 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-19</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2020-19 “一方水土孕育一方文化”（多选） · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: "审题眼：一条因果链 + 一个转折", cls: "key", sc: "step", tag: "审题", log: "拆题干：地理→经济→文化；后半句“并没有消失”", body: "<p>因果链：<b>地理空间（平原/高原/山地/河谷/海域）→ 经济形态（农耕/渔猎/游牧）→ 地域文化</b>。</p><p>转折：高铁、互联网消除界限、加速同质化，<b>地域文化并没有消失</b>。考点：社会存在决定社会意识 + 相对独立性。</p>" },
+  { t: "机制先行：决定线与惯性线各管一半", cls: "key", sc: "shift", tag: "机制", log: "两条线：前半句管 B/C，后半句管 D", body: "<p><b>决定线</b>：社会存在（自然地理环境 + 物质生产方式）决定社会意识（文化）。</p><p><b>惯性线</b>：社会意识有<b>相对独立性</b>——历史继承性、与经济发展不完全同步。经济同质化了，文化仍在延续起作用。</p>" },
+  { t: "选项 A：文化是人类社会发展的决定力量 —— 错", cls: "bad", sc: "miss", tag: "选项 A", ribbon: { k: 1, ok: false }, log: "主语是“文化”——被决定者只能反作用", body: "<p>决定力量是<b>社会存在</b>（尤其物质资料的生产方式）；文化属社会意识，只有<b>反作用</b>。</p><p>把反作用夸大为决定作用 = 文化决定论。“重要”不等于“决定”。<b>A 错</b>。</p>" },
+  { t: "选项 B：自然地理空间影响文化的外在特征 —— 对", cls: "good", sc: "ok", tag: "选项 B", ribbon: { k: 2, ok: true }, log: "因果链第一环：“一方水土”", body: "<p>平原、高原、山地、河谷、海域孕育出外在特征迥异的文化——<b>自然地理空间影响文化的外在特征</b>。B 对。</p>" },
+  { t: "选项 C：社会经济状况决定文化发展形态 —— 对", cls: "good", sc: "ok", tag: "选项 C", ribbon: { k: 3, ok: true }, log: "因果链第二环：经济形态不同→文化形态不同", body: "<p>农耕、渔猎、游牧等<b>经济形态</b>不同，文化形态随之不同——<b>社会经济状况决定文化发展形态</b>。</p><p>同样带“决定”，C 的主语是<b>社会经济状况</b>（属社会存在一侧）——决定者说决定，方向对。C 对。</p>" },
+  { t: "选项 D：不同形态文化的发展具有相对独立性 —— 对", cls: "good", sc: "ok", tag: "选项 D", ribbon: { k: 4, ok: true }, log: "“并没有消失”= 相对独立性的题眼", body: "<p>地域界限被消除、同质化加速，地域文化却<b>没有消失</b>、持续影响当代——历史延续性、不完全同步，正是<b>相对独立性</b>。D 对。</p>" },
+  { t: "结论：BCD", cls: "good", sc: "step", tag: "结论", log: "汇总：B、C、D 入选，A 排除", body: "<p>答案 <b>BCD</b>：地理影响外貌（B）· 经济决定形态（C）· 文化有“惯性”（D）。</p><p>决定者是<b>社会存在</b>，不是文化——A 把“重要”错升级为“决定”。</p>" }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "【2020·19】“一方水土孕育一方文化”（多选）",
+  subtitle: "考点：社会存在决定社会意识 · 社会意识的相对独立性",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）",
+  intro: "点击「▶ 播放」：先拆题干的因果链与转折，再看“决定”二字谁能用。",
+  snaps: snaps,
+  result: {
+    big: "答案 BCD",
+    html: "记忆锚点：水土影响文化外貌（B）、经济决定文化形态（C）、文化自带“惯性”不随经济同步消失（D）；决定者是社会存在而不是文化（A 错）——反作用不是决定作用。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：“一方水土孕育一方文化”里的存在与意识</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——题干里其实藏着两条线</h3>
+<p>机制一（决定线）：社会存在决定社会意识。社会存在 = 自然地理环境 + 物质生产方式；文化属于社会意识。题干前半句给出一条完整因果链：<strong>地理空间</strong>（平原、高原、山地、河谷、海域）→ <strong>孕育不同经济形态</strong>（农耕、渔猎、游牧）→ <strong>形成地域差别文化</strong>。这条链的两个环节，正是两个正确选项的出处——第一环对应 B，第二环对应 C。</p>
+<p>机制二（惯性线）：社会意识具有<strong>相对独立性</strong>——它一经产生就有自己的历史继承性，与社会存在（经济发展）的发展<strong>不完全同步</strong>。题干后半句：高铁、互联网极大消除地域界限、加速同质化，<strong>地域文化并没有消失、还在持续影响当代</strong>。经济同质化了，文化却延续——这正是 D 的题眼。</p>
+<h3>第 1 步：A~D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>判定</th><th>对应机制</th></tr></thead><tbody><tr><td>A 文化是人类社会发展的决定力量</td><td>✗</td><td>决定力量是<strong>社会存在</strong>（尤其物质资料的生产方式）；文化只有<strong>反作用</strong></td></tr><tr><td>B 自然地理空间影响文化的外在特征</td><td>✓</td><td>因果链第一环：不同地理空间孕育出外在特征迥异的文化</td></tr><tr><td>C 社会经济状况决定文化发展形态</td><td>✓</td><td>因果链第二环：农耕、渔猎、游牧等经济形态不同，文化形态随之不同</td></tr><tr><td>D 不同形态文化的发展具有相对独立性</td><td>✓</td><td>转折句：界限被消除而文化不消失 = 历史延续性、不完全同步</td></tr></tbody></table>
+<h3>第 2 步：预判追问——都带“决定”二字，为什么 C 对、A 错</h3>
+<p>看<strong>主语是谁</strong>，再看它在原理里的位置：</p>
+<ul><li>C 的主语是“<strong>社会经济状况</strong>”：经济（生产方式）属于<strong>社会存在</strong>一侧，它是真正的决定者——社会经济状况决定文化发展形态，表述方向与“存在决定意识”一致。</li><li>A 的主语是“<strong>文化</strong>”：文化属于<strong>社会意识</strong>一侧，被决定者只能<strong>反作用</strong>于决定者。说文化“决定”社会发展，等于把被决定者抬成决定者——“文化决定论”，方向整个反了。</li></ul>
+<p>一句话：<strong>决定者是社会存在，不是文化</strong>；谁坐上“决定”的位置，由原理决定，不由题干的强调程度决定。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：题干说地域文化“持续对当代社会发展产生重要影响”，容易顺势把“重要（反作用大）”升级成“决定”。反作用再大也不是决定作用——底线原理是社会存在决定社会意识。</li><li><strong>漏选 D</strong>：只盯着前半句“孕育”，把题当成单线因果题；后半句“并没有消失、还在持续影响”正是相对独立性的专门题眼，漏读转折就漏选 D。</li></ul>
+<blockquote>记忆锚点：水土影响文化外貌（B），经济决定文化形态（C），文化自带“惯性”不随经济同步消失（D）；决定者是社会存在而不是文化（A 错）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

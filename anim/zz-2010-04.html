@@ -1,8 +1,138 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-04 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-04</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-04 · 劳动力成为商品</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+
+/* 一张推理卡片 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 推理链：每一步的完整内容（引擎按步数截取显示；s.cls: key=关键/good=正确/bad=排除） */
+var STEPS = [
+  {
+    'cls': 'key',
+    'tag': '审题眼',
+    'title': '第一步："前提"问的是为什么',
+    'log': '不是问"是什么"，是问"凭什么让货币变成资本"',
+    'body': '<p>题干给了一个判断：<b>劳动力成为商品 → 货币才能转化为资本</b>。</p><p>要补的是中间那条因果链：货币变资本，必须<b>带回一个增殖额</b>。所以本题的全部推理围绕一句话——<b>增殖从哪里来？</b></p>'
+  },
+  {
+    'cls': 'key',
+    'tag': '公式',
+    'title': '第二步：两条流通公式并排看',
+    'log': 'W—G—W 不增殖；G—W—G′ 要求带回 ΔG',
+    'body': '<p><b>W—G—W</b>：为买而卖，价值量不变，是普通商品流通；</p><p><b>G—W—G′</b>（G′ = G + ΔG）：为卖而买，要求<b>增殖</b>，ΔG 就是剩余价值。</p><p>问题来了：ΔG 从哪个环节冒出来？</p>'
+  },
+  {
+    'cls': 'key',
+    'tag': '排流通',
+    'title': '第三步：流通领域生不出钱',
+    'log': '等价交换不生钱；贱买贵卖只是价值挪位',
+    'body': '<p><b>等价交换</b>：一分钱不生，等量换等量；</p><p><b>贱买贵卖</b>：你赚的是别人亏的，社会总价值纹丝不动，只是重新分配。</p><p>结论：增殖只能发生在货币<b>买到的商品被使用</b>的环节——生产环节。</p>'
+  },
+  {
+    'cls': 'key',
+    'tag': '找商品',
+    'title': '第四步：唯一"用起来能生钱"的商品',
+    'log': '劳动力：使用（劳动）创造大于自身价值的价值',
+    'body': '<p>需要一种<b>被使用时能创造出比自身价值更大的价值</b>的商品——<b>劳动力</b>。</p><p>它的使用价值就是<b>劳动</b>本身：劳动创造新价值，且<b>大于劳动力自身的价值</b>，超出部分 = 剩余价值 ΔG。</p><p>买到它，G—W—G′ 才走得通，货币才转化为资本——这就是"前提"。</p>'
+  },
+  {
+    'cls': 'bad',
+    'tag': 'A 排除',
+    'title': '选项 A：资本家购买的是劳动力的价值',
+    'log': 'A 买卖对象说反：付的是价值，买的是使用价值',
+    'body': '<p><b>A 错</b>：资本家按劳动力的<b>价值</b>支付（工资），但买回的是劳动力的<b>使用价值</b>（让它干活）。</p><p>"前提"的要害不是"买了它的价值"，而是买回的东西在生产中<b>能创造</b>。把支付标准当成购买对象就落进 A。</p>',
+    'ribbon': { 'k': 1, 'ok': false }
+  },
+  {
+    'cls': 'bad',
+    'tag': 'B 排除',
+    'title': '选项 B：劳动力商品具有价值和使用价值',
+    'log': 'B 拿一切商品的共性当特性',
+    'body': '<p><b>B 错</b>：价值 + 使用价值是<b>一切商品的共性</b>，只能证明劳动力"是商品"。</p><p>题问"为什么唯独它能带来增殖"——B 给的是普遍性，要害的特殊性没抓到。</p>',
+    'ribbon': { 'k': 2, 'ok': false }
+  },
+  {
+    'cls': 'good',
+    'tag': 'C 入选',
+    'title': '选项 C：购买的劳动力能够带来剩余价值',
+    'log': 'C 点中前提要害：特殊使用价值 → 剩余价值',
+    'body': '<p><b>C 对</b>：正是第四步机制的直述——劳动力被购买后，其<b>使用（劳动）</b>创造出大于自身价值的价值，超出部分即<b>剩余价值</b>。</p><p>有了它，货币完成增殖、转化为资本；没有它，G′ 永远等于 G。</p>',
+    'ribbon': { 'k': 3, 'ok': true }
+  },
+  {
+    'cls': 'bad',
+    'tag': 'D 排除',
+    'title': '选项 D：劳动力的价值在消费中转移到新商品',
+    'log': 'D 张冠李戴："转移价值"是生产资料 c 的专职',
+    'body': '<p><b>D 错</b>："价值<b>转移</b>"是<b>生产资料（不变资本 c）</b>的戏份——机器折旧、原料消耗把自身价值原样搬进新产品。</p><p>劳动力的价值不是被转移，而是被活劳动<b>再生产出来</b>并<b>额外创造新价值</b>（可变资本 v + 剩余价值 m）。</p>',
+    'ribbon': { 'k': 4, 'ok': false }
+  },
+  {
+    'cls': 'good',
+    'tag': '结论',
+    'title': '收束：答案 C',
+    'log': '收束：特殊使用价值 → 剩余价值 → 选 C',
+    'body': '<p>推理链完整回放：G—W—G′ 要 ΔG → 流通生不出 → 唯一能生钱的是劳动力 → 选 <b>C</b>。</p><p>口诀：见到"转移"想 c（生产资料），见到"创造 / 增殖"想劳动力；"前提"类答案 = 特殊使用价值 → 剩余价值。</p>'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '干扰项' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '劳动力成为商品：货币转化为资本的前提',
+  subtitle: '考点：G—W—G′ · 特殊使用价值 · 剩余价值的来源 · 选项逐项推演',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '<b>货币所有者购买的劳动力能够带来剩余价值</b>——劳动力特殊的使用价值：使用（劳动）创造大于自身价值的价值 → 货币完成增殖、转化为资本。<br>干扰项：A 把支付标准当购买对象、B 拿商品共性当特性、D 把"转移价值"（生产资料 c）错安给劳动力。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：劳动力成为商品——货币转化为资本的前提</h2>
+<p>答案：<strong>C</strong>。</p>
+<h3>第 0 步：先立机制——"前提"问的是增殖从哪来</h3>
+<p>货币变资本，中间必须多出一个增殖额。把两条流通公式并排看：</p>
+<table><thead><tr><th>公式</th><th>内容</th><th>价值走向</th><th>问题</th></tr></thead><tbody><tr><td>简单商品流通</td><td>W—G—W</td><td>为买而卖，价值量不变</td><td>不产生增殖</td></tr><tr><td>资本流通</td><td>G—W—G′，且 G′ = G + ΔG</td><td>为卖而买，要求带回 ΔG</td><td>ΔG 从哪里来？</td></tr></tbody></table>
+<p>在<strong>流通领域</strong>找不到 ΔG 的来源：等价交换一分钱不生，贱买贵卖只是把别人口袋里的价值挪过来，社会总价值纹丝不动。所以增殖只能发生在货币<strong>买到的商品被使用</strong>的环节——也就是要求流通中存在一种"用起来能生钱"的特殊商品。<strong>劳动力</strong>正是这种商品：它的使用价值就是<strong>劳动</strong>本身，而劳动创造新价值，且能创造出<strong>大于劳动力自身价值</strong>的价值，超出部分就是剩余价值 ΔG。</p>
+<p>这就是"前提"的准确含义：买到劳动力（货币所有者购买的劳动力能够带来剩余价值，即 C），货币才有可能完成 G—W—G′ 的增殖、从钱变成资本；没有这一步，G′ 永远等于 G。"前提"类设问，答案永远落在<strong>特殊使用价值 → 剩余价值</strong>这条链上。</p>
+<h3>第 1 步：三个干扰项各对应哪种误解</h3>
+<ul><li><strong>A（资本家购买的是劳动力的价值）→ 买卖对象说反</strong>：资本家按劳动力的<strong>价值</strong>付钱（工资），但买回来的是劳动力的<strong>使用价值</strong>（让它干活）。"前提"的要害从来不是"买了它的价值"，而是买回的东西在生产中"能创造"。把支付标准当成购买对象，就落进 A。</li><li><strong>B（劳动力商品具有价值和使用价值）→ 拿共性当特性</strong>：一切商品都有价值和使用价值，这是普通商品和劳动力<strong>共有</strong>的属性，只能证明劳动力"是商品"，回答不了"为什么唯独它能带来增殖"。题问的是特殊性，B 给的是普遍性。</li><li><strong>D（劳动力自身的价值能够在消费过程中转移到新的商品中去）→ 张冠李戴</strong>："价值<strong>转移</strong>"是<strong>生产资料</strong>（不变资本 c）的专职——机器折旧、原料消耗把自身价值原样搬进新产品。劳动力的价值不是被转移，而是被工人的活劳动<strong>再生产出来</strong>（工资那一块），并且<strong>额外多造出新价值</strong>（可变资本 v + 剩余价值 m）。D 把 c 的戏份安给了劳动力。</li></ul>
+<h3>预判追问</h3>
+<ul><li><strong>形式平等与剥削矛盾吗？</strong> 不矛盾，反而要分两层看：流通环节按劳动力价值<strong>等价买卖</strong>（形式平等）；增殖发生在<strong>生产环节</strong>——劳动力特殊使用价值登场的地方。这正是"前提在购买、实现在使用"的分工。</li><li><strong>记哪张口诀？</strong> 不变资本 c 转移价值；可变资本 v 再生产自身价值并带来剩余价值 m。见到"转移"想 c，见到"创造/增殖"想劳动力。</li></ul>
+<blockquote>记忆锚点：劳动力 = 唯一"用起来能生钱"的商品；G—W—G′ 走通的前提 = 特殊使用价值带来剩余价值（C 型选项）；"转移价值"永远属于生产资料。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

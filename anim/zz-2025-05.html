@@ -1,8 +1,147 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2025-05 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2025-05</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2025·05 「中国革命斗争的胜利要靠中国同志了解中国情况」主要为了什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版）：逐步展开推理卡片，只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行时间线格：两份文献的「户口」对照
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: "审题眼：「当时」「主要是为了」——问的是靶子",
+    cls: "key",
+    log: "题眼：把语录放回出台场景，找它当时打的靶子",
+    body: "<p>题干给了两个定位：1930 年的《反对本本主义》、独立自主思想的<b>最初明确表述</b>。语录题不能凭字面关键词猜，要问三件事：<b>对谁说、什么时候说、当时党里流行什么毛病</b>。</p>"
+  },
+  {
+    title: "先立机制：1930 年党内的三条病根",
+    cls: "key",
+    log: "机制：唯书＋唯上＋不调查＝教条主义（本本主义）",
+    body: "<p>当时不少同志把马克思主义「本本」当万能药方（<b>唯书</b>）、把共产国际决议和苏联经验神圣化（<b>唯上</b>）、开会引经据典却不做实地调查（<b>脱离实际</b>）。三条病根合起来就是<b>教条主义</b>，毛泽东给它起的形象名字叫「本本主义」——文章开篇名言「没有调查，没有发言权」，通篇都在打这一个靶子。</p>"
+  },
+  {
+    title: "正读、反读各一遍：这句话否定谁",
+    cls: "step",
+    log: "反读：胜利不能只靠本本与外来指示 → 否定教条主义",
+    body: "<p>正读：胜利要靠<b>中国同志</b>了解<b>中国情况</b>——钥匙在本国人对本国实际的了解。反读：胜利<b>不能只靠</b>书上的本本、<b>不能只靠</b>外来的决议和别国经验。被否定的正是「真理来源在中国之外的书本与指示」——教条主义的核心主张。</p>"
+  },
+  {
+    title: "B 对号入座：反对党内教条主义倾向",
+    cls: "good",
+    log: "本本主义＝教条主义的形象说法 → 选 B",
+    ribbon: {k: 2, ok: true},
+    body: "<p>「本本主义」就是教条主义的别名，全篇立论即「反本本、重调查研究」，并第一次提出「思想路线」概念（「从斗争中创造新局面的思想路线」）。<b>B 正确</b>。</p>"
+  },
+  {
+    title: "A 统一战线：时代错位",
+    cls: "bad",
+    log: "A 是国民革命／抗战时期的课题，1930 年非本文对象",
+    ribbon: {k: 1, ok: false},
+    body: "<p>统一战线是<b>国民革命时期</b>（联合国民党）和<b>抗战时期</b>（抗日民族统一战线）的中心课题；1930 年土地革命战争语境下，它不是这篇文章要解决的问题。<b>A 错误</b>。</p>"
+  },
+  {
+    title: "C 非无产阶级思想：户口在古田会议",
+    cls: "bad",
+    log: "C 的出处是 1929.12 古田会议决议",
+    ribbon: {k: 3, ok: false},
+    body: "<p>纠正党内和红军中的各种<b>非无产阶级思想</b>（单纯军事观点、极端民主化、流寇思想等），确立<b>思想建党、政治建军</b>，是 <b>1929 年 12 月古田会议决议</b>的主题——被挪到了本文头上。<b>C 错误</b>。</p>"
+  },
+  {
+    title: "D 旧军队不良作风：也归古田管",
+    cls: "bad",
+    log: "D 属古田会议建军作风的处理范围",
+    ribbon: {k: 4, ok: false},
+    body: "<p>官兵一致、废止肉刑、整顿纪律等<b>建军作风问题</b>，同样是古田会议决议处理的内容。两份文献只差半年，主题各管一摊：<b>古田管思想建军，本本管教条调查</b>。<b>D 错误</b>。</p>" + cells([
+      {t:"古田会议<br>思想建党·政治建军<br>（C、D 的户口）", c:"dim", l:"1929.12"},
+      {t:"《反对本本主义》<br>反教条·重调查<br>（B 的户口）", c:"ok", l:"1930.5"}
+    ])
+  },
+  {
+    title: "追问：为什么它是「独立自主最初表述」",
+    cls: "step",
+    log: "从依赖外来本本 → 转向依靠中国实际＝独立自主内核",
+    body: "<p>「了解中国情况」说破要害：正确答案不在本本与外来指示里，而在<b>中国自己的实际</b>里。后来活的灵魂三个基本点都能在此找到萌芽：调查研究通向<b>实事求是</b>与<b>群众路线</b>，反本本通向<b>独立自主</b>。</p>"
+  },
+  {
+    title: "结论",
+    cls: "good",
+    log: "锁定 B：反对党内存在的教条主义倾向",
+    body: "<p>答案 <b>B</b>。语录题三步走：<b>出台时间 → 当时病灶 → 正反读找靶子</b>；文献区分线：<b>古田管思想建军，本本管教条调查</b>。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || (last ? '完成' : '第 ' + i + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "政治 2025·05 「中国革命斗争的胜利要靠中国同志了解中国情况」主要为了什么",
+  subtitle: "考点：《反对本本主义》与教条主义 · 方法：出台场景 → 病灶 → 正反读找靶子",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」沿推理链展开：审题 → 立病灶 → 拆句子 → 对号 → 追问 → 结论。",
+  snaps: snaps,
+  result: {
+    big: "答案 B",
+    html: "答案 <b>B（反对党内存在的教条主义倾向）</b>：本本主义＝教条主义，全篇立论即「没有调查，没有发言权」。C、D 是<b>古田会议（1929.12）</b>的主题，A 是统战课题（时代错位）。记忆锚点：<b>古田管思想建军，本本管教条调查</b>。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「中国革命斗争的胜利要靠中国同志了解中国情况」当时主要为了什么</h2>
+<p>答案：<strong>B（反对党内存在的教条主义倾向）</strong>。</p>
+<h3>第 0 步：先立机制——一句话要放回它的「出台场景」里读</h3>
+<p>判断一句领导人语录「主要是为了什么」，不能凭句子表面的关键词猜，要先看它<strong>对谁说、什么时候说、当时党里流行什么毛病</strong>。《反对本本主义》写于 1930 年 5 月，原题《调查工作》，是毛泽东在做寻乌调查期间写给党内干部看的。当时革命的处境和党内的风气是：</p>
+<table><thead><tr><th>当时的情况</th><th>危害</th></tr></thead><tbody><tr><td>把马克思主义的「本本」当成万能药方，动辄「拿本本来」</td><td><strong>唯书</strong>：真理被定位在书里</td></tr><tr><td>把共产国际的决议、苏联经验奉为神明，照搬照抄</td><td><strong>唯上</strong>：真理被定位在外来指示里</td></tr><tr><td>开会先引经据典，就是不肯下去做实地调查</td><td><strong>脱离实际</strong>：中国自己的情况没人认真了解</td></tr></tbody></table>
+<p>这三条病根合起来有一个名字——<strong>教条主义（本本主义）</strong>。这篇文章通篇都在打这一个靶子：开篇第一句名言「没有调查，没有发言权」，通篇强调调查研究，还第一次提出了「思想路线」这个概念（「从斗争中创造新局面的思想路线」）。</p>
+<h3>第 1 步：把题干这句话正读、反读各一遍</h3>
+<p>正读：「胜利要靠<strong>中国同志</strong>了解<strong>中国情况</strong>」——成功的钥匙在本国的人对本国实际的了解。反读：胜利<strong>不能只靠</strong>书本上的本本、<strong>不能只靠</strong>外来的决议和别国经验。这句话否定的正是「真理来源在中国之外的书本与指示」这个教条主义的核心主张。靶子找到了：<strong>党内存在的教条主义倾向</strong>，选 <strong>B</strong>。</p>
+<h3>第 2 步：三个干扰项各是哪份文献、哪个时期的「户口」</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因</th></tr></thead><tbody><tr><td>A 巩固和发展统一战线</td><td>❌</td><td>统一战线是国民革命时期（联合国民党）和抗战时期（抗日民族统一战线）的中心课题；1930 年土地革命战争语境下不是本文对象——<strong>时代错位</strong></td></tr><tr><td>B 反对党内教条主义倾向</td><td>✅</td><td>本本主义＝教条主义的形象说法，全篇立论就是「反本本、重调查」</td></tr><tr><td>C 防止非无产阶级思想侵蚀</td><td>❌</td><td>这是 <strong>1929 年 12 月古田会议决议</strong>的主题（思想建党、政治建军），被挪到了本文头上——<strong>文献错位</strong></td></tr><tr><td>D 改变红军旧军队不良作风</td><td>❌</td><td>官兵一致、废止肉刑、整顿纪律等<strong>建军作风问题</strong>，同样归古田会议决议处理——<strong>文献错位</strong></td></tr></tbody></table>
+<p>两份文献只差半年：<strong>古田会议（1929.12）管党内思想和建军作风；《反对本本主义》（1930.5）管教条主义和调查研究</strong>。这是本题最实用的区分线。</p>
+<h3>第 3 步：预判追问——为什么题干说它是「独立自主思想最初的明确表述」</h3>
+<p>「靠中国同志了解中国情况」说破了教条主义的要害：革命道路的正确答案不在本本里、不在外来指示里，而在<strong>中国自己的实际</strong>里。从「了解中国情况」出发定政策，就是从依赖外来本本转向依靠本国实际——这正是「独立自主」的内核。后来毛泽东思想活的灵魂的三个基本点（实事求是、群众路线、独立自主）都能在这篇文章里找到萌芽：调查研究通向实事求是和群众路线，反本本通向独立自主。题干把它定位为「最初」，考点正在这条源头线上。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 C 或 D（古田会议主题平移过来）</strong>：时间挨得近、都是「党内毛病」，最容易串门。记口诀：<strong>古田管思想建军，本本管教条调查</strong>。</li><li><strong>选 A（看见「革命斗争」就联想到统一战线）</strong>：「革命斗争」四个字触发了对三大法宝的机械联想，没查这句话的出台时间——1930 年最急迫的敌人是党内的教条风气，不是统战课题。</li><li><strong>只背「没有调查，没有发言权」而不联系教条主义</strong>：调查研究之所以被提到「发言权」的高度，正因为它是对付教条主义的药方——药方与病要配对记忆。</li></ul>
+<blockquote>记忆锚点：《反对本本主义》（1930.5，原题《调查工作》）＝反对教条主义＋调查研究＋思想路线概念首次提出＋独立自主最初表述；非无产阶级思想与旧军队作风＝古田会议（1929.12）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

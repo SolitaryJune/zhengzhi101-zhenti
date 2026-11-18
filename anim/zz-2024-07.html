@@ -1,8 +1,98 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-07 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-07</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2024·07 新时代「枫桥经验」最突出的特点</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链模板（政治站无 KaTeX 版）：只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：一条时间线，一个「最突出」',
+    cls: 'key', tag: '审题', log: '时间线定位考点：新时代枫桥经验',
+    body: '<p>60 年代创造 → 1963 年批示推广（60 周年）→ 2003 年指示坚持和发展（20 周年）→ 2024 年 11 月会见「枫桥式工作法」代表。时间线全部指向一个考点：<b>新时代「枫桥经验」</b>；题眼「<b>最突出的特点</b>」问的不是某条做法，而是它<b>区别于其他做法的根本特征</b>。</p>' },
+  { title: '立机制：六十年不变的「基因」',
+    cls: 'key', tag: '溯源', log: '基因 = 依靠群众、就地化解、矛盾不上交',
+    body: '<p>枫桥经验的原本：依靠群众<b>就地化解矛盾</b>——小事不出村、大事不出镇、<b>矛盾不上交</b>。六十年间场景在变（农村→城市、线下→线上），基因没变：发源于<b>基层</b>、靠<b>群众</b>自己把矛盾解决在原地。新时代「最突出的特点」只能从这个基因里长出来。</p>' },
+  { title: 'A. 顶层设计——方向相反',
+    cls: 'bad', tag: 'A ✗', ribbon: { k: 1, ok: false }, log: 'A 自上而下，基因是自下而上',
+    body: '<p>顶层设计是宏观体制层面<b>自上而下</b>的动作；枫桥经验是基层群众<b>自下而上</b>的创造。一个向上看、一个向下扎根——方向正好相反，A 长不在「基层 + 群众」这条根上。</p>' },
+  { title: 'B. 防范化解在基层——基因的新表述',
+    cls: 'good', tag: 'B ✓', ribbon: { k: 2, ok: true }, log: 'B = 「就地化解」的现代表述 → 入选',
+    body: '<p>新时代社会治理<b>重心在基层、难点也在基层</b>，「就地化解」今天的说法就是：最大限度把矛盾风险<b>防范化解在基层</b>——源头治理、抓早抓小、矛盾不上交。它就是「最突出的特点」。</p>' },
+  { title: 'C. 人文关怀 + 心理疏导——枝叶做法',
+    cls: 'bad', tag: 'C ✗', ribbon: { k: 3, ok: false }, log: 'C 是社会心理服务体系里的具体做法',
+    body: '<p>把人文关怀和心理疏导结合起来，属于健全<b>社会心理服务体系</b>的一条具体做法——答得了「其中一件事怎么干」，答不了「这条经验凭什么区别于其他做法」。枝叶 vs 主干。</p>' },
+  { title: 'D. 政府主导——主体错位',
+    cls: 'bad', tag: 'D ✗', ribbon: { k: 4, ok: false }, log: 'D 删掉了群众自治这条生命线',
+    body: '<p>新时代社会治理格局是<b>共建共治共享</b>：党委领导、政府负责、社会协同、公众参与、法治保障。政府的位置是「负责、保障」；枫桥经验的生命线是<b>群众自己化解自己的矛盾</b>——选「政府主导」等于删掉群众基因。</p>' },
+  { title: '深一层：「最突出」= 主干部位',
+    cls: 'good', tag: '辨析', log: '四个选项都是真提法，拼的是「长在哪条根上」',
+    body: '<p>本题的坑：A、C、D 单看都是<b>真做法</b>，一个假选项都没有。判别标准不是「对不对」，而是「是不是主干部位」：只有 B 长在「基层 + 群众」两条根上，直接回答「矛盾在哪解决」——其余都是围绕它的外围配套。</p>' },
+  { title: '结论',
+    cls: 'good', tag: '完成', log: '锁定 B：最大限度把矛盾风险防范化解在基层',
+    body: '<p>答案 <b>B</b>。记忆锚点：新时代枫桥经验 = 依靠群众、<b>最大限度把矛盾风险防范化解在基层</b>（矛盾不上交）；口诀：往「基层」「群众」找答案，往「上面」「政府」找的都错。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "2024·07 新时代「枫桥经验」最突出的特点",
+  subtitle: "考点：基层治理与枫桥经验 · 方法：时间线立基因 → 逐项对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」：先沿时间线立住枫桥经验六十年的不变基因，再对 A–D 逐项排查。",
+  snaps: snaps,
+  result: {
+    big: "答案 B",
+    html: "答案 <b>B</b>：最突出的特点是<b>最大限度把矛盾风险防范化解在基层</b>。A 顶层设计方向相反（上面 vs 基层）；C 心理疏导只是枝叶做法；D 政府主导主体错位（生命线是群众自治）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：新时代「枫桥经验」最突出的特点</h2>
+<p>答案：<strong>B（最大限度把矛盾风险防范化解在基层）</strong>。</p>
+<h3>第 0 步：先立机制——枫桥经验六十年的「不变基因」</h3>
+<p>题干给了一条完整时间线，先把它读顺：20 世纪 60 年代，浙江枫桥的干部群众创造了「依靠群众<strong>就地化解矛盾</strong>」的枫桥经验——小事不出村、大事不出镇、矛盾不上交；1963 年毛泽东同志批示学习推广（题干说的 60 周年），2003 年习近平总书记指示坚持和发展（题干说的 20 周年），2024 年 11 月又强调坚持和发展好<strong>新时代</strong>枫桥经验。</p>
+<p>六十年间场景一直在变——从农村到城市、从线下到线上——但这条经验能一直被「坚持和发展」，靠的是一个<strong>没变过的基因</strong>：发源于基层群众，靠群众自己把矛盾解决在原地。新时代社会治理的重心在基层、难点也在基层，所以问「最突出的特点」，答案必然是从这条基因里长出来的新表述：把矛盾风险<strong>最大限度防范化解在基层</strong>——源头治理、抓早抓小、矛盾不上交。机制立住，答案自然浮出。</p>
+<h3>第 1 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因：对应哪种误解</th></tr></thead><tbody><tr><td>A 加强社会治理的顶层设计</td><td>❌</td><td>方向相反——顶层设计是宏观层面「自上而下」，枫桥经验恰恰是基层群众「自下而上」的创造</td></tr><tr><td>B 最大限度把矛盾风险防范化解在基层</td><td>✅</td><td>「就地化解」的现代表述：重心下移、源头治理、矛盾不上交</td></tr><tr><td>C 把人文关怀和心理疏导有机结合起来</td><td>❌</td><td>层次不够——这是健全社会心理服务体系里的一条具体做法，是枝叶不是主干</td></tr><tr><td>D 有效发挥政府的主导作用</td><td>❌</td><td>主体错位——枫桥经验的生命线是群众自治、共建共治共享，不是政府包办</td></tr></tbody></table>
+<h3>为什么不是 D（最值得多说一句）</h3>
+<p>「社会治理」类题目最容易条件反射地选「政府」。但新时代社会治理格局的关键词是<strong>共建共治共享</strong>，落点是党委领导、政府负责、社会协同、公众参与、法治保障——政府的位置是「负责」与「保障」。枫桥经验的独特价值恰恰在于群众<strong>自己</strong>化解自己的矛盾：政府搭台、保障，化解的主力是基层群众。把答案选成「政府主导化解」，等于把这条经验的群众基因删掉了——删掉基因，它就不是枫桥经验了。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A 的误解</strong>：以为「社会治理重要」就要靠「上面加强设计」——枫桥经验六十年的生命力恰恰来自下面、来自基层，方向不能记反。</li><li><strong>误选 C 的误解</strong>：把某项具体工作方法（心理疏导）当成「最突出特点」——具体做法回答的是「其中一件事怎么干」，回答不了「这条经验凭什么区别于其他做法」。</li><li><strong>误选 D 的误解</strong>：把「政府负责」扩大成「政府主导化解」——忽视了群众自治这条生命线。</li></ul>
+<blockquote>记忆锚点：新时代枫桥经验 = 依靠群众、<strong>最大限度把矛盾风险防范化解在基层</strong>（矛盾不上交）；判别口诀：看选项长不长在「基层」与「群众」这两条根上——往「上面」「政府」找的都不对。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

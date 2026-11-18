@@ -1,8 +1,101 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2019-18 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2019-18</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2019-18 严格管控基因编辑的原因 · 两把尺子推理动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX，纯文本卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：管控基因编辑，问的是"原因"',
+    cls: 'key', sc: 'step', tag: '审题',
+    log: '抓题眼：严格管控＝给一项实践活动立规矩——考实践的两个尺度',
+    body: '<p>题干关键：基因变化会<b>传给后代、影响整个基因库</b>；衍生<b>伦理、法律、安全难题</b>；各国制定规范。</p><p>考点：<b>真理尺度与价值尺度的统一</b>＋科学技术的两重性（双刃剑）。</p>' },
+  { t: '机制先行：实践要同时过两把尺子',
+    cls: 'key', sc: 'shift', tag: '机制',
+    log: '先立总框架：真理尺度（合规律）＋价值尺度（合目的），科技是双刃剑',
+    body: '<p><b>真理尺度</b>：实践必须遵循客观规律——基因变化传给后代、影响基因库，遗传规律不听人的招呼；</p><p><b>价值尺度</b>：实践应符合人的合理需要与价值要求——伦理、法律、安全难题正是价值警报；</p><p><b>双刃剑</b>：科技在缺乏规范的不当应用下，会反过来威胁、支配人自己——"科技异化"。</p>' },
+  { t: '选项 A：科技有时表现为异己的、敌对的力量 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A', ribbon: {k: 1, ok: true},
+    log: 'A 对：双刃剑／科技异化，正是管控的现实理由',
+    body: '<p>基因编辑一旦失控，威胁的是人自己的基因库与安全——技术本是人的手段，结果反过来支配人，这就是<b>科技异化</b>。</p><p>承认"有时异己"恰是教材承认科技<b>作用两重性</b>的原话，正是"许多国家制定伦理、法律规范"的哲学依据。<b>A 对</b>。</p>' },
+  { t: '选项 B：可能突破人类的伦理道德底线 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 B', ribbon: {k: 2, ok: true},
+    log: 'B 对：价值尺度发出的警报，题干明示伦理难题',
+    body: '<p>题干"极具争议""棘手的伦理难题"说的就是底线风险——这是<b>价值尺度</b>发出的警报。</p><p>技术的运用必须守住人类伦理底线，所以要严格管控。<b>B 对</b>。</p>' },
+  { t: '选项 C：实践要遵循真理尺度与价值尺度的统一 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C', ribbon: {k: 3, ok: true},
+    log: 'C 对：管控＝立规矩，让实践既合规律又合价值',
+    body: '<p>严格管控就是给这项实践立规矩：既<b>合规律</b>（不乱改基因库、遵守遗传规律），又<b>合价值</b>（不越伦理底线、符合人的合理需要）。</p><p>这正是<b>真理尺度与价值尺度的统一</b>。<b>C 对</b>。</p>' },
+  { t: '选项 D：实践是合规律性与合目的性的统一 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 D', ribbon: {k: 4, ok: true},
+    log: 'D 对：同一原则的另一面表述，与 C 并存不冲突',
+    body: '<p>D 是 C 的另一面表述：<b>真理尺度＝合规律性，价值尺度＝合目的性</b>。C 说"应当遵循"，D 说"本质上是什么"。</p><p>教材里本就是一对命题，实践的内在要求就是这两重统一。<b>C、D 并存都选</b>。</p>' },
+  { t: '结论：ABCD 全选',
+    cls: 'good', sc: 'done', tag: '结论',
+    log: '汇总：A、B 是事实原因，C、D 是原理原因——四个都要选',
+    body: '<p>答案 <b>ABCD</b>：A 说风险（双刃剑）、B 说警报（价值尺度）、C/D 说管控依据的实践原则（两重统一）。</p><p>原因类题目常"事实＋原理"各占一半，互为表里，一个都不能漏。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2019·18】人类严格控制基因编辑行为的原因（多选）',
+  subtitle: '考点：真理与价值的统一 · 方法：先立两把尺子，再分"事实原因／原理原因"对号',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先立实践的两把尺子，再看四个选项如何互为表里。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '记忆锚点：实践两把尺——<b>真理尺度（合规律）＋价值尺度（合目的）</b>；科技是双刃剑，异化风险要管控；事实原因（A、B）＋原理原因（C、D）各占一半，ABCD 一个不能少。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：人类为什么严格管控基因编辑——实践的两把尺子</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——任何实践活动都要同时过两把尺子</h3>
+<p>先把题干活动归位：基因编辑是一项<strong>实践活动</strong>（运用技术改造对象）。马克思主义哲学对实践的总要求，正是本题的分析工具：</p>
+<table><thead><tr><th>尺度</th><th>管什么</th><th>在本题里指什么</th></tr></thead><tbody><tr><td><strong>真理尺度</strong>（合规律性）</td><td>实践必须遵循客观规律</td><td>基因的变化会传给后代、最终可能影响整个基因库——遗传规律不听人的招呼</td></tr><tr><td><strong>价值尺度</strong>（合目的性）</td><td>实践应满足人的合理需要与价值要求</td><td>技术运用"极具争议"，衍生伦理、法律、安全难题</td></tr></tbody></table>
+<p>再补一层背景——<strong>科学技术是把双刃剑</strong>：科技本是人的手段，但在特定社会条件（尤其缺乏规范的不当应用）下，会反过来威胁、支配人自己，表现为<strong>异己的、敌对的力量</strong>（科技异化）。题干"影响整个基因库""一系列棘手的伦理、法律和安全难题"，描述的正是这种异化风险。</p>
+<h3>第 1 步：A~D 对号入座——管控＝强制实践回到两把尺子上</h3>
+<p>严格管控不是否定技术，而是强制这项实践"合规律＋合价值"。四个选项恰好从四个角度给出原因：</p>
+<table><thead><tr><th>选项</th><th>判定</th><th>原因类型</th></tr></thead><tbody><tr><td>A 科学技术有时表现为异己的、敌对的力量</td><td>✅</td><td><strong>事实原因</strong>：双刃剑／异化风险——技术本是人的手段，失控就反过来威胁人自己的基因库与安全</td></tr><tr><td>B 基因编辑技术可能突破人类的伦理道德底线</td><td>✅</td><td><strong>事实原因</strong>：价值尺度报警——题干"极具争议""棘手的伦理难题"说的就是底线风险</td></tr><tr><td>C 人的实践活动要遵循真理尺度与价值尺度的统一</td><td>✅</td><td><strong>原理原因</strong>：管控就是立规矩——既合规律（不乱改基因库）又合价值（不越伦理底线），两个尺度统一起来</td></tr><tr><td>D 人的实践活动是合规律性与合目的性的统一</td><td>✅</td><td><strong>原理原因</strong>：C 的另一面表述——同一原则的两种说法，并存都选</td></tr></tbody></table>
+<p>→ <strong>ABCD 全选</strong>。原因类题目常常"事实＋原理"各占一半：A、B 从题干材料读出风险事实，C、D 给出管控背后的哲学原理，四者互为表里。</p>
+<h3>第 2 步：预判两个必问的"为什么"</h3>
+<p><strong>为什么"科技有时异己、敌对"这种"负面"表述也算对？</strong> 这是教材原话，说的是科技社会作用的<strong>两重性</strong>：在不当社会应用（或缺乏规范）下，技术会反过来危害人类——环境污染、核风险、今天基因编辑的伦理争议都是例证。承认异化风险，恰恰是<strong>要求人主动规范</strong>的前提，与题干"许多国家制定伦理、法律规范"严丝合缝。这不是贬低科技，而是给科技立规矩的哲学依据。</p>
+<p><strong>C 和 D 会不会互相排斥、只能选其一？</strong> 不排斥，是同一原则的两种表述：<strong>真理尺度＝合规律性，价值尺度＝合目的性</strong>。C 从"实践应当遵循什么"说，D 从"实践本质上是什么"说；教材里这两个命题本来就是一对，多选题里并存都选，丢一个就是漏选。</p>
+<h3>易错点：每个干扰项对应哪种典型误解</h3>
+<ul><li><strong>漏选 A</strong>：把"科技异化"误解成"贬低科学"而不敢选——教材明确承认科技作用的两重性，承认风险正是管控的理由，不是否定科技本身。</li><li><strong>漏选 B</strong>：以为题干没直说"底线"二字就不选——"伦理、法律和安全难题""极具争议"说的就是底线风险，材料要学会转译。</li><li><strong>只选 C 不选 D（或反之）</strong>：把两种表述当成互相竞争的选项——同一原则的两面，C、D 并存都选。</li></ul>
+<blockquote>记忆锚点：实践两把尺——<strong>真理尺度（合规律）＋价值尺度（合目的）</strong>；科技是双刃剑，异化风险要管控；原因题"事实（A、B）＋原理（C、D）"各占一半，ABCD 一个不能少。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,141 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-33 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-33</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2014-33 俄印蒙三国总理同日访华的外交动向（答案 ACD）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- ============================================================
+     模板：概念/记忆/推理链类（anim_math_concept 同款结构，政治站无 KaTeX 版）
+     形态：逐步揭示推理链卡片，每步一张 .aw-stepcard；第 3 步内嵌
+     2013 年周边外交迷你时间线（时政史实类考点）；序号带逐个点亮 A–D。
+     路径：本页位于 anim/{id}.html（站点一级目录之下），../assets/ 指向站点根 assets/。
+============================================================= -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 迷你时间线（时政史实类考点：2013 年周边外交的节奏）
+function timeline(){
+  var rows = [
+    ['2013.03', '新一届领导层外交开局：国家主席首访俄罗斯', ''],
+    ['2013.09-10', '提出共建"丝绸之路经济带"与"21 世纪海上丝绸之路"', ''],
+    ['2013.10.22', '俄印蒙三国总理同一天开启访华（本题）', 'key'],
+    ['2013.10.24-25', '周边外交工作座谈会：提出"亲、诚、惠、容"', '']
+  ];
+  var h = '<div style="margin:6px 0 2px">';
+  for(var i = 0; i < rows.length; i++){
+    var r = rows[i];
+    var bg = r[2] === 'key' ? '#fff7df' : '#f1f5f9';
+    var bd = r[2] === 'key' ? '#d9a514' : '#cbd5e1';
+    h += '<div style="display:flex;align-items:center;gap:8px;margin:4px 0">' +
+         '<span style="flex:none;min-width:96px;text-align:center;font-size:12.5px;font-weight:700;' +
+         'color:#334155;background:' + bg + ';border:1px solid ' + bd + ';border-radius:6px;padding:2px 6px">' +
+         r[0] + '</span>' +
+         '<span style="font-size:13.5px;color:#334155">' + r[1] + '</span></div>';
+  }
+  return h + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：动向题读"信号"，不读"眼缘"',
+    cls: 'key', tag: '审题',
+    log: '拆题干三个信号源：谁来了、怎么来、何时来——多选题，逐项对号入座。',
+    body: '<p><b>谁</b>：俄罗斯总理梅德韦杰夫、印度总理辛格、蒙古国总理阿勒坦呼亚格——三个<b>陆上邻国</b>的政府首脑；<b>怎么来</b>：应中国总理李克强<b>邀请</b>、正式访问；<b>何时</b>：2013 年 10 月 22 日<b>同一天</b>开启中国之行。题眼一句话："这样密集的双边访问在中国外交史上<b>实属罕见</b>。"四个选项就是对这些信号的不同解读。</p>' },
+  { title: '先立模型：外交动向"两把尺"',
+    cls: 'key', tag: '模型',
+    log: '两把尺：原则关查措辞是否撞"不结盟"，名实关查强度词有无事实支撑。',
+    body: '<p><b>尺子一【原则关】</b>：措辞是否与我国外交基本原则冲突——"结盟"直接撞上<b>不结盟</b>原则。<b>尺子二【名实关】</b>：强度词（吸引力、延续、加速、共赢）是否有事实支撑。两本背景账备用：<b>节奏账</b>——2013 年周边是外交首要方向；<b>经济账</b>——中国长期是蒙古最大贸易伙伴、俄印重要经贸伙伴。</p>' },
+  { title: '时间线：把本题放进 2013 年周边外交的节奏',
+    cls: 'key', tag: '时间线',
+    log: '同日三访正落在周边外交加速期，为"延续""加速"提供事实底座。',
+    body: timeline() + '<p>本题（10 月 22 日）恰落在"一带一路"倡议提出与周边外交座谈会<b>之间</b>——三国之行是这一轮周边外交高潮的注脚，选项里的"延续""加速"都要从这里读出来。</p>' },
+  { title: '尺子一细看：伙伴 ≠ 盟友',
+    cls: 'key', tag: '机制',
+    log: '中国外交的上限措辞是"伙伴关系"：不针对第三方、无共同防务义务。',
+    body: '<p><b>伙伴关系</b>：不针对第三方、不承担共同防务义务；<b>盟友</b>：意味着"一国有难、共担军事义务"。20 世纪 80 年代起中国即不与任何国家结盟（1950 年《中苏友好同盟互助条约》1980 年期满后未再续订）。中国与三国的定位都是伙伴：中俄<b>全面战略协作伙伴</b>、中印<b>战略合作伙伴</b>、中蒙<b>战略伙伴</b>——没有一个"盟"字。</p>' },
+  { title: 'B："盟友关系"越界',
+    cls: 'bad', tag: 'B ✗',
+    ribbon: { k: 2, ok: false },
+    log: '"盟友"撞上不结盟原则，是把"来往密"偷换成"结盟" → B 不选。',
+    body: '<p>选项说"深化了中国与俄印蒙三国间的<b>盟友关系</b>"——把"关系好、来往密"偷换成"结盟"，与不结盟原则正面冲突。参考分析口径正是：<b>避免把正常合作误判为结盟或对抗</b>。B 错。</p>' },
+  { title: 'A：邻国用脚投票',
+    cls: 'good', tag: 'A ✓',
+    ribbon: { k: 1, ok: true },
+    log: '行为信号：应邀、同日、正式来访，议程主打经贸 → 体现经济吸引力。',
+    body: '<p>"吸引力"不是自夸，是对方<b>行为</b>投出来的：三国领导人<b>应邀</b>、<b>同日</b>、正式到访，合作议程以经贸合作为主——蒙古看中国市场与通道，俄罗斯谈能源经贸，印度看发展合作。经济账支撑名实相符。A 对。</p>' },
+  { title: 'C：延续 ＋ 加速',
+    cls: 'good', tag: 'C ✓',
+    ribbon: { k: 3, ok: true },
+    log: '一贯方针是"延续"，同日三访、史上罕见是"加速" → C 对。',
+    body: '<p><b>延续</b>：与邻为善、以邻为伴是改革开放以来的一贯方针，三国来访不是突然转向；<b>加速</b>：题干原话"同一天开启中国之行……在中国外交史上<b>实属罕见</b>"——"加速"正是从访问<b>密度</b>读出来的。两个词各有出处，名实相符。C 对。</p>' },
+  { title: 'D：互利共赢的时代潮流',
+    cls: 'good', tag: 'D ✓',
+    ribbon: { k: 4, ok: true },
+    log: '访问围绕合作与共同发展，与"求和平、谋发展、促合作、图共赢"一致 → D 对。',
+    body: '<p>访问围绕合作与共同发展，双方各有所得，符合官方对时代潮流的固定表述——"<b>求和平、谋发展、促合作、图共赢</b>"。别把 D 当套话跳过：动向与和平发展主题相符的题目，这一项通常应选。D 对。</p>' },
+  { title: '结论',
+    cls: 'good', tag: '答案',
+    log: '锁定 ACD：吸引力看行为、加速看密度、共赢看主题；B 拿"来往密"冒充"盟友"。',
+    body: '<p>答案选 <b>ACD</b>。一句记：邻国用脚投票看<b>吸引力</b>（A）、同日密集看<b>加速</b>（C）、合作红利看<b>共赢</b>（D）；唯一排除点 B 是拿"来往密"冒充"盟友"——<b>中国不结盟，伙伴非同盟</b>。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: s.tag,
+    log: s.log,
+    count: i >= 4 ? Math.min(i - 3, 4) : 0,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon,
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2014-33 · 俄印蒙三国总理同日访华的外交动向',
+  subtitle: '2014 年多选题 · 时政：外交动向"两把尺"模型 + "伙伴 ≠ 盟友"陷阱',
+  intro: '点击「▶ 播放」逐步展开动向解读推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（1=A · 2=B · 3=C · 4=D；✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已对号入座',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '记忆锚点：邻国用脚投票看<b>吸引力</b>（A），同日密集看<b>加速</b>（C），合作红利看<b>共赢</b>（D）；唯一排除点 B 是拿"来往密"冒充"盟友"——20 世纪 80 年代起中国<b>不结盟</b>，中俄、中印、中蒙的定位都是<b>伙伴关系</b>，不针对第三方、没有共同防务义务。防坑一句话：<b>中国不结盟，伙伴非同盟</b>。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：三个陆上邻国总理同日访华——先立"两把尺"，再对号入座</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先建立模型——外交动向题怎么读</h3>
+<p>动向题读的不是"发生了什么"，而是"行为背后的信号"。本题有三个信号源：<strong>谁来了</strong>（俄、印、蒙——三个陆上邻国）、<strong>怎么来</strong>（应中国总理李克强邀请、正式访问）、<strong>何时来</strong>（2013 年 10 月 22 日<strong>同一天</strong>开启中国之行，题干特意点出"这样密集的双边访问在中国外交史上实属罕见"）。四个选项就是对这些信号的不同解读，解读得对不对，用两把尺子量：</p>
+<table><thead><tr><th>尺子</th><th>量什么</th><th>一票否决的标准</th></tr></thead><tbody><tr><td>原则关</td><td>措辞是否与我国外交基本原则冲突</td><td>"结盟"直接撞上<strong>不结盟</strong>原则</td></tr><tr><td>名实关</td><td>强度词是否有事实支撑</td><td>名实相符才选，拔高或贬损都不选</td></tr></tbody></table>
+<p>再备两本背景账给"名实关"垫底。<strong>节奏账</strong>：2013 年是新一届领导层外交开局之年，周边是首要方向，10 月下旬紧接着召开周边外交工作座谈会，提出"亲、诚、惠、容"——三国同日到访正落在这个加速期里。<strong>经济账</strong>：中国长期是蒙古最大贸易伙伴、俄印的重要经贸伙伴，市场规模与发展红利是"吸引力"的实体来源。</p>
+<h3>第 1 步：A、C、D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>依据</th></tr></thead><tbody><tr><td>A 体现了中国经济发展的吸引力</td><td>✅</td><td>邻国用脚投票：应邀、同日、正式来访，议程主打经贸合作——"吸引力"有行为与经济账支撑</td></tr><tr><td>C 反映了中国周边外交行动的延续和加速</td><td>✅</td><td><strong>延续</strong>＝与邻为善、以邻为伴的一贯方针；<strong>加速</strong>＝同一天开启三国之行，密度史上罕见</td></tr><tr><td>D 顺应了互利共赢的时代潮流</td><td>✅</td><td>访问围绕合作与共同发展，与官方对时代潮流的固定表述"求和平、谋发展、促合作、图共赢"一致</td></tr><tr><td>B 深化了中国与俄印蒙三国间的盟友关系</td><td>❌</td><td>"盟友关系"越界——见第 2 步</td></tr></tbody></table>
+<p>→ 选 <strong>ACD</strong>。</p>
+<h3>第 2 步：为什么 B 错——"密集互访"≠"结盟"（唯一排除点，值得多说一句）</h3>
+<p>中国奉行独立自主的和平外交政策，<strong>不结盟</strong>是长期原则：20 世纪 80 年代起中国即不与任何国家结盟（1950 年《中苏友好同盟互助条约》1980 年期满后未再续订）。中国与三国的定位都是<strong>伙伴关系</strong>——中俄全面战略协作伙伴、中印战略合作伙伴、中蒙战略伙伴。</p>
+<p>伙伴与盟友的分界线在义务上：伙伴<strong>不针对第三方</strong>、不承担共同防务义务；盟友则意味着"一国有难、共担军事义务"。把"关系好、来往密"偷换成"盟友关系"，正是 B 的陷阱——参考分析的口径就是：<strong>避免把正常合作误判为结盟或对抗</strong>。</p>
+<h3>易错点：每个漏选/多选对应哪种误解</h3>
+<ul><li><strong>误选 B（多选）</strong>：把"密集互访、关系热络"等同于"结盟"。记住：我国对外关系的上限措辞是"伙伴关系"，"盟友"二字在当代中国外交词典里不出现。</li><li><strong>漏选 A</strong>：觉得"吸引力"是自夸。判断看行为而非形容词——三国领导人应邀同日来访、议程主打经贸，吸引力是对方用脚投出来的。</li><li><strong>漏选 C</strong>：只看到"来了三个邻国"，没抓住"<strong>同一天</strong>开启"这个题眼——"加速"正是从访问密度读出来的。</li><li><strong>漏选 D</strong>：把"互利共赢"当套话跳过。它是官方固定表述（时代主题＝和平与发展，时代潮流＝求和平、谋发展、促合作、图共赢），动向与之一致即应选。</li></ul>
+<blockquote>记忆锚点：邻国用脚投票看<strong>吸引力</strong>（A）；同日密集看<strong>加速</strong>（C）；合作红利看<strong>共赢</strong>（D）；唯一排除点是拿"来往密"冒充"盟友"——<strong>中国不结盟，伙伴非同盟</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

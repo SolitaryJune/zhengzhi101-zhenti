@@ -1,8 +1,97 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2019-07 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2019-07</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2019-07 党的建设的根本方针 · 定位表对号动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（参照 tools/anim_concept_template，政治站无 KaTeX，纯文本卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：党的建设总要求，问「根本方针」',
+    cls: 'key', sc: 'step', tag: '审题',
+    log: '题眼：总要求是一段固定表述，每个部件坐一个专属位置——考位置对号',
+    body: '<p>十九大提出的<b>新时代党的建设总要求</b>是一段固定表述：原则、方针、主线、统领、根基、着力点、总目标，各有其位。</p><p>题问「根本方针」，四个选项占据不同位置——先立表，再对号。</p>' },
+  { t: '机制先行：总要求定位表',
+    cls: 'key', sc: 'shift', tag: '机制',
+    log: '先立定位表：原则（党的全面领导）≠ 方针（党要管党、全面从严治党）',
+    body: '<p><b>根本原则</b>：坚持和加强党的全面领导——讲党对事业的领导；<b>根本方针</b>：坚持党要管党、全面从严治党——讲党怎么管好自己；<b>主线</b>：长期执政能力建设、先进性和纯洁性建设；<b>统领</b>：党的政治建设；<b>根基</b>：坚定理想信念宗旨；<b>着力点</b>：调动全党积极性、主动性、创造性。</p><p>最易混的一对：全面领导管<b>"对外领导"</b>，党要管党、全面从严治党管<b>"对内治党"</b>。</p>' },
+  { t: '选项 A：全面加强党的执政本领 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 A', ribbon: {k: 1, ok: false},
+    log: 'A 是「增强八项执政本领」层面的能力要求，够不到方针',
+    body: '<p>「执政本领」来自「增强八项执政本领」（学习本领、政治领导本领、改革创新本领等）——是<b>能力建设层面</b>的具体要求，不在总要求的方针位置上。</p><p><b>A 错</b>。</p>' },
+  { t: '选项 B：坚持党要管党、全面从严治党 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 B', ribbon: {k: 2, ok: true},
+    log: 'B 对号：「党要管党」答谁来管，「全面从严治党」答怎么管',
+    body: '<p>「党要管党」——党的事必须党自己管起来；「全面从严治党」——内容全覆盖、力度从严贯穿。二者合成<b>根本方针</b>的标准表述。</p><p><b>B 对</b>。</p>' },
+  { t: '选项 C：坚持解放思想、改革创新 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 C', ribbon: {k: 3, ok: false},
+    log: 'C 是百搭方法论词汇，不在党建定位表内任何位置',
+    body: '<p>「解放思想、改革创新」放哪个文件都不违和——正因如此它是<b>万能干扰项</b>：不在总要求定位表的任何位置上，靠固定搭配直接排除。</p><p><b>C 错</b>。</p>' },
+  { t: '选项 D：全面推进党的政治建设 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 D', ribbon: {k: 4, ok: false},
+    log: 'D 串位：政治建设是「统领」，统领与根本方针是两个位置',
+    body: '<p>政治建设地位显赫——<b>以党的政治建设为统领</b>，布局排头。但「统领」与「根本方针」是两个位置；「全面推进党的政治建设」是布局部署的原话，答非所问。</p><p><b>D 错</b>。</p>' },
+  { t: '结论：根本方针 = 党要管党、全面从严治党',
+    cls: 'good', sc: 'done', tag: '结论',
+    log: '汇总：B 选；A、C、D 各占别位——答案 B',
+    body: '<p>答案 <b>B（坚持党要管党、全面从严治党）</b>。</p><p>A 是能力要求，C 是百搭词，D 是统领——只有 B 坐在「根本方针」的位置上。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2019·07】新时代党的建设的根本方针',
+  subtitle: '考点：党的建设总要求定位表 · 方法：先立表，原则与方针不串位',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先立总要求定位表，再逐项检验四个选项坐没坐对位置。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '记忆锚点：<b>方针：党要管党、全面从严治党；主线：长期执政能力 + 先进性纯洁性；统领：政治建设</b>；「坚持和加强党的全面领导」是根本原则，管"对外领导"，别与方针串位。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：新时代党的建设的「根本方针」——总要求定位表对号</h2>
+<p>答案：<strong>B（坚持党要管党、全面从严治党）</strong>。</p>
+<h3>第 0 步：先立机制——总要求是一张定位表</h3>
+<p>十九大提出的「新时代党的建设总要求」是一段固定表述，里面每个部件坐一个专属位置。先把这张定位表立起来：</p>
+<table><thead><tr><th>部件</th><th>内容</th><th>回答的问题</th></tr></thead><tbody><tr><td>根本原则</td><td>坚持和加强党的全面领导</td><td>党建为了什么方向</td></tr><tr><td><strong>根本方针</strong></td><td><strong>坚持党要管党、全面从严治党</strong></td><td>党<strong>怎么管好自己</strong></td></tr><tr><td>主线</td><td>加强党的长期执政能力建设、先进性和纯洁性建设</td><td>抓什么统领全程</td></tr><tr><td>统领</td><td>党的政治建设</td><td>布局中谁排头</td></tr><tr><td>根基</td><td>坚定理想信念宗旨</td><td>靠什么立本</td></tr><tr><td>着力点</td><td>调动全党积极性、主动性、创造性</td><td>发动谁来干</td></tr><tr><td>总目标</td><td>始终走在时代前列、人民衷心拥护、勇于自我革命、经得起各种风浪考验、朝气蓬勃的马克思主义执政党</td><td>建成什么样的党</td></tr></tbody></table>
+<p><strong>为什么根本方针是它</strong>：「党要管党」回答"谁来管"——党的事必须党自己管起来；「全面从严治党」回答"怎么管"——内容全面覆盖、力度从严贯穿。二者合成治党的完整方针，与「坚持和加强党的全面领导」（讲党对事业的领导）分工不同：<strong>一个管"对外领导"，一个管"对内治党"</strong>——这是本题最容易混的一对。</p>
+<h3>第 1 步：A~D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>真实位置</th><th>对号结果</th></tr></thead><tbody><tr><td>A 全面加强党的执政本领</td><td>「增强执政本领」（八项本领）层面</td><td>❌</td></tr><tr><td>B 坚持党要管党、全面从严治党</td><td><strong>根本方针</strong></td><td>✅</td></tr><tr><td>C 坚持解放思想、改革创新</td><td>通用方法论，不在定位表内</td><td>❌</td></tr><tr><td>D 全面推进党的政治建设</td><td>政治建设是「统领」</td><td>❌</td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种典型误解</h3>
+<ul><li><strong>误选 A</strong>：把「能力要求」当「方针」——"执政本领"来自总要求之外的「增强八项执政本领」（学习本领、政治领导本领、改革创新本领等），是能力建设层面的具体要求，够不到"方针"的高度。</li><li><strong>误选 C</strong>：被百搭词带走——「解放思想、改革创新」放哪个文件都不违和，恰因如此它是<strong>万能干扰项</strong>；它不在党建定位表内的任何位置上，靠固定搭配直接排除。</li><li><strong>误选 D</strong>：把「统领」当「方针」——政治建设在布局中排第一（以党的政治建设为统领），地位显赫，但「统领」与「根本方针」是两个位置；「全面推进党的政治建设」是布局部署的原话，答非所问。</li></ul>
+<blockquote>记忆锚点：总要求抓三件套——<strong>方针：党要管党、全面从严治党；主线：长期执政能力 + 先进性纯洁性；统领：政治建设</strong>；「坚持和加强党的全面领导」是根本原则，别与方针串位。问什么，对什么位置。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

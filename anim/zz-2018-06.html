@@ -1,8 +1,117 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-06 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-06</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2018·06 特有民主形式=协商民主</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 纵向对号条目（标签 + 说明）
+function kv(rows){
+  return '<div>' + rows.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:86px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+// 两格并列小图（选举民主 / 协商民主 对照）
+function duo2(items){
+  return '<div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0">' + items.map(function(L){
+    return '<div style="flex:1;min-width:220px;border:1px solid #2a9d8f;border-radius:8px;padding:6px 10px;background:#2a9d8f14">' +
+           '<b style="color:#1f7a70">' + L.k + '</b><div style="font-size:12.5px;color:#555;line-height:1.6">' + L.v + '</div></div>';
+  }).join('') + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：三重限定叠在一起',
+    body: '<p>题干句式：「在<b>通过依法选举</b>让代表参与国家生活和社会生活管理的<b>同时</b>，找到了一种保证人民在<b>日常政治生活</b>中有<b>广泛持续深入</b>参与权利的<b>特有</b>民主形式」。三个限定词各管一道筛子，逐词核对才能锁定唯一。</p>' },
+  { tag: '机制', cls: 'key', title: '先立机制：人民民主的两种重要实现形式',
+    body: duo2([
+      { k: '选举民主（选举投票）', v: '依法投票选举代表，由代表参与国家和社会生活的管理——周期性、间接参与，行使的是<b>投票的权利</b>' },
+      { k: '协商民主（广泛商量）', v: '在决策之前和决策实施之中开展广泛协商——日常性、直接广泛参与，行使的是<b>广泛参与的权利</b>' },
+    ]) + '<p>十九大报告给协商民主两顶帽子：<b>实现党的领导的重要方式</b>、我国社会主义民主政治的<b>特有形式和独特优势</b>——中国共产党和中国人民的伟大创造，渠道覆盖政党、人大、政府、政协、人民团体、基层、社会组织七大方面。</p>' },
+  { tag: '核对', cls: '', title: '三重限定逐词核对',
+    body: kv([
+      ['「同时」', '要找的形式在选举之外——查找范围已划定'],
+      ['「日常＋广泛持续深入」', '日常政治生活中的持续参与——协商民主的功能定位'],
+      ['「特有」', '对应「特有形式和独特优势」这顶专属帽子'],
+    ]) + '<p>三道筛子过后，唯一同时满足的是<b>协商民主</b>。</p>' },
+  { tag: '选项A', cls: 'bad', ribbon: { k: 1, ok: false }, title: 'A：西方模式的标签',
+    body: '<p>A「竞争性民主」——西方竞选模式的标签性概念，不是我国「特有形式」的规范表述。<b>排除</b>。</p>' },
+  { tag: '选项B', cls: 'good', ribbon: { k: 2, ok: true }, title: 'B：三重限定全中，当选',
+    body: '<p>B「协商民主」——选举之外的另一形式，管「日常、广泛、持续、深入」的参与，且顶着「特有形式和独特优势」的帽子，与题干逐词对上。<b>当选</b>。</p>' },
+  { tag: '选项C', cls: 'bad', ribbon: { k: 3, ok: false }, title: 'C：选举的同义复述',
+    body: '<p>C「票决民主」——≈「依法选举」的同义复述，与题干前半句处在同一层；「同时」二字已把它划在查找范围之外。<b>排除</b>。</p>' },
+  { tag: '选项D', cls: 'bad', ribbon: { k: 4, ok: false }, title: 'D：非规范用词',
+    body: '<p>D「谈判民主」——我国规范用词是「协商」，「谈判」不是规范提法，近义词替换不得分。<b>排除</b>。</p>' },
+  { tag: '追问', cls: 'key', title: '预判追问：为什么 C 是最强的干扰项',
+    body: '<p>「票决民主」听着也像正式术语，题干里又明明写着「依法选举」——迷惑正来自此。审句式：题干结构是「A（选举）＋在 A 的<b>同时</b>另找到一种 B」，问的是 <b>B</b>。C 与 A 同层（都是投票类），把 A 的同义词再选一遍等于答非所问。再看功能：票决是一时一刻的一次性动作，「日常政治生活中广泛持续深入参与」这句话它接不住。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：一句话带走',
+    body: '<p>答案 <b>B</b>。记忆锚点：<b>选举＋协商 = 我国人民民主的两种重要实现形式</b>；「日常政治生活中广泛持续深入参与」「特有形式和独特优势」= 协商民主的专属定语；竞争性／票决／谈判三个近义词均不对号。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon,
+    done: last,
+  };
+});
+
+AW.init({
+  title: '特有民主形式 = 协商民主',
+  subtitle: '2018 年第 6 题 · 社会主义协商民主 · 方法：抓三重限定（选举之外＋日常广泛持续深入＋特有）逐词核对',
+  intro: '点击「▶ 播放」逐步展开：先立「选举＋协商」两种形式，再用三重限定筛选项。',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 干扰）',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '我国人民民主两种重要实现形式 = <b>选举民主＋协商民主</b>。题干「在依法选举的同时……日常政治生活中广泛持续深入参与」「特有形式」说的是<b>协商民主</b>——实现党的领导的重要方式、社会主义民主政治的特有形式和独特优势。C 票决民主是选举的同义复述（同一层），A 竞争性民主是西方标签，D 谈判民主非规范用词。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：题干三重限定如何锁死「协商民主」</h2>
+<p>答案：<strong>B（协商民主）</strong>。</p>
+<h3>第 0 步：先立机制——人民民主的两种重要实现形式</h3>
+<p>这道题的材料化用自习近平关于协商民主的论述。先把机制立起来：实行人民民主、保证人民当家作主，我国有<strong>两种重要实现形式</strong>——</p>
+<table><thead><tr><th>形式</th><th>机制</th><th>参与特点</th></tr></thead><tbody><tr><td>选举民主（选举投票）</td><td>依法投票选举代表，由代表参与国家生活和社会生活的管理</td><td>周期性、<strong>间接</strong>参与，行使的是<strong>投票的权利</strong></td></tr><tr><td>协商民主</td><td>在决策之前和决策实施之中开展广泛协商，商量着办</td><td>日常性、<strong>直接广泛</strong>参与，行使的是<strong>广泛参与的权利</strong></td></tr></tbody></table>
+<p>社会主义协商民主是中国共产党和中国人民的<strong>伟大创造</strong>，十九大报告给它两顶帽子：「协商民主是实现党的领导的重要方式，是我国社会主义民主政治的<strong>特有形式和独特优势</strong>」；其渠道覆盖政党、人大、政府、政协、人民团体、基层、社会组织七大方面。</p>
+<h3>第 1 步：题眼三重限定逐词核对</h3>
+<p>题干的句式是「在<strong>通过依法选举</strong>……<strong>的同时</strong>，找到了一种……的<strong>特有</strong>民主形式」，三个限定词叠在一起：</p>
+<ul><li>「在依法选举……<strong>同时</strong>」——要找的形式在<strong>选举之外</strong>，查找范围已划定；</li><li>「保证人民在<strong>日常政治生活</strong>中有<strong>广泛持续深入</strong>参与权利」——指向日常性、直接性，正是协商民主的功能定位；</li><li>「<strong>特有</strong>民主形式」——对应「特有形式和独特优势」这顶专属帽子。</li></ul>
+<p>三重限定逐一核对，唯一同时满足的是<strong>协商民主</strong>，选 <strong>B</strong>。</p>
+<h3>第 2 步：干扰项归因</h3>
+<table><thead><tr><th>选项</th><th>它是什么</th><th>为什么不对</th><th>对应的误解</th></tr></thead><tbody><tr><td>A</td><td>竞争性民主</td><td>西方竞选模式的标签性概念，不是我国「特有形式」的规范表述</td><td>用外来概念回答中国制度题</td></tr><tr><td>C</td><td>票决民主</td><td>≈「依法选举」的同义复述；题干「同时」二字已把它划在查找范围之外</td><td>没看清「选举之外」的限定，把题干前半句的近义词再选一遍</td></tr><tr><td>D</td><td>谈判民主</td><td>我国规范用词是「协商」，「谈判」非规范提法</td><td>被近义词带偏</td></tr></tbody></table>
+<h3>预判追问：为什么 C 是最强的干扰项</h3>
+<p>「票决民主」听着也是正式术语，而且题干里明明写着「依法选举」——这正是它迷惑的来源。但审句式：题干的结构是「A（选举）＋在 A 的<strong>同时</strong>另找到一种 B」，问的是<strong>B</strong>。C 与 A 处在同一层（都是投票类），把 A 的同义词再选一遍，等于答非所问。再看功能定位：票决是一时一刻的一次性动作，「日常政治生活中广泛持续深入参与」这句话票决无论如何接不住。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 C</strong>：被「依法选举」的近义词吸引，忽略「同时／之外」的句式限定。</li><li><strong>选 A</strong>：以为「竞争」是民主的应有之义；记牢我国语境的规范词是「协商」而非「竞争」「谈判」。</li><li><strong>概念错位</strong>：把「协商民主」当成政协专属——它的渠道有七大方面，基层村（居）民议事、企事业单位民主协商都在内。</li></ul>
+<blockquote>记忆锚点：<strong>选举＋协商 = 我国人民民主的两种重要实现形式</strong>；「日常政治生活中广泛持续深入参与」「特有形式和独特优势」= 协商民主的专属定语；竞争性／票决／谈判三个近义词均不对号。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

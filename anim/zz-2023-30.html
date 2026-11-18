@@ -1,8 +1,122 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-30 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-30</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·30 社会主义道德先进性的三个维度</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站（无 KaTeX）概念/推理链版：引擎 + 推理卡片累积展开，只改题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  {
+    "title": "审题眼：「先进」由什么决定",
+    "cls": "key",
+    "body": "<p>题干问：与以往道德形态相比，社会主义道德的<b>先进性</b>体现在哪。判定标准不是「调得多宽、地位多高」，而是<b>基础、立场、传承</b>三个维度。</p>",
+    "log": "先进与否看基础/立场/传承"
+  },
+  {
+    "title": "先立机制：道德由经济基础决定",
+    "cls": "key",
+    "body": "<p>道德是<b>由经济基础决定</b>的社会意识形态。社会主义道德建立在社会主义经济基础之上，以为人民服务为核心、集体主义为原则——「崭新类型」的根源在基础的翻新。</p>",
+    "log": "经济基础决定道德形态"
+  },
+  {
+    "title": "D：社会主义经济基础的反映",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p><b>基础维度</b>：先进首先来自<b>基础的先进</b>——反映先进生产力和文化的要求、反映最广大人民的根本利益。<b>入选</b>。</p>",
+    "log": "D 经济基础 ✓"
+  },
+  {
+    "title": "B：克服以往阶级道德的片面性和局限性",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p><b>立场维度</b>：旧道德把本阶级私利包装成普遍利益；社会主义道德服务<b>最广大人民</b>，突破其局限。<b>入选</b>。</p>",
+    "log": "B 克服旧道德局限 ✓"
+  },
+  {
+    "title": "A：对优秀道德资源批判继承、创新发展",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p><b>传承维度</b>：先进不是凭空另起炉灶，<b>扬弃</b>人类优秀道德成果本身就是新类型的构造方式。<b>入选</b>。</p>",
+    "log": "A 批判继承创新 ✓"
+  },
+  {
+    "title": "C：调节社会一切行为规范的准则",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p><b>「一切」绝对化</b>：社会规范分工协作——法律守底线、纪律管组织、道德立价值导向，道德不包办一切行为的调节。<b>不选</b>。</p>",
+    "log": "C 全称词「一切」✗"
+  },
+  {
+    "title": "干扰项归因：拿「地位高」冒充「先进」",
+    "cls": "bad",
+    "body": "<p>C 的迷惑手法：先进性讲<b>基础、立场与传承</b>，不讲<b>管辖范围的大小</b>。对照 32 题的「最大限度、最大诚意」——有无<b>原文出处</b>才是判断全称词真伪的标准，本题 C 无出处，是夸大。</p>",
+    "log": "地位高≠管辖一切"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>ABD</b>。记忆锚点：三据=<b>经济基础（D）＋克服旧道德局限（B）＋批判继承创新（A）</b>。</p>",
+    "log": "锁定 ABD"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "社会主义道德先进性的三个维度",
+  subtitle: "考点：社会主义道德的先进性 · 方法：基础—立场—传承三据＋全称词排查",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABD",
+    html: "记忆锚点：先进性三据＝社会主义经济基础的反映（基础·D）＋克服以往阶级道德片面性局限性（立场·B）＋对人类优秀道德资源批判继承创新发展（传承·A）；「调节一切行为」是无出处的全称词陷阱。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：社会主义道德先进性的三个判定维度</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——「先进」由什么决定</h3>
+<p>道德是<strong>由经济基础决定</strong>的社会意识形态，所以判断一种道德形态先进与否，标准不能是「调得多宽、地位多高」，而要看三个维度：<strong>站在什么经济基础上</strong>（基础）、<strong>为谁服务</strong>（立场）、<strong>同人类道德文明成果是什么关系</strong>（传承）。社会主义道德被称作「崭新类型的道德」，正因为三个维度全部翻新：</p>
+<ul><li><strong>基础新</strong>：建立在社会主义经济基础之上，反映先进生产力和文化的要求、反映最广大人民的根本利益（D）；</li><li><strong>立场新</strong>：以<strong>为人民服务为核心、集体主义为原则</strong>，突破以往剥削阶级道德把本阶级私利包装成普遍利益的片面性和局限性（B）；</li><li><strong>传承新</strong>：对人类历史上一切优秀道德资源<strong>批判继承、创新发展</strong>——先进不是凭空另起炉灶，扬弃本身就是新类型的构造方式（A）。</li></ul>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>落在哪个维度</th></tr></thead><tbody><tr><td>A 对人类优秀道德资源的批判继承和创新发展</td><td>✅</td><td>传承维度：继承文明成果正是先进性的构成部分</td></tr><tr><td>B 克服了以往阶级道德的片面性和局限性</td><td>✅</td><td>立场维度：从服务剥削阶级转向服务最广大人民</td></tr><tr><td>C 调节社会一切行为规范的准则</td><td>❌</td><td>「一切」绝对化：道德只是社会规范体系之一</td></tr><tr><td>D 它是社会主义经济基础的反映</td><td>✅</td><td>基础维度：道德由经济基础决定，先进首先来自基础的先进</td></tr></tbody></table>
+<h3>第 2 步：预判追问——C 为什么错，「地位高」为什么不等于「先进」</h3>
+<p>社会规范体系是<strong>分工协作的整体</strong>：法律守底线，纪律管组织内部，道德立价值导向——各管一段、互相补位。说道德「调节一切行为」，等于取消分工、把道德抬成包办一切的规范。C 的迷惑手法是拿「地位高」冒充「先进」：先进性讲的是<strong>基础、立场与传承</strong>，不是<strong>管辖范围的大小</strong>。同类的全称词「一切」「所有」「任何」在政治选择题里是高频雷区——但对照 32 题白皮书里的「最大限度」「最大诚意」可知，判断标准是<strong>有没有原文出处</strong>：无出处的夸大（本题 C）是陷阱，原文固定搭配则不是。</p>
+<h3>易错点：每处失误对应哪种误解</h3>
+<ul><li><strong>选 C</strong>：被「社会主义道德地位高」带偏——地位高不等于调节范围「一切」，全称词优先怀疑。</li><li><strong>漏选 A</strong>：以为批判继承旧道德会削弱「崭新类型」——恰恰相反，能否批判地继承人类优秀道德成果，本身就是先进性表现。</li><li><strong>漏选 B</strong>：只盯「经济基础决定」（D），忘了先进性还有立场一面——克服旧道德的阶级局限是不可缺的论据。</li></ul>
+<blockquote>记忆锚点：先进性三据=<strong>经济基础（D）＋克服旧道德局限（B）＋批判继承创新（A）</strong>；「调节一切」是无出处的全称词陷阱。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

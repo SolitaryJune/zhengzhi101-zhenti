@@ -1,8 +1,77 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-24 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-24</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2020-24 脱贫攻坚的主要举措（多选） · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 anim_math_concept_template（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: "审题眼：目标已定，问“主要举措”", cls: "key", sc: "step", tag: "审题", log: "锁定设问：达成脱贫目标的主要举措", body: "<p>目标已说死：到 2020 年现行标准下农村贫困人口实现脱贫、贫困县全部摘帽。设问：达成目标的<b>主要举措</b>——判断标准不是“像不像好话”，而是<b>是否在部署体系里有正式位置</b>。</p>" },
+  { t: "机制先行：四问给举措分工", cls: "key", sc: "shift", tag: "机制", log: "谁负责 · 怎么扶 · 靠什么动力 · 主攻哪里", body: "<p><b>谁负责</b>：组织保障——一把手负总责。</p><p><b>怎么扶</b>：路径与方法——精准方略。</p><p><b>靠什么动力</b>：内生动力——志与智。</p><p><b>主攻哪里</b>：最难啃的硬骨头——深度贫困地区。</p>" },
+  { t: "选项 A：坚持精准扶贫、精准脱贫 —— 对", cls: "good", sc: "ok", tag: "选项 A", ribbon: { k: 1, ok: true }, log: "基本方略：怎么扶的总路径", body: "<p>脱贫攻坚的<b>基本方略</b>：“六个精准”“五个一批”、因人因地施策——<b>怎么扶</b>的总路径。A 对。</p>" },
+  { t: "选项 B：强化党政一把手负总责的责任制 —— 对", cls: "good", sc: "ok", tag: "选项 B", ribbon: { k: 2, ok: true }, log: "组织保障：谁负责", body: "<p>中央统筹、省负总责、市县抓落实，五级书记抓扶贫——<b>谁负责</b>的组织保障。组织落实是头号举措：责任不落地，其他举措都空转。B 对。</p>" },
+  { t: "选项 C：注重扶贫同扶志扶智相结合 —— 对", cls: "good", sc: "ok", tag: "选项 C", ribbon: { k: 3, ok: true }, log: "内生动力：志解依赖、智补能力", body: "<p>“志”解决<b>不愿脱</b>的依赖，“智”解决<b>不能脱</b>的能力，阻断贫困代际传递——<b>靠什么动力</b>的内生动力实招。C 对。</p>" },
+  { t: "选项 D：重点攻克深度贫困地区脱贫任务 —— 对", cls: "good", sc: "ok", tag: "选项 D", ribbon: { k: 4, ok: true }, log: "主攻方向：最难啃的硬骨头", body: "<p>“三区三州”等<b>深度贫困地区</b>决定脱贫成败——<b>主攻哪里</b>的明确部署。D 对。</p>" },
+  { t: "结论：ABCD——每项确有出处", cls: "good", sc: "step", tag: "结论", log: "方法·组织·动力·重点四要素齐了", body: "<p>答案 <b>ABCD</b>：精准方略（方法）+ 一把手责任制（组织）+ 扶志扶智（动力）+ 深度贫困攻坚（重点）。</p><p>四项互不重叠、各有部署出处（十九大报告与《关于打赢脱贫攻坚战三年行动的指导意见》等），缺一不可——全选。</p>" }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "【2020·24】脱贫攻坚的主要举措（多选）",
+  subtitle: "考点：精准扶贫精准脱贫方略 · 脱贫攻坚部署体系",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）",
+  intro: "点击「▶ 播放」：用“谁负责·怎么扶·靠什么动力·主攻哪里”四问给举措分好工，再看每项是否有部署出处。",
+  snaps: snaps,
+  result: {
+    big: "答案 ABCD",
+    html: "记忆锚点：脱贫攻坚四件套——<b>精准方略（A）· 一把手责任制（B）· 扶志扶智（C）· 深度贫困攻坚（D）</b>＝方法·组织·动力·重点；全选题的检查点反转为“每项确有出处”，不凑错项。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：脱贫攻坚"主要举措"的分工体系</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——目标已定，问的是"怎么干"</h3>
+<p>题干已经把<strong>目标</strong>说死：到 2020 年现行标准下农村贫困人口实现脱贫、贫困县全部摘帽。设问落在"<strong>主要举措</strong>"——也就是达成目标<strong>怎么干</strong>。判断举措对不对，不能用"像不像好话"来筛，而要回到党中央脱贫攻坚的<strong>部署体系</strong>：一件举措必须在这个体系里有正式的位置。这个体系可以拆成四问——<strong>谁负责、怎么扶、靠什么动力、主攻哪里</strong>。四个选项恰好各占一问，谁也不和谁重叠。</p>
+<h3>第 1 步：四项对号入座</h3>
+<table><thead><tr><th>选项</th><th>在部署体系中的位置</th><th>要点</th></tr></thead><tbody><tr><td>A 坚持精准扶贫、精准脱贫</td><td><strong>怎么扶</strong>——基本方略</td><td>"六个精准""五个一批"，因人因地施策</td></tr><tr><td>B 强化党政一把手负总责的责任制</td><td><strong>谁负责</strong>——组织保障</td><td>中央统筹、省负总责、市县抓落实，五级书记抓扶贫</td></tr><tr><td>C 注重扶贫同扶志扶智相结合</td><td><strong>靠什么动力</strong>——内生动力</td><td>"志"解不愿脱的依赖，"智"补不能脱的能力，阻断贫困代际传递</td></tr><tr><td>D 重点攻克深度贫困地区脱贫任务</td><td><strong>主攻哪里</strong>——最难啃的硬骨头</td><td>"三区三州"等深度贫困地区决定脱贫成败</td></tr></tbody></table>
+<p>四项各占一问、互不重叠、各有部署出处——<strong>ABCD 全选</strong>。</p>
+<h3>第 2 步：预判"为什么能全选"</h3>
+<p>学习者最常见的追问是：多选题怎么会四个全对？判断标准不是"凑一个错项"，而是<strong>每项是否确有部署出处</strong>。这四项都出自党中央关于脱贫攻坚的正式部署（党的十九大报告与《关于打赢脱贫攻坚战三年行动的指导意见》等文件的原文表述）：精准方略是方法，一把手责任制是组织，扶志扶智是动力，深度贫困攻坚是重点——<strong>方法、组织、动力、重点</strong>四要素凑齐，缺一不可，所以没有可排除的项。题干给的目标（2020 年两个确保）也反向印证：要如期完成，这四件事一件都不能少。</p>
+<h3>易错点：干扰项与典型误解</h3>
+<ul><li><strong>不敢全选</strong>：对应"多选题必有一错"的机械直觉。政治多选全选很常见，判断只看"每项确有出处"——本题四项都是部署原文，全选。</li><li><strong>漏选 B</strong>：典型误解是把"举措"理解成<strong>具体帮扶动作</strong>（发钱、修路、搬迁），觉得"责任制"是组织安排、不算举措。其实脱贫攻坚是党领导的政治任务，<strong>组织保障正是头号举措</strong>——谁来干、谁担责没落实，其他举措都空转。</li><li><strong>漏选 C</strong>：把"扶志扶智"当成宣传口号。它针对"不想脱、不会脱"的内生动力短板，是<strong>实招</strong>，与单纯"输血式"帮扶相对。</li><li><strong>漏选 D</strong>：以为面上政策才叫举措，忽视"重点攻克深度贫困地区"是<strong>明确部署的主攻方向</strong>——剩下的硬骨头最集中在这里。</li></ul>
+<blockquote>记忆锚点：目标已定看举措——<strong>一把手负责（组织）+ 精准方略（路径）+ 扶志扶智（动力）+ 深度贫困攻坚（主攻）</strong>，方法·组织·动力·重点四件套全选。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

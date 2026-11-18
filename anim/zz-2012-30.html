@@ -1,8 +1,93 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-30 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-30</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-30 · 社会主义法治理念的基本内涵（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：封闭清单题审题 → 五项清单机制 → 逐项核对 A–D → 干扰项归因 → 结论。
+   全中文、自包含，仅引用本地 ../assets 引擎与样式，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼："基本内涵包括"＝封闭清单',
+    body: '<p>「基本内涵包括」这类措辞，考查的是<b>封闭的固定清单</b>：答案只能从教材概括的那几项里挑，不能凭「哪个选项听起来更像法治精神」来加项。</p><p>审题先划掉题干已给的两项——「依法治国、执法为民」已到场，剩下的任务是从 A–D 里找出清单<b>尚未出现的其余三项</b>。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行：五项清单与定位词',
+    body: '<p>社会主义法治理念五项内涵，按定位词成串记：</p><ul><li><b>依法治国</b>——核心内容（已给）；</li><li><b>执法为民</b>——本质要求（已给）；</li><li><b>公平正义</b>——价值追求；</li><li><b>服务大局</b>——重要使命；</li><li><b>党的领导</b>——根本保证。</li></ul><p>「核心—本质—价值—使命—保证」，缺一不可。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true },
+    title: 'A：公平正义——价值追求',
+    body: '<p><b>A 对</b>：公平正义是清单第三项，定位词「<b>价值追求</b>」。</p>' },
+  { cls: 'bad', tag: 'B 排除', ribbon: { k: 2, ok: false },
+    title: 'B：自由平等——价值正确，但不在清单',
+    body: '<p><b>B 错</b>：自由平等确实是法治的重要价值——这正是干扰项的手法：<b>用「价值正确」掩护「清单不符」</b>。</p><p>它属于更一般层面的法治价值理念（如社会主义核心价值观层面），不属于「社会主义法治理念基本内涵」这组<b>五项概括</b>。清单核对只有一个规则：以教材概括为准，不以价值高下为准。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: 'C：服务大局——重要使命',
+    body: '<p><b>C 对</b>：服务大局是清单第四项，定位词「<b>重要使命</b>」。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true },
+    title: 'D：党的领导——根本保证',
+    body: '<p><b>D 对</b>：党的领导是清单第五项，定位词「<b>根本保证</b>」。</p>' },
+  { cls: 'key', tag: '干扰项',
+    title: 'B 的手法与常见漏选',
+    body: '<p><b>选 B 的误解</b>：被「价值正确」带偏——凡是「基本内涵包括」类题目，答案永远以清单归属为准；内容再正确，不在这组五项里就不能选。</p><p><b>漏选 C/D 的误解</b>：只记了「依法治国、执法为民」两个最响亮的词，没把五项背全——清单题多选清单外项、少选清单内项都错。</p>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 ACD',
+    body: '<p>答案 <b>ACD</b>：题干已给「依法治国＋执法为民」，剩余三项＝公平正义＋服务大局＋党的领导。</p><p>自由平等是法治价值，但不在这组五项概括里。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2012·30】社会主义法治理念的基本内涵（多选）',
+  subtitle: '考点：思想道德修养与法律基础 · 社会主义法治理念五项内涵 · 封闭清单核对',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '五项一句话：<b>依法治国（核心）、执法为民（本质）、公平正义（价值）、服务大局（使命）、党的领导（保证）</b>。题干已给前两项，补齐 ACD——自由平等是法治价值，但不在清单。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：社会主义法治理念五项内涵——封闭清单题只按清单核对</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——"基本内涵包括"意味着什么</h3>
+<p>题干的说法是"社会主义法治理念的<strong>基本内涵包括</strong>依法治国、执法为民和……"。凡是"基本内涵包括""包括"这一类措辞，考查的都是一个<strong>封闭的固定清单</strong>：答案只能从教材概括的那几项里挑，不能凭"哪个选项听起来更像法治精神"来加项。审题时先把题干已给出的两项划掉——"依法治国、执法为民"已经到场，剩下的任务是从 A–D 里找出清单中<strong>尚未出现的其余三项</strong>。</p>
+<p>社会主义法治理念的五项内涵与各自定位词：</p>
+<table><thead><tr><th>内涵</th><th>定位词</th></tr></thead><tbody><tr><td>依法治国</td><td>核心内容</td></tr><tr><td>执法为民</td><td>本质要求</td></tr><tr><td>公平正义</td><td>价值追求</td></tr><tr><td>服务大局</td><td>重要使命</td></tr><tr><td>党的领导</td><td>根本保证</td></tr></tbody></table>
+<p>题干已给前两项（核心内容＋本质要求），剩余三项就是清单的后三项——<strong>公平正义、服务大局、党的领导</strong>，即 ACD。</p>
+<h3>第 1 步：逐项对号入座</h3>
+<ul><li><strong>A 对</strong>：公平正义——价值追求，清单第三项；</li><li><strong>C 对</strong>：服务大局——重要使命，清单第四项；</li><li><strong>D 对</strong>：党的领导——根本保证，清单第五项；</li><li><strong>B 错</strong>：自由平等——<strong>不在五项内涵的概括中</strong>。</li></ul>
+<h3>第 2 步：为什么自由平等会被放进来当干扰项</h3>
+<p>自由平等确实是法治的重要价值，这正是干扰项的手法：<strong>用"价值正确"掩护"清单不符"</strong>。它属于更一般层面的法治价值理念（如社会主义核心价值观层面的内容），而不是当年教材对"社会主义法治理念基本内涵"的这组五项概括。清单题的核对规则只有一个：<strong>以教材概括为准，不以价值高下为准</strong>——一个选项的内容再正确，只要不在这组五项里，就不能选。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 B</strong>：被"价值正确"带偏。凡是"基本内涵包括"类题目，答案永远以清单归属为准；看到"基本内涵""包括"就要警觉——这是封闭清单题，多选一个清单外的项、或少选一项都错。</li><li><strong>漏选 C 或 D</strong>：只记了"依法治国、执法为民"两个最响亮的词，没把五项背全。五项清单缺一不可，记忆时按"核心—本质—价值—使命—保证"的定位词成串记。</li></ul>
+<blockquote>记忆锚点：五项一句话——<strong>依法治国（核心）、执法为民（本质）、公平正义（价值）、服务大局（使命）、党的领导（保证）</strong>；自由平等是法治价值，但不在这组五项概括里。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

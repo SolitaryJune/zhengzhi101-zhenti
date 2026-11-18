@@ -1,8 +1,84 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-17 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-17</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2009-17 · 化“危”为“机”与意识的能动性</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：先立机制——意识能动性三层',
+    cls: 'key',
+    body: '<p>危机是客观的，但“化危为机”靠<b>人的主动应对</b>。意识的能动作用分三层上班：<b>认识世界</b>（看清危中之机）、<b>调节自身</b>（信心、恐惧影响行动）、<b>指导实践</b>（积极应对）。四个名言逐层对号。</p>' },
+  { title: '选项 A：信心比黄金更重要',
+    cls: 'good', k: 1, pick: true,
+    body: '<p>信心不能当钱花，但能<b>稳定预期、鼓舞行动</b>——精神力量通过人转化为物质力量。落在“调节自身＋指导实践”层。<b>符合意识能动性 → 入选</b>。</p>' },
+  { title: '选项 B：我们恐惧的就是恐惧本身',
+    cls: 'good', k: 2, pick: true,
+    body: '<p>恐惧是一种意识状态，它本身会瘫痪行动；<b>克服恐惧</b>正是意识对自身心理的调节作用。<b>符合 → 入选</b>。</p>' },
+  { title: '选项 C：问题与解决问题的方法是同时产生的',
+    cls: 'good', k: 3, pick: true,
+    body: '<p>恩格斯的话：问题出现时，解决它的<b>条件与方法根据</b>已孕育其中——但方法不会自动掉下来，要靠人<b>发挥能动性去发现、去用</b>。<b>符合 → 入选</b>。</p>' },
+  { title: '选项 D：事不避难，知难不难',
+    cls: 'good', k: 4, pick: true,
+    body: '<p>正视困难、把“难”认识透了就不再难——<b>认识与意识在转化矛盾中起作用</b>。<b>符合 → 入选</b>。</p>' },
+  { title: '结论：四项各占一层，全选 ABCD',
+    cls: 'good',
+    body: '<p>A、B 在“调节心理”层，C 在“主动找方法”层，D 在“认识转化困难”层——没有一个越出意识能动性范围。</p><p><b>答案 ABCD。</b>误排 C 的常见误解：把“方法同时产生”读成“无需认识活动自动解决”——它说的是根据已存在，方法仍要人去找。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2009-17 · 化“危”为“机”与意识的能动性',
+  subtitle: '2009 年第 17 题（多选）· 考点：意识的能动作用 · 逐项对号推演',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立意识能动性三层机制，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '记忆锚点：意识能动性三层——<b>认识深、心理稳、实践成</b>。A/B 调心理、C 找方法、D 化困难，四项全落其位；勿把 C 误读为“问题无需认识活动自动解决”。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：化"危"为"机"——意识的能动性原理如何对号入座</h2>
+<p>答案：<strong>ABCD（全选）</strong>。</p>
+<h3>第 0 步：先立机制——意识的能动性分三层"上班"</h3>
+<p>面对危机（客观存在的事实），"化危为机"靠什么？靠的就是<strong>意识的能动作用</strong>。它不是一句空话，而是分三个层面起作用：</p>
+<table><thead><tr><th>层面</th><th>在干什么</th><th>题干场景</th></tr></thead><tbody><tr><td>认识世界</td><td>有目的、有计划、有创造性地认识危机的成因与走势</td><td>看清"危"里藏着什么"机"</td></tr><tr><td>调节自身</td><td>意识对人的心理、生理活动和意志状态有调节作用</td><td>信心、恐惧情绪直接影响应对行动</td></tr><tr><td>指导实践</td><td>通过指导实践把观念的力量变成改造世界的力量</td><td>"主动积极应对"这个动作本身</td></tr></tbody></table>
+<p>题干"化'危'为'机'"已经把场景点明：危机的走向不取决于危机本身，而取决于人的主动应对——这正是意识能动性发挥作用的舞台。四个选项逐一对号。</p>
+<h3>第 1 步：四个选项逐层入座</h3>
+<ul><li><strong>A 信心比黄金更重要</strong>：信心不能当钱花，但能稳定预期、鼓舞行动——精神力量通过人转化为物质力量，属于意识的<strong>调节与反作用</strong>。✅</li><li><strong>B 我们恐惧的就是恐惧本身</strong>（罗斯福名言）：恐惧是一种意识状态，它本身会成为瘫痪行动的原因；克服恐惧正是意识<strong>对自身心理的调节</strong>。✅</li><li><strong>C 问题与解决问题的方法是同时产生的</strong>（恩格斯）：问题出现时，解决它的条件与"方法根据"也已孕育其中——但方法不会自动掉下来，要靠人<strong>发挥能动性去发现、去造</strong>。✅</li><li><strong>D 事不避难，知难不难</strong>：正视困难、把"难"认识透了就不再难——认识和意识在<strong>转化矛盾</strong>中起作用。✅</li></ul>
+<p>四个选项分别落在"调节心理（A、B）—主动找方法（C）—认识转化困难（D）"，全在意识能动性范围内 → <strong>ABCD</strong>。</p>
+<h3>易错点：每种误排对应哪种误解</h3>
+<ul><li><strong>误排除 C</strong>：把"方法同时产生"读成"问题无需人的认识活动就自动解决"——恰恰相反，它说的是解决方法的<strong>根据</strong>已客观存在，但把方法找出来、用起来靠人的能动活动。这正是后期公开参考答案把它收入 ABCD 时特意强调的点。</li><li><strong>漏 B</strong>：觉得"恐惧"太主观、不像原理——其实意识对心理生理活动的调节本来就是能动性的表现层之一。</li><li><strong>把能动性理解成"意识直接改变世界"</strong>：意识不能直接改变物质，必须通过实践；题干"应对"二字就是实践环节。四个选项没有一个说"意识直接消除危机"，所以不存在越界项。</li></ul>
+<blockquote>记忆锚点：意识能动性三层——<strong>认识深、心理稳、实践成</strong>；"危"变"机"靠这三层同时开工，四个名言各占其位，全选。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,101 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-31 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-31</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2026-31 · 法律权利与法律义务：依存与复合（2026 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：引文立结构，量词定生死',
+    cls: 'key',
+    body: '<p>"没有无义务的权利，也没有无权利的义务"——权利义务<b>结构对应</b>。据此三层关系：①相互依存（实现互为条件）；②目的与手段；③<b>有些</b>权利义务复合（劳动、受教育）。审题眼：盯住"有些"与"所有"的量词差。</p>' },
+  { title: '先立机制：你享权利 = 他人履义务',
+    cls: '',
+    body: '<p>财产权的实现以他人不侵犯的义务为条件；诉权的实现以法院受理裁判的义务为条件。义务是权利的<b>地基</b>，权利是义务的<b>依据</b>——这正是引文的结构含义，也是 C、D 的原理库。</p>' },
+  { title: '逐项分析 C：权利实现以义务履行为条件',
+    cls: 'good',
+    ribbon: {k:1, ok:true},
+    body: '<p>C："法律权利的实现必须以相应法律义务的履行为条件。"抽掉对应义务，权利只是纸面宣示——相互依存的"<b>实现</b>"维度。✅ 选。</p>' },
+  { title: '逐项分析 D：权利的存在发展以义务为条件',
+    cls: 'good',
+    ribbon: {k:2, ok:true},
+    body: '<p>D："法律权利的存在和发展都必须以法律义务的存在和发展为条件。"不止实现：义务范围随时代扩展（环保义务），才支撑新型权利（环境权益）——相互依存的"<b>存在</b>"维度。✅ 选。</p>' },
+  { title: '逐项分析 A：斩断依存的"义务本位"',
+    cls: 'bad',
+    ribbon: {k:3, ok:false},
+    body: '<p>A："法律义务离开法律权利，仍然有履行的价值。"与引文正面对撞："没有无权利的义务"——脱离权利谈义务，只剩单纯强制，正是法治思维要摆脱的<b>义务本位</b>旧观念。❌ 不选。</p>' },
+  { title: '逐项分析 B：有些 ≠ 所有',
+    cls: 'bad',
+    ribbon: {k:4, ok:false},
+    body: '<p>B："所有的法律权利和法律义务都具有复合性的关系。"教材原文是"<b>有些</b>"——劳动权、受教育权既是权利又是义务；但生命权对应他人不侵犯的义务，两个行为不是同一件事。特称偷换成全称，一个量词毙掉整项。❌ 不选。</p>' },
+  { title: '对号入座汇总',
+    cls: '',
+    body: '<p>A ❌ 割裂依存；B ❌ 有些偷成所有；C ✅ 实现维度；D ✅ 存在维度。→ 答案 <b>CD</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>CD</b>。相互依存两层：实现以义务履行为条件（C）、存在发展以义务存在发展为条件（D）；"所有复合"与"离开权利谈义务"都错。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2026-31 法律权利与法律义务的关系',
+  subtitle: '考点：权利义务相互依存 · 复合性的适用边界 · 量词辨析 —— 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 CD',
+    html: '<b>C</b> 法律权利的实现必须以相应法律义务的履行为条件；<b>D</b> 法律权利的存在和发展都必须以法律义务的存在和发展为条件——相互依存的两个维度。<br><br><b>干扰项：</b>A"义务离开权利仍有价值"割裂依存（义务本位）；B"所有的权利义务都复合"——教材为"<b>有些</b>"（劳动、受教育），特称偷换全称。<br><br><b>记忆锚点：</b>依存看实现与存在两层，复合只认"有些"；量词题先圈"所有/有些"。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：权利与义务——依存关系与"复合性"的适用边界</h2>
+<p>答案：<strong>CD</strong>。</p>
+<h3>第 0 步：先立机制——马克思这句话在说什么结构</h3>
+<p>"没有无义务的权利，也没有无权利的义务"，说的是权利与义务的<strong>结构对应关系</strong>：你享有权利，必有人履行相应义务；你履行义务，正是他人享有权利的保障。据此，教材把法律权利与法律义务的关系概括为三层：</p>
+<ol><li><strong>相互依存</strong>：法律权利的实现必须以相应法律义务的履行为条件；法律义务的履行必须以法律权利的享有为依据——权利的存在与发展同样以义务的存在与发展为条件；</li><li><strong>目的与手段</strong>：对具体主体而言，权利是目的、义务是手段，二者总是相互关联；</li><li><strong>复合性</strong>：<strong>有些</strong>法律权利和法律义务是复合的——一个行为既是权利又是义务（如劳动、受教育）。</li></ol>
+<p>注意第 3 层的量词："<strong>有些</strong>"——这就是排除 B 的钥匙；第 1 层的"互为条件"——这就是选 C、D 的依据。</p>
+<h3>第 1 步：C 对——权利的实现以义务的履行为条件</h3>
+<p>财产权的实现以他人负有不侵犯财产的义务为条件；诉权的实现以法院负有受理与裁判义务为条件。抽掉对应的义务，权利只是纸面宣示——这正是"没有无权利的义务"的具体化。</p>
+<h3>第 2 步：D 对——权利的存在与发展以义务的存在和发展为条件</h3>
+<p>不止"实现"这一层：连权利的<strong>存在和发展</strong>都要以义务的存在和发展为条件——义务范围随时代扩展（如环境保护义务），才支撑起新型权利（环境权益）的成立与发展。义务是权利的地基，这就是引文里"没有无义务的权利"的结构含义。</p>
+<h3>第 3 步：A 为什么错——"离开权利仍有价值"斩断依存</h3>
+<p>A 说法律义务离开法律权利"仍然有履行的价值"。这与引文正面对撞：没有无权利的义务——义务的正当性来自权利结构，脱离权利谈义务，只剩单纯的强制，恰恰是法治思维要摆脱的<strong>义务本位</strong>旧观念。A 割裂了相互依存关系。</p>
+<h3>第 4 步：B 为什么错——"所有……都复合"把特称说成全称</h3>
+<p>B 说<strong>所有的</strong>法律权利和法律义务都具有复合性。教材原文是"<strong>有些</strong>法律权利和法律义务具有复合性的关系"——如劳动权、受教育权既是权利又是义务；但绝大多数权利义务并不复合（生命权对应他人不侵犯的义务，两个行为不是同一件事）。把特称判断偷换成全称判断，一个量词就足以毙掉整项。</p>
+<h3>第 5 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>病灶</th></tr></thead><tbody><tr><td>A 义务离开权利仍有履行价值</td><td>❌</td><td>割裂相互依存，滑向义务本位</td></tr><tr><td>B 所有的权利义务都具复合性</td><td>❌</td><td>特称偷换全称（教材为"有些"）</td></tr><tr><td>C 权利实现以义务履行为条件</td><td>✅</td><td>相互依存的"实现"维度</td></tr><tr><td>D 权利存在发展以义务存在发展为条件</td><td>✅</td><td>相互依存的"存在"维度</td></tr></tbody></table>
+<p>→ 选 <strong>CD</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：把"劳动、受教育"两个经典复合例子泛化成普遍规律。量词题先圈"所有 / 有些"。</li><li><strong>漏选 D</strong>：只记"实现维度"（C），漏掉"存在与发展维度"（D）——依存关系有两层。</li><li><strong>误选 A 的隐含风险</strong>：受"多尽义务光荣"的传统表述影响，觉得义务可独立谈价值。法治思维的前提恰是权利义务<strong>统一</strong>观察。</li></ul>
+<blockquote>记忆锚点：权利义务三层关系——<strong>相互依存（C 实现、D 存在）、目的手段、有些复合（B 反：有些 ≠ 所有）</strong>；离开权利谈义务 = 义务本位旧观（A 反）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

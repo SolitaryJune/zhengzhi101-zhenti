@@ -1,8 +1,95 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-29 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-29</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-29 · 《关于正确处理人民内部矛盾的问题》（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：背景 → 矛盾学说五层框架 → 逐项对号 A–D → 全选题检验法 → 结论。
+   全中文、自包含，仅引用本地 ../assets 引擎与样式，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '背景',
+    title: '背景：1957 年 2 月，扩大的最高国务会议',
+    body: '<p>社会主义改造基本完成、大规模阶级斗争基本结束；苏共二十大破除「社会主义无矛盾」教条，波兰匈牙利事件冲击国际共运。</p><p>「社会主义社会还有没有矛盾」成了必须回答的问题——毛泽东的讲话正面回答，形成<b>社会主义社会矛盾学说</b>。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行：矛盾学说五层环环相扣',
+    body: '<ol><li><b>矛盾普遍存在</b>——社会主义社会充满着矛盾，矛盾推动社会发展；</li><li><b>基本矛盾</b>——仍然是生产关系和生产力之间、上层建筑和经济基础之间的矛盾；</li><li><b>性质不同</b>——非对抗性，「又相适应又相矛盾」；</li><li><b>解决途径</b>——经过社会主义制度本身不断地得到解决；</li><li><b>落脚主题</b>——区分两类矛盾，把正确处理人民内部矛盾作为国家政治生活的主题。</li></ol><p>A→B→C→D 恰好各占一层。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true },
+    title: 'A：充满着矛盾——学说第一层',
+    body: '<p><b>A 对</b>：社会主义社会<b>充满着矛盾</b>——打破「制度建立＝矛盾消灭」的教条，承认矛盾普遍性贯彻到底。</p>' },
+  { cls: 'good', tag: 'B 入选', ribbon: { k: 2, ok: true },
+    title: 'B：基本矛盾框架——学说第二层',
+    body: '<p><b>B 对</b>：基本矛盾<b>仍然是生产关系和生产力之间、上层建筑和经济基础之间的矛盾</b>——框架与旧社会相同，但性质不同。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: 'C：制度自身解决——学说第三、四层',
+    body: '<p><b>C 对</b>：矛盾是<b>非对抗性</b>的，可以<b>经过社会主义制度本身不断地得到解决</b>——靠制度自我调整完善，不需要推翻制度。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true },
+    title: 'D：国家政治生活的主题——学说第五层',
+    body: '<p><b>D 对</b>：区分两类矛盾（敌我矛盾用专政、人民内部矛盾用民主的方法，「团结—批评—团结」），<b>把正确处理人民内部矛盾作为国家政治生活的主题</b>——讲话的题目与落脚点。</p>' },
+  { cls: 'key', tag: '全选题检验',
+    title: '全选题怎么验：反向找"越界项"',
+    body: '<p>全选题不能靠「感觉都对」，要反向检验：<b>有没有一项越出讲话范围、或与原意相反</b>？</p><p>本题四项是学说骨架（普遍性→基本矛盾→解决途径→政治主题），一项都不能少。只有某项「加料」或「换词」（如把「敌我矛盾也用民主方法解决」混进来）才可排除。</p>' },
+  { cls: 'key', tag: '漏选归因',
+    title: '常见漏选：D 是"主张"就不算？',
+    body: '<p><b>漏选 D</b>：以为 D 是「政策主张」而非「矛盾学说」——其实 D 正是讲话的题目与主题，讲矛盾学说就是为了正确处理人民内部矛盾。</p><p><b>漏选 A/B</b>：以为社会主义制度建立后「矛盾就消灭了」或基本矛盾是资本主义专属——讲话的突破恰恰在于承认矛盾仍存在，只是性质与解决方式不同。</p>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 ABCD',
+    body: '<p>答案 <b>ABCD</b>：四项各占学说一层，没有一项越出讲话范围。</p><p>「又相适应又相矛盾」——基本矛盾框架相同、性质与解决方式不同。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2012·29】《关于正确处理人民内部矛盾的问题》强调指出（多选）',
+  subtitle: '考点：中国近现代史 · 社会主义社会矛盾学说 · 全选题反向检验',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '矛盾学说五层＝<b>充满矛盾 → 基本矛盾（生产关系↔生产力、上层建筑↔经济基础）→ 非对抗性质 → 制度自身解决 → 人民内部矛盾为国家政治生活主题</b>。A、B、C、D 各占一层——全选，一项不能少。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：《关于正确处理人民内部矛盾的问题》的矛盾学说——全选题怎么验</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——这篇讲话在什么背景下讲了什么</h3>
+<p>1957 年 2 月 27 日，毛泽东在扩大的最高国务会议上发表《关于正确处理人民内部矛盾的问题》。此时社会主义改造已经基本完成、大规模阶级斗争基本结束，加上苏共二十大破除"社会主义无矛盾"教条、波兰匈牙利事件的冲击，"社会主义社会还有没有矛盾"成了必须回答的问题。讲话正面回答，形成一套<strong>社会主义社会矛盾学说</strong>，可以拆成环环相扣的五层：</p>
+<ol><li><strong>矛盾普遍存在</strong>：社会主义社会不是没有矛盾，而是<strong>充满着矛盾</strong>，正是矛盾推动社会主义社会向前发展；</li><li><strong>基本矛盾</strong>：社会主义社会的基本矛盾<strong>仍然是生产关系和生产力之间、上层建筑和经济基础之间的矛盾</strong>——基本矛盾框架与旧社会相同，但表现为"又相适应又相矛盾"；</li><li><strong>性质不同</strong>：它是在人民根本利益一致基础上的矛盾，是<strong>非对抗性</strong>的；</li><li><strong>解决途径</strong>：正因为非对抗，它<strong>可以经过社会主义制度本身，不断地得到解决</strong>——靠制度自我调整完善，而不需要推翻制度；</li><li><strong>落脚主题</strong>：区分两类不同性质的矛盾（敌我矛盾用专政、人民内部矛盾用民主的方法，"团结—批评—团结"），并<strong>把正确处理人民内部矛盾作为国家政治生活的主题</strong>。</li></ol>
+<h3>第 1 步：四个选项逐一对号——每一项都在讲话范围之内</h3>
+<table><thead><tr><th>选项</th><th>对应学说第几层</th><th>判定</th></tr></thead><tbody><tr><td>A 社会主义社会充满着矛盾</td><td>第 1 层：矛盾普遍性</td><td>对</td></tr><tr><td>B 基本矛盾仍是生产关系和生产力之间、上层建筑和经济基础之间的矛盾</td><td>第 2 层：基本矛盾内容</td><td>对</td></tr><tr><td>C 矛盾可以通过社会主义制度本身得到解决</td><td>第 3、4 层：非对抗性质＋制度自身解决</td><td>对</td></tr><tr><td>D 把正确处理人民内部矛盾作为国家政治生活的主题</td><td>第 5 层：讲话的落脚点与主题</td><td>对</td></tr></tbody></table>
+<p>四个选项分别落在学说的四个不同层面，没有一项超出讲话内容——全选。</p>
+<h3>第 2 步：全选题的检验方法</h3>
+<p>全选题不能靠"感觉都对"，要反向检验：<strong>有没有一项越出讲话范围、或与讲话原意相反</strong>。本题四项恰好是矛盾学说的骨架（普遍性→基本矛盾→解决途径→政治主题），一项都不能少；只有当某项"加料"或"换词"（例如把"敌我矛盾也用民主方法解决"这类反向表述混进来）时才可排除。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选 D</strong>：以为 D 是"政策主张"而非"矛盾学说"，与"强调指出"的问法不符。其实 D 正是这篇讲话的题目与主题——讲矛盾学说，最终就是为了正确处理人民内部矛盾。</li><li><strong>漏选 A/B</strong>：以为社会主义制度建立后"矛盾就消灭了"，或以为基本矛盾是资本主义社会专属。讲话的突破恰恰在于承认社会主义社会仍充满矛盾，基本矛盾框架相同，只是性质与解决方式不同。</li></ul>
+<blockquote>记忆锚点：矛盾学说五层——<strong>充满矛盾 → 基本矛盾（生产关系↔生产力、上层建筑↔经济基础）→ 非对抗性质 → 制度自身解决 → 人民内部矛盾为国家政治生活主题</strong>；本题 ABCD 各占一层，全选。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

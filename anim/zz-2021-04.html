@@ -1,8 +1,104 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-04 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-04</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·04 引文两半：资本主义的历史地位</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：拆引文',
+    cls: 'key',
+    body: '<p>马克思的话是<b>一分为二</b>：前半句「发展社会劳动的生产力」＝<b>历史功绩</b>；后半句「不自觉地创造着一种更高级的生产形式的物质条件」＝<b>孕育否定自身、超越自身的条件</b>。</p>',
+    log: '拆引文：功绩一半 + 自我否定一半' },
+  { title: '立模型：合题是什么',
+    cls: 'key',
+    body: '<p>两半合起来：既解放生产力、又在自我否定中通向更高形态 → 资本主义<b>不是永恒的</b>，是<b>历史的、过渡性的</b>生产方式。选项的区分点就在「只见一面」上。</p>',
+    log: '合题：功绩 + 自我否定 = 过渡性' },
+  { title: 'B：无限制？',
+    cls: 'bad',
+    body: '<p>「无限制」绝对化。<b>基本矛盾</b>（生产社会化与生产资料私人占有）决定它对生产力的容纳有限度——这个限度正是「过渡性」的依据。<b>B 错误</b>。</p>',
+    ribbon: { k: 2, ok: false },
+    log: 'B 无限制绝对化' },
+  { title: 'A：越扩张越不利？',
+    cls: 'bad',
+    body: '<p>与前半句正好相反。资本主义阶段恰恰<b>大规模创造</b>了物质财富，「越不利于创造」接不住引文。<b>A 错误</b>。</p>',
+    ribbon: { k: 1, ok: false },
+    log: 'A 方向反了' },
+  { title: 'C：越发展越巩固？',
+    cls: 'bad',
+    body: '<p>只见「巩固」一面。后半句说的恰恰是在<b>瓦解自身</b>——发展生产力在为取代它的更高级形式积累物质条件。<b>C 错误</b>。</p>',
+    ribbon: { k: 3, ok: false },
+    log: 'C 只见巩固不见自我否定' },
+  { title: 'D：历史的过渡性的',
+    cls: 'good',
+    body: '<p>功绩（发展生产力）+ 自我否定（创造更高级形式的物质条件）→ 有生有灭、只是历史长河中的一段：<b>历史的、过渡性的生产方式</b>。<b>D 正确</b>。</p>',
+    ribbon: { k: 4, ok: true },
+    log: 'D 命中：历史性 + 过渡性' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>D</b>。记忆锚点：引文两半＝<b>功绩 + 自我否定</b> → 资本主义是历史的、过渡性的生产方式；「无限制 / 越…越巩固」都是只见一面的错误。</p>',
+    log: '锁定 D：历史的过渡性的生产方式' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "发展生产力又「创造更高级生产形式的物质条件」：资本主义的历史地位",
+  subtitle: "考点：资本主义的历史地位（历史性 · 过渡性） · 方法：引文两半取合题",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A 2=B 3=C 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」先拆引文再对号入座。',
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "资本主义在发展生产力的同时<b>不自觉地创造着更高级生产形式的物质条件</b>——它是<b>历史的、过渡性的</b>生产方式。记忆锚点：A 方向反、B「无限制」、C「越巩固」都只见一面。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：发展生产力又「创造更高级生产形式的物质条件」——资本主义的历史地位</h2>
+<p>答案：<strong>D</strong>。</p>
+<h3>第 0 步：先把引文拆成两半</h3>
+<p>马克思这句话是<strong>一分为二</strong>的结构：</p>
+<ul><li>前半句「发展社会劳动的生产力」——资本主义有<strong>历史功绩</strong>：比以往一切生产方式更能解放和发展生产力；</li><li>后半句「不自觉地创造着一种更高级的生产形式的物质条件」——资本主义在发展自己的同时，<strong>孕育着否定自身、超越自身</strong>的条件（生产社会化与私人占有的矛盾不断积累，为更高级的生产形式准备物质前提）。</li></ul>
+<p>两半合起来：资本主义既是生产力发展的一个特定历史阶段，又在自我否定中通向更高的形态 → 它不是永恒的，而是<strong>历史的、过渡性的</strong>生产方式。</p>
+<h3>第 1 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>病根</th></tr></thead><tbody><tr><td>A 资本越扩张越不利于创造更多的物质财富</td><td>❌</td><td>与前半句正好相反；资本主义阶段恰恰<strong>大规模创造</strong>了物质财富</td></tr><tr><td>B 资本主义生产方式能够无限制地解放和发展社会生产力</td><td>❌</td><td>「无限制」绝对化；<strong>基本矛盾</strong>（生产社会化与生产资料私人占有）决定它对生产力的容纳有限度</td></tr><tr><td>C 资本越发展越有利于巩固资本主义</td><td>❌</td><td>只看到「巩固」的一面；后半句说的是在<strong>瓦解自身</strong>——为更高级形式创造条件</td></tr><tr><td>D 资本主义生产是一种历史的过渡性的生产方式</td><td>✅</td><td>两半引文的合题：有历史功绩 + 自我否定 → 有生有灭，只是历史长河中的一段</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 C（只看半句）</strong>：抓住「发展生产力」就推断「越发展越巩固」。但引文的重心在后半句——发展生产力恰恰在为<strong>取代资本主义</strong>的更高级形式积累物质条件，越发展，过渡性越显。</li><li><strong>选 B（把前半句推到极致）</strong>：承认「能解放生产力」是对的，加上「无限制」就错了——基本矛盾决定了周期性危机与容纳限度，正是这个限度构成「过渡性」的依据。</li><li><strong>选 A（方向反了）</strong>：把对资本主义的批判想象成「不创造财富」，连前半句都没有接住。</li></ul>
+<blockquote>记忆锚点：引文两半 ＝ <strong>功绩（发展生产力）+ 自我否定（创造更高级形式的物质条件）</strong> → 资本主义是<strong>历史的、过渡性的</strong>生产方式；「无限制 / 越…越巩固」都是只见一面的错误。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

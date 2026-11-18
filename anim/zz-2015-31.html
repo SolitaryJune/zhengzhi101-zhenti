@@ -1,8 +1,96 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-31 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-31</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2015-31 "风能进，雨能进，国王不能进" · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：破屋子挡住千军万马',
+    cls: 'key', sc: 'step', tag: '审题',
+    body: '<p>老皮特：最穷的人在破屋子里也能对抗国王——"风能进，雨能进，<b>国王不能进</b>"。</p><p>两个意象：破屋子 = <b>最穷的人的私权利</b>；千军万马 = <b>最强的公权力</b>。问：这凸显权力与权利是什么关系。</p>',
+    log: '破屋子=私权利，千军万马=公权力' },
+  { t: '机制卡：权利是源，权力是流',
+    cls: 'key', sc: 'shift', tag: '机制',
+    body: '<p>基准关系是"<b>权利本位</b>"：人民的权利是<b>源</b>，国家权力是<b>流</b>——公权力由人民授权而产生，因保障权利而获得合法性。</p><p>推论：权力以权利为<b>界限</b>、受权利<b>制约</b>；绝不是权力决定权利、更不是权力优先。</p><p>为什么风、雨能进？风、雨是<b>自然力</b>，吹进淋进无关许可、谈不上越权；这句话拦的只是<b>公权力</b>那只脚——划的是"公权力—私权利"的界。</p>',
+    log: '权利本位：权力以权利为界、受权利制约' },
+  { t: '选项 A：权力应当以权利为界限 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A', ribbon: { k: 1, ok: true },
+    body: '<p>"国王不能踏进这所房子"——公权力到此<b>止步</b>，边界正是私权利：再破的屋子，也是权力的禁区。</p><p><b>A 对</b>。</p>',
+    log: '"不能进"= 以权利为界 → A 选' },
+  { t: '选项 C：权力必须受到权利的制约 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C', ribbon: { k: 3, ok: true },
+    body: '<p>私权利对公权力构成<b>刚性约束</b>——破屋子挡住千军万马，靠的正是权利对权力的制约。</p><p>"界限"（A）与"制约"（C）是一枚硬币的两面。<b>C 对</b>。</p>',
+    log: '破屋挡千军 = 权利制约权力 → C 选' },
+  { t: '选项 B：权力决定权利 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 B', ribbon: { k: 2, ok: false },
+    body: '<p>把源流<b>颠倒</b>了：权利产生并决定权力，不是权力决定权利——凡"权力本位"的表述都错。</p><p><b>B 不选</b>。</p>',
+    log: '源流颠倒，权力本位必错 → B 不选' },
+  { t: '选项 D：权力优先于权利 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 D', ribbon: { k: 4, ok: false },
+    body: '<p>同样是"权力本位"的表述：<b>权利优先</b>，权力因保障权利而存在——题干恰恰在讲权力碰壁，不是权力至上。</p><p><b>D 不选</b>。</p>',
+    log: '权力至上与题干相撞 → D 不选' },
+  { t: '结论：AC',
+    cls: 'good', sc: 'done', tag: '结论',
+    body: '<p>答案 <b>AC</b>：以权利为界（A）+ 受权利制约（C）。</p><p>排除 B、D：都是源流颠倒的"权力本位"。</p>',
+    log: '锁定 AC：界限 + 制约' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2015·31】"风能进，雨能进，国王不能进"凸显的关系（多选）',
+  subtitle: '考点：权力与权利 · 先立"权利本位"机制再对号',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先立"权利是源、权力是流"的机制，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 AC',
+    html: '记忆锚点：权利本位——<b>权力以权利为界（A）+ 受权利制约（C）</b>；"权力决定权利""权力优先于权利"（B、D）都是源流颠倒。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解："风能进，雨能进，国王不能进"——权力与权利谁给谁划界</h2>
+<p>答案：<strong>AC</strong>。</p>
+<h3>第 0 步：先立机制——权利是源，权力是流</h3>
+<p>法理上的基准关系：人民的权利是<strong>源</strong>，国家权力是<strong>流</strong>——公权力由人民授权而产生，因保障权利而获得合法性。所以权力与权利的关系是"权利本位"：权力以权利为界限、受权利制约；绝不是权力决定权利，更不是权力优先于权利。老皮特的话是这一关系的经典意象：屋子再破（最穷的人的私权利），国王的千军万马（最强的公权力）也不得跨进门槛——<strong>公权力的边界止于私权利</strong>。</p>
+<p>先把最可能追问的"为什么"答掉：<strong>为什么风能进、雨能进，偏偏国王不能进？</strong> 因为风、雨是自然力，吹进淋进无关"许可"，也谈不上越权；这句话拦的只是<strong>公权力</strong>这只脚踏进来——它划的不是"拒绝一切外来影响"的界，而是"公权力—私权利"之间那条刚性的线。再破的屋子也是权利的领地，再大的权威到此止步。</p>
+<h3>第 1 步：对号入座</h3>
+<ul><li><strong>A 权力应当以权利为界限</strong> ✅："国王不能踏进这所房子"——公权力到此止步，正是以权利为界限。</li><li><strong>B 权力决定权利</strong> ❌：源流颠倒。权利产生并决定权力，不是权力决定权利——凡"权力本位"的表述都错。</li><li><strong>C 权力必须受到权利的制约</strong> ✅：私权利对公权力构成刚性约束——破屋子挡住千军万马，靠的正是权利对权力的制约。</li><li><strong>D 权力优先于权利</strong> ❌：同样是权力本位的表述。权利优先，权力因保障权利而存在。</li></ul>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 B/D</strong>：被"国王的权威"震住，以为权力至上。题干恰恰在讲权力碰壁——"王不能进家"的隐喻正是权力不是无限的。</li><li><strong>漏选 C</strong>：只看到"界限"（A），没意识到"不能进"本身就是"受制约"（C）——界限与制约是一枚硬币的两面。</li></ul>
+<blockquote>记忆锚点：权利本位——<strong>权力以权利为界（A）+ 受权利制约（C）</strong>；"权力决定权利""权力优先于权利"（B、D）都是源流颠倒。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

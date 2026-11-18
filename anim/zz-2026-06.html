@@ -1,8 +1,137 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-06 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-06</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2026·06 十三大立论「这个设计好」好在哪</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行格子（时间线、依据格用）
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：「立论根据」＝全篇的总依据",
+    "cls": "key",
+    "tag": "审题",
+    "log": "题眼：十三大报告全篇以初级阶段作为立论的根据",
+    "body": "<p>1987 年 3 月《关于草拟十三大报告大纲的设想》提出：报告全篇以<b>社会主义初级阶段</b>作为立论的根据。立论根据＝讲什么任务、定什么政策都由以推出的<b>总前提</b>，不是报告里的普通观点。邓小平批示：「这个设计好。」</p>"
+  },
+  {
+    "title": "先立机制：初级阶段怎样「立」起来",
+    "cls": "key",
+    "tag": "机制",
+    "log": "最大实际 → 升格为总依据 → 路线方针政策由此出发",
+    "body": cells([
+      {"t": "我国社会主义<br>还处在初级阶段<br><b>最大实际</b>", "c": "ok", "l": "国情"},
+      {"t": "升格为立论根据<br><b>出发点·根本依据</b>", "c": "hit", "l": "关键"},
+      {"t": "路线方针政策<br>由此出发制定", "c": "", "l": "落点"}
+    ]) + "<p>把「初级阶段」从<b>一个判断</b>升格为<b>立论根据</b>，意味着一切路线方针政策都从初级阶段的实际出发来制定——「一个中心、两个基本点」的基本路线正由此构建。「首次」必须落在这层关系上。</p>"
+  },
+  {
+    "title": "C 对号：出发点与根本依据",
+    "cls": "good",
+    "tag": "命中",
+    "log": "「立论根据」＝制定路线方针政策的出发点 → C 正确",
+    "ribbon": {"k": 3, "ok": true},
+    "body": "<p>「明确了社会主义初级阶段是<b>制定路线方针政策的出发点和根本依据</b>」——与「立论根据」直接对应，正是《设想》设计思路的首次定位，故邓小平批「这个设计好」。<b>C 正确</b>。</p>"
+  },
+  {
+    "title": "B 排除：「首次提出」名不副实",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "论断 1981 年《历史决议》已有 → B 排除",
+    "ribbon": {"k": 2, "ok": false},
+    "body": "<p>「我们的社会主义制度还是处在初级的阶段」这一论断，<b>早在 1981 年十一届六中全会《历史决议》就已提出</b>（十二大报告重申）。《设想》首次的不是「提出概念」，而是把概念<b>升格为立论根据</b>。<b>B 错误</b>。</p>"
+  },
+  {
+    "title": "D 排除：常识表述 ≠ 《设想》首创",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "「根本任务」是通用结论 → D 排除",
+    "ribbon": {"k": 4, "ok": false},
+    "body": "<p>「发展生产力是社会主义现代化的根本任务」是通用结论、表述正确，但题干限的是<b>《设想》「首次」什么</b>——它没扣住「以初级阶段立论」这一设计思路的独特之处。<b>D 错误</b>。</p>"
+  },
+  {
+    "title": "A 排除：主题错配",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "《设想》不谈两阶段关系 → A 排除",
+    "ribbon": {"k": 1, "ok": false},
+    "body": "<p>「系统阐明社会主义和共产主义的关系」与《设想》主题无关——《设想》通篇谈的是初级阶段与报告纲领的关系，不是两个社会阶段的关系。<b>A 错误</b>。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "tag": "结论",
+    "log": "锁定 C：初级阶段是制定路线方针政策的出发点和根本依据",
+    "body": "<p>答案 <b>C</b>。记忆锚点：初级阶段＝最大实际＝制定路线方针政策的<b>出发点和根本依据</b>；「提出概念」（1981《历史决议》）≠「立为根据」（1987）。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'))),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  "title": "政治 2026·06 十三大立论「这个设计好」好在哪",
+  "subtitle": "考点：社会主义初级阶段 · 方法：先立「立论根据＝总依据」机制，再核「首次」卡点",
+  "counterLabel": "推理步",
+  "ribbonTitle": "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  "intro": "点击「▶ 播放」逐步展开推理链。",
+  "snaps": snaps,
+  "result": {
+    "big": "答案 C",
+    "html": "记忆锚点：<b>初级阶段＝最大实际＝制定路线方针政策的出发点和根本依据</b>；1981《历史决议》首次提出论断，1987 年首次立为根据并系统阐述理论、确立基本路线。选 <b>C</b>。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：十三大报告为什么以「初级阶段」立论</h2>
+<p>答案：<strong>C（明确了社会主义初级阶段是制定路线方针政策的出发点和根本依据）</strong>。</p>
+<h3>第 0 步：先立机制——「立论根据」是什么意思</h3>
+<p>一份报告的「立论根据」，就是全篇纲领由以展开的<strong>总依据</strong>：讲什么任务、定什么政策，都从这里推出。1987 年 3 月《关于草拟十三大报告大纲的设想》提出十三大报告全篇以社会主义初级阶段作为立论的根据，邓小平批示「这个设计好」——好就好在：</p>
+<ol><li>中国的社会主义还处在初级阶段，这是最大的实际、最基本的国情；</li><li>把这个判断升格为<strong>立论根据</strong>，意味着路线、方针、政策都要从初级阶段的实际出发来制定；</li><li>党的「一个中心、两个基本点」的基本路线，正是由此构建的。</li></ol>
+<p>所以「首次」必须落在<strong>初级阶段与路线方针政策的关系</strong>上——它从「一个判断」升格为「制定一切政策的出发点与根本依据」。</p>
+<h3>第 1 步：追问「为什么不是 B」——「首次」卡在哪</h3>
+<p>「我们的社会主义制度还是处在初级的阶段」这一论断，<strong>早在 1981 年十一届六中全会《关于建国以来党的若干历史问题的决议》中就已提出</strong>（十二大报告又作了重申）。《设想》的新意不在「提出初级阶段这个概念」，而在把已有概念<strong>升格为立论根据</strong>——题干问的是《设想》「首次」什么，B 的「首次」名不副实。这是本题唯一的硬排除点。</p>
+<h3>第 2 步：其余选项对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因</th></tr></thead><tbody><tr><td>A 系统阐明了社会主义和共产主义的关系</td><td>❌</td><td>主题错配——《设想》通篇谈初级阶段与报告纲领，不涉及两个阶段关系的系统阐述</td></tr><tr><td>B 提出我们的社会主义制度还是处在社会主义初级阶段</td><td>❌</td><td>论断 1981 年《历史决议》已提出，并非 1987 年《设想》「首次」</td></tr><tr><td>C 明确了社会主义初级阶段是制定路线方针政策的出发点和根本依据</td><td>✅</td><td>与「立论根据」直接对应——初级阶段升格为总依据，故「这个设计好」</td></tr><tr><td>D 明确了发展生产力是社会主义现代化的根本任务</td><td>❌</td><td>「发展生产力是根本任务」是通用结论，并非《设想》首次明确的内容，也没扣住「立论根据」</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 B（把「提出概念」当「首次」）</strong>：概念早已提出，《设想》首次的是「作为立论根据」这一层关系——审题眼在「立论的根据」几个字上。</li><li><strong>选 D（拿常识表述凑数）</strong>：「根本任务」表述本身正确，但「正确」不等于「该《设想》首次」——题干限定的是《设想》的首创之处。</li><li><strong>选 A（把「报告可能涉及」当「首次」）</strong>：报告里可能出现的内容与设计思路的「首次」是两回事。</li></ul>
+<blockquote>记忆锚点：初级阶段＝最大实际、最基本的国情＝制定路线方针政策的<strong>出发点和根本依据</strong>；「提出概念」（1981《历史决议》）≠「立为根据」（1987）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

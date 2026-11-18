@@ -1,8 +1,128 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-04 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-04</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2020·04 列宁「一国胜利论」的理论依据</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站无 KaTeX 版·纯文本推理链卡片：外壳沿用 assets/anim-engine.js + anim.css，
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每步完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>十月革命前，列宁得出「社会主义可能首先在少数甚至单独一个资本主义国家内胜利」。问「<b>理论依据</b>」——要找的是<b>规律</b>层面的支点，不是现实条件，更不是错误表述。</p>",
+    "log": "审题：找「理论依据」=规律"
+  },
+  {
+    "title": "先立模型：两幅革命图景各挂一条时代前提",
+    "cls": "key",
+    "body": "<ul><li><b>自由竞争阶段</b>：各国大体平衡发展 → 马、恩设想主要资本主义国家<b>同时发生、大体同时胜利</b></li><li><b>垄断阶段</b>：后起国跳跃式赶超、老牌国趋于停滞，<b>不平衡空前加剧</b> → 革命可能在<b>链条最薄弱环节</b>首先突破</li></ul><p>变量正是「不平衡」。</p>",
+    "log": "模型：平衡→同时胜利；不平衡→一国胜利"
+  },
+  {
+    "title": "推理链：不平衡如何一步步导出「一国胜利」",
+    "cls": "step",
+    "body": "<p><b>不平衡加剧</b> → 后起强国按新实力要求<b>重新瓜分世界</b> → 矛盾不可调和，爆发<b>帝国主义战争</b> → 战争把链条拖到<b>最薄弱处</b> → 革命可<b>首先在一国或数国突破</b>。</p>",
+    "log": "不平衡→战争→薄弱环节→一国突破"
+  },
+  {
+    "title": "A：发展不平衡规律——规律层面的依据",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p>列宁 1915 年《论欧洲联邦口号》正是沿这条链写下结论；链条每一环都踩在「资本主义<b>经济和政治发展不平衡规律</b>」上。<b>A 正确</b>。</p>",
+    "log": "A 是推理链的支点 → 正确"
+  },
+  {
+    "title": "B：「不断衰落」不是事实也不成依据",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>垄断阶段资本主义<b>仍能发展</b>，「不断衰落」不符合事实；「垂死」指历史<b>趋势</b>，不是现状描述。<b>B 错误</b>。</p>",
+    "log": "B 表述本身错误 → 排除"
+  },
+  {
+    "title": "C：理论传播是思想条件，推不出「一国」",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>科学社会主义广泛传播是革命的<b>思想条件</b>，各国普遍存在——回答不了「为什么偏偏<b>单独一国</b>首先胜利」。<b>C 错误</b>。</p>",
+    "log": "C 是思想条件 → 排除"
+  },
+  {
+    "title": "D：力量壮大是普遍状况，同样推不出「一国」",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>无产阶级力量壮大在<b>各国普遍存在</b>，顶多推出「革命可能发生」，推不出「首先在一国」。<b>D 错误</b>。</p>",
+    "log": "D 是普遍状况 → 排除"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>A</b>。C、D 把「现实条件」当「理论依据」，B 表述错误。记忆锚点：一国胜利论的支点=<b>资本主义经济和政治发展不平衡规律</b>；不平衡→战争→薄弱环节→首先一国（数国）胜利。</p>",
+    "log": "锁定 A：经济政治发展不平衡规律"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "列宁「一国胜利论」的理论依据",
+  subtitle: "考点：社会主义革命与发展不平衡 · 方法：两幅图景对照 + 推理链回溯找规律",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 A",
+    html: "记忆锚点：<b>资本主义经济和政治发展不平衡规律</b>是一国胜利论的唯一理论依据。抓题眼「<b>理论依据</b>」：只有规律能当依据——C、D 是各国普遍存在的现实条件，B 是不符合事实的表述；「不平衡 → 战争 → 薄弱环节 → 首先一国胜利」这条链要能默写。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：列宁「一国胜利论」的理论依据</h2>
+<p>答案：<strong>A（资本主义经济和政治发展不平衡规律）</strong>。</p>
+<h3>第 0 步：先立模型——革命图景随资本主义发展阶段而变</h3>
+<p>为什么先立模型：一国胜利论不是凭空猜想，而是把<strong>规律</strong>套在<strong>时代条件</strong>上推出的结论。两个时代的差别必须先摆清楚：</p>
+<table><thead><tr><th>时代</th><th>各国发展态势</th><th>由此推出的革命图景</th></tr></thead><tbody><tr><td>自由竞争阶段</td><td>各国大体平衡地发展，谁也难以突然拉开差距</td><td>马、恩设想革命在主要资本主义国家<strong>同时发生、大体同时胜利</strong></td></tr><tr><td>垄断（帝国主义）阶段</td><td>后起国家跳跃式赶超、老牌国家走向停滞，<strong>不平衡空前加剧</strong></td><td>列宁：革命可能首先在<strong>少数甚至单独一个</strong>资本主义国家胜利</td></tr></tbody></table>
+<p>同一个「社会主义必然代替资本主义」的大前提，配上不同的发展态势，得出不同的突破方式——变量正是<strong>不平衡</strong>。</p>
+<h3>第 1 步：推理链——不平衡怎样一步步导出「一国胜利」</h3>
+<ol><li>经济政治发展<strong>不平衡加剧</strong>：后起强国按新实力要求重新瓜分世界；</li><li>矛盾不可调和 → <strong>帝国主义战争</strong>（第一次世界大战）；</li><li>战争把帝国主义<strong>链条拖到最薄弱处</strong> → 无产阶级革命可在薄弱环节<strong>首先在一国或数国突破</strong>。</li></ol>
+<p>列宁 1915 年在《论欧洲联邦口号》中正是沿这条链得出「社会主义可能首先在少数甚至在单独一个资本主义国家内获得胜利」。推理链的每一环都踩在<strong>经济和政治发展不平衡规律</strong>上——所以它够格当「理论依据」。</p>
+<h3>第 2 步：题眼检验——什么够格当「依据」</h3>
+<p>题眼在「理论依据」：只有<strong>规律</strong>能解释「为什么偏偏可能单独一国首先胜利」。逐项过：</p>
+<table><thead><tr><th>选项</th><th>判断</th><th>对应的误解</th></tr></thead><tbody><tr><td>A 资本主义经济和政治发展不平衡规律</td><td>✅</td><td>推理链的支点本身</td></tr><tr><td>B 资本主义国家的不断衰落</td><td>❌</td><td>垄断阶段资本主义仍能发展，「不断衰落」不符合事实；「垂死」指历史趋势，不是现状描述</td></tr><tr><td>C 科学社会主义理论的广泛传播</td><td>❌</td><td>思想条件，各国普遍存在——推不出「为什么偏偏一国」</td></tr><tr><td>D 无产阶级力量的不断壮大</td><td>❌</td><td>阶级力量状况，同样具有普遍性——顶多推出「革命可能发生」</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 C/D</strong>：把「现实条件」当「理论依据」——C、D 是各国共有的普遍情况，恰恰解释不了「首先在一国」的特殊性。</li><li><strong>误选 B</strong>：顺着「帝国主义是垂死的资本主义」往下联想——考「依据」必须选规律本身，不能选错误表述。</li><li><strong>混淆两论</strong>：同时胜利论↔自由竞争阶段（相对平衡）；一国胜利论↔垄断阶段（不平衡加剧）。抓住「不平衡」三个字就抓住了题。</li></ul>
+<blockquote>记忆锚点：一国胜利论的支点=<strong>资本主义经济和政治发展不平衡规律</strong>；不平衡 → 战争 → 薄弱环节 → 首先一国（数国）胜利。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

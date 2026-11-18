@@ -1,8 +1,121 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-15 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-15</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-15 · 2009年3月28日布达拉宫广场集会庆祝什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链模板（政治站无 KaTeX，纯文本推理链卡片），只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：纪念类时政题 = 「双核对」",
+    "cls": "key",
+    "tag": "立方法",
+    "body": "<p>题干给的是 2009 年 3 月 28 日拉萨布达拉宫广场万人集会，问「热烈庆祝」什么。纪念类时政题的干扰项几乎全靠<b>数字巧合</b>钓鱼：周年数算得出来，但日期或称谓对不上。</p><p>双核对两关全过才落笔：① <b>日期—事件</b>核对；② <b>称谓—年代</b>核对。</p>",
+    "log": "纪念题先立「日期+称谓」双核对法"
+  },
+  {
+    "title": "立时间线：3 月 28 日的「正主」是谁",
+    "cls": "step",
+    "tag": "时间线",
+    "body": "<p>1951.5《十七条协议》<b>和平解放</b> → <b>1959.3.28 解散原西藏地方政府、民主改革启动，百万农奴翻身</b> → 1965.9.1 <b>自治区成立</b> → 2009.1 九届人大二次会议决定设纪念日 → 2009.3.28 <b>首个百万农奴解放纪念日</b>。</p><p>题干日期 3 月 28 日 = 民主改革启动 50 周年 = 首个「百万农奴解放纪念日」。</p>",
+    "log": "3月28日 = 民主改革启动日，正主锁定 D"
+  },
+  {
+    "title": "A 判误：数字巧，两关都不过",
+    "cls": "bad",
+    "tag": "干扰项",
+    "body": "<p>「和平解放 58 周年」：1951→2009 恰好 58 年，数字<b>巧</b>得很诱人。</p><p>但①和平解放纪念日是 <b>5 月</b>（协议签订日），不是 3 月 28 日；②<b>1951 年还没有「西藏自治区」</b>（1965 年才成立），「自治区和平解放」称谓本身不成立，<b>A 错误</b>。</p>",
+    "ribbon": { "k": 1, "ok": false },
+    "log": "A：日期不对 + 称谓不成立"
+  },
+  {
+    "title": "B 判误：最典型的「周年钓鱼」",
+    "cls": "bad",
+    "tag": "干扰项",
+    "body": "「自治区成立 44 周年」：1965→2009 恰好 44 周年，数字又对上了！但自治区成立日在 <b>9 月 1 日</b>，与 3 月 28 日对不上。<b>B 错误</b>——只背数字不核日期必中招。",
+    "ribbon": { "k": 2, "ok": false },
+    "log": "B：周年数对，日期对不上"
+  },
+  {
+    "title": "C 判误：是「因」，不是「果」",
+    "cls": "bad",
+    "tag": "干扰项",
+    "body": "<p>自治区九届人大二次会议（2009 年 1 月）是<b>设立</b>纪念日的「因」，3 月 28 日万人集会是纪念日当天的「果」。</p><p>会议 1 月就开过了，不是 3 月 28 日庆祝的内容，<b>C 错误</b>。</p>",
+    "ribbon": { "k": 3, "ok": false },
+    "log": "C：设立纪念日的会议，非集会庆祝对象"
+  },
+  {
+    "title": "D 入选：首个百万农奴解放纪念日",
+    "cls": "good",
+    "tag": "正确项",
+    "body": "<p>1959.3.28 民主改革启动、百万农奴翻身获得<b>人身自由</b>（注意：不是 1951 年的政权归属问题）；2009 年 3 月 28 日 = 50 周年 = 首个纪念日。</p><p>布达拉宫广场万人集会庆祝的正是它，<b>D 正确</b>。</p>",
+    "ribbon": { "k": 4, "ok": true },
+    "log": "D：3月28日 = 首个百万农奴解放纪念日"
+  },
+  {
+    "title": "收束：双核对防坑法",
+    "cls": "good",
+    "tag": "收束",
+    "body": "<p>三个干扰项 = 三种钓鱼：A 用「真实周年数 + 错误日期 + 不成立的称谓」，B 用「真实周年数 + 错误月份」，C 用「因当成果」。</p><p>防坑口诀：<b>先核日期对事件，再核称谓对年代，两关全过再选</b>。</p>",
+    "log": "干扰项归因收束 → D"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '干扰项' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '2009 年 3 月 28 日布达拉宫广场集会庆祝什么',
+  subtitle: '考点：西藏大事记时间线 · 「日期—事件 / 称谓—年代」双核对 · 周年钓鱼识别',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: { big: '答案 D', html: '<b>首个西藏「百万农奴解放纪念日」</b>：1959.3.28 民主改革启动、百万农奴翻身 → 2009.3.28 = 50 周年。<br>时间线：1951.5 和平解放 → 1959.3.28 民主改革 → 1965.9.1 自治区成立 → 2009.3.28 首个纪念日。<br>防坑：3 月 28 日 = 农奴解放，不是和平解放（5 月）、不是建区（9 月 1 日）；纪念题双核对——日期对事件、称谓对年代。' }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：2009 年 3 月 28 日布达拉宫广场万人集会——庆祝什么</h2>
+<p>答案：<strong>D（首个西藏"百万农奴解放纪念日"）</strong>。</p>
+<h3>第 0 步：先立方法——纪念类时政题的"双核对"</h3>
+<p>纪念类时政题的干扰项几乎全靠"数字巧合"钓鱼：周年数往往算得出来，但<strong>日期对不上</strong>或<strong>称谓配不上</strong>。所以解题用双核对，两关全过才落笔：</p>
+<ol><li><strong>日期—事件核对</strong>：题干日期（3 月 28 日）在西藏大事记里对应哪件事；</li><li><strong>称谓—年代核对</strong>：选项称谓（如"西藏自治区"）在该事件发生的年代是否已经存在。</li></ol>
+<h3>第 1 步：把题干日期放进西藏大事记</h3>
+<table><thead><tr><th>时间</th><th>事件</th><th>对本题的意义</th></tr></thead><tbody><tr><td>1951 年 5 月</td><td>《十七条协议》签订，西藏<strong>和平解放</strong></td><td>选项 A 的"底牌"</td></tr><tr><td>1959 年 3 月 28 日</td><td>国务院宣布解散原西藏地方政府，<strong>民主改革</strong>启动，百万农奴翻身获得人身自由</td><td>题干日期的"正主"</td></tr><tr><td>1965 年 9 月 1 日</td><td><strong>西藏自治区</strong>成立</td><td>选项 B 的"底牌"</td></tr><tr><td>2009 年 1 月</td><td>自治区九届人大二次会议决定：每年 3 月 28 日为西藏百万农奴解放纪念日</td><td>选项 C 的"底牌"</td></tr><tr><td>2009 年 3 月 28 日</td><td><strong>首个</strong>西藏百万农奴解放纪念日，拉萨布达拉宫广场万余人在此隆重集会</td><td>题干场景本身</td></tr></tbody></table>
+<p>题干日期 2009 年 3 月 28 日 = 民主改革启动 50 周年 = 首个"百万农奴解放纪念日"——选 <strong>D</strong>。</p>
+<h3>第 2 步：三个干扰项各踩哪颗雷</h3>
+<ul><li><strong>A（西藏自治区和平解放 58 周年）</strong>：周年数"巧"在 1951→2009 恰好 58 年，但两关都不过——①和平解放纪念日是 <strong>5 月</strong>（协议签订日），不是 3 月 28 日；②<strong>1951 年还没有"西藏自治区"</strong>（自治区 1965 年才成立），"自治区和平解放"这个称谓本身就不成立。</li><li><strong>B（西藏自治区成立 44 周年）</strong>：1965→2009 恰好 44 周年，数字又对上了！但自治区成立日在 <strong>9 月 1 日</strong>，与 3 月 28 日对不上——本题最典型的"周年钓鱼"项。</li><li><strong>C（自治区九届人大二次会议召开）</strong>：这次会议（2009 年 1 月）是<strong>设立</strong>纪念日的"因"，3 月 28 日集会是纪念日当天的"果"；会议 1 月就开过了，不是 3 月 28 日庆祝的内容。</li></ul>
+<h3>易错点与预判追问</h3>
+<ul><li><strong>为什么 A、B 的数字都能算对却不能选</strong>：出题人故意用"真实周年数 + 错误日期"造项——只背数字不核日期必中招。时政题的记忆单位是"日期 + 事件"绑定，不是孤立的年数。</li><li><strong>"百万农奴解放"和"和平解放"是一回事吗</strong>：不是。1951 年和平解放解决的是<strong>政权归属</strong>（回到祖国怀抱）；1959 年民主改革废除封建农奴制，解决的是<strong>人身解放</strong>——"百万农奴解放"对应后者，别混。</li><li><strong>防坑口诀</strong>：先核日期对事件，再核称谓对年代，两关全过再选。</li></ul>
+<blockquote>记忆锚点：1951.5 和平解放 → 1959.3.28 民主改革/农奴解放 → 1965.9.1 自治区成立 → 2009.3.28 首个百万农奴解放纪念日；3 月 28 日 = 农奴解放，不是和平解放、不是建区。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

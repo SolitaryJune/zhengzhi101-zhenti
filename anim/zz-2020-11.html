@@ -1,8 +1,137 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-11 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-11</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2020·11 党成立后采取的独有革命方法</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），
+     模板复制自 408 tools/anim_concept_template.html，只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼',
+    cls: 'key',
+    tag: '审题',
+    body: '<p>题干给的不是「哪个方法更革命」，而是一个<b>双重资格限定</b>：民族资产阶级、小资产阶级政党和政治派别「<b>没有采取过</b>」（事实关）+「<b>也不可能采取</b>」（性质关）——两关都过才算数。四个候选都真实存在，比的是谁能双关全过。</p>',
+    log: '审题：双重筛选器摆出来'
+  },
+  {
+    title: '先立模型：四个候选上筛台',
+    cls: 'key',
+    body: '<ul><li>候选：武装斗争 / 统一战线 / 土地革命 / 群众路线</li><li>筛选规则：过<b>事实关</b>（别的派别干过吗）+ 过<b>性质关</b>（阶级立场允许干吗）+ 对齐「成立之后<b>不久</b>」的时间限定</li></ul>',
+    log: '规则：事实关 + 性质关 + 时间限定'
+  },
+  {
+    title: 'C：武装斗争——辛亥已有',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>辛亥革命（武昌起义）就是武力推翻清王朝——别的派别<b>采取过</b>，事实关第一轮就出局。「革命」不等于「武装斗争」新鲜。</p>',
+    log: 'C 事实关不过 → 排除'
+  },
+  {
+    title: 'D：统一战线——联盟早有',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>同盟会本身就是政治联盟性质的组织——联盟式玩法<b>早已有之</b>；统一战线作为系统方法也是 1924 年国共合作之后的事，与「成立之后不久」不符。</p>',
+    log: 'D 事实关不过且时间靠后 → 排除'
+  },
+  {
+    title: 'B：土地革命——时间 + 类别双错位',
+    cls: 'bad',
+    ribbon: { k: 2, ok: false },
+    body: '<p>土地革命确实「没有采取过」，是四个候选里<b>最能过事实关</b>的一个——但它是 1927 年大革命失败后才展开，不符合「成立之后<b>不久</b>」；且它回答「革<b>什么</b>」（分土地），不是「怎么革」的<b>方法</b>。筛选题里最危险的，恰恰是最能过一关的选项。</p>',
+    log: 'B 时间错位 + 类别错位 → 排除'
+  },
+  {
+    title: '机制：为什么唯独党敢发动群众',
+    cls: 'step',
+    body: '<p>党是<b>工人阶级先锋队</b>，没有自己的特殊利益——发动和依靠工农与阶级属性一致，不存在「革自己的命」的顾虑；反观资产阶级、小资产阶级派别，发动工农等于瓦解自己的社会基础——想都不能想，故「<b>不可能采取</b>」。</p>',
+    log: '阶级立场决定敢不敢发动群众'
+  },
+  {
+    title: '「开始采取」有史实落点',
+    cls: 'step',
+    body: '<p>建党后不久：1921 年成立<b>中国劳动组合书记部</b>专事领导工人运动，1922—1923 年掀起<b>第一次工人运动高潮</b>（香港海员罢工、京汉铁路工人大罢工）——群众路线不是口号，是立刻动手干的方法。</p>',
+    log: '史实落点：工运高潮'
+  },
+  {
+    title: 'A：群众路线——双关全过',
+    cls: 'good',
+    ribbon: { k: 1, ok: true },
+    body: '<p>事实关：没有派别真正发动过工农群众；性质关：唯有党与工农利益一致，敢发动、能发动；时间关：建党后不久即开始采取。<b>A 正确</b>。</p>',
+    log: 'A 三关全过 → 正确'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    tag: '结论',
+    body: '<p>答案 <b>A</b>。记忆锚点：党成立后独有的新方法=<b>群众路线</b>（发动和依靠工农群众）；筛选器=「没有采取过（事实关）+ 不可能采取（性质关）」。</p>',
+    log: '锁定 A：群众路线的方法'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || (i === 0 ? '审题' : (last ? '结论' : '分析')),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '党成立后采取的独有革命方法',
+  subtitle: '考点：群众路线与早期革命运动 · 方法：双重筛选器（事实关 + 性质关）',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：党成立后不久开始采取、其他派别「<b>没有采取过也不可能采取</b>」的革命方法 = <b>群众路线的方法</b>（发动和依靠工农群众）。史实落点：劳动组合书记部 + 第一次工人运动高潮。C 武装斗争（辛亥已有）、D 统一战线（联盟早有）过不了事实关；B 土地革命能过事实关，但 1927 年才开始、且属革命内容而非方法——双错位。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：党成立后采取的、别的派别「没有采取过也不可能采取」的革命方法</h2>
+<p>答案：<strong>A（群众路线的方法）</strong>。</p>
+<h3>第 0 步：先立模型——把题干当双重筛选器</h3>
+<p>题干不是问「哪个方法革命」，而是给了一个很特别的资格限定：这种方法必须同时过两关——</p>
+<ol><li><strong>事实关</strong>：「没有采取过」——此前民族资产阶级、小资产阶级的政党和政治派别历史上没干过；</li><li><strong>性质关</strong>：「也不可能采取」——由其阶级性质决定，想干也不能干。</li></ol>
+<p>所以这是推理题不是背诵题：四个候选方法都真实存在，比的不是谁更出名，而是<strong>谁能双关全过</strong>。先给四个候选过筛：</p>
+<table><thead><tr><th>候选方法</th><th>事实关：采取过吗</th><th>性质关：可能采取吗</th><th>结果</th></tr></thead><tbody><tr><td>武装斗争</td><td>辛亥革命（武昌起义）就是武装推翻清王朝</td><td>——</td><td>第一关即出局</td></tr><tr><td>统一战线</td><td>同盟会本身就是政治联盟性质的组织</td><td>——</td><td>第一关即出局</td></tr><tr><td>土地革命</td><td>没搞过，事实关能过</td><td>时间关：1927 年大革命失败后才展开；类别关：它是革命<strong>内容</strong>不是<strong>方法</strong></td><td>出局</td></tr><tr><td>群众路线</td><td>没有派别真正发动过工农群众</td><td>与工农利益对立的阶级发动群众等于革自己的命</td><td><strong>双关全过</strong></td></tr></tbody></table>
+<h3>第 1 步：机制——为什么唯独党「敢」也「能」走群众路线</h3>
+<ul><li><strong>性质上敢</strong>：党是工人阶级先锋队，除了工人阶级和最广大人民群众的利益没有自己的特殊利益——发动和依靠工农群众与党的阶级属性完全一致，不存在「革自己的命」的顾虑；</li><li><strong>行动上真</strong>：建党后不久即开始采取——1921 年成立中国劳动组合书记部专事领导工人运动，1922—1923 年掀起第一次工人运动高潮（香港海员罢工、京汉铁路工人大罢工），「开始采取」有明确史实落点；</li><li><strong>对照面</strong>：民族资产阶级要的是本阶级的政权，小资产阶级惧怕大规模群众动员——发动工农对他们意味着瓦解自己的社会基础，所以是「不可能采取」，而非「不想」。</li></ul>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 群众路线的方法</td><td>✅</td><td>教材口径：没有采取过、也不可能采取；建党后不久即付诸行动</td></tr><tr><td>B 土地革命的方法</td><td>❌</td><td>双重错位——时间（1927 年后才开始）+ 类别（革命内容而非建党初期的方法）</td></tr><tr><td>C 武装斗争的方法</td><td>❌</td><td>辛亥革命早已武装夺取政权，事实关不过</td></tr><tr><td>D 统一战线的方法</td><td>❌</td><td>政治联盟早已有之（同盟会即联盟），事实关不过</td></tr></tbody></table>
+<h3>预判追问</h3>
+<ul><li><strong>问：土地革命「没有采取过」这关不是过了吗，为什么还不行？</strong>——题干的时间限定是「成立之后不久」，土地革命要到 1927 年才登场；而且题问「革命方法」，土地革命回答的是「革什么」（分配土地给农民），不是「怎么革」（走什么路线）。</li><li><strong>问：统一战线后来不是党的三大法宝之一吗？</strong>——是，但「法宝」是 1924 年国共合作之后的经验总结；题干问的是建党初期「别的派别没有采取过」的方法，同盟会式的政治联盟在辛亥年间已比比皆是。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 C（把「革命」等同于武装斗争）</strong>：看到「革命方法」就顺手选最带火的词——但武装斗争恰恰是最不新鲜的东西，辛亥革命就是武力推翻清王朝，国民党也始终掌握武装。</li><li><strong>误选 D（把统一战线的显眼当独有）</strong>：国共合作、政协协商很出名，但出名≠独有；且统一战线作为系统方法是 1924 年之后的产物，与「成立之后不久」不符。</li><li><strong>误选 B（只盯「没有采取过」不看后半句）</strong>：题干是双重限定，漏看「也不可能采取」或「成立之后不久」就会掉进这个最像答案的陷阱——筛选题里最危险的往往是最能过一关的选项。</li></ul>
+<blockquote>记忆锚点：党成立后独有的新方法=<strong>群众路线</strong>（发动和依靠工农群众）；筛选器=「没有采取过（事实关）+ 不可能采取（性质关）」；史实落点=劳动组合书记部与第一次工运高潮。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

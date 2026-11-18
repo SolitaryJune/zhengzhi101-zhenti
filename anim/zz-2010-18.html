@@ -1,8 +1,120 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-18 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-18</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-18 · 经济危机「孕育」科技革命的传导链</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链模板（政治站无 KaTeX，纯文本推理链卡片），只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：「由此证明」= 从传导链挑站得住的环节",
+    "cls": "key",
+    "tag": "立框架",
+    "body": "<p>题干两次史实：<b>1857 年危机引发电气革命</b>（蒸汽→电气时代）、<b>1929 年危机引发电子革命</b>（电气→电子时代）。</p><p>「由此证明」问的是：这条反复出现的传导链里，哪些环节站得住、能上升为规律。先立链条再逐项对号。</p>",
+    "log": "先立传导链，再挑站得住的环节"
+  },
+  {
+    "title": "立链条：危机 → 需要 → 科技 → 经济",
+    "cls": "step",
+    "tag": "立链条",
+    "body": "<p>四环传导链：</p><p><b>① 危机爆发</b>：旧经济结构撑不住，矛盾充分暴露 → <b>② 提出需要</b>：摆脱危机的社会实践需要摆上桌面 → <b>③ 催生科技</b>：实践的需要成为科技研究的强大牵引 → <b>④ 反哺经济</b>：成果产业化，经济跃上新台阶。</p>",
+    "log": "四环链条：①危机 ②需要 ③科技 ④经济"
+  },
+  {
+    "title": "C 入选：实践需要是科技发展的强大动力",
+    "cls": "good",
+    "tag": "正确项",
+    "body": "<p>为什么偏偏是危机之后冒出科技革命？危机把「必须找到新出路」的需要摆到全社会面前——<b>需要牵引研究，研究催生革命</b>。</p><p>「社会实践的需要是科技发展的强大动力」——链条②③环，1857→电气、1929→电子正是两次验证，<b>C 正确</b>。</p>",
+    "ribbon": { "k": 3, "ok": true },
+    "log": "C：链条②③环，动力环节成立"
+  },
+  {
+    "title": "D 入选：科技创新推动跨越式发展",
+    "cls": "good",
+    "tag": "正确项",
+    "body": "<p>每次科技革命都把人类社会推进一个新时代：<b>蒸汽→电气→电子</b>，社会生产力是跳跃而非匀速爬坡。</p><p>「科技创新能够推动社会经济跨越式发展」——链条④环的结果，<b>D 正确</b>。</p>",
+    "ribbon": { "k": 4, "ok": true },
+    "log": "D：链条④环，结果环节成立"
+  },
+  {
+    "title": "A 判误：「根本出路」被拔高",
+    "cls": "bad",
+    "tag": "干扰项",
+    "body": "<p>危机的根子在<b>社会基本矛盾/制度层面</b>，摆脱危机的根本出路在于变革不适应的生产关系与制度；科技革命只是「孕育」新出路的<b>契机与杠杆</b>——技术救得了一时产能，填不平制度鸿沟。</p><p>反证：若科技能根治危机，1929 年之后就不该再爆发危机。<b>A 错误</b>。</p>",
+    "ribbon": { "k": 1, "ok": false },
+    "log": "A：拔高——科技不是根本出路"
+  },
+  {
+    "title": "B 判误：「根本标志」被错位",
+    "cls": "bad",
+    "tag": "干扰项",
+    "body": "<p>社会形态更替的<b>根本标志</b>是<b>生产方式</b>的变更（生产力质变 + 生产关系更替），不是「科学技术」这个单项指标。</p><p>科技是第一生产力、是强大杠杆，但「重要」≠「根本标志」——用「重要」偷换「根本」是典型陷阱，<b>B 错误</b>。</p>",
+    "ribbon": { "k": 2, "ok": false },
+    "log": "B：错位——标志是生产方式变更"
+  },
+  {
+    "title": "收束：抓题眼「孕育」的分量",
+    "cls": "good",
+    "tag": "收束",
+    "body": "<p>题干说危机「<b>孕育</b>」科技革命——孕育 = 提供<b>需要与土壤</b>，不是「制造」科技革命本身，更不是「解决」危机本身。抓准这个词，A 的「根本出路」就进不来。</p><p>口诀：<b>危机出题目，实践给动力，科技交答卷，经济上台阶</b>（CD）。</p>",
+    "log": "干扰项归因收束 → CD"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '干扰项' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '经济危机「孕育」科技革命的传导链',
+  subtitle: '考点：危机→需要→科技→经济四环传导链 · 「拔高」与「错位」两类干扰',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: { big: '答案 CD', html: '<b>危机出题目，实践给动力，科技交答卷，经济上台阶</b>：社会实践的需要是科技发展的强大动力（C），科技创新推动社会经济跨越式发展（D）。<br>「根本出路」在变革制度不在科技（A 拔高），社会形态更替的根本标志是生产方式变更（B 错位）。' }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：经济危机"孕育"科技革命的传导链（多选）</h2>
+<p>答案：<strong>CD</strong>。</p>
+<h3>第 0 步：先立机制——危机 → 需要 → 科技 → 经济的四环传导链</h3>
+<p>题干给两个史实：1857 年世界经济危机引发<strong>电气革命</strong>（蒸汽时代→电气时代），1929 年世界经济危机引发<strong>电子革命</strong>（电气时代→电子时代）。"由此证明"问的是：这条反复出现的传导链里，哪些环节站得住、能上升为规律。</p>
+<table><thead><tr><th>环节</th><th>机制</th><th>对应选项</th></tr></thead><tbody><tr><td>① 危机爆发</td><td>旧经济结构撑不住，矛盾充分暴露</td><td>题干史实</td></tr><tr><td>② 提出需要</td><td>摆脱危机、寻找出路的社会实践需要摆上桌面</td><td>—</td></tr><tr><td>③ 催生科技</td><td>实践的需要成为科技研究的强大牵引</td><td><strong>C</strong></td></tr><tr><td>④ 反哺经济</td><td>科技成果产业化，经济跃上新台阶（蒸汽→电气→电子）</td><td><strong>D</strong></td></tr></tbody></table>
+<h3>第 1 步：C、D 为什么对</h3>
+<ul><li><strong>C 对</strong>：为什么偏偏是危机之后冒出科技革命？因为危机把"必须找到新出路"的需要摆到了全社会面前——需要牵引研究，研究催生革命。<strong>社会实践的需要是科技发展的强大动力</strong>，1857→电气、1929→电子正是"实践需要→科技突破"的两次验证（链条②③环）。</li><li><strong>D 对</strong>：每次科技革命都把人类社会推进一个新时代（蒸汽→电气→电子），社会生产力实现跳跃而非匀速爬坡——<strong>科技创新能够推动社会经济跨越式发展</strong>，这是链条④环的结果。</li></ul>
+<h3>第 2 步：A、B 错在哪——"拔高"与"错位"两种典型病</h3>
+<ul><li><strong>A（科技革命是摆脱社会危机的根本出路）错</strong>：<strong>拔高了</strong>。危机的根子在<strong>社会基本矛盾/制度层面</strong>，摆脱危机的根本出路在于变革不适应的生产关系与制度；科技革命只是"孕育"新出路的契机与杠杆——技术救得了一时产能，填不平制度鸿沟。反证：若科技能根治危机，1929 年之后就不该再爆发危机。</li><li><strong>B（科学技术是社会形态更替的根本标志）错</strong>：<strong>错位了</strong>。社会形态更替的<strong>根本标志</strong>是<strong>生产方式</strong>的变更（生产力质变 + 生产关系更替），而不是"科学技术"这个单项指标。科技是第一生产力、是社会发展的强大杠杆，但"重要"≠"根本标志"。</li></ul>
+<h3>易错点：干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A 的误解</strong>：把"危机总会过去、过后有新技术"归功于科技单打独斗——忽视了危机的根子在制度层面。</li><li><strong>误选 B 的误解</strong>：把"科技很重要"直接升格为"科技是根本标志"——用"重要"偷换"根本"。</li><li><strong>抓题眼"孕育"</strong>：孕育 = 提供<strong>需要与土壤</strong>，不是"制造"科技革命本身，更不是"解决"危机本身——抓准这个词，A 的"根本出路"就进不来。</li></ul>
+<blockquote>记忆锚点：危机出题目，实践给动力，科技交答卷，经济上台阶（CD）；答卷再漂亮，也不是"根本出路"（A），更不是"改朝换代的标志"（B）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

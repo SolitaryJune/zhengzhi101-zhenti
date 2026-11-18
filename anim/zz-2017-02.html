@@ -1,8 +1,101 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-02 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-02</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2017-02 鬼神观念反映什么：意识是客观存在的主观映象</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画（推理链卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：一条三步推理链，断在哪一环',
+    cls: 'key',
+    body: '<p>题中观点的推理链："意识是对外部世界的反映 → 头脑里有鬼神观念 → 外部世界<b>真实存在</b>鬼神"。第一步没错，坏在第二步。设问求"错误在于"——考点锁定：<b>意识是客观存在的主观映象</b>。</p>',
+    log: '推理断在"观念存在 → 实体存在"这一步' },
+  { title: '先立机制：反映不等于照镜子',
+    cls: 'key',
+    body: '<p>意识是客观世界的主观映象，两层意思：① <b>素材层</b>——一切观念都能在现实中找到原型或素材，鬼 = "人 + 动物 + 传说"的拼接，绝非凭空；② <b>方式层</b>——反映分<b>摹写性</b>（直接反映，原型是什么就映成什么）与<b>创造性</b>（对素材加工、重组、虚构）。题中观点把一切反映都当成镜像式摹写。</p>',
+    log: '素材来自现实，但反映有摹写与创造两种方式' },
+  { title: '选项 A：夸大了能动作用？方向反了',
+    cls: 'bad',
+    body: '<p>A"夸大了意识的能动作用"——错。题中观点把意识当成只会照原样成像的镜子，恰恰是<b>抹杀</b>了创造性；"夸大能动"指的是"意识创造万物"那类命题。这里的错误是少承认了能动性。<b>A 排除。</b></p>',
+    log: '是抹杀创造性，不是夸大能动性 → A 排除' },
+  { title: '选项 B：正确命题 ≠ 题目要找的错误',
+    cls: 'bad',
+    body: '<p>B"把意识看成是物质的产物"——这句本身是唯物主义的<b>正确</b>命题（意识是物质世界长期发展的产物、人脑的机能）。题中观点错在"反映的<b>方式</b>"，不在"意识的<b>来源</b>"。<b>B 排除。</b></p>',
+    log: '来源没错，错在反映方式 → B 排除' },
+  { title: '选项 C：把一切反映当成直接反映',
+    cls: 'good',
+    body: '<p>C"认为意识是对存在的直接反映"——命中。题中观点不承认观念可以是对现实素材的<b>加工与虚构</b>（歪曲的反映），由"头脑里有鬼神观念"硬推"鬼神实体存在"。观念存在 ≠ 原型实体存在。<b>C 正确。</b></p>',
+    log: '镜像式摹写，漏掉创造性反映 → C 正确' },
+  { title: '选项 D：拿"起源"硬套"本质"',
+    cls: 'bad',
+    body: '<p>D"混淆了人类意识自然演化的阶段"——答非所问。意识演化讲的是<b>起源</b>史（无生命反应特性 → 刺激感应 → 感觉心理 → 人类意识）；题问鬼神观念<b>反映什么</b>，是本质问题，起源时间线帮不上忙。<b>D 排除。</b></p>',
+    log: '题问本质，D 给的是起源 → D 排除' },
+  { title: '结论：C',
+    cls: 'good',
+    body: '<p>四个选项一正三偏：C 点破推理链断点——把一切反映当成直接反映；A 方向说反、B 拿正确命题顶错、D 答非所问。答案选 <b>C</b>。</p>',
+    log: '锁定 C：意识是对存在的直接反映' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var optK = i >= 2 && i <= 5 ? i - 1 : 0; // 卡片 3~6 对应选项 A~D
+  var isGood = s.cls === 'good';
+  return {
+    cls: last ? 'done' : (isGood ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: i === 0 ? '审题' : (i === 1 ? '机制' : (last ? '结论' : '选项 ' + 'ABCD'[optK - 1])),
+    log: s.log || s.title,
+    count: optK || (last ? 4 : 0),
+    ribbon: optK ? { k: optK, ok: isGood } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2017·02】鬼神观念反映什么：意识是客观存在的主观映象',
+  subtitle: '考点：意识的本质 · 反映的摹写性与创造性 · 方法：找推理链断点',
+  counterLabel: '已核选项',
+  ribbonTitle: '选项判定（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链：先立"反映≠照镜子"，再逐项判定 A/B/C/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '记忆锚点：一切观念都有现实<b>素材</b>，但反映分<b>摹写</b>与<b>创造</b>；鬼神 = 对存在的<b>歪曲反映</b>，头脑里有 ≠ 现实中存在。A 方向说反（是抹杀创造性），B 拿正确命题顶错，D 拿起源套本质。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：鬼神观念反映什么——意识是客观存在的主观映象</h2>
+<p>答案：<strong>C（认为意识是对存在的直接反映）</strong>。</p>
+<h3>第 0 步：先立机制——"反映"不等于"照镜子"</h3>
+<p>意识是客观世界的主观映象，这句话包含两层意思，缺一层就会掉进题里的坑：</p>
+<ol><li><strong>素材层（从哪里来）</strong>：一切意识都能在现实世界中找到它的<strong>原型或素材</strong>，鬼神观念也不例外——鬼的样子拆开看是"人 + 动物 + 传说素材"的拼接，绝非凭空。</li><li><strong>方式层（怎么反映）</strong>：反映有两种方式。<strong>摹写性</strong>（直接反映）：原型是什么，观念里就映成什么；<strong>创造性</strong>：对现实素材进行加工、重组、<strong>虚构</strong>（歪曲的反映）。"看见苹果 → 产生苹果的观念"是摹写，"拼出龙、鬼、神"是创造。</li></ol>
+<p>题中观点的推理链是："意识是对外部世界的反映 → 头脑里有鬼神观念 → 外部世界真实存在鬼神"。第一步没错，坏在第二步：它把<strong>一切反映都当成镜像式的直接反映</strong>，不承认观念可以是对现实素材的加工与虚构。观念存在 ≠ 原型实体存在——这正是 C 的表述。</p>
+<h3>第 1 步：预判追问——三个干扰项为什么"看着也像"</h3>
+<ul><li><strong>为什么不是 A（夸大了意识的能动作用）？</strong> 辨方向：题中观点把意识当成只会照原样成像的镜子，恰恰是<strong>抹杀</strong>了意识的创造性；"夸大能动作用"指的是"意识创造万物""人有多大胆"那类命题。这里的错误是少承认了能动性，不是夸大。</li><li><strong>为什么不是 B（把意识看成物质的产物）？</strong> 这句本身是唯物主义的<strong>正确</strong>命题（意识是物质世界长期发展的产物、人脑的机能）。题中观点错在"反映的<strong>方式</strong>"，不在"意识的<strong>来源</strong>"——正确命题 ≠ 题目所问的那个错误。</li><li><strong>为什么不是 D（混淆意识自然演化的阶段）？</strong> 意识的自然演化讲的是<strong>起源</strong>史：无生命物质的反应特性 → 低等生物的刺激感应 → 动物的感觉心理 → 人类意识。题问的是鬼神观念<strong>反映什么</strong>（本质问题），起源的时间线帮不上忙，答非所问。</li></ul>
+<h3>第 2 步：干扰项归因</h3>
+<table><thead><tr><th>选项</th><th>错在哪</th><th>对应的误解</th></tr></thead><tbody><tr><td>A</td><td>方向说反了：题中观点抹杀意识的能动性（创造性加工），不是夸大</td><td>见"意识"二字就条件反射往"能动性"上靠</td></tr><tr><td>B</td><td>唯物主义的正确命题，但题中观点错在反映方式，不在意识来源</td><td>把"正确命题"当成"题目要找的错误"</td></tr><tr><td>D</td><td>答非所问：演化阶段讲意识起源，题问鬼神观念反映什么</td><td>拿"意识的起源"知识硬套"意识的本质"</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li>最顺手选 A：题干表面在谈"意识"，容易条件反射选"能动性"。要辨方向——题中观点是把反映<strong>机械化</strong>，错在少承认了创造性，不是夸大了能动性。</li><li>"鬼神观念也是对存在的反映"这句话本身没错（素材来自现实），错的是由此<strong>推出鬼神实体存在</strong>。辨析要看推理走在哪一步断裂。</li></ul>
+<blockquote>记忆锚点：一切观念都有现实素材，但反映分<strong>摹写</strong>与<strong>创造</strong>；鬼神 = 对存在的<strong>歪曲反映</strong>，头脑里有 ≠ 现实中存在。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

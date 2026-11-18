@@ -1,8 +1,109 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-18 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-18</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2015-18 · "平衡"靠什么守住——三条线索一个干扰（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261118a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261118a"></script>
+<script>
+/* ================== 题目专属区域（依据 zz-2015-18 题干与答案 ACD 编写） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 一行可加宽的格子：格子放线索名，格下放它回答什么 */
+function lineRow(classes){
+  var names = ['运动观', '质量观', '系统观', '否定观'];
+  var jobs  = ['动静关系', '度的界限', '内部协调', '怎么发展'];
+  var row = AW.el('div', 'aw-cells');
+  names.forEach(function(name, i){
+    var col = AW.el('div', 'aw-col');
+    col.style.width = '92px';
+    var box = AW.el('div', 'aw-box' + (classes && classes[i] ? ' ' + classes[i] : ''), name);
+    box.style.width = '92px';
+    col.appendChild(box);
+    col.appendChild(AW.el('div', 'aw-idx', jobs[i]));
+    row.appendChild(col);
+  });
+  return row;
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：题问不是"是什么"，是"靠什么守住"',
+    body: '<p>材料把平衡举到平衡木、走钢丝、直升机悬停，落脚句是"要使平衡成为人们的大智慧，<b>就要</b>……"——问的是<b>守住平衡的条件</b>。判断选项的第一道关卡：它是否在回答"如何守住平衡"。</p>' },
+  { tag: '机制·定位', cls: 'key', title: '机制：平衡＝相对静止的特殊情形，相对、有条件',
+    body: '<p>马原定位：平衡是<b>相对静止</b>的特殊情形——事物保持在自身的度之内、内部诸要素关系协调、矛盾双方相持。正因运动是<b>绝对</b>的，平衡才是<b>相对的、有条件的</b>，才需要"守"。守的线索有三条：</p>' +
+      lineRow(['dim', 'dim', 'dim', 'dim']) +
+      '<p>前三格是守护线，第四格（否定观）先挂起来验货。</p>' },
+  { tag: 'A', cls: 'good', k: 1, pick: true, title: 'A 全面理解绝对运动和相对静止的辩证关系 → 总开关',
+    body: '<p>运动绝对、静止相对。懂了"动中有静、静中有动"，才不会把平衡当绝对不变（不变论），也不会因运动绝对而否认平衡（诡辩论）。悬停的直升机旋翼在高速转——平衡是<b>动态中的相对静止</b>。<b>入选</b> ✅。</p>' },
+  { tag: 'C', cls: 'good', k: 3, pick: true, title: 'C 精确把握事物的度 → 平衡的界限',
+    body: '<p>度是保持事物质的<b>数量界限</b>，平衡＝事物处于自己的度之内。走钢丝一旦偏出界限，质态改变、平衡即被打破——守平衡就是<b>守住度</b>。<b>入选</b> ✅。</p>' },
+  { tag: 'D', cls: 'good', k: 4, pick: true, title: 'D 善于协调事物内部各种因素的相互关系 → 现实条件',
+    body: '<p>平衡是内部诸要素关系的<b>协调态</b>：平衡木靠身体各部分调到位，悬停靠各旋翼力矩相抵。协调内部关系是守平衡的<b>现实条件</b>。<b>入选</b> ✅。</p>' },
+  { tag: 'B', cls: 'bad', k: 2, pick: false, title: 'B 准确掌握辩证否定的方式和方向 → 考点错位',
+    body: '<p>辩证否定回答"<b>事物如何自我发展</b>"——自我否定、扬弃、肯定与否定的统一；题眼问"<b>如何保持平衡</b>"。原理本身没错，但<b>答非所问</b>——马原多选里"原理正确、问题域不合"是标准排除理由。<b>不选</b> ❌。</p>' },
+  { tag: '辨析', cls: 'key', title: '预判追问：为什么"沾边"不等于"该选"',
+    body: '<p>多选题不是找"热词匹配"，是找"<b>能回答题眼的那条原理</b>"。B 的热词是"发展"，题眼是"保持平衡"——错位即排除；D 最容易漏，因为题干的杂技、悬停例子恰恰全是"协调"的实例。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：懂动静、守住度、会协调',
+    body: '<p>运动观（A）＋质量观（C）＋系统观（D），排除错位的否定观（B）——<b>答案 ACD。</b></p>' },
+];
+
+var nJudge = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nJudge++;
+  var sn = {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag,
+    log: s.title,
+    count: nJudge,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, (x.tag ? x.tag + ' · ' : '') + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: !!s.pick };
+  return sn;
+});
+
+AW.init({
+  title: 'zz-2015-18 · "平衡"成为大智慧要靠什么',
+  subtitle: '2015 年第 18 题（多选）· 考点：矛盾与平衡 · 方法：先定位"平衡＝相对静止"，再按"守住的条件"逐项验收',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先给"平衡"定位，再沿三条守护线索逐项验收。',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '记忆锚点：守平衡三件事——<b>懂动静（A）、守住度（C）、协调内部关系（D）</b>；辩证否定（B）回答"怎么发展"，不回答"怎么平衡"，沾边也不选。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解："平衡"这种状态靠什么守住——三条线索一个干扰</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——平衡在马原里是什么，"守"平衡要问什么</h3>
+<p>题干把平衡举例举到平衡木、走钢丝、直升机悬停，但考的不是杂技，是马原框架里的定位：<strong>平衡是相对静止的一种特殊情形</strong>——事物保持在自身的度之内、内部诸要素关系协调、矛盾双方处于相持状态。平衡又是<strong>相对的、有条件的</strong>：正因运动是绝对的，平衡才需要"守"。</p>
+<p>于是题眼"要使平衡成为人们的大智慧，就要……"问的是<strong>"靠什么守住平衡"</strong>。这一问沿三条哲学线索展开：运动观（怎么理解平衡的性质）、质量观（平衡的界限在哪）、系统观（平衡的现实条件是什么）。判断选项的第一道关卡：它是不是在回答"如何守住平衡"。</p>
+<h3>第 1 步：逐项对号</h3>
+<ul><li><strong>A 全面理解绝对运动和相对静止的辩证关系</strong> ✅：这是<strong>总开关</strong>。运动是绝对的，静止（含平衡）是相对的、有条件的；懂了"动中有静、静中有动"，才既不会把平衡当成绝对不变（形而上学不变论），也不会因运动绝对而否认平衡的存在（相对主义诡辩论）。</li><li><strong>B 准确掌握辩证否定的方式和方向</strong> ❌：辩证否定回答的是"事物<strong>如何自我发展</strong>"——自我否定、扬弃、肯定与否定的统一，关键词是"发展"；题眼问的是"保持平衡"。考点错位，答非所问。</li><li><strong>C 精确把握事物的度</strong> ✅：度是保持事物质的<strong>数量界限</strong>，平衡就是事物处于自己的度之内。走钢丝一旦偏出界限，质态改变、平衡即被打破——守平衡就是守住度。</li><li><strong>D 善于协调事物内部各种因素的相互关系</strong> ✅：平衡是内部诸要素关系的<strong>协调态</strong>；题干例子恰是注脚——平衡木靠身体各部分调到位，悬停靠各旋翼力矩相抵。协调内部关系是守平衡的<strong>现实条件</strong>。</li></ul>
+<h3>第 2 步：预判两个"为什么"</h3>
+<p><strong>为什么"守平衡"要先懂绝对运动？</strong> 因为平衡不是"不动"，而是<strong>动态中的相对静止</strong>——直升机悬停时旋翼在高速转。不懂动静辩证关系，就会把"守平衡"误解为"冻结一切"，那恰恰守不住。</p>
+<p><strong>为什么 B 是错位而非"次要正确"？</strong> 选项不是"沾边就对"：B 的原理本身没错，但它的<strong>问题域</strong>是"怎么发展"，本题的问题域是"怎么平衡"。马原多选题里，"原理正确但答非所问"是最典型的排除理由。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：见"事物发展"四个字就联想"辩证否定"，被热词碰瓷。看清题眼是"保持平衡的<strong>状态</strong>"，不是"实现发展"。</li><li><strong>漏选 D</strong>：只往纯哲学范畴（动静、度）上想，忘了系统内部关系的协调也是平衡的条件——题干举的杂技、悬停例子全是协调的实例。</li><li><strong>漏选 A</strong>：以为"绝对运动"与"求平衡"矛盾。恰相反：正因运动绝对，平衡才是相对的、要主动去守的。</li></ul>
+<blockquote>记忆锚点：守平衡三件事——<strong>懂动静（A）、守住度（C）、协调内部关系（D）</strong>；辩证否定（B）回答"怎么发展"，不回答"怎么平衡"。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

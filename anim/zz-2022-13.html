@@ -1,8 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-13 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-13</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2022 · 五句引文一个关键词——「公·国·天下」指向的整体利益</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链版（政治站无 KaTeX）：引用 ../assets/anim-engine.js + ../assets/anim.css，只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每步完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：五句古语连排的归类题",
+    "cls": "key",
+    "body": "<p>「夙夜在公」→「以公灭私」→「国而忘家，公而忘私」→「先天下之忧而忧」→「苟利国家生死以」——从《诗经》到林则徐，设问问<b>贯穿其中的传统美德</b>。归类题不逐句翻译，抓<b>公共关键词</b>。</p>",
+    "log": "归类题先抓关键词"
+  },
+  {
+    "title": "立模型：美德条目与引文指纹",
+    "cls": "key",
+    "body": "<p>给教材每条美德建「引文指纹」库：整体利益 → <b>公、国、天下、先忧后乐</b>；仁爱以和为贵 → 仁、爱人、和；人伦价值 → 父子君臣五伦；知行合一 → 修身、躬行。再把题干关键词拿去对号。</p>",
+    "log": "先建指纹库再对号"
+  },
+  {
+    "title": "提取公共关键词：公 · 国 · 天下",
+    "cls": "key",
+    "body": "<p>五句连排，高频字是「<b>公</b>」（在公、公灭私、公而忘私）、「<b>国</b>」（国而忘家、国家）、「<b>天下</b>」（先天下后天下）。公共语义：个人利益让位于<b>国家、社会（整体）</b>利益，个人对整体<b>尽责奉献</b>。</p>",
+    "log": "指纹唯一命中整体利益"
+  },
+  {
+    "title": "选项 C：重视整体利益，强调责任奉献",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p>「公灭私」「国忘家」「先天下」= 整体（国家、社会）利益置于个人之上；「先忧后乐」是把天下忧乐排在个人之前的责任担当；「苟利国家生死以」是奉献的极致。<b>C 正确</b>。</p>",
+    "log": "C = 公·国·天下，入选"
+  },
+  {
+    "title": "选项 A：知行合一，躬行实践",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>知行合一讲「道德要<b>落实在行动上</b>」（指纹：修身、力行）；引文谈的是<b>价值排序</b>（为公还是为私），与践行无关——惯性归档。<b>A 错误</b>。</p>",
+    "log": "A 谈践行，指纹不符"
+  },
+  {
+    "title": "选项 B：仁爱原则，以和为贵",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>仁爱的指纹是「<b>仁、爱人、和</b>」，落点在<b>人与人</b>的爱与和谐；本题落点在<b>个人与整体</b>的利益排序，五句无一字谈爱人与和——别把「爱国」泛化为「仁爱」。<b>B 错误</b>。</p>",
+    "log": "B 无仁·和指纹，排除"
+  },
+  {
+    "title": "选项 D：人伦价值，道德义务",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>人伦对应<b>五伦十义</b>等人与人（父子、君臣、夫妇……）的关系规范；见「国而忘家」的「家国」字样就联想人伦是误读——引文讲的是个人与国家间的利益取舍。<b>D 错误</b>。</p>",
+    "log": "D 是五伦指纹，排除"
+  },
+  {
+    "title": "结论：答案 C",
+    "cls": "good",
+    "body": "<p>五句引文都在回答「个人与国家（天下）谁先谁后」——这正是「整体利益优先」的定义域。归类口诀：见<b>公、国、天下、先忧后乐</b> → 重视整体利益、强调责任奉献。</p>",
+    "log": "锁定 C：整体利益与奉献"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  "title": "五句古语贯穿的传统美德是什么",
+  "subtitle": "2022 年第 13 题（单选）· 考点：中华传统美德 · 方法：引文指纹归类",
+  "counterLabel": "推理步",
+  "ribbonTitle": "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  "intro": "点击「▶ 播放」：先建美德指纹库，再提取五句引文的公共关键词对号。",
+  "result": {
+    "big": "答案 C",
+    "html": "记忆锚点：归类口诀——见「<b>公、国、天下、先忧后乐</b>」→ 整体利益与奉献；见「仁、和」→ 仁爱；见「修身、践行」→ 知行合一；见「父子君臣」→ 人伦。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：从「夙夜在公」到「先忧后乐」——抓引文关键词归类传统美德</h2>
+<p>答案：<strong>C（重视整体利益，强调责任奉献）</strong>。</p>
+<h3>第 0 步：先立模型——美德条目与引文指纹的对应</h3>
+<p>传统美德的题目几乎都以古文引语作题干，解法不是逐句翻译，而是先给教材归纳的每条美德建一个<strong>引文指纹</strong>库，再把题干引文的关键词拿去对号：</p>
+<table><thead><tr><th>美德条目</th><th>引文指纹</th><th>典型引文</th></tr></thead><tbody><tr><td><strong>重视整体利益，强调责任奉献</strong></td><td><strong>公、国、天下、先忧后乐</strong></td><td>夙夜在公、以公灭私、苟利国家生死以</td></tr><tr><td>推崇「仁爱」原则，注重以和为贵</td><td>仁、爱人、和</td><td>仁者爱人、礼之用和为贵</td></tr><tr><td>提倡人伦价值，重视道德义务</td><td>五伦十义（父子、君臣、夫妇……）</td><td>父子有亲、长幼有序</td></tr><tr><td>追求精神境界，向往理想人格</td><td>君子、圣人气象</td><td>见贤思齐、止于至善</td></tr><tr><td>强调道德修养，注重道德践履</td><td>修身、力行、知行合一</td><td>格物致知、躬行实践</td></tr></tbody></table>
+<h3>第 1 步：提取本题五句引文的公共关键词</h3>
+<p>五句连排：「夙夜<strong>在公</strong>」「以<strong>公</strong>灭私」「<strong>国</strong>而忘家，<strong>公</strong>而忘私」「<strong>先天下</strong>之忧而忧，后天下之乐而乐」「苟利<strong>国家</strong>生死以，岂因祸福避趋之」。高频字是<strong>公、国、天下</strong>；公共语义是个人利益让位于<strong>国家、社会（整体）</strong>的利益，个人对整体<strong>尽责、奉献</strong>——「先忧后乐」就是把天下的忧乐排在个人忧乐之前，主动把责任揽在自己身上。指纹唯一命中第一条。</p>
+<h3>第 2 步：四个选项对号入座</h3>
+<table><thead><tr><th>选项</th><th>对错</th><th>病灶</th></tr></thead><tbody><tr><td>A 强调知行合一，注重躬行实践</td><td>❌</td><td>讲「道德要落实在行动上」；引文谈的是<strong>价值取向</strong>（为公），与践行无关</td></tr><tr><td>B 推崇「仁爱」原则，注重以和为贵</td><td>❌</td><td>指纹应为「仁、爱人、和」；五句无一字谈爱人与和谐</td></tr><tr><td>C 重视整体利益，强调责任奉献</td><td>✅</td><td>「公灭私」「国忘家」「先天下」= 整体利益置于个人利益之上</td></tr><tr><td>D 提倡人伦价值，重视道德义务</td><td>❌</td><td>对应五伦十义等<strong>人与人</strong>的关系规范；引文讲的是个人与国家的关系</td></tr></tbody></table>
+<h3>为什么「先忧后乐」也归入「整体利益」（多说一句）</h3>
+<p>「先天下之忧而忧，后天下之乐而乐」表面看是忧乐观，实质是<strong>责任与奉献的排序</strong>：忧在天下人之前、乐在天下人之后，即个人对整体利益的让位与担当。同理「苟利国家生死以」：只要对国家有利，个人生死祸福皆可置之度外——奉献的极致表达。五句引文无一例外都在回答<strong>「个人与国家（天下/社会）谁先谁后」</strong>，这正是「整体利益优先」的定义域。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：见名言警句就归入「知行合一」的<strong>惯性归档</strong>——没检查引文谈的是「怎么行动」还是「价值排序」。</li><li><strong>误选 B</strong>：把「爱国」泛化为「仁爱」——仁爱的落点是人与人之间的爱与和谐，本题落点是个人与整体之间的利益排序。</li><li><strong>误选 D</strong>：见「国而忘家」的「家国」字样就联想「人伦」——人伦讲的是亲属与交往关系中的义务，不是家国利益的取舍。</li></ul>
+<blockquote>记忆锚点：归类口诀——见「<strong>公、国、天下、先忧后乐</strong>」→ 整体利益与奉献；见「仁、和」→ 仁爱；见「修身、践行」→ 知行合一；见「父子君臣」→ 人伦。抓关键词，秒级归档。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

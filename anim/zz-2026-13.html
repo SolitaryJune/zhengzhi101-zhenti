@@ -1,8 +1,136 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-13 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-13</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2026·13 建立社会主义市场经济体制的中心环节</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版）：只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行要素格（改革体系：中心 + 配套）
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: "审题眼：「中心环节」问的是机制短板",
+    cls: "key",
+    log: "题眼：中心环节不靠背——由市场机制缺哪块决定",
+    body: "<p>1992 年邓小平南方谈话和十四大后，现代化建设进入从计划经济体制向<b>社会主义市场经济体制</b>转变的新阶段。问「建立市场经济体制的<b>中心环节</b>」——先想机制：市场成为资源配置手段需要什么前提？</p>"
+  },
+  {
+    title: "立机制：市场主体＋价格信号",
+    cls: "key",
+    log: "市场要运转：既要有对信号作出反应的主体，也要有联通的价格与渠道",
+    body: "<p>市场发挥配置作用需要两个前提：<b>① 对价格信号作出反应的市场主体</b>；<b>② 联通的价格与流通渠道</b>。1992 年前后，价格改革（调放结合）已推进多年、流通渠道渐次打开——最短的板恰恰在<b>市场主体</b>：多数国有企业仍按计划指令生产，不面向市场、不负盈亏。主体不活，信号再准也<b>无人响应</b>。</p>"
+  },
+  {
+    title: "中心环节：国有企业改革",
+    cls: "key",
+    log: "十四大：转换国企经营机制、把企业推向市场；十四届三中全会：现代企业制度",
+    body: "<p>部署一路指向同一处：十四大提出<b>转换国有企业特别是大中型企业的经营机制、把企业推向市场</b>；1993 年十四届三中全会明确以<b>建立现代企业制度</b>为方向——重造市场主体，这就是中心环节。</p>"
+  },
+  {
+    title: "C 对号：中心环节",
+    cls: "good",
+    log: "重造市场主体 → C 正确",
+    ribbon: { k: 3, ok: true },
+    body: "<p>「<b>国有企业改革</b>」——把国企从计划指令的执行者变成自主经营、自负盈亏的法人主体，其他改革的效果才有承载者。<b>C 正确</b>。</p>"
+  },
+  {
+    title: "改革体系：中心 + 配套",
+    cls: "key",
+    log: "国企改革是中心，价格／财税／流通围绕它配套展开",
+    body: cells([
+      { t: "价格体制改革<br>调放结合（配套）", l: "信号" },
+      { t: "财税制度改革<br>1994 分税制（配套）", l: "宏观" },
+      { t: "<b>国有企业改革</b><br>现代企业制度（中心）", l: "主体", c: "ok" },
+      { t: "流通体制改革<br>打通渠道（配套）", l: "渠道" }
+    ])
+  },
+  {
+    title: "A 排除：理顺信号是配套",
+    cls: "bad",
+    log: "价格改革解决「信号准不准」，不是中心 → A 排除",
+    ribbon: { k: 1, ok: false },
+    body: "<p>「价格体制改革」——80 年代价格双轨制改革声势大、生活感受直接，但它解决的是<b>信号准不准</b>；没有真正的市场主体，信号再准也无人响应。「理顺信号」的改革可以先行，但坐不上中心环节。<b>A 错误</b>。</p>"
+  },
+  {
+    title: "B、D 排除：宏观框架与外围渠道",
+    cls: "bad",
+    log: "分税制是财政宏观配套；流通是市场外形 → B、D 排除",
+    ribbon: { k: 2, ok: false },
+    body: "<p>「财政制度改革」——1994 年<b>分税制</b>重新划分央地财政关系，是宏观层面的配套框架，不在企业层面，时间也是十四大之后的配套动作。<b>B 错误</b>。「流通体制改革」——集市、商流是市场的<b>外形</b>，不解决「谁在市场中活动」的根子问题。<b>D 错误</b>。</p>"
+  },
+  {
+    title: "结论",
+    cls: "good",
+    log: "锁定 C：国有企业改革是中心环节",
+    body: "<p>答案 <b>C</b>。市场主体不活，一切信号空转——所以中心环节是国有企业改革，价格、财税、流通围绕它配套展开。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+});
+
+AW.init({
+  title: "政治 2026·13 建立社会主义市场经济体制的中心环节",
+  subtitle: "考点：社会主义市场经济体制 · 方法：机制短板定位——市场主体决定中心环节",
+  counterLabel: "推理步",
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」逐步展开推理链。",
+  snaps: snaps,
+  result: {
+    big: "答案 C",
+    html: "建立社会主义市场经济体制的<b>中心环节＝国有企业改革</b>（转换经营机制 → 建立现代企业制度）（C）。记忆锚点：价格、财税（1994 分税制）、流通 = 围绕中心的<b>配套</b>改革。市场主体不活，一切信号空转。选 <b>C</b>。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：建立社会主义市场经济体制的中心环节</h2>
+<p>答案：<strong>C（国有企业改革）</strong>。</p>
+<h3>第 0 步：先立模型——「中心环节」为什么由市场主体决定</h3>
+<p>「中心环节」类题不能背结论，先想机制：市场要真正成为资源配置的基础手段，需要两个前提——<strong>有对价格信号作出反应的市场主体</strong>，以及<strong>联通的价格与流通渠道</strong>。1992 年南方谈话和十四大之后，价格改革（调放结合）已推进多年、流通渠道渐次打开，最短的板恰恰在<strong>市场主体</strong>：大多数国有企业仍按计划指令生产，不面向市场、不负盈亏。市场主体不活，价格信号再准也没有人响应——机制在这里卡住，所以「建立社会主义市场经济体制」的<strong>中心环节</strong>必然落在国有企业改革上。</p>
+<p>顺着这条机制，中央的部署也一路指向同一处：十四大提出<strong>转换国有企业特别是大中型企业的经营机制、把企业推向市场</strong>；1993 年十四届三中全会进一步明确以<strong>建立现代企业制度</strong>为方向。价格、财税（1994 年分税制）、流通等改革，都是围绕这个中心<strong>配套</strong>展开的——配套与中心的关系，正是本题四个选项的分辨点。</p>
+<h3>第 1 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因</th></tr></thead><tbody><tr><td>A 价格体制改革</td><td>❌</td><td>重要配套（调放结合），但价格只是信号，不是中心环节</td></tr><tr><td>B 财政制度改革</td><td>❌</td><td>1994 年分税制属宏观配套改革，时间与地位都不对</td></tr><tr><td>C 国有企业改革</td><td>✅</td><td>重造市场主体——转换经营机制、建立现代企业制度，中心环节</td></tr><tr><td>D 流通体制改革</td><td>❌</td><td>打通渠道属外围配套，不解决「谁在市场中活动」的根子问题</td></tr></tbody></table>
+<h3>第 2 步：预判「为什么」——三个追问提前答掉</h3>
+<ul><li><strong>为什么不是价格改革？</strong> 价格改革解决的是「信号准不准」，国企改革解决的是「谁对信号作出反应」。没有真正的市场主体，信号再准也无人响应——所以「理顺信号」的改革可以先行，但坐不上「中心环节」的位置。</li><li><strong>为什么不是财税改革？</strong> 分税制（1994）重新划分中央与地方财政关系，是宏观层面的配套改革；它为市场经济体制搭财政框架，但既不在企业层面，时间上也是十四大之后的配套动作。</li><li><strong>为什么国企改革够格当「中心」？</strong> 市场经济首先要有「在市场中活动的人」——企业。把国企从计划指令的执行者变成自主经营、自负盈亏的法人主体，其他改革（价格、财税、流通）的效果才有承载者。这也是「抓大放小」「建立现代企业制度」成为 90 年代改革主线的原因。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>选 A（「价格放开」印象深）</strong>：80 年代价格双轨制改革声势大、生活感受直接，容易先入为主——但它是「理顺信号」的配套，不是中心环节。</li><li><strong>选 B（分税制名气大）</strong>：分税制是 1994 年的标志性改革，名气大不等于地位「中心」——它在财政宏观层面，与企业主体无关。</li><li><strong>选 D（「市场经济＝流通」的望文生义）</strong>：集市、商流是市场的外形；市场经济的核心是<strong>市场主体</strong>的重造。</li></ul>
+<blockquote>记忆锚点：中心环节 = <strong>国有企业改革</strong>（转换经营机制 → 建立现代企业制度）；价格、财税、流通 = 配套。市场主体不活，一切信号空转。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

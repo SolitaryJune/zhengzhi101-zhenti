@@ -1,8 +1,130 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-09 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-09</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-09 · 最早讴歌十月革命、系统介绍马克思主义的人</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 推理链：每一步的完整内容（引擎按步数截取显示；s.cls: key=关键/good=正确/bad=排除） */
+var STEPS = [
+  {
+    "cls": "key",
+    "tag": "审题眼",
+    "title": "审题眼：两道卡口，同时满足",
+    "body": "<p>卡口①：在中国<b>最早</b>讴歌十月革命；卡口②：<b>比较系统地</b>介绍马克思主义。</p><p>两个条件<b>同时满足</b>才算数。题干引\u201c十月革命一声炮响\u201d只是点明历史语境——筛人靠时间线，不靠声望。</p>"
+  },
+  {
+    "cls": "key",
+    "tag": "时间线",
+    "title": "摆时间线：看谁把两道卡口都占住",
+    "body": "<ul><li>1917.11 俄国十月革命——\u201c一声炮响\u201d的由来</li><li>1918 李大钊《庶民的胜利》《布尔什维主义的胜利》——卡口①：<b>最早讴歌</b></li><li>1919.5 李大钊《我的马克思主义观》（《新青年》）——卡口②：<b>比较系统介绍</b></li><li>1919.5 五四运动——传播的放大器（在举旗<b>之后</b>）</li></ul><p>两道卡口盖的都是<b>李大钊</b>的戳。</p>"
+  },
+  {
+    "cls": "key",
+    "tag": "追问",
+    "title": "为什么\u201c最早\u201d轮不到别人：五四是放大器不是起点",
+    "body": "<p>五四运动让马克思主义<b>广泛</b>传播，但李大钊举旗在五四<b>之前</b>：1918 连续发文讴歌十月革命，1919 又率先分唯物史观、政治经济学、科学社会主义几大块<b>系统介绍</b>。</p><p>\u201c南陈北李，相约建党\u201d——举旗次序也是李先、陈后。</p>"
+  },
+  {
+    "cls": "bad",
+    "tag": "A 排除",
+    "title": "选项 A：陈独秀",
+    "body": "<p><b>A 错</b>：《新青年》主编、新文化运动发起者，声望够高——但转向、宣传马克思主义在五四之后（1920 年前后）。</p><p>两道\u201c最早\u201d的卡口都排不上。干扰设计：拿\u201c《新青年》主编\u201d的声望冒充传播第一人。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    }
+  },
+  {
+    "cls": "good",
+    "tag": "B 入选",
+    "title": "选项 B：李大钊",
+    "body": "<p><b>B 对</b>：1918《庶民的胜利》《布尔什维主义的胜利》（最早讴歌十月革命）＋ 1919.5《我的马克思主义观》（比较系统介绍马克思主义）。</p><p>两道卡口同时满足，中国最早的马克思主义传播先驱。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": true
+    }
+  },
+  {
+    "cls": "bad",
+    "tag": "C 排除",
+    "title": "选项 C：毛泽东",
+    "body": "<p><b>C 错</b>：五四时期在湖南组织进步活动（新民学会），确立马克思主义信仰要到 1920 年前后。</p><p>他是接受者、实践者，不在\u201c最早传播\u201d的位置上。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    }
+  },
+  {
+    "cls": "bad",
+    "tag": "D 排除",
+    "title": "选项 D：瞿秋白",
+    "body": "<p><b>D 错</b>：1920 年底才以记者身份赴苏俄实地考察，1921 年后以《饿乡纪程》《赤都心史》报道苏俄实况。</p><p>真去过十月革命的故乡，但<b>去得晚、写得晚</b>——\u201c最早\u201d看的是文章发表时间。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    }
+  },
+  {
+    "cls": "good",
+    "tag": "结论",
+    "title": "收束：答案 B",
+    "body": "<p>最早讴歌十月革命 + 比较系统介绍马克思主义 = <b>李大钊</b> → 选 <b>B</b>。</p><p>记忆锚点：1918 两篇\u201c胜利\u201d → 1919《我的马克思主义观》；陈、毛、瞿都晚一步。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '干扰项' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: "最早讴歌十月革命、比较系统介绍马克思主义的人",
+  subtitle: "考点：马克思主义在中国的早期传播 · 两道卡口筛时间线 · 选项逐项推演",
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个裁定 A–D。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已裁定',
+  snaps: snaps,
+  result: {"big": "答案 B", "html": "<b>李大钊</b>：1918《庶民的胜利》《布尔什维主义的胜利》（最早讴歌十月革命）＋ 1919《我的马克思主义观》（比较系统介绍马克思主义）。<br>时间对不上卡口：陈独秀（1920 后转向）、毛泽东（湖南活动）、瞿秋白（1920 底赴俄）。"}
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：最早讴歌十月革命、比较系统介绍马克思主义的人——两道卡口筛时间线</h2>
+<p>答案：<strong>B（李大钊）</strong>。</p>
+<h3>第 0 步：先立机制——把题干拆成两道筛选卡口，再用时间线筛人</h3>
+<p>题干设了<strong>两道卡口</strong>，必须<strong>同时满足</strong>：①在中国<strong>最早讴歌</strong>十月革命；②<strong>比较系统地介绍</strong>马克思主义。题干引的“十月革命一声炮响，给我们送来了马克思列宁主义”只是点明历史语境，不参与筛人；筛人的办法是摆时间线，看谁的文章把两道卡口都占住：</p>
+<table><thead><tr><th>时间</th><th>文章 / 事件</th><th>卡上哪道卡口</th></tr></thead><tbody><tr><td>1917.11</td><td>俄国十月革命</td><td>“一声炮响”的由来</td></tr><tr><td>1918</td><td>李大钊《庶民的胜利》《布尔什维主义的胜利》</td><td>卡口①：最早讴歌十月革命</td></tr><tr><td>1919.5</td><td>李大钊《我的马克思主义观》（《新青年》）</td><td>卡口②：比较系统介绍马克思主义</td></tr><tr><td>1919.5</td><td>五四运动爆发</td><td>传播的放大器（在举旗<strong>之后</strong>）</td></tr></tbody></table>
+<p>两道卡口盖的都是李大钊的戳，选 <strong>B</strong>。</p>
+<h3>第 1 步：预判“为什么”——为什么“最早”轮不到别人</h3>
+<p><strong>五四是放大器，不是起点。</strong> 五四运动让马克思主义广泛传播，但李大钊举旗在五四<strong>之前</strong>：1918 年连续发文讴歌十月革命，1919 年又率先在《我的马克思主义观》里分唯物史观、政治经济学、科学社会主义几大块系统介绍这一学说——中国最早的马克思主义传播先驱。“南陈北李，相约建党”，举旗的次序也是李先、陈后。</p>
+<h3>第 2 步：三个干扰项都坏在“时间对不上卡口”</h3>
+<ul><li><strong>A（陈独秀）</strong>：《新青年》主编、新文化运动发起者，声望够高，但转向、宣传马克思主义在五四之后（1920 年前后）——两道“最早”的卡口都排不上。干扰设计：拿“《新青年》主编”的声望冒充传播第一人。</li><li><strong>C（毛泽东）</strong>：五四时期在湖南组织进步活动（新民学会），确立马克思主义信仰要到 1920 年前后——是接受者、实践者，不是“最早传播”的位置。</li><li><strong>D（瞿秋白）</strong>：1920 年底才以记者身份赴苏俄实地考察，1921 年后以《饿乡纪程》《赤都心史》报道苏俄实况——真去过十月革命的故乡，但<strong>去得晚、写得晚</strong>，在“最早”这条线上明显偏后。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>只见“系统介绍”不见“最早” → 犹豫选 A</strong>：卡口要同时满足，李大钊两卡全占；陈独秀一道都占不住。</li><li><strong>被“去过苏俄”迷惑 → 误选 D</strong>：去得早不如写得早，“最早”看的是文章发表时间。</li><li><strong>以为五四 = 传播起点 → 时间线错位</strong>：李大钊的文章在五四之前，五四只是把传播放大。</li></ul>
+<blockquote>记忆锚点：1918 两篇“胜利”（最早讴歌）→ 1919《我的马克思主义观》（系统介绍）= <strong>李大钊</strong>；陈、毛、瞿都晚一步。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

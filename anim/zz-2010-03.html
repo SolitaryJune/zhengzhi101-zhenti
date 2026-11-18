@@ -1,8 +1,131 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-03 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-03</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-03 · 人与自然的关系</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+
+/* 一张推理卡片 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 推理链：每一步的完整内容（引擎按步数截取显示；s.cls: key=关键/good=正确/bad=排除） */
+var STEPS = [
+  {
+    'cls': 'key',
+    'tag': '审题眼',
+    'title': '第一步：照片控诉的是谁',
+    'log': '先问"问题出在谁身上"——控诉人类自身活动',
+    'body': '<p>北极冰盖融化、北极熊无冰可依。根源是<b>人类过度排放等不合理活动</b>干扰了自然进程，不是自然自己走坏了。</p><p>所以照片的警示对象是<b>人</b>：反思自身活动、尊重自然规律。正确选项必须落在"人反思人"上。</p>'
+  },
+  {
+    'cls': 'key',
+    'tag': '机制',
+    'title': '第二步：人与自然靠"实践"绑定，账单会原样退回',
+    'log': '立机制：实践联系人与自然；违背规律的代价会反馈给人类',
+    'body': '<p>人与自然通过<b>实践</b>（物质生产）联系起来：改造自然获取生活资料，改造<b>尊重规律</b>就有供给、有容纳；<b>违背规律</b>（过度排放）自然就把失衡账单退回——气候变暖就是一张。</p><p>所以"自然出问题"，机制上第一怀疑对象是<b>人的活动</b>。</p>'
+  },
+  {
+    'cls': 'key',
+    'tag': '定位',
+    'title': '第三步：给"地理环境"在社会历史观里定位',
+    'log': '三级表：必要条件→影响不决定→规律可认识利用',
+    'body': '<p><b>必要条件</b>：地理环境能<b>加速或延缓</b>社会发展；</p><p><b>不是决定力量</b>：不能决定社会的性质与走向——"根本决定力量"的帽子属于<b>物质生产方式</b>；</p><p><b>规律客观</b>：可以被认识、利用，治理修复有出路。</p><p>安全措辞 = "影响 / 前提 / 重要条件"；危险措辞 = "决定 / 核心 / 不可逆"。</p>'
+  },
+  {
+    'cls': 'bad',
+    'tag': 'A 排除',
+    'title': '选项 A：人与自然的关系成为一切社会关系的核心',
+    'log': 'A 顶替了不该顶替的东西——核心是生产关系',
+    'body': '<p><b>A 错</b>：人与人一切社会关系的核心是<b>生产关系（利益关系）</b>。</p><p>人与自然的关系再紧迫，也在"人—自然"层，取代不了"人—人"层的核心。"一切……核心"是顶替式过头话。</p>',
+    'ribbon': { 'k': 1, 'ok': false }
+  },
+  {
+    'cls': 'bad',
+    'tag': 'B 排除',
+    'title': '选项 B：生态失衡是自然界自身周期演化、不可逆转',
+    'log': 'B 双重踩线：归因错位 + "不可逆转"绝对化',
+    'body': '<p><b>B 错</b>，双重错——①<b>归因错位</b>：失衡主要源于人类不合理活动，不是"自然界自身周期演化"；②<b>"不可逆转"绝对化</b>：规律可以被认识和利用，治理修复能缓解、扭转。</p>',
+    'ribbon': { 'k': 2, 'ok': false }
+  },
+  {
+    'cls': 'bad',
+    'tag': 'C 排除',
+    'title': '选项 C：自然地理环境是社会发展的根本决定力量',
+    'log': 'C 是地理环境决定论——决定帽子只能给物质生产方式',
+    'body': '<p><b>C 错</b>：教科书级错误——<b>地理环境决定论</b>。</p><p>三级表第二行：地理环境只有"影响"，没有"决定"；"根本决定力量"这顶帽子只能给<b>物质生产方式</b>。</p>',
+    'ribbon': { 'k': 3, 'ok': false }
+  },
+  {
+    'cls': 'good',
+    'tag': 'D 入选',
+    'title': '选项 D：生态环境日益成为人类反思自身活动的重要前提',
+    'log': 'D 措辞安全："重要前提"，对象是人，分寸刚好',
+    'body': '<p><b>D 对</b>：警示落在"人反思<b>自身活动</b>"——改进生产方式、尊重自然规律、可持续发展。</p><p>措辞安全核对：对象是人（不控诉自然）、"重要前提"是起点不是主宰（不越位成决定力量）——两级检查都通过。</p>',
+    'ribbon': { 'k': 4, 'ok': true }
+  },
+  {
+    'cls': 'good',
+    'tag': '结论',
+    'title': '收束：答案 D',
+    'log': '收束：北极熊照 → 反思自身活动 → 选 D',
+    'body': '<p>北极熊照 → 控诉人类自身活动 → 反思前提 → 选 <b>D</b>。</p><p>秒判口诀：说地理环境"决定 / 核心 / 不可逆"的一律排除；"影响 / 必要条件 / 反思前提"才安全。</p>'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '干扰项' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '北极熊照片给人类的警示',
+  subtitle: '考点：人与自然 · 实践的中介 · 地理环境的地位 · 选项逐项推演',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  snaps: snaps,
+  result: {
+    big: '答案 D',
+    html: '<b>生态环境已日益成为人类反思自身活动的重要前提</b>。<br>人与自然靠实践绑定，违背规律的代价会反馈给人；地理环境 = 必要条件、影响因素 ≠ 根本决定力量。A"一切核心"顶替生产关系、B 归因错位且绝对化、C 是地理环境决定论。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：北极熊照片的警示——人与自然的关系怎么定位</h2>
+<p>答案：<strong>D</strong>。</p>
+<h3>第 0 步：先立机制——人与自然通过"实践"绑定，出问题先看人的活动</h3>
+<p>人与自然不是邻居关系，而是被<strong>实践</strong>（首先是物质生产实践）拴在一起的关系：人改造自然获取生活资料，改造活动的成果与代价都会沿同一条纽带反馈回来。改造<strong>尊重自然规律</strong>，自然供给资源、容纳排放；改造<strong>违背自然规律</strong>（过度排放、滥伐滥捕），自然就把失衡的账单原样退回——冰盖融化、北极熊无处可去，就是这张账单的实物照片。所以看到"自然出问题"，机制上第一怀疑对象是<strong>人类自身活动</strong>，而不是自然自己。</p>
+<p>再给"自然地理环境"在社会历史观里定位，这是一张三级表：</p>
+<table><thead><tr><th>地位</th><th>能力边界</th><th>典型措辞</th></tr></thead><tbody><tr><td>社会存在与发展的<strong>必要条件</strong></td><td>能<strong>加速或延缓</strong>社会发展</td><td>"影响""前提""重要条件"</td></tr><tr><td><strong>不是</strong>根本决定力量</td><td>不能决定社会的性质与走向</td><td>决定力量的帽子属于<strong>物质生产方式</strong></td></tr><tr><td>自身运行有规律</td><td>规律是客观的，可以被认识和利用</td><td>"尊重规律""可持续发展"</td></tr></tbody></table>
+<p>题干的警示落点只能落在第一行、第三行允许的措辞上——这正是 D 项"生态环境已日益成为人类反思自身活动的<strong>重要前提</strong>"：对象是人（反思"自身活动"），分寸是"重要前提"（不越位成决定力量）。</p>
+<h3>第 1 步：三个干扰项各踩了机制的哪条红线</h3>
+<ul><li><strong>A（人与自然的关系成为人与人一切社会关系的核心）→ 顶替了不该顶替的东西</strong>：人与人一切社会关系的核心是<strong>生产关系（利益关系）</strong>。人与自然的关系再紧迫，也处在"人—自然"这层，取代不了"人—人"层的核心。"一切……核心"是顶替式过头话。</li><li><strong>B（生态失衡已成为自然界自身周期演化不可逆转的趋势）→ 归因错位 + 绝对化双重踩线</strong>：第一错把账记错了对象——机制上失衡主要源于<strong>人类不合理活动</strong>，不是"自然界自身周期演化"；第二错"不可逆转"把客观规律理解成死局——规律既然可以被认识和利用，治理修复就能缓解乃至扭转。</li><li><strong>C（自然地理环境已成为人类社会发展的根本决定力量）→ 地理环境决定论</strong>：这是第 0 步表格里明令禁止的第二行——"决定"的帽子只能给<strong>物质生产方式</strong>，给地理环境就是教科书级错误。</li></ul>
+<h3>预判追问</h3>
+<ul><li><strong>为什么 D 的措辞"安全"？</strong> 它只把生态环境放在"反思的<strong>前提</strong>"位置：前提是起点，不是终点，更不是主宰——既不夸大（对 A、C 的克制），也不否认人的责任（对 B 的纠正）。</li><li><strong>这类图片题怎么秒判？</strong> 先问"照片控诉谁"。控诉人 → 选指向"反思人的活动、尊重规律"的选项；凡是把话说满的（"一切""根本决定""不可逆转"）先存疑。</li></ul>
+<blockquote>记忆锚点：北极熊照 → 控诉人类自身活动；地理环境 = 必要条件 + 影响因素，"决定""核心""不可逆"三个词一出现就排除。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

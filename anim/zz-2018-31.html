@@ -1,8 +1,88 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-31 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-31</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2018-31 公序良俗入法：德法共治的标本 · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- 复制自政治站概念模板（无 KaTeX 版，纯文本推理链卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：从「散见规定」到「基本原则」',
+    body: '<p>材料两条线：①民法通则、合同法、物权法中「遵守社会公德、不得损害公共利益和经济秩序」的规定<b>已经具有公序良俗的含义</b>；②2017 年民法总则把它<b>上升为民法基本原则</b>。问：这一规定体现了什么。先立两条轴，再让四个选项对号入座。</p>' },
+  { tag: '机制', cls: 'key', title: '先立机制：公序良俗补的是「成文法的缝隙」',
+    body: '<p>「公序良俗」＝<b>公共秩序＋善良风俗</b>：民事活动不得违反法律、不得违背公序良俗。法律条文再细也管不到所有民事行为（如签一份有违社会公德的合同），这条原则给民事活动画出<b>兜底边界</b>。两条轴：①<b>德法关系轴</b>——道德要求进了法律；②<b>民法传统轴</b>——这个概念从传统民法来。</p>' },
+  { tag: '选项 A', cls: 'good', title: 'A 依法治国和以德治国的有机统一 ✓',
+    body: '<p>总轴：「良俗」就是社会公德、善良风俗——道德要求经立法程序成为法律原则，正是<b>德法共治</b>的典型标本。<b>A 对。</b></p>' },
+  { tag: '选项 B', cls: 'good', title: 'B 对传统民法公序良俗原则的继承和发展 ✓',
+    body: '<p>民法传统轴：公序良俗是<b>大陆法系传统民法的基本原则</b>；我国立法吸收其原则精神、结合国情明文确立——「散见含义 → 明文基本原则」既是继承又是发展。继承≠照搬外国法。<b>B 对。</b></p>' },
+  { tag: '选项 C', cls: 'good', title: 'C 法律为道德建设提供制度保障 ✓',
+    body: '<p>德→法的<b>法律侧</b>：「良俗」入法后，遵守公德不再是单纯的道德呼吁，而是有强制力的法律要求——<b>道德底线被制度化</b>。<b>C 对。</b></p>' },
+  { tag: '选项 D', cls: 'good', title: 'D 道德为法律提供价值基础 ✓',
+    body: '<p>德→法的<b>道德侧</b>：法律为什么肯接受「良俗」这种柔性标准？因为法的价值（公正、诚信、和谐）本身来自道德——<b>道德是法律的价值根基</b>。<b>D 对。</b></p>' },
+  { tag: '关系', cls: 'key', title: 'C 与 D 是「双向奔赴」，别记成单向',
+    body: '<p>德法关系是<b>双向</b>的：道德为法律提供价值基础（D，德是法的根基）⇄ 法律为道德提供制度保障（C，法是德的护栏）。方向相反、各说一半，A 是这组双向关系的统合表述。最容易漏的正是「反方向」的那一半。</p>' },
+  { tag: '结论', cls: 'good', title: '结论：四个选项全部成立 → ABCD',
+    body: '<p>两条轴四个选项全中：德法共治（A）、继承发展传统民法原则（B）、法律给道德制度保障（C）、道德给法律价值基础（D）。答案 <b>ABCD</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: s.tag,
+    log: s.title,
+    count: i + 1,
+    ribbon: { k: i + 1, ok: s.cls !== 'bad' },
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2018·31】公序良俗入法：德法共治的标本',
+  subtitle: '多选题 · 考点：民法总则公序良俗原则 · 德法关系 · 对传统民法原则的继承发展',
+  counterLabel: '推理步',
+  ribbonTitle: '步骤进度（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链：先立「公序良俗」机制与两条轴，再逐项判定 A/B/C/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '记忆锚点：公序良俗＝<b>公共秩序＋善良风俗</b>（民事活动的兜底边界，补成文法的缝隙）；德法双向＝<b>道德提供价值基础（D）⇄ 法律提供制度保障（C）</b>，统合为依法治国与以德治国有机结合（A）；对传统民法原则＝继承＋发展（B）——继承原则精神、发展确立形式，不是照搬。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「公序良俗」入法——一条原则同时照亮德法关系与民法传统</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——「公序良俗」是什么、为什么值得写进民法总则</h3>
+<p>「公序良俗」＝<strong>公共秩序＋善良风俗</strong>。它补的是<strong>成文法的缝隙</strong>：法律条文再细，也覆盖不了所有民事行为（比如签一份有违社会公德的合同），这条原则给民事活动画出兜底边界——越出公共秩序或善良风俗的行为，法律不保护。</p>
+<p>材料的时间线里还藏着第二层机制：民法通则、合同法、物权法里「应当遵守社会公德、不得损害公共利益和经济秩序」的规定<strong>已经具有公序良俗的含义</strong>；2017 年民法总则把它<strong>上升为民法基本原则</strong>。从「散见的规定」到「基本原则」，这是继承，更是发展。</p>
+<p>读题时先立两条轴：<strong>德法关系轴</strong>（这条道德原则进了法律）与<strong>民法传统轴</strong>（这个概念从哪里来）。四个选项就是在这两条轴上各归其位。</p>
+<h3>第 1 步：四个选项沿两条轴入座</h3>
+<table><thead><tr><th>选项</th><th>归属</th><th>机制解释</th></tr></thead><tbody><tr><td>A 依法治国和以德治国的有机统一</td><td>总轴</td><td>「良俗」就是社会公德、善良风俗——道德要求经立法程序成为法律原则，是<strong>德法共治</strong>的典型标本</td></tr><tr><td>B 对传统民法公序良俗原则的继承和发展</td><td>民法传统轴</td><td>公序良俗是大陆法系传统民法的基本原则；我国立法吸收其原则精神、结合国情明文确立——「散见含义→明文基本原则」既是继承又是发展</td></tr><tr><td>C 法律为道德建设提供制度保障</td><td>德→法的法律侧</td><td>「良俗」入法后，遵守公德不再是单纯道德呼吁，而是有强制力的法律要求——道德底线被制度化</td></tr><tr><td>D 道德为法律提供价值基础</td><td>德→法的道德侧</td><td>法律为什么肯接受「良俗」这种弹性标准？因为法的价值（公正、诚信、和谐）本身来自道德——道德是法律的价值根基</td></tr></tbody></table>
+<p>四个选项全部成立，答案 <strong>ABCD</strong>。</p>
+<h3>第 2 步：C 与 D 是「双向奔赴」，别记成单向</h3>
+<p>德法关系是<strong>双向</strong>的：道德为法律提供价值基础（D，德是法的根基），法律为道德提供制度保障（C，法是德的护栏）。二者方向相反、各说一半，并不冲突；A 是这组双向关系的统合表述。本题最容易漏的，正是这组关系里「反方向」的那一半。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选 B</strong>：把「继承传统民法」误解为「照搬外国法、不该选」。继承发展≠全盘移植——吸收的是原则精神，确立的是结合国情的明文基本原则。</li><li><strong>漏选 D</strong>：把德法关系记成单向的「法律保障道德」。倒过来追问一句：法律凭什么接受道德标准？价值根基在道德——D 就出现了。</li><li><strong>漏选 A</strong>：把「有机统一」当成空套话划掉。A 不是套话，它是 C＋D 这组双向关系的合称，「道德要求入法」本身就是统一。</li><li><strong>把 B 当「民法题」、把 A/C/D 当混进来的「道德题」</strong>：材料恰恰是道德要求进入民法原则的实例，两个学科视角在同一材料上同时成立，这正是多选题要「全选」的信号。</li></ul>
+<blockquote>记忆锚点：公序良俗＝公共秩序＋善良风俗（民事活动的兜底边界）；德法双向＝道德给价值（D）⇄ 法律给保障（C），合起来是德法共治（A）；对传统民法原则＝继承＋发展（B）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

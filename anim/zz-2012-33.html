@@ -1,8 +1,145 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-33 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-33</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-33 德班气候大会取得的重要成果</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- ============================================================
+     模板：概念/记忆/推理链类（anim_math_concept 同款结构，政治站无 KaTeX 版）
+     形态：逐步揭示推理链卡片，每步一张 .aw-stepcard；第 3 步内嵌
+     气候谈判进程迷你时间线（史实/会议类考点）；序号带逐个点亮 A–D。
+     路径：本页位于 anim/{id}.html（站点一级目录之下），../assets/ 指向站点根 assets/。
+============================================================= -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 迷你时间线（史实/会议类考点：气候谈判从公约到巴黎的进程，德班站在中间）
+function timeline(){
+  var rows = [
+    ['1992', '《联合国气候变化框架公约》开放签署', ''],
+    ['1997', '《京都议定书》：第一承诺期 2008—2012', ''],
+    ['2009', '哥本哈根大会：分歧严重，未达成法律文件', ''],
+    ['2010', '坎昆大会：决定设立"绿色气候基金"', ''],
+    ['2011', '德班大会（本题）：续议定书 · 启基金 · 开新轨', 'key'],
+    ['2015', '巴黎大会：达成《巴黎协定》——框架这才"竣工"', 'ok']
+  ];
+  var h = '<div style="margin:6px 0 2px">';
+  for(var i = 0; i < rows.length; i++){
+    var r = rows[i];
+    var bg = r[2] === 'key' ? '#fff7df' : (r[2] === 'ok' ? '#eefbf1' : '#f1f5f9');
+    var bd = r[2] === 'key' ? '#d9a514' : (r[2] === 'ok' ? '#2e9e5b' : '#cbd5e1');
+    h += '<div style="display:flex;align-items:center;gap:8px;margin:4px 0">' +
+         '<span style="flex:none;min-width:52px;text-align:center;font-size:12.5px;font-weight:700;' +
+         'color:#334155;background:' + bg + ';border:1px solid ' + bd + ';border-radius:6px;padding:2px 6px">' +
+         r[0] + '</span>' +
+         '<span style="font-size:13.5px;color:#334155">' + r[1] + '</span></div>';
+  }
+  return h + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：成果清单题，先立账本再对号',
+    cls: 'key',
+    tag: '审题',
+    log: '拆出时间、事件、问法：德班大会"取得了哪些重要成果"——多选，逐项对号入座。',
+    body: '<p><b>时间</b>：2011 年 11 月 28 日—12 月 11 日；<b>事件</b>：《联合国气候变化框架公约》缔约方会议（南非德班）；<b>背景</b>：焦点议题分歧严重；<b>问法</b>："取得了一些重要成果，包括"——成果清单题。时政成果题最忌"哪个眼熟选哪个"：先把会议欠的账立起来，选项会自动归位。</p>' },
+  { title: '先立模型：谈判桌上压着"三本账"',
+    cls: 'key',
+    tag: '模型',
+    log: '减排账要"续"、资金账要"启"、路线账要"开新轨"——德班就是围着这三本账谈的。',
+    body: '<p><b>减排账</b>：《京都议定书》第一承诺期 2012 年底到期，发达国家减排承诺要断档 → 德班要"续"。</p><p><b>资金账</b>：坎昆大会只是"决定设立"绿色气候基金，纸面决定没运转 → 德班要"启"。</p><p><b>路线账</b>：议定书只约束部分发达国家，2020 年后所有排放主体怎么办没安排 → 德班要"开新轨"。</p>' },
+  { title: '历史坐标：德班站在公约到巴黎的中间',
+    cls: 'key',
+    tag: '时间线',
+    log: '看清进程：德班是"立项"的一站，法律框架到 2015 年巴黎才"竣工"。',
+    body: timeline() + '<p>这条线记住两头：<b>德班只立项</b>（启动谈判、成立工作组），<b>巴黎才立法</b>（达成《巴黎协定》）。A 的陷阱就埋在这一前一后之间。</p>' },
+  { title: 'C：减排账——议定书"续命"',
+    cls: 'good',
+    tag: 'C ✓',
+    log: '第一承诺期 2012 年底到期，大会决定继续第二承诺期，承诺不断档。C 对。',
+    body: '<p>大会顶住分歧，决定<b>继续《京都议定书》第二承诺期</b>（2013—2020），减排账落地。<b>别被新闻带偏</b>：日本、加拿大等国宣布不参加第二承诺期，是它们自己的选择，不影响"继续第二承诺期"作为大会成果成立。C 对。</p>',
+    ribbon: { k: 3, ok: true } },
+  { title: 'D：资金账——基金从纸面到落地',
+    cls: 'good',
+    tag: 'D ✓',
+    log: '坎昆"决定设立" → 德班"正式启动"，绿色气候基金落地。D 对。',
+    body: '<p>坎昆大会只是<b>决定设立</b>"绿色气候基金"；德班大会通过基金治理安排，<b>正式启动</b>这一基金，为发展中国家减缓和适应气候变化提供资金支持。<b>两步别混</b>：坎昆"设立"、德班"启动"，方向记反就会漏选 D。D 对。</p>',
+    ribbon: { k: 4, ok: true } },
+  { title: 'B：路线账——成立德班平台特设工作组',
+    cls: 'good',
+    tag: 'B ✓',
+    log: '为谈"2020 年后怎么办"，大会同步成立德班增强行动平台特设工作组。B 对。',
+    body: '<p>德班决定<b>启动</b>制定"适用于所有缔约方的法律工具"的谈判进程，并为此<b>成立"德班增强行动平台特设工作组"</b>作为执行班底——当年的新设机构，名字冷僻但确是大会议程。B 对。</p>',
+    ribbon: { k: 2, ok: true } },
+  { title: 'A：立项冒充竣工——框架并没有"达成"',
+    cls: 'bad',
+    tag: 'A ✗',
+    log: '德班只是启动谈判（拟 2015 年提交、2020 年生效），没"达成"涵盖所有缔约方的法律框架。',
+    body: '<p>路线账的真实进度：德班<b>同意启动谈判</b>，制定自 2020 年起生效、最迟 2015 年提交结果的法律工具——那份"国际法律框架"只是<b>立项开工</b>，真正"达成"要到 2015 年巴黎大会的《巴黎协定》。</p><p><b>启动谈判 ≠ 达成框架</b>；"涵盖所有缔约方"更说得圆满——各方当时正为"谁该先减排、约束谁"僵持，谈不拢才只好先设工作组慢慢谈。A 错。</p>',
+    ribbon: { k: 1, ok: false } },
+  { title: '结论',
+    cls: 'good',
+    tag: '答案',
+    log: '三本账各进一程：续议定书（C）、启基金（D）、开新轨（B）；A 立项冒充竣工。',
+    body: '<p>答案选 <b>BCD</b>。三件事一句记：<b>续议定书（C）、启基金（D）、开新轨（B）</b>；唯一排除点 A 是拿"过程"冒充"结果"。防坑一句话：<b>巴黎才立法，德班只立项</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: s.tag,
+    log: s.log,
+    count: i >= 3 ? Math.min(i - 2, 4) : 0,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon,
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2012-33 · 德班气候大会取得的重要成果',
+  subtitle: '2012 年多选题 · 时政：三本账模型 + "立项 ≠ 竣工"陷阱',
+  intro: '点击「▶ 播放」逐步展开成果推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已对号入座',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '答案 <b>BCD</b>。记忆锚点：德班三件事——<b>续</b>议定书（继续第二承诺期）、<b>启</b>基金（正式启动绿色气候基金）、<b>开</b>新轨（成立德班增强行动平台特设工作组）；唯一排除点 A 是"过程冒充结果"：<b>启动谈判 ≠ 达成法律框架</b>，涵盖所有缔约方的框架要到 2015 年巴黎大会的《巴黎协定》才达成。防坑一句话：<b>巴黎才立法，德班只立项</b>。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：德班气候大会的"三本账"——干成了什么、没干成什么</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先建立模型——德班开幕时，谈判桌上压着"三本账"</h3>
+<p>时政成果题最忌"哪个眼熟选哪个"。先把会议的处境立起来：2011 年 11 月底，全球气候谈判同时欠着三笔账，德班大会的任务就是让这三本账各自往前走一步。模型立起来，四个选项会自动归位：</p>
+<table><thead><tr><th>账本</th><th>开幕时的欠账</th><th>德班的动作</th></tr></thead><tbody><tr><td>减排账</td><td>《京都议定书》第一承诺期 2012 年底到期，到期后发达国家的减排承诺出现"真空"</td><td>落实<strong>第二承诺期</strong></td></tr><tr><td>资金账</td><td>2010 年坎昆大会决定设立"绿色气候基金"，但只是纸面决定，尚未实际运转</td><td><strong>正式启动</strong>基金</td></tr><tr><td>路线账</td><td>《京都议定书》只约束部分发达国家，2020 年后所有排放主体怎么办没有安排</td><td><strong>启动</strong>制定"适用于所有缔约方的法律工具"的谈判，并为此<strong>成立特设工作组</strong></td></tr></tbody></table>
+<h3>第 1 步：B、C、D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对应账本与依据</th></tr></thead><tbody><tr><td>B 成立"德班增强行动平台特设工作组"</td><td>✅</td><td>路线账：大会决定启动谈判进程，同步设立这个<strong>当年新设</strong>的机构当"执行班底"</td></tr><tr><td>C 继续《京都议定书》第二承诺期</td><td>✅</td><td>减排账：议定书"续命"，避免 2012 年后承诺断档</td></tr><tr><td>D 正式启动"绿色气候基金"</td><td>✅</td><td>资金账：从坎昆的"决定设立"推进到德班的"正式启动"，基金落地</td></tr><tr><td>A 达成涵盖所有缔约方的"国际法律框架"</td><td>❌</td><td>路线账只走到"立项"，没有"竣工"——见第 2 步</td></tr></tbody></table>
+<p>→ 选 <strong>BCD</strong>。</p>
+<h3>第 2 步：为什么 A 错——"启动谈判"≠"达成框架"（唯一排除点，值得多说一句）</h3>
+<p>德班在路线账上的真实成果是：同意启动一个进程，制定一份自 2020 年起生效、适用于<strong>所有缔约方</strong>的法律工具（议定书、法律文书或经一致同意的具有法律约束力的成果），并最迟于 2015 年提交谈判结果。也就是说，那份"国际法律框架"在德班只是<strong>立项开工</strong>，远未竣工——真正"达成"要到 2015 年巴黎大会通过的《巴黎协定》。A 把德班平台的<strong>谈判授权</strong>偷换成<strong>已取得的成果</strong>，是典型的拿"过程"冒充"结果"。</p>
+<h3>易错点：每个漏选/多选对应哪种误解</h3>
+<ul><li><strong>误选 A（多选）</strong>：把"决定将来达成一个法律框架"记成"已达成"。旁证是"涵盖所有缔约方"说得太圆满——当年发达国家与发展中国家正为"谁该先减排、约束谁"僵持不下，正因为谈不拢，才只能决定"成立工作组慢慢谈"。</li><li><strong>漏选 C</strong>：以为议定书"濒临到期、救不回来了"，或被日本、加拿大等国宣布不参加第二承诺期的新闻带偏。大会决议确实落实了第二承诺期，个别国家不参加，不影响"继续第二承诺期"作为大会成果成立。</li><li><strong>漏选 D</strong>：把坎昆"决定设立"与德班"正式启动"两步并成一步，以为基金"还停留在纸面"——把进程方向记反了。</li><li><strong>漏选 B</strong>：德班平台特设工作组名字冷僻、又是新机构，背成果清单时最容易被跳过；记住它是路线账的"执行班底"即可。</li></ul>
+<blockquote>记忆锚点：德班三件事——<strong>续</strong>议定书（第二承诺期）、<strong>启</strong>基金（绿色气候基金）、<strong>开</strong>新轨（德班平台特设工作组）；一句话防坑：<strong>巴黎才立法，德班只立项</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

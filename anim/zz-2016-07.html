@@ -1,8 +1,131 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2016-07 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2016-07</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2016·07 社会主义初级阶段：长期性与阶段性统一</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画（推理链卡片，纯文本无 KaTeX，走 anim-engine），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>新世纪以来出现一系列<b>新的阶段性特征</b>，但「并没有改变我国仍处于社会主义初级阶段」这一基本事实。设问「这表明初级阶段是」——考的不是初级阶段<b>是什么</b>，而是变与不变并存<b>揭示它什么属性</b>。</p>",
+    "log": "特征在变，国情未变——问动态属性"
+  },
+  {
+    "title": "先立机制：两层含义 + 一个动态属性",
+    "cls": "key",
+    "body": "<p><b>两层含义（静态内涵）</b>：①已是社会主义社会（社会性质）；②尚处不发达的初级阶段（发展程度）。<b>一个动态属性</b>：初级阶段是长期历史过程（长期性），内部先后呈现不同阶段性特征（阶段性）。题干的「变与不变并存」只能落在动态属性上。</p>",
+    "log": "静态答「是什么」，动态答「变与不变」"
+  },
+  {
+    "title": "选项 A：真话陷阱——静态内涵答非所问",
+    "cls": "bad",
+    "body": "<p>「社会性质与发展程度的有机统一」= 两层含义，<b>命题本身正确</b>；但它答的是「初级阶段是什么」，接不住题干的「新特征出现、基本国情未变」。<b>A 排除</b>——命题对 ≠ 贴题眼。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "log": "A 是静态内涵，答非所问"
+  },
+  {
+    "title": "选项 B：变与不变统一在动态属性上",
+    "cls": "good",
+    "body": "<p>新阶段性特征在展现 = <b>阶段性</b>；基本国情未变 = <b>长期性</b>。变的是特征、不变的是国情，二者统一 → 长期性与阶段性统一的<b>动态发展过程</b>。<b>B 正确</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": true
+    },
+    "log": "B=长期性与阶段性统一，就位"
+  },
+  {
+    "title": "选项 C：拿主要矛盾凑概念",
+    "cls": "bad",
+    "body": "<p>「先进社会制度与落后社会生产的矛盾过程」貌似贴近<b>主要矛盾</b>，但①题干谈的是发展阶段特征而非主要矛盾；②「矛盾过程」不是对初级阶段的规范定性。<b>C 排除</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    },
+    "log": "C 拿主要矛盾凑概念"
+  },
+  {
+    "title": "选项 D：杜撰组合",
+    "cls": "bad",
+    "body": "<p>「科学社会主义基本原则与时代精神相结合」是无中生有的拼装表述，教材对初级阶段没有这种定性，与「新特征 vs 基本国情」的逻辑无关。<b>D 排除</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "log": "D 无中生有，排除"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>B</b>。记忆锚点：初级阶段 = 两层含义（已是社会主义 + 尚处不发达阶段）+ 动态属性（<b>长期性与阶段性统一</b>）；静态内涵答「是什么」，动态属性答「变与不变」——新阶段性特征 <b>≠ 新阶段</b>，更 ≠ 走出初级阶段。</p>",
+    "log": "锁定 B：长期性与阶段性统一"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "社会主义初级阶段：长期性与阶段性统一",
+  subtitle: "考点：社会主义初级阶段（两层含义 · 动态属性） · 方法：先立「静态内涵 / 动态属性」两层，再让题干对号",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 B",
+    html: "记忆锚点：社会主义初级阶段 = <b>两层含义</b>（已是社会主义 + 尚处不发达阶段）+ <b>动态属性</b>（长期性与阶段性统一）。新阶段性特征只说明阶段性的展现，不改变初级阶段的基本判断——<b>新特征 ≠ 新阶段</b>。A 是两层含义的静态表述，命题正确但答非所问；C 拿主要矛盾凑概念；D 无中生有。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：新特征没有改变初级阶段，说明初级阶段是什么</h2>
+<p>答案：<strong>B（长期性与阶段性统一的动态发展过程）</strong>。</p>
+<h3>第 0 步：先立机制——初级阶段的「两层含义 + 一个动态属性」</h3>
+<p>判断这类题，先把「社会主义初级阶段」这个概念的完整结构立起来，再让题干的信息对号入座：</p>
+<ul><li><strong>两层含义（静态内涵）</strong>：①我国已经进入社会主义社会，必须坚持而不能离开社会主义（社会性质）；②我国的社会主义还处在不发达的初级阶段，必须正视而不能超越这个阶段（发展程度）。</li><li><strong>一个动态属性</strong>：初级阶段不是凝固的一块，而是一个<strong>相当长的历史过程</strong>（长期性）；在这个长过程中，随着发展水平的变化，会先后呈现<strong>不同的阶段性特征</strong>（阶段性）。</li></ul>
+<p>题干说的正是这组动态关系：新世纪以来出现一系列<strong>新的阶段性特征</strong>——这是「阶段性」在展现；但这些新特征「并没有改变我国仍处于社会主义初级阶段」——这是「长期性」在兜底。变的是特征，不变的是基本国情，二者统一起来，初级阶段就是<strong>长期性与阶段性统一的动态发展过程</strong>。选 <strong>B</strong>。</p>
+<h3>第 1 步：为什么 A 命题正确却不选</h3>
+<p>A 是本题唯一的「真话陷阱」。「社会性质与发展程度的有机统一」说的是初级阶段的<strong>两层含义</strong>，这句话本身完全正确——但它回答的问题是「初级阶段<strong>是什么</strong>」，是静态的内涵界定。</p>
+<p>题干设问的是：<strong>新特征出现了、基本国情没变，这「表明」什么</strong>——问的是变与不变并存这一现象揭示了初级阶段的什么属性。静态内涵答不了这个「变与不变」，只有「长期性与阶段性统一的动态发展过程」接得住。<strong>命题正确 ≠ 贴合题眼</strong>，干扰项里最要防的就是这种「背过的话」。</p>
+<h3>第 2 步：干扰项归因</h3>
+<table><thead><tr><th>选项</th><th>错在哪</th><th>对应的典型误解</th></tr></thead><tbody><tr><td>A 社会性质与发展程度的有机统一过程</td><td>是初级阶段的<strong>两层含义</strong>（静态内涵），答「是什么」而非题问的「动态属性」</td><td>把背熟的静态定义当成万能答案，不审设问</td></tr><tr><td>C 先进社会制度与落后社会生产的矛盾过程</td><td>貌似在说主要矛盾（人民日益增长的需要同落后的社会生产之间的矛盾），但①题干谈的是发展阶段特征，不是主要矛盾；②「矛盾过程」不是对初级阶段的规范定性</td><td>拿相邻考点的主要矛盾来凑概念</td></tr><tr><td>D 科学社会主义基本原则与时代精神相结合的过程</td><td>杜撰组合，教材对初级阶段没有这种表述，与「新特征 vs 基本国情」的逻辑无关</td><td>无中生有，靠「听起来高级」诱选</td></tr></tbody></table>
+<blockquote>记忆锚点：初级阶段 = 两层含义（已是社会主义 + 尚处不发达阶段）+ 动态属性（<strong>长期性与阶段性统一</strong>）；新阶段性特征 ≠ 新阶段、更 ≠ 走出初级阶段——变的只是特征，不变的是国情。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

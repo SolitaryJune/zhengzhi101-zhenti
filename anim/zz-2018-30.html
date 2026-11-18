@@ -1,8 +1,93 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-30 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-30</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>2018·30 「守法」的完整拼图：主体·内容·定义·范围</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- 复制自 anim_math_concept_template（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：法律的生命力在于实施',
+    cls: 'key',
+    log: '题眼：守法是法律实施的基本途径',
+    body: '<p>「天下之事，不难于立法，而难于法之必行」——法律制定出来只是纸面，<b>实施</b>才让它活起来；而<b>守法是法律实施和实现的基本途径</b>。问的是：对「守法」的正确理解。</p>' },
+  { title: '先立机制：守法必须覆盖实施的全链条',
+    cls: 'key',
+    body: '<p>既然守法是实施的基本途径，它就要覆盖全链条：<b>谁来守</b>（主体）、<b>守什么</b>（范围）、<b>怎么算守</b>（方式与状态）。四个选项恰好各管一块拼图，缺一块定义就不完整——全选题的结构特征。</p>' },
+  { title: 'A：守法的主体是一切组织和个人',
+    cls: 'good',
+    body: '<p>主体块：守法不是老百姓专属义务——国家机关、企事业单位、社会组织<b>一切组织和个人</b>都在守法主体之列；「法之必行」首先难在权力守法。<b>A 对。</b></p>' },
+  { title: 'B：守法是行使法定权利、履行法定义务',
+    cls: 'good',
+    body: '<p>内容块（积极面）：守法不只是「不违法」，还包括<b>依法行使权利</b>——把法定权利用起来同样是守法。最容易漏的一半。<b>B 对。</b></p>' },
+  { title: 'C：守法＝一切组织和个人严格依法办事的活动和状态',
+    cls: 'good',
+    body: '<p>定义块：教材标准定义——既是「<b>活动</b>」（动态的依法办事），也是「<b>状态</b>」（持续的法治秩序），主体同样是一切组织和个人。<b>C 对。</b></p>' },
+  { title: 'D：守法是遵守宪法和法律',
+    cls: 'good',
+    body: '<p>范围块：守法的「法」以<b>宪法和法律</b>为核心——宪法是根本法，守法首先是守宪。最基础、不能少的一块。<b>D 对。</b></p>' },
+  { title: '结论：ABCD',
+    cls: 'good',
+    body: '<p>四块拼图各就各位：主体（A）＋内容（B）＋定义（C）＋范围（D），互不重复、缺一不可。全选题的失分方式是漏选——尤其别漏 B。答案选 <b>ABCD</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var optK = { 2: 1, 3: 2, 4: 3, 5: 4 }[i];
+  var optLetter = optK ? 'ABCD'[optK - 1] : '';
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: i === 0 ? '审题' : (i === 1 ? '机制' : (i === STEPS.length - 1 ? '结论' : '选项 ' + optLetter)),
+    log: s.log || s.title,
+    count: optK || 0,
+    ribbon: optK ? { k: optK, ok: s.cls !== 'bad' } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2018·30】「守法」的完整拼图：主体·内容·定义·范围',
+  subtitle: '考点：法律的实施与守法 · 守法的主体与内容 · 多选题',
+  counterLabel: '已核选项',
+  ribbonTitle: '选项判定（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链：先立「全链条」机制，再逐项判定 A/B/C/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '记忆锚点：守法四拼图＝<b>主体一切组织和个人（A）＋行使权利履行义务（B）＋依法办事的活动与状态（C）＋宪法和法律（D）</b>；守法 ≠ 仅仅不违法——依法行使权利也是守法。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「守法」的完整拼图——主体、内容、方式、范围四块一起看</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——题干那句话把「守法」放在什么位置</h3>
+<p>「天下之事，不难于立法，而难于法之必行」——法律制定出来只是纸面，<strong>实施</strong>才让它活起来，所以「法律的生命力在于实施，法律的权威也在于实施」，而<strong>守法是法律实施和实现的基本途径</strong>。既然守法是实施的基本途径，那它就必须覆盖实施的全链条：谁来守（主体）、守什么（范围）、怎么算守（方式与状态）。四个选项恰好各管一块，拼起来才是完整定义——这也是全选题的结构特征：每块各有分工，缺一块定义就不完整。</p>
+<h3>第 1 步：四个选项按拼图入座</h3>
+<ul><li><strong>A 守法的主体是一切组织和个人</strong> ✅：主体块。守法不是老百姓的专属义务——国家机关、企事业单位、社会组织乃至国家机关工作人员，<strong>一切组织和个人</strong>都在守法主体之列。参考解析专门提醒「不能把守法主体仅限定为公民个人」。</li><li><strong>B 守法是行使法定的权利、履行法定的义务</strong> ✅：内容块（积极面）。守法不只是「不违法」，还包括<strong>依法行使权利</strong>——把法定权利用起来同样是守法。容易忽略的一半。</li><li><strong>C 守法意味着一切组织和个人严格依法办事的活动和状态</strong> ✅：定义块。这是教材对守法的<strong>标准定义</strong>——既是一种「活动」（动态的依法办事），也是一种「状态」（持续的法治秩序），主体同样是「一切组织和个人」。</li><li><strong>D 守法是遵守宪法和法律</strong> ✅：范围块。守法的「法」以宪法和法律为核心——宪法是根本法，守法首先是守宪。这是最基础也是唯一不能少的一块。</li></ul>
+<h3>第 2 步：为什么没有干扰项还要逐项过</h3>
+<p>全选题的失分方式不是「选错」，而是「<strong>漏选</strong>」。四个块里最容易漏的是 B：日常直觉把守法窄化为「别违法」（消极不违法），忘了<strong>依法行使权利</strong>也是守法（积极守法）。参考解析原文即是提示：「守法不仅要求避免违法，也要求依法行使权利、履行义务」。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选 B</strong>：直觉把守法＝不违法。纠正：守法＝履行义务＋行使权利，两半合起来才完整。</li><li><strong>漏选 A</strong>：把守法主体窄化为公民个人。公职人员、政府机关更须守法——「法之必行」首先难在权力守法。</li><li><strong>漏选 C 或 D</strong>：C 是定义（活动＋状态），D 是范围（宪法和法律），各有岗位，不重复，都要勾。</li></ul>
+<blockquote>记忆锚点：守法四拼图＝主体一切组织和个人（A）＋内容行使权利履行义务（B）＋定义依法办事的活动与状态（C）＋范围宪法和法律（D）；守法≠仅仅不违法，依法行使权利也是守法。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

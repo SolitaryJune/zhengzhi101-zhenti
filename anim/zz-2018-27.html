@@ -1,8 +1,93 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-27 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-27</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>2018·27 古田会议：「武装集团」四个字的拆解</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- 复制自 anim_math_concept_template（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：1929 古田会议 + 定性句',
+    cls: 'key',
+    log: '题眼：思想建党、政治建军',
+    body: '<p>1929 年 12 月，红四军党的第九次代表大会在福建上杭古田村召开——古田会议，毛泽东起草决议案，两条主线：<b>思想建党、政治建军</b>。定性句是钥匙：红军是「执行<b>革命的政治任务</b>的武装集团」。</p>' },
+  { title: '先立机制：把「武装集团」的定性句拆开',
+    cls: 'key',
+    body: '<p>拆定性句：「武装集团」＝打仗是本职；「执行<b>革命的政治任务</b>」＝不是单纯打仗的军事组织——必须<b>听党指挥</b>（谁领导）、<b>承担全部革命任务</b>（干什么）、<b>加强政治工作</b>（怎么建）。三问正好对应三个正确项。</p>' },
+  { title: 'A：绝对服从共产党的领导',
+    cls: 'good',
+    body: '<p>「执行革命政治任务」的前提是<b>听党指挥</b>——党对军队绝对领导正是古田会议确立的政治建军核心。<b>A 对。</b></p>' },
+  { title: 'B：担负打仗、筹款和做群众工作的任务',
+    cls: 'good',
+    body: '<p>红军<b>三大任务</b>：打仗、筹款、做群众工作——正说明红军不是「单纯军事观点」下只管打仗的军队，而是执行全部革命政治任务的武装集团。<b>B 对。</b></p>' },
+  { title: 'C：加强政治工作',
+    cls: 'good',
+    body: '<p>思想建党、政治建军落到军队建设上＝<b>政治工作的地位</b>：决议强调用无产阶级思想建设军队，政治工作是红军的生命线。<b>C 对。</b></p>' },
+  { title: 'D：实行全国军事的总动员',
+    cls: 'bad',
+    body: '<p>错。「总动员」是<b>全国性抗战</b>时期的口号——全面抗战路线、动员全民族力量，出自 1937 年全面抗战爆发后的文献。古田会议是 1929 年、处理的是<b>红军建设</b>问题。时间线一拉：1929 建军原则 vs 1937 抗战动员——跨期移植，<b>D 错。</b></p>' },
+  { title: '结论：ABC',
+    cls: 'good',
+    body: '<p>定性句三拆全中：谁领导（A）＋干什么（B）＋怎么建（C）；D 是 1937 年抗战文献的口号，别移植到 1929。答案选 <b>ABC</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var optK = { 2: 1, 3: 2, 4: 3, 5: 4 }[i];
+  var optLetter = optK ? 'ABCD'[optK - 1] : '';
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: i === 0 ? '审题' : (i === 1 ? '机制' : (i === STEPS.length - 1 ? '结论' : '选项 ' + optLetter)),
+    log: s.log || s.title,
+    count: optK || 0,
+    ribbon: optK ? { k: optK, ok: s.cls !== 'bad' } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2018·27】古田会议：「武装集团」四个字的拆解',
+  subtitle: '考点：古田会议（1929）· 思想建党、政治建军 · 多选题',
+  counterLabel: '已核选项',
+  ribbonTitle: '选项判定（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链：先拆「武装集团」定性句，再逐项判定 A/B/C/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: '记忆锚点：古田会议（1929）＝<b>思想建党＋政治建军</b>；武装集团三拆＝<b>绝对服从党的领导（A）＋三大任务（B）＋加强政治工作（C）</b>；「全国军事总动员」是 1937 抗战口号——别跨期移植（D）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：古田会议——「武装集团」四个字背后的建军原则</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——古田会议解决的是什么问题</h3>
+<p>1927 年建军后，红军长期处于农村游击环境，成分复杂，各种非无产阶级思想（单纯军事观点、极端民主化、流寇思想等）侵蚀军队。1929 年 12 月，红四军党的第九次代表大会（古田会议）在福建上杭县古田村召开，毛泽东起草决议案，核心就是两条：<strong>思想建党、政治建军</strong>。题干引的定性句是关键钥匙——「红军是一个<strong>执行革命的政治任务的武装集团</strong>」：武装集团意味着打仗是本职；「执行革命的政治任务」意味着它不是单纯打仗的军事组织，必须接受党的领导、承担政治任务、加强政治工作。把这句话拆开，A、B、C 就都站住了。</p>
+<h3>第 1 步：三个正确项按「武装集团」的定性拆解</h3>
+<ul><li><strong>A 绝对服从共产党的领导</strong> ✅：政治建军的核心——「执行革命政治任务」的前提是<strong>听党指挥</strong>。党对军队的绝对领导正是古田会议确立的原则。</li><li><strong>B 担负打仗、筹款和做群众工作的任务</strong> ✅：红军三大任务——打仗、筹款、做群众工作。这正说明红军不是「单纯军事观点」下只管打仗的军队，而是执行<strong>全部</strong>革命政治任务的武装集团。</li><li><strong>C 加强政治工作</strong> ✅：思想建党、政治建军落到军队建设上，就是政治工作的地位——决议强调用无产阶级思想建设军队，政治工作是红军的生命线。</li></ul>
+<h3>第 2 步：D 错在哪——时间和文献都对不上</h3>
+<ul><li><strong>D 实行全国军事的总动员</strong> ❌：「总动员」是<strong>全国性抗战</strong>时期的口号——全面抗战路线、广泛动员全民族力量，出自 1937 年全面抗战爆发后的文献（如《抗日救国十大纲领》号召实行全国军事总动员）。古田会议是 1929 年、处理的是<strong>红军建设</strong>问题，全国的军事总动员既不在它的议题里，也不是军队建设原则的内容。时间线一拉：1929 年建军原则 vs 1937 年抗战动员——D 是典型的「跨时期移植」干扰项。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>漏选 B</strong>：以为三大任务只是根据地经济要求。恰恰相反，三大任务是「执行革命的政治任务」的直接展开，是古田会议决议的重要内容。</li><li><strong>误选 D</strong>：被「武装集团→总动员」的字面联想带走。对策：给每个会议标时间戳——古田会议 1929（建军），总动员 1937（抗战）；同一题干里的年代线索决定取舍。</li><li><strong>混淆「思想建党」与「政治建军」的对象</strong>：前者解决党内的非无产阶级思想（成员思想建设），后者解决军队的领导权与性质（军队建设），本题强调的是军队一侧。</li></ul>
+<blockquote>记忆锚点：古田会议（1929）＝思想建党＋政治建军；红军＝执行革命政治任务的武装集团 → 绝对服从党的领导（A）＋三大任务（B）＋加强政治工作（C）；「全国军事总动员」是 1937 抗战文献的口号，别跨期移植。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

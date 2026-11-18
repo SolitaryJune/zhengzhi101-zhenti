@@ -1,8 +1,130 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-06 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-06</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-06 · 发展的根本目的</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+
+/* 一张推理卡片 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 推理链：每一步的完整内容（引擎按步数截取显示；s.cls: key=关键/good=正确/bad=排除） */
+var STEPS = [
+  {
+    'cls': 'key',
+    'tag': '审题眼',
+    'title': '第一步：前半句说"手段"，最后一问拐到"目的"',
+    'log': '三个口号全是手段层信号；设问问"为了谁"',
+    'body': '<p>"发展才是硬道理""第一要务""总钥匙"——三个口号回答的都是<b>靠什么解决问题</b>：靠发展。它们全部落在<b>手段层</b>。</p><p>最后一问拐弯了：<b>发展的根本目的</b>——问"发展<b>为了谁</b>"。手段答不了目的，链条必须接到目的端。</p>'
+  },
+  {
+    'cls': 'key',
+    'tag': '立链条',
+    'title': '第二步：手段 → 主体 → 目标，把链条立完整',
+    'log': '发展做大蛋糕 → 人民是主体 → 共同富裕分好蛋糕',
+    'body': '<p><b>手段</b>：发展，做大"蛋糕"（题干前半句）；</p><p><b>主体</b>：人民——发展为了谁、成果归谁；</p><p><b>目标</b>：共同富裕，分好"蛋糕"。</p><p>社会主义生产的目的是满足人民需要：成果由<b>人民共享</b>，最终走向<b>共同富裕</b>——问"根本目的"必须接到这一站。</p>'
+  },
+  {
+    'cls': 'bad',
+    'tag': 'A 排除',
+    'title': '选项 A：增强综合国力',
+    'log': 'A 把"中间收获"当"终点"——链条停在半路',
+    'body': '<p><b>A 错</b>：综合国力是发展的重要结果之一，也是解决问题的实力基础。</p><p>但它属于国家层面的能力建设，本身还要回答"强大起来<b>为了谁</b>"——链条没接完，停在半路，够不到"根本目的"。</p>',
+    'ribbon': { 'k': 1, 'ok': false }
+  },
+  {
+    'cls': 'bad',
+    'tag': 'B 排除',
+    'title': '选项 B：体现社会主义优越性',
+    'log': 'B 把"表现"当"目的"',
+    'body': '<p><b>B 错</b>：优越性是发展成果对制度的<b>证明</b>，回答"发展得好会带来什么"。</p><p>为"显示优越"而发展是本末倒置——目的问"为了谁"，表现不是终点。</p>',
+    'ribbon': { 'k': 2, 'ok': false }
+  },
+  {
+    'cls': 'bad',
+    'tag': 'C 排除',
+    'title': '选项 C：消灭剥削，消除两极分化（最强干扰）',
+    'log': 'C 把"环节"当"终点"——本质论里它是过程性要求',
+    'body': '<p><b>C 错</b>（最强干扰）：它确实在社会主义本质论五句话里——"解放生产力，发展生产力，<b>消灭剥削，消除两极分化</b>，<b>最终达到共同富裕</b>"。</p><p>但看排列：前四句是<b>手段与过程性要求</b>，"最终达到"三字把目标收给<b>共同富裕</b>。C 是通往 D 的必经环节，问"根本目的 / 最终目标 / 落脚点"时，环节让位于终点。</p>',
+    'ribbon': { 'k': 3, 'ok': false }
+  },
+  {
+    'cls': 'good',
+    'tag': 'D 入选',
+    'title': '选项 D：使人民共享发展成果，实现共同富裕',
+    'log': 'D 链条接到底：主体（人民）+ 目标（共同富裕）一个不缺',
+    'body': '<p><b>D 对</b>：把链条接到目的端——发展成果由<b>人民共享</b>（主体），最终<b>实现共同富裕</b>（目标）。</p><p>对照检查：主体、目标一个不缺；和 C 的关系 = C 是路上的一站，D 是终点站。</p>',
+    'ribbon': { 'k': 4, 'ok': true }
+  },
+  {
+    'cls': 'key',
+    'tag': '方法',
+    'title': '第六步：本质论三层 + "目的"类设问的题眼',
+    'log': '问本质五句全要；问根本目的只取目标面',
+    'body': '<p><b>本质论三层</b>：解放和发展生产力 = 手段面；消灭剥削、消除两极分化 = 制度面；共同富裕 = 目标面。问"本质"→ 五句全要；问"根本目的 / 最终目标 / 落脚点"→ 只取目标面。</p><p><b>题眼信号</b>："根本目的""最终""归宿""为了谁" = 目的题；"总钥匙""第一要务""硬道理" = 手段层信号——题干铺在前半句，就等你把手段误当答案。</p>'
+  },
+  {
+    'cls': 'good',
+    'tag': '结论',
+    'title': '收束：答案 D',
+    'log': '收束：发展是手段 → 人民共享 → 共同富裕 → 选 D',
+    'body': '<p>推理链回放：手段口号 → 问"为了谁" → 链条接到目的端 → 选 <b>D</b>。</p><p>口诀：发展是手段、人民是主体、共同富裕是终点；C 是环节，别把环节当终点。</p>'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '干扰项' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '发展的根本目的：共享发展成果、实现共同富裕',
+  subtitle: '考点：手段链与目的链 · 社会主义本质论分层 · 选项逐项推演',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  snaps: snaps,
+  result: {
+    big: '答案 D',
+    html: '<b>使人民共享发展成果，实现共同富裕</b>——发展是手段、人民是主体、共同富裕是根本目的。<br>干扰项：A 综合国力是中间收获、B 优越性是表现不是目的、C 消灭剥削消除两极分化是通往 D 的环节（本质论前四句为手段与过程性要求，"最终达到共同富裕"才是目标面）。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：发展的根本目的——共享发展成果，实现共同富裕</h2>
+<p>答案：<strong>D</strong>。</p>
+<h3>第 0 步：先立机制——"手段链"与"目的链"不能接错头</h3>
+<p>题干前半句一口气给了三个口号："发展才是硬道理""发展是党执政兴国的第一要务""发展是解决中国一切问题的总钥匙"——三个说法全部落在<strong>手段层</strong>：说的是"解决中国所有问题<strong>靠什么</strong>"，答案是"靠发展"。最后一问却拐了个弯：发展的<strong>根本目的</strong>——问的是"发展<strong>为了谁</strong>"。把这条链完整立起来：</p>
+<table><thead><tr><th>环节</th><th>内容</th><th>题干对应</th></tr></thead><tbody><tr><td>手段</td><td>发展：做大"蛋糕"</td><td>硬道理 / 第一要务 / 总钥匙</td></tr><tr><td>主体</td><td>人民：发展<strong>为了谁</strong>、成果<strong>归谁</strong></td><td>设问"根本目的"指向的位置</td></tr><tr><td>目标</td><td>共同富裕：分好"蛋糕"</td><td>社会主义本质论的终点</td></tr></tbody></table>
+<p>社会主义生产的目的是满足人民日益增长的物质文化需要，发展成果由<strong>人民共享</strong>，最终走向<strong>共同富裕</strong>。问"根本目的"，链条必须接到<strong>目的端</strong>：D 项"使人民共享发展成果，实现共同富裕"正是这条链的终点站——主体（人民）和目标（共同富裕）一个不缺。</p>
+<h3>第 1 步：三个干扰项各对应哪种误解</h3>
+<ul><li><strong>A（增强综合国力）→ 把"中间收获"当"终点"</strong>：综合国力是发展的重要结果之一，也是"解决一切问题"的实力基础，但它属于国家层面的能力建设，本身还要回答"强大起来为了谁"——链条没接完，停在半路。</li><li><strong>B（体现社会主义优越性）→ 把"表现"当"目的"</strong>：优越性是发展成果对制度的<strong>证明</strong>，是"发展得好会带来什么"，不是"发展为的什么"；为"显示优越"而发展是本末倒置。</li><li><strong>C（消灭剥削，消除两极分化）→ 最强干扰：把"环节"当"终点"</strong>：C 确实在社会主义本质论五句话里——"解放生产力，发展生产力，消灭剥削，消除两极分化，<strong>最终达到共同富裕</strong>"。但看排列：前四句是手段与过程性要求，"最终达到"三字把目标收给<strong>共同富裕</strong>。C 是到达 D 的必经环节，问"根本目的 / 最终目标 / 落脚点"时，环节让位于终点。</li></ul>
+<h3>预判追问</h3>
+<ul><li><strong>本质论和这道题什么关系？</strong> 本质论回答"什么是社会主义"，五句话分三层：解放和发展生产力是<strong>手段面</strong>，消灭剥削、消除两极分化是<strong>制度面</strong>，共同富裕是<strong>目标面</strong>。问"本质"→ 五句全要；问"根本目的 / 最终目标 / 出发点落脚点"→ 只取目标面。本题正是后者。</li><li><strong>怎么识别"目的"类设问？</strong> 题眼信号："根本目的""最终""落脚点""为了谁""归宿"。而"总钥匙""第一要务""硬道理"是<strong>手段层信号</strong>——题干故意把它们铺在前半句，就是等你把手段误当答案。</li></ul>
+<blockquote>记忆锚点：发展是手段、人民是主体、共同富裕是终点；本质论五句里只有"最终达到共同富裕"是目标面，C 是通往 D 的环节，别把环节当终点。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

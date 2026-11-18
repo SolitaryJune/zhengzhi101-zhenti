@@ -1,8 +1,99 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-13 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-13</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·13 公民道德建设的着力点</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 概念/结构卡片（依据 anim_math_concept_template；政治站纯文本，无 KaTeX） */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：问"着力点"落在纲要哪一层',
+    cls: 'key',
+    body: '<p>2019 年《新时代公民道德建设实施纲要》有清晰层次。题干问"着力点"——就是问：道德建设<b>落地施力的领域/抓手</b>是哪一条？先立结构图再查层。</p>',
+    log: '纲要分层：重点任务 / 教育引导 / 着力点' },
+  { title: '机制：为什么着力点是"四德"',
+    cls: 'key',
+    body: '<p>人一生有四个道德活动场：公共场所（<b>社会公德</b>）、职业岗位（<b>职业道德</b>）、家庭（<b>家庭美德</b>）、个人修身（<b>个人品德</b>）——道德建设就从这四个领域着力，合称"四德"。</p>',
+    log: '四个活动场 = 四德 = 着力点' },
+  { title: '选项 A：重点任务层',
+    cls: 'bad',
+    body: '<p>"弘扬<b>民族精神和时代精神</b>"是纲要"重点任务"里的内容——要弘扬什么，不是在哪里着力。A 错位。</p>',
+    ribbon: {k: 1, ok: false},
+    log: 'A：重点任务层' },
+  { title: '选项 B：教育引导层',
+    cls: 'bad',
+    body: '<p>"推动<b>理想信念教育</b>常态化制度化"属于深化道德教育引导层面的任务表述。B 错位。</p>',
+    ribbon: {k: 2, ok: false},
+    log: 'B：教育引导层' },
+  { title: '选项 C：着力点正主',
+    cls: 'good',
+    body: '<p>"推进<b>社会公德、职业道德、家庭美德、个人品德</b>建设"——四德连排，正是纲要明确的着力点。C 对。</p>',
+    ribbon: {k: 3, ok: true},
+    log: 'C：四德 = 着力点' },
+  { title: '选项 D：重点任务层',
+    cls: 'bad',
+    body: '<p>"传承<b>孝老爱亲、扶危济困、见义勇为</b>等中华美德"是重点任务中"传承中华传统美德"的内容清单——美德的内容，不是着力领域。D 错位。</p>',
+    ribbon: {k: 4, ok: false},
+    log: 'D：传统美德的内容清单' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>C</b>。四个选项全是纲要真话，考的是层次定位：着力点 = 四德。</p>',
+    log: '锁定 C：四德建设' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '《新时代公民道德建设实施纲要》：着力点查层',
+  subtitle: '考点：新时代公民道德建设 · 方法：先立纲要结构图，再按层对号入座',
+  counterLabel: '推理步',
+  ribbonTitle: '选项带（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链；序号带 1–4 对应选项 A–D。',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '记忆锚点：着力点 = <b>四德（社会公德、职业道德、家庭美德、个人品德）</b>；重点任务 = 理想信念 + 传统美德 + 民族精神与时代精神。四个选项全是真话，层次定位定胜负。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：《新时代公民道德建设实施纲要》——"着力点"对应"四德"</h2>
+<p>答案：<strong>C（推进社会公德、职业道德、家庭美德、个人品德建设）</strong>。</p>
+<h3>第 0 步：先立机制——先立纲要的"结构图"</h3>
+<p>2019 年《新时代公民道德建设实施纲要》不是一锅粥，它有清晰的层次，考点就出在"哪个说法属于哪一层"：</p>
+<table><thead><tr><th>层次</th><th>内容</th></tr></thead><tbody><tr><td>重点任务</td><td>筑牢理想信念之基；传承中华传统美德；弘扬民族精神和时代精神</td></tr><tr><td>深化道德教育引导</td><td>理想信念教育常态化制度化等</td></tr><tr><td><strong>着力点（重点领域）</strong></td><td><strong>推进社会公德、职业道德、家庭美德、个人品德建设（"四德"）</strong></td></tr></tbody></table>
+<p>题干问"着力点"——查表：<strong>四德</strong>，即 C。"着力点"的含义是道德建设要落地施力的<strong>领域/抓手</strong>：人在社会上有四个活动场——公共场所（社会公德）、职业岗位（职业道德）、家庭（家庭美德）、个人修身（个人品德），道德建设就从这四个领域着力。</p>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归属层次</th></tr></thead><tbody><tr><td>A 弘扬民族精神和时代精神</td><td>❌</td><td>重点任务层</td></tr><tr><td>B 推动理想信念教育常态化制度化</td><td>❌</td><td>深化道德教育引导层</td></tr><tr><td>C 推进社会公德、职业道德、家庭美德、个人品德建设</td><td>✅</td><td>着力点层（四德）</td></tr><tr><td>D 传承孝老爱亲、扶危济困、见义勇为等中华美德</td><td>❌</td><td>重点任务层（传承中华传统美德的展开）</td></tr></tbody></table>
+<h3>第 2 步：易错点——干扰项全是纲要里的真表述</h3>
+<p>和延安精神那题同款陷阱：四个选项<strong>没有一个是编造的</strong>，全是纲要里的正确内容，考的只是"层次定位"。</p>
+<ul><li><strong>误选 A</strong>：知道民族精神、时代精神重要，就当成着力点。它在"重点任务"里——是"要弘扬什么"，不是"在哪里着力"。</li><li><strong>误选 B</strong>：把理想信念教育常态化制度化当成着力点。它是深化道德教育引导层面的任务表述。</li><li><strong>误选 D</strong>：孝老爱亲、见义勇为确实很"着力"，但它属于重点任务中"传承中华传统美德"的具体内容——美德的内容清单，不是建设的着力领域。</li></ul>
+<blockquote>记忆锚点：着力点 = <strong>四德</strong>（社会公德、职业道德、家庭美德、个人品德）；重点任务 = 理想信念 + 传统美德 + 民族精神与时代精神。看到"公德/职德/美德/品德"连排，选它。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

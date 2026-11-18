@@ -1,8 +1,124 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-14 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-14</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2015·14 钱学森的「最高奖赏」：评价人生价值的根本尺度</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 模板：anim_concept（概念/推理链卡片，政治站无 KaTeX 版）· 只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：两句话、一个设问",
+    "cls": "key",
+    "body": "<p>钱学森：「活着的目的就是<b>为人民服务</b>」「人民满意……那才是<b>最高的奖赏</b>」。设问锁定「评价人生价值的<b>根本尺度</b>是」——先立教材模型，再让两句话对号。考点：<b>人生价值的评价</b>。</p>",
+    "log": "话分两层：目的说贡献，奖赏说评价权"
+  },
+  {
+    "title": "先立机制：两个维度、一个根本尺度",
+    "cls": "key",
+    "body": "<p>人生价值含<b>自我价值</b>（个体从社会获得的尊重与满足）与<b>社会价值</b>（个体对社会和他人的责任与贡献）。评价时要结合看，但<b>根本尺度</b>只有一把：看活动是否符合社会发展客观规律、是否推动历史进步——具体到个人，就是看<b>是否以劳动为社会和他人作贡献</b>。道理：贡献是「源」、满足是「流」，不问贡献评价就失去公共标准。</p>",
+    "log": "贡献是源、满足是流：根本尺度看贡献"
+  },
+  {
+    "title": "C：对社会和他人生存发展的贡献",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p>「为人民服务」＝人生目的落在<b>贡献</b>上；「人民满意才是最高奖赏」＝评价权交给<b>人民（社会）</b>。两层合起来：贡献是内容、人民是裁判——正对根本尺度。<b>C 正确</b>。</p>",
+    "log": "贡献是尺、人民是裁判 → 选 C"
+  },
+  {
+    "title": "A：地位——位置高低≠价值大小",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>地位是社会给的位置；位置可以高，不贡献照样谈不上价值。把「被放在哪」当成「价值几何」，是典型误解。<b>A 错误</b>。</p>",
+    "log": "地位是位置不是尺度 → A 不选"
+  },
+  {
+    "title": "B：影响——影响力≠贡献",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>影响是<b>中性词</b>，有正有负——破坏也能「有影响」。钱学森强调的是「人民满意」，即影响必须是<b>为人民造福</b>的方向才计为价值。<b>B 错误</b>。</p>",
+    "log": "影响要问方向，贡献才讲价值 → B 不选"
+  },
+  {
+    "title": "D：从社会获得的满足——方向反了（最迷惑）",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>「从社会获得的满足」＝<b>索取</b>方向（自我价值一端）。自我价值是被评价的<b>构成</b>，不是评价的<b>尺度</b>；评价人生价值首先看贡献而非获得——「得到多少」当尺子，方向恰好相反。<b>D 错误</b>。</p>",
+    "log": "自我价值是构成不是尺度 → D 不选"
+  },
+  {
+    "title": "判别刀口：「根本尺度」别换成「方法论」",
+    "cls": "key",
+    "body": "<p>教材还有「能力与尽力、动机与效果、物质与精神贡献相结合」等要求——那是「<b>怎样评得全面</b>」的方法论；设问问的是「根本尺度<b>是什么</b>」。答题先审问法：问什么答什么，别把方法论当尺度。</p>",
+    "log": "问尺度答尺度：劳动和贡献"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>C</b>：评价人生价值的根本尺度是<b>个人对社会和他人生存和发展的贡献</b>。记忆锚点：<b>贡献是尺，人民是裁判</b>；地位、影响不是尺度，「从社会获得的满足」是索取方向。</p>",
+    "log": "锁定 C：贡献尺度"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "钱学森的「最高奖赏」：评价人生价值的根本尺度",
+  subtitle: "考点：思修·人生价值的评价 · 方法：先立「两维度一尺度」，再把话拆两层对号",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 C",
+    html: "记忆锚点：评价人生价值的根本尺度＝<b>劳动和贡献</b>（是否推动社会进步、是否为人民作贡献）；「为人民服务」指贡献，「人民满意」指裁判——<b>贡献是尺，人民是裁判</b>，索取方向（D）不是尺度。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：钱学森的「最高奖赏」——评价人生价值的根本尺度是贡献</h2>
+<p>答案：<strong>C（个人对社会和他人的生存和发展的贡献）</strong>。</p>
+<h3>第 0 步：先立机制——人生价值有两个维度，评价却有一个根本尺度</h3>
+<p>人生价值包含<strong>自我价值</strong>（个体从社会获得的尊重与满足）与<strong>社会价值</strong>（个体对社会和他人的责任与贡献）两个方面；二者要结合起来看，但教材明确：评价人生价值的<strong>根本尺度</strong>，是看一个人的活动<strong>是否符合社会发展的客观规律、是否通过实践促进了历史进步</strong>——具体到个人，就是看<strong>是否以自己的劳动为社会和他人作出了贡献</strong>。道理在于：社会的存在与发展依赖每个成员的贡献，<strong>贡献是「源」、满足是「流」</strong>；不问贡献只问获得，评价就失去了公共标准。</p>
+<h3>第 1 步：把钱学森的话拆成两层，逐层对上尺度</h3>
+<ul><li>「我活着的目的就是为人民服务」——人生<strong>目的</strong>落在<strong>为人民作贡献</strong>上，说的是人生价值的内容指向；</li><li>「人民最后满意，那才是最高的奖赏」——由谁来<strong>评价</strong>？评价权交给<strong>人民（社会）</strong>，而不是自我感觉，也不是个人所得。</li></ul>
+<p>两层合起来：<strong>贡献是内容，人民满意是裁判</strong>——正对应根本尺度「个人对社会和他人生存和发展的贡献」，选 <strong>C</strong>。</p>
+<h3>第 2 步：干扰项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>错因与典型误解</th></tr></thead><tbody><tr><td>A 个体在社会中的地位</td><td>❌</td><td>地位是社会给的位置，位置高低≠价值大小——把「被放在哪」当成「价值几何」</td></tr><tr><td>B 个体在社会中的影响</td><td>❌</td><td>影响是中性词，有正有负（破坏也能「有影响」），影响力≠贡献——把「名气、作用大小」当尺子</td></tr><tr><td>D 个体从社会获得的满足尺度</td><td>❌</td><td>方向反了：这是从社会<strong>索取</strong>（自我价值一端）；评价人生价值首先看<strong>贡献</strong>而非获得——把「得到多少」当尺子</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 D（最迷惑的一项）</strong>：「自我价值」确实是人生价值的组成部分，但它是<strong>被评价的构成</strong>，不是<strong>评价的尺度</strong>；且「从社会获得的满足」侧重索取一端，与「根本尺度看贡献」方向恰好相反。</li><li><strong>选 B（把影响当贡献）</strong>：影响要问方向，钱学森强调「人民满意」，即影响必须是<strong>为人民造福</strong>的方向才计为价值。</li><li><strong>漏看「根本尺度」四个字</strong>：教材另有「能力大小与尽己所能、动机与效果、物质贡献与精神贡献相结合」等<strong>方法论</strong>要求，但那是「怎样评得全面」，不是「根本尺度是什么」——设问问的是后者。</li></ul>
+<blockquote>记忆锚点：评价人生价值的根本尺度 = <strong>劳动和贡献</strong>（是否推动社会进步、是否为人民作贡献）；地位、影响不是尺度，「从社会获得的满足」是索取方向——<strong>贡献是尺，人民是裁判</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

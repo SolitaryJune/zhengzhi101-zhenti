@@ -1,8 +1,121 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2025-33 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2025-33</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2025·33 金砖合作常葆活力的「关键」</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 anim_math_concept 模板（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: "审题眼",
+    cls: "key",
+    tag: "审题",
+    log: "锁定考点：金砖合作机制的原则基因",
+    body: "<p>现象链：成立 18 年不断发展壮大——人口占全球近一半、经济总量占世界比重超三成、对世界经济增长贡献率超 <b>50%</b>；2024 年 10 月喀山会晤又决定邀请新一批<b>金砖伙伴国</b>。问法「关键在于」问的是成效背后的<b>原则基因</b>，不是成效清单。</p>" },
+  { title: "先立机制：三条基因 + 一条红线",
+    cls: "key",
+    tag: "立机制",
+    log: "金砖 = 联合自强的合作机制，不是军事政治集团",
+    body: "<p>金砖是<b>新兴市场和发展中国家联合自强的合作机制</b>，不是军事政治集团。基因三句话：<b>开放包容（襟怀）</b>——怎么待人；<b>合作共赢（目标）</b>——为什么在一起；<b>公平正义（追求）</b>——一起想改变什么。一条红线：<b>结伴不结盟</b>。凡沾「同盟、阵营、排他」者排除。</p>" },
+  { title: "A. 以开放包容为襟怀——入选",
+    cls: "good",
+    tag: "A ✓",
+    ribbon: { k: 1, ok: true },
+    log: "邀新伙伴国正是开放包容的落点",
+    body: "<p>题干「决定邀请新一批国家成为<b>金砖伙伴国</b>」就是 A 的直接落点：不设门槛、不搞封闭小圈子，大门越开越大——这正是 18 年发展壮大的来源之一。</p>" },
+  { title: "B. 以合作共赢为目标——入选",
+    cls: "good",
+    tag: "B ✓",
+    ribbon: { k: 2, ok: true },
+    log: "贡献率超 50%，共赢有数据支撑",
+    body: "<p>对世界经济增长贡献率超 <b>50%</b> 是真金白银的落点：金砖做的是<b>做大蛋糕</b>的发展逻辑，不是你输我赢的零和博弈——各国加入图的是共同发展，不是另立山头。</p>" },
+  { title: "C. 以公平正义为追求——入选",
+    cls: "good",
+    tag: "C ✓",
+    ribbon: { k: 3, ok: true },
+    log: "格局演变、力量对比是公平正义的落点",
+    body: "<p>题干「牵动着<b>世界格局演变和国际力量对比</b>」是 C 的落点：金砖壮大本身就是推动全球治理朝公正合理方向演进、提升发展中国家<b>代表性和发言权</b>的过程。</p>" },
+  { title: "D. 以构建同盟为路径——排除",
+    cls: "bad",
+    tag: "D ✗",
+    ribbon: { k: 4, ok: false },
+    log: "同盟 = 冷战思维，金砖结伴不结盟",
+    body: "<p>「构建同盟」是冷战式组织形态：有<b>共同假想敌</b>、有<b>排他阵营义务</b>的封闭集团。金砖恰恰相反：<b>结伴不结盟</b>、不针对第三方、不搞阵营对抗。「伙伴国」机制走的是伙伴网络之路，与同盟的封闭形态相反。</p>" },
+  { title: "交叉验证：A 与 D 不能同时成立",
+    cls: "step",
+    tag: "验证",
+    log: "开放包容 ⊥ 同盟封闭性，D 从内部锁死",
+    body: "<p>若金砖「以<b>构建同盟</b>为路径」，就不可能同时「以<b>开放包容</b>为襟怀」——同盟的封闭排他与开放包容直接冲突。题干邀新伙伴国的证据只能与 A 兼容，D 从内部一致性上就被排除。</p>" },
+  { title: "结论",
+    cls: "good",
+    tag: "完成",
+    log: "锁定 ABC：三基因 + 一条红线",
+    body: "<p>答案 <b>ABC</b>。金砖三基因：<b>开放包容（襟怀）+ 合作共赢（目标）+ 公平正义（追求）</b>；一条红线：<b>结伴不结盟</b>——凡「构建同盟」类表述必排。</p>" },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "2025·33 金砖合作常葆活力的「关键」",
+  subtitle: "考点：金砖合作机制 · 方法：先立「三条基因 + 一条红线」，再对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」沿推理链展开：立机制 → 对号 → 验证 → 结论。",
+  snaps: snaps,
+  result: {
+    big: "答案 ABC",
+    html: "答案 <b>ABC</b>：金砖合作以<b>开放包容</b>为襟怀、以<b>合作共赢</b>为目标、以<b>公平正义</b>为追求，结伴而不结盟。D「构建同盟」是冷战思维——同盟有假想敌、有排他义务，与开放包容自相矛盾，与伙伴国机制形态相反，必排。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：金砖为什么常葆活力——三条基因与一条红线</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——金砖是什么，不是什么</h3>
+<p>题干给了一串现象：成立 18 年不断发展壮大，人口占全球近一半，经济总量占世界比重超三成，对世界经济增长贡献率超 50%，喀山会晤又决定邀请新一批国家成为金砖伙伴国。问法是「关键在于」——问的不是成效清单，而是这些成效背后金砖合作的<strong>原则基因</strong>。</p>
+<p>金砖是<strong>新兴市场和发展中国家联合自强的合作机制</strong>，不是军事政治集团。把它的基因拆开，恰好三句话：<strong>以开放包容为襟怀（怎么待人）、以合作共赢为目标（为什么在一起）、以公平正义为追求（一起想改变什么）</strong>；外加一条红线：<strong>结伴而不结盟</strong>。判断标准由此确立——与「开放、不结盟、非对抗」相容的入选，沾「同盟、阵营、排他」的排除。</p>
+<h3>第 1 步：A、B、C 对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>题干落点与依据</th></tr></thead><tbody><tr><td>A 以开放包容为襟怀</td><td>✅</td><td>「邀请新一批国家成为金砖伙伴国」就是开放包容的落点：不设门槛、不搞封闭小圈子，大门越开越大</td></tr><tr><td>B 以合作共赢为目标</td><td>✅</td><td>对世界经济增长贡献率超 50% 是真金白银的落点：金砖做的是做大蛋糕的发展逻辑，不是你输我赢的零和博弈</td></tr><tr><td>C 以公平正义为追求</td><td>✅</td><td>「牵动着世界格局演变和国际力量对比」是落点：金砖壮大本身就是推动全球治理朝公正合理方向演进、提升发展中国家代表性和发言权的过程</td></tr></tbody></table>
+<p>→ 选 <strong>ABC</strong>。</p>
+<h3>第 2 步：D 为什么错（唯一排除点，值得多说一句）</h3>
+<p>「构建同盟」是冷战式的组织形态：有共同假想敌、有排他的阵营义务。金砖恰恰相反——<strong>结伴不结盟</strong>：不针对第三方、不搞阵营对抗。用题干内部证据即可排除：</p>
+<ol><li>「邀请新一批伙伴国」走的是<strong>伙伴网络</strong>之路；同盟是封闭排他的集团，两者形态相反。</li><li>若 D 成立，就与 A「开放包容」<strong>自相矛盾</strong>——襟怀开放包容的机制，不可能同时「以构建同盟为路径」。</li><li>参考口径：中国奉行结伴不结盟，金砖合作同样不结盟、不对抗、不针对第三方。</li></ol>
+<h3>易错点：每个干扰项、漏选对应哪种误解</h3>
+<ul><li><strong>误选 D（把「壮大」套进阵营思维）</strong>：典型误解是「多边机制壮大 = 抱团取暖 = 结盟」，甚至把金砖误读成「反西方同盟」。金砖扩员从不设假想敌，D 是冷战思维的套用。</li><li><strong>漏选 C（觉得「公平正义」空泛）</strong>：意义题不看「具体不具体」，看题干有没有落点——「世界格局演变和国际力量对比」正是公平正义的落点，错把它当套话就漏了。</li><li><strong>漏选 B（把「合作共赢」当口号）</strong>：贡献率超 50% 说明共赢有数据支撑，B 与题干现象直接对应，不是空洞表态。</li></ul>
+<blockquote>记忆锚点：金砖三基因 = <strong>开放包容（襟怀）+ 合作共赢（目标）+ 公平正义（追求）</strong>；一条红线 = <strong>结伴不结盟</strong>——凡「构建同盟」类表述必排。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

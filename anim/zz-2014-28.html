@@ -1,8 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-28 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-28</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·28 钓鱼岛的法理链条：三份文件接力</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 自包含推理链卡片模板（引擎自动按 URL 注入题干与选项），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+    {
+      "title": "审题眼：一条归还链条",
+      "cls": "key",
+      "body": "<p>题眼：钓鱼岛作为台湾附属岛屿「应与台湾一并归还中国」的<b>国际文件</b>。机制：国际法上归还领土靠<b>层层咬合的文件接力</b>——先声明（还什么）→ 再执行令（必须还）→ 后接收（认账生效）。</p>",
+      "log": "题眼：文件接力三环——声明→执行令→认账"
+    },
+    {
+      "title": "1943.12 · 《开罗宣言》：定「还什么」",
+      "cls": "good",
+      "ribbon": {
+        "k": 2,
+        "ok": true
+      },
+      "body": "<p><b>《开罗宣言》</b>（1943 年 12 月）：日本所窃取于中国的领土，例如东北四省、<b>台湾、澎湖群岛</b>等，归还中华民国——钓鱼岛随台湾附属岛屿在列。链条第一环。<b>B 正确</b>。</p>",
+      "log": "开罗定「还什么」 → B 选"
+    },
+    {
+      "title": "1945.7 · 《波茨坦公告》：定「必须还」",
+      "cls": "good",
+      "ribbon": {
+        "k": 1,
+        "ok": true
+      },
+      "body": "<p><b>《波茨坦公告》</b>（1945 年 7 月）：第八条「《开罗宣言》之条件<b>必将实施</b>」——把声明升级为必须执行的义务。链条第二环。<b>A 正确</b>。</p>",
+      "log": "波茨坦定「必须还」 → A 选"
+    },
+    {
+      "title": "1945.9 · 《日本投降书》：认账",
+      "cls": "good",
+      "ribbon": {
+        "k": 3,
+        "ok": true
+      },
+      "body": "<p><b>《日本投降书》</b>（1945 年 9 月）：日本正式签署的国际文书，写明<b>接受《波茨坦公告》</b>、无条件投降——等于认下归还义务，前两环由此落地生效。链条第三环。<b>C 正确</b>。别漏：宣言、公告、投降书都算国际文件。</p>",
+      "log": "投降书「认账」，链条闭环 → C 选"
+    },
+    {
+      "title": "D：《德黑兰宣言》管的是欧洲战场",
+      "cls": "bad",
+      "ribbon": {
+        "k": 4,
+        "ok": false
+      },
+      "body": "<p><b>《德黑兰宣言》</b>：1943 年底美英苏<b>对德作战</b>会议文件（商讨开辟欧洲第二战场），与对日领土处置无关。它与《开罗宣言》同为 <b>1943 年 12 月 1 日</b>发表，最易张冠李戴。<b>D 不选</b>。</p>",
+      "log": "德黑兰管欧洲战场 → D 不选"
+    },
+    {
+      "title": "结论",
+      "cls": "good",
+      "body": "<p>答案 <b>ABC</b>：开罗定「还什么」→ 波茨坦定「必须还」→ 投降书「认账」。1943 年两宣言同日发表——<b>开罗对日、德黑兰对德</b>。</p>",
+      "log": "锁定 ABC"
+    }
+  ];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "钓鱼岛的法理链条：三份文件接力",
+  subtitle: "考点：抗战与国际文件 · 方法：文件接力（还什么→必须还→认账）",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABC",
+    html: "记忆锚点：<b>开罗（还什么）→ 波茨坦（必须还）→ 投降书（认账）</b>；投降书是日本签署的国际文书、接受波茨坦公告即认下归还义务。德黑兰宣言是欧洲战场对德文件，1943.12.1 与开罗宣言同日发表。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：钓鱼岛归还的国际法"文件接力"</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——领土归还靠"文件接力"</h3>
+<p>单凭一句"中国最早发现、命名、利用和管辖"是讲不完战后处置的，国际法上把领土还回来靠<strong>层层咬合的文件链</strong>：先有声明（定"还什么"），再有执行令（定"必须还"），最后有接收（"认账"生效）。战后对日领土处置恰好三环：</p>
+<table><thead><tr><th>时间</th><th>文件</th><th>关键内容</th></tr></thead><tbody><tr><td>1943 年 12 月</td><td>《开罗宣言》</td><td>日本所窃取于中国的领土，例如东北四省、<strong>台湾、澎湖群岛</strong>等，归还中华民国</td></tr><tr><td>1945 年 7 月</td><td>《波茨坦公告》</td><td>第八条：《开罗宣言》之条件<strong>必将实施</strong></td></tr><tr><td>1945 年 9 月</td><td>《日本投降书》</td><td>日本接受《波茨坦公告》，宣布无条件投降</td></tr></tbody></table>
+<p>钓鱼岛作为台湾的<strong>附属岛屿</strong>，随台湾一并进入这条归还链条——这就是题干"钓鱼岛作为台湾的附属岛屿应与台湾一并归还中国"的出处。</p>
+<h3>第 1 步：逐项裁决</h3>
+<ul><li><strong>B《开罗宣言》</strong> ✅：链条第一环——明确"还什么"，台湾及其附属岛屿在列。</li><li><strong>A《波茨坦公告》</strong> ✅：链条第二环——把开罗的声明变成必须执行的义务。</li><li><strong>C《日本投降书》</strong> ✅：链条第三环——投降行为使前两环落地生效。</li><li><strong>D《德黑兰宣言》</strong> ❌：1943 年底美英苏<strong>对德作战</strong>会议文件（商讨开辟欧洲第二战场），与对日领土处置无关。</li></ul>
+<p>→ 选 <strong>ABC</strong>。</p>
+<h3>为什么《日本投降书》也算国际文件</h3>
+<p>容易漏 C 的人心里的问题是："宣言、公告才算国际文件，一纸投降书算吗？"算——投降书是日本作为战败国正式签署的国际文书，它写明<strong>接受《波茨坦公告》</strong>，等于在法律上认下了"归还台湾及附属岛屿"的义务。没有这一环，前两份文件只是纸上声明；有了这一环，归还才完成"宣布—执行—认账"的闭环。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 D</strong>：同是 1943 年的大国宣言，记混了战场归属。<strong>开罗对日、德黑兰对德</strong>，且两者同为 1943 年 12 月 1 日发表，最容易张冠李戴。</li><li><strong>漏掉 C</strong>：以为只有"宣言""公告"才够格——实际上投降书正是让前两环生效的最后一扣，少了它链条就断在半空。</li></ul>
+<blockquote>记忆锚点：<strong>开罗定"还什么"→ 波茨坦定"必须还"→ 投降书"认账"</strong>；1943 年两宣言同日发表——开罗对日、德黑兰对德。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

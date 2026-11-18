@@ -1,8 +1,100 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-15 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-15</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2024·15 加强基础研究，归根到底要靠什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：「归根到底」是层次题',
+    cls: 'key', tag: '审题',
+    body: '<p>2023 年 2 月 21 日中央政治局第三次集体学习：加强基础研究是实现高水平科技自立自强的<b>迫切要求</b>、建设世界科技强国的<b>必由之路</b>。设问落在「<b>归根到底要靠</b>」——四个选项都是讲话里的真举措，比的不是真假，是<b>层次</b>。</p>',
+    log: '四选项全真，比「归根到底」的层次' },
+  { title: '先立机制：条件是台，人才是角',
+    cls: 'key', tag: '立机制',
+    body: '<p>基础研究是整个科学体系的<b>源头</b>，源头竞争拼<b>原始创新能力</b>——而原始创新只能由人的头脑产出。机制提供保障、平台提供舞台、布局提供路径，但它们自己不会思考，<b>会思考的只有人</b>。所以载体是人才：讲话原句「加强基础研究，<b>归根到底要靠高水平人才</b>」。</p>',
+    log: '机制：条件皆台，人才是角' },
+  { title: 'D. 高水平人才——入选',
+    cls: 'good', tag: 'D ✓', ribbon: { k: 4, ok: true },
+    body: '<p>与讲话原句直接对应：<b>归根到底要靠高水平人才</b>。人才是让一切条件最终运转的载体，其余选项都是支撑条件。</p>',
+    log: 'D 是原句落点 → 正确' },
+  { title: 'A. 体制机制——制度保障条件',
+    cls: 'bad', tag: 'A ✗', ribbon: { k: 1, ok: false },
+    body: '<p>「深化基础研究<b>体制机制</b>改革」确是部署重点，但体制改革再好也要靠人去落实——保障条件，撑不起「归根到底」。最易误选此项。</p>',
+    log: 'A 是制度保障，条件让位于载体' },
+  { title: 'B. 国际合作平台——开放手段',
+    cls: 'bad', tag: 'B ✗', ribbon: { k: 2, ok: false },
+    body: '<p>「构筑国际基础研究<b>合作平台</b>」是扩大开放合作的举措之一——舞台再大，也要有人登台。</p>',
+    log: 'B 是开放合作手段' },
+  { title: 'C. 学科建设布局——路径安排',
+    cls: 'bad', tag: 'C ✗', ribbon: { k: 3, ok: false },
+    body: '<p>「优化基础<b>学科建设布局</b>」属于路径安排——路径再好，也要由人去走。</p>',
+    log: 'C 是路径安排' },
+  { title: '结论',
+    cls: 'good', tag: '完成',
+    body: '<p>答案 <b>D</b>。记忆锚点：加强基础研究，归根到底要靠<b>高水平人才</b>；体制机制、平台、布局都是「台」，人才是「角」——「归根到底」选载体不选条件。</p>',
+    log: '锁定 D：高水平人才' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "2024·15 加强基础研究，归根到底要靠什么",
+  subtitle: "考点：基础研究与科技强国 · 方法：区分「举措条件」与「最终载体」",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」：先立「条件 vs 载体」机制，再锁定「归根到底」。",
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "答案 <b>D</b>：加强基础研究，归根到底要靠<b>高水平人才</b>（讲话原句）。A 体制机制改革、B 国际合作平台、C 学科建设布局都是同一讲话部署的真举措——但「归根到底」问最终决定性因素：条件类让位于载体类（人）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：加强基础研究，归根到底要靠什么</h2>
+<p>答案：<strong>D（高水平人才）</strong>。</p>
+<h3>第 0 步：先立机制——「归根到底」问的是最终载体，不是让你复述举措清单</h3>
+<p>题干出自 2023 年 2 月 21 日中央政治局第三次集体学习（主题：加强基础研究）。这次学习部署了一整盘棋：深化<strong>体制机制</strong>改革、构筑<strong>国际合作平台</strong>、优化<strong>学科建设布局</strong>、培养造就高水平人才队伍……四个选项全部来自这份真举措清单。所以这道题比的<strong>不是谁真谁假，而是层次</strong>：设问的限定词是「归根到底要靠」，它要的是那个<strong>让其他一切条件最终得以运转的载体</strong>。</p>
+<p>为什么载体是人才？基础研究是整个科学体系的<strong>源头</strong>，是所有技术创新的根；源头竞争拼的是<strong>原始创新能力</strong>，而原始创新只能由人的头脑产出——机制提供保障、平台提供舞台、布局提供路径，但这三者自己不会思考，<strong>会思考的只有人</strong>。所以讲话原句正是：加强基础研究，归根到底要靠<strong>高水平人才</strong>。</p>
+<h3>第 1 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>它在讲话里的真实定位</th></tr></thead><tbody><tr><td>A 体制机制</td><td>❌</td><td>「深化基础研究体制机制改革」——制度保障条件</td></tr><tr><td>B 国际合作平台</td><td>❌</td><td>「构筑国际基础研究合作平台」——开放合作手段</td></tr><tr><td>C 学科建设布局</td><td>❌</td><td>「优化基础学科建设布局」——学科路径安排</td></tr><tr><td>D 高水平人才</td><td>✅</td><td>「归根到底要靠高水平人才」——原句直接命中</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 A（最常见）</strong>：A 确是讲话部署的重点之一，考生容易把「重要举措」当成「归根到底」。但「归根到底」问的是<strong>最终决定性因素</strong>：体制改革再好，也要靠人去落实、靠人去创新——条件类让位于载体类。</li><li><strong>四个全真就懵</strong>：全真选项题的解法是<strong>抠设问限定词</strong>——「归根到底／关键／核心／首要」各指向不同层次；本题限定词指向「人」这个载体。</li><li><strong>同类定位词串场</strong>：同一主题下「必由之路」说的是基础研究本身（题干已给出），「迫切要求」针对科技自立自强——别把别的定位词的答案搬到「归根到底」上。</li></ul>
+<blockquote>记忆锚点：加强基础研究，归根到底要靠<strong>高水平人才</strong>；体制机制、平台、布局都是「台」，人才才是「角」——归根到底选载体，不选条件。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

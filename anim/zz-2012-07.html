@@ -1,8 +1,88 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-07 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-07</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-07 · 选举制度与平等原则</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：「首次实行」＋「它表明什么」',
+    cls: 'key',
+    body: '<p>2010 年 3 月选举法修改后，2011 年县乡人大换届选举<b>首次</b>实行城乡按<b>相同人口比例</b>选举人大代表。问这件大事「表明」什么——问的是修改内容的<b>直接意义</b>，不能跳到宏观制度地位。考点：选举制度与平等原则。</p>' },
+  { title: '立机制：同票同权＝选举权平等的三重维度',
+    cls: 'key',
+    body: '<p>名额比例的演进：1953 年城乡 <b>8:1</b> → 1995 年 <b>4:1</b> → 修改后 <b>1:1</b>。比例相同→选票含金量相同，直接实现<b>选举权的平等</b>，且平等有三个维度：①<b>人人平等</b>（城乡同比例）；②<b>地区平等</b>（保障各行政区域应有的代表名额）；③<b>民族平等</b>（保障各民族应有的代表性）。</p>' },
+  { title: '选项 A：更好地体现了人人平等、地区平等和民族平等',
+    cls: 'good', k: 1, pick: true,
+    body: '<p>三个短语与「相同人口比例」<b>一一对应</b>：比例相同→人人平等，名额按区域→地区平等，各民族有名额→民族平等。「表明」类题就贴着修改内容答，<b>入选</b>。</p>' },
+  { title: '选项 B：有利于党在国家政权中发扬民主，贯彻党的群众路线',
+    cls: 'bad', k: 2, pick: false,
+    body: '<p>主体错位：选举法调整的是<b>人大代表选举制度</b>，不是党的活动方式——「政治大事必联系党」是典型误解，<b>排除</b>。</p>' },
+  { title: '选项 C：集中反映了人民代表大会是人民当家作主的根本途径',
+    cls: 'bad', k: 3, pick: false,
+    body: '<p>命题本身正确，但说的是人大制度的<b>宏观地位</b>，答不了「这次修改」的直接意义——「正确但离题」是惯用干扰手法；「最宏大就最正确」是误解，<b>排除</b>。</p>' },
+  { title: '选项 D：表明我国人大代表的产生与西方议会成员的产生有根本区别',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p>比较型选项要求题干给出比较双方；题干只有选举比例平等化这一个事件，没有引入西方参照物，<b>排除</b>。</p>' },
+  { title: '结论：8:1→4:1→1:1，落点只在平等原则',
+    cls: 'good',
+    body: '<p>只有 A 与「城乡按相同人口比例选举」直接对应；C 宏而不切、B 主体错位、D 无中生比。</p><p><b>答案 A。</b>记忆锚点：城乡同票同权＝人人平等＋地区平等＋民族平等。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2012-07 · 城乡同比例选举表明什么',
+  subtitle: '2012 年第 7 题（单选）· 考点：选举制度与平等原则 · 逐项推演',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 正确 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立「同票同权」机制，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：城乡 <b>8:1→4:1→1:1</b>，「同票同权」＝<b>人人平等＋地区平等＋民族平等</b>；「表明」类题贴着修改内容答，小心「正确但离题」的宏观选项。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：城乡「同票同权」表明什么——贴着修改内容找直接意义</h2>
+<p>答案：<strong>A（更好地体现了人人平等、地区平等和民族平等）</strong>。</p>
+<h3>第 0 步：先立机制——选举权平等是怎么一步步实现的</h3>
+<p>先看这件事的来龙去脉：人大代表名额在城乡间的分配比例，1953 年是农村与城市 <strong>8:1</strong>，1995 年改为 <strong>4:1</strong>，2010 年 3 月选举法修改后统一为 <strong>1:1</strong>——城乡每一代表所代表的人口数相同，这就是「同票同权」。它指向的是<strong>选举权的平等原则</strong>，而且这种平等体现在三个维度上：</p>
+<table><thead><tr><th>维度</th><th>怎么体现</th></tr></thead><tbody><tr><td>人人平等</td><td>城乡居民按相同人口比例产生代表，选票含金量一样</td></tr><tr><td>地区平等</td><td>保障各行政区域应有的代表名额，地区间不悬殊</td></tr><tr><td>民族平等</td><td>保障各民族应有的代表性</td></tr></tbody></table>
+<p>题干的关键限定是「<strong>首次实行</strong>」——问的是这次修改、这件大事<strong>直接表明</strong>什么，而不是问宏观制度的整体地位。审题范围划在这里，答案就只能落在与「相同人口比例」直接对应的选项上。</p>
+<h3>第 1 步：为什么「相同比例」恰好等于三重平等</h3>
+<p>题干已经把修改内容说了：城乡按<strong>相同人口比例</strong>选举。把这个内容往意义上一推：比例相同→选票价值相同→人人平等；名额仍按区域安排→地区平等；各民族照样有名额保障→民族平等。A 的三个短语与修改内容<strong>一一对应</strong>，这是「表明」类题的正答方式——意义不能超出事件本身的内容。</p>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 更好地体现了人人平等、地区平等和民族平等</td><td>✅</td><td>与「相同人口比例」直接对应，三重维度正是修改内容的直接指向</td></tr><tr><td>B 有利于党在国家政权中发扬民主，贯彻党的群众路线</td><td>❌</td><td>主体错位：选举法调整的是人大代表的选举制度，不是党的活动方式</td></tr><tr><td>C 集中反映了人民代表大会是人民当家作主的根本途径</td><td>❌</td><td>命题正确但答错题：说的是人大制度的宏观地位，答不了「这次修改」的直接意义</td></tr><tr><td>D 表明我国人大代表的产生与西方议会成员的产生有根本区别</td><td>❌</td><td>题干只讲比例平等化，没有引入任何西方参照物，比较无从谈起</td></tr></tbody></table>
+<h3>为什么 C 的诱惑最大（每个干扰项对应哪种误解）</h3>
+<ul><li><strong>选 C →「最宏大就最正确」的误解</strong>：干扰项的惯用手法是「命题正确但离题」。「人民当家作主的根本途径」本身是教材里对人民代表大会制度的正确表述，但它回答的是「这个制度整体上是什么地位」；本题问的是选举法修改这一<strong>具体事件</strong>表明什么——宏观命题罩不住具体事件，落点必须收回到平等原则。</li><li><strong>选 B →「大事必联系党」的误解</strong>：看到「政治生活中的一件大事」就往党的领导上挂。但引语主体是选举法修改，党和国家机构各自的调整范围不能混。</li><li><strong>选 D →「看到选举就比西方」的误解</strong>：忽略「首次实行」的题眼，跳到制度比较。比较型选项要求题干同时给出比较双方，本题只有一个事件。</li></ul>
+<blockquote>记忆锚点：城乡 8:1→4:1→1:1，「同票同权」=人人平等＋地区平等＋民族平等；「表明」类题贴着修改内容答，别被「正确但离题」的宏观选项带跑。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

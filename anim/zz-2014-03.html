@@ -1,8 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-03 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-03</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·03 产品积压：断的是价值补偿还是实物补偿</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>题眼：企业「因<b>产品积压</b>、订单缺乏」而无法继续再生产、被迫倒闭。要判断断掉的是哪个补偿——考点：<b>社会再生产的实现问题</b>。</p>",
+    "log": "积压倒闭：断的是哪一环"
+  },
+  {
+    "title": "先立机制：再生产需要两个补偿",
+    "cls": "key",
+    "body": "<p>再生产要连续进行，产品必须回市场完成两个补偿：<b>价值补偿</b>=把商品<b>卖出去</b>收回货币；<b>实物补偿</b>=用货币<b>买回来</b>所需的生产资料。两者合称社会总产品的实现，是社会再生产的核心问题。</p>",
+    "log": "两个补偿：卖出（价值）+ 买进（实物）"
+  },
+  {
+    "title": "对照材料：积压=卖不出去",
+    "cls": "key",
+    "body": "<p>「产品积压」=商品停在货架上<b>卖不掉</b>，货币收不回，垫付资本被压死在商品形态上——再生产链条<b>第一环</b>断裂。若是「买不到原料」，才是买进环节的问题。</p>",
+    "log": "材料是「卖不出」，不是「买不进」"
+  },
+  {
+    "title": "B：价值补偿无法实现",
+    "cls": "good",
+    "body": "<p>卖不出→收不回货币→<b>价值补偿</b>中断。这正是积压企业倒闭的直接原因。<b>B 正确</b>。</p>",
+    "ribbon": { "k": 2, "ok": true },
+    "log": "积压断价值补偿 → 选 B"
+  },
+  {
+    "title": "C：实物补偿方向接反",
+    "cls": "bad",
+    "body": "<p>实物补偿对应「<b>买不进</b>」（原料、设备短缺），题干是「<b>卖不出</b>」——背了「两个补偿」但没对准材料方向。<b>C 错误</b>。</p>",
+    "ribbon": { "k": 3, "ok": false },
+    "log": "买不进才断实物补偿 → C 不选"
+  },
+  {
+    "title": "A：无「劳动补偿」范畴",
+    "cls": "bad",
+    "body": "<p>社会总产品实现问题只谈价值补偿与实物补偿，没有「劳动补偿」这个标准范畴（劳动力维持靠工资，属分配环节）。<b>A 错误</b>。</p>",
+    "ribbon": { "k": 1, "ok": false },
+    "log": "杜撰范畴 → A 不选"
+  },
+  {
+    "title": "D：无「增殖补偿」概念",
+    "cls": "bad",
+    "body": "<p>政治经济学里没有「增殖补偿」，用「增殖」造的干扰词——抓住标准术语即可排除。<b>D 错误</b>。</p>",
+    "ribbon": { "k": 4, "ok": false },
+    "log": "凑数项 → D 不选"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>B</b>：积压企业无法实现生产过程中的<b>价值补偿</b>。记忆锚点：社会总产品实现=价值补偿（卖出）+实物补偿（买进）；<b>积压断价值补偿，断供断实物补偿</b>。</p>",
+    "log": "锁定 B：价值补偿断裂"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "产品积压：断的是价值补偿还是实物补偿",
+  subtitle: "考点：社会再生产（社会总产品的实现） · 方法：先立「两个补偿」机制，再对材料方向",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 B",
+    html: "记忆锚点：再生产核心=社会总产品实现=<b>价值补偿（卖出）+实物补偿（买进）</b>。判断口诀：<b>积压→价值补偿断裂</b>；买不到原料→实物补偿断裂。A「劳动补偿」、D「增殖补偿」均为杜撰范畴。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：产品积压压断的是哪一「补偿」——社会再生产的实现问题</h2>
+<p>答案：<strong>B（价值补偿）</strong>。</p>
+<h3>第 0 步：先立机制——再生产要转起来，必须在市场上完成两个补偿</h3>
+<p>企业不是一次性生产，而是连续不断的再生产。每一轮生产结束，产品必须回到市场，完成<strong>两个补偿</strong>，下一轮才能开始：</p>
+<table><thead><tr><th>补偿</th><th>做什么</th><th>断了会怎样</th></tr></thead><tbody><tr><td><strong>价值补偿</strong></td><td>把商品<strong>卖出去</strong>，收回货币，垫付的资本回流</td><td>商品积压、资金链断裂</td></tr><tr><td><strong>实物补偿</strong></td><td>用货币<strong>买回来</strong>所需的生产资料（原料、设备）等</td><td>有钱也买不到料，开工不了</td></tr></tbody></table>
+<p>两个补偿合起来就是<strong>社会总产品的实现问题</strong>——社会再生产顺利进行的核心问题。</p>
+<h3>第 1 步：把材料对进机制</h3>
+<p>题干的死因是「<strong>产品积压</strong>」「订单缺乏」——商品停在货架上<strong>卖不出去</strong>，货币收不回来，垫付的资本被「压死」在商品形态上，价值补偿无法实现，再生产链条第一环就断了。若材料写的是「买不到原料」「设备短缺」，那才是实物补偿问题——题干正好相反。→ 选 <strong>B</strong>。</p>
+<h3>第 2 步：干扰项各自错在哪</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>错因</th></tr></thead><tbody><tr><td>A 劳动补偿</td><td>❌</td><td>社会总产品实现问题里没有这个标准范畴（劳动力的维持靠工资，属于分配环节，不叫「劳动补偿」），杜撰词</td></tr><tr><td>C 实物补偿</td><td>❌</td><td>方向接反：实物补偿对应「<strong>买不进</strong>」（原料、设备短缺），题干是「<strong>卖不出</strong>」</td></tr><tr><td>D 增殖补偿</td><td>❌</td><td>政治经济学无此概念，用「增殖」造的干扰词</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 C（背过「两个补偿」就顺手选）</strong>：这是本题最典型的错法——两个补偿都背了，但没看清材料给的是「积压」（卖不出→价值补偿）还是「短缺」（买不进→实物补偿）。判断口诀：<strong>积压断价值补偿，断供断实物补偿</strong>。</li><li><strong>误选 A/D（抓不住标准术语）</strong>：实现问题只谈价值补偿与实物补偿两个方向，其余都是凑数项。</li></ul>
+<blockquote>记忆锚点：再生产核心=社会总产品实现=<strong>价值补偿（卖出）+实物补偿（买进）</strong>；「积压」二字直接指向<strong>价值补偿</strong>断裂。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

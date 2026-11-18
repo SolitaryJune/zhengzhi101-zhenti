@@ -1,8 +1,109 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2019-19 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2019-19</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2019-19 利润率平均化 · "分蛋糕"数值推演动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+<style>
+/* 本题专用：舞台内的迷你数值表 */
+.aw-stage table{border-collapse:collapse;margin:10px auto;font-size:13px}
+.aw-stage table th,.aw-stage table td{border:1px solid #cbd5e1;padding:3px 10px;text-align:center}
+.aw-stage table th{background:#f1f5f9;color:#0f172a}
+.aw-stage table td.up{color:#15803d;font-weight:600}
+.aw-stage table td.down{color:#b91c1c;font-weight:600}
+</style>
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX，纯文本卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：追逐利润 → 部门竞争 → 利润率平均化',
+    cls: 'key', sc: 'step', tag: '审题',
+    log: '抓题干因果链：资本逐利转移，最终等量资本得等量利润',
+    body: '<p>题干给的链条：<b>追逐利润最大化 → 不同部门资本家竞争（资本转移）→ 利润率平均化</b>。问的是"平均化的过程意味着什么"。</p><p>考点：<b>平均利润的形成与剩余价值的重新瓜分</b>。</p>' },
+  { t: '机制先行：用数字推一遍"分蛋糕"',
+    cls: 'key', sc: 'shift', tag: '机制',
+    log: '三部门各投 100：利润率 10%、20%、30% → 资本转移 → 都拿 20% 平均利润',
+    body: '<p><b>三部门各投资 100</b>（剩余价值率均 100%），有机构成不同：</p><table><tr><th>部门</th><th>投资</th><th>有机构成</th><th>剩余价值</th><th>原利润率</th><th>平均化后</th></tr><tr><td>机械</td><td>100</td><td>90c＋10v</td><td>10</td><td>10%</td><td class="up">20（＋10）</td></tr><tr><td>纺织</td><td>100</td><td>80c＋20v</td><td>20</td><td>20%</td><td>20（持平）</td></tr><tr><td>食品</td><td>100</td><td>70c＋30v</td><td>30</td><td>30%</td><td class="down">20（−10）</td></tr></table><p>资本从低利润部门流向高利润部门 → 平均利润率＝60÷300＝<b>20%</b>：<b>等量资本得等量利润，蛋糕总量不变，只换瓜分份额</b>。</p>' },
+  { t: '选项 A：某企业工人创造的剩余价值可能被其他资本家侵占 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A', ribbon: {k: 1, ok: true},
+    log: 'A 对：瓜分按资本量在全社会进行，食品部门的 10 就流进了机械资本家口袋',
+    body: '<p>瓜分在<b>全社会范围</b>按资本量进行，不认"这块蛋糕是谁做的"——例子里食品部门工人创造 30，本部门资本家只得 20，<b>10 被机械部门资本家瓜分走</b>。</p><p>所以某企业工人创造的剩余价值确实有被其他资本家侵占的可能。<b>A 对</b>。</p>' },
+  { t: '选项 B：各部门"内"等量投资利润大体均等 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 B', ribbon: {k: 2, ok: false},
+    log: 'B 偷换层次：均等只在部门之间；部门内争的是超额利润',
+    body: '<p>平均化是<b>部门之间</b>（行业之间）的事；<b>部门内部</b>各企业技术、管理不同，个别利润率不同——先进企业赚<b>超额利润</b>、落后企业可能亏损。</p><p>B 把"部门间"偷换成"部门内"，是最典型的干扰项。<b>B 错</b>。</p>' },
+  { t: '选项 C：各部门资本家在剥削工人上有共同的阶级利益 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C', ribbon: {k: 3, ok: true},
+    log: 'C 对：抢蛋糕是资本家之间的事，蛋糕本身是工人创造的剩余价值',
+    body: '<p>分蛋糕的实质：资本家阶级<b>共同瓜分工人创造的剩余价值</b>——谁多分谁少分是他们的内部之争。</p><p>在加强对工人阶级的剥削、维护剥削制度这个大前提上，各部门资本家<b>阶级利益一致</b>。<b>C 对</b>。</p>' },
+  { t: '选项 D：银行资本家利润"总是低于"平均利润 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 D', ribbon: {k: 4, ok: false},
+    log: 'D 混淆"创造"与"瓜分"：银行资本不创造，但按资本量参与瓜分，拿平均利润',
+    body: '<p>银行资本虽不直接创造剩余价值，但作为社会资本的一部分<b>参与瓜分</b>——按"等量资本得等量利润"拿的是<b>平均利润</b>。</p><p>否则资本早就从银行撤走了。"不创造"推不出"分得少"：<b>D 错</b>。</p>' },
+  { t: '结论：AC',
+    cls: 'good', sc: 'done', tag: '结论',
+    log: '汇总：A、C 选，B、D 不选——答案 AC',
+    body: '<p>答案 <b>AC</b>：平均化＝全社会资本家按资本量<b>共同瓜分剩余价值</b>（A），并因此在剥削工人上利益一致（C）。</p><p>B 偷换层次、D 混淆创造与瓜分，都不选。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2019·19】利润率平均化的过程意味着什么（多选）',
+  subtitle: '考点：平均利润 · 方法：数值推演"分蛋糕"，再分层次对号四个选项',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先用三个部门的数字推一遍平均化，再逐项检验四个说法。',
+  snaps: snaps,
+  result: {
+    big: '答案 AC',
+    html: '记忆锚点：<b>部门间竞争 → 资本转移 → 平均利润率 → 等量资本等量利润 → 共同瓜分剩余价值</b>；部门内争超额、部门间争平均；创造≠瓜分，银行资本拿平均利润。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：利润率平均化——剩余价值在资本家之间"重新分蛋糕"</h2>
+<p>答案：<strong>AC</strong>。</p>
+<h3>第 0 步：先立机制——平均化这场"分蛋糕"怎么发生（用数字推一遍）</h3>
+<p>题干因果链：<strong>追逐利润最大化 → 部门之间竞争（资本转移）→ 利润率平均化</strong>。</p>
+<p>机制：各部门资本有机构成不同，利润率本来高低不一。低利润部门的资本撤出、高利润部门的资本涌入，商品供给随之增减、价格涨落，最终各部门利润率趋近<strong>平均利润率</strong>。用一组数字推一遍——设三部门各投资 100，剩余价值率均为 100%：</p>
+<table><thead><tr><th>部门</th><th>投资</th><th>有机构成</th><th>工人创造的剩余价值</th><th>原利润率</th><th>平均化后所得</th></tr></thead><tbody><tr><td>机械</td><td>100</td><td>90c＋10v</td><td>10</td><td>10%</td><td>20（多分 10）</td></tr><tr><td>纺织</td><td>100</td><td>80c＋20v</td><td>20</td><td>20%</td><td>20（持平）</td></tr><tr><td>食品</td><td>100</td><td>70c＋30v</td><td>30</td><td>30%</td><td>20（被分走 10）</td></tr></tbody></table>
+<p>平均利润率 ＝ 总剩余价值 60 ÷ 社会总资本 300 ＝ <strong>20%</strong>。此后<strong>等量资本不论投在哪个部门，大体取得等量利润</strong>。看清两点：剩余价值<strong>总量没变</strong>（仍是 60），变的只是<strong>瓜分份额</strong>；机械部门资本家多得的那 10，正是从食品部门（工人创造 30、本部门资本家只得 20）瓜分来的——这就是选项 A 的直接依据。</p>
+<h3>第 1 步：A~D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>判定</th><th>对号过程</th></tr></thead><tbody><tr><td>A 某企业工人创造的剩余价值有被其他资本家侵占的可能</td><td>✅</td><td>瓜分在<strong>全社会范围</strong>按资本量进行——食品部门工人创造的剩余价值就有 10 流进了机械部门资本家口袋</td></tr><tr><td>B 各部门内不同资本家的等量投资所得到的利润大体上均等</td><td>❌</td><td>偷换层次：均等只发生在<strong>部门之间</strong>；<strong>部门内部</strong>各企业技术、管理不同，个别利润率不同——先进企业赚超额利润，落后企业可能亏损</td></tr><tr><td>C 各部门资本家在加强对工人阶级的剥削上有着共同的阶级利益</td><td>✅</td><td>分蛋糕的实质是资本家阶级<strong>共同瓜分工人创造的剩余价值</strong>——份额之争不影响他们在维护剥削制度上利益一致</td></tr><tr><td>D 不从事直接生产的银行资本家所获得的利润总是低于平均利润</td><td>❌</td><td>银行资本虽不创造剩余价值，但<strong>参与瓜分</strong>——按"等量资本得等量利润"拿<strong>平均利润</strong>，不是"总是低于"</td></tr></tbody></table>
+<p>→ 选 <strong>AC</strong>。</p>
+<h3>第 2 步：预判两个必问的"为什么"</h3>
+<p><strong>为什么部门内部不会均等？</strong> 平均化靠的是<strong>部门之间</strong>的资本自由转移；而<strong>部门内部</strong>的竞争（改进技术、提高劳动生产率）恰恰是<strong>超额利润</strong>的来源——谁把个别利润率抬到社会平均水平之上，谁就多得。若部门内也均等，超额利润无从谈起，部门内竞争也就没有意义了。口诀：<strong>部门内争超额，部门间争平均</strong>。</p>
+<p><strong>"不创造剩余价值"为什么推不出"利润低于平均"？</strong> 这混淆了<strong>创造</strong>与<strong>瓜分</strong>两件事：银行、商业资本虽不直接创造剩余价值，但作为社会资本的一部分，按资本量参与全社会剩余价值的瓜分，拿的是平均利润——否则资本早就从银行撤走，"等量资本得等量利润"也就无从谈起了。</p>
+<h3>易错点：每个干扰项对应哪种典型误解</h3>
+<ul><li><strong>误选 B</strong>：把"部门间竞争→平均化"与"部门内竞争→超额利润"两个层次搅在一起——记住层次：部门内争超额，部门间争平均。</li><li><strong>误选 D</strong>：以为"不创造所以分得少"——混淆创造与瓜分；银行资本按资本量参与瓜分，拿的是平均利润。</li><li><strong>漏选 A</strong>：只从"本企业工人 vs 本企业资本家"看问题，没看到剩余价值在全社会资本家之间的<strong>再分配</strong>——本部门工人创造的剩余价值可能流进别的资本家口袋。</li><li><strong>漏选 C</strong>：只盯着资本家之间"抢蛋糕"的竞争面，忘了他们在"剥削工人"这个大前提上利益一致——竞争之上还有阶级联合。</li></ul>
+<blockquote>记忆锚点：<strong>部门间竞争 → 资本转移 → 平均利润率 → 等量资本等量利润 → 共同瓜分剩余价值</strong>；部门内争超额、部门间争平均；创造≠瓜分，银行资本拿平均利润。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

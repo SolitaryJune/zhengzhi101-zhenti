@@ -1,8 +1,132 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-11 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-11</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2017·11 毛泽东思想成熟的标志：新民主主义理论的系统阐释</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 时间线卡片（理论发展阶段）
+function tl(rows){
+  return '<div>' + rows.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:150px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼：题干已锁时间窗口',
+    cls: 'key',
+    body: '<p>题眼：毛泽东思想在<b>"土地革命战争后期和抗日战争时期"</b>得到多方面展开而达到成熟，问成熟的标志。机关在于：毛泽东思想分阶段生长，<b>每个阶段的"标志"互不相同</b>——先立时间轴，再看选项挂在哪一段。</p>',
+    log: '先锁时间窗口：1935—1945'
+  },
+  {
+    title: '立机制：形成 → 成熟 → 继续发展',
+    cls: 'key',
+    body: tl([
+      ['形成 1928—1930', '土地革命战争前中期：农村包围城市、武装夺取政权道路理论（找到革命道路）'],
+      ['成熟 1935—1945', '土地革命战争后期和抗战时期：新民主主义理论系统阐释（答出革命的全套蓝图）'],
+      ['继续发展 1945 后', '解放战争及以后：人民民主专政理论等继续发展（选项 C 挂在这段）'],
+    ]) + '</p>',
+    log: '三阶段各挂各的标志'
+  },
+  {
+    title: '选项 B：正挂在成熟刻度上',
+    cls: 'good',
+    ribbon: { k: 2, ok: true },
+    body: '<p>B"新民主主义理论的系统阐释"——<b>对</b>。《〈共产党人〉发刊词》《中国革命和中国共产党》《新民主主义论》系统回答了中国革命的对象、任务、动力、领导、前途，理论成体系 = 达到成熟。<b>B 正确</b>。</p>',
+    log: '系统阐释新民主主义 = 成熟 → B 正确'
+  },
+  {
+    title: '选项 A：那是"形成"的标志',
+    cls: 'bad',
+    ribbon: { k: 1, ok: false },
+    body: '<p>A"农村包围城市、武装夺取政权理论的科学概论"——这是毛泽东思想<b>形成</b>的标志（1928—1930，井冈山道路）。把"形成"当"成熟"是本题最典型的错法。<b>A 排除</b>。</p>',
+    log: '形成≠成熟 → A 排除'
+  },
+  {
+    title: '选项 C：成熟之后的继续发展',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>C"人民民主专政理论的完整论述"——《论人民民主专政》发表于 <b>1949 年</b>解放战争胜利前夕，落在"继续发展"段，在题干给的时间窗口之后。<b>C 排除</b>。</p>',
+    log: '1949 在窗口后 → C 排除'
+  },
+  {
+    title: '选项 D：具体领域的展开',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>D"思想政治工作和文化工作理论的系统提出"——属具体领域成果（如 1942《在延安文艺座谈会上的讲话》），是成熟阶段"多方面展开"的一部分——<b>展开 ≠ 成熟的标志</b>。<b>D 排除</b>。</p>',
+    log: '成熟后的展开 → D 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>B（新民主主义理论的系统阐释）</b>。四项都是毛泽东思想的真内容——考的不是对错，而是<b>哪一条挂在"成熟"这个时间刻度上</b>。记法：先有农村包围城市找到道路（形成），再有新民主主义答出全套蓝图（成熟）。</p>',
+    log: '锁定 B：阶段—标志配对'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '毛泽东思想达到成熟的标志：新民主主义理论的系统阐释',
+  subtitle: '考点：毛泽东思想形成—成熟—继续发展的阶段标志配对',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」沿三阶段时间轴对号入座。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '记忆锚点：形成（<b>农村包围城市、武装夺取政权</b>，1928—1930）→ 成熟（<b>新民主主义理论系统阐释</b>，土地革命战争后期和抗战时期）→ 继续发展（人民民主专政 1949 等）。配对题先锁时间刻度：<b>展开 ≠ 成熟的标志</b>，再选挂在刻度上的标志。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：毛泽东思想"达到成熟"的标志是什么</h2>
+<p>答案：<strong>B（新民主主义理论的系统阐释）</strong>。</p>
+<h3>第 0 步：先立机制——理论成果是一步步长成的，各阶段有各自的标志</h3>
+<p>毛泽东思想是马克思主义中国化的第一大理论成果，它的生长分三个阶段，<strong>每个阶段的"标志"互不相同</strong>——这是本题的全部机关。题干把时间范围先划死了："土地革命战争后期和抗日战争时期"（约 1935—1945），在这个窗口里达到成熟。所以先立时间轴，再看四个选项各挂在哪一段：</p>
+<table><thead><tr><th>阶段</th><th>时间</th><th>标志性成果</th><th>代表著作</th></tr></thead><tbody><tr><td>形成</td><td>土地革命战争前中期（1928—1930）</td><td>农村包围城市、武装夺取政权道路理论</td><td>《中国的红色政权为什么能够存在？》《星星之火，可以燎原》</td></tr><tr><td><strong>成熟</strong></td><td><strong>土地革命战争后期和抗战时期（1935—1945）</strong></td><td><strong>新民主主义理论的系统阐释</strong></td><td>《〈共产党人〉发刊词》《中国革命和中国共产党》《新民主主义论》</td></tr><tr><td>继续发展</td><td>解放战争时期及以后</td><td>人民民主专政理论等</td><td>《论人民民主专政》</td></tr></tbody></table>
+<p>成熟阶段系统回答了"中国革命分几步走、谁领导、往哪去"这些根本问题，新民主主义理论正是这套总答案，故成熟的标志选 <strong>B</strong>。</p>
+<h3>第 1 步：干扰项归因——每个选项挂在时间轴哪一段</h3>
+<table><thead><tr><th>选项</th><th>挂在哪</th><th>为什么不能当"成熟"标志</th></tr></thead><tbody><tr><td>A</td><td><strong>形成</strong>阶段（1928—1930）</td><td>农村包围城市、武装夺取政权理论是毛泽东思想<strong>形成</strong>的标志；把"形成"当"成熟"是最典型的错法</td></tr><tr><td>C</td><td><strong>继续发展</strong>阶段（1949）</td><td>《论人民民主专政》发表于解放战争胜利前夕，在成熟窗口之后</td></tr><tr><td>D</td><td>成熟阶段的"多方面展开"（1942《在延安文艺座谈会上的讲话》等）</td><td>思想政治工作和文化工作理论属具体领域成果，是成熟期里展开的内容之一——展开 ≠ 成熟的标志，不能拿"展开"来充当"成熟"的标志</td></tr></tbody></table>
+<p>四个选项都是毛泽东思想的真内容——本题考的不是"对错"，而是<strong>哪一条挂在"成熟"这个时间刻度上</strong>，这正是阶段—标志配对题的出题套路。</p>
+<h3>易错点</h3>
+<ul><li><strong>形成 ≠ 成熟</strong>：A 项最容易误选。记法：先有"农村包围城市"找到革命道路（形成），再有"新民主主义"回答革命的全套蓝图（成熟）。</li><li><strong>别把"展开"当"标志"，也别把后期成果提前</strong>：D 是成熟阶段"多方面展开"里的具体领域成果（1942《在延安文艺座谈会上的讲话》），展开 ≠ 成熟的标志；C 则是成熟期之后（1949）的继续发展，时间刻度同样挂不到"成熟"上。</li><li>成熟是有体系的：判断"成熟"的标准是<strong>系统回答了中国革命的对象、任务、动力、领导、前途</strong>，这正是新民主主义理论做的事。</li></ul>
+<blockquote>记忆锚点：形成（农村包围城市、武装夺取政权）→ <strong>成熟（新民主主义理论系统阐释，土地革命战争后期和抗战时期）</strong> → 继续发展（人民民主专政等）；配对题先锁时间刻度，再选挂在刻度上的标志。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

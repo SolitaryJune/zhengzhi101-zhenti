@@ -1,8 +1,144 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-07 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-07</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2026·07 制度体系中的统领地位</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行格子（分层表、要素格用）
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：「统领」＝管总、管方向",
+    "cls": "key",
+    "tag": "审题",
+    "log": "题眼：中国特色社会主义制度体系中谁居统领地位",
+    "body": "<p>「统领」不是「重要」，而是<b>管总、管方向</b>：其他各项制度的制定和运行，都必须从它那里获得政治前提——都必须坚持它。想通这层，再立一把「制度体系分层」的尺子，四个选项对号入座。</p>"
+  },
+  {
+    "title": "先立机制：为什么顶层必然是党的领导制度",
+    "cls": "key",
+    "tag": "机制",
+    "log": "党的领导＝最本质特征＋最大优势 → 党是最高政治领导力量",
+    "body": "<p>推理起点：<b>中国共产党领导是中国特色社会主义最本质的特征，是中国特色社会主义制度的最大优势</b>，党是最高政治领导力量。制度体系围绕这个轴心组织，所以体系的顶层必然站着党的领导制度——十九届四中全会将其定位为<b>根本领导制度</b>，并明确其<b>统领地位</b>。</p>"
+  },
+  {
+    "title": "立尺子：制度体系分层表",
+    "cls": "key",
+    "tag": "机制",
+    "log": "分层：统领 → 根本政治 → 基本层级 → 重要制度",
+    "body": cells([
+      {"t": "党的领导制度<br>根本领导制度<br><b>统领</b>", "c": "good", "l": "管总"},
+      {"t": "人民代表大会制度<br>根本政治制度", "c": "", "l": "支柱"},
+      {"t": "基本政治制度<br>基本经济制度", "c": "", "l": "组成"},
+      {"t": "重要制度<br>（具体安排）", "c": "", "l": "支撑"}
+    ]) + "<p>尺子一立，四个选项全部各归其位——站在「统领」层的只有一项。</p>"
+  },
+  {
+    "title": "A 排除：民族区域自治＝基本政治制度之一",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "「基本」是组成层级，低于「统领」→ A 排除",
+    "ribbon": {"k": 1, "ok": false},
+    "body": "<p><b>民族区域自治制度</b>属于基本政治制度之一，在体系中是「被统领」的一员——「基本」与「统领」不是一个层级概念。<b>A 错误</b>。</p>"
+  },
+  {
+    "title": "C 排除：基本经济制度＝重要组成",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "经济制度重要 ≠ 统领：统领讲政治上管总 → C 排除",
+    "ribbon": {"k": 3, "ok": false},
+    "body": "<p><b>社会主义基本经济制度</b>（公有制为主体多种所有制共同发展、按劳分配为主体多种分配方式并存、社会主义市场经济体制）属「重要组成」。经济制度重要讲的是贡献，统领讲的是<b>政治上管总管方向</b>——两个维度。<b>C 错误</b>。</p>"
+  },
+  {
+    "title": "D 排除：全过程人民民主＝本质属性＋具体安排",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "热词不改变制度层级 → D 排除",
+    "ribbon": {"k": 4, "ok": false},
+    "body": "<p><b>全过程人民民主</b>是社会主义民主政治的本质属性及其具体制度安排，属「重要制度」层面——热词只反映新鲜度，不改变制度层级。<b>D 错误</b>。</p>"
+  },
+  {
+    "title": "B 对号：党的领导制度＝根本领导制度",
+    "cls": "good",
+    "tag": "命中",
+    "log": "管总管方向、统领一切制度的政治前提 → B 正确",
+    "ribbon": {"k": 2, "ok": true},
+    "body": "<p><b>党的领导制度</b>：根本领导制度，其余各项制度的制定与运行都须坚持党的领导——十九届四中全会明确其在中国特色社会主义制度体系中<b>居统领地位</b>。<b>B 正确</b>。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "tag": "结论",
+    "log": "锁定 B：党的领导制度",
+    "body": "<p>答案 <b>B</b>。记忆锚点：制度体系分层记——党的领导制度（根本领导制度、<b>统领</b>）→ 人民代表大会制度（根本政治制度）→ 三项基本政治制度＋基本经济制度 → 重要制度；「统领」＝管总管方向。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'))),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  "title": "政治 2026·07 制度体系中的统领地位",
+  "subtitle": "考点：党的领导制度 · 方法：先立「统领＝管总」机制，再用制度体系分层表对号",
+  "counterLabel": "推理步",
+  "ribbonTitle": "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  "intro": "点击「▶ 播放」逐步展开推理链。",
+  "snaps": snaps,
+  "result": {
+    "big": "答案 B",
+    "html": "记忆锚点：<b>党的领导制度＝根本领导制度＝统领地位</b>（管总管方向，十九届四中全会）；人民代表大会制度＝根本政治制度；民族区域自治等＝基本政治制度；基本经济制度＝重要组成；全过程人民民主＝本质属性与具体安排。选 <b>B</b>。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：中国特色社会主义制度体系里谁「统领」</h2>
+<p>答案：<strong>B（党的领导制度）</strong>。</p>
+<h3>第 0 步：先立机制——「统领」不是「重要」，是「管总」</h3>
+<p>拿到这题先别急着背，把「统领」这个词拆开：统领说的是<strong>其他一切制度都从它那里获得政治前提</strong>——各项制度的制定和运行，都必须坚持党的领导。为什么必须是它？因为<strong>中国共产党领导是中国特色社会主义最本质的特征，是中国特色社会主义制度的最大优势</strong>，党是最高政治领导力量。制度体系正是围绕这个轴心组织起来的，所以体系的顶层必然站着党的领导制度。党的十九届四中全会据此把它定位为<strong>根本领导制度</strong>，并明确其在中国特色社会主义制度体系中<strong>居统领地位</strong>。</p>
+<h3>第 1 步：给制度体系分层（对号的尺子）</h3>
+<table><thead><tr><th>层级</th><th>定位</th><th>代表制度</th></tr></thead><tbody><tr><td>党的领导制度</td><td>根本领导制度，<strong>统领</strong></td><td>党的领导制度</td></tr><tr><td>根本政治制度</td><td>体系支柱</td><td>人民代表大会制度</td></tr><tr><td>基本政治制度</td><td>重要组成</td><td>多党合作和政治协商制度、民族区域自治制度、基层群众自治制度</td></tr><tr><td>基本经济制度</td><td>重要组成</td><td>公有制为主体多种所有制共同发展、按劳分配为主体多种分配方式并存、社会主义市场经济体制</td></tr><tr><td>重要制度</td><td>具体层面支撑</td><td>全过程人民民主的具体制度安排等</td></tr></tbody></table>
+<p>尺子一立，四个选项全部各归其位——站在「统领」那一层的只有 B。</p>
+<h3>第 2 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>层级归属</th><th>判断</th></tr></thead><tbody><tr><td>A 民族区域自治制度</td><td>基本政治制度之一</td><td>是「被统领」的一员，排除</td></tr><tr><td>B 党的领导制度</td><td>根本领导制度</td><td>管总管方向，<strong>统领</strong>，正确</td></tr><tr><td>C 社会主义基本经济制度</td><td>基本经济制度</td><td>重要组成，在统领之下，排除</td></tr><tr><td>D 全过程人民民主制度</td><td>本质属性＋具体制度安排</td><td>重要制度层面，排除</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 C（「经济决定论」错位套用）</strong>：把「经济制度很重要」套到「制度统领」上——重要性讲的是贡献大小，统领讲的是政治上管总管方向，两个维度不是一回事。</li><li><strong>选 D（追新热词）</strong>：全过程人民民主是近年热词，但热词只反映新鲜度，不改变制度层级——它是社会主义民主政治的本质属性与具体制度安排，不在统领层。</li><li><strong>选 A（「基本」当「根本」）</strong>：民族区域自治确属基本政治制度，但「基本」是体系内的组成层级，低于「根本领导制度」。</li></ul>
+<blockquote>记忆锚点：统领＝管总管方向＝党的领导制度（根本领导制度）；人大＝根本政治制度；三项基本政治制度＋基本经济制度＝基本层级；全过程人民民主＝本质属性与具体安排。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,129 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-05 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-05</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·05 毛泽东思想科学体系围绕的主题</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（politics101 站约定，纯文本卡片，无 KaTeX）。
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 体系板块小格子
+function chip(txt, extra){
+  return '<span class="aw-box ' + (extra || '') + '" style="display:inline-block;margin:3px 4px 3px 0;padding:2px 8px;font-size:12.5px">' + txt + '</span>';
+}
+
+// 判定行
+function verdict(txt, ok){
+  return '<p><b style="color:' + (ok ? '#15803d' : '#b91c1c') + '">' + (ok ? '✓ ' : '✗ ') + txt + '</b></p>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：完整科学思想体系，问「围绕的主题」',
+    cls: 'key',
+    body: '<p>题干给了半句话：「由一系列相互联系的重要理论观点构成的<b>完整的科学思想体系</b>」。问这个体系<b>围绕的主题</b>。「主题」有明确定义，不能靠语感挑顺耳的选项。</p>',
+    log: '先弄清「主题」在体系里指什么' },
+  { title: '立机制：体系＝一个总问题＋一组围绕它的观点',
+    cls: 'key',
+    body: '<p>任何「完整的科学思想体系」结构都是：<b>一个贯穿全部观点的总问题（主题）</b>＋一组围绕它展开、彼此联系的观点。所以找主题只做一件事：把体系板块全部摆开，看它们<b>共同在回答什么</b>——主题必须与体系的特有观点一一对应。</p>',
+    log: '标尺：主题＝全部观点共同服务的总问题' },
+  { title: '锚点：主题就写在定义句里',
+    cls: 'ok',
+    body: '<p>教材对毛泽东思想的定点定义：马克思列宁主义在中国的运用和发展，是被实践证明了的关于中国<b>革命和建设</b>的正确的理论原则和经验总结，是中国共产党集体智慧的结晶。<b>「革命和建设」四个字就写在定义里</b>。</p>',
+    log: '定义句直接点名主题：中国革命和建设' },
+  { title: '摆板块验证：六大板块逐块归总',
+    cls: 'step',
+    body: '<p>' + chip('新民主主义革命理论') + chip('社会主义革命和建设') + chip('革命军队建设和军事战略') + chip('政策和策略') + chip('思想政治工作和文化工作') + chip('党的建设') +
+          '</p><p>逐块看：革命理论答「革命怎么胜利」，建设理论答「建设怎么搞」，其余板块答「靠什么力量、用什么办法」——<b>没有一块跑出这个总问题</b>。注意《论十大关系》等是建设探索：「建设」也在主题之内。</p>',
+    log: '六大板块共同指向：革命怎么胜利、建设怎么搞' },
+  { title: 'B：正中总问题',
+    cls: 'good',
+    body: '<p>「中国<b>革命和建设</b>」＝六大板块共同服务的总问题＝定义句点名的表述。<b>B 正确</b>。</p>' +
+    verdict('B 中国革命和建设 —— 主题', true),
+    ribbon: { k: 2, ok: true },
+    log: 'B 命中：中国革命和建设' },
+  { title: 'A：依据 ≠ 主题',
+    cls: 'bad',
+    body: '<p>「社会性质和阶级状况」＝<b>认清国情</b>。半殖民地半封建的国情是制定路线的<b>依据和出发点</b>——先摸清情况，再围绕解决问题；依据在前，主题在后，身份不同。<b>A 错误</b>。</p>' +
+    verdict('A 社会性质和阶级状况 —— 是依据，不是主题', false),
+    ribbon: { k: 1, ok: false },
+    log: 'A 是出发点，不是体系围绕的总问题' },
+  { title: 'C：过宽过虚',
+    cls: 'bad',
+    body: '<p>「命运和前途」哪个理论都能挂，与毛泽东思想的<b>特有观点</b>没有一一对应，不构成考点级固定搭配。「主题」题要的是准，不是大。<b>C 错误</b>。</p>' +
+    verdict('C 中国命运和前途 —— 太虚，无特有观点对应', false),
+    ribbon: { k: 3, ok: false },
+    log: 'C 过宽过虚，不是考点级搭配' },
+  { title: 'D：时代错位',
+    cls: 'bad',
+    body: '<p>「改革」是<b>1978 年以后</b>的关键词，中国特色社会主义理论体系才围绕「什么是社会主义、怎样建设社会主义」等主题展开。两大理论成果分界：<b>革命和建设＝毛泽东思想</b>。<b>D 错误</b>。</p>' +
+    verdict('D 中国改革和发展 —— 「改革」属邓小平理论以后', false),
+    ribbon: { k: 4, ok: false },
+    log: 'D 时代错位：改革不是毛泽东思想的关键词' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>B：中国革命和建设</b>。方法复盘：主题题不背书——先看定义句，再摆开体系全部板块，找它们<b>共同服务的总问题</b>。</p>',
+    log: '锁定 B：中国革命和建设' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || ((s.cls === 'good' || s.cls === 'ok') ? '命中' : (s.cls === 'bad' ? '排除' : '第 ' + (i + 1) + ' 步')),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "毛泽东思想科学体系围绕的主题",
+  subtitle: "考点：毛泽东思想的科学体系 · 方法：看定义句＋摆板块找共同总问题",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A 2=B 3=C 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先立「体系结构」的机制，再摆板块，最后逐项裁定。',
+  snaps: snaps,
+  result: {
+    big: "答案 B",
+    html: "毛泽东思想围绕<b>中国革命和建设</b>展开——这句话就写在定义句里（关于中国<b>革命和建设</b>的正确的理论原则和经验总结）。记忆锚点：社会性质和阶级状况＝<b>依据</b>（认清国情）；「命运前途」过宽过虚；「改革和发展」＝邓小平理论以后的关键词。主题题的做法＝看定义句＋摆板块、找共同总问题。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：毛泽东思想科学体系围绕的「主题」</h2>
+<p>答案：<strong>B（中国革命和建设）</strong>。</p>
+<h3>第 0 步：机制先行——「科学思想体系」的结构长什么样</h3>
+<p>一个称得上「完整的科学思想体系」的理论，结构都是同一种：<strong>一个贯穿全部观点的总问题（主题）</strong>＋<strong>一组围绕它展开、彼此联系的观点</strong>。所以「主题」不是从选项里挑一句最顺耳的话，而是体系内全部理论观点<strong>共同服务的那个总问题</strong>。找主题的办法只有一个：把体系的板块全部摆开，看它们一起在回答什么。</p>
+<p>更省事的锚点是<strong>定义本身</strong>：教材对毛泽东思想的定点定义是——马克思列宁主义在中国的运用和发展，是被实践证明了的关于中国<strong>革命和建设</strong>的正确的理论原则和经验总结，是中国共产党集体智慧的结晶。<strong>主题就写在定义句里</strong>：「革命和建设」。这个定义出自对历史经验的正式总结，是考试级搭配，比任何语感都可靠。</p>
+<h3>第 1 步：摆开板块验证</h3>
+<table><thead><tr><th>板块</th><th>回答什么</th></tr></thead><tbody><tr><td>新民主主义革命理论</td><td>革命怎么胜利</td></tr><tr><td>社会主义革命和社会主义建设</td><td>改造怎么完成、建设怎么搞</td></tr><tr><td>革命军队建设和军事战略</td><td>革命靠什么武装力量</td></tr><tr><td>政策和策略</td><td>革命和建设用什么方法</td></tr><tr><td>思想政治工作和文化工作</td><td>靠什么凝聚人心</td></tr><tr><td>党的建设</td><td>靠谁来领导</td></tr></tbody></table>
+<p>六块没有一块跑出「革命怎么胜利、建设怎么搞」。注意「建设」也在主题之内——《论十大关系》《关于正确处理人民内部矛盾的问题》都是建设探索的成果，别以为毛泽东思想只管革命、不管建设；主题是并列的两件事。</p>
+<h3>第 2 步：逐项裁定</h3>
+<ul><li><strong>B 中国革命和建设</strong> ✅：六大板块共同服务的总问题，且与定义句逐字对上。</li><li><strong>A 中国社会性质和阶级状况</strong> ❌：这是<strong>认清国情</strong>。半殖民地半封建的社会性质是制定路线方针的<strong>依据和出发点</strong>——「认清中国国情，是认清一切革命问题的基本依据」。依据在前，主题在后：先摸清情况，再围绕解决问题，身份不同。</li><li><strong>C 中国命运和前途</strong> ❌：过宽过虚。任何理论都可以说自己「为命运和前途」，它与毛泽东思想的<strong>特有观点</strong>没有一一对应，不构成考点级固定搭配。「主题」题要的是准，不是大。</li><li><strong>D 中国改革和发展</strong> ❌：时代错位。「改革」是 1978 年以后的关键词，中国特色社会主义理论体系才围绕「什么是社会主义、怎样建设社会主义」这类主题展开；毛泽东思想的时代任务是<strong>革命和建设</strong>。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：教材反复讲「认清社会性质和阶级状况」，印象深、先入为主——把「出发点」当成了「主题」。</li><li><strong>误选 D</strong>：被今天的语感带走——「发展」天天讲，但「改革」一词一出现就指向邓小平理论以后。</li><li><strong>误选 C</strong>：「越宏大越像答案」的错觉——政治选择题里，放之四海而皆准的空泛表述恰恰是干扰项。</li></ul>
+<blockquote>记忆锚点：主题写在定义句里——毛泽东思想＝关于中国<strong>革命和建设</strong>的正确的理论原则和经验总结；社会性质与阶级状况＝<strong>依据</strong>；「改革」＝中国特色社会主义理论体系的关键词；「命运前途」太虚不选。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

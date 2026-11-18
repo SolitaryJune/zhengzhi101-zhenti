@@ -1,8 +1,117 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-17 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-17</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2022·17 有多少汤泡多少馍——物质条件制约发展蓝图</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 模板：纯文本推理链卡片（政治站无 KaTeX 版），只改下方题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：先拆比喻",
+    "cls": "key",
+    "body": "<p>习近平以「羊肉泡馍」比喻贯彻「四水四定」（以水定城、定地、定人、定产）。拆结构：<b>汤</b>（水）＝客观存在的<b>物质条件</b>，<b>馍</b>（城地人产的安排）＝意识层面的<b>主观规划</b>。「有多少汤泡多少馍」是条件关系——蓝图只能按汤的多少来定。</p>",
+    "log": "汤＝客观条件，馍＝主观蓝图"
+  },
+  {
+    "title": "先立模型：物质第一性，主观服从客观",
+    "cls": "key",
+    "body": "<p>物质第一性、意识第二性——不能先定馍再找汤。判定标尺随之而来：谁忠实表达<b>「主观服从客观」</b>的制约关系，谁入选；谁把重心挪到「主观突破客观」，谁出局。</p>",
+    "log": "标尺立起：主观规划服从客观条件"
+  },
+  {
+    "title": "B：一切从实际出发，实事求是",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p>按现有水量定发展规模＝从客观实际出发定主观蓝图——唯物论的基本要求，正是「有多少汤泡多少馍」的直接翻译。<b>B 正确</b>。</p>",
+    "log": "汤定馍＝一切从实际出发 → B 选"
+  },
+  {
+    "title": "C：因地制宜，因时制宜",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p>「四水四定」按不同流域、不同时期的水情分别定城定地定人定产——具体问题具体分析（马克思主义活的灵魂），不是空泛口号。<b>C 正确</b>。</p>",
+    "log": "四水四定＝因地因时制宜 → C 选"
+  },
+  {
+    "title": "D：尊重规律，把握适度原则",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>汤与馍保持合理比例、量入为出，正是对<b>「度」</b>的把握（质量互变规律）；水情约束体现客观规律性，发展必须尊重它。<b>D 正确</b>。</p>",
+    "log": "比例适度＝尊重规律 → D 选"
+  },
+  {
+    "title": "A：正确的话，未必切题",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>「创造条件，充分发挥意识能动性」命题本身不错，但<b>多选题考切题性，不考命题真假</b>。题眼反复落在<b>受制</b>：精打细算、量水而行、水用在该用的地方——是让主观服从客观，不是放开发挥、改造水情。<b>A 不选</b>。</p>",
+    "log": "题眼在「制约」不在「发挥」→ A 不选"
+  },
+  {
+    "title": "结论：答案 BCD",
+    "cls": "good",
+    "body": "<p>答案 <b>BCD</b>。记忆锚点：汤＝客观物质条件，馍＝主观规划；汤定馍 → 一切从实际出发 + 因地制宜 + 适度原则；题眼落在「制约」，就不选「发挥」。</p>",
+    "log": "锁定 BCD：物质条件制约发展蓝图"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  title: "「有多少汤泡多少馍」的哲学道理",
+  subtitle: "2022 年第 17 题（多选）· 考点：物质与意识的关系 · 一切从实际出发 · 适度原则 · 方法：拆比喻对号入座",
+  counterLabel: "推理步",
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」：先拆比喻立模型，再逐项对号，最后看唯一的反方向选项 A。",
+  result: {
+    big: "答案 BCD",
+    html: "记忆锚点：汤＝客观物质条件，馍＝主观规划；汤定馍 → <b>一切从实际出发 + 因地制宜 + 适度原则</b>。A「发挥意识能动性」命题对但不切题——题眼落在「制约」，就不选「发挥」。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解："有多少汤泡多少馍"——客观条件如何制约主观蓝图</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立模型——把比喻拆成"汤定馍"</h3>
+<p>比喻题先拆结构：<strong>汤</strong>（水资源）是客观存在的<strong>物质条件</strong>，<strong>馍</strong>（城、地、人、产的发展安排）是意识层面的<strong>主观规划</strong>。"有多少汤泡多少馍"是条件关系——<strong>蓝图只能按汤的多少来定，不能先定馍再找汤</strong>。这正是物质第一性、意识第二性在发展问题上的落地。四个选项谁忠实表达了"主观服从客观"，谁就入选；谁把重心挪到"主观突破客观"，谁就出局。</p>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>推理</th></tr></thead><tbody><tr><td>B 一切从实际出发，实事求是</td><td>✅</td><td>按现有水量定发展规模＝从客观实际出发定主观蓝图，唯物论的基本要求</td></tr><tr><td>C 因地制宜，因时制宜</td><td>✅</td><td>"四水四定"按不同流域、不同时期的水情分别定城定地定人定产，具体问题具体分析</td></tr><tr><td>D 尊重规律，把握适度原则</td><td>✅</td><td>汤与馍保持合理比例、量入为出，正是对"度"的把握；水情约束是客观规律性的体现</td></tr><tr><td>A 创造条件，充分发挥意识能动性</td><td>❌</td><td>题眼落在<strong>受制</strong>而非<strong>发挥</strong>——方向相反</td></tr></tbody></table>
+<h3>为什么 A 不选：正确的话未必切题（预判追问）</h3>
+<p>最常被追问的是："发挥意识能动性难道不对吗？"——命题本身正确，但<strong>多选题考切题性，不考命题真假</strong>。题干反复强调"精打细算用好水资源""让水资源用在最该用的地方"，重心是物质条件对发展的<strong>制约</strong>；A 把重心挪到"创造条件、放开发挥"上，暗示可以突破水的约束去定馍——与"有多少汤泡多少馍"的口径相反。再看"创造条件"四个字：题干丝毫没有"改造水情"的意思，讲的全是"服从水情"。</p>
+<h3>易错点：每个干扰对应哪种误解</h3>
+<ul><li><strong>全选（把 A 也勾上）</strong>：被"能动性"这个正确词带走——忘了判断标准是题眼落点（制约）而非选项本身对不对。</li><li><strong>漏 C</strong>：觉得"因地制宜"太具体、不够"哲学"——具体问题具体分析正是马克思主义活的灵魂，"四水四定"本身就是按地按时的分别处理。</li><li><strong>漏 D</strong>：把"适度"当成经济常识——量入为出、比例合理正是质量互变规律中"度"的运用。</li></ul>
+<blockquote>记忆锚点：汤＝客观物质条件，馍＝主观规划；汤定馍 → <strong>一切从实际出发＋因地制宜＋适度原则</strong>；题眼落在"制约"，就不选"发挥"。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

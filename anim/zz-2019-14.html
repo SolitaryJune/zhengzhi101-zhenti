@@ -1,8 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2019-14 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2019-14</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2019·14 人生价值的两个侧面</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: "审题眼",
+    cls: "key",
+    body: "<p>马克思：「只有为同时代人的完美、幸福而工作，<b>自己才能达到完美</b>；只为自己劳动……永远不能成为完美的、真正伟大的人物。」一段话两个侧面，先把人生价值模型立起来。</p>",
+    log: "题眼：为他人 → 自己完美"
+  },
+  {
+    title: "先立模型：人生价值 = 两极",
+    cls: "step",
+    body: "<p><b>自我价值</b>：社会对个人的尊重与满足（发展、幸福、成就）；<b>社会价值</b>：个人对社会的责任与贡献。原文结构：为他人工作 = 社会价值 → 自己达到完美 = 自我价值。</p>",
+    log: "贡献 → 完善自我，一条链"
+  },
+  {
+    title: "机制：统一而非单极",
+    cls: "step",
+    body: "<p>反面例证：只为自己劳动，或许成为学者、哲人、诗人（才华照旧），却「永远不能成为完美的、真正伟大的人物」——单极化导致价值残缺。两个侧面不可拆：自我价值<b>通过</b>社会价值的创造来实现。</p>",
+    log: "单极化 → 残缺；两极在场 → 统一"
+  },
+  {
+    title: "D：统一对号",
+    cls: "good",
+    body: "<p>「人生价值是自我价值和社会价值的统一」与原文双向结构完全吻合。<b>D 正确</b>。</p>",
+    ribbon: { k: 4, ok: true },
+    log: "D 吻合原文结构 → 选 D"
+  },
+  {
+    title: "A：关系装反",
+    cls: "bad",
+    body: "<p>「实现自我价值是创造社会价值的原因」——方向反了。正确方向：社会价值（贡献）是自我价值实现的<b>前提</b>。<b>A 错误</b>。</p>",
+    ribbon: { k: 1, ok: false },
+    log: "A 把前提结果倒装"
+  },
+  {
+    title: "B：表层现象当决定因素",
+    cls: "bad",
+    body: "<p>「取决于他人的认可」——认可只是社会评价的表层现象，个人价值的实现根本上取决于贡献与社会条件。<b>B 错误</b>。</p>",
+    ribbon: { k: 2, ok: false },
+    log: "B 抓了表层，丢了根本"
+  },
+  {
+    title: "C：代替 ≠ 统一",
+    cls: "bad",
+    body: "<p>见题干重「为他人」就以为自我价值被取消——「统一」的意思是两极都在场，谁也代替不了谁；「代替」恰好取消了统一。<b>C 错误</b>。</p>",
+    ribbon: { k: 3, ok: false },
+    log: "C 走过头，用代替取消统一"
+  },
+  {
+    title: "结论",
+    cls: "good",
+    body: "<p>答案 <b>D</b>。记忆锚点：人生价值 = <b>自我价值 + 社会价值</b>，统一的桥梁是劳动与贡献；社会价值是前提，自我价值通过贡献实现。出处：马克思中学毕业论文《青年在选择职业时的考虑》。</p>",
+    log: "锁定 D：人生价值是两个侧面的统一"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "「为他人工作才能达到完美」：人生价值两极",
+  subtitle: "考点：人生价值（自我价值与社会价值） · 方法：结构对读 + 关系辨向",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "记忆锚点：人生价值 = <b>自我价值 + 社会价值</b>的统一；社会价值是自我价值实现的前提，自我价值通过贡献实现。A 方向装反，B 表层当根本，C 用「代替」取消统一。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：为他人幸福工作才能「达到完美」——人生价值的两个侧面</h2>
+<p>答案：<strong>D（人生价值是自我价值和社会价值的统一）</strong>。</p>
+<h3>第 0 步：先立模型——人生价值内部本来就有两个侧面</h3>
+<p>人生价值 = <strong>自我价值</strong>（社会对个人的尊重和满足：个人的发展、幸福、成就）+ <strong>社会价值</strong>（个人对社会的责任和贡献）。马克思这段话的结构恰好把两个侧面接成一条链：</p>
+<ul><li>「为同时代人的完美、为他们的幸福而工作」——<strong>社会价值</strong>（贡献）；</li><li>「自己才能达到完美」——<strong>自我价值</strong>（个人的完善）；</li><li>反面例证：「只为自己劳动」的人也许成为著名学者、伟大哲人、卓越诗人（才华照旧），却「永远不能成为完美的、真正伟大的人物」——单极化导致价值残缺。</li></ul>
+<p>有贡献才有真正的自我完善——两个侧面在一段话里同时出场，这正是「统一」的文本证据。此段出自马克思中学毕业论文《青年在选择职业时的考虑》。</p>
+<h3>第 1 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>对号结果</th><th>理由</th></tr></thead><tbody><tr><td>A 实现自我价值是创造社会价值的原因</td><td>❌</td><td>关系装反——社会价值（贡献）是自我价值实现的<strong>前提</strong></td></tr><tr><td>B 个人价值的实现取决于他人的认可</td><td>❌</td><td>「他人认可」只是社会评价的表层现象</td></tr><tr><td>C 人生社会价值可以代替自我价值</td><td>❌</td><td>二者不可互相代替——「统一」是两极都在场</td></tr><tr><td>D 人生价值是自我价值和社会价值的统一</td><td>✅</td><td>与原文「为他人工作↔自己达到完美」的双向结构吻合</td></tr></tbody></table>
+<h3>第 2 步：预判追问——重「为他人」会不会否定自我价值？</h3>
+<p>不会。原文说「为同时代人完美而工作，<strong>自己才能</strong>达到完美」——马克思不是要人牺牲掉自我，而是指出自我价值的实现<strong>要通过</strong>社会价值的创造来完成。「为他的完美 → 自己的完美」恰恰是把两个侧面接成一条价值链。C 恰好在这一点上走过头：用「代替」取消了统一。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 A</strong>：把「前提—结果」读成「原因—结果」且方向装反；正确方向是<strong>社会价值为自我价值提供前提</strong>，自我价值通过贡献实现。</li><li><strong>选 B</strong>：把「他人认可」当成实现的决定因素——认可是被贡献决定的表层现象，实现根本上取决于贡献与社会条件。</li><li><strong>选 C</strong>：见题干重「为他人」，就以为自我价值被取消——统一的意思是两极都在场，谁也代替不了谁。</li></ul>
+<blockquote>记忆锚点：人生价值 = <strong>自我价值 + 社会价值</strong>，统一的桥梁是劳动与贡献；社会价值是前提，自我价值通过贡献得以实现。出处：马克思中学毕业论文《青年在选择职业时的考虑》。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

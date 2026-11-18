@@ -1,8 +1,78 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-22 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-22</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-22 · 社会主义市场经济的制度特征（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：先立"两层基因 + 判别式"机制，再对 A–D 逐项判定。
+   全中文、自包含，仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var S1 = card(1, 'key', '审题眼：问的是"社会主义制度特征"',
+  '<p>社会主义市场经济体制 = <b>社会主义基本制度 × 市场经济</b>的结合。题问这一结合<b>体现社会主义制度特征</b>的方面——不是问市场经济有什么好处。</p><p>先立判别式，再逐项过。</p>');
+var S2 = card(2, 'key', '机制先行：两层基因 + 一句判别式',
+  '<p>结合体长着两层基因：<b>制度特征</b>（社会主义独有）与<b>市场经济一般特征</b>（凡是市场经济都有）。</p><p>判别式：<b>换到资本主义市场经济里还成立吗？</b>成立 → 一般特征；不成立 → 制度特征。</p>');
+var S3 = card(3, 'good', '选项 A：公有制为主体、多种所有制共同发展 —— 对',
+  '<p>资本主义市场经济以<b>私有制</b>为主体，不可能以公有制为主体——判别式过不去。</p><p>公有制决定制度性质，A 是所有制维度上的制度特征。A 对。</p>');
+var S4 = card(4, 'good', '选项 B：按劳分配为主体、多种分配方式并存 —— 对',
+  '<p>资本主义是<b>按资分配</b>；按劳分配与公有制相联系，是制度性质在分配上的实现。</p><p>B 是分配维度上的制度特征。B 对。</p>');
+var S5 = card(5, 'good', '选项 C：宏观调控以最广大劳动人民利益为出发点和归宿 —— 对',
+  '<p>调控<b>为谁服务</b>由基本制度决定：社会主义为人民利益调控，资本主义为资本利益调控。</p><p>C 是宏观调控维度上的制度特征。C 对。</p>');
+var S6 = card(6, 'bad', '选项 D：市场配置资源、发挥市场基础性作用 —— 错',
+  '<p>资本主义市场经济<b>同样</b>靠市场配置资源——判别式在这里畅通无阻。</p><p>D 是市场经济的一般特征，体现的是"市场经济"那一半，体现不了"社会主义"。D 错。</p>');
+var S7 = card(7, 'key', '陷阱复盘：句子正确 ≠ 归类正确',
+  '<p>D 的表述本身没错（当年口径：市场在资源配置中起<b>基础性</b>作用），错在<b>归类</b>——被塞进"制度特征"的篮子。</p><p>做题先看清问哪一层：问"一般特征"才选 D 这类，问"制度特征"选 A、B、C 这类。</p>');
+var S8 = card(8, 'good', '收束：答案 ABC',
+  '<p>答案 <b>ABC</b>：所有制看公有制（A）、分配看按劳分配（B）、调控看人民利益（C）。</p><p>市场配置资源（D）是通用件——资本主义市场经济也有。</p>');
+
+var snaps = [
+  { cls: 'step', tag: '审题眼', log: '题眼"体现社会主义制度特征"——先立判别式再做题', html: S1, count: 0 },
+  { cls: 'step', tag: '立机制', log: '判别式：换到资本主义市场经济还成立吗？成立即一般特征', html: S1 + S2, count: 0 },
+  { cls: 'ok',   tag: 'A 入选', log: 'A 资本主义没有：公有制为主体是制度底色', html: S1 + S2 + S3, count: 1, ribbon: { k: 1, ok: true } },
+  { cls: 'ok',   tag: 'B 入选', log: 'B 资本主义没有：按劳分配与公有制相联系', html: S1 + S2 + S3 + S4, count: 2, ribbon: { k: 2, ok: true } },
+  { cls: 'ok',   tag: 'C 入选', log: 'C 资本主义没有：调控以人民利益为归宿', html: S1 + S2 + S3 + S4 + S5, count: 3, ribbon: { k: 3, ok: true } },
+  { cls: 'miss', tag: 'D 排除', log: 'D 资本主义也有：市场配置资源是市场经济共性', html: S1 + S2 + S3 + S4 + S5 + S6, count: 4, ribbon: { k: 4, ok: false } },
+  { cls: 'step', tag: '陷阱',   log: '复盘 D：句子正确，错在归类——问的是制度特征', html: S1 + S2 + S3 + S4 + S5 + S6 + S7, count: 4 },
+  { cls: 'done', tag: '结论',   log: '四项判定完毕：答案 ABC', html: S1 + S2 + S3 + S4 + S5 + S6 + S7 + S8, count: 4, done: true }
+];
+
+AW.init({
+  title: '【2011·22】社会主义市场经济体现制度特征的方面（多选）',
+  subtitle: '考点：社会主义市场经济 · 制度特征 vs 一般特征 · 判别式排查',
+  intro: '点击「▶ 播放」或按 → 逐维度排查 A–D；右侧序号带实时标记对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: '<b>判别式：换到资本主义市场经济里还成立吗？</b><br>公有制为主体（A）、按劳分配为主体（B）、调控以人民利益为归宿（C）——都不成立，是制度特征；市场配置资源（D）成立，是市场经济通用件。句子正确 ≠ 归类正确。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：社会主义市场经济里，哪些是"社会主义制度特征"</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——一个体制，两层基因</h3>
+<p>社会主义市场经济体制 = <strong>社会主义基本制度 × 市场经济</strong>的结合。这个结合体天然长着两层基因：一层是<strong>制度特征</strong>——由社会主义基本制度带来，资本主义市场经济不会有的；一层是<strong>市场经济的一般特征</strong>——凡是市场经济都长这样。题问"体现社会主义制度特征的方面"，就是要在四个维度里挑出"社会主义独有"的部分。</p>
+<p><strong>判别式一句话</strong>：这一条换到资本主义市场经济里还成立吗？成立 → 一般特征；不成立 → 制度特征。拿它逐维度过一遍：</p>
+<table><thead><tr><th>维度</th><th>内容</th><th>换到资本主义市场经济</th><th>判定</th></tr></thead><tbody><tr><td>所有制结构</td><td>公有制为主体、多种所有制共同发展</td><td>不成立（以私有制为主体）</td><td>制度特征</td></tr><tr><td>分配制度</td><td>按劳分配为主体、多种分配方式并存</td><td>不成立（按资分配）</td><td>制度特征</td></tr><tr><td>宏观调控</td><td>以最广大劳动人民利益为出发点和归宿</td><td>不成立（资本利益导向）</td><td>制度特征</td></tr><tr><td>资源配置</td><td>发挥市场的基础性作用</td><td>成立（市场配置资源是共性）</td><td>一般特征</td></tr></tbody></table>
+<p>三个制度特征都长在"社会主义"三个字上：公有制决定制度性质，按劳分配是公有制在分配上的实现，宏观调控的归宿由"为谁服务"决定。而"市场配置资源"是市场经济通用件——它体现的是"市场经济"那一半，体现不了"社会主义"。</p>
+<h3>第 1 步：选项对号入座</h3>
+<ul><li><strong>A 对</strong>：公有制为主体是社会主义的所有制底色，判别式过不去（资本主义以私有为主体）→ 制度特征。</li><li><strong>B 对</strong>：按劳分配与公有制相联系，是制度性质在分配上的实现 → 制度特征。</li><li><strong>C 对</strong>：调控为谁服务由基本制度决定——以最广大劳动人民利益为出发点和归宿，资本主义做不到 → 制度特征。</li><li><strong>D 错</strong>：市场配置资源，资本主义市场经济同样如此——D 是结合体里来自"市场经济"那一半的属性。</li></ul>
+<p>→ 选 <strong>ABC</strong>。</p>
+<h3>易错点：句子正确 ≠ 归类正确</h3>
+<ul><li><strong>误选 D（把市场经济共性当成社会主义特性）</strong>：D 的表述本身没错（当年口径：市场在资源配置中起基础性作用），错在<strong>归类</strong>——题眼"体现社会主义制度特征"设下的反向陷阱。判别法：先看清问的是哪一层，问"一般特征"才选 D 这类，问"制度特征"选 A、B、C 这类。</li></ul>
+<blockquote>记忆锚点：制度特征查三处——所有制看公有制（A）、分配看按劳分配（B）、调控看人民利益（C）；市场配置资源（D）是通用件，资本主义也有。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

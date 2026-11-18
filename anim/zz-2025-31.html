@@ -1,8 +1,95 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2025-31 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2025-31</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2025-31 · 集体主义原则（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼', count: 0,
+    title: '审题眼：调节"三方利益"的基本原则',
+    body: '<p>集体主义是社会主义道德的原则，调节的是<b>国家利益、社会整体利益和个人利益</b>三者之间的关系。</p><p>题眼问"强调"什么——考的是内容结构。考点：集体主义的三层内涵。</p>' },
+  { cls: 'key', tag: '机制先行', count: 0,
+    title: '机制先行：集体主义的三层结构',
+    body: '<ul><li><b>第一层 · 统一</b>：国家利益、社会整体利益和个人利益根本上辩证统一；</li><li><b>第二层 · 高于</b>：集体利益高于个人利益——发生矛盾时个人利益服从集体利益，必要时作出贡献或牺牲；</li><li><b>第三层 · 保障</b>：重视和保障个人的<b>正当利益</b>，促进个人价值实现。</li></ul><p>四个选项两对分家：B 落第二层、D 落第三层；A 绝对化、C 曲解。</p>' },
+  { cls: 'good', tag: 'B 入选', ribbon: { k: 2, ok: true }, count: 1,
+    title: '选项 B：国家利益高于个人利益 —— 对',
+    body: '<p>第二层：国家利益、社会整体利益代表全体成员<b>共同的、根本的、长远的</b>利益，高于个人利益。</p><p>这是集体主义作为"基本原则"的底线内容。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true }, count: 2,
+    title: '选项 D：重视和保障个人的正当利益 —— 对',
+    body: '<p>第三层：集体主义不是压制个人——集体要尽力关心、保障个人正当利益，促进个人价值实现。</p><p>"高于"与"保障"一体两面：只讲高于不讲保障，就滑向虚假集体主义。</p>' },
+  { cls: 'bad', tag: 'A 排除', ribbon: { k: 1, ok: false }, count: 2,
+    title: '选项 A：个人利益应当无条件服从集体利益 —— 错',
+    body: '<p>错在"<b>无条件</b>"三个字。教材表述有前提：其一，存在<b>真实的冲突情境</b>才谈服从；其二，服从对象必须是<b>正当的</b>集体利益。</p><p>同时集体要尊重保障个人正当利益、尽量兼顾。"无条件服从"既取消冲突前提，又取消保障义务——把"高于"绝对化成"碾压"。</p>' },
+  { cls: 'bad', tag: 'C 排除', ribbon: { k: 3, ok: false }, count: 2,
+    title: '选项 C：集体利益是个人所有利益的总和 —— 错',
+    body: '<p>错误在结构：集体利益是全体成员<b>共同的、根本的、整体的</b>利益，不是个人利益的机械相加。</p><p>个人利益的加总里含彼此冲突的、局部的、短期的成分——这些不构成集体利益；公共利益（公共设施、生态安全）也拆不回任何一个人头上。"总和说"把整体溶解成个体。</p>' },
+  { cls: 'key', tag: '陷阱对比', count: 2,
+    title: 'A、C 各歪曲一层：碾压化与溶解化',
+    body: '<ul><li><b>A</b>：把双向关系（高于 + 保障）写成单向碾压——判断技巧：凡"无条件"式表述先画问号；</li><li><b>C</b>：把"涉及全体成员"偷换成"等于个人利益之和"——涉及 ≠ 相加；</li><li>漏选 D 的常见原因：以为集体主义只讲服从——第三层"保障正当利益"是教材明文。</li></ul>' },
+  { cls: 'good', tag: '结论', count: 2,
+    title: '收束：答案 BD',
+    body: '<p>答案 <b>BD</b>：高于（B）+ 保障（D）。</p><p>两个经典歪曲各记一句："无条件"是把高于写成碾压（A 反），"总和"是把整体溶解成个体（C 反）。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    count: s.count,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2025·31】集体主义：高于有边界，总和是歪曲（多选）',
+  subtitle: '考点：集体主义原则的三层内涵 · 辩证统一/高于/保障 · 选项逐项推演',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已确认正确项',
+  snaps: snaps,
+  result: {
+    big: '答案 BD',
+    html: '<b>集体主义三层</b>：辩证统一 → 集体利益高于个人利益（B）→ 重视保障个人正当利益（D）。<br>"无条件服从"取消了冲突前提与保障义务（A 反）；集体利益是共同根本整体利益，不是个人利益的加总（C 反）。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：集体主义的三层结构——"高于"有边界，"总和"是歪曲</h2>
+<p>答案：<strong>BD</strong>。</p>
+<h3>第 0 步：先立机制——先看集体主义调节什么、内容由几层构成</h3>
+<p>集体主义是社会主义道德的原则，调节的是<strong>国家利益、社会整体利益和个人利益</strong>三者之间的关系。教材给它的内容结构是三层：</p>
+<ol><li><strong>辩证统一</strong>：国家利益、社会整体利益和个人利益在根本上是一致的——集体不是个人的对立面；</li><li><strong>集体利益高于个人利益</strong>：当二者发生矛盾时，个人利益要服从集体利益，必要时作出贡献或牺牲；</li><li><strong>重视和保障个人的正当利益</strong>：集体要尽力关心、保障个人正当利益，促进个人价值的实现——这一层与"高于"配套存在，缺了它，集体主义就滑向自己的对立面（虚假集体主义）。</li></ol>
+<p>四张选项卡恰好两两配对：B 落在第 2 层（高于 ✅），D 落在第 3 层（保障 ✅）；A 把第 2 层绝对化成"碾压"（❌），C 把"整体"曲解成"加法"（❌）。</p>
+<h3>第 1 步：B、D 对号入座</h3>
+<ul><li><strong>B 国家利益高于个人利益</strong> ✅：第 2 层——国家利益、社会整体利益代表着全体成员<strong>共同的、根本的、长远的</strong>利益，高于个人利益。这是集体主义作为"基本原则"的底线内容；</li><li><strong>D 重视和保障个人的正当利益</strong> ✅：第 3 层——集体主义不是压制个人，而是要求集体尽力关心、保障个人正当利益，促进个人价值实现。教材明文，与"高于"一体两面。</li></ul>
+<h3>第 2 步：为什么 A 错——错在"无条件"三个字</h3>
+<p>A 说"个人利益应当<strong>无条件</strong>服从集体利益"。追问一句：服从有没有条件？有。教材的表述是：当个人利益与集体利益<strong>发生矛盾时</strong>，个人利益要服从集体利益——前提有二：其一，存在真实的冲突情境；其二，服从的对象必须是<strong>正当的</strong>集体利益。同时，集体要尊重、保障个人正当利益，尽量兼顾二者；若以"集体"之名要求个人放弃正当利益甚至牺牲合法权益，恰恰是对集体主义的歪曲。"无条件服从"既取消了冲突前提，又取消了集体的保障义务——把"高于"绝对化成了"碾压"。</p>
+<h3>第 3 步：为什么 C 错——集体利益不是"加法"</h3>
+<p>C 说"集体利益是个人所有利益的总和"。错误在结构上：集体利益是全体成员<strong>共同的、根本的、整体的</strong>利益，不是每个成员个人利益的机械相加。个人利益的加总里会包含彼此冲突的、局部的、短期的成分，而这些恰恰不构成集体利益；反过来，集体利益中的公共利益（公共设施、生态安全）也无法拆分还原到任何一个人头上。"总和说"把整体溶解成了个体，等于取消集体利益的独立性。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：觉得"服从"就说得对，没盯住"无条件"。判断技巧：凡把双向关系（高于 + 保障）写成单向碾压（无条件服从）的表述，基本是错项；</li><li><strong>误选 C</strong>：被"集体利益来自全体成员"的直觉带偏。直觉成立的部分是集体利益<strong>涉及</strong>全体成员，不成立的部分是"等于个人利益之和"——涉及 ≠ 相加；</li><li><strong>漏选 D</strong>：以为集体主义只讲服从。第三层"保障正当利益"是教材明文的内在要求。</li></ul>
+<blockquote>记忆锚点：集体主义三层 = <strong>统一 + 高于（B）+ 保障（D）</strong>；两个经典歪曲各记一句——"无条件"把高于写成碾压（A 反），"总和"把整体溶解成个体（C 反）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

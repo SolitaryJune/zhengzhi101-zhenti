@@ -1,8 +1,121 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-03 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-03</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-03 · 谁穿上衣都一样——使用价值</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 推理链：每一步的完整内容（引擎按步数截取显示；s.cls: key=关键/good=正确/bad=排除） */
+var STEPS = [
+  {
+    "cls": "key",
+    "tag": "审题眼",
+    "title": "审题眼：“无论谁穿，都是一样的”",
+    "body": "<p>《资本论》：对上衣来说，无论<b>裁缝自己穿</b>还是<b>顾客穿</b>，都是一样的。</p><p>关键词“<b>穿</b>”——上衣正在满足穿着需要。问：这个“一样”指上衣的哪种属性在起作用？</p>"
+  },
+  {
+    "cls": "key",
+    "tag": "立机制",
+    "title": "立机制：使用价值=自然属性，价值=社会属性",
+    "body": "<p><b>使用价值</b>：物的有用性，满足人的某种需要——自然属性，跟谁用、为谁生产都无关。</p><p><b>价值</b>：凝结的无差别人类劳动——社会属性，只在<b>交换</b>中显现，体现生产者之间的社会关系。</p><p>消费端看“有没有用”，交换端才看“值多少”。</p>"
+  },
+  {
+    "cls": "good",
+    "tag": "A 入选",
+    "title": "选项 A：上衣都起着使用价值的作用",
+    "body": "<p><b>A 对</b>：无论谁穿，上衣都起着“满足穿着需要”的作用——<b>有用性不分主客</b>，谁穿都一样。</p>",
+    "ribbon": {"k": 1, "ok": true}
+  },
+  {
+    "cls": "bad",
+    "tag": "B 排除",
+    "title": "选项 B：上衣都起着价值的作用",
+    "body": "<p><b>B 错</b>：价值在<b>交换</b>中才显现。</p><p>裁缝自己穿，产品自用、不进交换，价值问题根本不出现——“都一样”不可能指价值。</p>",
+    "ribbon": {"k": 2, "ok": false}
+  },
+  {
+    "cls": "bad",
+    "tag": "C 排除",
+    "title": "选项 C：上衣都是抽象劳动的结果",
+    "body": "<p><b>C 错</b>：抽象劳动形成价值，属价值范畴。</p><p>题干观察点在<b>消费端</b>（谁在穿），不在生产端（谁的劳动凝结）——答错了层面。</p>",
+    "ribbon": {"k": 3, "ok": false}
+  },
+  {
+    "cls": "bad",
+    "tag": "D 排除",
+    "title": "选项 D：上衣都是社会劳动的结果",
+    "body": "<p><b>D 错</b>：同样是生产者社会关系层面的说法。</p><p>它回答不了“为什么谁穿都一样”——有用性对主体一视同仁，跟生产的社会性无关。</p>",
+    "ribbon": {"k": 4, "ok": false}
+  },
+  {
+    "cls": "key",
+    "tag": "追问",
+    "title": "追问：题干为什么要强调“自穿”",
+    "body": "<p>“裁缝自己穿”恰恰<b>排除了交换</b>——没有交换，价值根本不显现。</p><p>这是命题人埋的提示：把答案从价值一侧推向使用价值一侧。自用劳动产品未必是商品。</p>"
+  },
+  {
+    "cls": "good",
+    "tag": "结论",
+    "title": "收束：答案 A",
+    "body": "<p>谁穿上衣都一样=上衣对谁都<b>有用</b>=使用价值在起作用。</p><p><b>答案 A。</b>记忆锚点：谁用都一样→使用价值；交换才见价值；自穿的产品可以不是商品，但不能没有使用价值。</p>"
+  }
+];
+
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.ribbon) nPick++;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '排除' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: "谁穿上衣都一样：使用价值不分主客",
+  subtitle: "考点：商品二因素 · 使用价值与价值 · 选项逐项推演",
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已对号选项',
+  snaps: snaps,
+  result: {"big": "答案 A", "html": "无论谁穿，上衣都满足穿着需要——<b>使用价值</b>（自然属性）对主体一视同仁。<br>易错：价值是社会属性、<b>交换才显现</b>，自穿不进交换；C/D 把消费端的问题答到生产端去了。"}
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：谁穿上衣都一样——使用价值不分主客</h2>
+<p>答案：<strong>A（上衣都起着使用价值的作用）</strong>。</p>
+<h3>第 0 步：先立机制——商品二因素各有"管辖范围"</h3>
+<p>商品是二因素的统一体，两个因素性质完全不同：</p>
+<ul><li><strong>使用价值</strong>：物的<strong>有用性</strong>，能满足人的某种需要。它是商品的<strong>自然属性</strong>，回答"这个东西有什么用"——跟谁用、为什么用、为谁生产都无关，谁穿上衣都是遮体御寒。</li><li><strong>价值</strong>：凝结在商品中的无差别人类劳动（抽象劳动的凝结），是商品的<strong>社会属性</strong>，体现商品生产者之间的社会关系。它只在<strong>交换</strong>中显现——回答"值多少、谁同谁交换"。</li></ul>
+<p>《资本论》那句话"对上衣来说，无论裁缝自己穿还是他的顾客穿，都是一样的"——说的正是上衣的<strong>用处</strong>对主体一视同仁。这个"一样"只能落在使用价值上：消费者关心的是物的有用性，不是价值。</p>
+<h3>第 1 步：题眼翻译</h3>
+<p>关键词"<strong>穿</strong>"——上衣正在满足穿着需要。满足需要 = 有用性在起作用 = 使用价值。至于价值、抽象劳动、社会劳动，都是<strong>生产与交换</strong>层面的事，与"谁在穿"无关。</p>
+<h3>第 2 步：逐项对号</h3>
+<ul><li><strong>A 使用价值的作用</strong> ✅：无论谁穿，上衣都起着"满足穿着需要"的作用——有用性不分主客。</li><li><strong>B 价值的作用</strong> ❌：价值在交换中才显现。裁缝<strong>自己穿</strong>，产品自用、不进交换，价值问题根本不出现——"都一样"不可能指价值。</li><li><strong>C 都是抽象劳动的结果</strong> ❌：抽象劳动形成价值，属价值范畴；题干观察点在<strong>消费端</strong>（谁在穿），不在生产端（谁的劳动凝结）。</li><li><strong>D 都是社会劳动的结果</strong> ❌：同样是生产者社会关系层面的说法，回答"为什么谁穿都一样"答非所问。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：把"有用"混成"有价值"。日常语言里"有用"和"值钱"常混用，政治经济学里严格分家：使用价值=自然属性；价值=社会属性，交换才显现。</li><li><strong>误选 C/D</strong>：从劳动角度找答案。注意自用劳动产品未必是商品：裁缝自穿的上衣有使用价值、未必谈得上价值。</li><li>一个追问：为什么"自穿"这里要特别强调？因为自穿恰恰<strong>排除了交换</strong>，从而排除了价值显现的场景——这是命题人放在题干里的提示。</li></ul>
+<blockquote>记忆锚点：谁用都一样 → <strong>使用价值</strong>；交换才见价值；自穿的产品可以不是商品（无价值体现），但不能没有使用价值。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

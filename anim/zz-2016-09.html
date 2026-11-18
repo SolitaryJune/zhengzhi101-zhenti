@@ -1,8 +1,145 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2016-09 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2016-09</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2016·09 民族意识开始普遍觉醒的重大事件</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画（推理链卡片 + 时间线，纯文本无 KaTeX，走 anim-engine），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 时间线卡片（史实/会议/著作类用）
+function tl(rows){
+  return '<div>' + rows.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:86px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>1840 年后炮声隆隆，「睡狮」渐醒。设问限定「民族意识<b>开始普遍觉醒</b>的重大事件」——不考哪场战争最惨烈，考<b>觉醒的梯度层次</b>：每场战争把觉醒推到了哪一层。</p>",
+    "log": "题眼=「开始普遍觉醒」"
+  },
+  {
+    "title": "先立时间线：觉醒的梯度",
+    "cls": "key",
+    "body": tl([
+      ["1840", "鸦片战争——林则徐、魏源「开眼看世界」，少数先觉"],
+      ["1883–85", "中法战争——「不败而败」，有刺激但未及普遍"],
+      ["1894–95", "甲午战争——《马关条约》+ 瓜分狂潮，开始普遍觉醒"],
+      ["1900", "八国联军侵华——危机加深，觉醒的延续"],
+      ["1937", "日本全面侵华——全民族抗战，觉醒早已完成"]
+    ]) + "<p>「开始普遍」卡在 1894–95。</p>",
+    "log": "先觉 → 普遍 → 成熟，梯度展开"
+  },
+  {
+    "title": "选项 D：1883 层次不够",
+    "cls": "bad",
+    "body": "<p>中法战争「不败而败」确有刺激，但社会层面震动有限，民族意识<b>没有普遍</b>觉醒——层次够不着题眼。<b>D 排除</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "log": "D 有刺激、未普遍"
+  },
+  {
+    "title": "选项 B：甲午是转折临界点",
+    "cls": "good",
+    "body": "<p>败于向来被轻视的日本，割台湾、赔二亿两，刺激空前；列强随即掀起<b>瓜分狂潮</b>——「四千余年大梦之唤醒，实自甲午战始」（梁启超），救亡图存成为各阶层普遍呼声。<b>B 正确</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": true
+    },
+    "log": "B=甲午，开始普遍觉醒"
+  },
+  {
+    "title": "选项 C：1900 是延续不是起点",
+    "cls": "bad",
+    "body": "<p>八国联军侵华、《辛丑条约》使危机更深，但发生在甲午<b>之后</b>——是普遍觉醒的延续与加深，不是「开始」。<b>C 排除</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    },
+    "log": "C 在甲午之后，是延续"
+  },
+  {
+    "title": "选项 A：1937 太晚",
+    "cls": "bad",
+    "body": "<p>日本全面侵华时，民族意识<b>早已完成</b>普遍觉醒并走向全民族抗战——用「最惨烈」替代「最早普遍」，程度 ≠ 起点。<b>A 排除</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "log": "A 时间太晚，谈不上开始"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>B</b>。记忆锚点：觉醒三段论——鸦片战争<b>少数先觉</b>（开眼看世界）→ 甲午<b>开始普遍觉醒</b>（救亡图存）→ 全面侵华<b>走向成熟</b>（全民族抗战）；「开始普遍」只认甲午。</p>",
+    "log": "锁定 B：甲午唤醒普遍民族意识"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "民族意识开始普遍觉醒的重大事件",
+  subtitle: "考点：近代民族意识觉醒的梯度 · 方法：先立时间线，按「觉醒层次」对号，设问卡「开始普遍」",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 B",
+    html: "记忆锚点：民族意识觉醒三段——鸦片战争后<b>少数先觉</b>（林则徐、魏源开眼看世界）→ <b>甲午战争</b>后开始<b>普遍觉醒</b>（败于轻视的日本 + 瓜分狂潮，救亡图存成时代强音）→ 全面侵华时期<b>走向成熟</b>（全民族抗战）。设问带「开始普遍」四字，卡点只能是 1894–95 甲午战争。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：民族意识「开始普遍觉醒」的重大事件是哪一场</h2>
+<p>答案：<strong>B（中日甲午战争）</strong>。</p>
+<h3>第 0 步：先立机制——民族意识觉醒是一个梯度过程，设问卡的是层次</h3>
+<p>「民族意识觉醒」不是一个开关，而是一个由少数先觉者到社会各阶层的<strong>梯度展开</strong>过程。命题人不考「哪场战争最惨」，考的是<strong>每场战争把觉醒推进到了哪一层</strong>。先立时间线：</p>
+<table><thead><tr><th>时间</th><th>事件</th><th>把觉醒推到了哪一层</th></tr></thead><tbody><tr><td>1840–42</td><td>鸦片战争</td><td>极少数人惊醒：林则徐、魏源等「开眼看世界」，注目世界、求新知于西方——<strong>少数先觉</strong></td></tr><tr><td>1883–85</td><td>中法战争</td><td>「不败而败」带来刺激，但社会层面震动仍有限——<strong>未及普遍</strong></td></tr><tr><td>1894–95</td><td><strong>中日甲午战争</strong></td><td>割地赔款空前、列强掀起瓜分狂潮，救亡图存成为时代最强音——<strong>开始普遍觉醒</strong></td></tr><tr><td>1900</td><td>八国联军侵华</td><td>《辛丑条约》后危机更深，是觉醒的<strong>延续与加深</strong>，不是起点</td></tr><tr><td>1937</td><td>日本全面侵华</td><td>全民族抗战，民族意识<strong>早已完成</strong>普遍觉醒并走向成熟</td></tr></tbody></table>
+<p>设问限定「<strong>开始普遍觉醒</strong>的重大事件」，卡点在 1894–95。选 <strong>B</strong>。</p>
+<h3>第 1 步：为什么偏偏是甲午</h3>
+<p>鸦片战争打了，但「天朝上国」的迷梦只被少数先驱惊破，多数人仍把败绩当作偶然。甲午一战，败给的竟是向来被中国轻视的蕞尔日本，《马关条约》割台湾、赔二亿两，刺激远超以往；随后列强竞相划分势力范围，瓜分狂潮扑面而来——亡国灭种的危险从士大夫的议论变成了每个人的切肤之感。梁启超说：「吾国四千余年大梦之唤醒，实自甲午战败割台湾、偿二百兆始。」此后「救亡图存」成为各阶层的普遍呼声：康梁变法、孙中山革命、实业救国，都从这次普遍觉醒中生长出来。<strong>「败于从来瞧不起的对手 + 面临被瓜分的现实危险」</strong>，这两点使甲午成为意识转折的临界点。</p>
+<h3>第 2 步：干扰项归因</h3>
+<table><thead><tr><th>选项</th><th>错在哪</th><th>对应的典型误解</th></tr></thead><tbody><tr><td>A 日本全面侵华战争（1937）</td><td>时间太晚：觉醒早已完成并走向全民族抗战，谈不上「开始」</td><td>用「最惨烈」代替「最早普遍」——把程度当起点</td></tr><tr><td>C 八国联军侵华（1900）</td><td>危机加深发生在甲午<strong>之后</strong>，是觉醒的延续而非起点</td><td>只比「够不够重」，不比「够不够早」</td></tr><tr><td>D 中法战争（1883–85）</td><td>「不败而败」有刺激作用，但未使民族意识<strong>普遍</strong>觉醒，层次不够</td><td>高估局部战争的全民震动</td></tr></tbody></table>
+<blockquote>记忆锚点：觉醒三段论——鸦片战争<strong>少数先觉</strong>（开眼看世界）→ 甲午<strong>开始普遍觉醒</strong>（救亡图存）→ 全面侵华<strong>走向成熟</strong>（全民族抗战）；设问带「开始普遍」四字，只认甲午。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

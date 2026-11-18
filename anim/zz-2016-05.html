@@ -1,8 +1,146 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2016-05 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2016-05</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2016·05 贯穿两大理论成果的精髓：实事求是</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画（推理链卡片，纯文本无 KaTeX，走 anim-engine），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>毛泽东思想 + 中国特色社会主义理论体系 = 马克思主义中国化<b>两大理论成果</b>。设问「贯穿始终、体现在各个基本观点中的<b>世界观和方法论的基础</b>」——这个设问词直指一个头衔：<b>精髓</b>。</p>",
+    "log": "设问词 = 精髓 / 世界观方法论基础"
+  },
+  {
+    "title": "先立机制：两大成果凭什么接续",
+    "cls": "key",
+    "body": "<p>两次历史性飞跃诞生两大成果，年代与课题不同，靠一条共同的<b>思想路线</b>一脉相承：<b>实事求是</b>——一切从实际出发、理论联系实际、在实践中检验和发展真理。每个基本观点都是用它对准各自年代的「实事」求出来的「是」。</p>",
+    "log": "一条思想路线贯穿两大成果"
+  },
+  {
+    "title": "摆开框架：活的灵魂三个层次",
+    "cls": "key",
+    "body": "<p>毛泽东思想活的灵魂三方面，定位不同：<b>实事求是</b> = 精髓（认识世界的总方法）；<b>群众路线</b> = 根本工作路线（依靠谁）；<b>独立自主</b> = 立足点（靠什么力量）。「面」从属于「精髓」，精髓贯穿每一「面」。</p>",
+    "log": "三条灵魂：精髓 / 路线 / 立足点"
+  },
+  {
+    "title": "选项 A：时代精神的核心",
+    "cls": "bad",
+    "body": "<p><b>改革创新是时代精神的核心</b>（与民族精神共同构成中国精神），主要对应中特理论体系的时代课题——贯穿不了毛泽东思想。<b>A 排除</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "log": "A 张冠李戴：时代精神核心"
+  },
+  {
+    "title": "选项 B：独立自主是立足点",
+    "cls": "bad",
+    "body": "<p>活的灵魂之一，但解决的是「<b>靠什么力量建设国家</b>」的立足点问题（自力更生）——是「一面」，层次低于精髓，「贯穿」不了。<b>B 排除</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    },
+    "log": "B 是立足点，非精髓"
+  },
+  {
+    "title": "选项 C：实事求是 = 精髓",
+    "cls": "good",
+    "body": "<p>辩证唯物主义与历史唯物主义世界观方法论的<b>集中运用</b>：不从本本出发、从客观实际出发求规律。它是两大成果共同的<b>精髓</b>，贯穿始终、体现在各个基本观点中。<b>C 正确</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": true
+    },
+    "log": "C = 精髓，贯穿两大成果"
+  },
+  {
+    "title": "选项 D：群众路线是根本工作路线",
+    "cls": "bad",
+    "body": "<p>活的灵魂之一，但解决「<b>依靠谁</b>」的问题（一切为了群众、一切依靠群众）——党的根本工作路线，同样只是「一面」。<b>D 排除</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "log": "D 是根本工作路线，非精髓"
+  },
+  {
+    "title": "判别口诀",
+    "cls": "key",
+    "body": "<p>问「<b>精髓 / 世界观方法论基础 / 贯穿始终</b>」→ 实事求是；问「<b>根本工作路线</b>」→ 群众路线；问「<b>立足点</b>」→ 独立自主；问「<b>时代精神核心</b>」→ 改革创新。设问词对号入座。</p>",
+    "log": "设问词决定答案"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>C</b>。记忆锚点：活的灵魂 = <b>实事求是（精髓）+ 群众路线（根本工作路线）+ 独立自主（立足点）</b>；能贯穿两大成果一切基本观点的只有精髓——实事求是。</p>",
+    "log": "锁定 C：实事求是"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "贯穿两大理论成果的精髓：实事求是",
+  subtitle: "考点：实事求是思想路线（活的灵魂三方面 · 精髓） · 方法：先立「面从属于精髓」机制，再对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 C（实事求是）",
+    html: "记忆锚点：活的灵魂三条 = <b>实事求是（精髓）</b>+ <b>群众路线（根本工作路线）</b>+ <b>独立自主（立足点）</b>。「贯穿两大成果、体现在各个基本观点中的世界观和方法论基础」只有精髓配得上——<b>实事求是</b>；改革创新是时代精神的核心，也贯穿不了两大成果。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：贯穿两大理论成果的「精髓」凭什么只有它</h2>
+<p>答案：<strong>C（实事求是）</strong>。</p>
+<h3>第 0 步：先立机制——两大成果为什么能"接续"，靠一条思想路线</h3>
+<p>先把大背景立起来：马克思主义中国化经历了两次历史性飞跃，产生了<strong>两大理论成果</strong>——第一次飞跃形成<strong>毛泽东思想</strong>，第二次飞跃形成<strong>中国特色社会主义理论体系</strong>。两批成果诞生的年代不同、面对的课题不同（革命和建设 vs 改革开放），凭什么说它们是"一脉相承"的同一个体系？凭的就是一条贯穿始终的<strong>思想路线</strong>：</p>
+<p><strong>实事求是</strong>——一切从实际出发，理论联系实际，在实践中检验真理和发展真理。</p>
+<p>这条路线是辩证唯物主义和历史唯物主义<strong>世界观和方法论</strong>在实际工作中的集中运用：想问题不从本本出发、从"实事"（客观实际）出发，去"求"出其中的"是"（规律）。两大成果的每一个基本观点，都是用它对着各自年代的"实事"求出来的"是"——所以教材给它两个头衔：<strong>精髓</strong>、两大成果共同的<strong>世界观和方法论的基础</strong>。题干的设问词一个字不差地指向这个头衔。</p>
+<h3>第 1 步：把「活的灵魂」三条摆开——同一个框架里三个不同层次</h3>
+<p>毛泽东思想的<strong>活的灵魂</strong>有三个基本方面：实事求是、群众路线、独立自主。三者常被一起背诵，命题人最爱拿另外两条设障。它们定位不同、层次不同，不能互换：</p>
+<table><thead><tr><th>内容</th><th>定位</th><th>回答什么问题</th><th>能否当「精髓」</th></tr></thead><tbody><tr><td>实事求是</td><td><strong>精髓</strong>、世界观方法论基础</td><td>认识世界、改造世界的<strong>总的方法</strong></td><td>✅ 贯穿两大成果的一切基本观点</td></tr><tr><td>群众路线</td><td>党的<strong>根本工作路线</strong></td><td>一切为了群众、一切依靠群众——<strong>依靠谁</strong></td><td>❌ 只是"一面"</td></tr><tr><td>独立自主</td><td><strong>立足点</strong></td><td>自力更生——<strong>靠什么力量建设国家</strong></td><td>❌ 只是"一面"</td></tr></tbody></table>
+<p>只有"实事求是"够格当<strong>精髓</strong>：群众路线、独立自主都是实事求是这条思想路线在特定领域的<strong>展开和运用</strong>（群众路线是"从群众中来、到群众中去"的认识论运用；独立自主是"从中国实际出发、不照搬外国"的立足点运用）。<strong>"面"从属于"精髓"，精髓却贯穿每一"面"</strong>——选 <strong>C</strong>。</p>
+<h3>第 2 步：干扰项归因——每种错选对应一种记混</h3>
+<ul><li><strong>误选 D（群众路线）</strong>：把"党的根本工作路线"升格成了精髓。典型误解：以为"群众观点最根本，所以群众路线是基础"。它解决的是"依靠谁"的问题，是活的灵魂的一个<strong>方面</strong>，"贯穿不了"两大成果的各个基本观点。</li><li><strong>误选 B（独立自主）</strong>：同样是活的灵魂之一，但它是"立足点"，解决"靠什么力量"的问题——层次低于精髓，同样"贯穿"不了。</li><li><strong>误选 A（改革创新）</strong>：张冠李戴——<strong>改革创新是时代精神的核心</strong>（与以爱国主义为核心的民族精神共同构成中国精神）。它主要对应中国特色社会主义理论体系的时代课题，毛泽东思想的形成背景里并不是它，谈不上"贯穿两大成果"。</li></ul>
+<h3>判别口诀：设问词决定答案</h3>
+<p>这类题不要死背选项，抓住设问词对号：问"<strong>精髓 / 世界观和方法论的基础 / 贯穿始终、体现在各个基本观点中</strong>" → 实事求是；问"<strong>根本工作路线</strong>" → 群众路线；问"<strong>立足点 / 出发点</strong>" → 独立自主；问"<strong>时代精神的核心</strong>" → 改革创新。</p>
+<blockquote>记忆锚点：活的灵魂三条 = <strong>实事求是（精髓）+ 群众路线（根本工作路线）+ 独立自主（立足点）</strong>；能"贯穿两大成果一切基本观点"的只有精髓——实事求是。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

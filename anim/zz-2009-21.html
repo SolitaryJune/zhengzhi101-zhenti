@@ -1,8 +1,94 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-21 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-21</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2009-21 · 马克思论信用制度：两支箭头读原文（2009 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：把《资本论》这段话拆成"一建一破"两支箭头',
+    cls: 'key',
+    body: '<p>材料出自《资本论》第三卷，句子结构工整：<b>正向箭头</b>"加速生产力物质发展＋世界市场的形成"→ 承接句"作为<b>新生产形式的物质基础</b>"→ <b>反向箭头</b>"加速矛盾的暴力的爆发（危机）"。设问"这一论述表明"——逐句对号。</p>' },
+  { title: '先立机制：一支"建新"、一支"破旧"，两重性总括',
+    cls: '',
+    body: '<p>正向＝<b>建</b>：信用集中资本、突破单个资本限制，放大生产与流通规模；反向＝<b>破</b>：信用放大投机、拉大生产与消费的矛盾，让危机来得更快更猛。两支箭头合起来＝信用制度的<b>两重性</b>——这正是 D 选项的由来：总括项常是"分句各一个＋总括一个"结构里的第三件。</p>' },
+  { title: '逐项分析 A："已成为危机爆发的深层原因"',
+    cls: 'bad',
+    ribbon: {k:1, ok:false},
+    body: '<p>A：信用制度已成为资本主义经济危机爆发的<b>深层原因</b>。危机的深层原因另有其人——资本主义<b>基本矛盾</b>（生产社会化 vs 生产资料资本主义私人占有）；题干"这种矛盾"指的正是它，信用的角色是"<b>加速</b>矛盾的暴力的爆发"——加速器、助燃剂，不是火源。机制层的"加速"替换不了根源层 → ❌ 不选。</p>' },
+  { title: '逐项分析 B：促进社会主义生产方式物质基础的形成',
+    cls: 'good',
+    ribbon: {k:2, ok:true},
+    body: '<p>B 与承接句<b>同义改写</b>："使<b>这二者</b>（生产力物质发展＋世界市场）作为<b>新生产形式的物质基础</b>发展到一定的高度"——"这二者"就近指代前句内容，新生产形式即社会主义生产方式 → ✅ 选。</p>' },
+  { title: '逐项分析 C：加速内部矛盾发展和解体要素的形成',
+    cls: 'good',
+    ribbon: {k:3, ok:true},
+    body: '<p>C 与反向箭头<b>逐字对应</b>："加速了这种矛盾的暴力的爆发，即危机，因而<b>加强了旧生产方式解体的各种因素</b>"——旧生产方式解体＝资本主义生产方式内部矛盾发展和解体要素形成 → ✅ 选。</p>' },
+  { title: '逐项分析 D：既推动商品经济发展，又加深其矛盾',
+    cls: 'good',
+    ribbon: {k:4, ok:true},
+    body: '<p>D 是两支箭头的<b>"一分为二"总括</b>：既推动（正向"建新"）又加深（反向"破旧"）——"双刃剑"式结论。D 不是凭空多出的选项，是 B、C 两句的合称层 → ✅ 选。</p>' },
+  { title: '对号入座汇总',
+    cls: '',
+    body: '<p>A ❌ 加速器背不了根源的锅；B ✅ 建新基础；C ✅ 促旧解体；D ✅ 一体两面总括。→ 答案 <b>BCD</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>BCD</b>。信用两重性：建新基础（B）＋促旧解体（C）＋一体两面总括（D）；基本矛盾是根、信用是加速器（A 反）。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2009-21 马克思论信用制度："双刃剑"的读法',
+  subtitle: '考点：资本主义信用制度 · 两重性 · 原文拆句对号 —— 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '<b>B</b> 承接句同义改写——"这二者（生产力物质发展＋世界市场）作为新生产形式的物质基础"。<br><b>C</b> 反向箭头逐字对应——"加强了旧生产方式解体的各种因素"。<br><b>D</b> 正反两支箭头的"一分为二"总括——既推动又加深。<br><br><b>干扰项：</b>A 把"加速矛盾的暴力的爆发"（机制层·加速器）说成"危机的深层原因"（根源层）——危机的深层原因是资本主义基本矛盾，加速器不背根源的锅。<br><br><b>记忆锚点：</b>基本矛盾是根，信用是加速器；建新（B）＋破旧（C）＋总括（D）。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：马克思论信用制度——"双刃剑"的两支箭头与一个不背的锅</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——把这段话拆成"一建一破"两支箭头</h3>
+<p>材料出自《资本论》第三卷，句子结构工整，先把原文按语义切成三段：</p>
+<ol><li><strong>正向箭头（建）</strong>："信用制度<strong>加速了</strong>生产力的物质上的发展和世界市场的形成"——信用把分散的资本集中起来，突破单个资本的限制，放大生产与流通的规模；</li><li><strong>承接句</strong>："使<strong>这二者</strong>作为<strong>新生产形式的物质基础</strong>发展到一定的高度"——"这二者"就近指代前一句的"生产力的物质发展＋世界市场"，而"新生产形式"即社会主义生产方式。这一句是 B 选项的原文出处；</li><li><strong>反向箭头（破）</strong>："信用<strong>加速了</strong>这种矛盾的暴力的爆发，即<strong>危机</strong>，因而<strong>加强了旧生产方式解体的各种因素</strong>"——信用放大投机、拉大生产与消费的矛盾，让危机来得更快更猛。这一句是 C 选项的原文出处。</li></ol>
+<p>一支箭头"建新"、一支箭头"破旧"，两句合起来正是信用制度的<strong>两重性</strong>：既推动商品经济的发展，又加深商品经济运行中的矛盾——D 不是凭空多出的选项，它是两支箭头"一分为二"的<strong>总括</strong>。多选题里"分句各对应一个选项＋总括再对应一个选项"是经典结构。</p>
+<h3>第 1 步：B、C、D 的原文对号处</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对号处</th></tr></thead><tbody><tr><td>B 促进建立社会主义生产方式的物质基础的形成</td><td>✅</td><td>承接句："使这二者（生产力物质发展＋世界市场）作为新生产形式的物质基础发展到一定的高度"</td></tr><tr><td>C 加速内部矛盾发展和解体要素的形成</td><td>✅</td><td>反向箭头："加速矛盾的暴力的爆发（危机），加强了旧生产方式解体的各种因素"</td></tr><tr><td>D 既推动商品经济发展，又加深商品经济运行中的矛盾</td><td>✅</td><td>正反两支箭头的合称——"建新＋破旧"的总括</td></tr></tbody></table>
+<h3>第 2 步：A 为什么不选——"加速器"不背"根源"的锅</h3>
+<p>经济危机爆发的<strong>深层（根本）原因</strong>是资本主义基本矛盾——生产社会化与生产资料资本主义私人占有之间的矛盾。题干原话里"这种矛盾"指的正是它：信用制度的角色被马克思写得很清楚——"<strong>加速</strong>矛盾的暴力的爆发"，是助燃剂、加速器，不是火源。把深层原因安到信用制度头上，等于用机制层的"加速"替换制度层的"根源"——层次一换，选项就错。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：看见"加速了矛盾的暴力的爆发"就顺手带上 A——没区分"加速爆发"（机制层）与"深层原因"（根源层）。</li><li><strong>漏 D</strong>：逐句找到了 B、C，却忘了把两句合成"既……又……"的总括层——多选题的总括项常被漏掉。</li><li><strong>漏 B</strong>：被"新生产形式的物质基础"的书面表述劝退——它就是承接句里"这二者"的直接落实，"这二者"＝生产力的物质发展＋世界市场。</li></ul>
+<blockquote>记忆锚点：<strong>基本矛盾是根，信用是加速器</strong>；信用两重性＝建新基础（B）＋促旧解体（C）＋一体两面总括（D），深层原因的锅不背（A）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

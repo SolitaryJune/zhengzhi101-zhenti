@@ -1,8 +1,137 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-08 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-08</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2015·08 香港高度自治权：中央授予的地方事务管理权</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>题眼：「高度自治权」是<b>什么性质的权力</b>。考点：一国两制下特区权力的来源——单一制国家的授权逻辑。</p>",
+    "log": "题眼：高度自治权从哪来"
+  },
+  {
+    "title": "先立机制：单一制=地方权力来自中央授权",
+    "cls": "key",
+    "body": "<p>我国是<b>单一制</b>国家：主权由中央统一行使，地方权力由中央授予。宪法和香港基本法<b>共同构成</b>特区宪制基础；中央拥有<b>全面管治权</b>，高度自治权是授权产生的组成部分——「一国」是「两制」的前提。</p>",
+    "log": "授权逻辑：先有「一国」，才谈「两制」"
+  },
+  {
+    "title": "D：中央授予的地方事务管理权",
+    "cls": "good",
+    "ribbon": {
+      "k": 4,
+      "ok": true
+    },
+    "body": "<p>高度自治权=中央依法授予、用于管理特区<b>地方事务</b>的权力（行政管理权、立法权、独立司法权与终审权）。<b>D 正确</b>。</p>",
+    "log": "授权产生的管理权 → 选 D"
+  },
+  {
+    "title": "A：完全自治权——「完全自治」就是两个中国",
+    "cls": "bad",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "body": "<p>「完全自治」意味着不服从中央管治，主权落空——邓小平明确讲过，「完全自治」就是<b>「两个中国」</b>而不是一国两制。<b>A 错误</b>。</p>",
+    "log": "高度≠完全 → A 不选"
+  },
+  {
+    "title": "B：剩余权力——单一制不存在剩余权力",
+    "cls": "bad",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    },
+    "body": "<p>联邦制才有州保留剩余权力的说法；单一制下未被授予的权力<b>保留在中央</b>，特区没有「剩余权力」可言。<b>B 错误</b>。</p>",
+    "log": "制度类型错配 → B 不选"
+  },
+  {
+    "title": "C：本身固有的权力——权力无「固有」",
+    "cls": "bad",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    },
+    "body": "<p>「固有」意味着先于授权而存在，与单一制相悖：特区依中央授权设立；「港人治港」说的是<b>谁管</b>，回答不了<b>权力从哪来</b>。<b>C 错误</b>。</p>",
+    "log": "谁管≠权力来源 → C 不选"
+  },
+  {
+    "title": "追问：高度自治会不会变成无限自治？",
+    "cls": "key",
+    "body": "<p>不会，三重边界：①范围限于<b>基本法授权事项</b>；②来源始终是<b>中央授权</b>（中央可解释基本法并监督）；③外交国防等事项由中央直接行使。全面管治权与高度自治权<b>相联系</b>而非对立。</p>",
+    "log": "「高度」修饰程度，不改变授权性质"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>D</b>：中央授予的地方事务管理权。记忆锚点：单一制=授权政治；宪制基础=宪法+基本法；不存在「完全自治」，也不存在「剩余权力」「固有权力」。</p>",
+    "log": "锁定 D：中央授予的地方事务管理权"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "香港高度自治权：中央授予的地方事务管理权",
+  subtitle: "考点：一国两制 · 单一制国家的授权逻辑",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 D",
+    html: "记忆锚点：单一制=地方权力<b>来自中央授权</b>；宪制基础=<b>宪法+基本法</b>；不存在「完全自治」，也不存在「剩余权力」「固有权力」。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：香港高度自治权的来源——中央授予的地方事务管理权</h2>
+<p>答案：<strong>D（中央授予的地方事务管理权）</strong>。</p>
+<h3>第 0 步：先立机制——单一制国家里，地方权力从哪来</h3>
+<p>我国是<strong>单一制</strong>国家。在这个框架里：主权由中央政府统一行使，地方的权力不是地方自己「带来」的，而是<strong>中央授予</strong>的——这就是「授权政治」的基本逻辑。</p>
+<p>具体到香港：宪法和香港基本法<strong>共同构成</strong>香港特区的<strong>宪制基础</strong>。中央依照基本法的规定授予香港高度自治权（行政管理权、立法权、独立的司法权和终审权），中央对特区同时拥有<strong>全面管治权</strong>——高度自治权是全面管治权的<strong>组成部分</strong>，两权不是对立关系，而是「授权与被授权」的关系。所谓「一国」是「两制」的前提：没有主权上的「一国」，就没有授权意义上的「两制」。</p>
+<h3>第 1 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>错因</th></tr></thead><tbody><tr><td>A 特别行政区的完全自治权</td><td>❌</td><td>「完全自治」=「两个中国」的另一种说法——自治到不服从中央，主权就落空了；中央从来没有允诺「完全自治」</td></tr><tr><td>B 中央授权之外的剩余权力</td><td>❌</td><td>单一制下<strong>不存在剩余权力</strong>：未被授予的权力保留在中央，特区没有「剩余权力」可言（联邦制国家才有州保留剩余权力的说法）</td></tr><tr><td>C 特别行政区本身固有的权力</td><td>❌</td><td>「固有」意味着先于中央授权而存在——与单一制相悖；特区是<strong>依中央授权设立</strong>的，权力无「固有」可言</td></tr><tr><td>D 中央授予的地方事务管理权</td><td>✅</td><td>高度自治权=中央依法授予、用于管理特区地方事务的权力</td></tr></tbody></table>
+<h3>第 2 步：预判追问——「高度」自治会不会变成「无限」自治？</h3>
+<p>不会。高度自治有<strong>三重边界</strong>：①权力<strong>范围</strong>限于基本法授权事项；②权力<strong>来源</strong>始终是中央授权（中央可解释基本法、可监督）；③中央保留<strong>全面管治权</strong>并在特定事项（外交、国防等）上直接行使。「高度」修饰的是自治的<strong>程度</strong>，不改变授权的<strong>性质</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 A（被「高度」带成「完全」）</strong>：「高度」是程度词，与「完全」之间隔着中央全面管治权这道墙；「完全自治」的政治实质是否定「一国」。</li><li><strong>选 C（把「本地治理本地事务」误当成「权力固有」）</strong>：特区确实由港人治港、管理本地事务，但「谁管」与「权力从哪来」是两回事——治权来自授权，不是固有。</li><li><strong>选 B（受联邦制直觉干扰）</strong>：联邦制下州保留剩余权力的印象被套到单一制特区上——这是制度类型错配。</li></ul>
+<blockquote>记忆锚点：单一制=地方权力<strong>来自中央授权</strong>；香港高度自治权=中央授予的地方事务管理权；宪制基础=宪法+基本法；不存在「完全自治」，也不存在「剩余权力」。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

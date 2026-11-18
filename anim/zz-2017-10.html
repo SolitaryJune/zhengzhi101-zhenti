@@ -1,8 +1,138 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-10 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-10</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2017·10 陈独秀认识转变的直接原因：巴黎和会外交失败</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 时间线卡片（史实类）
+function tl(rows){
+  return '<div>' + rows.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:86px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼：找"直接原因"',
+    cls: 'key',
+    body: '<p>认识变化链：1918.12 陈独秀欢呼"公理战胜强权"、称威尔逊"世界第一好人" → 1919.5.4"什么公理……都成了一文不值的空话"。<b>直接原因</b> = 因果链上紧贴认识改变的前一环，中间不许再隔事件——排时间轴找它。</p>',
+    log: '180° 掉头，找紧邻的一环'
+  },
+  {
+    title: '排时间轴：幻想如何一步步建立',
+    cls: 'key',
+    body: tl([
+      ['1918.11', '一战结束，威尔逊提出"十四条"，幻想的来源'],
+      ['1918.12', '《每周评论》发刊词："公理战胜强权"，幻想的顶点'],
+      ['1919.1', '巴黎和会召开，中国以战胜国身份期待收回山东权益'],
+    ]) + '</p>',
+    log: '幻想建立：公理、威尔逊、十四条'
+  },
+  {
+    title: '1919.4—5：幻想当场粉碎',
+    cls: 'key',
+    body: '<p>巴黎和会拒绝中国的正当要求，把德国在山东的权益<b>转交日本</b>，消息传回国内——"弱国无外交"证明所谓公理不过是列强分赃的遮羞布。紧跟着 1919.5.4 五四运动爆发，陈独秀写下"一文不值的空话"。因果链严丝合缝。</p>',
+    log: '和会外交失败 → 幻想粉碎 → 五四'
+  },
+  {
+    title: '选项 A：正是那一环',
+    cls: 'good',
+    ribbon: { k: 1, ok: true },
+    body: '<p>A"中国巴黎和会外交失败"——<b>对</b>。它紧贴 5 月 4 日的认识转变，打碎的就是"公理战胜强权"这个幻想；也是五四运动爆发的<b>直接导火线</b>。<b>A 正确</b>。</p>',
+    log: '直接原因 = 和会外交失败 → A 正确'
+  },
+  {
+    title: '选项 B：时间错位',
+    cls: 'bad',
+    ribbon: { k: 2, ok: false },
+    body: '<p>B"日本对德国宣战，出兵山东"——发生在 <b>1914 年</b>一战初期，远在幻想形成之前，不可能成为 1919 年认识转变的直接原因。<b>B 排除</b>。</p>',
+    log: '1914 年的旧事 → B 排除'
+  },
+  {
+    title: '选项 C：时间倒挂',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>C"苏俄宣布废除以前同中国签订的一切不平等条约"——《加拉罕宣言》发表于 <b>1919 年 7 月</b>，在五四运动<b>之后</b>；它带来的是新希望，不是幻灭的原因。把结果当原因是典型时序倒挂。<b>C 排除</b>。</p>',
+    log: '1919.7 在五四之后 → C 排除'
+  },
+  {
+    title: '选项 D：以偏概全',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>D"美国不愿放弃在华种种特权"——只是和会分赃的一个侧面、长期背景的一角；"直接原因"应对准整个事件：<b>巴黎和会中国外交失败</b>。<b>D 排除</b>。</p>',
+    log: '局部背景≠直接原因 → D 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>A（中国巴黎和会外交失败）</b>。记忆锚点：幻想（公理战胜强权）→ 破灭（巴黎和会外交失败、山东权益转交日本）→ 行动（五四运动）。"直接原因"= 因果链紧邻的一环；"直接原因"≠ 深层背景，也绝不晚于结果。</p>',
+    log: '锁定 A：巴黎和会外交失败'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '陈独秀从"公理战胜强权"到"一文不值的空话"：直接原因是什么',
+  subtitle: '考点：五四运动的直接导火线 · 方法：排时间轴找因果链紧邻一环',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」沿时间轴逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：<b>巴黎和会中国外交失败</b>（山东权益转交日本）= 陈独秀幻想破灭的直接原因 = 五四运动爆发的直接导火线。时序三查：B 是 1914 年旧事（错位）、C 是 1919 年 7 月（晚于结果）、D 是背景侧面（以偏概全）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：陈独秀从"公理战胜强权"到"一文不值"——认识转变的直接原因</h2>
+<p>答案：<strong>A（中国巴黎和会外交失败）</strong>。</p>
+<h3>第 0 步：先立机制——"直接原因"在因果链上是哪一环</h3>
+<p>题目给了一条<strong>认识变化链</strong>：1918 年 12 月陈独秀在《每周评论》发刊词里欢呼一战结果是"公理战胜强权"、称威尔逊是"世界第一好人"；到 1919 年 5 月 4 日出版的《每周评论》上却写"什么公理……都成了一文不值的空话"。找"直接原因"，就是在因果链上找<strong>紧贴着认识改变的前一环</strong>——中间不许再隔其他事件。所以做法是排时间轴，看哪个事件恰好落在 1919 年 4 月底至 5 月初，并且打碎的正是"公理战胜强权"这个具体幻想。</p>
+<h3>第 1 步：排时间轴，找最靠近 5 月 4 日的那一环</h3>
+<table><thead><tr><th>时间</th><th>事件</th><th>对幻想的影响</th></tr></thead><tbody><tr><td>1918.11</td><td>一战结束，威尔逊提出"十四条"</td><td>幻想来源：以为"公理"真会主持正义</td></tr><tr><td>1918.12</td><td>《每周评论》发刊词："公理战胜强权"</td><td>幻想的顶点</td></tr><tr><td>1919.1</td><td>巴黎和会召开，中国以战胜国身份参会</td><td>幻想仍在，期待收回山东权益</td></tr><tr><td>1919.4—5</td><td>和会拒绝中国正当要求，把德国在山东的权益转交日本，消息传回国内</td><td><strong>幻想当场粉碎</strong></td></tr><tr><td>1919.5.4</td><td>五四运动爆发；陈独秀写下"一文不值的空话"</td><td>认识转变的落点</td></tr></tbody></table>
+<p>和会上"弱国无外交"的结局证明：所谓公理不过是列强分赃的遮羞布。中国外交失败正是幻想幻灭的<strong>直接原因</strong>，也是五四运动爆发的直接导火线——与题干的认识链严丝合缝，选 <strong>A</strong>。</p>
+<h3>第 2 步：干扰项归因——每个错项错在哪一环</h3>
+<table><thead><tr><th>选项</th><th>错在哪</th><th>对应误解</th></tr></thead><tbody><tr><td>B</td><td>日本对德宣战、出兵山东发生在 1914 年一战初期，远在幻想形成之前</td><td>时间错位：拿开端的旧事当结尾的转折</td></tr><tr><td>C</td><td>苏俄宣布废除对华不平等条约是 1919 年 7 月《加拉罕宣言》，在五四运动<strong>之后</strong>；它带来的是新希望，不是幻灭的原因</td><td>时间倒挂：把结果当原因</td></tr><tr><td>D</td><td>美国不愿放弃在华特权只是和会分赃的一个侧面，"直接原因"应对准整个事件</td><td>以偏概全：把局部背景当直接原因</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>"直接原因"≠"深层背景"</strong>：帝国主义强权政治的本质、列强分赃是长期背景；直接原因必须紧贴认识转变的那一刻，本题即和会外交失败的消息传回。</li><li><strong>别倒挂时序</strong>：C 项最具迷惑性——苏俄宣言常与五四运动一起记，但它在 1919 年 7 月，晚于 5 月 4 日，因果链上排在结果之后。</li><li>本题同时是五四运动考点：巴黎和会中国外交失败是<strong>五四运动爆发的直接导火线</strong>，记住这对搭配。</li></ul>
+<blockquote>记忆锚点：幻想（公理战胜强权、威尔逊"第一好人"）→ 破灭（巴黎和会外交失败、山东权益转交日本）→ 行动（五四运动）；直接原因 = 因果链紧邻一环 = <strong>中国巴黎和会外交失败</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

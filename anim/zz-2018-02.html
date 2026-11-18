@@ -1,8 +1,109 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-02 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-02</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2018·02 「白马非马」错在割裂共性与个性</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 三行小表（范畴对照用）
+function rows(list){
+  return '<div>' + list.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:86px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：拆「白马非马」的推理链',
+    body: '<p>公孙龙的论证：「白」命色、「马」命形，命色者非命形，故「白马非马」。设问要求从唯物辩证法看这一命题的<b>错误</b>——辨析「白马（个别）」与「马（一般）」被摆成了什么关系。</p>',
+    log: '白马=个别，马=一般，看两者被摆成什么关系' },
+  { tag: '机制', cls: 'key', title: '先立机制：共性寓于个性之中',
+    body: '<p>矛盾的普遍性与特殊性 = 共性与个性（一般与个别）：<b>共性寓于个性之中</b>，个性中包含共性，二者辩证统一、不可割裂。</p>' +
+          rows([
+            ['马（共性）', '一切马的共同本质，命「形」；只能通过白马、黑马等个性而存在'],
+            ['白马（个性）', '白色＋马形：既包含马的共性，又含自身特点'],
+            ['正确关系', '白马是马中的一种——个别包含一般，一般通过个别存在']
+          ]),
+    log: '共性寓于个性之中，个性包含共性' },
+  { tag: '拆解', cls: '', title: '推理哪一步出错：差别 ≠ 互斥',
+    body: '<p>「马」命形、「白」命色——两个词<b>侧重点</b>确有差别，这一步没错；错在由「命色者非命形」（侧重不同）推出「白马非马」（互斥），把「侧重点不同」偷换成「彼此对立」。共性恰恰要通过有差别的个性来表现，一个「非」字切断了两者的联系。</p>',
+    log: '差别真实存在，但夸大成「非」就是割裂' },
+  { tag: '选项 A', cls: 'good', title: 'A「割裂了共性和个性之间的联系」：当选',
+    body: '<p>命题用「非」字把白马与马对立起来，正是否认「个性中包含共性」、割裂一般与个别——诡辩论的典型手法。<b>当选</b>。</p>',
+    log: '「非」字割裂一般与个别 → A 正确' },
+  { tag: '选项 B', cls: 'bad', title: 'B「模糊了本质和现象」：不对号，排除',
+    body: '<p>本质是内在根本性质，现象是外部表现，讲的是<b>同一对象</b>的内外两层；「白马 vs 马」是两个对象之间<b>个别与一般</b>的关系。迷惑点在「白是看得见的」，但那是认识过程，不是本题辨析的关系。<b>排除</b>。</p>',
+    log: '白马与马不是本质/现象关系' },
+  { tag: '选项 C', cls: 'bad', title: 'C「混淆了内容和形式」：不对号，排除',
+    body: '<p>内容与形式讲事物的构成要素与其表现方式（内容决定形式），题干没有这层对应——范畴名词硬套。<b>排除</b>。</p>',
+    log: 'C 属名词硬套' },
+  { tag: '选项 D', cls: 'bad', title: 'D「颠倒了形态和功能」：不对号，排除',
+    body: '<p>形态/功能并非辩证法基本范畴的成对关系，纯拼凑。<b>排除</b>。</p>',
+    log: 'D 与原理不对应' },
+  { tag: '结论', cls: 'good', title: '结论：锁定 A',
+    body: '<p>答案 <b>A</b>：割裂了共性与个性。记忆锚点：<b>共性寓于个性之中、个性包含共性</b>；「白马非马」= 割裂一般与个别 → 诡辩论。</p>',
+    log: '锁定 A：一般与个别被割裂' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.log,
+    count: i + 1,
+    ribbon: { k: i + 1, ok: s.cls !== 'bad' },
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '「白马非马」错在割裂共性与个性',
+  subtitle: '2018 年单选第 2 题 · 考点：矛盾的普遍性与特殊性（共性与个性） · 方法：先立「共性寓于个性」机制，再拆推理、对号入座',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  counterLabel: '推理步',
+  ribbonTitle: '推理进度（绿=成立/正确，红=干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：矛盾的普遍性（共性）<b>寓于</b>特殊性（个性）之中，个性包含共性、二者不可割裂。白马是个性、马是共性，白马<b>是</b>马中的一种——「白马非马」由「命色者非命形」（侧重点不同）推出互斥结论，把差别夸大成对立，错在<b>割裂共性与个性的联系</b>。B 本质/现象、C 内容/形式、D 形态/功能均与题干不对应。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「白马非马」错在哪儿——共性寓于个性</h2>
+<p>答案：<strong>A（割裂了事物共性和个性之间的联系）</strong>。</p>
+<h3>第 0 步：先立机制——共性只能通过个性存在</h3>
+<p>矛盾的普遍性与特殊性，说的就是<strong>共性与个性、一般与个别</strong>的关系：<strong>共性寓于个性之中</strong>——「马」这个一般并不脱离一匹匹具体的马而独立存在，它只能通过白马、黑马、老马、小马表现出来；<strong>个性中包含共性</strong>——白马既包含「马」的共性，又带有自身的特点（白色）。所以正确的说法是：白马<strong>是</strong>马中的一种，一般通过个别存在、个别包含一般。</p>
+<h3>第 1 步：拆公孙龙的推理，错在哪一步</h3>
+<p>「马者所以命形也；白者所以命色也」——「马」命形、「白」命色，两个词的<strong>侧重点</strong>确有差别，这一步没错；错在下一步：由「命色者非命形」（侧重点不同）推出「白马非马」（互斥），把「侧重点不同」偷换成「彼此对立」。差别真实存在，但共性恰恰要通过这些有差别的个性来表现——一个「非」字切断白马与马的联系，正是否认「个性中包含共性」，割裂了一般与个别 → <strong>A</strong>。</p>
+<h3>第 2 步：干扰项归因</h3>
+<table><thead><tr><th>选项</th><th>为什么不对号</th><th>对应的典型误解</th></tr></thead><tbody><tr><td>B</td><td>本质/现象讲同一对象的内在根据与外部表现两层；「白马 vs 马」是两个对象之间<strong>个别与一般</strong>的关系，不是内外两层</td><td>「白是看得见的」→ 顺势往现象上挂</td></tr><tr><td>C</td><td>内容/形式讲事物的构成要素与其表现方式，题干没有这层对应</td><td>辩证法范畴名词硬套</td></tr><tr><td>D</td><td>形态/功能不是辩证法基本范畴的成对关系</td><td>纯拼凑</td></tr></tbody></table>
+<h3>为什么 B 最有迷惑性</h3>
+<p>有人会想：白色是看得见的「现象」，马的「本质」藏在后面——B 似乎也通。但题干辨析的是<strong>白马与马这两类对象的关系</strong>，不是「透过白马的现象认识马的本质」这一认识过程；而且「命色者非命形」推出的是白马与马<strong>互相排斥</strong>，这是「个别 vs 一般」层面的事。抓住设问「从唯物辩证法的观点看，错误在于」——考的是该命题割裂了哪一对辩证关系，答案落在共性与个性。</p>
+<blockquote>记忆锚点：共性寓于个性之中、个性包含共性；「白马非马」= 割裂一般与个别 → 诡辩论；凡把「一般」与「个别」说成互斥的说法，都割裂共性与个性。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

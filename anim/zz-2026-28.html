@@ -1,8 +1,101 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-28 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-28</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2026-28 · 抗战中流砥柱：三层体现与一个"穿越项"（2026 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼："中流砥柱"要分层看',
+    cls: 'key',
+    body: '<p>习近平总书记："党发挥中流砥柱的作用是抗日战争赢得伟大胜利的关键。"砥柱不是一句赞美，它有学理结构——<b>路线、战场、战略</b>三层。判断标尺：选项必须落在<b>抗战时期（1931–1945）</b>党领导的抗战实践框架内。</p>' },
+  { title: '先立机制：三层如何托住"关键"二字',
+    cls: '',
+    body: '<p>路线（全面抗战）回答"依靠谁"；战场（敌后游击）回答"在哪打"；战略（持久战 + 人民战争）回答"怎么打赢"。三层叠加，构成与其他政治力量对比的关键优势。</p>' },
+  { title: '逐项分析 A：坚持全面抗战路线',
+    cls: 'good',
+    ribbon: {k:1, ok:true},
+    body: '<p>A："坚持全面抗战路线。"即人民战争路线：全国军事总动员、人民总动员，把抗战变成全民族抗战——通过建立并维护抗日民族统一战线落到实处。<b>路线之砥</b>。✅ 选。</p>' },
+  { title: '逐项分析 B：开辟敌后战场、游击战争',
+    cls: 'good',
+    ribbon: {k:2, ok:true},
+    body: '<p>B："开辟敌后战场，开展游击战争。"八路军、新四军深入敌后，钳制消耗大量日军、配合正面战场，敌后战场逐步成为全国抗战的重要战场。<b>战场之砥</b>。✅ 选。</p>' },
+  { title: '逐项分析 C：持久战总方针 + 人民战争战略战术',
+    cls: 'good',
+    ribbon: {k:3, ok:true},
+    body: '<p>C："提出和实施持久战的战略总方针和一整套人民战争的战略战术。"《论持久战》预见防御、相持、反攻三阶段，为全国指明方向——其他政治力量都未提供的"总设计"。<b>战略之砥</b>。✅ 选。</p>' },
+  { title: '逐项分析 D：解放战争的方针穿越了',
+    cls: 'bad',
+    ribbon: {k:4, ok:false},
+    body: '<p>D："集中优势兵力，各个歼灭敌人。"方针本身真实——但出自<b>解放战争时期</b>（1946 年后作战经验总结、十大军事原则核心），针对国民党军正规战。抗战对装备远优的日军以游击战、运动战为主。<b>时间错位</b>。❌ 不选。</p>' },
+  { title: '对号入座汇总',
+    cls: '',
+    body: '<p>A ✅ 路线之砥；B ✅ 战场之砥；C ✅ 战略之砥；D ❌ 方针真实但年代穿越。→ 答案 <b>ABC</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>ABC</b>。砥柱三层：路线、战场、战略；"集中优势各个歼灭"是解放战争的（D 反）。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2026-28 抗战中流砥柱的三层体现',
+  subtitle: '考点：抗日战争中流砥柱 · 全面抗战路线 / 敌后战场 / 持久战 —— 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: '<b>A</b> 坚持全面抗战路线（人民战争路线）；<b>B</b> 开辟敌后战场、开展游击战争（战场之砥）；<b>C</b> 提出和实施持久战的战略总方针和一整套人民战争的战略战术（战略之砥）。<br><br><b>干扰项：</b>D"集中优势兵力，各个歼灭敌人"——方针真实但属<b>解放战争时期</b>（十大军事原则），时间穿越。<br><br><b>记忆锚点：</b>砥柱三层——路线、战场、战略；史实题先核年代再核内容。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解："中流砥柱"的三个体现与一个"穿越"的干扰项</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——"中流砥柱"是分层的完整体系</h3>
+<p>"中国共产党是抗日战争的中流砥柱"不是一句赞美，它有明确的学理结构，体现在<strong>路线、战场、战略</strong>三个层面：</p>
+<ol><li><strong>路线</strong>：坚持全面抗战路线（动员全民族一切力量的人民战争路线），与国民党单纯依靠政府和军队的片面抗战路线相对；</li><li><strong>战场</strong>：开辟敌后战场、开展游击战争，与正面战场相互配合，构成对日作战的整体格局；</li><li><strong>战略</strong>：提出并实施持久战的战略总方针和一整套人民战争的战略战术，回答了"中国会不会亡、能不能胜、怎样取胜"。</li></ol>
+<p>判断题眼由此而来：选项必须落在<strong>抗战时期</strong>党领导的抗战实践框架内，越出框架者出局。</p>
+<h3>第 1 步：A 对——路线之砥</h3>
+<p>全面抗战路线即人民战争路线：实行全国军事总动员、人民总动员，改革政治机构、改善人民生活，把抗战变成全民族的抗战。中国共产党通过倡导建立并坚决维护抗日民族统一战线，把这条路线变成现实——这是"中流砥柱"在政治路线上的体现。</p>
+<h3>第 2 步：B 对——战场之砥</h3>
+<p>八路军、新四军深入敌后，开辟敌后战场，开展独立自主的游击战争：钳制、消耗大量日军，战略上配合正面战场；敌后战场逐步上升为全国抗战的重要战场。没有敌后战场，相持阶段的撑持不可想象。</p>
+<h3>第 3 步：C 对——战略之砥</h3>
+<p>《论持久战》（1938 年）科学预见战略防御、相持、反攻三阶段，提出持久战的战略总方针，并配套一整套人民战争的战略战术——在思想理论上为全党全国指明方向。这是其他任何政治力量都未能提供的"总设计"，是砥柱的灵魂层面。</p>
+<h3>第 4 步：D 为什么错——解放战争的方针"穿越"到抗战</h3>
+<p>"集中优势兵力，各个歼灭敌人"出自<strong>解放战争时期</strong>的作战指导（1946 年后的作战经验总结，十大军事原则的核心内容之一，针对的是国民党军正规战）。抗日战争面对装备远优的日军，我军以游击战、运动战为主，不搞正面集中决战——D 的方针本身真实存在，但<strong>时间错位</strong>：它不属于抗战时期中流砥柱的体现。史实题里"方针是真的、年代是错的"是高频陷阱。</p>
+<h3>第 5 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归层</th></tr></thead><tbody><tr><td>A 坚持全面抗战路线</td><td>✅</td><td>路线层</td></tr><tr><td>B 开辟敌后战场、开展游击战争</td><td>✅</td><td>战场层</td></tr><tr><td>C 持久战总方针 + 一整套人民战争战略战术</td><td>✅</td><td>战略层</td></tr><tr><td>D 集中优势兵力、各个歼灭敌人</td><td>❌</td><td>解放战争方针，时间错位</td></tr></tbody></table>
+<p>→ 选 <strong>ABC</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 D</strong>：因"集中优势兵力各个歼灭敌人"是真实的军事原则而选。核查动作：把方针放回年代——那是 1946 年后解放战争的东西。</li><li><strong>漏选 C</strong>：只记"论持久战"一篇文章，漏掉"一整套人民战争的战略战术"这半句——C 是完整表述。</li><li><strong>混淆路线主体</strong>：全面抗战路线是党主张和坚持的路线（动员全民族），国民党的路线是片面抗战——别把路线安错主人。</li></ul>
+<blockquote>记忆锚点：中流砥柱三层——<strong>路线（全面抗战）、战场（敌后游击）、战略（持久战 + 人民战争）</strong>；"集中优势各个歼灭"是解放战争的（D 反）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,121 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-18 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-18</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2022·18 AI 辅助新材料研发——认识深化与世界的物质性</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 模板：纯文本推理链卡片（政治站无 KaTeX 版），只改下方题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：提取四步研发流程",
+    "cls": "key",
+    "body": "<p>题干给出机器学习辅助材料研发四步：<b>描述符生成 → 模型构建和验证 → 材料预测 → 实验验证</b>。流程题先把流程翻译成哲学语言，再判断选项。</p>",
+    "log": "提取题干四步研发流程"
+  },
+  {
+    "title": "先立模型：流程翻译成认识路线",
+    "cls": "key",
+    "body": "<p>四步正是一条认识路线：提炼规律（描述符）→ 上升为理性认识（模型）→ 以理性认识<b>指导实践</b>（预测新材料）→ 回到实践中<b>检验</b>（实验验证）。预测—验证构成闭环：认识在实践基础上循环往复、不断深化。</p>",
+    "log": "四步流程＝认识不断深化的闭环"
+  },
+  {
+    "title": "C：认识是一个不断深化的过程",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p>预测→验证→修正的闭环让认识<b>步步逼近真实</b>：从性质预测到合成生产，正是认识运动的反复性与无限性——人类对物质的认识在循环中上升。<b>C 正确</b>。</p>",
+    "log": "闭环推进＝认识不断深化 → C 选"
+  },
+  {
+    "title": "D：具体形态可变，物质性不变",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>世界的物质性＝<b>客观实在性</b>（共同本质）；具体物质形态是它的具体表现。AI 改变的只是<b>具体物质形态</b>的结构与性质——万变不离其宗，新材料依然是不依赖于人的意识的物质。<b>D 正确</b>。</p>",
+    "log": "万变不离其宗：物质性不变 → D 选"
+  },
+  {
+    "title": "A：「任意改变」——程度词错位",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>「科学研究能够<b>任意</b>改变物质的性质和结构」——「任意」意味着摆脱规律约束，而科学研究恰恰以<b>认识规律、按规律办事</b>为前提；材料的性质由内在结构按规律决定，人只能认识和利用规律。<b>A 错误</b>。</p>",
+    "log": "「任意」＝标志性错误信号 → A 不选"
+  },
+  {
+    "title": "B：「取代」——主体错位",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>「人工智能能够<b>取代</b>人类对物质世界的认识」——题干自己给了边界：「机器学习算法在<b>辅助</b>新材料设计时尤为得力」。模型由人构建、数据由人组织、结果由实验（人的实践）验证——AI 是认识能力的<b>延伸</b>，不是认识<b>主体</b>。<b>B 错误</b>。</p>",
+    "log": "工具延伸认识，不取代主体 → B 不选"
+  },
+  {
+    "title": "结论：答案 CD",
+    "cls": "good",
+    "body": "<p>答案 <b>CD</b>。记忆锚点：AI＝认识工具的延伸，不是认识主体；改造物质不能「任意」；具体形态可变，世界的物质性不变。A 的「任意」、B 的「取代」都是程度词/主体错位的信号词。</p>",
+    "log": "锁定 CD：认识深化 + 世界的物质性"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  title: "AI 辅助新材料研发表明什么",
+  subtitle: "2022 年第 18 题（多选）· 考点：认识的深化过程 · 世界的物质性 · 方法：流程翻译成认识路线",
+  counterLabel: "推理步",
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」：先把四步流程翻译成认识路线，再逐项判断对错与错因。",
+  result: {
+    big: "答案 CD",
+    html: "记忆锚点：AI＝认识工具的<b>延伸</b>，不是认识主体；改造物质不能<b>「任意」</b>；具体物质形态可变，<b>世界的物质性不变</b>。A 的「任意」、B 的「取代」都是错位信号词。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：AI 研新材料——一条"预测—验证"闭环里的认识论</h2>
+<p>答案：<strong>CD</strong>。</p>
+<h3>第 0 步：先立模型——把研发流程翻译成认识路线</h3>
+<p>流程题先做翻译。题干四步：<strong>描述符生成 → 模型构建和验证 → 材料预测 → 实验验证</strong>，正是一条认识路线：</p>
+<table><thead><tr><th>研发步骤</th><th>认识论含义</th></tr></thead><tbody><tr><td>描述符生成</td><td>从经验材料中提炼规律性联系</td></tr><tr><td>模型构建和验证</td><td>上升为理性认识（理论模型）</td></tr><tr><td>材料预测</td><td>以理性认识<strong>指导实践</strong>，预判新材料的物理化学性质</td></tr><tr><td>实验验证</td><td>回到实践中<strong>检验</strong>认识（实践是检验真理的标准）</td></tr></tbody></table>
+<p>预测—验证构成闭环：认识在实践基础上循环往复、螺旋上升——四个选项的判断全部挂在这条链上。</p>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>推理</th></tr></thead><tbody><tr><td>C 人类对物质的认识是不断深化的过程</td><td>✅</td><td>预测→验证→修正的闭环让认识步步逼近真实，体现认识运动的反复性与无限性</td></tr><tr><td>D 具体物质结构和性质的变化不改变世界的物质性</td><td>✅</td><td>AI 改变的只是<strong>具体物质形态</strong>的结构与性质；世界的客观实在性不随具体形态的生灭而改变</td></tr><tr><td>A 科学研究能够任意改变物质的性质和结构</td><td>❌</td><td>"任意"＝不受规律约束——程度词错位</td></tr><tr><td>B 人工智能能够取代人类对物质世界的认识</td><td>❌</td><td>"取代"＝主体错位——工具顶替了认识主体</td></tr></tbody></table>
+<h3>为什么 A、B 不选（预判追问）</h3>
+<ul><li><strong>A 错在程度词</strong>："任意"意味着摆脱规律的约束，而科学研究恰恰以<strong>认识规律、按规律办事</strong>为前提——AI 能加快筛选与合成，但材料的性质由其内在结构<strong>按规律</strong>决定，人只能认识和利用规律，不能"任意"改写。见到"任意""随心所欲地创造"这类词，就是标志性错误信号。</li><li><strong>B 错在主体错位</strong>：题干自己给了边界——"作为人工智能的一个分支，机器学习算法在<strong>辅助</strong>新材料设计时尤为得力"。模型由人构建、数据由人组织、结果由<strong>实验</strong>（人的实践）验证——AI 是人类认识能力的<strong>延伸</strong>（工具），不是认识<strong>主体</strong>；"取代人类"偷换了主客体关系。</li></ul>
+<h3>第 2 步：D 为什么成立——"万变不离其宗"</h3>
+<p>世界的物质性＝<strong>客观实在性</strong>，这是万事万物的<strong>共同本质</strong>（物质的唯一特性）；具体物质形态是它的<strong>具体表现</strong>，可以被人工合成、改变结构与性质。具体形态之"变"，变的只是"存在方式"，不动摇"客观实在"这个"宗"——题干里 AI 造出的是新材料，而新材料依然是<strong>不依赖于人的意识的物质</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>勾 A</strong>：被"加快合成和生产"的成绩单带偏——忘了能动性受规律约束，"任意"二字直接判死刑。</li><li><strong>勾 B</strong>：把"得力工具"当成"认识主体"——"辅助"一词已划定边界，工具延伸能力而不取代主体。</li><li><strong>漏 D</strong>：只盯"认识"层面选了 C 就收工——漏看题干"新材料的合成和生产"还涉及<strong>物质形态本身</strong>的变化。</li></ul>
+<blockquote>记忆锚点：AI＝认识工具的延伸，不是认识主体；改造物质不能"任意"；<strong>具体形态可变，世界的物质性不变</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

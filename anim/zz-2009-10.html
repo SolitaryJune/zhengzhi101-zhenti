@@ -1,8 +1,138 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-10 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-10</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2009·10 新民主主义经济方针时间定位</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：时间锁",
+    "cls": "key",
+    "body": "<p>题眼「<b>中共七届二中全会后</b>」（1949 年 3 月）是一把时间锁。四个选项来自<b>四个不同年代</b>——先判断题型：时间定位题，先建时间轴。</p>",
+    "log": "时间定位题：先定轴"
+  },
+  {
+    "title": "1949 年的行情",
+    "cls": "key",
+    "body": "<p>全国胜利在即，工作重心由乡村转向城市；新民主主义经济<b>五种成分并存</b>（国营、合作社、个体、私人资本主义、国家资本主义）——公的私的都在，必须四面八方都照顾到。</p>",
+    "log": "五种成分并存 → 四面八方兼顾"
+  },
+  {
+    "title": "对号：B 正确",
+    "cls": "good",
+    "body": "<p>方针 = <b>公私兼顾、劳资两利（选项作「劳资双利」，同义）、城乡互助、内外交流</b>——「四面八方」政策，写入《共同纲领》。<b>B 正确</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": true
+    },
+    "log": "四面八方方针 → B"
+  },
+  {
+    "title": "A：属 1956 八大",
+    "cls": "bad",
+    "body": "<p>「既反保守又反冒进，在综合平衡中稳步前进」= <b>1956 年中共八大</b>的方针，针对当时的急躁冒进——晚于题干七年。<b>A 错误</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "log": "A 属 1956 八大"
+  },
+  {
+    "title": "C：属 1961 八字方针",
+    "cls": "bad",
+    "body": "<p>「调整、巩固、充实、提高」= <b>1961 年</b>八届九中全会的八字方针，为克服国民经济严重困难提出——最出名却最晚，比题干晚十二年。<b>C 错误</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    },
+    "log": "C 属 1961 八字方针"
+  },
+  {
+    "title": "D：属 90 年代提法",
+    "cls": "bad",
+    "body": "<p>「实现速度、结构、效益、质量的统一」= 20 世纪 <b>90 年代以后</b>转变经济增长方式的要求——词最时髦、年代最晚。<b>D 错误</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "log": "D 属 90 年代提法"
+  },
+  {
+    "title": "时间轴总览",
+    "cls": "good",
+    "body": "<p><b>1949</b> 四面八方 → <b>1956</b> 反保守反冒进 → <b>1961</b> 八字方针 → <b>90 年代</b>速度结构效益质量——四个选项各归各位，互不串门。</p>",
+    "log": "时间轴：1949 / 1956 / 1961 / 90 年代"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>B</b>。经济方针题先钉年代再对选项；「劳资双利」=「劳资两利」，同义换词不是陷阱。</p>",
+    "log": "锁定 B"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "七届二中全会后的经济建设方针",
+  subtitle: "考点：新民主主义经济纲领 · 方法：时间轴定位（1949/1956/1961/90 年代）",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 B（四面八方方针）",
+    html: "记忆锚点：<b>1949 七届二中全会/《共同纲领》= 公私兼顾、劳资两利、城乡互助、内外交流</b>（四面八方）；1956 八大反保守反冒进；1961 八字方针；90 年代讲速度结构效益质量。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：七届二中全会后的经济建设方针——四个选项来自四个年代</h2>
+<p>答案：<strong>B（公私兼顾、劳资双利、城乡互助、内外交流）</strong>。</p>
+<h3>第 0 步：先立机制——这是「时间定位题」，先建时间轴再对号</h3>
+<p>题眼是「<strong>中共七届二中全会后</strong>」。四个选项不是同一方针的四种说法，而是<strong>四个不同年代</strong>各出一条方针——命题人把它们摆在一张卷子上，考的就是能否把每条方针钉在它的年代上。先建轴：</p>
+<table><thead><tr><th>年代</th><th>会议/文件</th><th>方针</th><th>对应选项</th></tr></thead><tbody><tr><td>1949 年 3 月</td><td>七届二中全会（后写入《共同纲领》）</td><td>公私兼顾、劳资两利、城乡互助、内外交流</td><td><strong>B</strong></td></tr><tr><td>1956 年</td><td>中共八大</td><td>既反保守又反冒进，在综合平衡中稳步前进</td><td>A</td></tr><tr><td>1961 年</td><td>八届九中全会</td><td>调整、巩固、充实、提高（八字方针）</td><td>C</td></tr><tr><td>20 世纪 90 年代以后</td><td>转变经济增长方式</td><td>速度、结构、效益、质量相统一</td><td>D</td></tr></tbody></table>
+<p>题干锁在 1949 → 取第一行，<strong>B</strong>。选项 B 的「劳资双利」即标准表述「劳资两利」，属同义换词，不是陷阱。</p>
+<h3>第 1 步：为什么 1949 年是这条方针（预判「为什么」）</h3>
+<ol><li>全国胜利在即，经济形态是<strong>新民主主义经济</strong>：国营经济、合作社经济、个体经济、私人资本主义、国家资本主义<strong>五种成分</strong>并存——公的私的都在，必须「公私兼顾」；</li><li>工作重心由乡村转向城市，城市以<strong>生产建设</strong>为中心：恢复生产要劳资一起干（劳资两利）、城乡货畅其流（城乡互助）、对内对外都要交流（内外交流）——合称「四面八方」政策，写入《共同纲领》的经济政策部分。</li></ol>
+<h3>第 2 步：每个干扰项错在哪一年（归因）</h3>
+<ul><li><strong>误选 C</strong>：「调整、巩固、充实、提高」是记忆里最「出名」的经济方针，但它是 <strong>1961 年</strong>为克服国民经济严重困难提出的，比题干晚十二年——把「最有名」当成「最早」。</li><li><strong>误选 A</strong>：八大（1956）确实讲经济建设，但「既反保守又反冒进，在综合平衡中稳步前进」针对的是当时的急躁冒进，晚于 1949。</li><li><strong>误选 D</strong>：「实现速度、结构、效益、质量的统一」是后来转变经济增长方式的要求，时代词最时髦、年代却最晚。</li></ul>
+<h3>易错点：两类典型失误</h3>
+<ul><li><strong>把「最有名」当「最早」→ 误选 C</strong>：八字方针在教材里出现频率最高，印象最深；但「出名」与「符合题干年代」无关。越熟的口号越要先钉年代再下手。</li><li><strong>被「劳资双利/两利」一字之差吓退 → 漏选 B</strong>：命题人常做<strong>同义换词</strong>（双利=两利、四面八方政策的通行表述），这是正常现象不是陷阱；反过来，若选项出现<strong>年代错配</strong>（如给 1949 的事配 1961 的口号）才是真陷阱。换词照选，错配才弃。</li></ul>
+<blockquote>记忆锚点：<strong>1949 七届二中全会/《共同纲领》= 公私兼顾、劳资两利、城乡互助、内外交流（四面八方）</strong>；1956 八大反保守反冒进；1961 八字方针；90 年代讲速度结构效益质量——经济方针题先钉年代再对选项。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

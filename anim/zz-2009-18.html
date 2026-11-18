@@ -1,8 +1,83 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-18 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-18</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2009-18 · 邓小平论农村改革与理论创新</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：把原话拆成三节',
+    cls: 'key',
+    body: '<p>邓小平按“创新从哪里来 → 谁来创造 → 怎么上升为理论”说了三层：<b>发明权是农民的</b>（源头）／<b>基层创造出来</b>（材料）／<b>拿来加工提高</b>（升华）。三节各自顶出一个选项。</p>' },
+  { title: '选项 A：要以解放思想为先导',
+    cls: 'good', k: 1, pick: true,
+    body: '<p>“拿来<b>加工提高</b>作为全国的指导”——把经验升华为理论，先要<b>敢于突破不合时宜的旧结论</b>，这就是解放思想先导。<b>入选</b>。</p>' },
+  { title: '选项 B：打破一切理论的约束',
+    cls: 'bad', k: 2, pick: false,
+    body: '<p>错在<b>“一切”</b>。反对的是<b>教条式对待理论</b>，不是反对理论本身；科学理论对实践仍有指导作用，承包制恰是在社会主义方向内搞起来的。<b>全称词＝陷阱 → 排除</b>。</p>' },
+  { title: '选项 C：关注生活实践的需要',
+    cls: 'good', k: 3, pick: true,
+    body: '<p>“好多东西都是<b>基层创造</b>出来”——实践出真知，理论创新的问题与材料都源于实际生活。<b>入选</b>。</p>' },
+  { title: '选项 D：尊重人民群众的诉求',
+    cls: 'good', k: 4, pick: true,
+    body: '<p>“发明权是<b>农民的</b>”——人民群众是实践主体、历史创造者，尊重群众诉求与尊重群众创造是一回事。<b>入选</b>。</p>' },
+  { title: '结论：ACD',
+    cls: 'good',
+    body: '<p>原话三节分别对应 D（群众之源）、C（实践需要）、A（解放思想加工）——<b>答案 ACD</b>；B 的“一切”把反对教条扩大成反对一切理论，排除。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2009-18 · 邓小平论农村改革与理论创新',
+  subtitle: '2009 年第 18 题（多选）· 考点：理论创新与群众实践 · 拆话对号',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先拆原话三层，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '记忆锚点：理论创新三件套——<b>解放思想是先导、实践需要是问题源、群众创造是活水</b>；见“打破一切”“任何”“全部”这类全称词先打问号。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：邓小平论农村改革——理论创新的三个来源</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——把邓小平这句话拆成三节再对号</h3>
+<p>这段话不是泛泛而谈，而是按"创新从哪里来 → 谁来创造 → 怎么上升为理论"的逻辑说下来的，逐节拆开：</p>
+<table><thead><tr><th>原话</th><th>认识论含义</th><th>对应选项</th></tr></thead><tbody><tr><td>"这个发明权是农民的"</td><td>人民群众是实践的主体、历史的创造者，创造来自群众</td><td>D 尊重人民群众的诉求</td></tr><tr><td>"好多东西都是基层创造出来"</td><td>实践出真知，理论创新的问题与材料都源于实际生活</td><td>C 关注生活实践的需要</td></tr><tr><td>"我们把它拿来加工提高作为全国的指导"</td><td>把实践经验加工上升为理论，先要敢于突破不合时宜的旧结论</td><td>A 以解放思想为先导</td></tr></tbody></table>
+<p>三节正好把 C、D、A 顶出来。可见本题的答案不是背出来的，而是顺着话的逻辑推出来的。</p>
+<h3>第 1 步：B 为什么错（唯一排除点）</h3>
+<p>"打破<strong>一切</strong>理论的约束"错在"一切"二字。这段话反对的是<strong>教条式对待理论</strong>——照抄书本、不顾实际；而不是反对理论本身。经过实践检验的科学理论（如马克思主义基本原理）对实践仍有指导作用，家庭联产承包恰恰是在坚持社会主义方向的前提下搞起来的。理论创新是"解放思想 + 实事求是"的统一，不是推倒重来。"一切""任何""全部"这类全称词在政治选择题里几乎总是陷阱标志。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏 C</strong>：只盯住"群众创造"，忽略"生活实践的需要"——理论创新的问题只能从实践中提出来，加工的对象也正是实践需要解决的事。</li><li><strong>误选 B</strong>：把"解放思想"无限放大成"摆脱一切理论"，混淆了"反对教条主义地对待理论"与"反对理论本身"。</li><li><strong>漏 D</strong>：以为"诉求"太感性——邓小平明说发明权在农民，尊重群众诉求与尊重群众创造是一回事。</li></ul>
+<blockquote>记忆锚点：理论创新三件套——<strong>解放思想是先导、实践需要是问题源、群众创造是活水</strong>（ACD）；见"打破一切"先打问号（B 错）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

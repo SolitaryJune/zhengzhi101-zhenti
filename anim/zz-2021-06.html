@@ -1,8 +1,131 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-06 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-06</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·06 新发展格局的规范表述</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（politics101 站约定，纯文本卡片，无 KaTeX）。
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 判定行
+function verdict(txt, ok){
+  return '<p><b style="color:' + (ok ? '#15803d' : '#b91c1c') + '">' + (ok ? '✓ ' : '✗ ') + txt + '</b></p>';
+}
+
+// 两个空位的填空格
+function slot(label, fill, cls){
+  return '<span class="aw-box ' + (cls || 'ok') + '" style="display:inline-block;margin:3px 6px 3px 0;padding:4px 10px;font-size:13px"><b>' +
+         label + '</b>→ ' + fill + '</span>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：问「这一新发展格局是」',
+    cls: 'key',
+    body: '<p>题干交代了战略抉择的背景（应对国际国内形势变化、提升经济发展水平、塑造国际竞争新优势），落脚点是「新发展格局<b>是</b>什么」——考<b>定点表述</b>，不考理解发挥。</p>',
+    log: '定位题型：定点表述题，考逐字记忆' },
+  { title: '立结构：规范表述只有两个空位',
+    cls: 'key',
+    body: '<p>「新发展格局」整句只有两个空位：<b>空位一「以什么为主体」</b>＋<b>空位二「什么与什么的关系」</b>。记住两个空位各填什么，四个选项全是纸老虎。</p>',
+    log: '拆结构：主体空位＋关系空位' },
+  { title: '填空位一：以「国内大循环」为主体',
+    cls: 'step',
+    body: '<p>为什么主体是国内？向外看，国际环境不确定性上升，发展和安全的底座<b>不能放在别人身上</b>；向内看，我国有<b>超大规模市场优势</b>，立足国内，主动权在自己手里。</p>' +
+          '<p>' + slot('主体', '国内大循环') + '</p>',
+    log: '主体空位填：国内大循环' },
+  { title: '填空位二：国内国际双循环相互促进',
+    cls: 'ok',
+    body: '<p>「主体是国内」绝不等于关起门来：新发展格局<b>绝不是封闭的国内循环</b>，而是开放的国内国际双循环——后半句正是开放性的表述。两个空位是一个整体，缺一不可。</p>' +
+          '<p>' + slot('关系', '国内国际双循环相互促进') + '</p>',
+    log: '关系空位填：双循环相互促进（绝不封闭）' },
+  { title: 'A：与定点表述逐字吻合',
+    cls: 'good',
+    body: '<p>A「以国内大循环为主体、国内国际双循环相互促进」——两个空位全部填对。<b>A 正确</b>。</p>' +
+    verdict('A 国内大循环为主体 + 双循环相互促进 —— 正解', true),
+    ribbon: { k: 1, ok: true },
+    log: 'A 命中：两个空位逐字吻合' },
+  { title: 'B：张冠李戴',
+    cls: 'bad',
+    body: '<p>「体制机制创新」属于<b>改革/动力</b>语境，填进「主体」空位错位；「利用好两个市场」本身没错，但没按「双循环」表述。<b>B 错误</b>。</p>' +
+    verdict('B 体制机制创新为主体 —— 隔壁考点的词', false),
+    ribbon: { k: 2, ok: false },
+    log: 'B 主体空位填错：体制机制创新不是循环' },
+  { title: 'C：层级降格',
+    cls: 'bad',
+    body: '<p>「维护产业链供应链稳定」是应对冲击的<b>具体任务</b>，不是「格局」的定义层级；「促进经济复苏」是世界经济语境。<b>C 错误</b>。</p>' +
+    verdict('C 产业链供应链稳定为主体 —— 任务≠格局', false),
+    ribbon: { k: 3, ok: false },
+    log: 'C 把具体任务当成了格局定义' },
+  { title: 'D：领域错位',
+    cls: 'bad',
+    body: '<p>「发展先进制造业」属<b>产业升级/实体经济</b>语境，回答「发展什么」，不回答「循环怎么循环」。<b>D 错误</b>。</p>' +
+    verdict('D 先进制造业为主体 —— 产业升级语境', false),
+    ribbon: { k: 4, ok: false },
+    log: 'D 领域错位：产业升级进不了循环定义' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>A：以国内大循环为主体、国内国际双循环相互促进</b>。识别办法：盯住「主体」二字，主体填的不是「国内大循环」，一律不是新发展格局。</p>',
+    log: '锁定 A：新发展格局的规范表述' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || ((s.cls === 'good' || s.cls === 'ok') ? '命中' : (s.cls === 'bad' ? '排除' : '第 ' + (i + 1) + ' 步')),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "新发展格局的规范表述",
+  subtitle: "考点：新发展格局 · 方法：两个空位定点填空，主体必是「国内大循环」",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A 2=B 3=C 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先拆出两个空位，再逐个填空，最后逐项排除干扰项。',
+  snaps: snaps,
+  result: {
+    big: "答案 A",
+    html: "新发展格局＝<b>以国内大循环为主体、国内国际双循环相互促进</b>。记忆锚点：主体＝国内大循环（超大规模市场、主动权在我），<b>绝不封闭</b>；「体制机制创新」「产业链稳定」「先进制造业」都是隔壁考点的词，进不了这句定义。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：新发展格局的规范表述是哪一句</h2>
+<p>答案：<strong>A（以国内大循环为主体、国内国际双循环相互促进）</strong>。</p>
+<h3>第 0 步：机制先行——「新发展格局」是一句只有两个空位的定点表述</h3>
+<p>「新发展格局」是党中央面对国际国内形势变化作出的战略抉择，教材给它的是<strong>定点搭配</strong>，整句只有两个空位：</p>
+<ul><li>空位一「<strong>以什么为主体</strong>」→ 只能填「<strong>国内大循环</strong>」；</li><li>空位二「什么与什么的关系」→ 「<strong>国内国际双循环相互促进</strong>」。</li></ul>
+<p>为什么以国内大循环为主体？逻辑有两层：向外看，国际环境不确定性上升（逆全球化抬头、疫情冲击全球产业链），发展和安全的底座<strong>不能放在别人身上</strong>；向内看，我国有超大规模市场优势，把发展的立足点放在国内，<strong>主动权在自己手里</strong>。但「主体是国内」绝不等于关起门来：教材同时强调「新发展格局<strong>绝不是封闭的国内循环</strong>，而是开放的国内国际双循环」——两个空位是一个整体，缺了后半句，表述就不完整。</p>
+<h3>第 1 步：逐项裁定</h3>
+<table><thead><tr><th>选项</th><th>判定</th><th>归因</th></tr></thead><tbody><tr><td>A 以国内大循环为主体、国内国际双循环相互促进</td><td>✅</td><td>与定点表述逐字吻合</td></tr><tr><td>B 以体制机制创新为主体、利用好国际国内两个市场</td><td>❌</td><td>张冠李戴：体制机制创新属于<strong>改革/动力</strong>语境，填进「主体」空位错位；后半句也没按「双循环」表述</td></tr><tr><td>C 以维护产业链供应链稳定为主体、促进国内国际经济复苏</td><td>❌</td><td>层级降格：保链稳链是应对冲击的<strong>具体任务</strong>，不是「格局」的定义层级；「促进复苏」是世界经济语境</td></tr><tr><td>D 以发展先进制造业为主体、促进产业结构优化升级</td><td>❌</td><td>领域错位：先进制造业属<strong>产业升级/实体经济</strong>语境，回答「发展什么」，不回答「循环怎么循环」</td></tr></tbody></table>
+<h3>第 2 步：预判两个追问</h3>
+<ul><li><strong>「以国内大循环为主体，是不是不开放了？」</strong>——不是。主体说的是<strong>立足点和主动权</strong>在国内，开放的大门照样越开越大；A 的后半句「国内国际双循环相互促进」正是开放性的表述，而 C、D 恰恰缺这层关系。</li><li><strong>「为什么不选 D？先进制造业不是很重要吗？」</strong>——重要≠是本题答案。题问的是「新发展格局<strong>是</strong>什么」，考定义层级；产业升级是另一处考点（把发展经济的着力点放在实体经济上），干扰项都是<strong>隔壁考点的词</strong>搬进了这句定义。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 C/D</strong>：被「听起来也很战略」带偏——识别办法只有一条：盯住「主体」二字，主体填的不是「国内大循环」，一律不是新发展格局。</li><li><strong>漏记后半句</strong>：只记「国内大循环为主体」、忘「双循环相互促进」，遇到把新格局曲解成「自给自足、闭关自守」的说法就辨不出错。</li></ul>
+<blockquote>记忆锚点：新发展格局＝<strong>以国内大循环为主体、国内国际双循环相互促进</strong>；主体＝国内大循环，绝不封闭；「体制机制创新」「产业链稳定」「先进制造业」都是隔壁考点的词，进不了这句定义。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

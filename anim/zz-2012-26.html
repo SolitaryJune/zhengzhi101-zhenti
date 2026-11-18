@@ -1,8 +1,96 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-26 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-26</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-26 · 南京条约后的美法条约（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：时间窗＋签约方双坐标锁定 → 选项逐项判定（引擎默认渲染 stage.innerHTML）。
+   全中文、无外部请求；仅引用本地 ../assets 引擎（anim/ 位于站点根下一层）。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var TIMELINE = '<div class="aw-cells" style="margin:8px 0"><span class="aw-chip" style="font-size:12px;opacity:.5">1842 南京·英</span><span class="aw-chip miss" style="font-size:12px">1843 虎门·英</span><span class="aw-chip ok" style="font-size:12px">1844 望厦·美</span><span class="aw-chip ok" style="font-size:12px">1844 黄埔·法</span><span class="aw-chip miss" style="font-size:12px">1858 天津</span></div>';
+var LOCKS = '<div class="aw-cells" style="margin:8px 0"><span class="aw-chip ok" style="font-size:12px">坐标① 时间窗：南京条约签订后</span><span class="aw-chip ok" style="font-size:12px">坐标② 签约方：美、法</span></div>';
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼：两个坐标锁死范围' + LOCKS + TIMELINE,
+    body: '<p>坐标① <b>时间窗</b>：《南京条约》签订<b>后</b>＝第一次鸦片战争余波之内，年份紧贴 1842；坐标② <b>签约方</b>：题干点名「<b>美、法</b>趁火打劫」——主角必须是美或法。两个坐标一卡，先摆时间轴（上图：绿＝美法趁火，红＝干扰项，灰＝起点）。</p>' },
+  { cls: 'key', tag: '时间线',
+    title: '时间轴读法：一附、两趁火、一窗口外',
+    body: '<p><b>1842 中英《南京条约》</b>——起点；<b>1843 中英《虎门条约》</b>——南京<b>附约</b>，主角仍是英国；<b>1844 中美《望厦条约》、中法《黄埔条约》</b>——美法趁火打劫的两个格子；<b>1858《天津条约》</b>——第二次鸦片战争时期，窗口外。</p>' },
+  { cls: 'bad', tag: 'A 排除', ribbon: { k: 1, ok: false },
+    title: 'A：《虎门条约》——主角是英国自己',
+    body: '<p><b>错</b>。1843 年<b>中英</b>签订，是《南京条约》的<b>附约</b>（连同《五口通商章程》等）——条约真实、时间贴近，但「火」是英国自己放的，续约谈不上被美法逼迫。</p>' },
+  { cls: 'good', tag: 'B 入选', ribbon: { k: 2, ok: true },
+    title: 'B：《望厦条约》——中美 1844',
+    body: '<p><b>对</b>。1844 年 7 月<b>中美</b>签订，美国攫取扩大领事裁判权等特权——「美」趁火打劫的那一格。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: 'C：《黄埔条约》——中法 1844',
+    body: '<p><b>对</b>。1844 年 10 月<b>中法</b>签订，法国取得同样特权——「法」趁火打劫的那一格。</p>' },
+  { cls: 'bad', tag: 'D 排除', ribbon: { k: 4, ok: false },
+    title: 'D：《天津条约》——时间窗外',
+    body: '<p><b>错</b>。1858 年<b>第二次鸦片战争</b>期间由美、俄、英、法分别迫使清政府签订——真条约、假窗口，时间已跳出题干限定。</p>' },
+  { cls: 'key', tag: '为什么',
+    title: '预判"为什么美法来得这么快"：利益均沾',
+    body: '<p>英国用战争打开大门后，美、法援引「<b>利益均沾</b>」趁势讹诈：不必自己发动战争，靠英国打出来的局面就能勒索同等特权——所以两条约都签在 <b>1844 年</b>，紧贴南京条约之后。这也解释了为什么干扰项用《虎门条约》：同一波"火"里英国自己续签的约，最容易混作一团。</p>' },
+  { cls: 'key', tag: '干扰项',
+    title: '两个干扰项对应两种误解',
+    body: '<p><b>误选 A</b>＝「时间贴近就入选」：只盯时间窗、不核对签约方——虎门是中英附约；<b>误选 D</b>＝「美法也是缔约国就选上」：把参与签约当成题干关系成立——天津条约窗口错位。</p><p>口诀「一附两趁火」：虎门是附约，望厦（美）、黄埔（法）是趁火。</p>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 BC',
+    body: '<p>答案 <b>BC</b>：南京（1842·英）之后，美法趁火打劫＝望厦（1844·美）＋黄埔（1844·法）；虎门是中英附约，天津属第二次鸦片战争。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2012·26】《南京条约》后美、法逼迫签订的条约（多选）',
+  subtitle: '考点：中国近现代史 · 第一次鸦片战争 · 不平等条约时间轴 · 双坐标定位',
+  intro: '点击「▶ 播放」或按 → 双坐标锁定范围后逐项判定；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 BC',
+    html: '锁时间窗、认签约方：<b>《望厦条约》（1844·中美）、《黄埔条约》（1844·中法）</b>是南京条约后美法的趁火打劫；《虎门条约》是中英附约（主角错误），《天津条约》属第二次鸦片战争（时间窗错位）。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：《南京条约》之后——用"时间窗＋签约方"锁住美法条约</h2>
+<p>答案：<strong>BC</strong>。</p>
+<h3>第 0 步：先立机制——两个坐标把范围锁死</h3>
+<p>条约题不必背大清单也能做：用<strong>两个坐标</strong>定位。①<strong>时间窗</strong>：《南京条约》签订<strong>后</strong>＝第一次鸦片战争的余波之内，年份紧贴 1842；②<strong>签约方</strong>：题干点名"<strong>美、法</strong>趁火打劫"——主角必须是美国或法国，英国自己后续签的不算，第二次鸦片战争（1856 年起）时期签的更不算。两个坐标一卡，四个选项只剩两个格子。先摆时间轴：</p>
+<table><thead><tr><th>年份</th><th>条约</th><th>签约方</th><th>与题干的关系</th></tr></thead><tbody><tr><td>1842</td><td>《南京条约》</td><td>中英</td><td>起点（题干"签订后"的锚）</td></tr><tr><td>1843</td><td>《虎门条约》</td><td>中英</td><td>南京<strong>附约</strong>，主角仍是英国</td></tr><tr><td>1844</td><td>《望厦条约》</td><td><strong>中美</strong></td><td>美国趁火打劫 ✓</td></tr><tr><td>1844</td><td>《黄埔条约》</td><td><strong>中法</strong></td><td>法国趁火打劫 ✓</td></tr><tr><td>1858</td><td>《天津条约》</td><td>美俄英法等</td><td><strong>第二次鸦片战争</strong>时期，时间窗外</td></tr></tbody></table>
+<h3>第 1 步：逐项对号入座</h3>
+<ul><li><strong>A 错</strong>：《虎门条约》（1843）——条约真实、时间贴近，但它是《南京条约》的<strong>附约</strong>（连同《五口通商章程》等），签约方仍是<strong>英国</strong>自己——"火"是英国自己放的，谈不上被美法逼迫。</li><li><strong>B 对</strong>：《望厦条约》（1844 年 7 月）——<strong>中美</strong>签订，美国攫取扩大领事裁判权等特权，是"美"趁火打劫的那一格。</li><li><strong>C 对</strong>：《黄埔条约》（1844 年 10 月）——<strong>中法</strong>签订，法国取得同样特权，是"法"趁火打劫的那一格。</li><li><strong>D 错</strong>：《天津条约》（1858）——<strong>第二次鸦片战争</strong>期间由美、俄、英、法分别迫使清政府签订，真条约、假窗口，时间已跳出题干限定。</li></ul>
+<h3>第 2 步：预判"为什么"——为什么美法来得这么快？</h3>
+<p>英国用战争打开大门后，美、法援引"<strong>利益均沾</strong>"趁势讹诈：不必自己发动战争，只靠英国打出来的局面就能勒索同等特权——所以两条约都签在 1844 年，紧贴《南京条约》之后。这也解释了为什么干扰项要用《虎门条约》：它是同一波"火"里英国自己续签的约，时间最近、最容易和美法签约混作一团。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A → "时间贴近就入选"</strong>：只盯时间窗、不核对签约方。记牢：虎门是<strong>中英附约</strong>，主角是英国自己。</li><li><strong>误选 D → "美法也是缔约国就选上"</strong>：把"美法参与签约"当成题干关系成立；题干限定的是<strong>南京条约后的趁火打劫</strong>，《天津条约》属第二次鸦片战争，窗口错位。</li></ul>
+<blockquote>记忆锚点："一附两趁火"——虎门（1843·英）是附约；望厦（1844·美）、黄埔（1844·法）是趁火；天津（1858）在第二次鸦片战争的窗口外。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,78 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-22 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-22</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2020-22 新时代社会主要矛盾的历史性变化（多选） · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: "审题眼：“有没有”变“好不好”", cls: "key", sc: "step", tag: "审题", log: "抓新需求关键词：获得感、幸福感、安全感", body: "<p>题干关键词：不仅关注<b>“有没有”</b>、更关注<b>“好不好”</b>；获得感、幸福感、安全感及尊严、权利等<b>新需求</b>。</p><p>考点：新时代<b>社会主要矛盾</b>的转化——矛盾两端各对题干一半。</p>" },
+  { t: "机制先行：需要端升级 + 供给端短板", cls: "key", sc: "shift", tag: "机制", log: "两端一合，才有“历史性变化”的结论", body: "<p><b>需要端</b>：物质文化需要之上衍生<b>美好生活需要</b>——从“有没有”到“好不好”。</p><p><b>供给端</b>：发展<b>不平衡不充分</b>，满足新需求的瓶颈在结构与质量、不在总量。</p><p>两端合成 → 主要矛盾 = <b>人民日益增长的美好生活需要和不平衡不充分的发展之间的矛盾</b>。</p>" },
+  { t: "选项 A：已经满足了人民“从有到优”的需求 —— 错", cls: "bad", sc: "miss", tag: "选项 A", ribbon: { k: 1, ok: false }, log: "“更关注好不好”恰说明还没满足", body: "<p>正因为“从有到优”<b>尚未满足</b>、正在追求之中，人民才“<b>更关注</b>好不好”、才提出获得感幸福感等更高期待。</p><p>A 把“奋斗目标”读成“既成事实”，与题干“更关注”直接冲突。<b>A 错</b>。</p>" },
+  { t: "选项 C：需要出现阶段性新特征 —— 对", cls: "good", sc: "ok", tag: "选项 C", ribbon: { k: 3, ok: true }, log: "题干新需求 = 新特征的直接对应", body: "<p>获得感、幸福感、安全感及尊严、权利等——<b>人民群众对日益增长的物质文化需要出现了阶段性新特征</b>。C 对。</p>" },
+  { t: "选项 D：不平衡不充分的发展成为主要制约根源 —— 对", cls: "good", sc: "ok", tag: "选项 D", ribbon: { k: 4, ok: true }, log: "供给端的规范表述", body: "<p>矛盾另一端的规范表述：<b>不平衡不充分的发展已成为制约满足人民需要的主要根源</b>——瓶颈不在总量、在结构与质量。D 对。</p>" },
+  { t: "选项 B：我国社会主要矛盾发生了历史性变化 —— 对", cls: "good", sc: "ok", tag: "选项 B", ribbon: { k: 2, ok: true }, log: "两端变化合成主要矛盾转化", body: "<p>需要升级（C）+ 供给短板（D）→ 合成结论：主要矛盾转化为<b>美好生活需要 vs 不平衡不充分的发展</b>——<b>历史性变化</b>。B 对。</p>" },
+  { t: "结论：BCD", cls: "good", sc: "step", tag: "结论", log: "汇总：B、C、D 入选，A 排除", body: "<p>答案 <b>BCD</b>：新特征（C）+ 主要制约（D）→ 矛盾历史性变化（B）。</p><p>“已经满足”与“更关注好不好”直接冲突——A 把追求读成了事实。</p>" }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "【2020·22】新时代社会主要矛盾的历史性变化（多选）",
+  subtitle: "考点：新时代社会主要矛盾 · 人民需要的阶段性新特征",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）",
+  intro: "点击「▶ 播放」：把矛盾拆成“需要端”与“供给端”，再看 A 为什么把方向说反。",
+  snaps: snaps,
+  result: {
+    big: "答案 BCD",
+    html: "记忆锚点：需要端“从有到优”是<b>新特征</b>（C），供给端“不平衡不充分”是<b>主要制约</b>（D），两端合成 → 主要矛盾历史性变化（B）；“已经满足”是反着读（A 错）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：“有没有”变“好不好”：社会主要矛盾为何转化</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——把矛盾拆成两端看</h3>
+<p>社会主要矛盾的表述由两端构成：一端是<strong>人民需要</strong>，另一端是<strong>发展供给</strong>。十九大作出“历史性变化”的判断，不是单边事件，而是<strong>两端同时变了</strong>的合成结果：</p>
+<ul><li><strong>需要端升级</strong>：从“物质文化需要”扩展为“<strong>美好生活需要</strong>”——题干说得很具体：不仅关注“有没有”，更关注“好不好”；在既有物质文化需要之上，衍生出获得感、幸福感、安全感及尊严、权利等<strong>新需求</strong>。这就是需要侧的<strong>阶段性新特征</strong>。</li><li><strong>供给端短板</strong>：总体上已实现“从无到有”，但发展<strong>不平衡不充分</strong>——新需求满足不了，瓶颈不在总量不够，而在结构与质量。</li></ul>
+<p>两端一合：需要变了 + 供给跟不上 → 主要矛盾转化为<strong>人民日益增长的美好生活需要和不平衡不充分的发展之间的矛盾</strong>——“历史性变化”（B）就是这么来的。</p>
+<h3>第 1 步：预判追问——“更关注好不好”为什么说明“尚未满足”</h3>
+<p>A 说“已经满足了人民‘从有到优’的需求”。把题干读一遍就能发现方向反了：正因为“从有到优”<strong>还没有满足</strong>、正在追求之中，人民群众才会“<strong>更关注</strong>好不好”、才会提出获得感、幸福感、安全感这些更高期待；发展不平衡不充分，恰恰是满足这些需要的<strong>制约</strong>。A 把“奋斗目标”读成了“既成事实”，与题干“更关注”三个字直接冲突。</p>
+<h3>第 2 步：A~D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>判定</th><th>归因</th></tr></thead><tbody><tr><td>A 我国已经满足了人民“从有到优”的需求</td><td>✗</td><td>把追求读成事实，与“更关注好不好”直接冲突</td></tr><tr><td>B 我国社会主要矛盾发生了历史性变化</td><td>✓</td><td>需要端升级 + 供给端短板的合成结论</td></tr><tr><td>C 人民群众对日益增长的物质文化需要出现了阶段性新特征</td><td>✓</td><td>获得感、幸福感、安全感及尊严、权利等新需求 = 新特征</td></tr><tr><td>D 不平衡不充分的发展已成为制约满足人民需要的主要根源</td><td>✓</td><td>供给端的规范表述，矛盾转化的另一半依据</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：被“新时代成就很大”带偏，顺手选“已经满足”——成就大不等于满足“从有到优”，题眼在“更关注”而不是“都实现”。</li><li><strong>漏选 C/D</strong>：只抓“主要矛盾变化”这个大结论（B），漏掉构成它的两端依据——C、D 恰好各对应一端，是 B 的支撑项。</li></ul>
+<blockquote>记忆锚点：需要端“从有到优”是<strong>新特征</strong>（C），供给端“不平衡不充分”是<strong>主要制约</strong>（D），两端合成 → 主要矛盾历史性变化（B）；“已经满足”是反着读（A 错）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

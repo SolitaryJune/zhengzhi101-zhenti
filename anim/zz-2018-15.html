@@ -1,8 +1,138 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-15 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-15</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2018·15 2017 年中央一号文件的主线</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX，参照本站已完成动画），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 时间线卡片（史实/会议/著作类用）
+function tl(rows){
+  return '<div>' + rows.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:86px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>时政记忆题：2017 年中央一号文件提出的农业农村工作「<b>主线</b>」。文件全名自带答案——先把名字立起来，再按功能分层排除。</p>",
+    "log": "主线题→先立文件全名"
+  },
+  {
+    "title": "先立机制：文件定位",
+    "cls": "key",
+    "body": "<div><div style=\"display:flex;align-items:baseline;gap:8px;margin:5px 0\"><b style=\"flex:none;min-width:86px;font-family:var(--mono,monospace);color:#b45309\">文件全名</b><span style=\"font-size:13.5px;line-height:1.55\">《中共中央 国务院关于深入推进农业供给侧结构性改革 加快培育农业农村发展新动能的若干意见》</span></div><div style=\"display:flex;align-items:baseline;gap:8px;margin:5px 0\"><b style=\"flex:none;min-width:86px;font-family:var(--mono,monospace);color:#b45309\">主线</b><span style=\"font-size:13.5px;line-height:1.55\">深入推进农业供给侧结构性改革（标题点明）</span></div><div style=\"display:flex;align-items:baseline;gap:8px;margin:5px 0\"><b style=\"flex:none;min-width:86px;font-family:var(--mono,monospace);color:#b45309\">背景</b><span style=\"font-size:13.5px;line-height:1.55\">农业农村发展进入新阶段：主要矛盾由总量不足转为结构性矛盾——故从「结构调整」升级为「供给侧结构性改革」</span></div></div>",
+    "log": "标题即主线：农业供给侧结构性改革"
+  },
+  {
+    "title": "选项 A：绿色发展要求",
+    "cls": "bad",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "body": "<p>A「改善农业生态环境」——绿色发展的要求，文件关注点之一，非主线。<b>排除</b>。</p>",
+    "log": "A 是关注点之一"
+  },
+  {
+    "title": "选项 B：动能层面",
+    "cls": "bad",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    },
+    "body": "<p>B「发展农村新产业新业态」——「培育新动能」的措施层面，非主线。<b>排除</b>。</p>",
+    "log": "B 是措施层"
+  },
+  {
+    "title": "选项 C：底线层面",
+    "cls": "bad",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    },
+    "body": "<p>C「确保国家粮食安全」——始终坚守的<b>底线与前提</b>，不是当年主线。<b>排除</b>。</p>",
+    "log": "C 是底线不是主线"
+  },
+  {
+    "title": "选项 D：主线就位",
+    "cls": "good",
+    "ribbon": {
+      "k": 4,
+      "ok": true
+    },
+    "body": "<p>D「深入推进农业供给侧结构性改革」——文件标题点明的主线。<b>当选</b>。</p>",
+    "log": "D 与标题逐字对上"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>D</b>。记忆锚点：<b>2017 年一号文件标题即主线——深入推进农业供给侧结构性改革</b>；粮食安全=底线，新产业新业态=动能，生态环境=绿色发展要求。</p>",
+    "log": "锁定 D：农业供给侧结构性改革"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "2017 年中央一号文件的主线",
+  subtitle: "考点：2017 年中央一号文件 · 方法：文件全名定位主线＋功能分层排除",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 干扰）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    "big": "答案 D",
+    "html": "记忆锚点：2017 年中央一号文件全名——《关于<b>深入推进农业供给侧结构性改革</b> 加快培育农业农村发展新动能的若干意见》，标题即主线。功能分层：粮食安全=底线前提，新产业新业态=培育动能的措施，生态环境=绿色发展要求——都不是「主线」。背景：农业农村主要矛盾由总量不足转为结构性矛盾，故提「供给侧结构性改革」。"
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：文件标题即主线</h2>
+<p>答案：<strong>D（深入推进农业供给侧结构性改革）</strong>。</p>
+<h3>第 0 步：先立机制——把文件全名立起来</h3>
+<p>2017 年中央一号文件的全名是《中共中央 国务院关于<strong>深入推进农业供给侧结构性改革</strong> 加快培育农业农村发展新动能的若干意见》——标题前半句就是当年农业农村工作的<strong>主线</strong>。它为什么在 2017 年被提为主线？背景托住：我国农业农村发展进入新的历史阶段，主要矛盾已由<strong>总量不足</strong>转变为<strong>结构性矛盾</strong>（大宗农产品供过于求与优质农产品供给不足并存），单纯讲「结构调整」不够了，必须上升到「供给侧结构性改革」——改的是供给体系的质量与效率。</p>
+<h3>第 1 步：功能分层排除</h3>
+<table><thead><tr><th>选项</th><th>功能定位</th><th>为什么不是主线</th></tr></thead><tbody><tr><td>A</td><td>绿色发展要求（改善生态环境）</td><td>是文件关注点之一</td></tr><tr><td>B</td><td>培育新动能的措施（新产业新业态）</td><td>是实现主线的抓手</td></tr><tr><td>C</td><td>底线与前提（国家粮食安全）</td><td>任何时候都强调，不因年份而成为「主线」</td></tr></tbody></table>
+<p>主线是<strong>统领全年工作全局的那一条</strong>，只有 D 与文件标题逐字对上。选 <strong>D</strong>。</p>
+<h3>为什么 C 有迷惑性</h3>
+<p>「确保国家粮食安全」是三农工作的传统头号关键词，很多人听到「三农」就反射它。但粮食安全是<strong>常量</strong>（每年都必须守住），「主线」问的是<strong>当年变量</strong>——2017 年文件的新提法。时政题的解法：常量做前提，变量做答案。</p>
+<blockquote>记忆锚点：2017 年一号文件标题即主线=深入推进农业供给侧结构性改革；粮食安全=底线，新产业新业态=动能，生态环境=绿色发展；时政题常量做前提、变量做答案。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

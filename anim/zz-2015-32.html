@@ -1,8 +1,95 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-32 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-32</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2015-32 两个抗战纪念日的四重意义 · 时间线动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，时间线卡片版），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：两个日期各有所指',
+    cls: 'key', sc: 'step', tag: '审题',
+    body: '<p>2014.2.27 人大常委会决定：9 月 3 日 = 抗战<b>胜利纪念日</b>；12 月 13 日 = 南京大屠杀死难者<b>国家公祭日</b>。</p><p>9.3 面向<b>胜利与贡献</b>，12.13 面向<b>死难与告慰</b>——四个选项两两对应，外加共同落点。</p>',
+    log: '9.3 指胜利贡献，12.13 指死难告慰' },
+  { t: '时间线：从 1937 到 2014 的国家记忆',
+    cls: 'key', sc: 'shift', tag: '时间线',
+    body: '<p><b>1937.12.13</b> 南京大屠杀，30 万以上同胞遇难；</p><p><b>1937–1945</b> 全民族抗战，中国战场牵制和抗击日本陆军主力——世界反法西斯的<b>东方主战场</b>；</p><p><b>1945.9.3</b> 中国人民抗日战争胜利；</p><p><b>2014.2.27</b> 人大常委会以国家名义设立两个纪念日。</p>',
+    log: '1937 → 主战场 → 1945 胜利 → 2014 设纪念日' },
+  { t: '选项 B：对付出牺牲、作出贡献者的敬重缅怀 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 B', ribbon: { k: 2, ok: true },
+    body: '<p>9.3 纪念日的直接指向：胜利属于<b>付出巨大牺牲、作出巨大贡献</b>的人们——以国家名义敬重与缅怀。</p><p><b>B 对</b>。</p>',
+    log: '9.3 = 敬重缅怀贡献者 → B 选' },
+  { t: '选项 C：对死难同胞的告慰和尊重 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C', ribbon: { k: 3, ok: true },
+    body: '<p>12.13 公祭日的直接指向：以<b>国家公祭</b>对南京大屠杀中大量死难同胞告慰与尊重。</p><p><b>C 对</b>。</p>',
+    log: '12.13 = 国家公祭告慰死难者 → C 选' },
+  { t: '选项 A：彰显中国作为反法西斯主要战场的作用 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A', ribbon: { k: 1, ok: true },
+    body: '<p>以国家名义纪念<b>胜利</b>，就是以国家名义确认：中国战场是世界反法西斯战争的<b>东方主战场</b>，作用伟大。</p><p><b>A 对</b>——别只想到"纪念死者"，还有确认历史地位这一面。</p>',
+    log: '纪念胜利 = 确认东方主战场地位 → A 选' },
+  { t: '选项 D：向中外传播历史事实的真相 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 D', ribbon: { k: 4, ok: true },
+    body: '<p>两个纪念日共同的落点：把历史事实固化为<b>国家记忆</b>，向中国人民和世界各国人民<b>传播真相</b>——纪念本身就是最有力的讲述。</p><p><b>D 对</b>。</p>',
+    log: '国家记忆传播历史真相 → D 选' },
+  { t: '结论：ABCD',
+    cls: 'good', sc: 'done', tag: '结论',
+    body: '<p>答案 <b>ABCD</b>：东方主战场（A）+ 缅怀贡献者（B）+ 告慰死难者（C）+ 传播真相（D）。</p><p>四个选项各有落点、并行不悖——全选。纪念≠延续仇恨：落点是铭记历史、缅怀先烈、珍爱和平。</p>',
+    log: '全选 ABCD：四重意义齐整' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2015·32】设立抗战胜利纪念日与国家公祭日的意义（多选）',
+  subtitle: '考点：抗战纪念与国家公祭 · 时间线 + 意义逐项对号',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先铺时间线看两个日期的指向，再逐项核对意义。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '记忆锚点：9.3 → 胜利、贡献、<b>东方主战场（A、B）</b>；12.13 → 死难同胞的告慰与尊重（<b>C</b>）；合起来 → 传播历史真相（<b>D</b>）。全选 ABCD。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：两个纪念日，四重意义</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——先立时间轴，再谈意义</h3>
+<p>时间轴：2014 年 2 月 27 日，十二届全国人大常委会第七次会议通过决定：将 9 月 3 日确定为中国人民抗日战争胜利纪念日，将 12 月 13 日确定为南京大屠杀死难者国家公祭日。两个日期各有所指——9.3 面向<strong>胜利与贡献</strong>，12.13 面向<strong>死难与告慰</strong>；四个选项两两对应，外加共同的意义落点。</p>
+<h3>第 1 步：逐项对号</h3>
+<ul><li><strong>A 彰显了中国作为反法西斯主要战场的伟大作用</strong> ✅：中国战场是世界反法西斯战争的东方主战场——以国家名义纪念胜利，就是以国家名义确认这一历史地位。</li><li><strong>B 是对抗击日本帝国主义侵略付出巨大牺牲和作出巨大贡献的人们的敬重与缅怀</strong> ✅：9.3 纪念日的直接指向——胜利属于付出牺牲、作出贡献的人们。</li><li><strong>C 是对南京大屠杀中大量死难同胞的告慰和尊重</strong> ✅：12.13 公祭日的直接指向——以国家公祭告慰、尊重死难者。</li><li><strong>D 有助于向中国人民和世界各国人民传播历史事实的真相</strong> ✅：两个纪念日共同的社会功能——把历史事实固化为国家记忆，向国内外传递真相。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>漏选 A</strong>：只想到"纪念死者"，忘了胜利纪念日的另一面——确认中国战场在世界反法西斯战争中的地位（东方主战场）。</li><li><strong>误以为 C 太窄</strong>：题干同时设了两个纪念日，公祭日对应 C、胜利纪念日对应 B，各有落点、并行不悖，四个选项全部成立。</li><li><strong>把设立纪念日读成"延续仇恨"</strong>：两个纪念日以国家名义立起，落点是铭记历史、缅怀先烈、珍爱和平——四个选项说的都是敬重（B）、告慰（C）、真相（D）、历史地位（A），没有一项是仇恨表述；传播真相正是为了防止历史被淡忘和歪曲，不是为了延续对立。</li></ul>
+<blockquote>记忆锚点：9.3 → 胜利、贡献、东方主战场（A、B）；12.13 → 死难同胞的告慰与尊重（C）；合起来 → 传播历史真相（D）。全选 ABCD。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

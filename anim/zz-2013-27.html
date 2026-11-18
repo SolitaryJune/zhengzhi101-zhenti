@@ -1,8 +1,114 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-27 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-27</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-27 · 大革命与辛亥革命比不同（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片 + 四维比较小表（内联样式，自包含，
+   仅引用本地 ../assets 引擎，无任何外部请求；引擎默认渲染 stage.innerHTML）。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+/* 比较小表：[维度, 辛亥革命, 大革命, 判定 ok=不同点 / same=相同点] */
+function cmp(pairs){
+  var head = '<tr>' + ['比较维度', '辛亥革命', '大革命 1925—1927', '判定'].map(function(h){
+    return '<td style="border:1px solid #e2e8f0;padding:5px 8px;font-size:12.5px;font-weight:700;background:#f1f5f9;color:#0f172a;white-space:nowrap">' + h + '</td>';
+  }).join('') + '</tr>';
+  return '<table style="border-collapse:collapse;width:100%;margin:6px 0">' + head + pairs.map(function(r){
+    var jc = r[3] === 'ok' ? '#166534' : '#92400e';
+    var jbg = r[3] === 'ok' ? '#f0fdf4' : '#fffbeb';
+    return '<tr><td style="border:1px solid #e2e8f0;padding:5px 8px;font-size:12.5px;font-weight:700;background:#f8fafc;color:#334155;white-space:nowrap">' + r[0] +
+      '</td><td style="border:1px solid #e2e8f0;padding:5px 8px;font-size:12.5px;color:#334155">' + r[1] +
+      '</td><td style="border:1px solid #e2e8f0;padding:5px 8px;font-size:12.5px;color:#334155">' + r[2] +
+      '</td><td style="border:1px solid #e2e8f0;padding:5px 8px;font-size:12.5px;font-weight:700;background:' + jbg + ';color:' + jc +
+      ';white-space:nowrap">' + r[4] + '</td></tr>';
+  }).join('') + '</table>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼：大革命是辛亥革命的"继续 + 发展"',
+    body: '<p>1925—1927 年大革命（五卅运动—省港大罢工—北伐战争）与 1911 年辛亥革命是同一条河的上下游：<b>"继续"意味着必有相同点，"发展"意味着必有不同点</b>。所以比较题的正确姿势：先立比较维度，逐栏填两个对象各自的答案——两栏一致的是"继续"，拉开差距的是"发展"。</p><p>口诀：<b>找不同，先排同。</b>比较维度立四栏：发动面、斗争形式、革命对象、组织形式。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行：四栏比较，先看出哪栏"同"',
+    body: cmp([
+      ['发动面', '主要依靠会党、新军，基本未发动下层工农', '五卅运动、省港大罢工、湖南农民运动——工农广泛深刻地发动', 'ok', '不同点'],
+      ['斗争形式', '武装斗争（武昌起义、各省响应）', '武装斗争（北伐战争）', 'same', '相同'],
+      ['革命对象', '清王朝及其专制统治，对帝国主义抱有幻想', '帝国主义和封建军阀（"打倒列强，除军阀"）', 'ok', '不同点'],
+      ['组织形式', '同盟会等革命派单独领导，组织松散', '国共合作统一战线（1924 年国民党一大），共产党参与领导', 'ok', '不同点']
+    ]) + '<p>四栏里只有"斗争形式"两栏一致——它就是要排除的项。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true },
+    title: '选项 A：广泛而深刻地发动了工农群众 —— 不同点',
+    body: '<p>大革命最突出的进步：省港罢工、农会运动席卷南北，<b>工人农民第一次</b>以罢工、农会的组织形式成为革命主力军；辛亥革命只在会党和新军中活动，群众基础狭窄。</p><p>A 对。</p>' },
+  { cls: 'bad', tag: 'B 排除', ribbon: { k: 2, ok: false },
+    title: '选项 B：主要斗争形式是武装斗争 —— 相同点',
+    body: '<p>辛亥革命靠武昌起义的武装方式推翻帝制，大革命的北伐战争同样是武装斗争——两栏一填，内容一致：武装斗争是两场革命<b>共有的主要斗争形式</b>，属于"继续"的一面。</p><p>把共同特征放进"不同点"清单，正是本题的埋伏。B 错。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: '选项 C：革命对象是帝国主义和封建军阀 —— 不同点',
+    body: '<p>辛亥革命主要指向清王朝，甚至对帝国主义抱有幻想（承认清政府与列强所订条约继续有效）；大革命的矛头明确指向北洋军阀及其背后的帝国主义，反帝反封建纲领鲜明。</p><p>C 对。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true },
+    title: '选项 D：在国共合作统一战线的组织下进行 —— 不同点',
+    body: '<p>大革命区别于以往一切革命的组织特征：1924 年国民党一大实现第一次国共合作，建立革命统一战线，共产党参与领导——群众发动（A）是"动员深度"的差异，统一战线（D）是"组织形式"的差异，两个不同侧面。</p><p>D 对。</p>' },
+  { cls: 'key', tag: '陷阱拆解',
+    title: 'B 的迷惑点：把"继续"读成"发展"',
+    body: '<p>"大革命轰轰烈烈、打仗更多"的印象容易让人把武装斗争当成大革命的"新东西"。识破方法：问自己一句——<b>"辛亥革命是不是也武装斗争？"</b>是，立即排除。</p>' +
+      cmp([
+        ['自检栏', '辛亥：武昌起义 ✓', '大革命：北伐 ✓', 'same', '相同 → 排除']
+      ]) + '<p>漏 C 的预防：两次革命确实都反封建，但"反的谁"不同——辛亥只反了封建的清王朝，大革命反帝反封建并举，对象这一栏拉开了差距。</p>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 ACD',
+    body: '<p>答案 <b>ACD</b>：继续的是武装斗争（B 是同不是异），发展的是群众发动更广（A）、革命对象升级为帝国主义和封建军阀（C）、国共合作统一战线的组织形式（D）。比较题先排同、再选异。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2013·27】大革命对辛亥革命：找不同先排同（多选）',
+  subtitle: '考点：大革命 · 与辛亥革命比较 · 相同项排除法',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '<b>继续的是武装斗争，发展的是三件大事</b>：工农群众广泛发动（A）、对象升级为帝国主义和封建军阀（C）、国共合作统一战线（D）。<br>干扰项 B 把两场革命的共同斗争形式塞进"不同点"——找不同，先排同。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：大革命与辛亥革命比"不同点"——先立比较坐标，再找相同项排除</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——比较题的坐标与口诀</h3>
+<p>1925 至 1927 年的大革命（五卅运动—省港大罢工—北伐战争）与 1911 年的辛亥革命，是同一条河流的上下游：<strong>大革命是辛亥革命未竟事业的继续与发展</strong>。"继续"意味着必有相同点，"发展"意味着必有不同点。所以比较题的正确姿势是：先立比较维度，逐栏把两个对象各自的答案填进去——<strong>两栏内容一致的是"继续"（相同点），两栏拉开差距的是"发展"（不同点）；题目问不同点，就把一致的那栏排除</strong>。口诀：<strong>找不同，先排同。</strong></p>
+<p>比较维度立四栏——发动面、斗争形式、革命对象、组织形式：</p>
+<table><thead><tr><th>比较维度</th><th>辛亥革命</th><th>大革命（1925—1927）</th><th>是否不同点</th></tr></thead><tbody><tr><td>发动面</td><td>主要依靠会党、新军，基本未发动下层工农</td><td>五卅运动、省港大罢工、湖南农民运动，工农广泛而深刻地发动</td><td>是（A）</td></tr><tr><td>斗争形式</td><td>武装斗争（武昌起义、各省响应）</td><td>武装斗争（北伐战争）</td><td><strong>否——相同</strong></td></tr><tr><td>革命对象</td><td>清王朝及其专制统治，对帝国主义抱有幻想</td><td>帝国主义和封建军阀（"打倒列强，除军阀"）</td><td>是（C）</td></tr><tr><td>组织形式</td><td>同盟会等革命派单独领导，组织松散</td><td>以国共合作为基础的统一战线（1924 年国民党一大），共产党参与领导</td><td>是（D）</td></tr></tbody></table>
+<h3>第一步：三个不同点逐栏对号</h3>
+<ul><li><strong>A 对</strong>："广泛而深刻地发动了工农群众"——这是大革命最突出的进步。工人农民第一次以罢工、农会的组织形式成为革命主力军；辛亥革命则只在会党和新军中活动，群众基础狭窄。</li><li><strong>C 对</strong>："革命对象是帝国主义和封建军阀"——辛亥革命主要指向清王朝，甚至对帝国主义抱有幻想（承认清政府与列强所订条约继续有效）；大革命的矛头明确指向北洋军阀及其背后的帝国主义，反帝反封建纲领鲜明。</li><li><strong>D 对</strong>："在以国共合作为基础的统一战线的组织下进行"——这是大革命区别于以往一切革命的组织特征：1924 年国民党一大实现第一次国共合作，建立革命统一战线，共产党参与领导。</li></ul>
+<h3>第二步：B 为什么是干扰项——它填进"相同"栏</h3>
+<ul><li><strong>B 错</strong>："主要斗争形式是武装斗争"——辛亥革命靠武昌起义的武装方式推翻帝制，大革命的北伐战争同样是武装斗争。两栏一填，内容一致：武装斗争是两场革命<strong>共有的主要斗争形式</strong>，属于"继续"的一面，不是"发展"。把共同特征放进"不同点"清单，正是本题的埋伏。</li></ul>
+<h3>易错点：每个干扰项背后的误解</h3>
+<ul><li><strong>误选 B（把相同当不同）</strong>：被"大革命轰轰烈烈、打仗更多"的印象带偏。识破标志：问自己"辛亥革命是不是也武装斗争？"——是，立即排除。</li><li><strong>漏选 C（以为都反封建、对象相同）</strong>：两次革命确实都反封建，但"反的谁"不同——辛亥只反了封建的清王朝，对帝国主义妥协；大革命反帝反封建并举。对象这一栏两场革命拉开了差距。</li><li><strong>A、D 只知其一</strong>：群众发动是"动员深度"的差异，统一战线是"组织形式"的差异，是两个不同侧面的新事物，都要选。</li></ul>
+<blockquote>记忆锚点：大革命对辛亥革命——继续的是<strong>武装斗争</strong>（B 是同不是异），发展的是<strong>群众发动（A）、革命对象（C）、统一战线组织（D）</strong>；比较题先排同、再选异。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

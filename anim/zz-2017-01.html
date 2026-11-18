@@ -1,8 +1,102 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-01 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-01</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2017-01 「人努力」与「天帮忙」：主观能动性与客观规律</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画（推理链卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼："人努力才是根本"，求"启示"',
+    cls: 'key',
+    body: '<p>题眼一句话："天帮忙很重要，但<b>人努力才是根本</b>"。设问求"启示"——考点锁定：<b>主观能动性与客观规律的辩证关系</b>。"天帮忙"= 客观规律（大风扩散、气候条件），"人努力"= 主观能动性（减排治污）。</p>',
+    log: '题眼落在"人努力"，考点是能动性与规律的关系' },
+  { title: '先立机制：这对关系只有两条标准结论',
+    cls: 'key',
+    body: '<p>① <b>尊重客观规律</b>是正确发挥主观能动性的<b>前提</b>——规律是本质的、必然的、稳定的联系，不以人的意志为转移；② <b>实践</b>是客观规律性与主观能动性相统一的<b>基础</b>——人只有在实践中才能认识规律、利用规律。下面把四个选项放回这两条上。</p>',
+    log: '尊重规律是前提，实践是统一的基础' },
+  { title: '选项 A：前提就位',
+    cls: 'good',
+    body: '<p>A"尊重事物的客观规律是正确发挥主观能动性的前提"——人努力要干成治霾这件事，必须先摸清并顺应"天"的规律，正是机制第 ① 条。<b>A 正确。</b></p>',
+    log: '人努力先得顺着天的脾气 → A 正确' },
+  { title: '选项 B：把"前提"的位置坐反了',
+    cls: 'bad',
+    body: '<p>B"人类有意识的思想活动是掌握客观规律的根本前提"——错。思想活动是发挥能动性的<b>表现</b>，规律藏在客观过程里，只有靠<b>实践</b>才能被掌握；"根本前提"这个位置在教材里只属于客观规律。<b>B 排除。</b></p>',
+    log: '掌握规律靠实践，前提另有其人 → B 排除' },
+  { title: '选项 C：偷换"基础"',
+    cls: 'bad',
+    body: '<p>C"认识活动是客观规律性与主观能动性相统一的基础"——错。认识只解决"知道"，实践才把"知道"与"做到"接通；统一的基础是<b>实践</b>，不是认识活动。<b>C 排除。</b></p>',
+    log: '统一的基础是实践而非认识 → C 排除' },
+  { title: '选项 D：答非所问',
+    cls: 'bad',
+    body: '<p>D"尚未认识的外在自然规律对人的实践活动起着至关重要的作用"——错。题干说的恰是人们<b>已认识</b>雾霾成因、并顺应规律持续减排（"人努力才是根本"），与"尚未认识的规律"无关。<b>D 排除。</b></p>',
+    log: '题眼重心在"人努力"，不在未知的天 → D 排除' },
+  { title: '结论：A',
+    cls: 'good',
+    body: '<p>四个选项一正三偏：A 是标准结论 ①；B 倒置前提、C 偷换基础、D 答非所问。答案选 <b>A</b>。</p>',
+    log: '锁定 A：尊重规律是前提' },
+];
+
+var snapCls = { 2: 'ok', 3: 'miss', 4: 'miss', 5: 'miss' };
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var optK = snapCls[i] ? i - 1 : 0; // 卡片 3~6 对应选项 A~D
+  return {
+    cls: last ? 'done' : snapCls[i] || 'step',
+    tag: i === 0 ? '审题' : (i === 1 ? '机制' : (last ? '结论' : '选项 ' + 'ABCD'[optK - 1])),
+    log: s.log || s.title,
+    count: optK || (last ? 4 : 0),
+    ribbon: optK ? { k: optK, ok: snapCls[i] === 'ok' } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2017·01】「人努力」与「天帮忙」：主观能动性与客观规律',
+  subtitle: '考点：主观能动性与客观规律的辩证关系 · 方法：先立机制，再对号入座',
+  counterLabel: '已核选项',
+  ribbonTitle: '选项判定（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链：先立两条标准结论，再逐项判定 A/B/C/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：<b>尊重客观规律</b>是正确发挥主观能动性的<b>前提</b>，<b>实践</b>是二者统一的<b>基础</b>。"天帮忙"= 客观规律，"人努力"= 主观能动性——人努力先得顺着天的脾气。B 倒置前提（思想活动≠前提），C 偷换基础（认识≠实践），D 答非所问。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「人努力」与「天帮忙」——主观能动性与客观规律的辩证关系</h2>
+<p>答案：<strong>A（尊重事物的客观规律是正确发挥主观能动性的前提）</strong>。</p>
+<h3>第 0 步：先立机制——这对关系只有两条标准结论</h3>
+<p>主观能动性与客观规律的辩证关系，教材结论就两条，做题前先把它们立起来，再让选项来"对号"：</p>
+<ol><li><strong>尊重客观规律是正确发挥主观能动性的前提和基础</strong>。规律是事物运动发展中本质的、必然的、稳定的联系，具有<strong>不以人的意志为转移</strong>的强制性——顺规律办事才能成，逆规律去"能动"必然碰壁。所以"尊重"必须排在"发挥"之前，它是前提。</li><li><strong>实践是客观规律性与主观能动性相统一的基础</strong>。人只有在改造世界的实践中，才能认识规律、利用规律，把"天"的必然变成"人"的自由。"知道"靠认识，"做到"靠实践，把两者接通的是实践。</li></ol>
+<p>题眼一句话："天帮忙很重要，但人努力才是根本。"对号入座："天帮忙" = 客观规律（大风扩散、气候条件）在起作用；"人努力" = 发挥主观能动性（减排治污）。题问"启示"，即"人努力要干成事，得先怎么办"——按第 1 条，前提是先摸清并顺应"天"的规律，直接锁定 <strong>A</strong>。</p>
+<h3>第 1 步：预判追问——为什么"前提""基础"不能给别人</h3>
+<ul><li><strong>为什么"掌握规律的前提"不是思想活动（B）？</strong> 人脑想得再多，也只是主观领域里的活动，规律本身藏在客观过程里，只有通过实践（去测、去治、去试）才能被掌握。思想活动是发挥能动性的<strong>表现</strong>，不是掌握规律的<strong>前提</strong>——B 恰好把位置坐反了。</li><li><strong>为什么"统一的基础"不是认识（C）？</strong> 认识活动只解决"知道规律"，客观规律性与主观能动性要真正"统一"，必须是在实践中既尊重规律又改造世界——认识是环节，实践才是基础。</li><li><strong>为什么不是"尚未认识的规律"（D）？</strong> 题干说的恰是人们<strong>已认识</strong>了雾霾成因、并顺应规律持续减排（"人努力才是根本"）；D 把题眼重心从"人努力"滑向"未知的天决定一切"，答非所问。</li></ul>
+<h3>第 2 步：干扰项归因</h3>
+<table><thead><tr><th>选项</th><th>错在哪</th><th>对应的误解</th></tr></thead><tbody><tr><td>B</td><td>关系倒置：掌握客观规律靠的是实践，"人类有意识的思想活动"不是"掌握客观规律的根本前提"</td><td>把"意识能认识规律"偷换成"意识是认识规律的前提"</td></tr><tr><td>C</td><td>偷换"基础"：使二者统一起来的基础是<strong>实践</strong>，不是"认识活动"——认识只解决"知道"，实践才把"知道"与"做到"接通</td><td>用"认识"冒充"实践"的基础地位</td></tr><tr><td>D</td><td>答非所问：题干说的恰恰是人已认识并顺应规律、持续减排治霾，不是"尚未认识的规律"在起"至关重要的作用"</td><td>把题眼重心从"人努力"滑向"未知的天决定一切"</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li>看到"人努力才是根本"容易选 B："有意识的思想活动"听起来很"能动"，但设问求的是"启示"——正确处理这对关系的条件，标准表述只有"尊重客观规律是前提"。</li><li>"前提/基础"两个词要盯死：发挥能动性的<strong>前提</strong>是尊重规律；二者统一的<strong>基础</strong>是实践。B、C 分别在这两个词上做文章。</li></ul>
+<blockquote>记忆锚点：<strong>尊重规律是前提，实践是统一的基础</strong>；"天帮忙" = 客观规律，"人努力" = 主观能动性，人努力先得顺着天的脾气。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

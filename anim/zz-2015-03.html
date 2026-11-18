@@ -1,8 +1,130 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-03 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-03</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2015·03 「机器换人」：资本技术构成的提高</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 模板：anim_concept（概念/推理链卡片，政治站无 KaTeX 版）· 只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一张两栏小表（嵌在卡片内）
+function miniTable(head, rows){
+  var h = '<tr>' + head.map(function(x){ return '<th>' + x + '</th>'; }).join('') + '</tr>';
+  var b = rows.map(function(r){ return '<tr>' + r.map(function(x){ return '<td>' + x + '</td>'; }).join('') + '</tr>'; }).join('');
+  return '<table style="border-collapse:collapse;width:100%;margin:6px 0">' + h + b + '</table>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：机器换人动了什么",
+    "cls": "key",
+    "body": "<p>第三次科技革命后「机器换人」：智能化工厂效率高、企业有经济效益。问：率先用机器人的个别企业发生了什么？先把场景翻成政治经济学语言——<b>机器人＝生产资料</b>（不变资本），被替换的<b>工人＝劳动力</b>（可变资本）。考点：<b>资本构成</b>。</p>",
+    "log": "机器人=生产资料，工人=劳动力，考资本构成"
+  },
+  {
+    "title": "先立机制：资本的三种构成",
+    "cls": "key",
+    "body": miniTable(
+      ["构成", "从什么角度看", "内容"],
+      [["技术构成", "物质形态", "生产资料数量 ∶ 劳动力数量"],
+       ["价值构成", "价值形态", "不变资本 c ∶ 可变资本 v"],
+       ["有机构成", "c∶v", "由技术构成决定并反映技术构成"]]
+    ) + "<p>链条：技术水平变了 → 物质比例先变（技术构成）→ 带动 c:v 变（有机构成）。</p>",
+    "log": "技术构成在先，价值构成随之，有机构成居中"
+  },
+  {
+    "title": "A：机器换人＝技术构成提高",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p>对号入座：机器人（生产资料）<b>增多</b>、工人（劳动力）<b>减少</b>——物质形态上「生产资料 ∶ 劳动力」的比例升高，这正是<b>资本技术构成的提高</b>；随后 c:v 上升，有机构成也提高。题干问的正是这场变化的直接含义。<b>A 正确</b>。</p>",
+    "log": "生产资料↑、劳动力↓ → 技术构成提高 → 选 A"
+  },
+  {
+    "title": "B：剩余价值来源改变？机器不创造价值",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>机器人是<b>不变资本（物化劳动）</b>，只能把自身价值<b>转移</b>到产品中，<b>不创造新价值</b>；剩余价值的唯一来源仍是<b>雇佣工人的活劳动</b>——只是留下的工人在更高效率下劳动。<b>B 错误</b>。</p>",
+    "log": "机器只转移价值，来源仍是活劳动 → B 不选"
+  },
+  {
+    "title": "C：所生产商品价值提高？方向反了",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>劳动生产率提高 → 单位商品的社会必要劳动时间<b>下降</b> → 单位商品价值<b>降低</b>。效率高≠价值高。率先者个别价值<b>低于</b>社会价值，这个差额恰是它赚钱的秘密——可见不是「价值提高」。<b>C 错误</b>。</p>",
+    "log": "生产率↑单位价值↓ → C 不选"
+  },
+  {
+    "title": "D：获得更多社会平均利润？范畴用错了",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>率先采用新技术者获得的是<b>超额剩余价值</b>（个别价值低于社会价值的差额）；平均利润是<b>部门间竞争</b>后「等量资本取得等量利润」的范畴，且全部门有机构成提高后平均利润率反而趋于<b>下降</b>。「个别企业率先」对不上这个范畴。<b>D 错误</b>。</p>",
+    "log": "率先者拿超额剩余价值，不是平均利润 → D 不选"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>A</b>：机器换人＝生产资料↑、劳动力↓＝<b>资本技术构成的提高</b>。两个不变：剩余价值来源不变（活劳动）、单位商品价值方向不变（生产率↑则价值↓）。</p>",
+    "log": "锁定 A：技术构成提高"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "「机器换人」：资本技术构成的提高",
+  subtitle: "考点：资本有机构成 · 方法：先立「技术构成→价值构成→有机构成」链条，再对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 A",
+    html: "记忆锚点：机器换人＝生产资料↑劳动力↓＝<b>技术构成提高</b>→c:v 提高＝有机构成提高；机器人只转移价值，<b>剩余价值仍来自活劳动</b>；率先者拿<b>超额剩余价值</b>，不是平均利润。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「机器换人」——资本有机构成提高，剩余价值来源不变</h2>
+<p>答案：<strong>A（资本技术构成的提高）</strong>。</p>
+<h3>第 0 步：先立机制——资本的三种构成</h3>
+<table><thead><tr><th>构成</th><th>从什么角度看</th><th>定义</th><th>由谁决定</th></tr></thead><tbody><tr><td><strong>技术构成</strong></td><td>物质形态</td><td>生产资料的数量与劳动力的数量之比</td><td>由<strong>技术水平</strong>决定</td></tr><tr><td><strong>价值构成</strong></td><td>价值形态</td><td>不变资本 c 与可变资本 v 之比（c:v）</td><td>由技术构成决定</td></tr><tr><td><strong>有机构成</strong></td><td>c:v</td><td>由技术构成决定并<strong>反映</strong>技术构成的价值构成</td><td>技术构成↑ → 有机构成↑</td></tr></tbody></table>
+<p>「机器换人」发生了什么？机器人（生产资料）<strong>增多</strong>、被替换的工人（劳动力）<strong>减少</strong>——物质形态上「生产资料/劳动力」的比例升高，这正是<strong>资本技术构成的提高</strong>；相应地 c:v 上升，有机构成也随之提高。题干「率先使用机器人的个别企业」干的就是这件事 → 选 A。</p>
+<h3>第 1 步：预判追问——机器换人后，剩余价值还是活劳动创造的吗？</h3>
+<p>是，这是本题第二个机关。机器人是<strong>不变资本（物化劳动）</strong>，它只能把自身价值<strong>转移</strong>到产品中，<strong>不创造新价值</strong>；价值的源泉、剩余价值的唯一来源仍是<strong>雇佣工人的活劳动</strong>——只是留下来的工人在更高效率下付出劳动。所以「剩余价值来源的改变」不成立。</p>
+<h3>第 2 步：干扰项各自错在哪</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>错因</th></tr></thead><tbody><tr><td>B 剩余价值来源的改变</td><td>❌</td><td>价值源泉仍是<strong>活劳动</strong>，机器只转移价值不创造价值</td></tr><tr><td>C 所生产商品价值提高</td><td>❌</td><td>方向反了：劳动生产率提高，单位商品耗费的社会必要劳动时间<strong>下降</strong>，单位商品价值<strong>降低</strong>（率先者个别价值低于社会价值，恰是超额利润的来源）</td></tr><tr><td>D 获得更多的社会平均利润</td><td>❌</td><td>率先采用新技术者获得的是<strong>超额剩余价值</strong>（个别价值低于社会价值的差额）；平均利润是部门间竞争后等量资本取得等量利润的范畴，与「个别企业率先」不符</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 C（把「效率高」当成「价值高」）</strong>：混淆了劳动生产率与价值量的方向——生产率越高，单位商品价值越低。</li><li><strong>选 D（把「竞争力强」等同于「平均利润多」）</strong>：平均利润是<strong>部门竞争的结果</strong>范畴；个别企业因技术领先得到的是超额剩余价值，而且全部门有机构成提高后，平均利润率反而趋于<strong>下降</strong>。</li><li><strong>技术构成与有机构成混淆</strong>：题干描述的是物质形态的比例变化（机器多了、人少了），直接对应<strong>技术构成</strong>；即便有机构成同时提高，「技术构成的提高」也是这场变化的<strong>起点与直接含义</strong>。</li></ul>
+<blockquote>记忆锚点：机器换人 = 生产资料↑、劳动力↓ = <strong>技术构成提高</strong> → c:v 提高 = 有机构成提高；机器人只转移价值，<strong>剩余价值仍来自活劳动</strong>；率先者拿<strong>超额剩余价值</strong>，不是平均利润。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

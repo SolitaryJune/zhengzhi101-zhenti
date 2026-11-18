@@ -1,8 +1,100 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-20 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-20</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2024·20 简单商品经济的基础：私有制＋个体劳动</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼：先立机制——商品经济怎么来、分哪两级',
+    cls: 'key', tag: '立机制',
+    body: '<p>商品经济产生的历史条件两条：① <b>社会分工</b>（你需要我生产的，有交换的必要）；② <b>生产资料和产品属于不同的所有者</b>（你的东西不能白拿，有交换的可能）。顺着分两级：<b>简单商品经济＝私有制＋个体劳动</b>（换回使用价值）；<b>资本主义商品经济＝私有制＋雇佣劳动</b>（价值增殖）。两级共享私有制地基，分界牌是<b>劳动形式</b>。题限「资本主义社会之前」→ 只要前一级的基础。</p>',
+    log: '两级共享私有制，分界牌是劳动形式' },
+  { title: 'A. 生产资料公有制——排除',
+    cls: 'bad', tag: 'A ✗', ribbon: { k: 1, ok: false },
+    body: '<p>商品交换的前提是产品属于<b>不同的所有者</b>。原始社会虽有公有制，却没有剩余产品和独立所有者，产品统一调配、不经市场——<b>构不成商品经济</b>。商品经济历史上的根恰恰在私有制。排除。</p>',
+    log: 'A＝一个所有者，无需交换 → 排除' },
+  { title: 'B. 个体劳动——入选',
+    cls: 'good', tag: 'B ✓', ribbon: { k: 2, ok: true },
+    body: '<p>简单商品经济的<b>劳动形式</b>基础：小私有者靠自己（和家人）的劳动生产，产品归自己、自己拿去交换。两级私有制相同，能区分两个阶段的正是它。入选。</p>',
+    log: 'B＝自己劳动 → 入选' },
+  { title: 'C. 生产资料私有制——入选',
+    cls: 'good', tag: 'C ✓', ribbon: { k: 3, ok: true },
+    body: '<p>商品经济立身的<b>所有制</b>基础——「你的归你、我的归我」，才有等价交换；简单商品经济的基本矛盾「<b>私人劳动 vs 社会劳动</b>」，两头都踩在它上面：没有私有制就没有「私人」劳动。入选。</p>',
+    log: 'C＝不同所有者才有交换 → 入选' },
+  { title: 'D. 雇佣劳动——排除',
+    cls: 'bad', tag: 'D ✗', ribbon: { k: 4, ok: false },
+    body: '<p>这是<b>资本主义商品经济</b>的标志：劳动力成为商品、货币转化为资本之后的事。资本主义之前的小生产者用自己的劳动、不雇人——<b>时间对不上</b>，D 属于下一阶段。排除。</p>',
+    log: 'D＝下一阶段的劳动形式 → 排除' },
+  { title: '结论：BC 入选，A、D 各踩一个坑',
+    cls: 'good', tag: '完成',
+    body: '<p>答案 <b>BC</b>：所有制（C）＋劳动形式（B）双基础齐全。误选 A 的误解是以为「基础」总得沾「公有制」——原始社会恰恰没有商品经济；误选 D 的误解是把商品经济笼统等同于资本主义经济——题目限定「资本主义社会之前」。</p>',
+    log: '锁定 BC' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "2024·20 资本主义之前，商品经济靠什么立起来",
+  subtitle: "考点：商品经济的产生条件 · 简单/资本主义商品经济两阶段 · 方法：立两级框架 + 逐项归位",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）",
+  intro: "点击「▶ 播放」：先立商品经济两级框架，再逐项对号。",
+  snaps: snaps,
+  result: {
+    big: "答案 BC",
+    html: "答案 <b>BC</b>：简单商品经济＝<b>生产资料私有制（C）＋个体劳动（B）</b>，基本矛盾是<b>私人劳动与社会劳动</b>的矛盾；资本主义商品经济＝私有制＋<b>雇佣劳动（D）</b>，目的是价值增殖。两级共享私有制地基，<b>分界牌是劳动形式</b>——见「雇佣劳动」先问一句：题目问的是哪个阶段？",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：简单商品经济靠什么立起来——私有制＋个体劳动</h2>
+<p>答案：<strong>BC</strong>。</p>
+<h3>第 0 步：先立机制——商品经济从哪里来、两个阶段怎么分</h3>
+<p>商品经济不是从来就有的，它是"社会经济发展到一定阶段的产物"，产生的历史条件有两条：<strong>①社会分工</strong>（你需要我生产的、我需要你生产的，才有交换的必要）；<strong>②生产资料和劳动产品属于不同的所有者</strong>（你的东西不能白拿，才有交换的可能）。第二条落到前资本主义阶段，就是<strong>生产资料私有制</strong>。</p>
+<p>顺着这条线索把商品经济分两段看：</p>
+<table><thead><tr><th>阶段</th><th>基础</th><th>交换目的</th></tr></thead><tbody><tr><td><strong>简单商品经济</strong>（资本主义之前）</td><td><strong>生产资料私有制 ＋ 个体劳动</strong>（小私有者自己劳动，产品归自己拿去交换）</td><td>换回使用价值，满足自身需要</td></tr><tr><td>资本主义商品经济</td><td>生产资料私有制 ＋ <strong>雇佣劳动</strong>（资本家出生产资料，工人出卖劳动力）</td><td>价值增殖（剩余价值）</td></tr></tbody></table>
+<p>两段的私有制是共同底座，差别在劳动形态：一个靠<strong>自己劳动</strong>，一个靠<strong>雇佣劳动</strong>。所以"这一阶段商品经济发展的基础"＝私有制（C）＋个体劳动（B）。</p>
+<p>为什么是这两条？回到简单商品经济的基本矛盾——<strong>私人劳动和社会劳动的矛盾</strong>：生产资料归私人占有，劳动当然是私人劳动；但社会分工又使每个生产者的劳动是社会总劳动的一部分，必须通过交换才被社会承认。这个矛盾两头都踩在"私有制＋个体劳动"上：没有私有制就没有"私人"劳动，没有个体劳动的独立生产就没有交换的必要。</p>
+<h3>第 1 步：四个选项逐项对号</h3>
+<ul><li><strong>A 生产资料公有制</strong> ❌：商品交换的前提是"产品属于不同的所有者"；原始社会虽有公有制，却没有剩余产品和独立所有者，产品统一调配、不需经过市场，<strong>构不成商品经济</strong>。</li><li><strong>B 个体劳动</strong> ✅：简单商品经济阶段的生产者是小私有者，靠自己和家人的劳动生产，产品自己拿去交换。</li><li><strong>C 生产资料私有制</strong> ✅：商品经济立身的所有制基础——"你的东西归你、我的东西归我"，才有等价交换。</li><li><strong>D 雇佣劳动</strong> ❌：这是<strong>资本主义商品经济</strong>的标志（劳动力成为商品、货币转化为资本），资本主义之前的小生产者用的是自己的劳动，不雇人——时间对不上。</li></ul>
+<p>→ 选 <strong>BC</strong>。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 D</strong>：把"商品经济"笼统等同于"资本主义商品经济"，看见"经济"就想起"雇佣劳动"。区分：题目限定"<strong>资本主义社会之前</strong>"，两阶段的分界线恰恰是劳动形态——个体劳动 vs 雇佣劳动，D 属于下一阶段。</li><li><strong>误选 A</strong>：以为"基础"总得跟"公有制"这类好听词沾边，或被"原始社会是公有制"带偏。区分：商品交换的历史前提是<strong>不同所有者</strong>的存在，公有制（一个所有者）下产品统一调配，不需要市场交换；商品经济历史上的根在私有制。</li><li><strong>漏 B</strong>：只答了私有制一半。两级私有制相同，命题人考的就是"靠什么区分两个阶段"——个体劳动是简单商品经济的另一半底座，缺了它就与资本主义阶段区分不开。</li></ul>
+<blockquote>记忆锚点：简单商品经济＝<strong>私有制（C）＋个体劳动（B）</strong>，基本矛盾是<strong>私人劳动与社会劳动</strong>；资本主义商品经济＝私有制＋<strong>雇佣劳动（D）</strong>，目的是价值增殖——见到"雇佣劳动"先问一句：题目问的是哪个阶段？</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

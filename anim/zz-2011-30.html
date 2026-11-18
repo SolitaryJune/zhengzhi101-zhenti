@@ -1,8 +1,139 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-30 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-30</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-30 我国刑法明文规定的基本原则（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- ============================================================
+     模板：概念/记忆/推理链类（anim_concept 同款结构，政治站无 KaTeX 版）
+     形态：逐步揭示推理链卡片，每步一张 .aw-stepcard；第 2 步内嵌
+     "实体法/程序法两张清单"分拣图（刑法基本原则考点）。只改 AW.init 区域。
+     路径：本页位于 anim/{id}.html（站点一级目录之下），../assets/ 指向站点根 assets/。
+============================================================= -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 两张清单分拣机：刑法（实体）vs 刑事诉讼法（程序），chips 里字标命中位置
+function sorter(hit, bad){
+  // hit: 命中刑法清单的选项字母；bad: 落到程序法清单的选项字母
+  var items = { A: '罪刑法定', C: '罪刑相当', D: '一律平等', B: '疑罪从无' };
+  function chips(letters, color, bg){
+    var out = '';
+    for(var i = 0; i < letters.length; i++){
+      var L = letters[i];
+      out += '<span style="display:inline-block;margin:2px 3px 0;padding:2px 7px;border:1.5px solid ' + color +
+             ';background:' + bg + ';border-radius:10px;font-size:12px;font-weight:800;color:' + color + '">' +
+             L + ' ' + items[L] + '</span>';
+    }
+    return out || '<span style="font-size:11px;color:#94a3b8">（暂无）</span>';
+  }
+  var h = '<div style="display:flex;gap:8px;margin:8px 0 2px">';
+  h += '<div style="flex:1;border:1.5px solid #2e9e5b;background:#f7fcf9;border-radius:8px;padding:7px 6px">' +
+       '<div style="font-size:12px;font-weight:800;color:#2e9e5b">刑法（实体法）清单：定罪量刑</div>' +
+       '<div style="margin-top:4px">' + chips(hit || '', '#2e9e5b', '#eefbf1') + '</div></div>';
+  h += '<div style="flex:1;border:1.5px solid #d9a514;background:#fffcf3;border-radius:8px;padding:7px 6px">' +
+       '<div style="font-size:12px;font-weight:800;color:#b98a10">刑事诉讼法（程序法）清单：证据审判</div>' +
+       '<div style="margin-top:4px">' + chips(bad || '', '#d9a514', '#fff7df') + '</div></div>';
+  return h + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { title: '审题眼："刑法特有的 + 明文规定"两个限定',
+    cls: 'key', tag: '审题', ribbon: null,
+    log: '题眼"刑法特有的、明文规定"——先造分拣机器，再逐项过筛。',
+    body: '<p>题干限定语：刑法<b>特有的</b>、在立法/解释/适用中必须普遍遵循的<b>全局性、根本性</b>准则，且我国刑法<b>明文规定</b>。于是每条原则先问一句：它处理的是什么性质的问题？</p>' },
+  { title: '先立框架：实体法与程序法两张清单',
+    cls: 'key', tag: '框架', ribbon: null,
+    log: '刑法管定罪量刑，刑诉管诉讼怎么走——只有实体清单上的才入选。',
+    body: sorter('', '') + '<p><b>刑法（实体法）</b>回答"什么算犯罪、怎么处罚"；<b>刑事诉讼法（程序法）</b>回答"诉讼怎么走、证据怎么用、疑案怎么判"。分拣口诀：见<b>定罪、量刑</b>字眼归刑法，见<b>证据、审判程序</b>字眼归刑诉。</p>' },
+  { title: 'A：罪刑法定——刑法的"铁门槛"（第 3 条）',
+    cls: 'good', tag: 'A ✓', ribbon: { k: 1, ok: true },
+    log: '法无明文规定不为罪、不处罚——限制刑罚权任意发动，实体清单头号原则。',
+    body: sorter('A', '') + '<p><b>法无明文规定不为罪、法无明文规定不处罚</b>——没有法律条文就没有犯罪与刑罚，防止随意入人于罪。写在刑法<b>第 3 条</b>，"明文规定"四个字就落在它身上。A 对。</p>' },
+  { title: 'B：疑罪从无——够好，但住在隔壁',
+    cls: 'bad', tag: 'B ✗', ribbon: { k: 2, ok: false },
+    log: '它处理"证据不足怎么下判"，是程序问题——挂在刑事诉讼法名下。',
+    body: sorter('', 'B') + '<p>"疑罪从无"= <b>证据不足、指控不能成立时按无罪处理</b>。它处理的是审判程序中<b>如何下判</b>，不是"什么算犯罪、怎么量刑"——挂在<b>刑事诉讼法</b>名下（与无罪推定、非法证据排除并列）。够好，但住错门。B 错。</p>' },
+  { title: 'C：罪刑相当——量刑的标尺（第 5 条）',
+    cls: 'good', tag: 'C ✓', ribbon: { k: 3, ok: true },
+    log: '罪责刑相适应：重罪重罚、轻罪轻罚、罚当其罪——不是学理口号，是第 5 条原文。',
+    body: sorter('AC', 'B') + '<p>刑罚轻重应与罪行、刑事责任<b>相称</b>——重罪重罚、轻罪轻罚、罚当其罪。"罪责刑相适应"是条文表述，"罪刑相当"是本题选项表述，指同一条原则，写在刑法<b>第 5 条</b>。C 对。</p>' },
+  { title: 'D：适用刑法一律平等（第 4 条）',
+    cls: 'good', tag: 'D ✓', ribbon: { k: 4, ok: true },
+    log: '法律面前人人平等在定罪量刑领域的落点——不许有超越法律的特权。',
+    body: sorter('ACD', 'B') + '<p>对任何人犯罪，在适用法律上一律<b>平等</b>，不允许任何人有超越法律的特权——宪法平等原则在定罪量刑领域的落实，写在刑法<b>第 4 条</b>。D 对。</p>' },
+  { title: '陷阱复盘：近亲原则要分家',
+    cls: '', tag: '复盘', ribbon: null,
+    log: 'B 是刑法的"近亲"——同样保护无辜，但够亲近不等于够格。',
+    body: sorter('ACD', 'B') + '<p>B 的迷惑性：它同样是"法治名言级"准则，且与刑法共同服务于惩罚犯罪、保障无辜。但本题问的是<b>清单归属</b>——"够好"不等于"够格"，两张清单不能混。</p>' },
+  { title: '结论',
+    cls: 'good', tag: '答案', ribbon: null,
+    log: '第 3、4、5 条一个萝卜一个坑：法定、平等、相当——B 住在隔壁。',
+    body: sorter('ACD', 'B') + '<p>答案选 <b>ACD</b>：法定（A，第 3 条）+ 平等（D，第 4 条）+ 相当（C，第 5 条）。口诀：<b>定罪量刑归刑法，证据审判归刑诉</b>——B 住在隔壁。</p>' }
+];
+
+var COUNTS = [0, 0, 1, 2, 3, 4, 4, 4];
+
+var snaps = STEPS.map(function(s, i){
+  var sn = {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.log,
+    count: COUNTS[i],
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+  if (s.ribbon) sn.ribbon = s.ribbon;
+  return sn;
+});
+
+AW.init({
+  title: 'zz-2011-30 · 我国刑法明文规定的基本原则（多选）',
+  subtitle: '考点：刑法基本原则 · 实体法与程序法分家 · 选项逐项判定',
+  intro: '点击「▶ 播放」逐步展开：用"两张清单"分拣机过筛 A–D；右侧序号带实时标记对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已锁定原则项',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '答案选 <b>ACD</b>——<b>刑法三原则，占第 3、4、5 条</b>：罪刑法定（A）、适用刑法一律平等（D）、罪责刑相适应 / 罪刑相当（C）。记忆锚点：疑罪从无处理"证据不足怎么下判"，是<b>刑事诉讼法</b>的原则（B 出局）——口诀：<b>定罪量刑归刑法，证据审判归刑诉</b>；"够好"不等于"够格"。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：刑法基本原则——用"实体/程序"两张清单分拣</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——"刑法特有的"划定了分拣标准</h3>
+<p>法条列举题不能见原则就选，先立一台分拣机器。题干限定语是"刑法<strong>特有的</strong>、在立法/解释/适用中必须普遍遵循的"准则，还强调"<strong>明文规定</strong>"。于是每条原则先问一句：<strong>它处理的是什么性质的问题？</strong></p>
+<ul><li>刑法是<strong>实体法</strong>：回答"什么行为构成犯罪、构成什么罪、配什么刑罚"；</li><li>刑事诉讼法是<strong>程序法</strong>：回答"诉讼怎么走、证据怎么用、疑案怎么判"。</li></ul>
+<p>只有<strong>实体问题上的全局性准则</strong>才进刑法的清单。而且我国刑法第 3–5 条恰好逐条明文规定了三条——"明文规定"四个字就落在它们身上：</p>
+<table><thead><tr><th>条文</th><th>原则</th><th>管什么</th></tr></thead><tbody><tr><td>第 3 条</td><td><strong>罪刑法定</strong>（A）</td><td>法无明文规定不为罪、不处罚，限制刑罚权任意发动</td></tr><tr><td>第 4 条</td><td><strong>适用刑法一律平等</strong>（D）</td><td>任何人犯罪，适用法律上一律平等，不许有超越法律的特权</td></tr><tr><td>第 5 条</td><td><strong>罪责刑相适应 / 罪刑相当</strong>（C）</td><td>刑罚轻重与罪行、刑事责任相称，罚当其罪</td></tr></tbody></table>
+<h3>第 1 步：三个正确项对号入座</h3>
+<ul><li><strong>A（罪刑法定）</strong>：刑法的"铁门槛"——没有法律条文就没有犯罪与刑罚，防止随意入人于罪；</li><li><strong>D（平等适用）</strong>："法律面前人人平等"在定罪量刑领域的落点；</li><li><strong>C（罪刑相当）</strong>：量刑的标尺——重罪重罚、轻罪轻罚。注意它有两个名字："罪责刑相适应"是条文表述，"罪刑相当"是本题选项表述，指同一条原则。</li></ul>
+<h3>第 2 步：B 归哪张清单</h3>
+<p>"疑罪从无"说的是：<strong>证据不足、指控不能成立时，按无罪处理</strong>。拆开看，它处理的是"审判程序中在证据不足时<strong>如何下判</strong>"——这是程序问题、证据判断问题，不是"什么算犯罪、怎么量刑"的实体问题。所以它挂在<strong>刑事诉讼法</strong>名下（与无罪推定、非法证据排除等并列），不是刑法特有的原则。B 出局。</p>
+<h3>第 3 步：预判追问——两个最容易卡的"为什么"</h3>
+<ul><li><strong>疑罪从无难道不保护无辜吗？为什么不能选？</strong> 保护无辜没错，但它保护的方式是<strong>在诉讼程序里</strong>设定证据不足的处理规则；本题问的是"刑法明文规定的基本原则"，问的是清单归属，不是好坏。够好但住错门，照样不选。</li><li><strong>"罪刑相当"听着像学理口号，凭什么算明文规定？</strong> 它不是学者概括，而是刑法第 5 条的原文；本题的门槛是"明文规定"，C 稳稳跨过。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>"法治名言级"就选 → 误选 B</strong>：疑罪从无同样是法治文明的重要准则，迷惑性正在于它是刑法的"近亲"。分拣口诀：见<strong>证据、侦查、审判程序</strong>字眼归程序法，见<strong>定罪、量刑</strong>字眼归刑法。</li><li><strong>把"罪刑相当"当可有可无的学理说法 → 漏选 C</strong>：忘了"明文规定"这道硬门槛——第 3、4、5 条一个萝卜一个坑。</li><li><strong>以为"平等"是宪法原则、刑法里没有 → 漏选 D</strong>：宪法规定的是总原则，刑法第 4 条把它落实在定罪量刑领域，正是"刑法特有的"体现。</li></ul>
+<blockquote>记忆锚点：刑法三原则占第 3、4、5 条——<strong>法定（A）、平等（D）、相当（C）</strong>；疑罪从无住在隔壁刑诉法（B）——<strong>定罪量刑归刑法，证据审判归刑诉</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

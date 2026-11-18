@@ -1,8 +1,109 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2019-32 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2019-32</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2019-32 中央外事工作会议"四个既要又要" · 对仗配对动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+/* 四个领域格子：[格内文字, 格下注, 颜色类 ok/miss/dim/''] */
+function cells(arr, w){
+  return '<div class="aw-cells" style="--cell:' + (w || 92) + 'px;--gap:10px">' +
+    arr.map(function(c){
+      return '<div class="aw-col"><div class="aw-box ' + (c[2] || '') + '">' + c[0] +
+             '</div><div class="aw-idx">' + c[1] + '</div></div>';
+    }).join('') + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：世界转型过渡期，怎么"统筹谋划和推进对外工作"',
+    cls: 'key', sc: 'step', tag: '审题',
+    body: '<p>2018 年 6 月 22—23 日中央外事工作会议：深入分析<b>世界转型过渡期</b>国际形势的演变规律，准确把握<b>历史交汇期</b>我国外部环境的基本特征，其<b>基本要求</b>是——</p><p>考点：<b>"四个既要又要"</b>（会议原文的完整列举）。</p>' },
+  { t: '立机制：每组都是"既要大势 + 又要态势"的对仗',
+    cls: 'key', sc: 'shift', tag: '机制',
+    log: '立框架：机遇的大势 + 挑战的态势，四个领域',
+    body: '<p>"转型过渡期"=机遇与挑战并存且相互转化→每组都是两手抓：<b>既要把握的大势</b>（长期确定性、机遇主流）+<b>又要重视的态势</b>（短期复杂性、挑战）。</p>' +
+      cells([['政治格局', '多极化×大国关系', 'ok'], ['经济格局', '全球化×格局演变', 'ok'],
+             ['安全环境', '稳定×安全挑战', 'ok'], ['文明文化', '互鉴×激荡', 'ok']], 92) +
+      '<p style="margin-top:8px">四组词眼唯一（"多极化"只属政治格局……），按词眼对号入座即可，不必背选项顺序。</p>' },
+  { t: '选项 A：环境总体稳定大势 + 安全挑战复杂局面 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A', ribbon: {k: 1, ok: true},
+    body: '<p><b>安全环境</b>一组：国际环境<b>总体稳定</b>的大势（机遇）+ 国际安全挑战<b>错综复杂</b>的局面（挑战）。</p><p>句式对仗、词眼齐整——<b>A 对</b>。</p>' },
+  { t: '选项 B：全球化持续发展大势 + 经济格局深刻演变 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 B', ribbon: {k: 2, ok: true},
+    body: '<p><b>经济格局</b>一组：经济全球化<b>持续发展</b>的大势 + 世界经济格局<b>深刻演变</b>的动向。</p><p>"全球化"的词眼唯一——<b>B 对</b>。</p>' },
+  { t: '选项 C：多极化加速推进大势 + 大国关系深入调整 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C', ribbon: {k: 3, ok: true},
+    body: '<p><b>政治格局</b>一组：世界多极化<b>加速推进</b>的大势 + 大国关系<b>深入调整</b>的态势。</p><p>别把"大国关系"误归安全组——它跟着"多极化"走，属政治格局——<b>C 对</b>。</p>' },
+  { t: '选项 D：文明交流互鉴大势 + 思想文化相互激荡 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 D', ribbon: {k: 4, ok: true},
+    body: '<p><b>文明文化</b>一组：各种文明<b>交流互鉴</b>的大势 + 不同思想文化<b>相互激荡</b>的态势。</p><p>选项原文"交流<b>互整</b>"是"交流<b>互鉴</b>"的录入讹误，意思可辨，不影响判断——<b>D 对</b>。</p>' },
+  { t: '预判追问：全选太整齐，必有陷阱？——两个检验都过',
+    cls: 'key', sc: 'shift', tag: '辨析',
+    log: '结构对仗 + 内容互补，一一对应无外部假设',
+    body: '<p><b>结构检验</b>：四个选项都是"既要（大势）+ 又要（态势）"的标准对仗句式，无句式残缺、无混入其他会议内容。</p><p><b>内容检验</b>：四组覆盖政治、经济、安全、文明四个领域，互补重叠，共同构成"统筹谋划和推进对外工作"的完整要求——不存在"选三留一"的设计空间。</p>' },
+  { t: '结论：ABCD',
+    cls: 'good', sc: 'done', tag: '结论',
+    body: '<p>答案 <b>ABCD</b>：安全（A）· 经济（B）· 政治（C）· 文明文化（D）四个领域各一组对仗。</p><p>每组都是"机遇的大势 + 挑战的态势"——会议原文完整列举，识别出对仗格式后放心全选。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2019·32】统筹谋划和推进对外工作的基本要求（多选）',
+  subtitle: '考点：中央外事工作会议 · 方法：先立"大势 × 态势"对仗模型，四个领域一一对应',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先立四个领域的"大势+态势"对仗框架，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '记忆锚点：四个领域、四组对仗——<b>多极化 × 大国关系、全球化 × 经济格局、环境稳定 × 安全挑战、文明互鉴 × 思想激荡</b>，机遇与挑战两手都要抓（ABCD）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：中央外事工作会议的基本要求——先立"大势 × 态势"对仗模型，四组一一对应</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——"既要把握大势，又要重视态势"是每组的基本结构</h3>
+<p>2018 年 6 月中央外事工作会议强调：深入分析<strong>世界转型过渡期</strong>国际形势的演变规律，准确把握<strong>历史交汇期</strong>我国外部环境的基本特征，统筹谋划和推进对外工作。题问"基本要求是什么"——先立结构，再背内容：会议给出的要求是四组"<strong>既要……又要……</strong>"，每组都是同一个辩证句式的重复——</p>
+<ul><li><strong>既要把握的大势</strong>：长期起作用的确定性趋势，代表<strong>机遇的主流</strong>；</li><li><strong>又要重视的态势</strong>：短期内的复杂变化，代表<strong>挑战的一面</strong>。</li></ul>
+<p>"转型过渡期"的判断本身就说明了这套结构：形势转型期，机遇与挑战并存且相互转化，所以对外工作必须"两手抓"——只看大势会盲目乐观，只看态势会陷入被动。四组要求分布在<strong>四个领域</strong>：</p>
+<table><thead><tr><th>领域</th><th>把握的大势（机遇）</th><th>重视的态势（挑战）</th></tr></thead><tbody><tr><td>政治格局</td><td>世界多极化加速推进</td><td>大国关系深入调整</td></tr><tr><td>经济格局</td><td>经济全球化持续发展</td><td>世界经济格局深刻演变</td></tr><tr><td>安全环境</td><td>国际环境总体稳定</td><td>国际安全挑战错综复杂</td></tr><tr><td>文明文化</td><td>各种文明交流互鉴</td><td>不同思想文化相互激荡</td></tr></tbody></table>
+<h3>第 1 步：A~D 对号入座</h3>
+<ul><li><strong>A 对</strong>："把握国际环境总体稳定的大势 + 重视国际安全挑战错综复杂的局面"——安全环境一组，机遇是总体和平稳定，挑战是安全问题的复杂性。</li><li><strong>B 对</strong>："把握经济全球化持续发展的大势 + 重视世界经济格局深刻演变的动向"——经济格局一组，机遇是全球化的深化，挑战是格局的力量对比变化。</li><li><strong>C 对</strong>："把握世界多极化加速推进的大势 + 重视大国关系深入调整的态势"——政治格局一组，机遇是多极化趋势，挑战是大国关系的重组。</li><li><strong>D 对</strong>："把握各种文明交流互鉴的大势 + 重视不同思想文化相互激荡的态势"——文明文化一组。选项原文"交流互整"是"交流<strong>互鉴</strong>"的录入讹误，不影响判断：大意仍是文明交流、互学互鉴。</li></ul>
+<h3>第 2 步：为什么敢放心全选？</h3>
+<p>两个检验都通过：<strong>结构上</strong>，四个选项都是"既要（大势）+ 又要（态势）"的标准对仗句式，与会议原文的四组列举一一对应，没有哪一项句式残缺或混入其他会议的内容；<strong>内容上</strong>，四组恰好覆盖政治、经济、安全、文明四个领域，互补重叠、共同构成"统筹谋划和推进对外工作"的完整要求。这类"原文列举式"多选，识别出对仗结构后全选是最稳的——不存在"选三个留一个"的设计空间。</p>
+<h3>预判追问：四组顺序为什么是 A=安全、B=经济、C=政治、D=文明？</h3>
+<p>选项编排顺序与会议原文的领域顺序不同（原文大体是政治格局、经济格局、安全环境、文明文化）。这不影响作答：每组的"大势+态势"词眼是唯一的（"多极化"只属于政治格局，"全球化"只属于经济格局），按词眼对号入座即可，不必背选项顺序。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选</strong>：觉得"全选太整齐，必有陷阱"。本题四组是会议原文的完整列举，属于一一对应、无外部假设的全选结构；真正的功夫在识别"大势 + 态势"对仗格式。</li><li><strong>错配领域</strong>：把"大国关系深入调整"误归到安全组。归属看词眼："多极化 × 大国关系"是政治格局一组；安全组的词眼是"环境稳定 × 安全挑战"。</li><li><strong>被"互整"绊住</strong>：D 选项的"互整"是录入讹误（应为"互鉴"），意思可辨，不应因此排除。</li></ul>
+<blockquote>记忆锚点：四个领域、四组对仗——<strong>多极化 × 大国关系（政治）、全球化 × 经济格局（经济）、环境稳定 × 安全挑战（安全）、文明互鉴 × 思想激荡（文明）</strong>；每组都是"机遇的大势 + 挑战的态势"，两手都要抓（ABCD）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

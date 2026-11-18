@@ -1,8 +1,94 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-29 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-29</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2024-29 · 党的自我革命：三句标准表述与一个绝对化陷阱</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（概念类：机制先行 + 用 A 打 C） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：先立机制——「第二个答案」与「区别于」的排他性',
+    cls: 'key',
+    body: '<p>跳出历史周期率两个答案：<b>人民监督</b>（毛泽东·延安窑洞对）＋<b>自我革命</b>（习近平·「以党的自我革命引领社会革命」）。自我革命成立的前提：党<b>没有任何自己特殊的利益</b>，才敢刀刃向内——所以「能不能自我革命」是党与其他政党的<b>分界线</b>。「区别于」三个字自带排他性，先记住它。</p>' },
+  { title: '选项 A：勇于自我革命是党区别于其他政党的显著标志',
+    cls: 'good', k: 1, pick: true,
+    body: '<p>标准表述——刀刃向内是党的<b>特有品格</b>，「区别于」正建立在「没有特殊利益」的前提上。<b>符合 → 入选</b>。</p>' },
+  { title: '选项 B：自我革命精神是党永葆青春活力的强大支撑',
+    cls: 'good', k: 2, pick: true,
+    body: '<p>标准表述，与「以党的自我革命引领社会革命」配套——先管好自己，才能领好社会。<b>符合 → 入选</b>。</p>' },
+  { title: '选项 C：所有政党都是在不断自我革命中淬炼而成的',
+    cls: 'bad', k: 3, pick: false,
+    body: '<p><b>与 A 直接矛盾</b>：若所有政党都在自我革命，「区别于其他政党的显著标志」就不成立了。多数政党受制于私利集团绑架，不敢也不能真刀真枪革自己的命。<b>排除</b>。</p>' },
+  { title: '选项 D：自我革命是跳出历史周期率的第二个答案',
+    cls: 'good', k: 4, pick: true,
+    body: '<p>标准表述——第一个答案是<b>人民监督</b>（窑洞对），第二个答案是<b>自我革命</b>，对仗记忆。<b>符合 → 入选</b>。</p>' },
+  { title: '干扰项解剖：C 把特有品格泛化成共性',
+    cls: 'key',
+    body: '<p>C 把党的<b>特有品格</b>说成<b>一切政党的共性</b>，等于抹掉「区别于」的排他性——它是对 A 的镜像否定。考场技巧：<b>「所有」「都」式绝对化表述与「区别于」式排他表述同现，二者必有一假</b>，本题就是让你用 A 打 C。</p>' },
+  { title: '结论：ABD 入选',
+    cls: 'good',
+    body: '<p>三句标准话齐活：显著标志、强大支撑、第二个答案。<b>答案 ABD。</b></p>' },
+];
+
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+
+AW.init({
+  title: 'zz-2024-29 · 党的自我革命',
+  subtitle: '2024 年第 29 题（多选）· 考点：党的自我革命 · 先立「两个答案」再逐项对号',
+  counterLabel: '已入选',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立「第二个答案」的历史坐标，再用 A 去打 C。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABD',
+    html: '记忆锚点：自我革命三句标准话——<b>显著标志（A）、强大支撑（B）、第二个答案（D）</b>；两个答案对仗：人民监督—毛泽东（窑洞对）、自我革命—习近平。一见「所有政党都……」，就对照「区别于其他政党」找矛盾。'
+  }
+});
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：党的自我革命——三句标准表述与一个绝对化陷阱</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——「第二个答案」的历史坐标与「区别于」的排他性</h3>
+<p>跳出历史周期率，党给过<strong>两个答案</strong>：第一个是毛泽东在延安「窑洞对」里给出的<strong>人民监督</strong>（让人民来监督政府，政府才不敢松懈）；第二个是习近平总书记给出的<strong>自我革命</strong>（以党的自我革命引领社会革命）。题干正是沿这条线从 1939 年「伟大工程」讲到新时代「新的伟大工程」。</p>
+<p>自我革命之所以能成立，靠一个前提：<strong>党没有任何自己特殊的利益</strong>——所以才敢于刀刃向内、直面问题。这也正是 A 项「区别于其他政党的显著标志」的原理根据：能不能真刀真枪地自我革命，恰恰是党与其他多数政党的<strong>分界线</strong>。「区别于」三个字自带排他性——这一步先想明白，C 的真假立刻见分晓。</p>
+<h3>第 1 步：四个选项逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判定</th><th>依据</th></tr></thead><tbody><tr><td>A 勇于自我革命是党区别于其他政党的显著标志</td><td>✅</td><td>标准表述；刀刃向内是党的特有品格</td></tr><tr><td>B 自我革命精神是党永葆青春活力的强大支撑</td><td>✅</td><td>标准表述，与「以党的自我革命引领社会革命」配套</td></tr><tr><td>C 所有政党都是在不断自我革命中淬炼而成的</td><td>❌</td><td>与 A 直接矛盾——若所有政党都在自我革命，「区别于其他政党的显著标志」就不成立了</td></tr><tr><td>D 自我革命是党跳出历史周期率的第二个答案</td><td>✅</td><td>标准表述（第一个答案是人民监督）</td></tr></tbody></table>
+<p>→ 选 <strong>ABD</strong>。</p>
+<h3>为什么 C 错得如此彻底（预判追问）</h3>
+<p>「自我革命」之所以成为<strong>显著标志</strong>，恰恰因为它不是政党的普遍属性：惟有党没有自己特殊的利益，才敢于刀刃向内；多数政党受制于私利集团绑架，不敢也不能真刀真枪地革自己的命。C 把我们党的<strong>特有品格</strong>泛化成<strong>一切政党的共性</strong>，等于亲手抹掉了「区别于」的排他性——它是对 A 的镜像式否定。考场技巧：<strong>「所有」「都」式绝对化表述与「区别于」式排他表述同现时，二者必有一假</strong>，本题就是让你用 A 打 C。</p>
+<h3>易错点：每个干扰项/漏选对应哪种误解</h3>
+<ul><li><strong>误选 C</strong>：把「政党都需要管好自己」泛化为「所有政党都在自我革命」——忽视了前提（没有特殊利益）的差异。</li><li><strong>漏 D</strong>：只记「显著标志」，忘了「第二个答案」。两个答案对仗记忆：人民监督—毛泽东（窑洞对），自我革命—习近平（二十大报告）。</li><li><strong>漏 B</strong>：把「永葆青春活力的强大支撑」当临时修辞划掉；它是与「自我革命引领社会革命」配套的功能表述。</li><li><strong>混淆「两个伟大工程」</strong>：1939 年《〈共产党人〉发刊词》称党的建设为「伟大工程」；新时代称「党的建设新的伟大工程」，题干首尾呼应的就是这条线。</li></ul>
+<blockquote>记忆锚点：自我革命三句标准话——<strong>显著标志（A）、强大支撑（B）、第二个答案（D）</strong>；一见「所有政党都……」，就对照「区别于其他政党」找矛盾。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

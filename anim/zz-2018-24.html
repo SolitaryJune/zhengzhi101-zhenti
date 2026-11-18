@@ -1,8 +1,93 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-24 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-24</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>2018·24 生态文明制度体系：河长制的病灶与药方</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- 复制自 anim_math_concept_template（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：河长制治的是什么病',
+    cls: 'key',
+    log: '题眼：落实属地责任，健全长效机制',
+    body: '<p>材料先讲病：河湖管理保护过去「<b>部门职责分散交叉</b>」——九龙治水，出事找不到头。药方是「<b>落实属地责任，健全长效机制</b>」：把每条河包给具体领导，责任到人。考点：生态文明制度体系包括哪些制度。</p>' },
+  { title: '先立机制：把「分散交叉」变成「清晰统一」',
+    cls: 'key',
+    body: '<p>看懂「病灶—药方」结构，标尺就有了：生态文明制度体系建设方向＝<b>分散 → 统一、无人负责 → 终身追责</b>。拿这把尺子量四个选项，选项里若把「分散交叉」当要完善的对象，方向就反了。</p>' },
+  { title: 'A：完善经济社会发展考核评价体系',
+    cls: 'good',
+    body: '<p>把资源消耗、环境损害、生态效益纳入考核——指挥棒一改，地方才不只盯 GDP。制度体系第一块基石：<b>评价制度</b>。<b>A 对。</b></p>' },
+  { title: 'B：完善生态环境损害责任终身追究制度',
+    cls: 'good',
+    body: '<p>与河长制「落实属地责任」直接呼应——责任人跑不掉、离任也追责。第二块基石：<b>责任制度</b>。<b>B 对。</b></p>' },
+  { title: 'C：完善生态环境保护管理制度',
+    cls: 'good',
+    body: '<p>河长制、湖长制本身就是<b>管理制度</b>层面的创新——完善生态环境保护管理制度是第三块基石。<b>C 对。</b></p>' },
+  { title: 'D：完善「部门职责分散交叉」的环保监督体系',
+    cls: 'bad',
+    body: '<p>错。细读限定词：要「完善」的竟是「<b>分散交叉</b>」的体系？可「分散交叉」正是河长制要<b>治</b>的病，不是要立的制——材料明说方向是「落实属地责任」。褒贬词偷换：主干眼熟，限定词把政策方向拧了 180 度。<b>D 错。</b></p>' },
+  { title: '结论：ABC',
+    cls: 'good',
+    body: '<p>三块基石：考核评价体系（A）＋损害责任终身追究（B）＋生态环境保护管理制度（C）；D 把病灶当药方。答案选 <b>ABC</b>。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var optK = { 2: 1, 3: 2, 4: 3, 5: 4 }[i];
+  var optLetter = optK ? 'ABCD'[optK - 1] : '';
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: i === 0 ? '审题' : (i === 1 ? '机制' : (i === STEPS.length - 1 ? '结论' : '选项 ' + optLetter)),
+    log: s.log || s.title,
+    count: optK || 0,
+    ribbon: optK ? { k: optK, ok: s.cls !== 'bad' } : undefined,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2018·24】生态文明制度体系：河长制的病灶与药方',
+  subtitle: '考点：生态文明制度体系建设 · 考核评价/终身追责/管理制度 · 多选题',
+  counterLabel: '已核选项',
+  ribbonTitle: '选项判定（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链：先看河长制治什么病，再逐项判定 A/B/C/D。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: '记忆锚点：制度三基石＝<b>考核评价体系（A）＋损害责任终身追究（B）＋生态环境保护管理制度（C）</b>；河长制治「分散交叉」——所以「完善分散交叉的体系」必错（D）：盯紧限定词。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：生态文明制度体系的三块基石——从「河长制治的是什么」反推</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——河长制针对的病灶是什么</h3>
+<p>材料先讲病：河湖管理保护过去「<strong>部门职责分散交叉</strong>」，出事找不到头——九龙治水，人人管、人人不管。《关于全面推行河长制的意见》的药方是「<strong>落实属地责任，健全长效机制</strong>」：把每条河包给一位具体领导，责任到人。看懂了这个「病灶—药方」结构就明白：生态文明制度体系建设是要把<strong>分散交叉</strong>变成<strong>清晰统一</strong>，把<strong>无人负责</strong>变成<strong>终身追责</strong>。拿这个标尺去量四个选项。</p>
+<h3>第 1 步：三个正确项对号</h3>
+<ul><li><strong>A 完善经济社会发展考核评价体系</strong> ✅：把资源消耗、环境损害、生态效益纳入考核评价——指挥棒一改，地方才不会只盯 GDP。这是制度体系的第一块基石（评价制度）。</li><li><strong>B 完善生态环境损害责任终身追究制度</strong> ✅：与河长制「落实属地责任」直接呼应——责任人跑不掉、离任也追责。这是第二块基石（责任制度）。</li><li><strong>C 完善生态环境保护管理制度</strong> ✅：河长制、湖长制本身就是管理制度层面的创新；完善管理制度是第三块基石（管理制度）。</li></ul>
+<h3>第 2 步：D 错在哪——把病灶当药方</h3>
+<ul><li><strong>D 完善部门职责分散交叉的环保监督体系</strong> ❌：细读这半句——要「完善」的竟是「<strong>分散交叉</strong>」的体系？可「分散交叉」正是河长制要<strong>治</strong>的病，不是要立的制。材料明说河长制是「落实属地责任」，方向是把分散变集中、交叉变清晰；D 恰好把方向写反。这是典型的<strong>褒贬词偷换</strong>：主体词（环保监督体系）眼熟，限定词（分散交叉）却把政策方向拧了 180 度。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 D</strong>：只看「完善……环保监督体系」的主干就打勾。时政题要盯<strong>限定词</strong>——「分散交叉」这类描述性定语往往就是出题人埋的雷。</li><li><strong>漏选 A</strong>：觉得「考核评价」太抽象不像制度。恰恰相反，考核评价体系是生态文明制度体系里最先明确的一项（破坏生态环境终身追责、考核评价体系并提）。</li><li><strong>混淆河长制与「行政区交界推诿」</strong>：河长制解决的就是跨界河流责任不清问题，所以「属地责任＋长效机制」是理解全题的钥匙。</li></ul>
+<blockquote>记忆锚点：生态文明制度三基石＝<strong>考核评价体系（A）＋损害责任终身追究（B）＋生态环境保护管理制度（C）</strong>；河长制治「分散交叉」——所以「完善分散交叉的体系」必错。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

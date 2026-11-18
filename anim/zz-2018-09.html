@@ -1,8 +1,112 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-09 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-09</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2018-09 近代中国社会最主要矛盾 · 两对基本矛盾排位动画</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<!-- 复制自政治站概念模板（无 KaTeX 版，纯文本推理链卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+function tl(rows){
+  return '<div>' + rows.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:110px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：三重限定，三道闸逐一过',
+    log: '贯穿始终＋决定性＋最主要',
+    body: '<p>题干给矛盾加了三道闸：「<b>贯穿整个半殖民地半封建社会的始终</b>」「对中国近代社会的发展变化起<b>决定性作用</b>」「<b>最主要</b>的矛盾」。筛选从严，答案必须<b>三关全过</b>——先立机制，再过闸。</p>' },
+  { tag: '机制', cls: 'key', title: '先立机制：半殖民地半封建=矛盾「叠加态」',
+    log: '多组矛盾并存，但基本矛盾只有两对',
+    body: tl([
+      ['社会形态', '既保留封建制度残余，又被资本-帝国主义强行卷入世界体系——两组时代叠加，矛盾错综复杂'],
+      ['多组并存', '帝国主义与中华民族、封建主义与人民大众、无产阶级与资产阶级、农民阶级与地主阶级……'],
+      ['两对基本矛盾', '<b>帝国主义和中华民族的矛盾</b> ＋ <b>封建主义和人民大众的矛盾</b>——教材从多组矛盾中归纳出的主要矛盾'],
+      ['还要再排位', '两对之中谁是「最主要」？判据=谁是<b>总根源</b>'],
+    ]) },
+  { tag: '机制', cls: 'key', title: '再立机制：为什么帝与中华民族居首',
+    log: '侵略是一切灾难的总根源，还扶植封建势力当支柱',
+    body: '<p><b>帝国主义侵略是近代中国一切灾难的总根源</b>：①直接压迫中华民族——民族不独立，发展无从谈起；②扶植封建势力作为自己统治中国的支柱——列强与封建势力相互勾结，使封建主义与人民大众的矛盾也打上侵略的烙印。所以两对基本矛盾里<b>帝国主义和中华民族的矛盾居首位</b>，它规定近代中国革命的首要任务：民族独立、人民解放。</p>' },
+  { tag: '选项A', cls: 'good', ribbon: { k: 1, ok: true }, title: 'A：三关全过——当选',
+    log: 'A 三闸全过',
+    body: '<p>A「帝国主义和中华民族的矛盾」——<b>贯穿始终</b>（从鸦片战争到近代终结全程在场）＋<b>起决定性作用</b>（一切灾难的总根源，规定社会走向）＋<b>最主要</b>（两对基本矛盾之首）。<b>当选</b>。</p>' },
+  { tag: '选项B', cls: 'bad', ribbon: { k: 2, ok: false }, title: 'B：新户头——随资本主义才出现，不贯穿始终',
+    log: 'B 时间上过不了第一闸',
+    body: '<p>B「无产阶级和资产阶级的矛盾」——随民族资本主义产生发展才显现，时间上<b>不「贯穿始终」</b>，地位上也不主导近代社会的走向。<b>排除</b>。</p>' },
+  { tag: '选项C', cls: 'bad', ribbon: { k: 3, ok: false }, title: 'C：两对之一，但居第二位——漏「最主要」',
+    log: 'C 是标准表述，错在排位',
+    body: '<p>C「封建主义和人民大众的矛盾」——确实是两对基本矛盾<b>之一</b>，也贯穿始终；但它是<b>第二位</b>：其解决被帝国主义矛盾牵制，还被打上侵略烙印。「最主要」的定语不落在它头上。<b>排除</b>。</p>' },
+  { tag: '选项D', cls: 'bad', ribbon: { k: 4, ok: false }, title: 'D：旧社会账本——封建社会的过期答案',
+    log: 'D 是旧王朝逻辑',
+    body: '<p>D「农民阶级和地主阶级的矛盾」——这是<b>封建社会</b>的主要矛盾，套到半殖民地半封建社会已经过期：「半殖民地」三个字正是新矛盾（帝国主义与中华民族）登场的标志。<b>排除</b>。</p>' },
+  { tag: '追问', cls: 'key', title: '预判追问：为什么 C 最有迷惑性',
+    log: '熟人选项，防「记住两对忘了排位」',
+    body: '<p>C 是<b>标准表述</b>——背过的同学一眼看到「熟人」就选。错只错在排序：「最主要」是题眼定语，必须再问一层「两对里谁压得住全局」。对策：记忆背成<b>有层级的一组</b>——先背两对基本矛盾，再背「最主要=第一对」。</p>' },
+  { tag: '结论', cls: 'good', title: '结论：两对＋排位，一句带走',
+    log: '锁定 A：帝国主义和中华民族的矛盾',
+    body: '<p>答案 <b>A</b>。记忆锚点：两对基本矛盾=<b>帝国主义和中华民族＋封建主义和人民大众</b>；<b>最主要=前者</b>（一切灾难的总根源）；农民与地主是旧社会账本，无产与资产是后来的新户头。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : (s.cls === 'good' ? 'ok' : 'step')),
+    tag: s.tag,
+    log: s.log,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2018·09】近代中国半殖民地半封建社会的最主要矛盾',
+  subtitle: '单选 1 分 · 考点：两对基本矛盾及其排位 · 方法：先立「叠加态—两对—排位」机制，再按三重限定过闸',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 当选 / ✗ 干扰）',
+  intro: '点击「▶ 播放」逐步展开推理链：先立两对基本矛盾与其层级，再逐个选项过三道闸。',
+  snaps: snaps,
+  result: {
+    big: '答案 A：帝国主义和中华民族的矛盾',
+    html: '两对基本矛盾=<b>帝国主义和中华民族＋封建主义和人民大众</b>；其中<b>最主要=帝国主义和中华民族的矛盾</b>——帝国主义侵略是近代中国一切灾难的总根源，还扶植封建势力为统治支柱，使封建矛盾也打上侵略烙印。B（无产与资产）是不贯穿始终的新户头，C（封建与人民大众）居第二位，D（农民与地主）是封建社会的旧账本。近代革命的首要任务——民族独立、人民解放——正是从这个「最主要」里推导出来的。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：半殖民地半封建社会——两对基本矛盾谁居首</h2>
+<p>答案：<strong>A（帝国主义和中华民族的矛盾）</strong>。</p>
+<h3>第 0 步：先立机制——矛盾体系是怎么长出来的</h3>
+<p>近代中国沦为半殖民地半封建社会，是个「叠加态」：既保留封建制度的残余，又被资本-帝国主义强行卷入世界体系，矛盾因此错综复杂——帝国主义与中华民族、封建主义与人民大众、无产阶级与资产阶级、农民阶级与地主阶级……多组并存。但教材从中归纳出<strong>两对基本矛盾（主要矛盾）</strong>：</p>
+<ul><li><strong>帝国主义和中华民族的矛盾</strong>；</li><li><strong>封建主义和人民大众的矛盾</strong>。</li></ul>
+<p>两对之中还要再分主次，判据是「谁是总根源」：<strong>帝国主义侵略是近代中国一切灾难的总根源</strong>——它不仅直接压迫中华民族，还扶植封建势力作为自己统治中国的支柱，列强与封建势力相互勾结，使封建主义与人民大众的矛盾也打上了侵略的烙印。所以<strong>最主要的矛盾是帝国主义和中华民族的矛盾</strong>，它规定着近代中国的走向：民族独立、人民解放由此成为近代中国革命的首要任务。</p>
+<h3>第 1 步：题眼三重限定逐一筛</h3>
+<p>题眼给了三道闸：「<strong>贯穿始终</strong>」（从鸦片战争到近代终结都在场）＋「<strong>决定性作用</strong>」（规定社会发展变化）＋「<strong>最主要</strong>」（两对基本矛盾里再排位）。逐一过闸：</p>
+<table><thead><tr><th>选项</th><th>贯穿始终？</th><th>决定性？</th><th>判定</th></tr></thead><tbody><tr><td>A 帝国主义和中华民族的矛盾</td><td>✅ 全程在场</td><td>✅ 一切灾难的总根源</td><td><strong>三关全过，当选</strong></td></tr><tr><td>B 无产阶级和资产阶级的矛盾</td><td>❌ 随民族资本主义产生才出现</td><td>❌</td><td>排除</td></tr><tr><td>C 封建主义和人民大众的矛盾</td><td>✅</td><td>居第二位</td><td>过两关、漏「最主要」，排除</td></tr><tr><td>D 农民阶级和地主阶级的矛盾</td><td>❌ 封建社会的旧矛盾</td><td>❌</td><td>排除</td></tr></tbody></table>
+<h3>预判追问：为什么 C 最有迷惑性</h3>
+<p>C 的危险在于它是<strong>标准表述</strong>——「封建主义和人民大众的矛盾」确实是两对基本矛盾之一，背过的同学一眼看到「熟人」就选它。错只错在排序：「<strong>最主要</strong>」三个字是题眼定语，必须再往里问一层「两对里谁压得住全局」——帝国主义矛盾是总根源，封建矛盾被打上侵略烙印，只能居第二位。对策是把记忆背成<strong>有层级的一组</strong>：先背两对基本矛盾，再背「最主要=第一对」。</p>
+<h3>易错点</h3>
+<ul><li><strong>记住「两对」忘了「谁最主要」选 C</strong>：层级记忆残缺——两对要背，两对的主次也要背。</li><li><strong>把新社会的新矛盾选 B</strong>：无产阶级与资产阶级的矛盾随民族资本主义发展才显现，时间上不「贯穿始终」，地位上也不主导近代社会的走向。</li><li><strong>拿旧王朝逻辑选 D</strong>：农民与地主是封建社会的主要矛盾，套到半殖民地半封建社会已经过期——「半殖民地」三个字正是新矛盾（帝国主义与中华民族）登场的标志。</li></ul>
+<blockquote>记忆锚点：两对基本矛盾=<strong>帝国主义和中华民族＋封建主义和人民大众</strong>；<strong>最主要=前者</strong>（一切灾难的总根源）；农民与地主是旧社会账本，无产与资产是后来的新户头。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

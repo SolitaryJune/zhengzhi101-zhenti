@@ -1,8 +1,143 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-09 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-09</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2026·09 生态环境问题系统解决的根本之策</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行格子（因果链、映射格用）
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：「根本之策」＝先找病根再开药方",
+    "cls": "key",
+    "tag": "审题",
+    "log": "题眼：生态环境问题系统解决的根本之策是什么",
+    "body": "<p>「根本之策」类题目的通用解法：<b>先诊断病根，药方必须打在病根上</b>。题干给了一串现象（环保成及格线、废物变宝贝、绿色消费），它们是「症状」；要答的是病根层面的那味药。先立病根诊断，再让选项对号。</p>"
+  },
+  {
+    "title": "先立机制：病根在「方式」",
+    "cls": "key",
+    "tag": "机制",
+    "log": "生态问题归根到底是发展方式和生活方式问题",
+    "body": "<p>权威诊断一锤定音：生态环境问题<b>归根到底是发展方式和生活方式问题</b>——粗放的发展方式过度消耗资源、大量排放废弃物；高消耗的生活方式又放大需求端压力。病根既然在「方式」，根本之策就只能是从源头<b>转变经济发展方式和生活方式</b>（绿色发展）。</p>"
+  },
+  {
+    "title": "现象映射：题干三条全落在「方式」两端",
+    "cls": "key",
+    "tag": "机制",
+    "log": "企业门槛之变、废物生财、绿色消费 → 发展方式＋生活方式",
+    "body": cells([
+      {"t": "环保从加分项<br>变成及格线", "c": "", "l": "企业·发展方式"},
+      {"t": "工业废物变成<br>生财的宝贝", "c": "", "l": "循环经济"},
+      {"t": "无需餐具·共享单车<br>一级能效家电", "c": "", "l": "消费·生活方式"}
+    ]) + "<p>三个现象覆盖「发展方式＋生活方式」两端，正是病根诊断的注脚，全部指向同一个方向。</p>"
+  },
+  {
+    "title": "A 排除：空间格局不动「怎么做」",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "国土空间布局管「在哪里做」 → A 排除",
+    "ribbon": {"k": 1, "ok": false},
+    "body": "<p><b>国土空间开发布局优化</b>属于空间格局层面的举措，管的是「在哪里做、做多少」，不动「怎么做」这个根子——够不上「根本之策」。<b>A 错误</b>。</p>"
+  },
+  {
+    "title": "C 排除：制度是保障，不是病根之药",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "制度管住行为，但不改变行为背后的方式 → C 排除",
+    "ribbon": {"k": 3, "ok": false},
+    "body": "<p><b>生态文明制度体系的完善</b>是重要保障和约束——能管住行为，但不改变行为背后的方式本身。题干列举的变化都发生在生产、生活的「方式」层面，而非制度条文层面。<b>C 错误</b>。</p>"
+  },
+  {
+    "title": "D 排除：「系统治理」是路径，不是病根",
+    "cls": "bad",
+    "tag": "排除",
+    "log": "「系统」字面相近但层次不同 → D 排除",
+    "ribbon": {"k": 4, "ok": false},
+    "body": "<p><b>山水林田湖草沙一体化保护和系统治理</b>与题干「系统解决」字面相近，是最大的干扰项。但它讲的是<b>治理对象如何统筹</b>（生态要素一体保护），仍在「治」的层面——是路径，不是病根层面的策。<b>D 错误</b>。</p>"
+  },
+  {
+    "title": "B 对号：转变发展方式和生活方式",
+    "cls": "good",
+    "tag": "命中",
+    "log": "直指病根、切断污染源头 → B 正确",
+    "ribbon": {"k": 2, "ok": true},
+    "body": "<p><b>经济发展方式和生活方式转变</b>与病根诊断一一对应：只有从源头变「方式」，污染才不再产生——这正是「根本之策」的含义，绿色发展由此成为中国式现代化的鲜明底色。<b>B 正确</b>。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "tag": "结论",
+    "log": "锁定 B：经济发展方式和生活方式转变",
+    "body": "<p>答案 <b>B</b>。记忆锚点：生态病根＝发展方式和生活方式问题 → 根本之策＝绿色转型；制度是保障、空间布局是安排、一体化治理是路径，都够不上「根本」。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'))),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  "title": "政治 2026·09 生态环境问题系统解决的根本之策",
+  "subtitle": "考点：生态文明与绿色发展 · 方法：先诊断「病根在方式」，再现象映射对号",
+  "counterLabel": "推理步",
+  "ribbonTitle": "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  "intro": "点击「▶ 播放」逐步展开推理链。",
+  "snaps": snaps,
+  "result": {
+    "big": "答案 B",
+    "html": "记忆锚点：<b>生态环境问题归根到底是发展方式和生活方式问题</b> → 根本之策＝经济发展方式和生活方式绿色转变；制度完善是保障、国土空间布局是安排、山水林田湖草沙一体化是治理路径。选 <b>B</b>。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：生态环境问题系统解决的根本之策</h2>
+<p>答案：<strong>B（经济发展方式和生活方式转变）</strong>。</p>
+<h3>第 0 步：先立机制——先诊断病根，再开药方</h3>
+<p>「根本之策」类题目有通用解法：先找病根，药方必须打在病根上。生态环境问题的病根在哪？权威诊断一锤定音：生态环境问题<strong>归根到底是发展方式和生活方式问题</strong>——粗放的发展方式过度消耗资源、大量排放废弃物，高消耗的生活方式又放大需求端压力。病根既然在「方式」，系统解决的<strong>根本之策</strong>就只能是从源头转变<strong>经济发展方式和生活方式</strong>（绿色发展）。其他任何举措若不动「方式」，都只是外围保障或治理路径。</p>
+<h3>第 1 步：题干现象逐条映射（验证病根诊断）</h3>
+<table><thead><tr><th>题干现象</th><th>说明什么在变</th></tr></thead><tbody><tr><td>环保从「加分项」变成企业生存发展的「及格线」</td><td>生存门槛改变 → 企业发展方式绿色转型</td></tr><tr><td>无处堆放的工业废物成为「可以生财的宝贝」</td><td>循环经济 → 发展方式内部结构之变</td></tr><tr><td>无需餐具、共享单车、买一级能效家电</td><td>消费习惯之变 → 生活方式绿色化</td></tr></tbody></table>
+<p>三个现象恰好覆盖「发展方式＋生活方式」两端，全部指向 B。</p>
+<h3>第 2 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因</th></tr></thead><tbody><tr><td>A 国土空间开发布局优化</td><td>❌</td><td>管的是「在哪里做」的空间格局，不动「怎么做」的根子</td></tr><tr><td>B 经济发展方式和生活方式转变</td><td>✅</td><td>与病根诊断一一对应，直指源头</td></tr><tr><td>C 生态文明制度体系的完善</td><td>❌</td><td>制度是保障和约束，能管住行为，但不改变行为背后的方式本身</td></tr><tr><td>D 山水林田湖草沙一体化保护和系统治理</td><td>❌</td><td>治理对象的统筹方针，仍在「治」的层面，是路径不是病根之策</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 D（「系统」字面陷阱）</strong>：题干说「系统解决」，选项 D 恰好带「系统治理」四个字——字面相近但层次不同，一体化保护讲的是如何统筹治理生态要素。</li><li><strong>选 C（制度万能印象）</strong>：制度体系完善是重要保障，但题干列举的变化都发生在生产、生活的「方式」层面，而非制度条文层面。</li><li><strong>选 A（把布局当顶层设计）</strong>：布局优化是重要一环，但「根本之策」必须切断污染源头——只有转变方式才做得到。</li></ul>
+<blockquote>记忆锚点：生态病根＝发展方式和生活方式问题 → 根本之策＝绿色转型；制度是保障、空间布局是安排、一体化治理是路径，都够不上「根本」。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

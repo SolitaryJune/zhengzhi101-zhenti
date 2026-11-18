@@ -1,8 +1,127 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-15 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-15</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2022 · 「加快建设」的宾语——人才战略部署的层级定位</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 模板：纯文本推理链卡片（政治站无 KaTeX 版），只改下方题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：时政题抓「原话搭配」",
+    "cls": "key",
+    "body": "<p>题干引 2021.9.27-28 中央人才工作会议原话：「深入实施新时代人才强国战略，<b>加快建设</b>……」。时政题考<b>表述层级</b>：总目标、战略布局、平台载体各有专属搭配，设问动词「加快建设」挂在哪一层，是判定关键。</p>",
+    "log": "「加快建设」挂哪一层"
+  },
+  {
+    "title": "先立模型：三层部署的挂载关系",
+    "cls": "key",
+    "body": "<p>会议部署自上而下三层，各挂各的动词：<b>总目标</b>——回答「成为什么」，表述为世界重要人才中心和创新高地，专属动词「加快建设」；<b>战略布局</b>——回答「在哪里建」，京沪粤高水平人才高地、中心城市平台，动词「建设」；<b>平台载体</b>——回答「用什么干」，国家实验室、新型研发机构等，动词「打造/依托」。</p>",
+    "log": "目标-布局-载体三层，动词各归各"
+  },
+  {
+    "title": "机制：回到原话完整句",
+    "cls": "key",
+    "body": "<p>目标句完整版：「全方位培养、引进、用好人才，<b>加快建设世界重要人才中心和创新高地</b>」。「加快建设」回答的是中国人才事业要<b>成为什么</b>；往下两层都是实现总目标的路径与工具，层级递降——宾语只能落总目标层。</p>",
+    "log": "宾语落在总目标层"
+  },
+  {
+    "title": "选项 A：世界重要人才中心和创新高地",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p>原话「加快建设<b>世界重要人才中心和创新高地</b>」——「加快建设」的宾语正是这个总目标，<b>逐字命中</b>。<b>A 正确</b>。</p>",
+    "log": "A=总目标宾语，逐字命中"
+  },
+  {
+    "title": "选项 B：京沪粤高水平人才高地",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>京、沪、大湾区是<b>战略布局节点</b>（「在哪里建」），层级低于总目标；且原话里它前面的动词是「建设高水平人才高地」，没有「加快」二字——把「加快建设」接到 B 上，是<b>拼接</b>出原文没有的搭配。<b>B 错误</b>。</p>",
+    "log": "B 是布局节点+拼接搭配，排除"
+  },
+  {
+    "title": "选项 C：国家实验室等机构",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>国家实验室、新型研发机构是<b>平台载体层</b>——人才干活的硬件设施，比布局还低一级；越具体的东西离总目标越远。<b>C 错误</b>。</p>",
+    "log": "C 是载体层，降两级，排除"
+  },
+  {
+    "title": "选项 D：中心城市平台",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>中心城市吸引聚集人才的平台是<b>布局的城市平台层</b>（第二批节点），同样不是「加快建设」的总目标宾语。<b>D 错误</b>。</p>",
+    "log": "D 是城市平台层，排除"
+  },
+  {
+    "title": "结论：答案 A",
+    "cls": "good",
+    "body": "<p>三层表：<b>目标=世界重要人才中心和创新高地（「加快建设」+）</b>；布局=京沪粤高地/中心城市平台；载体=国家实验室。记忆锚点：时政配对题<b>认「动词+宾语」原话整体</b>——背原句连动词一起背，防拼接。</p>",
+    "log": "锁定 A：世界重要人才中心和创新高地"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  title: "中央人才工作会议：加快建设什么",
+  subtitle: "2022 年第 15 题（单选）· 考点：2021 中央人才工作会议 · 方法：目标-布局-载体三层定位",
+  counterLabel: "推理步",
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」：先立三层部署模型，再认「动词+宾语」的原话搭配。",
+  result: {
+    big: "答案 A",
+    html: "记忆锚点：三层表——<b>目标=世界重要人才中心和创新高地（「加快建设」+）</b>；布局=京沪粤高地/中心城市平台；载体=国家实验室。时政配对认<b>「动词+宾语」原话整体</b>，防拼接。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解："加快建设"的宾语——人才工作会议部署的三层定位</h2>
+<p>答案：<strong>A（世界重要人才中心和创新高地）</strong>。</p>
+<h3>第 0 步：先立模型——三层部署，各挂各的动词</h3>
+<p>时政配对题不能靠"眼熟"猜，先把 2021.9.27–28 中央人才工作会议的部署立成<strong>三层模型</strong>，每层回答一个问题、各有专属动词搭配：</p>
+<table><thead><tr><th>层级</th><th>回答什么问题</th><th>表述</th><th>专属动词</th></tr></thead><tbody><tr><td><strong>总目标</strong></td><td>中国人才发展要"成为什么"</td><td><strong>世界重要人才中心和创新高地</strong></td><td><strong>加快建设</strong></td></tr><tr><td>战略布局</td><td>"在哪里建"</td><td>在北京、上海、粤港澳大湾区建设高水平人才高地；在一些中心城市建设吸引和聚集人才的平台</td><td>建设（节点）</td></tr><tr><td>平台载体</td><td>"用什么干"</td><td>一批国家实验室、新型研发机构等</td><td>打造/依托</td></tr></tbody></table>
+<p>判定要害：<strong>看设问动词挂在哪一层</strong>。题干原话"深入实施新时代人才强国战略，<strong>加快建设</strong>……"——"加快建设"的宾语只能落在总目标层。</p>
+<h3>第 1 步：从原话搭配直接锁定</h3>
+<p>设问是会议原话的截取，目标句完整版是「全方位培养、引进、用好人才，<strong>加快建设世界重要人才中心和创新高地</strong>」。"加快建设"回答的是"中国人才事业要成为什么"——成为世界的<strong>人才中心</strong>与<strong>创新高地</strong>；往下两层（在哪里建高地、用什么平台承载）都是实现总目标的<strong>路径与工具</strong>，层级递降。A 逐字命中原话宾语。</p>
+<h3>第 2 步：四个选项对号入座</h3>
+<table><thead><tr><th>选项</th><th>对错</th><th>病灶</th></tr></thead><tbody><tr><td>A 世界重要人才中心和创新高地</td><td>✅</td><td>总目标层，"加快建设"的<strong>原文宾语</strong></td></tr><tr><td>B 北京、上海、粤港澳大湾区高水平人才高地</td><td>❌</td><td><strong>战略布局节点</strong>（"在哪里建"），比总目标低一层</td></tr><tr><td>C 一批国家实验室和新型研发机构</td><td>❌</td><td><strong>平台载体层</strong>，降两级——硬件设施不是目标</td></tr><tr><td>D 中心城市吸引和聚集人才的平台</td><td>❌</td><td>布局中的<strong>城市平台层</strong>，同样不是总目标宾语</td></tr></tbody></table>
+<h3>为什么 B 最像正确答案、却不能选（预判追问）</h3>
+<p>B 是全题最强干扰：内容真实存在、表述几乎原样（京沪粤高地）。判定看两点。<strong>其一，层级</strong>：总目标回答"成为什么"（世界重要人才中心和创新高地），布局回答"在哪里建"（京沪粤）——"加快建设"挂总目标。<strong>其二，搭配完整性</strong>：原话里 B 前面的动词是"建设高水平人才高地"，<strong>没有"加快"二字</strong>；把"加快建设"接到 B 上，等于拼接出原文没有的搭配。时政题防拼接的通用办法：背原句时连<strong>动词+宾语</strong>整体背，不许拆开重组。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 B</strong>：只记住了最出名的"京沪粤建高地"——把<strong>布局节点</strong>当<strong>总目标</strong>，层级错位。</li><li><strong>误选 C</strong>：觉得"国家实验室"最硬核、最有存在感——越具体的东西离总目标越远，载体是支撑层。</li><li><strong>误选 D</strong>：与 B 同理降了一级——城市平台是布局的延伸节点。</li></ul>
+<blockquote>记忆锚点：三层表——<strong>目标＝世界重要人才中心和创新高地（"加快建设"+）</strong>；布局＝京沪粤高地、中心城市平台；载体＝国家实验室等。时政配对认<strong>"动词+宾语"原话整体</strong>，防拼接。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

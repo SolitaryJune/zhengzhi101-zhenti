@@ -1,8 +1,93 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-28 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-28</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-28 · 抗日游击战争的战略地位（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：一般定位 → 升格机制 → 逐项推演 A–D → 陷阱归因 → 结论。
+   全中文、自包含，仅引用本地 ../assets 引擎与样式，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼：从"战术问题"到"战略地位"的跳跃',
+    body: '<p>一般地说，游击战争是<b>战术问题</b>：在内线配合正规军作战，规模小，起辅助作用。</p><p>但抗日战争中，毛泽东 1938 年 5 月发表<b>《抗日游击战争的战略问题》</b>，专门把游击战争当作战略问题论述。跳跃从哪来？——不是游击战本身变了，而是<b>战争舞台变了</b>。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行：为什么在中国的抗日战场升了格',
+    body: '<ul><li><b>中国是大国</b>：地域广阔，日军兵力不足，只能占领点和线，敌后出现大片空隙；</li><li><b>共产党领导的军队深入敌后</b>：独立自主发动群众、建立根据地，游击战争<b>单独作战、大规模展开、长期坚持</b>。</li></ul><p>一句话：它从「配合正规军的配角」变成<b>「独当一面的方面军」</b>——战术问题升格为战略问题。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true },
+    title: 'A：外线单独作战——战略地位的空间表现',
+    body: '<p><b>A 对</b>：主要<b>不是在内线配合正规军作战，而是在外线单独作战</b>——敌后战场在日军占领线后方独立开辟，自成大战略区，不再只是正规军的「配角」。</p>' },
+  { cls: 'bad', tag: 'B 排除', ribbon: { k: 2, ok: false },
+    title: 'B：主要作战方式？——把"地位"偷换成"主次"',
+    body: '<p><b>B 错</b>：<b>战略地位 ≠ 主要作战方式</b>。前者说「能否自成战略问题、独立战线」，后者说「使用比例上的主次」。</p><p>就全国而言，战略防御阶段正面战场正规战承担主要作战任务，游击战与正规战<b>相互配合</b>；地位高不等于份额最大。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: 'C：大规模——战略地位的规模表现',
+    body: '<p><b>C 对</b>：<b>是大规模的，而不是小规模的</b>——遍及广大敌后，游击兵团与民兵以数十万、百万计，并与根据地建设相结合，规模本身就够上战略层级。</p>' },
+  { cls: 'bad', tag: 'D 排除', ribbon: { k: 4, ok: false },
+    title: 'D：只攻不防？——忘了攻防兼备',
+    body: '<p><b>D 错</b>：游击战争的基本方针是<b>防御中的进攻、持久中的速决、内线中的外线</b>——既有主动袭击的进攻作战，也有反「扫荡」等防御作战。</p><p>说它「是进攻战而不是防御战」，把攻防对立起来，是片面的绝对化说法。</p>' },
+  { cls: 'key', tag: '陷阱归因',
+    title: 'B、D 共同的手法：绝对化',
+    body: '<p><b>选 B</b>：把「具有战略地位」拔高成「主要作战方式」——题干问的是「为什么具有战略地位」，正确项必须直接回答原因（外线单独、大规模），B 是在给地位「再加码」。</p><p><b>选 D</b>：凭「游击战机动灵活、主动进攻」的印象选 D——灵活性恰恰是「能攻能守」，「外线」说的是战场位置，不是「纯进攻」。</p>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 AC',
+    body: '<p>答案 <b>AC</b>：外线单独作战＋大规模——两个「不是…而是…」正是战略地位的直接表现。</p><p>B 混「地位」与「主次」，D 忘了「攻防兼备」。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2012·28】抗日游击战争为什么具有战略地位（多选）',
+  subtitle: '考点：中国近现代史 · 毛泽东《抗日游击战争的战略问题》· 选项逐项推演',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 AC',
+    html: '游击战争升格三条件＝<b>外线单独作战（A）＋大规模（C）＋长期性</b>——大国空隙＋敌后独立坚持。<b>战略地位 ≠ 主要作战方式</b>（B 偷换概念），游击战<b>攻防兼备</b>（D 绝对化）。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：抗日游击战争为什么从"战术问题"升到"战略地位"</h2>
+<p>答案：<strong>AC</strong>。</p>
+<h3>第 0 步：先立机制——一般游击战与抗日游击战的差别从哪来</h3>
+<p>一般地说，游击战争是战术问题：<strong>在内线配合正规军作战</strong>，规模小，起辅助作用——这是战争史上的常规定位。但在抗日战争中，毛泽东 1938 年 5 月发表《抗日游击战争的战略问题》，专门把游击战争作为战略问题系统论述。地位之所以升级，根源在<strong>中国的特殊战争条件</strong>：</p>
+<ul><li><strong>中国是大国</strong>：地域广阔，日军兵力不足，只能占领点和线，敌后出现大片空隙，广大乡村可以独立支撑游击战争；</li><li><strong>共产党领导的军队深入敌后</strong>：独立自主地发动群众、建立根据地，游击战争在广大敌后<strong>单独作战、大规模展开、长期坚持</strong>——与民族战争的长期性相联系。</li></ul>
+<p>一句话：不是游击战本身变了，而是<strong>战争舞台变了</strong>——它从"配合正规军的配角"变成"独当一面的方面军"，战术问题就升格为战略问题。</p>
+<h3>第 1 步：战略地位的两个直接表现——A 与 C 为什么对</h3>
+<p>选项正是对上述条件的直接表述：</p>
+<ul><li><strong>A 对</strong>：主要<strong>不是在内线配合正规军作战，而是在外线单独作战</strong>——敌后战场在日军占领线后方独立开辟，自成大战略区，这是"战略地位"的空间表现；</li><li><strong>C 对</strong>：<strong>是大规模的，而不是小规模的</strong>——遍及广大敌后，游击兵团与民兵以数十万、百万计，规模本身就够上战略层级。</li></ul>
+<h3>第 2 步：B 与 D 为什么错——两个"绝对化"陷阱</h3>
+<ul><li><strong>B 错</strong>："是抗日战争的主要作战方式，而不是次要作战方式"。<strong>战略地位 ≠ 主要作战方式</strong>：前者说的是"能否自成战略问题、独立战线"，后者说的是"作战形式使用比例上的主次"。就全国而言，正面战场正规战在防御阶段承担主要作战任务，游击战与正规战<strong>相互配合</strong>；地位高不等于份额最大。此选项混淆了"地位"与"主次"两个层面。</li><li><strong>D 错</strong>："是进攻战，而不是防御战"。游击战争的基本方针是<strong>防御中的进攻、持久中的速决、内线中的外线</strong>，攻防结合；既有主动袭击的进攻作战，也有反"扫荡"等防御作战。把它说成"只是进攻战、不是防御战"，把攻防对立起来，是片面的绝对化说法。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：把"具有战略地位"拔高成"主要作战方式"。题干问的是"为什么具有战略地位"，正确项必须直接回答原因（外线单独、大规模）；B 是在给地位"再加码"，超出题干逻辑。</li><li><strong>误选 D</strong>：凭"游击战机动灵活、主动进攻"的印象选 D。游击战的灵活性恰恰是"能攻能守"——"外线"说的是战场位置，不是"纯进攻"。</li></ul>
+<blockquote>记忆锚点：升格三条件＝<strong>外线单独作战（A）＋大规模（C）＋长期性</strong>；战略地位≠主要作战方式，游击战攻防结合、持久速决。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

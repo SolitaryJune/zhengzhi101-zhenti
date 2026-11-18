@@ -1,8 +1,115 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-04 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-04</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2018·04 理解政治经济学的枢纽=劳动二重性</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 纵向对号条目（标签 + 说明）
+function kv(rows){
+  return '<div>' + rows.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:86px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+// 两格并列小图（具体劳动 / 抽象劳动 对照）
+function duo2(items){
+  return '<div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0">' + items.map(function(L){
+    return '<div style="flex:1;min-width:220px;border:1px solid #2a9d8f;border-radius:8px;padding:6px 10px;background:#2a9d8f14">' +
+           '<b style="color:#1f7a70">' + L.k + '</b><div style="font-size:12.5px;color:#555;line-height:1.6">' + L.v + '</div></div>';
+  }).join('') + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：这是「原文定位题」',
+    body: '<p>设问「“理解政治经济学的枢纽”理论是（）」——《资本论》第一卷里马克思的原话：<b>商品中包含的劳动的二重性，「是理解政治经济学的枢纽」</b>。这句定位的专属定语给的是<b>劳动二重性</b>，四个选项是四个候选理论，逐一比对。</p>' },
+  { tag: '机制', cls: 'key', title: '先立机制：一个劳动、两重属性',
+    body: duo2([
+      { k: '具体劳动（自然属性）', v: '特定形式的有用劳动 → 生成<b>使用价值</b>；在生产中<b>转移</b>生产资料的旧价值（对应不变资本）' },
+      { k: '抽象劳动（社会属性）', v: '撇开具体形式的无差别一般人类劳动 → 形成<b>价值</b>；<b>创造</b>新价值，其中包含剩余价值（对应可变资本）' },
+    ]) + '<p>商品二因素（使用价值、价值）正是<b>由</b>劳动二重性<b>决定</b>的：一个劳动拆成两重属性，商品才有「既有用又有价」的两面。</p>' },
+  { tag: '枢纽', cls: '', title: '枢纽 = 剩余价值之谜的钥匙',
+    body: '<p>政治经济学的核心难题：资本家按价值买劳动力、按价值卖商品，<b>增殖从哪里来</b>？</p>' + kv([
+      ['不区分', '仿佛价值凭空多出——谜无解'],
+      ['靠二重性', '同一劳动中：具体劳动转移旧价值（不新增），抽象劳动创造出大于劳动力自身价值的新价值，多出的即剩余价值'],
+      ['撬动了谁', '不变资本／可变资本的区分 → 剩余价值率 → 资本有机构成、资本积累——一个概念撑起整座大厦'],
+    ]) },
+  { tag: '选项A', cls: 'bad', ribbon: { k: 1, ok: false }, title: 'A：价值规律——运行层面的基本规律',
+    body: '<p>A「价值规律」——商品经济的<b>基本规律</b>（等价交换、价格围绕价值波动），重要但属运行层面，不是撑起资本理论的推理环节。<b>排除</b>。</p>' },
+  { tag: '选项B', cls: 'bad', ribbon: { k: 2, ok: false }, title: 'B：商品二因素——被决定者，逻辑下游',
+    body: '<p>B「商品二因素」——使用价值与价值，由劳动二重性<b>决定</b>；它负责提出「价值从哪来」，回答这个问题的是二重性。因果倒置，被决定者做不了枢纽。<b>排除</b>。</p>' },
+  { tag: '选项C', cls: 'good', ribbon: { k: 3, ok: true }, title: 'C：劳动二重性——原话定位，当选',
+    body: '<p>C「劳动二重性理论」——马克思原话的专属定语；且它确有枢纽之实：剩余价值的来源、不变／可变资本的区分全立在它上面。<b>当选</b>。</p>' },
+  { tag: '选项D', cls: 'bad', ribbon: { k: 4, ok: false }, title: 'D：剩余价值理论——大厦，不是钥匙',
+    body: '<p>D「剩余价值理论」——马克思两大发现之一、政治经济学的核心内容，但它的成立<b>依赖</b>劳动二重性来说明；依赖别人者做不了枢纽。<b>排除</b>。</p>' },
+  { tag: '追问', cls: 'key', title: '预判追问：D 明明是「两大发现」之一，为何不当选',
+    body: '<p>辨析办法是看<b>逻辑方向</b>：可变资本之所以能增殖，正因为抽象劳动在补偿劳动力价值之外继续形成新价值——剩余价值理论依赖二重性，反之不然。再叠加题干引的是马克思给<b>二重性</b>的原话定位。把「核心／基石」与「枢纽」混同，正是命题人设 D 的用意。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：一句话带走',
+    body: '<p>答案 <b>C</b>。记忆锚点：<b>「理解政治经济学的枢纽」= 劳动二重性（专属定语，背诵点）</b>；具体劳动出使用价值、转移旧价值；抽象劳动成价值、创造新价值含剩余价值；商品二因素←由它决定，剩余价值论←立在它之上。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon,
+    done: last,
+  };
+});
+
+AW.init({
+  title: '理解政治经济学的枢纽 = 劳动二重性',
+  subtitle: '2018 年第 4 题 · 《资本论》劳动二重性 · 方法：原文定位＋看逻辑方向（谁依赖谁）',
+  intro: '点击「▶ 播放」逐步展开：先立「一个劳动两重属性」的机制，再验它为什么是枢纽，最后四个选项对号。',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 干扰）',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '<b>「理解政治经济学的枢纽」= 劳动二重性</b>（马克思原话专属定语）。具体劳动生成使用价值、转移旧价值（不变资本）；抽象劳动形成价值、创造新价值含剩余价值（可变资本）。A 价值规律是运行层面的基本规律；B 商品二因素是被它决定的结果；D 剩余价值理论是立在它之上的大厦——「核心／基石」≠「枢纽」。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：为什么「理解政治经济学的枢纽」偏偏是劳动二重性</h2>
+<p>答案：<strong>C（劳动二重性理论）</strong>。</p>
+<h3>第 0 步：先立机制——《资本论》的大厦从「商品」盖起</h3>
+<p>《资本论》的分析从商品这个「细胞」出发。商品有两个因素：使用价值和价值。<strong>价值是从哪来的？</strong>由此引出生产商品的同一个劳动的两重属性：<strong>具体劳动</strong>（特定形式的有用劳动，劳动的自然属性）与<strong>抽象劳动</strong>（撇开具体形式的、无差别的一般人类劳动，劳动的社会属性）。马克思在《资本论》第一卷给这一理论下了原话定位：商品中包含的劳动的二重性，<strong>「是理解政治经济学的枢纽」</strong>——题干设问引用的正是这句话，这是一道「原文定位题」。</p>
+<p>但二重性凭什么配得上「枢纽」？看它撑起了什么：</p>
+<table><thead><tr><th>劳动的属性</th><th>生成什么</th><th>在资本理论里的作用</th></tr></thead><tbody><tr><td>具体劳动</td><td>使用价值</td><td><strong>转移</strong>生产资料的旧价值（对应不变资本）</td></tr><tr><td>抽象劳动</td><td>价值</td><td><strong>创造</strong>新价值，其中包含剩余价值（对应可变资本）</td></tr></tbody></table>
+<h3>第 1 步：枢纽是什么意思——剩余价值之谜的钥匙</h3>
+<p>「枢纽」= 其余环节都从它出发、绕它转动的<strong>关键环节</strong>。政治经济学要回答的核心难题是：资本家按价值购买劳动力、又按价值卖出商品，<strong>增殖从哪里来</strong>？不区分两种劳动，这道谜无解。只有靠劳动二重性才能说清：同一劳动过程中，具体劳动把旧价值<strong>转移</strong>进产品（不新增一分价值），抽象劳动<strong>新创造</strong>出大于劳动力自身价值的价值，多出的部分就是剩余价值——由此才区分了不变资本与可变资本，进而奠基资本有机构成、资本积累等理论。一个概念撬动整座大厦，故称「枢纽」；商品二因素（使用价值、价值）也正是<strong>由</strong>它<strong>决定</strong>的。</p>
+<h3>第 2 步：干扰项归因</h3>
+<table><thead><tr><th>选项</th><th>它是什么</th><th>为什么不是「枢纽」</th><th>对应的误解</th></tr></thead><tbody><tr><td>A</td><td>价值规律：商品经济的基本规律（等价交换、价格围绕价值波动）</td><td>重要，但属商品经济<strong>运行层面</strong>的规律，不是撑起资本理论的推理环节</td><td>把「基本规律」当成「逻辑枢纽」</td></tr><tr><td>B</td><td>商品二因素：使用价值与价值</td><td>它是劳动二重性<strong>决定</strong>的结果，处在逻辑下游——它负责提出「价值从哪来」，回答它的是二重性</td><td>因果倒置：把被决定者当轴</td></tr><tr><td>D</td><td>剩余价值理论：马克思两大发现之一、政治经济学的核心内容</td><td>它是靠劳动二重性才说明白的「大厦」；依赖别人者做不了枢纽</td><td>把「核心/基石」与「枢纽」混同</td></tr></tbody></table>
+<h3>预判追问：D 明明是「两大发现」之一，为什么不当选</h3>
+<p>D 是本题最强的干扰项——剩余价值理论确实是《资本论》最著名的成果。但辨析的办法是看<strong>逻辑方向</strong>：剩余价值的成立依赖二重性（可变资本之所以能增殖，正因为抽象劳动在补偿劳动力价值之外继续形成新价值），反过来二重性不依赖剩余价值理论。再加上题干引的是马克思给<strong>二重性</strong>的原话定位，答 D 等于把大厦误认成钥匙。</p>
+<h3>易错点</h3>
+<ul><li><strong>背过「剩余价值理论是核心」就选 D</strong>：混淆「核心/基石」与「枢纽」两个定位词——考试专挑这类专属定语设问。</li><li><strong>只背到商品二因素就选 B</strong>：二因素与二重性是「问题与答案」的关系，命题人常用前者替换后者。</li><li><strong>把价值规律当万能答案</strong>：A 在商品经济章节出现频率高，但见到「枢纽」「生命线」「钥匙」这类定位词时它一般不对号。</li></ul>
+<blockquote>记忆锚点：具体劳动出使用价值、抽象劳动成价值；<strong>「理解政治经济学的枢纽」= 劳动二重性（专属定语，背诵点）</strong>；商品二因素←由它决定，剩余价值论←立在它之上。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

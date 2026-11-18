@@ -1,8 +1,137 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-12 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-12</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2020·12 社会主义基本制度全面确立的标志</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），
+     模板复制自 408 tools/anim_concept_template.html，只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼',
+    cls: 'key',
+    tag: '审题',
+    body: '<p>1956 年三大改造基本完成，政治制度之后经济制度也落地——「全面确立」<b>标志着</b>中国处在什么历史坐标？本题本质是<b>时间戳定位</b>：把 A—D 四个事件放回各自年份，看谁与 1956 对得上。</p>',
+    log: '审题：1956 的里程碑是什么'
+  },
+  {
+    title: '先立模型：1949 与 1956 两条里程碑线',
+    cls: 'key',
+    body: '<ul><li><b>1949.10 建国</b>：半殖民地半封建社会<b>结束</b>；新民主主义革命取得<b>基本胜利</b>；进入新民主主义社会，任务是恢复经济</li><li><b>1956 三大改造基本完成</b>：政治+经济基本制度<b>全面确立</b>；进入社会主义社会，任务转向「建设新社会」</li></ul>',
+    log: '两条里程碑线：1949 / 1956'
+  },
+  {
+    title: '拆题眼：「全面」= 政治 + 经济两条腿',
+    cls: 'step',
+    body: '<p><b>政治制度</b>：1954 年一届人大通过宪法，人民代表大会制度确立；<b>经济制度</b>：1956 年三大改造完成，公有制成为社会经济制度的基础。两条腿都站稳，「基本制度」才配得上「<b>全面</b>确立」。</p>',
+    log: '全面确立 = 政治制度 + 经济制度'
+  },
+  {
+    title: '机制：为什么标志是「开始全面建设」',
+    cls: 'step',
+    body: '<p>制度确立后主要矛盾转变为<b>建立先进工业国的要求同落后农业国的现实</b>之间的矛盾（八大）→ 集中力量发展社会生产力、实现国家工业化——任务从「改造旧社会」切换为「建设新社会」。分寸：制度确立是建设的<b>起点</b>，措辞是「<b>开始</b>」。</p>',
+    log: '任务切换：改造 → 建设（起步）'
+  },
+  {
+    title: 'B：进入开始全面建设社会主义的历史阶段',
+    cls: 'good',
+    ribbon: { k: 2, ok: true },
+    body: '<p>与 1956 年「制度确立 → 任务转向建设」的坐标完全对应，也是教材的规范表述。<b>B 正确</b>。</p>',
+    log: 'B 对位 1956 里程碑 → 正确'
+  },
+  {
+    title: 'A：半殖民地半封建社会结束在 1949',
+    cls: 'bad',
+    ribbon: { k: 1, ok: false },
+    body: '<p>旧社会终结是<b>中华人民共和国成立</b>（1949.10）的标志——搬到 1956 年属于时间错位。<b>A 错误</b>。</p>',
+    log: 'A 是 1949 时间戳 → 排除'
+  },
+  {
+    title: 'C：新民主主义革命基本胜利也在 1949',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>新民主主义革命取得基本胜利同样是<b>建国</b>的标志——又一个 1949 时间戳，与 1956 的制度确立无关。<b>C 错误</b>。</p>',
+    log: 'C 是 1949 时间戳 → 排除'
+  },
+  {
+    title: 'D：「初步基础」≠「初步实现」',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>「一五」计划（1957 年超额完成）只是为社会主义工业化<b>打下初步基础</b>——程度链条：打下基础 → 逐步实现 → 远未完成。D 把「初步基础」偷换成「已经初步实现」。<b>D 错误</b>。</p>',
+    log: 'D 程度词偷换 → 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    tag: '结论',
+    body: '<p>答案 <b>B</b>。记忆锚点：1949=革命胜利、旧社会终结；1956=基本制度（政治+经济）确立、<b>开始全面建设社会主义</b>。「标志着」题先锚时间戳、再卡程度词。</p>',
+    log: '锁定 B：开始全面建设社会主义'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || (i === 0 ? '审题' : (last ? '结论' : '分析')),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '社会主义基本制度全面确立的标志',
+  subtitle: '考点：社会主义基本制度的确立（1956） · 方法：两条里程碑线对号 + 程度词校验',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '记忆锚点：1956 年基本制度<b>全面确立</b>（政治：1954 人大制度为基石；经济：三大改造后公有制为主体），标志着中国<b>进入开始全面建设社会主义的历史阶段</b>。A（旧社会结束）、C（革命基本胜利）是 1949 年的时间戳；D 把「一五」打下的「初步基础」偷换成「工业化已经初步实现」。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：1956 年社会主义基本制度全面确立的历史坐标</h2>
+<p>答案：<strong>B（进入开始全面建设社会主义的历史阶段）</strong>。</p>
+<h3>第 0 步：先立模型——给共和国前 20 年画两条里程碑线</h3>
+<p>这道题的本质是<strong>时间戳定位</strong>：把 A—D 四个「事件」放回它们各自发生的年份，看哪个与 1956 对得上。先画两条线：</p>
+<table><thead><tr><th>时间</th><th>事件</th><th>制度含义</th><th>社会形态与任务</th></tr></thead><tbody><tr><td>1949.10</td><td>中华人民共和国成立</td><td>政权更替，人民当家作主的新政权建立</td><td>半殖民地半封建社会<strong>结束</strong>；新民主主义革命取得<strong>基本胜利</strong>；进入新民主主义社会，任务是恢复经济、继续完成民主革命遗留</td></tr><tr><td>1956</td><td>三大改造基本完成</td><td>基本<strong>政治制度</strong>（人民代表大会制度为基石）+ 基本<strong>经济制度</strong>（社会主义公有制为主体）双双落定 = 「全面确立」</td><td>进入<strong>社会主义社会</strong>；任务从「改造旧社会」转向「建设新社会」，<strong>开始全面建设社会主义</strong></td></tr></tbody></table>
+<h3>第 1 步：拆题眼——「全面确立」为什么要在 1956 才成立</h3>
+<ul><li><strong>政治制度</strong>：1954 年一届人大通过宪法，人民代表大会制度这一根本政治制度确立——但仅有政治制度，还不算「全面」；</li><li><strong>经济制度</strong>：1956 年农业、手工业、资本主义工商业三大改造基本完成，生产资料社会主义公有制成为社会经济制度的基础——经济制度这才落地；</li><li>政治 + 经济两条腿都站稳，「社会主义基本制度」才配得上题干里的「<strong>全面</strong>确立」二字。</li></ul>
+<h3>第 2 步：为什么标志是「开始全面建设社会主义」</h3>
+<ol><li>制度确立后，国内主要矛盾转变为<strong>人民对于建立先进的工业国的要求同落后的农业国的现实之间的矛盾</strong>（党的八大）；</li><li>八大据此部署：集中力量发展社会生产力，实现国家工业化——建设的总任务立起来了；</li><li>注意分寸：制度确立是建设的<strong>起点</strong>，所以措辞是「<strong>开始</strong>全面建设」，不是「建成」，更不是「实现工业化」。</li></ol>
+<h3>第 3 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 半殖民地半封建社会的结束</td><td>❌</td><td>1949 年建国的时间戳</td></tr><tr><td>B 进入开始全面建设社会主义的历史阶段</td><td>✅</td><td>与 1956 年「制度确立 → 任务转向建设」完全对应</td></tr><tr><td>C 新民主主义革命取得基本胜利</td><td>❌</td><td>也是 1949 年的时间戳</td></tr><tr><td>D 社会主义工业化已经初步实现</td><td>❌</td><td>「一五」计划只为工业化打下<strong>初步基础</strong>，实现工业化是长时期的任务</td></tr></tbody></table>
+<h3>预判追问</h3>
+<ul><li><strong>问：为什么不直接说「进入社会主义社会」？</strong>——「进入社会主义社会」与「基本制度全面确立」是同一件事的两面；题问「标志着中国」处于什么历史阶段，教材的官方表述正是「进入开始全面建设社会主义的历史阶段」，B 是这一坐标的规范说法。</li><li><strong>问：「一五」计划 1957 年就超额完成，为什么 D 还是错？</strong>——一五计划初步奠定工业化的基础，特别是重工业骨架；「打下初步基础」与「已经初步实现」之间差着一整个历史时期，D 是程度副词的偷换。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 A/C（把 1949 的里程碑搬到 1956）</strong>：这两个选项都真实发生过，错在<strong>时间错位</strong>——「半殖民地半封建社会结束」「新民主主义革命基本胜利」都是建国纪念日的时间戳，与 1956 的制度确立无关。</li><li><strong>误选 D（被「一五」的成绩单晃了眼）</strong>：混淆「初步基础」与「初步实现」——量的积累不等于已经实现；记住程度链条：<strong>打下基础 → 逐步实现 → 远未完成</strong>。</li><li><strong>方法</strong>：凡「标志着」题先锚时间戳，再看程度词——两个维度一卡，干扰项大多自己现形。</li></ul>
+<blockquote>记忆锚点：1949=革命胜利、旧社会终结；1956=基本制度（政治+经济）确立、<strong>开始全面建设社会主义</strong>；「初步基础」≠「工业化实现」。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

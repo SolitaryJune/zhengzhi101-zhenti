@@ -1,8 +1,131 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-15 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-15</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2017·15 两岸沟通机制中断的根本原因：九二共识</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 因果链小卡片
+function chain(steps){
+  return '<div style="font-size:13.5px;line-height:1.7">' + steps.map(function(s, i){
+    return (i ? '<span style="color:#b45309;font-weight:700"> → </span>' : '') + s;
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼',
+    cls: 'key',
+    body: '<p>2016 年 5 月 20 日台湾地区新领导人入职以来，两岸<b>制度化沟通和协商谈判机制中断</b>。设问：<b>根本原因</b>。"根本"意味着要沿因果链走到最上游，不停留在下游现象。</p>',
+    tag: '审题',
+    log: '机制中断，沿因果链找上游'
+  },
+  {
+    title: '先立机制：机制是楼，政治基础是地基',
+    cls: 'key',
+    body: '<p>两条机制线：国台办—陆委会联系沟通机制、海协会—海基会协商谈判机制。它们立在共同政治基础——<b>一个中国原则</b>（集中体现为"<b>九二共识</b>"，核心意涵 = <b>大陆和台湾同属一个中国</b>）之上。</p>' + chain(['承认"九二共识"', '共同政治基础在', '机制立得住', '……', '不明确承认', '地基被抽掉', '机制中断']) + '<p>根本原因 = 抽地基的那一环。</p>',
+    tag: '立机制',
+    log: '基础在则机制立，基础塌则机制断'
+  },
+  {
+    title: '选项 A：地基被抽',
+    cls: 'good',
+    ribbon: { k: 1, ok: true },
+    body: '<p>A"台湾当局未明确承认九二共识及其核心意涵"——<b>对</b>。2016.5.20 后台湾当局不明确承认"九二共识"，两岸共同政治基础遭到破坏，沟通和协商谈判机制随之中断。这正是因果链最上游的一环。<b>A 正确</b>。</p>',
+    tag: '✓ 对',
+    log: '未承认九二共识 → 基础塌 → A 正确'
+  },
+  {
+    title: '选项 B：外因不是根本',
+    cls: 'bad',
+    ribbon: { k: 2, ok: false },
+    body: '<p>B"美国高规格礼遇台湾当局领导人过境"——美方对华政策层面的干扰，属<b>外部因素</b>。两岸关系的性质由两岸双方是否认同一个中国决定，不由第三方行为决定；"根本原因"要落在两岸之间。<b>B 排除</b>。</p>',
+    tag: '✗ 错',
+    log: '外部干扰 ≠ 根本原因 → B 排除'
+  },
+  {
+    title: '选项 C：下游现象',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>C"台湾当局减少了赴台旅游大陆游客的配额"——两岸交流中的具体事项，长在机制"楼"的下游：基础一塌，下游跟着停摆；但下游摩擦动摇不了基础。拿现象当原因，方向反了。<b>C 排除</b>。</p>',
+    tag: '✗ 错',
+    log: '现象在上游之后 → C 排除'
+  },
+  {
+    title: '选项 D：无关混入',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>D"台湾在美国测试新的导弹防御系统"——与"沟通机制中断"没有直接因果链，属凑数干扰项。既非基础层，也非因果链上的一环。<b>D 排除</b>。</p>',
+    tag: '✗ 错',
+    log: '无直接因果链 → D 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>A（台湾当局未明确承认"九二共识"及其核心意涵）</b>。排查口诀：B 是外因，C 是下游现象，D 无关——问"根本原因"，答"政治基础"层：旅游、经贸是标，承认与否是本。</p>',
+    tag: '定案',
+    log: '锁定 A：政治基础被破坏'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '两岸沟通机制中断的根本原因：九二共识',
+  subtitle: '考点：两岸关系的政治基础 · 2017·15',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先立"楼与地基"的因果链，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：两岸制度化沟通机制中断的<b>根本原因 = 台湾当局未明确承认"九二共识"及其核心意涵</b>；"九二共识"核心意涵 = <b>大陆和台湾同属一个中国</b>。排查口诀：B 外部因素、C 下游现象、D 无关项——问"根本原因"，答<b>政治基础</b>层。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：两岸沟通机制中断的根本原因——未明确承认"九二共识"</h2>
+<p>答案：<strong>A（台湾当局未明确承认"九二共识"及其核心意涵）</strong>。</p>
+<h3>第 0 步：先立机制——机制立在哪，中断就因哪塌</h3>
+<p>题干说的"两岸制度化沟通和协商谈判机制"，指两条线：<strong>国台办—陆委会</strong>联系沟通机制、<strong>海协会—海基会</strong>协商谈判机制。它们不是靠行政惯性运转的，而是建立在<strong>共同政治基础</strong>之上：<strong>一个中国原则</strong>——其集中体现就是"<strong>九二共识</strong>"，核心意涵是<strong>大陆和台湾同属一个中国</strong>。</p>
+<p>因果链一句话就能立起来：承认"九二共识" → 共同政治基础在 → 机制立得住；不明确承认 → 地基被抽掉 → 机制中断。2016 年 5 月 20 日台湾地区新领导人入职后，台湾当局未明确承认"九二共识"及其核心意涵，两岸共同政治基础遭到破坏，沟通和协商谈判机制随之中断。"根本原因"就落在这块地基上，选 <strong>A</strong>。</p>
+<p>为什么问"根本"必须答到政治基础这一层？因为旅游配额、经贸往来、人员交流这些事务性安排都<strong>长在地基之上</strong>：基础动摇，下游一切接触面随之停摆；反过来，下游的具体摩擦却动摇不了基础本身。根本原因 = 因果链最上游、一旦抽掉全局皆塌的那一环。</p>
+<h3>第 1 步：干扰项归因</h3>
+<table><thead><tr><th>选项</th><th>错在哪</th><th>对应的误解</th></tr></thead><tbody><tr><td>B</td><td>美方高规格"礼遇"台湾当局领导人过境，是美国对华政策层面的干扰，属<strong>外部因素</strong>；两岸关系的性质由两岸双方是否认同一个中国决定，不由第三方行为决定</td><td>把外部干扰当成两岸关系的主因</td></tr><tr><td>C</td><td>减少赴台旅游大陆游客配额是两岸交流中的具体事项，属下游现象，与机制存废没有决定性因果</td><td>拿现象当原因</td></tr><tr><td>D</td><td>"台湾在美国测试新的导弹防御系统"与沟通机制中断无直接因果链，属凑数干扰项</td><td>无关项混入</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>B 是最强干扰</strong>：它有新闻热度，也确实给台海局势添乱，但"根本原因"问的是机制赖以成立的基础被谁抽掉——答案只能落在<strong>两岸双方之间</strong>（承认与否），而不是任何外部第三方的动作。</li><li>问"根本"答"基础"：凡"机制中断、关系倒退"类设问，先问"它立在什么之上"，再找"谁抽走了它"——上游定案，不看下游。</li></ul>
+<blockquote>记忆锚点：沟通机制中断的根本原因 = <strong>未明确承认"九二共识"及其核心意涵</strong>；"九二共识"核心意涵 = <strong>大陆和台湾同属一个中国</strong>；B 外因、C 现象、D 无关。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

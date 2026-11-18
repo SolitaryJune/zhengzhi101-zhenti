@@ -1,8 +1,125 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2015-01 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2015-01</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2015·01 袁隆平「书本电脑里种不出水稻」：实践是认识的基础和来源</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 模板：anim_concept（概念/推理链卡片，政治站无 KaTeX 版）· 只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：两个词先翻译",
+    "cls": "key",
+    "body": "<p>「书本电脑」＝<b>认识</b>（间接经验及其载体）；「田里」＝<b>实践</b>。题眼「书本电脑里<b>种不出</b>水稻」「<b>只有在田里</b>才能种出水稻」——问的是认识与实践谁离不开谁。考点：<b>实践是认识的基础</b>。</p>",
+    "log": "书本电脑=认识，田里=实践，问二者关系"
+  },
+  {
+    "title": "先立机制：实践是认识的基础，四点展开",
+    "cls": "key",
+    "body": "<p>实践是认识的基础：认识<b>来源于</b>实践、实践是认识发展的<b>动力</b>、认识的<b>目的</b>、检验认识真理性的唯一<b>标准</b>。做题先把这四点立在脑中，再看选项往哪一条上靠。</p>",
+    "log": "来源·动力·目的·检验标准，四点先立住"
+  },
+  {
+    "title": "追问预判：书本是间接经验，违反「来源=实践」吗？",
+    "cls": "key",
+    "body": "<p>不违反。直接经验、间接经验只是<b>获得途径</b>不同，间接经验归根到底仍来源于他人、前人的<b>实践</b>；书本认识还要<b>回到实践</b>才能实现价值、接受检验。所以袁隆平先说书本电脑「非常重要」，再说「种不出水稻」——重要≠独立来源。</p>",
+    "log": "间接经验归根到底也来自实践，关键在「回到实践」"
+  },
+  {
+    "title": "A：只有在田里才能种出水稻",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p>「只有……才……」点题：水稻育种的真知只能从<b>田间实践</b>中来，杂交水稻正是袁隆平在大田里做出来的——认识在改造对象的活动中获得，这就是「实践是人类认识的<b>基础和来源</b>」。<b>A 正确</b>。</p>",
+    "log": "真知源于田间实践 → 选 A"
+  },
+  {
+    "title": "B：实践水平的提高有赖于认识水平",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>把关系<b>说反了</b>：实践是基础，认识（理论）反过来<b>指导</b>实践；不是实践「有赖于」认识。题干讲的也是实践产出认识，不是认识抬升实践。<b>B 错误</b>。</p>",
+    "log": "基础关系被颠倒 → B 不选"
+  },
+  {
+    "title": "C：理论指导没有正确与错误之分",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>理论有<b>科学与非科学、正确与错误</b>之分，只有正确的理论才起积极的指导作用；「没有正确与错误之分」直接违背真理观。<b>C 错误</b>。</p>",
+    "log": "指导作用有正误之分 → C 不选"
+  },
+  {
+    "title": "D：第一次飞跃比第二次飞跃更重要",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>恰好说反：认识只有<b>回到实践</b>（第二次飞跃）才能实现目的、接受检验、得到发展，第二次飞跃<b>更为重要</b>；且题干讲认识的<b>来源</b>，根本没有比较两次飞跃。<b>D 错误</b>。</p>",
+    "log": "第二次飞跃更重要，题干也未比较 → D 不选"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>A</b>：实践是人类认识的<b>基础和来源</b>。四点口诀＋两个提醒：书本=间接经验、归根到底来自实践；重要不等于独立来源，价值要<b>回到实践</b>实现。</p>",
+    "log": "锁定 A：实践是认识的基础和来源"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "袁隆平「书本电脑里种不出水稻」：实践是认识的基础和来源",
+  subtitle: "考点：实践与认识 · 方法：先立「来源·动力·目的·标准」机制，再对号入座",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 A",
+    html: "记忆锚点：实践是认识的<b>来源、动力、目的与检验标准</b>；书本电脑＝间接经验，归根到底来自实践，「种不出水稻」＝认识不能脱离实践独立产出成果。干扰项一句斩：B 颠倒关系，C 无视正误，D 次序说反。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：袁隆平「书本电脑里种不出水稻」——实践是认识的基础和来源</h2>
+<p>答案：<strong>A（实践是人类认识的基础和来源）</strong>。</p>
+<h3>第 0 步：先立机制——实践观点是马克思主义认识论的首要观点</h3>
+<p>马克思主义认识论的地基是一条：<strong>实践是认识的基础</strong>，具体展开为四点——认识<strong>来源于</strong>实践（认识在改造对象的活动中获得）、实践是认识发展的<strong>动力</strong>、实践是认识的<strong>目的</strong>、实践是检验认识真理性的唯一<strong>标准</strong>。</p>
+<p>先把一个最可能的追问答掉：<strong>书本知识是「间接经验」，它推翻「来源=实践」吗？</strong> 不推翻。直接经验与间接经验只是获得途径不同，间接经验归根到底仍来源于他人、前人的实践；而且书本上的认识只有<strong>回到实践</strong>中，才能实现价值、接受检验。正因如此，袁隆平说书本、电脑「非常重要」——承认认识及其载体重要；但「种不出水稻」——认识再重要也不能脱离实践独立产出成果。</p>
+<h3>第 1 步：把题干语言翻译成哲学术语</h3>
+<table><thead><tr><th>题干说法</th><th>认识论对应</th></tr></thead><tbody><tr><td>书本、电脑</td><td>认识层面的工具（间接经验）</td></tr><tr><td>田里</td><td>实践</td></tr><tr><td>「书本电脑里种不出水稻」</td><td>认识不能脱离实践独立产出成果</td></tr><tr><td>「只有在田里才能种出水稻」</td><td>认识必须<strong>从实践中来</strong>、回到<strong>实践中去</strong></td></tr></tbody></table>
+<p>题眼落在「只有……才……」上：水稻育种的真知只能从田间实践中获得，杂交水稻正是袁隆平在大田里做出来的。→ <strong>实践是认识的基础和来源</strong>，选 A。</p>
+<h3>第 2 步：干扰项各自错在哪</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>错因</th></tr></thead><tbody><tr><td>B 实践水平的提高有赖于认识水平的提高</td><td>❌</td><td>把关系<strong>说反了</strong>：实践是基础，认识反作用于实践；题干也完全没有这层意思</td></tr><tr><td>C 理论对实践的指导作用没有正确与错误之分</td><td>❌</td><td>违背真理观——理论有<strong>科学/非科学、正确/错误</strong>之分，只有正确的理论才起积极的指导作用</td></tr><tr><td>D 第一次飞跃比第二次飞跃更加重要</td><td>❌</td><td>恰好说反：认识只有<strong>回到实践</strong>（第二次飞跃）才能实现目的、得到检验和发展，第二次飞跃<strong>更为重要</strong>；且题干没有比较两次飞跃</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 D（把「书本知识重要」当成第一次飞跃重要）</strong>：题干承认书本、电脑重要，但「重要」不等于「更重要」——题眼是「种不出水稻」，讲的是<strong>来源</strong>问题，不是两次飞跃孰轻孰重。</li><li><strong>选 C（误以为承认书本重要=不辨理论对错）</strong>：袁隆平恰恰是在提醒「纸上种不出稻」，要到田里检验，这正是坚持实践标准、区分理论正误的立场。</li></ul>
+<blockquote>记忆锚点：实践是认识的<strong>来源、动力、目的、检验标准</strong>；书本=间接经验，归根到底来自实践，其价值要<strong>回到实践</strong>实现——「纸上得来终觉浅，绝知此事要躬行」。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,90 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-01 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-01</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-01 · 粉笔优选与适度原则</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：题问"就是要"——要的是方法论',
+    cls: 'key',
+    body: '<p>华罗庚两难卡在两端：就少丢笔头而言<b>愈长愈好</b>；可<b>太长</b>不便使用、容易折断，每断一次浪费一个笔头。四个选项全是辩证法方法论，考点锁定：<b>量变质变规律中的"度"</b>。</p>' },
+  { title: '立机制："度"是保持质的数量界限',
+    cls: 'key',
+    body: '<p>在度的范围内，量怎么变质都不变；突破关节点，质就改变。粉笔的"长"：<b>太短</b>浪费、<b>合适</b>最优、<b>太长</b>折断报废——超出关节点走向反面。方法论回答就是：<b>坚持适度原则</b>。</p>' },
+  { title: '选项 A：注重量的积累',
+    cls: 'bad', k: 1, pick: false,
+    body: '<p>量的积累服务于<b>促成质变</b>；粉笔要防止的恰是"折断"这种<b>坏质变</b>。方向相反，排除。</p>' },
+  { title: '选项 B：保持事物质的稳定性',
+    cls: 'bad', k: 2, pick: false,
+    body: '<p>这是对<b>客观状态</b>的描述（在度内质不变），而题眼"就是要："问的是<b>做法</b>。停在描述层，排除。</p>' },
+  { title: '选项 C：坚持适度原则',
+    cls: 'good', k: 3, pick: true,
+    body: '<p>在"愈长愈好"与"太长易断"之间选<b>最佳分寸</b>——"过犹不及、适可而止"的原型场景。<b>符合方法论要求 → 入选</b>。</p>' },
+  { title: '选项 D：全面考虑事物属性的多样性',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p>谈的是联系与<b>多样性</b>问题，与"长短怎么取舍"无关，排除。</p>' },
+  { title: '结论：优选＝度内找最佳量',
+    cls: 'good',
+    body: '<p>只有 C 给出了"怎么办"的方法论回答；A 方向相反，B 是状态描述，D 越界到多样性。</p><p><b>答案 C。</b>记忆锚点：量变在度内不改变质，优选＝在度内找最佳量＝<b>坚持适度原则</b>。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2011-01 · 粉笔多长为好——适度原则',
+  subtitle: '2011 年第 1 题（单选）· 考点：量变质变与适度原则 · 逐项推演',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 正确 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立"度"的机制，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '记忆锚点：<b>过犹不及、适可而止</b>。量变在度内不改变质，突破关节点质变发生；"优选"＝在度内找最佳量＝<b>坚持适度原则</b>。A 是促成质变的积累（方向反），B 是状态描述（非做法）。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：粉笔多长为好——量变质变规律里的"度"与适度原则</h2>
+<p>答案：<strong>C（坚持适度原则）</strong>。</p>
+<h3>第 0 步：先立机制——量变质变规律里有个"度"</h3>
+<p>这道题表面讲优选法，实际考的是辩证法中<strong>度</strong>的概念。先把机制链条立起来：</p>
+<ul><li>量变是质变的<strong>必要准备</strong>，质变是量变的必然结果；</li><li><strong>度</strong>是一事物保持自己质的数量界限（范围）：在度的范围内，量怎么变，事物的质都不变；一旦突破度的关节点，质就改变；</li><li>由规律引出的<strong>方法论</strong>：要掌握适度原则，防止不达或过头——"过犹不及"说的就是它。</li></ul>
+<p>方法论与原理的关系要分清："保持事物质的稳定性"是对<strong>客观状态</strong>的描述（事物在度内，质就稳定）；"坚持适度原则"才是<strong>人怎么做</strong>的方法论要求。</p>
+<h3>第 1 步：把粉笔问题翻译成"度"的语言</h3>
+<p>华罗庚的两难，恰好卡在"度"的两端：</p>
+<table><thead><tr><th>粉笔长度</th><th>后果</th><th>处在什么位置</th></tr></thead><tbody><tr><td>太短</td><td>每次使用都丢掉一个粉笔头，浪费</td><td>量不足</td></tr><tr><td>合适</td><td>既少浪费笔头，又方便好用、不易折断</td><td><strong>在度之内，最优</strong></td></tr><tr><td>太长</td><td>使用不便、容易折断，每断一次浪费一个笔头，反而不合适</td><td>超出关节点，走向反面</td></tr></tbody></table>
+<p>"长"这个量在一定范围内收益递增，超过关节点反而招致坏的质变（折断报废）。所谓"优选"，优选的就是这个关节点范围内的最佳分寸——这正是<strong>适度原则</strong>的原型场景。</p>
+<h3>第 2 步：逐项对号</h3>
+<ul><li><strong>A 注重量的积累</strong>：这是量变质变规律的另一条方法论，说的是"想让好的质变发生，就得一点点积累"。粉笔恰恰要<strong>防止</strong>"折断"这种坏质变，不是要促成质变——方向相反。</li><li><strong>B 保持事物质的稳定性</strong>：它描述的是"在度内质不变"这一客观状态；题眼"就是要："问的是做法，方法论表述是适度原则。</li><li><strong>C 坚持适度原则</strong> ✅：在"愈长愈好"与"太长易断"之间选最佳分寸，正中题意。</li><li><strong>D 全面考虑事物属性的多样性</strong>：谈的是联系与多样性问题，与"长短怎么取舍"无关。</li></ul>
+<h3>为什么不是 B（唯一值得多说一句的点）</h3>
+<p>B 和 C 像一句话的两半：前者是原理描述层，后者是方法论要求层。辩证法考题里"就是要"这类句式要的是方法论答案；"保持质的稳定"是适度原则要达到的效果，不是做法本身。</p>
+<blockquote>记忆锚点：过犹不及、适可而止；量变在度内不改变质，优选＝在度内找最佳量＝坚持适度原则。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

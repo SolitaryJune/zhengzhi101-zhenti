@@ -1,8 +1,89 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-12 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-12</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-12 · 义务性规范告诉人们什么</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：三种规范 × 三个语气',
+    cls: 'key',
+    body: '<p>法律的指引作用＝规定人们<b>可以做什么、必须做什么、不得做什么</b>。题干拆成授权、禁止、义务三种规范——每种规范有自己的<b>语气标志</b>，摘词即判。</p>' },
+  { title: '立机制：三规范对表',
+    cls: 'key',
+    body: '<p><b>授权性</b>："可以、有权"——做不做由你；<b>义务性</b>："应当、必须"——必须做；<b>禁止性</b>："不得、不准"——不能做。本题只问义务性一栏。</p>' },
+  { title: '选项 A：不得或者不准做什么',
+    cls: 'bad', k: 1, pick: false,
+    body: '<p>标志词"不得、不准"——这是<b>禁止性规范</b>的语气：方向是"不准做"，与义务性的"必须做"一反一正，<b>排除</b>。</p>' },
+  { title: '选项 B：可以或者有权做什么',
+    cls: 'bad', k: 2, pick: false,
+    body: '<p>标志词"可以、有权"——<b>授权性规范</b>：给的是选择自由，不行使也不违法，<b>排除</b>。</p>' },
+  { title: '选项 C：应当或者必须做什么',
+    cls: 'good', k: 3, pick: true,
+    body: '<p>标志词"应当、必须"——<b>义务性规范</b>：要求积极履行，不做即违反义务。对上表第二行，<b>入选</b>。</p>' },
+  { title: '选项 D：能够或者不能做什么',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p>"能够"是授权语气、"不能"是禁止语气——两种规范<b>各掺一半</b>的拼凑项，教材三规范中没有这种表述，<b>排除</b>。</p>' },
+  { title: '结论：摘语气词，对表即判',
+    cls: 'good',
+    body: '<p>A＝禁止、B＝授权、D＝拼凑——只有 C 对上"义务性"的语气。</p><p><b>答案 C。</b>记忆锚点：<b>可以＝授权，必须＝义务，不得＝禁止</b>。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2011-12 · 义务性规范告诉人们什么',
+  subtitle: '2011 年第 12 题（单选）· 考点：法律规范的指引作用 · 摘语气词 + 逐项对表',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 正确 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立"三规范—三语气"对表，再逐项摘词判定。',
+  snaps: snaps,
+  result: {
+    big: '答案 C',
+    html: '记忆锚点：三规范对三语气——<b>可以＝授权性，应当/必须＝义务性，不得/不准＝禁止性</b>；做题先摘选项里的语气词，对表即判。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：法律指引作用的三种规范——抓"语气词"对号</h2>
+<p>答案：<strong>C（应当或者必须做什么）</strong>。</p>
+<h3>第 0 步：先立机制——指引作用靠"行为模式"落地</h3>
+<p>法律的指引作用，是指法律通过规定人们<strong>可以做什么、必须做什么、不得做什么</strong>，为人们的行为指明方向。题干把这拆成三种规范形式，每种规范对应一种行为模式、一种语气标志，成套记忆：</p>
+<table><thead><tr><th>规范</th><th>告诉人们</th><th>语气标志</th><th>行为模式</th></tr></thead><tbody><tr><td><strong>授权性规范</strong></td><td>可以、有权做什么</td><td>"可以""有权"</td><td>做不做由你（权利）</td></tr><tr><td><strong>义务性规范</strong></td><td>应当、必须做什么</td><td>"应当""必须"</td><td>必须做（积极义务）</td></tr><tr><td><strong>禁止性规范</strong></td><td>不得、不准做什么</td><td>"不得""不准""禁止"</td><td>不能做（消极约束）</td></tr></tbody></table>
+<p>本题三种规范同时出现在选项里，只问"<strong>义务性规范</strong>"一栏——表上第二行：<strong>应当或者必须做什么</strong>。</p>
+<h3>第 1 步：辨析技巧——先把每个选项的语气词摘出来</h3>
+<p>"告诉人们什么"考的就是<strong>行为模式的语言标志</strong>，所以解题动作是摘词，而不是凭语感：</p>
+<ul><li>A 的标志词"<strong>不得、不准</strong>"——禁止性规范的语气，行为模式是"不能做"；</li><li>B 的标志词"<strong>可以、有权</strong>"——授权性规范，行为模式是"可选的权利"；</li><li>C 的标志词"<strong>应当、必须</strong>"——义务性规范，行为模式是"必须做的积极义务"；</li><li>D 的标志词"<strong>能够、不能</strong>"——前半是授权语气、后半是禁止语气，两种规范各掺一半，不是任何一种规范的标准表述，属拼凑项。</li></ul>
+<h3>第 2 步：逐项对号</h3>
+<ul><li><strong>A 不得或者不准做什么</strong> ✗：禁止性规范——方向是"不准做"，与义务性的"必须做"正好一反一正。</li><li><strong>B 可以或者有权做什么</strong> ✗：授权性规范——给的是选择自由，不行使也不违法。</li><li><strong>C 应当或者必须做什么</strong> ✅：义务性规范——要求人们积极履行，不做即违反义务。</li><li><strong>D 能够或者不能做什么</strong> ✗：授权语气＋禁止语气的拼接，教材三规范的表述里没有这种说法。</li></ul>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：把"必须不做"（禁止）与"必须做"（义务）混为一谈——两者都有约束力，但行为模式方向相反：禁止性是消极的"不准"，义务性是积极的"应当"。</li><li><strong>误选 B</strong>：把"有权做"当成"有义务做"——授权性规范给权利而非课义务，放弃权利并不违法。</li><li><strong>误选 D</strong>：没察觉 D 根本不是规范术语——"能（授权）/不能（禁止）"是拼凑的缝合项，专门用来凑数。</li></ul>
+<blockquote>记忆锚点：三规范对三语气——<strong>可以＝授权，应当/必须＝义务，不得/不准＝禁止</strong>；做题先摘选项里的语气词，对表即判。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,138 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2016-32 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2016-32</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2016·32 「习马会」四点意见：历史性一页</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "时间线：66 年来的第一次握手",
+    "cls": "key",
+    "log": "1949 分治 → 2008 和平发展 → 2015 会面",
+    "body": "<p><b>1949</b> 两岸分治，此后 66 年两岸领导人从未直接会面；<b>2008</b> 之后两岸关系和平发展，「九二共识」成为互动的政治基础；<b>2015-11-07</b> 习近平与马英九在<b>新加坡</b>会面——1949 年以来两岸领导人<b>首次</b>会面，翻开历史性一页。</p>"
+  },
+  {
+    "title": "审题眼：清单题考完整性",
+    "cls": "key",
+    "log": "题眼：四点意见，逐条勾",
+    "body": "<p>习近平就携手巩固两岸关系和平发展大格局、让中华民族子孙后代共享美好未来提出<b>四点意见</b>——本题是「史实清单题」，考记忆的<b>完整性</b>而非辨析。数着四个「坚持」逐条勾，防「背全三漏一」。</p>"
+  },
+  {
+    "title": "先立机制：四条的逻辑闭环",
+    "cls": "key",
+    "log": "机制：基础→道路→福祉→愿景",
+    "body": "<p>四点意见按逻辑排布：<b>共同政治基础</b>（没有基础一切无从谈起，排首位）→ <b>和平发展道路</b>（巩固深化，不另起炉灶）→ <b>同胞福祉</b>（回答「为了谁」）→ <b>民族复兴愿景</b>（收束到「共享美好未来」）。基础→道路→目的→愿景，闭环成体。</p>"
+  },
+  {
+    "title": "A：坚持同心实现中华民族伟大复兴",
+    "cls": "good",
+    "ribbon": {
+      "k": 1,
+      "ok": true
+    },
+    "log": "第四点：愿景 → A 对",
+    "body": "<p>第四点——把两岸关系放到<b>民族复兴</b>的高度收束，与题干「让中华民族子孙后代共享美好未来」直接呼应。<b>A 正确</b>。</p>"
+  },
+  {
+    "title": "B：坚持巩固深化两岸关系和平发展",
+    "cls": "good",
+    "ribbon": {
+      "k": 2,
+      "ok": true
+    },
+    "log": "第二点：道路 → B 对",
+    "body": "<p>第二点——大格局已经形成，方向是<b>巩固与深化</b>，不是另起炉灶。<b>B 正确</b>。</p>"
+  },
+  {
+    "title": "C：坚持为两岸同胞多谋福祉",
+    "cls": "good",
+    "ribbon": {
+      "k": 3,
+      "ok": true
+    },
+    "log": "第三点：福祉 → C 对",
+    "body": "<p>第三点——落点始终在<b>同胞利益</b>上，回答「和平发展为了谁」。<b>C 正确</b>。</p>"
+  },
+  {
+    "title": "D：坚持两岸共同政治基础不动摇",
+    "cls": "good",
+    "ribbon": {
+      "k": 4,
+      "ok": true
+    },
+    "log": "第一点：基础（九二共识） → D 对",
+    "body": "<p>第一点——共同政治基础即<b>一个中国原则的「九二共识」</b>；基础不牢地动山摇，所以排首位。<b>D 正确</b>。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "log": "锁定 ABCD",
+    "body": "<p>答案 <b>ABCD</b>。记忆抓手：一个基础（D）＋一条道路（B）＋一份福祉（C）＋一个愿景（A）。史实别错位：1993 汪辜会谈是<b>授权民间团体</b>高层会谈，2015 习马会才是两岸领导人首次会面。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "「习马会」四点意见：历史性一页",
+  subtitle: "考点：两岸关系 · 2015 新加坡会面 · 史实清单（时间线）",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: "记忆锚点：四点=一个<b>基础（D）</b>+一条<b>道路（B）</b>+一份<b>福祉（C）</b>+一个<b>愿景（A）</b>；史实锚点：<b>1949 年以来首次、新加坡、2015-11-07</b>；共同政治基础=「九二共识」。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：2015「习马会」——1949 年以来的第一次握手说了四条</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立时间线——会面的分量与"四点意见"</h3>
+<ul><li><strong>1949 年</strong>：两岸分治，此后 66 年间两岸领导人从未直接会面；</li><li><strong>2008 年之后</strong>：两岸关系和平发展，"九二共识"成为双方互动的政治基础；</li><li><strong>2015 年 11 月 7 日</strong>：习近平与马英九在<strong>新加坡</strong>会面——1949 年以来两岸领导人<strong>首次</strong>会面，翻开两岸关系历史性一页。</li></ul>
+<p>会面中，习近平就携手巩固两岸关系和平发展大格局、让中华民族子孙后代共享美好未来提出<strong>四点意见</strong>，命题即照此四条逐项设问——本题是"史实清单题"，考的是记忆的<strong>完整性</strong>。</p>
+<h3>第 1 步：四点意见逐条对号</h3>
+<ul><li><strong>D 坚持两岸共同政治基础不动摇</strong> ✅：第一点——共同政治基础就是<strong>一个中国原则的"九二共识"</strong>；基础不牢，一切无从谈起，所以排首位。</li><li><strong>B 坚持巩固深化两岸关系和平发展</strong> ✅：第二点——大格局已经形成，方向是巩固与深化，不是另起炉灶。</li><li><strong>C 坚持为两岸同胞多谋福祉</strong> ✅：第三点——落点始终在同胞利益上，回答"和平发展为了谁"。</li><li><strong>A 坚持同心实现中华民族伟大复兴</strong> ✅：第四点——把两岸关系放到民族复兴的高度收束，与题干"让中华民族子孙后代共享美好未来"直接呼应。</li></ul>
+<p>四条各自成点、共同成体：<strong>基础（D）→道路（B）→目的（C）→愿景（A）</strong>，逻辑闭环，全选。</p>
+<h3>第 2 步：预判追问——为什么"共同政治基础"排第一</h3>
+<p>因为政治基础决定其他三条的成色：没有"九二共识"这一共同基础，和平发展就没有支点，福祉与复兴更是无从谈起。refAnalysis 强调"坚持'九二共识'和推动两岸关系和平发展"，正是把这个基础地位点出来——记忆时抓住"<strong>基础不动摇</strong>"这第一条，其余三条按"道路—福祉—愿景"顺藤摸瓜。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选其一（常见漏 A 或 D）</strong>：四点意见条数多、措辞相近，容易背全三漏一。记忆抓手：<strong>一个基础、一条道路、一份福祉、一个愿景</strong>——数着四个"坚持"逐条勾。</li><li><strong>混淆"政治基础"的表述</strong>：选项写的是"两岸共同政治基础不动摇"，不必在选项里展开"九二共识"字样——它是这一条的内涵，不是选项的原文。</li><li><strong>史实定位错位</strong>：首次两岸领导人会面是 2015 年新加坡（习马会），不是 1993 年汪辜会谈（那是两岸授权民间团体高层会谈）——时间线要钉牢。</li></ul>
+<blockquote>记忆锚点：习马会四点=<strong>基础（D）＋道路（B）＋福祉（C）＋复兴（A）</strong>；1949 年以来首次、新加坡、2015-11-07 三个史实锚点；"九二共识"是共同政治基础。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

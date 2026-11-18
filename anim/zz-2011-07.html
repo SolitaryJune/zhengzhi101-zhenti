@@ -1,8 +1,91 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-07 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-07</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-07 · "和谐"写入基本路线的依据</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 概念/推理链类：先立"定位层级"机制，再逐项对号（对应 2011 年第 7 题，答案 A） */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：写入基本路线要什么量级的依据',
+    cls: 'key',
+    body: '<p>十七大党章把"和谐"与"富强、民主、文明"并列写入基本路线。基本路线是初级阶段的<b>总方针、总政策</b>——入线的目标词必须有<b>制度级定位</b>，具体政策、文化偏好、局部任务都撑不起这个量级。</p>' },
+  { title: '立机制：制度属性判断 → 内在要求',
+    cls: 'key',
+    body: '<p>十六届六中全会《决定》：<b>社会和谐是中国特色社会主义的本质属性</b>。逻辑链：本质属性 → 目标与制度同源 → 写入基本路线是制度的<b>内在要求</b>，不是外加任务。</p>' },
+  { title: '选项 A：中国特色社会主义的本质属性',
+    cls: 'good', k: 1, pick: true,
+    body: '<p>党的重要文献给出的<b>定位判断</b>，回答"为什么是社会主义的目标"，量级与"写入基本路线"匹配。<b>入选</b>。</p>' },
+  { title: '选项 B：中国传统文化的价值取向',
+    cls: 'bad', k: 2, pick: false,
+    body: '<p>"和为贵"是理念的<b>思想渊源</b>——回答"从哪来"，答不了"为何是社会主义目标"；照此逻辑早该写入任何路线，解释不了"为什么是现在"。<b>排除</b>。</p>' },
+  { title: '选项 C：社会建设的内在要求',
+    cls: 'bad', k: 3, pick: false,
+    body: '<p>因果倒置：恰因和谐是<b>制度本质属性</b>，社会建设才要去落实它——不是社会建设需要才升格目标。把根本依据降格成领域要求，<b>排除</b>。</p>' },
+  { title: '选项 D：解决收入分配差距的重要途径',
+    cls: 'bad', k: 4, pick: false,
+    body: '<p>缩小差距是构建和谐社会的<b>具体子任务</b>——手段服务于目标，不能反过来当目标成立的依据，<b>排除</b>。</p>' },
+  { title: '结论：制度级定位才配写入总方针',
+    cls: 'good',
+    body: '<p>B 是渊源、C 是落实、D 是子任务——只有 A 站在制度属性层。</p><p><b>答案 A。</b></p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2011-07 · "和谐"为何写入基本路线',
+  subtitle: '2011 年第 7 题（单选）· 考点：社会主义和谐社会 · 定位层级 → 逐项对号',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 正确 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立"定位层级"机制，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：写入基本路线要<b>制度级定位</b>——<b>社会和谐＝中国特色社会主义的本质属性</b>（十六届六中全会）。B 传统文化是渊源，C 社会建设是落实，D 分配差距是子任务。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解："和谐"写入基本路线——凭什么定位为社会主义现代化目标</h2>
+<p>答案：<strong>A（中国特色社会主义的本质属性）</strong>。</p>
+<h3>第 0 步：先立机制——写入基本路线需要什么量级的依据</h3>
+<p>党的基本路线是党在社会主义初级阶段的<strong>总方针、总政策</strong>，管全局、管长远。写进基本路线的每一个目标词（富强、民主、文明、和谐）都必须有<strong>最高层级的理论定位</strong>——一项具体政策、一种文化偏好、一个局部任务，都撑不起"国家目标"这个量级。这个定位出自十六届六中全会《决定》的判断句：</p>
+<blockquote>社会和谐是<strong>中国特色社会主义的本质属性</strong>。</blockquote>
+<p>逻辑链条是：既然"和谐"是社会主义制度<strong>自身固有的本质属性</strong>，那么把它作为国家目标写入基本路线就不是外加的任务，而是社会主义制度的<strong>内在要求</strong>——目标与制度同源，这才配得上"写入基本路线"的分量。</p>
+<h3>第 1 步：预判追问——传统文化讲"和"上千年，为什么 B 不算依据</h3>
+<p>B 项最有迷惑性："和为贵"是中国人讲了几千年的价值取向。但层级不对：传统文化是"和谐"理念的<strong>思想渊源</strong>——回答"这个词从哪里来"；而写入基本路线的依据要回答"<strong>它为什么是社会主义的目标</strong>"——回答它的只能是制度属性判断。渊源回答"从哪来"，属性回答"为什么当目标"，B 答错了问题。而且照 B 的逻辑，"和谐"早该写进任何朝代的治国路线，解释不了"为什么是党在现阶段把它写入基本路线"。</p>
+<h3>第 2 步：预判追问——C 的因果倒置与 D 的层级不足</h3>
+<p><strong>C 社会建设的内在要求</strong>：方向反了。不是因为社会建设这一项工作需要和谐，才把"和谐"升格为国家目标；恰恰是因为和谐是制度的本质属性，社会建设（总体布局之一）才要去<strong>落实</strong>它。C 把目标层的根本依据降格成了具体领域的工作要求。<strong>D 解决收入分配差距的重要途径</strong>：缩小分配差距是构建和谐社会的<strong>具体任务之一</strong>，是"手段服务于目标"——手段反过来说明目标，层级更不够。</p>
+<h3>第 3 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判定</th><th>一句话归因</th></tr></thead><tbody><tr><td>A 中国特色社会主义的本质属性</td><td>✅</td><td>制度属性判断，量级与"写入基本路线"匹配</td></tr><tr><td>B 中国传统文化的价值取向</td><td>❌</td><td>思想渊源，答"从哪来"，答不了"为何是目标"</td></tr><tr><td>C 社会建设的内在要求</td><td>❌</td><td>因果倒置：本质属性在先，社会建设是落实</td></tr><tr><td>D 解决收入分配差距的重要途径</td><td>❌</td><td>具体子任务，层级低于目标本身</td></tr></tbody></table>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 B</strong>：把文化渊源当理论依据——混淆"理念从哪来"与"为何是制度目标"两个不同的问题。</li><li><strong>误选 C</strong>：把总体布局中某领域的"工作要求"当成目标的根本依据——层级降格，因果倒置。</li><li><strong>误选 D</strong>：把局部任务当全局依据——分配差距只是和谐问题的一个子集。</li></ul>
+<blockquote>记忆锚点：写入基本路线要"制度级"定位——<strong>社会和谐＝中国特色社会主义的本质属性</strong>（十六届六中全会）；传统文化是渊源，社会建设是落实，分配差距是子任务，都替代不了这个定位。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

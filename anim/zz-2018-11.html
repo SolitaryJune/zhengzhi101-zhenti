@@ -1,8 +1,110 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2018-11 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2018-11</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2018·11 武装斗争的实质=无产阶级领导的农民战争</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片，纯文本无 KaTeX），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 三行小表（要素清单用）
+function rows(list){
+  return '<div>' + list.map(function(r){
+    return '<div style="display:flex;align-items:baseline;gap:8px;margin:5px 0">' +
+           '<b style="flex:none;min-width:76px;font-family:var(--mono,monospace);color:#b45309">' + r[0] + '</b>' +
+           '<span style="font-size:13.5px;line-height:1.55">' + r[1] + '</span></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：问「实质」= 问谁领导 × 谁为主',
+    body: '<p>武装斗争是三大法宝（统一战线、武装斗争、党的建设）之一。设问「<b>实质</b>」，问的不是打谁（革命对象）、在哪打（革命道路），而是这场战争<b>由谁领导、以谁为主力</b>——两个要素相乘，缺一不可。</p>',
+    log: '实质=领导力量×主体力量' },
+  { tag: '机制', cls: 'key', title: '先立机制：领导 × 主力，两要素相乘',
+    body: rows([
+      ['领导力量', '工人阶级（无产阶级）人数虽少但最先进，经由中国共产党掌握革命领导权——新民主主义革命区别于旧民主主义革命的根本标志'],
+      ['主力军', '农民——半殖民地半封建的农业大国中占人口绝大多数、深受帝封双重压迫'],
+      ['相乘', '武装斗争=无产阶级领导下的农民战争'],
+      ['印证', '「农村包围城市」道路的阶级底色：主力军是农民，重心自然落在农村']
+    ]) + '<p>公式立好，选项逐一过秤。</p>',
+    log: '无产阶级（领导）×农民（主力）' },
+  { tag: '选项 A', cls: 'bad', title: 'A「无产阶级领导的反帝国主义战争」：只点对象，排除',
+    body: '<p>只答「<b>反对谁</b>」。反帝只是革命对象的一面（还有反封建）；对象是「打谁」，实质是「谁打的仗」——漏掉主体（农民）。<b>排除</b>。</p>',
+    log: 'A 有领导无主体' },
+  { tag: '选项 B', cls: 'bad', title: 'B「资产阶级领导的反封建战争」：领导权错位，排除',
+    body: '<p>领导权给了资产阶级——资产阶级领导的旧民主主义革命（辛亥革命）已经失败，此路不通；B 是新民主主义革命要抛弃的<b>旧帽子</b>。<b>排除</b>。</p>',
+    log: 'B 领导权错位' },
+  { tag: '选项 C', cls: 'bad', title: 'C「工农联合的反军阀战争」：未点领导权，排除',
+    body: '<p>带着大革命「打倒列强、除军阀」口号的熟悉气味，但「工农联合」只描述<b>同盟军构成</b>，没点明领导权归属——口号顶替不了规范表述；「反军阀」也仍只是对象一面。<b>排除</b>。</p>',
+    log: 'C 未点领导权归属' },
+  { tag: '选项 D', cls: 'good', title: 'D「工人阶级领导的农民战争」：双要素齐全，当选',
+    body: '<p>领导（工人阶级）＋主体（农民）双要素齐全，正是教材规范表述——中国革命的武装斗争实质上是<b>无产阶级领导下的农民战争</b>。<b>当选</b>。</p>',
+    log: 'D 双要素齐全' },
+  { tag: '结论', cls: 'good', title: '结论：锁定 D',
+    body: '<p>答案 <b>D</b>。记忆锚点：武装斗争实质=<b>无产阶级（领导）×农民（主力）</b>；「实质」题先问领导权、再问主体；「农村包围城市」道路的阶级底色即在此。</p>',
+    log: '锁定 D：无产阶级领导的农民战争' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.log,
+    count: i + 1,
+    ribbon: { k: i + 1, ok: s.cls !== 'bad' },
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '武装斗争的实质=无产阶级领导的农民战争',
+  subtitle: '2018 年单选第 11 题 · 考点：新民主主义革命三大法宝之武装斗争 · 方法：领导力量×主体力量的公式对号入座',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  counterLabel: '推理步',
+  ribbonTitle: '推理进度（绿=成立/正确，红=干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 D',
+    html: '记忆锚点：中国革命武装斗争的实质=<b>无产阶级领导下的农民战争</b>。两要素相乘：领导力量=工人阶级（经由中国共产党）；主力军=农民（半殖民地半封建农业大国中占人口绝大多数、深受帝封双重压迫）。「实质」题的公式——先问谁领导，再问谁为主：A 只点对象漏主体，B 领导权错位（旧民主主义革命的旧帽子），C 「工农联合」未点领导权。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：武装斗争的实质=「谁领导」×「谁为主」</h2>
+<p>答案：<strong>D（工人阶级领导的农民战争）</strong>。</p>
+<h3>第 0 步：先立机制——「实质」题的采分公式</h3>
+<p>武装斗争是新民主主义革命三大法宝之一（统一战线、武装斗争、党的建设）。设问问「实质」，问的不是打谁（革命对象）、也不是在哪打（革命道路），而是这场战争<strong>由谁领导、以谁为主力</strong>——两个要素相乘，缺一个都不完整：</p>
+<ul><li><strong>领导力量</strong>：中国工人阶级人数虽少，但同先进生产方式相联系、革命性最坚决，经由中国共产党掌握革命领导权——领导权问题正是新民主主义革命区别于旧民主主义革命的根本标志；</li><li><strong>主力军</strong>：中国是半殖民地半封建的农业大国，农民占人口绝大多数、深受帝国主义和封建主义的双重压迫，是革命的主力军——中国革命的问题说到底是农民问题，土地革命因此成为革命的基本内容。</li></ul>
+<p>两要素合起来：中国革命的武装斗争，实质上是<strong>无产阶级领导下的农民战争</strong>。</p>
+<h3>第 1 步：公式对号入座</h3>
+<table><thead><tr><th>选项</th><th>领导权</th><th>主体</th><th>判定</th></tr></thead><tbody><tr><td>A 无产阶级领导的反帝国主义战争</td><td>✓ 无产阶级</td><td>✗ 只点对象</td><td>排除</td></tr><tr><td>B 资产阶级领导的反封建战争</td><td>✗ 错位</td><td>✗</td><td>排除</td></tr><tr><td>C 工农联合的反军阀战争</td><td>✗ 未点归属</td><td>部分（工农沾边）</td><td>排除</td></tr><tr><td>D 工人阶级领导的农民战争</td><td>✓</td><td>✓ 农民</td><td><strong>当选</strong></td></tr></tbody></table>
+<h3>第 2 步：干扰项归因</h3>
+<ul><li><strong>A</strong>：只答「反对谁」。反帝只是革命对象的一面（还有反封建），用革命对象顶替「谁领导＋谁为主」的实质概括——对象是「打谁」，实质是「谁打的仗」。</li><li><strong>B</strong>：领导权给了资产阶级——资产阶级领导的旧民主主义革命（辛亥革命）已经失败，证明那条路在中国走不通；B 给的是新民主主义革命要抛弃的旧帽子。</li><li><strong>C</strong>：带着大革命时期「打倒列强、除军阀」口号的熟悉气味，但「工农联合」描述的是同盟军的构成，通篇没有点明领导权归属——口号顶替不了规范原理表述。</li></ul>
+<h3>为什么 C 最有迷惑性</h3>
+<p>「工农联合反军阀」与正确答案靠得最近：主体沾边（农民、工人都在内）、对象也对（军阀是封建势力）。但审题眼：「实质」的采分点永远是<strong>领导权＋主体</strong>双要素，C 恰恰在领导权这个最关键的要素上留白——而领导权正是新民主主义革命理论的核心命题。见到「实质」二字，先问谁领导，再问谁为主，C 就接不住。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 A</strong>：把「反帝反封建」的革命纲领当实质背——纲领回答对象，实质回答领导与主体；</li><li><strong>选 C</strong>：被口号的熟悉感带走，没核对领导权要素是否齐全。</li></ul>
+<blockquote>记忆锚点：武装斗争实质=<strong>无产阶级（领导）×农民（主力）=无产阶级领导的农民战争</strong>；它同时解释了「农村包围城市」道路的阶级底色——主力军是农民，革命重心自然落在农村。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

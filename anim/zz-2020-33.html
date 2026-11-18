@@ -1,8 +1,100 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-33 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-33</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2020-33 新时代中俄关系·四层主张一体全选</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：出处唯一，问的是纪念大会讲话的四点主张',
+    body: '<p>2019 年 6 月 5 日至 7 日，习近平主席对俄罗斯进行国事访问并出席第二十三届圣彼得堡国际经济论坛。</p>' +
+          '<p>题干问"在中俄建交 70 周年纪念大会讲话中……提出的主张"——即 6 月 5 日莫斯科讲话《携手努力，并肩前行，开创新时代中俄关系的美好未来》。讲话连用四个"要……"排比，选项正是四句话的原文压缩。</p>' },
+  { tag: '机制', cls: 'key', title: '先立框架：四点主张沿"由内到外"四个层次展开',
+    body: '<p>四个"要……"不是随手罗列，而是一套顶层设计：</p>' +
+          '<ul><li><b>政治/战略</b>层：互信是基石——一切合作的前提；</li>' +
+          '<li><b>经贸/利益</b>层：利益交融是动力；</li>' +
+          '<li><b>人文/民意</b>层：民意是"世代友好"的根基；</li>' +
+          '<li><b>国际/责任</b>层：双边关系向世界的延伸。</li></ul>' },
+  { tag: 'A', cls: 'good', title: 'A 对：始终以互信为基石，巩固彼此战略依托',
+    body: '<p>政治/战略层面——互信是一切合作的前提，没有互信，后面三层都无从谈起。</p>' +
+          '<p>"战略依托"是官方原话口径：中俄互为最主要友好国家和战略伙伴。✅</p>' },
+  { tag: 'B', cls: 'good', title: 'B 对：着力深化利益交融，拉紧共同利益纽带',
+    body: '<p>经贸/利益层面——利益交融是关系的动力，让两国合作"有利可图、互利共赢"。</p>' +
+          '<p>互信（基石）与利益（纽带）分工不同、不可互替，官方口径里两者并列。✅</p>' },
+  { tag: 'C', cls: 'good', title: 'C 对：促进民心相通，夯实世代友好的民意基础',
+    body: '<p>人文/民意层面——民心相通不是可有可无的人文点缀，它管的是"长期"。</p>' +
+          '<p>官方表述正是"夯实<b>世代友好</b>的民意基础"：前三层再牢，没有民意根基就保不了"世代"。✅</p>' },
+  { tag: 'D', cls: 'good', title: 'D 对：要更加担当有为，携手维护世界和平安宁',
+    body: '<p>国际/责任层面——前三层管好了双边，第四层向外走：两个大国携手维护世界和平安宁。</p>' +
+          '<p>新时代中俄关系的第四点主张正是它：大国关系不只有双边维度，还有对世界的责任维度。✅</p>' },
+  { tag: '为什么', cls: 'key', title: '预判追问：凭什么判断是全选？',
+    body: '<p>判断依据在<b>结构</b>而不在数量：四项分别占据互信、利益、民意、担当四个<b>互不重叠又互相支撑</b>的层面。</p>' +
+          '<ul><li>缺 A 则无前提，缺 B 则无动力，缺 C 则无根基；</li>' +
+          '<li>缺 D 则降格为普通双边关系。</li></ul>' +
+          '<p>四项均与"新时代中俄全面战略协作伙伴关系"官方表述一致、互不排斥——无可排除项。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：四层递进，缺一角框架就不完整',
+    body: '<p><b>A</b> 互信基石 ✅ · <b>B</b> 利益纽带 ✅ · <b>C</b> 民意根基 ✅ · <b>D</b> 世界担当 ✅</p>' +
+          '<p>答案 <b>ABCD</b>。由内到外：先有互信，再谈利益，民意保"世代"，担当向世界。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'bad' ? 'miss' : 'step'),
+    tag: s.tag,
+    log: s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    ribbon: { k: i + 1, ok: s.cls !== 'bad' },
+    done: last,
+  };
+});
+
+AW.init({
+  title: '互信→利益→民意→担当：新时代中俄关系四层主张',
+  subtitle: '2020 年多选题第 33 题 · 考点：中俄建交 70 周年 · 新时代中俄关系（时政）',
+  intro: '点击「▶ 播放」逐步展开：先立四层框架，再逐项归位，最后看"为什么全选"。',
+  counterLabel: '推理步',
+  ribbonTitle: '推理步骤（✓ 主张条目）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD（全选）',
+    html: '四点主张四层递进：<b>互信基石（A）→ 利益纽带（B）→ 民意根基（C）→ 世界担当（D）</b>。<br>' +
+          '缺 A 无前提、缺 B 无动力、缺 C 无根基、缺 D 降格为普通双边关系——四层一体全选。<br>' +
+          '记忆锚点：<b>由内到外，缺一角框架就不完整</b>。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：新时代中俄关系四点主张——四个层面，一体全选</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立底座——这道题的"原文"只有一份，先找到它</h3>
+<p>时政识记题不能靠感觉，先立底座：题目把出处说得非常明确——<strong>2019 年 6 月 5 日至 7 日，习近平主席应普京总统邀请对俄罗斯进行国事访问并出席第二十三届圣彼得堡国际经济论坛</strong>；题干问的"在中俄建交 70 周年纪念大会讲话中……提出的主张"，正是 6 月 5 日在莫斯科纪念大会上的讲话《携手努力，并肩前行，开创新时代中俄关系的美好未来》。讲话对新时代中俄关系连用四个"要……"的排比句提出主张，<strong>选项 A、B、C、D 就是这四句话的原文压缩</strong>——一个选项对应一句，没有改写、没有杂项。</p>
+<h3>第 1 步：四点主张不是随手罗列，而是沿"双边关系由内到外"的四个层次展开</h3>
+<table><thead><tr><th>选项</th><th>主张</th><th>所在层面</th></tr></thead><tbody><tr><td>A</td><td>始终以互信为基石，巩固彼此战略依托</td><td>政治/战略：互信是一切合作的前提</td></tr><tr><td>B</td><td>着力深化利益交融，拉紧共同利益纽带</td><td>经贸/利益：利益交融是关系的动力</td></tr><tr><td>C</td><td>促进民心相通，夯实世代友好的民意基础</td><td>人文/民意：民意是"世代友好"的根基</td></tr><tr><td>D</td><td>要更加担当有为，携手维护世界和平安宁</td><td>国际/责任：大国关系向世界的延伸</td></tr></tbody></table>
+<p>四个层面<strong>由内到外、逐层递进</strong>：先有政治互信的基石，才谈得上深化利益交融；利益与互信再牢固，也要民意基础来保障"世代"；前三层管好了双边，第四层才向外走——两个大国携手维护世界和平安宁。这是一套结构完整的顶层设计，不是凑数的四条新闻。</p>
+<h3>第 2 步：为什么是全选（预判"为什么"）</h3>
+<p>判断依据在结构而不在数量：四项分别占据互信、利益、民意、担当四个<strong>互不重叠又互相支撑</strong>的层面，去掉任何一层，"新时代中俄全面战略协作伙伴关系"的框架就缺角——缺 A 则无前提，缺 B 则无动力，缺 C 则无根基，缺 D 则降格为普通双边关系。且四项均与官方表述一致、互不排斥，没有可排除项。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选 D</strong>：以为"维护世界和平安宁"超出"中俄关系"的题域——新时代中俄关系的第四点主张恰恰是"要更加担当有为，携手维护世界和平安宁"：大国关系不只有双边维度，还有对世界的责任维度，全选题常见丢的就是这"向外延伸"的一条。</li><li><strong>漏选 C</strong>：把"民心相通"当成可有可无的人文点缀——它被官方表述为"夯实世代友好的民意基础"，是四个层面里管"长期"的那一层。</li><li><strong>漏选 A 或 B</strong>：试图在"互信/利益"里二选一——政治互信（基石）与经贸利益（纽带）分工不同、不可互替，官方口径里两者并列。</li></ul>
+<blockquote>记忆锚点：四层递进全选——<strong>互信基石（A）→ 利益纽带（B）→ 民意根基（C）→ 世界担当（D）</strong>；由内到外，缺一角框架就不完整。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

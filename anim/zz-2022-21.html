@@ -1,8 +1,130 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-21 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-21</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2022·21 《共产党宣言》之问——资本主义生产力为何飞速发展</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 concept 推理链模板（政治站无 KaTeX 版）：只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 双轮驱动模型：内轮（动力）+ 外轮（压力）
+function wheelRow(){
+  return '<div class="aw-cells" style="margin:10px 0 4px">' +
+    '<div class="aw-col"><div class="aw-ptr">内轮·给油</div><div class="aw-box ok">剩余价值</div><div class="aw-idx">内在动力</div></div>' +
+    '<div class="aw-col"><div class="aw-ptr">&nbsp;</div><div class="aw-box hit">生产力↑</div><div class="aw-idx">共同推动</div></div>' +
+    '<div class="aw-col"><div class="aw-ptr">外轮·抽鞭</div><div class="aw-box ok">市场竞争</div><div class="aw-idx">外在压力</div></div>' +
+    '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：宣言惊叹的「生产力井喷」从哪来",
+    "cls": "key",
+    "body": "<p>《共产党宣言》：资产阶级不到一百年创造的生产力，「比过去一切世代创造的全部生产力还要多、还要大」——自然力征服、机器采用、铁路电报……问的是这轮井喷的<b>主要原因</b>。找原因，要到资本主义自身的<b>经济规律</b>里找，不靠资本家的善意。</p>",
+    "log": "题眼：生产力爆发的原因＝经济规律"
+  },
+  {
+    "title": "先立机制：双轮驱动——内轮给油，外轮抽鞭",
+    "cls": "key",
+    "body": wheelRow() +
+      "<p><b>内轮</b>：资本主义生产的直接目的和决定性动机是榨取<b>剩余价值</b>——想多榨，只能延长强化劳动（绝对剩余价值）或提高生产率（相对剩余价值），技术革新被自动逼出来。<b>外轮</b>：市场竞争优胜劣汰，谁生产率低谁出局——不进步就被吞并。一内一外，缺一不可。</p>",
+    "log": "机制立起：剩余价值给油 + 竞争抽鞭"
+  },
+  {
+    "title": "选项 A：资本追逐剩余价值的内在动力",
+    "cls": "good",
+    "ribbon": {"k": 1, "ok": true},
+    "body": "<p>剩余价值规律是资本主义的<b>基本经济规律</b>：追剩余价值必然要求缩短必要劳动时间——提高劳动生产率、采用机器、征服自然力，正是引文里那串奇迹的发动机。<b>A 正确</b>。</p>",
+    "log": "内轮确认 → A 选"
+  },
+  {
+    "title": "选项 B：市场刺激竞争的外在压力",
+    "cls": "good",
+    "ribbon": {"k": 2, "ok": true},
+    "body": "<p>市场上无数资本相互较量：竞争强制每个资本「不革新就出局」，与技术革新互为因果、彼此放大。内在动力想跑，外在压力不敢不跑——双轮齐转，生产力井喷。<b>B 正确</b>。</p>",
+    "log": "外轮确认 → B 选"
+  },
+  {
+    "title": "选项 C：无产阶级反对资产阶级的斗争——命题对、问题不对",
+    "cls": "bad",
+    "ribbon": {"k": 3, "ok": false},
+    "body": "<p>「阶级斗争是阶级社会发展的直接动力」这句话本身没错，但本题问的是<b>生产力迅速发展</b>的原因——工人斗争推动的是社会变革、待遇改善与生产关系调整，不在「资本家为什么拼命改进生产」这条因果链上。命题没错位 ≠ 命题对题。<b>C 错误</b>。</p>",
+    "log": "一般命题错位到特定问题 → C 不选"
+  },
+  {
+    "title": "选项 D：国家对市场的全面控制——时代与逻辑双错位",
+    "cls": "bad",
+    "ribbon": {"k": 4, "ok": false},
+    "body": "<p>引文出自 1848 年《宣言》，彼时自由竞争、放任主义为主，「全面控制」是 20 世纪垄断阶段后的现象——<b>时代错位</b>；且国家干预调节的是市场秩序、缓和矛盾，不是生产力爆发的动力源——<b>逻辑错位</b>。动力始终在资本内部与市场机制。<b>D 错误</b>。</p>",
+    "log": "史实不符且非动力源 → D 不选"
+  },
+  {
+    "title": "结论：答案 AB",
+    "cls": "good",
+    "body": "<p>主要原因＝追逐剩余价值的<b>内在动力</b>（A）＋市场竞争的<b>外在压力</b>（B），双轮驱动。C 把「阶级斗争答历史发展」错配给「生产力发展」，D 是时代错位的现代印象。</p>",
+    "log": "锁定 AB"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  title: "资本主义社会生产力迅速发展的主要原因是",
+  subtitle: "2022 年第 21 题（多选）· 考点：资本主义发展生产力的动力 · 方法：双轮驱动找动力源",
+  counterLabel: "推理步",
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」：先立「内轮给油＋外轮抽鞭」的机制，再逐项对号。",
+  result: {
+    big: "答案 AB",
+    html: "记忆锚点：<b>内在动力＝追逐剩余价值，外在压力＝市场竞争，双轮驱动生产力</b>。阶级斗争答「历史发展」，不答「生产力发展」；「国家全面控制市场」是时代错位的现代印象。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：《共产党宣言》之问——资本主义生产力为何飞速发展</h2>
+<p>答案：<strong>AB</strong>。</p>
+<h3>第 0 步：先立机制——生产力的"油门"装在资本身体的哪个部位</h3>
+<p>马克思、恩格斯惊叹的"不到一百年创造的生产力比过去一切世代还要多、还要大"，不是靠资本家的自觉善意，而是资本主义的<strong>经济规律</strong>自动逼出来的。先把这条因果链立起来：资本主义生产的直接目的和决定性动机是<strong>榨取剩余价值</strong>。要多榨，只有两条路——延长劳动时间、提高强度（绝对剩余价值），或提高劳动生产率、缩短必要劳动时间（相对剩余价值）。于是"追逐剩余价值"这个<strong>内在动力</strong>，天然推着资本家不断改进技术、扩大生产。再看外部：市场上站着无数相互较量的资本，<strong>竞争</strong>优胜劣汰，谁生产率低谁破产出局——这是强制每个资本进步的<strong>外在压力</strong>。一内一外两个轮子，一个给油、一个抽鞭，共同解释了生产力的井喷。审题抓"主要原因"，就是找这条链上的部件。</p>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>推理</th></tr></thead><tbody><tr><td>A 资本追逐剩余价值的内在动力</td><td>✅</td><td>剩余价值规律是资本主义的基本经济规律；追剩余价值必然要提生产率——内在动力成立</td></tr><tr><td>B 市场刺激竞争的外在压力</td><td>✅</td><td>竞争强制资本革新：不进步就被吞并淘汰——外在压力成立，与 A 合成双轮驱动</td></tr><tr><td>C 无产阶级反对资产阶级的斗争</td><td>❌</td><td>阶级斗争是阶级社会发展的直接动力（一般命题），但它推动的是社会变革与工人处境改善，不是资产阶级"主动发展生产力"的动机</td></tr><tr><td>D 资本主义国家对市场的全面控制</td><td>❌</td><td>两处不成立：时代错位——《宣言》处于自由竞争阶段，国家并不全面控制市场；逻辑错位——即便有国家干预，它调节的是秩序，不是生产力爆发的动力源</td></tr></tbody></table>
+<h3>为什么 C 不选（预判追问）</h3>
+<p>"阶级斗争是阶级社会发展的直接动力"这句话本身没错，为什么这里不选？因为<strong>命题没错位≠命题对题</strong>。本题问的是"资本主义社会<strong>生产力迅速发展</strong>的主要原因"——问的是资本家为什么拼命改进生产，答案只能到资本自身的动机结构（剩余价值）和市场机制（竞争）里找。工人斗争的对象是分配与权力关系，它可能迫使生产关系调整、待遇改善，却不在"生产力为何爆发"这条因果链上。多选题里"对的命题 + 错的问题"正是常见陷阱。</p>
+<h3>为什么 D 不选（预判追问）</h3>
+<p>引文出自 1848 年《共产党宣言》，彼时自由竞争、放任主义是主流，"国家对市场的全面控制"是 20 世纪垄断阶段以后才出现的现象——把它当成 19 世纪生产力跃升的原因，是<strong>时代错位</strong>；而且即便后来的国家干预，也主要是调节市场秩序、缓和矛盾，仍不是生产力发展的动力源——动力在资本内部（剩余价值）与市场（竞争），这是《宣言》所在时代便已运转的机制。</p>
+<h3>易错点</h3>
+<ul><li><strong>勾 C</strong>：把一般命题错位到特定问题上——记住问"生产力发展动力"就答"剩余价值＋竞争"，问"社会变革"才答阶级斗争。</li><li><strong>勾 D</strong>：被现代印象（宏观调控、国家垄断）带入 19 世纪语境。</li><li><strong>漏 A 或漏 B</strong>：只记一头——内外是成对的：内在动力给油，外在压力抽鞭，缺一不可。</li></ul>
+<blockquote>记忆锚点：内在动力＝追逐剩余价值，外在压力＝市场竞争，双轮驱动生产力。阶级斗争答"历史发展"，不答"生产力发展"。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

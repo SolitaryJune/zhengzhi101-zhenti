@@ -1,8 +1,121 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-09 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-09</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2022 · 三层光谱两条路——维新派的主张定位</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 concept 推理链模板（政治站无 KaTeX 版）：只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：两条限定画坐标",
+    "cls": "key",
+    "body": "<p>题干给两条限定：「<b>资产阶级性质的政治改良运动</b>」＋「突破洋务派『中体西用』思想的局限」。前者圈定<b>改良</b>路线，后者把学习层次从<b>器物</b>推到<b>制度</b>——两条一交，坐标唯一。</p>",
+    "log": "改良 + 学制度 = 定位"
+  },
+  {
+    "title": "先立模型：三层光谱两条路",
+    "cls": "key",
+    "body": "<p>近代学西方由浅入深：<b>器物层</b>（洋务：坚船利炮）→ <b>制度层</b>（维新与辛亥）→ <b>文化层</b>（新文化运动）。制度层内分两路：<b>改良＝留君主、行立宪</b>；<b>革命＝去君主、建共和</b>。维新派站在改良路。</p>",
+    "log": "光谱定位：制度层·改良"
+  },
+  {
+    "title": "选项 A：君主立宪取代君主专制",
+    "cls": "good",
+    "ribbon": {"k": 1, "ok": true},
+    "body": "<p>维新派主张<b>设议院、定宪法，实行君主立宪</b>——君位保留、实权受限：既突破「中体西用」只学器物的局限，又不越「改良」雷池。<b>A 正确</b>。</p>",
+    "log": "A=留君主的立宪，入选"
+  },
+  {
+    "title": "选项 B：民主共和取代专制",
+    "cls": "bad",
+    "ribbon": {"k": 2, "ok": false},
+    "body": "<p>民主共和以<b>废除君主</b>为前提，是<b>革命派（孙中山）</b>的方案——维新派恰恰「不敢从根本上否定封建主义」，不反皇帝。<b>B 排除</b>。</p>",
+    "log": "B 是革命方案，排除"
+  },
+  {
+    "title": "选项 C：总统共和取代君主立宪",
+    "cls": "bad",
+    "ribbon": {"k": 3, "ok": false},
+    "body": "<p>「立宪→总统共和」的更替发生在<b>民国初年</b>，不是 1898 年维新派的主张——他们连君主都不反对，何来「取代君主立宪」。<b>C 排除</b>。</p>",
+    "log": "C 时代错位，排除"
+  },
+  {
+    "title": "选项 D：议会共和取代君主立宪",
+    "cls": "bad",
+    "ribbon": {"k": 4, "ok": false},
+    "body": "<p>议会制共和制仍是<b>共和制</b>（无君主），与维新派「保留君主」的立场直接冲突。见「议会」莫慌——维新派「设议院」服务于立宪，不是建共和。<b>D 排除</b>。</p>",
+    "log": "D 仍是共和家族，排除"
+  },
+  {
+    "title": "结论：答案 A",
+    "cls": "good",
+    "body": "<p>解题链条：改良→留君主；学制度→超出器物。交点=<b>君主立宪取代君主专制</b>。「共和」家族（B/C/D）一律以废君为前提，路线定性即整批排除。</p>",
+    "log": "锁定 A"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  "title": "戊戌维新的主张定位——三层光谱两条路",
+  "subtitle": "2022 年第 9 题（单选）· 考点：戊戌维新运动 · 方法：学习层次光谱 + 改良/革命分流",
+  "counterLabel": "推理步",
+  "ribbonTitle": "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  "intro": "点击「▶ 播放」：先立学习层次光谱，再用「改良」二字分流选项。",
+  "result": {
+    "big": "答案 A",
+    "html": "记忆锚点：「<b>改良=留君主的立宪；革命=去君主的共和</b>」。凡戊戌维新的制度主张，一律在「君主立宪」里找答案；B/C/D 全属「共和」家族，方向即错。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：三层光谱两条路——维新派的主张定位</h2>
+<p>答案：<strong>A（用君主立宪制取代君主专制制度）</strong>。</p>
+<h3>第 0 步：先立机制——学西方的三层光谱与制度层的两条路</h3>
+<p>近代中国向西方学习由浅入深分三层；制度层内部又分两条路线：</p>
+<table><thead><tr><th>层次</th><th>代表运动</th><th>学什么</th></tr></thead><tbody><tr><td>器物层</td><td>洋务运动</td><td>坚船利炮（「中体西用」：只学技术，不动制度）</td></tr><tr><td><strong>制度层·改良</strong></td><td><strong>戊戌维新</strong></td><td><strong>君主立宪</strong>：设议院、定宪法，<strong>保留君主</strong></td></tr><tr><td>制度层·革命</td><td>辛亥革命</td><td>民主共和：废除君主、建立共和国</td></tr><tr><td>文化层</td><td>新文化运动</td><td>民主与科学思想</td></tr></tbody></table>
+<p>先记住这张地图，再拿题干两条限定去定位：「<strong>资产阶级性质的政治改良运动</strong>」＋「突破洋务派『中体西用』思想的局限」——前者圈定<strong>改良</strong>路线，后者把层次从<strong>器物</strong>推到<strong>制度</strong>。两条限定一交，坐标点唯一：制度层的改良路线。</p>
+<h3>第 1 步：从「突破中体西用」推导出「立宪」</h3>
+<p>洋务派「中体西用」的要害：只学器物，封建专制制度这个「体」动不得。维新派的突破恰恰在此——<strong>制度核心必须改</strong>：把君主<strong>专制</strong>改成君主<strong>立宪</strong>（君主的位子还在，但权力结构变了：设议院、开国会、定宪法，实权向宪法与议会转移）。改的深度超过洋务，方式却仍是自上而下的改良——<strong>不推翻帝制</strong>是它与革命派的分界线。</p>
+<h3>第 2 步：四个选项对号入座</h3>
+<table><thead><tr><th>选项</th><th>对错</th><th>定位</th></tr></thead><tbody><tr><td>A 用君主立宪制取代君主专制制度</td><td>✅</td><td>留君主、行立宪——既突破器物局限，又不越「改良」雷池</td></tr><tr><td>B 用民主共和制度取代封建专制制度</td><td>❌</td><td><strong>革命派（孙中山）</strong>的方案；维新派不敢否定君主</td></tr><tr><td>C 用总统共和制取代君主立宪制</td><td>❌</td><td>民国初年的制度变迁；1898 年的维新派根本不反皇帝，谈不上「取代立宪」</td></tr><tr><td>D 用议会共和制取代君主立宪制</td><td>❌</td><td>议会制共和制仍是<strong>共和</strong>（无君主），与「保留君主」直接冲突</td></tr></tbody></table>
+<h3>追问：为什么「改良」二字能一票否决 B/C/D</h3>
+<p>「改良」的定义性特征：<strong>不改变政权框架中的君主制前提</strong>，只通过自上而下的变革调整权力运行。对君主制国家，改良的极限形态就是<strong>君主立宪</strong>——君位保留，实权受限。而总统共和、议会共和、民主共和，无论哪种形态都以<strong>废除君主</strong>为前提，天然属于「革命」方案。所以只要题干出现「维新/改良」，候选答案直接在「君主立宪」里找，「共和」家族整批排除——不必逐个背史实，路线定性即可判三错一对。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：见「学西方政治制度」就想到「共和」——把后来革命派的任务提前安给维新派，忽略「不敢从根本上否定封建主义」的题干提示。</li><li><strong>误选 C</strong>：被「立宪→共和」的演进幻觉带走——那是民国初年的制度史，不是维新派的主张。</li><li><strong>误选 D</strong>：见「议会」就对应维新派「设议院」——「设议院」服务于君主立宪（议院在君主制框架内运作），不是建立共和制。</li></ul>
+<blockquote>记忆锚点：<strong>改良=留君主的立宪；革命=去君主的共和</strong>。凡戊戌维新的制度主张，一律在「君主立宪」里找；「共和」家族（B/C/D）方向即错。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

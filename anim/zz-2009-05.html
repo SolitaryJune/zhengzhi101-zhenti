@@ -1,8 +1,144 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-05 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-05</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2009·05 货币流通规律计算</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>去年价格总额 24 万亿 → 货币需要量 3 万亿；今年价格总额 +10%，其他条件不变。求今年货币需要量。</p>",
+    "log": "已知两量，隐含第三量"
+  },
+  {
+    "title": "立公式",
+    "cls": "key",
+    "body": "<p>货币流通规律：<b>流通中所需货币量 = 商品价格总额 ÷ 同一单位货币的平均流通速度</b>。价格总额越大要钱越多；转手越快要钱越少。</p>",
+    "log": "公式：需要量 = 价格总额 ÷ 速度"
+  },
+  {
+    "title": "挖隐含条件",
+    "cls": "step",
+    "body": "<p>去年 24 ÷ 3 = <b>8 次/年</b>——「其他条件不变」保证今年流通速度仍是 8。这是检验一切算法的标尺。</p>",
+    "log": "流通速度 = 24 ÷ 3 = 8 次/年"
+  },
+  {
+    "title": "代入计算",
+    "cls": "step",
+    "body": "<p>今年价格总额 = 24 × 1.1 = 26.4 万亿；26.4 ÷ 8 = <b>3.3 万亿元</b>。等价捷径：速度不变 → 货币量与价格总额<b>同比例</b>增长，3 × 1.1 = 3.3。</p>",
+    "log": "26.4 ÷ 8 = 3.3 万亿元"
+  },
+  {
+    "title": "C 正确",
+    "cls": "good",
+    "body": "<p><b>C 正确</b>：3.3 万亿元。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": true
+    },
+    "log": "C = 3.3 万亿元"
+  },
+  {
+    "title": "D：增量陷阱",
+    "cls": "bad",
+    "body": "<p>26.4 − 24 = <b>2.4 万亿</b>——D 恰是这个差值：误把「价格总额的<b>增量</b>」当成「流通所需的货币量」。<b>D 错误</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "log": "D 是增量陷阱"
+  },
+  {
+    "title": "A：折算凑数",
+    "cls": "bad",
+    "body": "<p>4.2 万亿与「26.4 ÷ 8 = 3.3」对不上——把「同比例」的折算做错（基数或倍数用错）的凑数项。<b>A 错误</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "log": "A 与标尺对不上"
+  },
+  {
+    "title": "B：折算凑数",
+    "cls": "bad",
+    "body": "<p>3.5 万亿同样经不起 26.4 ÷ 8 的检验——比例基数或速度用错。<b>B 错误</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    },
+    "log": "B 与标尺对不上"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>C</b>：3.3 万亿元。记忆锚点：<b>需要量 = 价格总额 ÷ 速度</b>；其他条件不变=同比例，3 × 1.1 = 3.3。</p>",
+    "log": "锁定 C"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "货币流通规律：流通中需要多少货币",
+  subtitle: "考点：货币流通规律 · 方法：公式 + 挖隐含的流通速度",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 C（3.3 万亿元）",
+    html: "记忆锚点：<b>货币需要量 = 价格总额 ÷ 流通速度</b>；「其他条件不变」=<b>同比例</b>变化，3 × 1.1 = 3.3 万亿。D 是「增量陷阱」（26.4 − 24 = 2.4），最像算出来的数。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：货币流通规律的一道计算题</h2>
+<p>答案：<strong>C（3.3 万亿元）</strong>。</p>
+<h3>第 0 步：先立公式——流通中需要多少货币</h3>
+<p>货币流通规律：一定时期内流通中所需要的货币量 = <strong>商品价格总额 ÷ 同一单位货币的平均流通速度</strong>。</p>
+<p>道理：商品交换需要货币做媒介——价格总额越大，需要的「媒介」越多；货币转手越快（流通速度越高），同一枚货币可以反复服务，需要量越少。一个正比、一个反比。</p>
+<h3>第 1 步：把题目拆进公式</h3>
+<table><thead><tr><th>量</th><th>数值</th><th>来源</th></tr></thead><tbody><tr><td>去年商品价格总额</td><td>24 万亿元</td><td>题给</td></tr><tr><td>去年货币需要量</td><td>3 万亿元</td><td>题给</td></tr><tr><td>货币流通速度</td><td>24 ÷ 3 = 8 次/年</td><td><strong>隐含条件</strong></td></tr><tr><td>今年价格总额</td><td>24 × (1+10%) = 26.4 万亿元</td><td>题给「增长 10%」</td></tr><tr><td>今年货币需要量</td><td>26.4 ÷ 8 = <strong>3.3 万亿元</strong></td><td>待求</td></tr></tbody></table>
+<p>关键一步是<strong>挖出隐含条件</strong>：去年两个数据本身在告诉你流通速度是 8 次/年；「其他条件不变」保证今年速度仍是 8。于是货币需要量与价格总额<strong>同比例</strong>增长：3 × 1.1 = 3.3（万亿元）——两条算法殊途同归。</p>
+<h3>第 2 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 4.2 万亿元</td><td>❌</td><td>与 26.4 ÷ 8 = 3.3 对不上，折算比例用错的凑数项</td></tr><tr><td>B 3.5 万亿元</td><td>❌</td><td>同上，比例基数或速度用错的凑数项</td></tr><tr><td>C 3.3 万亿元</td><td>✅</td><td>3 × (1+10%) = 3.3，同比例变化</td></tr><tr><td>D 2.4 万亿元</td><td>❌</td><td>恰是 26.4 − 24：误把价格总额的<strong>增量</strong>当成「流通所需的货币量」</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 D（最像「算出来的数」）</strong>：2.4 万亿确实是今年比去年多出的价格总额，但流通所需货币量对应的是「总盘子」的媒介量，不是「增量」——忘了同比例、直接报增长额。</li><li><strong>没挖出流通速度</strong>：不先算 24 ÷ 3 = 8，就失去了检验一切算法的标尺。</li></ul>
+<blockquote>记忆锚点：货币需要量 = 价格总额 ÷ 流通速度；「其他条件不变」 = <strong>同比例</strong>变化：3 × 1.1 = 3.3 万亿。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

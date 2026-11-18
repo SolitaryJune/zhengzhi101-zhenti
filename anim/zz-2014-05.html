@@ -1,8 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-05 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-05</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·05 市场的作用：从「基础性」到「决定性」</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链/时间线卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>题眼：「经过十四大到十八届三中全会 20 多年的实践……<b>新的科学定位</b>」。要的是<b>最新</b>表述——考点：市场在资源配置中作用的提法演进。</p>",
+    "log": "「新的科学定位」=时间线最后一格"
+  },
+  {
+    "title": "时间线 1992：十四大",
+    "cls": "step",
+    "body": "<p><b>1992 年党的十四大</b>：提出建立社会主义市场经济体制，市场在宏观调控下对资源配置起<b>基础性</b>作用——这是当时的定位。</p>",
+    "log": "十四大：基础性作用"
+  },
+  {
+    "title": "时间线 2013：十八届三中全会",
+    "cls": "step",
+    "body": "<p><b>2013 年十八届三中全会</b>：把「基础性」改为「<b>决定性</b>」，同时更好发挥政府作用——这是题干所说的「新的科学定位」。</p>",
+    "log": "十八届三中全会：决定性作用"
+  },
+  {
+    "title": "A：新定位=决定性作用",
+    "cls": "good",
+    "body": "<p>题干问「新的科学定位」，取时间线最后一格：<b>决定性作用</b>。<b>A 正确</b>。</p>",
+    "ribbon": { "k": 1, "ok": true },
+    "log": "新定位=决定性 → 选 A"
+  },
+  {
+    "title": "B：基础性是旧表述",
+    "cls": "bad",
+    "body": "<p>「基础性」本身没错，但它是<b>十四大以来的旧提法</b>——题干问的是「新」定位。把旧当新是本题最大陷阱。<b>B 错误</b>。</p>",
+    "ribbon": { "k": 2, "ok": false },
+    "log": "旧提法当新定位 → B 不选"
+  },
+  {
+    "title": "C：辅助性=杜撰",
+    "cls": "bad",
+    "body": "<p>官方从未用「辅助性作用」定位市场，属杜撰词。<b>C 错误</b>。</p>",
+    "ribbon": { "k": 3, "ok": false },
+    "log": "无此定位 → C 不选"
+  },
+  {
+    "title": "D：补充性是更早的残留",
+    "cls": "bad",
+    "body": "<p>「计划经济为主、市场调节为辅」时期的旧说法残留，不是社会主义市场经济体制内的定位。<b>D 错误</b>。</p>",
+    "ribbon": { "k": 4, "ok": false },
+    "log": "「为辅」时代的残留 → D 不选"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>A</b>：使市场在资源配置中起<b>决定性作用</b>。记忆锚点：提法演进=「为主为辅」→ 十四大「基础性」→ 十八届三中全会「<b>决定性</b>」；见「新」字，取时间线最后一格。</p>",
+    "log": "锁定 A：决定性作用"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "市场在资源配置中的作用：从「基础性」到「决定性」",
+  subtitle: "考点：社会主义市场经济体制的提法演进 · 方法：时间线对位「新的科学定位」",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」沿时间线逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 A",
+    html: "记忆锚点：十四大「<b>基础性</b>」（1992）→ 十八届三中全会「<b>决定性</b>、更好发挥政府作用」（2013）。B 是最大陷阱——「基础性」没错，但题干要「<b>新</b>」定位；C/D 是杜撰或更早的残留说法。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：市场在资源配置中的作用——「基础性」到「决定性」的一字之变</h2>
+<p>答案：<strong>A（决定性作用）</strong>。</p>
+<h3>第 0 步：先立时间线——这个提法是一步一步改过来的</h3>
+<p>市场在资源配置中的定位不是一次说死的，是随改革实践不断升级：</p>
+<table><thead><tr><th>时间</th><th>会议</th><th>表述</th></tr></thead><tbody><tr><td>1992 年</td><td>党的<strong>十四大</strong></td><td>提出建立社会主义市场经济体制，市场在宏观调控下对资源配置起<strong>基础性</strong>作用</td></tr><tr><td>2013 年</td><td><strong>十八届三中全会</strong></td><td>使市场在资源配置中起<strong>决定性</strong>作用，更好发挥政府作用</td></tr></tbody></table>
+<p>题干明说了「经过十四大到十八届三中全会 20 多年的实践……<strong>新的科学定位</strong>」——问的就是 2013 年的新表述。</p>
+<h3>第 1 步：题问对位</h3>
+<p>「新的科学定位」＝时间线的最后一格 = <strong>决定性作用</strong> → 选 A。</p>
+<h3>第 2 步：干扰项各自错在哪</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>错因</th></tr></thead><tbody><tr><td>B 基础性作用</td><td>❌</td><td>十四大以来的<strong>旧</strong>提法——「基础性」本身没错，错在题干问的是「新」定位；把旧表述当新表述是本题最大陷阱</td></tr><tr><td>C 辅助性作用</td><td>❌</td><td>从未有过的官方定位，杜撰词</td></tr><tr><td>D 补充性作用</td><td>❌</td><td>「计划经济为主、市场调节为辅」时期的旧说法残留，不是市场经济体制内的定位</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 B（最典型）</strong>：审题只看到「市场对资源配置」就选「基础性」——记住了十四大，漏了题干的「新的科学定位」。做这类时政定位题，先扫题眼要「新」还是要「旧」。</li><li><strong>误选 C/D</strong>：说明只知道「基础性」一个提法，对定位的演进过程没印象——顺时间线记忆（「为主为辅」→「基础性」→「决定性」）就不会掉进造出来的词。</li></ul>
+<blockquote>记忆锚点：十四大「<strong>基础性</strong>」→ 十八届三中全会「<strong>决定性</strong>+更好发挥政府作用」；题干出现「新的科学定位」，答案取时间线<strong>最后一格</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

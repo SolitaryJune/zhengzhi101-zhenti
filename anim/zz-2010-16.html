@@ -1,8 +1,121 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-16 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-16</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-16 · 全球经济失衡的根源定位</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链模板（政治站无 KaTeX，纯文本推理链卡片），只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：「根源」是等级词，问最深层",
+    "cls": "key",
+    "tag": "立方法",
+    "body": "<p>题干是胡锦涛 2009 年 9 月 G20 匹兹堡峰会讲话《全力促进增长 推动平衡发展》：五个「失衡」（储蓄消费、贸易收支、世界财富分配、资源拥有和消费、国际货币体系）是<b>表现清单</b>。</p><p>设问「<b>从根本上看，失衡的根源是</b>」——「根源」是等级词，要最深层那一条。先定层级，再看选项归属。</p>",
+    "log": "抓等级词「根源」→ 答案在最深一层"
+  },
+  {
+    "title": "立三层漏斗：表现 → 原因 → 根源",
+    "cls": "step",
+    "tag": "立框架",
+    "body": "<p><b>表现层</b>：五个失衡「长什么样」（题干已给）。</p><p><b>原因层</b>：失衡「经什么机制形成」——全球化与产业分工转移 / 国际经济体系与宏观政策 / 消费文化。</p><p><b>根源层</b>：失衡「为什么根深蒂固」——南北发展严重不平衡这块<b>深层土壤</b>。</p>",
+    "log": "三层漏斗：机制运行在结构之上"
+  },
+  {
+    "title": "A 判误：背景与传导机制，中间层",
+    "cls": "bad",
+    "tag": "干扰项",
+    "body": "<p>「经济全球化深入发展、国际产业分工转移、国际资源流动」解释失衡<b>怎么传导、在哪里形成</b>——是背景与机制。</p><p>但机制运行在结构之上：它解释「在哪失衡」，不解释「为什么根深蒂固」，<b>A 错误</b>。误选 = 把「失衡发生在哪些环节」当成「失衡为什么存在」。</p>",
+    "ribbon": { "k": 1, "ok": false },
+    "log": "A：机制层，够不着根源"
+  },
+  {
+    "title": "B 判误：可调整的制度原因，迷惑性最强",
+    "cls": "bad",
+    "tag": "干扰项",
+    "body": "<p>「现行国际经济体系、主要经济体宏观经济政策」最接近「制度原因」——但它们属于<b>可调整的操作层面</b>（G20 协调的正是宏观政策）。</p><p>调整能<b>缓解</b>失衡，却改不了失衡反复产生的土壤，够不着「根本」二字，<b>B 错误</b>。</p>",
+    "ribbon": { "k": 2, "ok": false },
+    "log": "B：制度政策层，可调整≠根源"
+  },
+  {
+    "title": "C 判误：消费文化，离根源最远",
+    "cls": "bad",
+    "tag": "干扰项",
+    "body": "「各国消费文化和生活方式」是次要的、习俗层面的因素——既非机制主体，更不是结构差距，离「根源」最远。<b>C 错误</b>。",
+    "ribbon": { "k": 3, "ok": false },
+    "log": "C：习俗层，最远"
+  },
+  {
+    "title": "D 入选：南北发展严重不平衡",
+    "cls": "good",
+    "tag": "正确项",
+    "body": "<p>南方国家在<b>产业分工</b>低端、<b>资源定价</b>不利、<b>国际货币体系</b>缺话语权——五个失衡都从南北发展鸿沟这块土壤里长出来。</p><p>A、B 的机制之所以持续起作用，正因南北差距摆在那里；讲话的对策（更公平的国际经济秩序、支持发展中国家发展）也印证：治根源 = 治南北差距，<b>D 正确</b>。</p>",
+    "ribbon": { "k": 4, "ok": true },
+    "log": "D：结构性差距 = 深层土壤 = 根源"
+  },
+  {
+    "title": "收束：等级词定位法",
+    "cls": "good",
+    "tag": "收束",
+    "body": "<p>时政讲话类题通用解法：抓等级词——<b>表现/现象 → 原因/机制 → 根源/根本/实质</b>；选项常把中间层堆得很满，答案通常给「结构性差距」类表述。</p><p>排除直觉：能靠「协调政策、改变习惯」解决的不是根源；要靠「改变结构/秩序」才能解决的才是。</p>",
+    "log": "干扰项归因收束 → D"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '干扰项' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '全球经济失衡的根源定位',
+  subtitle: '考点：G20 匹兹堡峰会讲话 · 表现/原因/根源三层漏斗 · 「等级词」定位法',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: { big: '答案 D', html: '<b>南北发展严重不平衡</b>是全球经济失衡的根源：五个失衡是<b>表现</b>，全球化/分工/资源流动（A）与经济体系/宏观政策（B）是<b>原因层</b>，消费文化（C）是<b>习俗层</b>。<br>等级词定位：表现/现象 → 原因/机制 → 根源/根本——问「根本」就选最深层、最结构的那条。' }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：全球经济失衡的"根源"定位——南北发展严重不平衡</h2>
+<p>答案：<strong>D（南北发展严重不平衡）</strong>。</p>
+<h3>第 0 步：先立机制——讲话的三层结构与"等级词"定位法</h3>
+<p>胡锦涛 2009 年 9 月在 G20 匹兹堡峰会讲话《全力促进增长 推动平衡发展》谈全球经济失衡，内容分三层，一层比一层深：</p>
+<table><thead><tr><th>层次</th><th>内容</th><th>对应选项</th></tr></thead><tbody><tr><td><strong>表现层</strong>（失衡"长什么样"）</td><td>储蓄消费失衡、贸易收支失衡、世界财富分配失衡、资源拥有和消费失衡、国际货币体系失衡——五个"失衡"清单</td><td>题干已给</td></tr><tr><td><strong>原因层</strong>（失衡"经什么机制形成"）</td><td>经济全球化与产业分工转移、现行国际经济体系与主要经济体宏观政策、各国消费文化和生活方式</td><td>A、B、C</td></tr><tr><td><strong>根源层</strong>（失衡"为什么根深蒂固"）</td><td><strong>南北发展严重不平衡</strong>——发达国家（北）与发展中国家（南）之间的发展鸿沟</td><td>D</td></tr></tbody></table>
+<p>题干问"<strong>从根本上看，失衡的根源是</strong>"——"根源"是等级词，要的是最深层那一条。定位词一抓，先确定答案该在哪一层，再看选项各归属哪层。</p>
+<h3>第 1 步：为什么"根源"落在南北发展不平衡</h3>
+<ul><li>南方（发展中国家）在<strong>国际产业分工</strong>中处于低端、在<strong>资源定价与流动</strong>中处于不利位置、在<strong>国际货币体系</strong>中缺乏话语权——贸易失衡、财富分配失衡、货币体系失衡这些"表现"，都是从南北发展鸿沟这块土壤里长出来的。</li><li>换句话说：A、B 说的那些机制之所以能持续起作用、失衡之所以反复出现，正因为南北差距摆在那里——它是<strong>其他一切失衡的深层土壤</strong>，所以讲话把"根源"给它。</li><li>讲话的对策也印证这一点：促进平衡发展，要靠建立更公平的国际经济秩序、支持发展中国家发展——治"根源"就要治南北差距。</li></ul>
+<h3>第 2 步：A、B、C 各错在哪一层</h3>
+<ul><li><strong>A（经济全球化深入发展、国际产业分工转移、国际资源流动）</strong>：定位在<strong>原因层</strong>。它们解释失衡"怎么传导、在哪里形成"，是背景与传导机制——但机制运行在结构之上，问"根源"还要再往下挖一层。</li><li><strong>B（现行国际经济体系、主要经济体宏观经济政策）</strong>：定位在<strong>原因层</strong>，且最接近"制度原因"，迷惑性最强。但制度与政策属于<strong>可调整的操作层面</strong>（G20 协调的正是宏观政策）：调整它们能缓解失衡，却改不了失衡反复产生的土壤——够不着"根本"二字。</li><li><strong>C（各国消费文化和生活方式）</strong>：次要的、习俗层面的因素，既非机制主体，更不是结构差距——离"根源"最远。</li></ul>
+<h3>易错点：干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：把"失衡发生在哪些环节"当成了"失衡为什么存在"——混淆"机制"与"根源"。</li><li><strong>误选 B</strong>：把"可调整的制度原因"当成"根源"——能靠协调政策解决的不是根源。</li><li><strong>通用解法</strong>：时政讲话类题抓"等级词"——表现/现象 → 原因/因素/机制 → 根源/根本/实质/深层；选项常把中间层堆得很满，答案通常给"结构性差距"类表述（南北差距、发展不平衡、旧的国际经济秩序）。</li></ul>
+<blockquote>记忆锚点：五个失衡是表现，全球化/分工/政策是原因，<strong>南北发展严重不平衡</strong>才是根源；问"根本"就选最深层、最结构的那条。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,127 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2017-13 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2017-13</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2017·13 信念的层次：高层决定低层</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站概念类动画模板（推理链卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼',
+    cls: 'key',
+    body: '<p>题干给出定义：信念是<b>认知、情感和意志</b>的有机统一体，是"坚信不疑并身体力行"的心理态度和精神状态。设问落在"<b>不同的层次和类型</b>"——不考定义本身，考信念体系的<b>内部结构</b>。</p>',
+    tag: '审题',
+    log: '定义之后考结构：层次与类型'
+  },
+  {
+    title: '先立机制：信念是一座有层次的塔',
+    cls: 'key',
+    body: '<p>三个维度先立好：① <b>层次</b>——高层定方向（统摄整个人生），低层管日常（对具体人、事、观念的相信，服从服务于高层），"基本信仰"只有<b>高层</b>担得起；② <b>科学性</b>——有科学与非科学之分，"坚信"≠"正确"；③ <b>主体差异</b>——多样性、差异性，同环境也会因立场、经历、利益、教育而信念不同。</p>',
+    tag: '立机制',
+    log: '层次·科学性·差异，三个维度备好'
+  },
+  {
+    title: '选项 A：层次关系原话对号',
+    cls: 'good',
+    ribbon: { k: 1, ok: true },
+    body: '<p>A"高层次的信念决定低层次的信念"——正是维度 ① 的表述：高层信念确定人生方向，低层次信念服从、服务于它，先定方向再管日常。<b>A 正确</b>。</p>',
+    tag: '✓ 对',
+    log: '高层决定低层 → A 正确'
+  },
+  {
+    title: '选项 B：塔尖塔基对调',
+    cls: 'bad',
+    ribbon: { k: 2, ok: false },
+    body: '<p>B"低层次的信念代表了一个人的基本信仰"——错。基本信仰是对最高理想的坚定追求，在<b>塔尖</b>；低层次信念在塔基，只支撑日常选择。B 把层次关系<b>颠倒</b>。<b>B 排除</b>。</p>',
+    tag: '✗ 错',
+    log: '基本信仰在高层 → B 排除'
+  },
+  {
+    title: '选项 C：绝对化抹平差异',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>C"相同社会环境中生活的人们信念始终一致"——错。维度 ③：信念具有多样性和差异性，立场、经历、利益、教育不同，同环境的人信念也会不同；"始终一致"过于绝对。<b>C 排除</b>。</p>',
+    tag: '✗ 错',
+    log: '同环境 ≠ 同信念 → C 排除'
+  },
+  {
+    title: '选项 D：否定科学性维度',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>D"各种信念没有科学与非科学之分"——错。维度 ②：信念<b>有</b>科学与非科学之分，科学的信念建立在对客观规律的正确认识之上，教材因此要求"确立科学的信念"。"坚信不疑"不等于内容正确。<b>D 排除</b>。</p>',
+    tag: '✗ 错',
+    log: '有科学与非科学之分 → D 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>A（高层次的信念决定低层次的信念）</b>。四个选项各对应一个维度：A 用层次维度判对，B 颠倒层次，C、D 用绝对化措辞否定多样性与科学性区分这两个真实特征。</p>',
+    tag: '定案',
+    log: '锁定 A：高层决定低层'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '信念的层次结构：高层决定低层',
+  subtitle: '考点：信念的内涵与特征（层次 · 科学性 · 多样性） · 2017·13',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」：先立三个维度，再逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 A',
+    html: '记忆锚点：信念 = <b>认知 + 情感 + 意志</b>的有机统一体；<b>高层次的信念决定低层次的信念</b>，高层次信念 = 一个人的基本信仰（塔尖不在塔基）；信念有<b>科学与非科学之分</b>（坚信 ≠ 正确）；信念具有<b>多样性</b>（同环境 ≠ 同信念）。B 颠倒层次；C、D 靠"始终一致""没有之分"的绝对化措辞设障。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：信念的层次与类型——高层次的信念决定低层次的信念</h2>
+<p>答案：<strong>A（高层次的信念决定低层次的信念）</strong>。</p>
+<h3>第 0 步：先立机制——信念体系是一座有层次的"塔"</h3>
+<p>题干先把定义交到手上：信念是<strong>认知、情感和意志</strong>的有机统一体——认知是底座（知道并相信它有道理），情感是黏合剂（认同它、热爱它），意志是支柱（下决心排除困难去践行它），三者合成"坚信不疑并身体力行"的心理态度和精神状态。正因为三个成分合成一个整体，信念不是零散想法的堆砌，而是有<strong>结构和层次</strong>的体系——设问"信念有不同的层次和类型，其中……"，考的就是这个内部结构。</p>
+<p>为什么会分层？因为各种信念在同一个人心里的<strong>地位并不平等</strong>：</p>
+<ul><li><strong>最高层</strong>：对最高理想和终极价值的坚定追求，即一个人的<strong>基本信仰</strong>，统摄整个人生方向——"信仰"二字只有<strong>高层次</strong>信念担得起；</li><li><strong>低层</strong>：对具体人、具体事、具体观念的相信，支撑日常选择，并<strong>服从、服务于</strong>高层次信念。</li></ul>
+<p>所以层次关系的正确表述只有一条：<strong>高层次的信念决定低层次的信念</strong>——高层定方向，低层管日常。选 <strong>A</strong>。</p>
+<p>再立两个维度，供排除干扰项用：</p>
+<ol><li><strong>科学性维度</strong>：信念有科学与非科学之分。科学的信念建立在对客观规律的正确认识之上；"坚信不疑"只说明态度坚定，不等于内容正确——否则教材就不会要求"确立科学的信念"了。</li><li><strong>主体差异维度</strong>：信念具有<strong>多样性和差异性</strong>。即使社会环境相同，人们的信念也会因立场、经历、利益、教育不同而不一致——同环境不等于同信念。</li></ol>
+<h3>第 1 步：干扰项归因</h3>
+<table><thead><tr><th>选项</th><th>错在哪</th><th>对应的误解</th></tr></thead><tbody><tr><td>B</td><td>层次颠倒：代表"基本信仰"的是<strong>高层次</strong>信念；低层次信念只是支撑日常的具体相信</td><td>把"信仰"泛化为"凡坚持的皆是信仰"</td></tr><tr><td>C</td><td>绝对化否定多样性："始终一致"与信念的多样性、差异性直接冲突</td><td>环境决定论——以为同环境必然同信念</td></tr><tr><td>D</td><td>否定科学性维度：教材要求"确立科学的信念"，前提就是有科学与非科学之分</td><td>把"信念是精神状态"偷换成"信念无对错"</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>C、D 共用同一手法——绝对化措辞</strong>："始终一致""没有……之分"是一刀切表述，政治选择题里几乎必错；本题它们恰好各踩掉信念的一个真实特征（多样性、科学性区分）。</li><li><strong>B 最迷惑</strong>：它借题干"坚信不疑"的语感，让人以为天天坚持的"低层次"信念就是信仰。判断钥匙仍是那句层次关系——<strong>信仰在塔尖，不在塔基</strong>。</li></ul>
+<blockquote>记忆锚点：信念 = 认知 + 情感 + 意志的统一体；<strong>高层决定低层，高层 = 基本信仰</strong>；有科学与非科学之分；同环境 ≠ 同信念。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,95 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-25 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-25</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-25 · 和平发展道路的文化传统依据（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261117a">
+</head>
+<body>
+<!-- 概念/推理链模板：机制先行（两重依据 + 限定词划界）→ A/C/D 对号、B 答非所问出局（ACD） -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261117a"></script>
+<script>
+/* ================== 题目专属区域（依据 zz-2010-25 题干与 refAnalysis 编写） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：限定词"历史文化传统"就是答案的边界',
+    body: '<p>题干先说全了：和平发展道路"与本国国情和<b>时代特征</b>相适应"，再单独问"符合中国的<b>历史文化传统</b>，这是因为……"。</p><p>两重依据只开一重——先划界，再逐项查出处。</p>',
+    log: '审题：只要"历史文化传统"这一重，越界即错' },
+  { tag: '机制', cls: 'key', title: '机制先行：同一件事，两重依据',
+    body: '<p>中国走和平发展道路：<b>时代特征</b>给了外部可能（和平与发展的潮流），<b>历史文化传统</b>给了自身底子（民族品格 + 交往传统 + 文化本体）。</p><p>两重依据分开装袋：题干这问只取"文化"袋里的东西。</p>',
+    log: '机制：时代特征是外因、文化传统是底子，本题只问后者' },
+  { tag: '选项A', cls: 'good', title: 'A 中华民族是热爱和平的民族 —— 品格层面',
+    body: '<p>民族<b>品格</b>——文化传统落在"人"身上的表现，出处词"民族"自带历史纵深。</p><p>文化传统命中。<b>A 对</b>。</p>',
+    ribbon: { k: 1, ok: true },
+    log: 'A＝品格：热爱和平是中华民族的民族性' },
+  { tag: '选项C', cls: 'good', title: 'C 亲仁善邻、和而不同 —— 交往传统层面',
+    body: '<p>对外交往中的<b>传统</b>："亲仁善邻"善待邻居、"和而不同"承认差异仍求和谐——"始终"二字标明是历史积淀，不是一时政策。</p><p>文化传统命中。<b>C 对</b>。</p>',
+    ribbon: { k: 3, ok: true },
+    log: 'C＝交往传统：亲仁善邻、和而不同，古已有之' },
+  { tag: '选项D', cls: 'good', title: 'D 中华文化是和平的文化 —— 文化本体层面',
+    body: '<p><b>文化本体</b>的判断：渴望和平始终是中国人民的精神特征——把 A（品格）、C（交往）拢到"和平文化"这个总名下。</p><p>三条合起来才是完整取材。<b>D 对</b>。</p>',
+    ribbon: { k: 4, ok: true },
+    log: 'D＝文化本体：收拢品格与交往，和平文化的总判断' },
+  { tag: '选项B', cls: 'bad', title: 'B 和平与发展成为时代潮流 —— 正确，但答非所问',
+    body: '<p>说法<b>正确</b>、相关性也真，但它属于<b>时代特征</b>——题干前半句"与时代特征相适应"对应的那一重依据。</p><p>题问"历史文化传统"，B 是从隔壁房间搬来的正确答案——<b>答非所问，B 出局</b>。</p>',
+    ribbon: { k: 2, ok: false },
+    log: 'B 出处错位：时代潮流 ≠ 历史文化传统，正确也选不得' },
+  { tag: '结论', cls: 'good', title: '收束：看出处词定去留 —— ACD',
+    body: '<p>一条线收拢：<b>A</b> 品格、<b>C</b> 交往传统、<b>D</b> 文化本体——全带历史文化纵深词；<b>B</b> 带时代词（潮流），归另一袋。</p><p>内容对 ≠ 能选：先问题干限定词圈的是哪一块，再决定选项去留。</p>',
+    log: '结论：ACD——问文化就答文化，问时代才答潮流' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag,
+    log: s.log || s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon,
+    done: last,
+  };
+});
+
+AW.init({
+  title: 'zz-2010-25 · 坚持和平发展道路符合历史文化传统的原因（多选）',
+  subtitle: '考点：和平发展道路 · 两重依据划界 —— "正确但不对题"的 B 出局',
+  ribbonTitle: '选项 A–D 逐个点亮（✓ 对 / ✗ 答非所问）',
+  intro: '点击「▶ 播放」：先划两重依据的边界，再按品格 → 交往 → 本体 → 潮流逐项查出处。',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '记忆锚点：<b>问文化就答文化，问时代才答潮流</b>——A 民族品格、C 亲仁善邻和而不同的交往传统、D 和平的文化本体。<br>"历史文化传统"五个字是取材边界，B（时代潮流）再正确也是隔壁房间的答案。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：和平发展道路——"历史文化传统"的限定词划界</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——限定词就是答案的边界</h3>
+<p>题干的问法先拆干净："中国成功地走上了一条<strong>与本国国情和时代特征相适应</strong>的和平发展道路"，然后问"符合中国的<strong>历史文化传统</strong>，这是因为……"。和平发展道路有两重依据：一重来自<strong>时代特征</strong>（外部环境），一重来自<strong>历史文化传统</strong>（自身底子）。题干只要后一重——限定词五个字就是答案的边界，越界即错：</p>
+<table><thead><tr><th>依据来源</th><th>内容</th><th>本题是否要</th></tr></thead><tbody><tr><td>时代特征</td><td>和平与发展成为时代潮流</td><td>不要（B）</td></tr><tr><td>历史文化传统</td><td>民族热爱和平的品格、亲仁善邻和而不同的交往传统、和平的文化本体</td><td>要（A、C、D）</td></tr></tbody></table>
+<h3>逐项对号入座</h3>
+<ul><li><strong>A 对</strong>：中华民族是热爱和平的民族——民族<strong>品格</strong>，文化传统落在"人"身上的表现。</li><li><strong>C 对</strong>：中国人民在对外交往中始终强调亲仁善邻、和而不同——具体<strong>交往传统</strong>："亲仁善邻"是善待邻居、"和而不同"是承认差异仍求和谐，都带"始终"这类纵深时间词，是历史积淀而非一时政策。</li><li><strong>D 对</strong>：中华文化是一种和平的文化，渴望和平始终是中国人民的精神特征——<strong>文化本体</strong>的判断，把前两条拢到"文化"这个总名下。</li><li><strong>B 错</strong>：和平与发展成为时代发展的潮流——说法完全正确，也确实支撑和平发展道路，但它属于<strong>时代特征</strong>，是题干前半句"与时代特征相适应"对应的那一重依据。题干问"历史文化传统"，B 答的是另一半，<strong>答非所问</strong>。</li></ul>
+<h3>为什么 B 最有迷惑性</h3>
+<p>B 的迷惑性是双重的：内容正确、相关性也真——把 B 排除似乎"可惜"。但选择题的规则是<strong>内容对 ≠ 能选</strong>：题干的限定词圈定了取材范围，B 是从隔壁房间搬来的正确答案。识别这类干扰项的诀窍是看"出处词"——A、C、D 全带历史文化纵深词（民族、始终、文化），B 带时代词（潮流）。命题人把 B 放进来，考的就是审题时有没有把"时代特征"和"历史文化传统"分开装袋。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：只看"正确 + 相关"，不看题干限定词——"正确但不对题"是政治选择题最经典的失分动作。</li><li><strong>漏 C</strong>：觉得"亲仁善邻、和而不同"是古话、太细——它恰是交往层面的传统实证，与 A（品格）、D（本体）构成三个层面。</li><li><strong>漏 D</strong>：把 A、C 选中就收手——D 是把前两者收拢的文化本体判断，三条合起来才是"文化传统"的完整取材。</li></ul>
+<blockquote>记忆锚点：问文化就答文化，问时代才答潮流——A 民族品格、C 交往传统、D 文化本体，"历史文化传统"五个字把 B 挡在门外。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,99 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-22 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-22</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2026-22 · 毛泽东谈音乐：中外文化关系的根本观点（2026 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：设问锁定"中外文化关系"',
+    cls: 'key',
+    body: '<p>1956 年毛泽东同音乐工作者对谈，表面谈音乐，实际谈<b>中外文化怎么相处</b>。设问："阐明<b>中外文化关系</b>的根本观点是？"——材料三条线：①"唱一种曲子不行"；②演外国音乐未消亡；③谈话落点＝学外创中。逐条对号。</p>' },
+  { title: '先立机制：九部乐十部乐的历史例证',
+    cls: '',
+    body: '<p>隋唐九部乐、十部乐多数是西域音乐，还有高丽、印度音乐——多元并存是<b>历史事实</b>；"演外国音乐并没有使我们自己的音乐消亡了"——民族音乐在开放中存活并发展。两个史实分别支撑后面的每一条观点，也各堵一个极端。</p>' },
+  { title: '逐项分析 A：要尊重文化多样性',
+    cls: 'good',
+    ribbon: {k:1, ok:true},
+    body: '<p>A：要尊重文化多样性。"地球上有二十七亿人，如果<b>唱一种曲子</b>是不行的"——对单一化的正面否定；九部乐十部乐中西域、高丽、印度乐与汉乐同台，是多样性的历史实例。尊重多样性是处理中外关系的前提。✅ 选。</p>' },
+  { title: '逐项分析 B："文化自信"对不上号',
+    cls: 'bad',
+    ribbon: {k:2, ok:false},
+    body: '<p>B：要有自己的文化自信。今天看<b>说法没错</b>，但两处不合：①设问问"中外文化关系"（怎么对待外国文化），B 说的是对自己文化的态度——<b>答非所问</b>；②"文化自信"是新时代话语，1956 谈话里没有此表述——<b>超语境</b>。观点正确 ≠ 与材料对应。❌ 不选。</p>' },
+  { title: '逐项分析 C：两个极端都错',
+    cls: 'good',
+    ribbon: {k:3, ok:true},
+    body: '<p>C：一概排斥或全盘吸收<b>都是错误的</b>。"演外国音乐没使我们消亡"堵住<b>排斥论</b>（关门主义）；"中国民族的东西有规律"堵住<b>取代论</b>（全盘照搬即取消主体性）。既不关门，也不照搬。✅ 选。</p>' },
+  { title: '逐项分析 D：学外国长处、创民族风格',
+    cls: 'good',
+    ribbon: {k:4, ok:true},
+    body: '<p>D：学习外国的长处，来创造出<b>中国自己的、有独特的民族风格</b>的东西。谈话的核心落点："洋为中用"——以我为主、为我所用；学是手段，创造是目的。✅ 选。</p>' },
+  { title: '对号入座汇总',
+    cls: '',
+    body: '<p>A ✅ 多样要尊重；B ❌ 答非所问＋超语境；C ✅ 两个极端都不能走；D ✅ 学了为创造。→ 答案 <b>ACD</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>ACD</b>。中外文化三原则：多样要尊重（A）、两个极端都不能走（C）、学了为创造（D）；"文化自信"观点对但答非所问、超 1956 语境（B 反）。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2026-22 毛泽东谈音乐：中外文化关系',
+  subtitle: '考点：社会主义文化建设 · 对待外国文化的正确态度 · 史论题的语境意识 —— 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '<b>A</b> 尊重文化多样性——"二十七亿人唱一种曲子不行"、九部乐十部乐多元并存。<br><b>C</b> 一概排斥或全盘吸收都错——演外国音乐未消亡（堵排斥）、民族的东西有规律（堵取代）。<br><b>D</b> 学外国长处，创造中国自己的、独特民族风格的东西——谈话落点"洋为中用"。<br><br><b>干扰项：</b>B"文化自信"观点正确，但设问问"中外文化关系"、且是新时代话语——答非所问＋超语境，"观点对≠与材料对应"。<br><br><b>记忆锚点：</b>多样、反极端、为创造；史论题盯设问与语境。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：毛泽东谈音乐与中外文化关系的根本观点</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——一段谈话里的"三条处理线"</h3>
+<p>1956 年毛泽东同音乐工作者对谈，表面谈音乐，实际谈的是<strong>中外文化关系怎么处理</strong>。把材料拆开，三条线一清二楚：</p>
+<ol><li><strong>"地球上有二十七亿人，如果唱一种曲子是不行的"</strong>——世界若只剩一种文化，等于文化上的单一化，此路不通；九部乐、十部乐中西域、高丽、印度音乐与本土音乐并存，是多样性的历史实例 → <strong>尊重文化多样性</strong>（A）；</li><li><strong>"演外国音乐并没有使我们自己的音乐消亡了"＋"说中国民族的东西没有规律……是不对的"</strong>——外国音乐进来没冲垮民族音乐，说明"一概排斥"是关门主义；但民族的东西自有其规律，"全盘吸收"则取消自己的主体性 → <strong>两个极端都错</strong>（C）；</li><li>谈话的落点：学外国不是为了变成外国，而是"<strong>洋为中用</strong>"——要创造出中国自己的、有独特民族风格的东西 → <strong>学外国长处、创民族风格</strong>（D）。</li></ol>
+<h3>第 1 步：A、C、D 各自对在哪里</h3>
+<p><strong>A 尊重文化多样性</strong>："唱一种曲子不行"是对单一化的正面否定；隋唐宫廷乐里西域乐、高丽乐、印度乐与汉乐同台，本身就是"地球不只一种曲子"的史证。文化多样性是人类社会的基本特征，尊重它是处理中外关系的前提。</p>
+<p><strong>C 一概排斥或全盘吸收都错</strong>：材料用两个史实各堵一个极端——"演外国音乐没使我们消亡"堵住<strong>排斥论</strong>（开放不亡国），"中国民族的东西有规律"堵住<strong>取代论</strong>（外国的不必也不能全盘搬来）。这次谈话的精神正是：既不关门，也不照搬。</p>
+<p><strong>D 学外国长处、创造民族风格</strong>：这是谈话的核心落点。学习的目的性要讲清楚——"以我为主、为我所用"，消化外国长处后长出的仍是"中国自己的、有独特的民族风格的东西"。学是手段，创造是目的。</p>
+<h3>第 2 步：B 为什么不选——观点本身对，但"对不上号"</h3>
+<p>B"要有自己的文化自信"放在今天完全正确，为什么排除？两处不合：</p>
+<ol><li><strong>答非所问</strong>：设问限定"阐明<strong>中外文化关系</strong>的根本观点"。A、C、D 都直接回答"如何对待外国文化"（怎么相处、怎么学、学了干什么）；B 说的是<strong>对自己文化</strong>的态度，没落在"中外关系"这个设问点上。</li><li><strong>超语境</strong>："文化自信"是新时代提炼的表述，1956 年的谈话文本里没有这一概念（题目解析也特别提示"注意当时论述语境"）。把后来的话语倒贴回历史文本，是史论题里最隐蔽的干扰类型：<strong>观点正确 ≠ 与材料对应</strong>。</li></ol>
+<h3>第 3 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>材料对号处</th></tr></thead><tbody><tr><td>A 要尊重文化多样性</td><td>✅</td><td>"唱一种曲子是不行的"；九部乐十部乐多元并存</td></tr><tr><td>B 要有自己的文化自信</td><td>❌</td><td>非"中外关系"设问点；新时代话语超 1956 语境</td></tr><tr><td>C 一概排斥/全盘吸收都错</td><td>✅</td><td>演外国音乐未消亡（堵排斥）；民族的东西有规律（堵取代）</td></tr><tr><td>D 学外国长处创民族风格</td><td>✅</td><td>谈话落点：创造中国自己的独特民族风格</td></tr></tbody></table>
+<p>→ 选 <strong>ACD</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：觉得"文化自信永远正确"就顺手选上。多选题要盯<strong>设问</strong>：问的是"中外文化关系"的观点，B 答的是"对自己文化"的态度——观点对但答非所问，同样不选。</li><li><strong>漏选 C</strong>：材料只明说了"不必怕外国音乐"，"全盘吸收也错"要靠谈话整体精神补齐：学外国是为了创造自己的东西，照搬即取消主体性。</li><li><strong>漏选 A</strong>：注意力全落在"学外国"上，漏掉"二十七亿人唱一种曲子不行"这句对单一化的强表态——尊重多样性是谈话的第一层意思。</li></ul>
+<blockquote>记忆锚点：中外文化三原则——<strong>多样要尊重（A）、两个极端都不能走（C）、学了为创造（D）</strong>；"观点本身对、但与设问和语境对不上"的选项照样排除（B 反）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

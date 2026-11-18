@@ -1,8 +1,89 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2011-14 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2011-14</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2011-14 · 理想按层次划分</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：分类题先找"维度"',
+    cls: 'key',
+    body: '<p>理想类型多，每种分类挂在一个<b>维度</b>上。题眼"从<b>层次</b>上划分"＝问<b>境界高低</b>那一行。先立维度表，再验每个选项。</p>' },
+  { title: '立机制：四个维度配四对词',
+    cls: 'key',
+    body: '<p><b>性质</b>＝科学/非科学；<b>层次</b>＝崇高/一般；<b>对象</b>＝个人/社会；<b>内容</b>＝生活·职业·道德·政治；<b>时间</b>＝长远/近期。窍门：看两个词在<b>比什么</b>——比高低才是"层次"。</p>' },
+  { title: '选项 A：个人理想和社会理想',
+    cls: 'bad', k: 1, pick: false,
+    body: '<p>比的是理想的主人是谁——<b>对象/主体维度</b>。二者并列强调统一，无高低排序，<b>排除</b>。</p>' },
+  { title: '选项 B：道德理想和政治理想',
+    cls: 'bad', k: 2, pick: false,
+    body: '<p>比的是<b>内容领域</b>（道德领域 vs 政治领域）——领域之间只有内容之别，无高低之分，<b>排除</b>。</p>' },
+  { title: '选项 C：生活理想和职业理想',
+    cls: 'bad', k: 3, pick: false,
+    body: '<p>同样是<b>内容维度</b>（日常生活 vs 职业发展），<b>排除</b>。</p>' },
+  { title: '选项 D：崇高理想和一般理想',
+    cls: 'good', k: 4, pick: true,
+    body: '<p>比的是境界的<b>高低</b>——正是"层次"维度的教材表述。<b>入选</b>。</p>' },
+  { title: '结论：比高低＝层次',
+    cls: 'good',
+    body: '<p>A 比范围、B/C 比领域、D 比高低——只有 D 对准"层次"。</p><p><b>答案 D。</b>记忆锚点：<b>层次＝崇高/一般</b>；问什么维度就找"比什么"的词。</p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: last ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2011-14 · 理想按层次如何划分',
+  subtitle: '2011 年第 14 题（单选）· 考点：理想信念的类型 · 逐项推演',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 正确 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立维度表，再逐项验明正身。',
+  snaps: snaps,
+  result: {
+    big: '答案 D',
+    html: '记忆锚点：四维度配四对词——<b>性质＝科学/非科学，层次＝崇高/一般，对象＝个人/社会，内容＝生活·职业·道德·政治</b>。A 迷惑在"社会理想更重要"≠"层次更高"。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：理想分类的四个"维度"——按层次划分是哪一对</h2>
+<p>答案：<strong>D（崇高理想和一般理想）</strong>。</p>
+<h3>第 0 步：先立机制——分类题先立"维度表"</h3>
+<p>理想有多种类型，但每种分类都挂在一个<strong>维度</strong>上。分类题的机关永远是：选项给出的两个词各自属于哪个维度。先把教材的维度表立起来：</p>
+<table><thead><tr><th>划分维度</th><th>类别</th></tr></thead><tbody><tr><td>按<strong>性质</strong>划分</td><td>科学理想 / 非科学理想</td></tr><tr><td>按<strong>层次（境界高低）</strong>划分</td><td><strong>崇高理想 / 一般理想</strong></td></tr><tr><td>按<strong>对象（主体范围）</strong>划分</td><td>个人理想 / 社会理想</td></tr><tr><td>按<strong>内容（生活领域）</strong>划分</td><td>社会理想、道德理想、职业理想、生活理想</td></tr><tr><td>按<strong>时间（奋斗时序）</strong>划分</td><td>长远理想 / 近期理想</td></tr></tbody></table>
+<p>题眼"<strong>从层次上划分</strong>"＝问境界高低那一行——崇高理想与一般理想。</p>
+<h3>第 1 步：逐个维度"验明正身"</h3>
+<ul><li><strong>A 个人理想和社会理想</strong>：按理想的主人是谁（个体还是整个社会）分——这是<strong>对象/主体</strong>维度，不是层次。</li><li><strong>B 道德理想和政治理想</strong>：按理想的内容领域分（道德领域的理想、政治领域的理想）——这是<strong>内容</strong>维度。</li><li><strong>C 生活理想和职业理想</strong>：同样按内容领域分（日常生活、职业发展）——还是<strong>内容</strong>维度。</li><li><strong>D 崇高理想和一般理想</strong>：比较理想的高低境界——正是<strong>层次</strong>维度 ✅。</li></ul>
+<p>判断窍门：看两个词之间比的是什么。"个人 vs 社会"比的是<strong>范围</strong>，"道德 vs 政治""生活 vs 职业"比的是<strong>领域</strong>，"崇高 vs 一般"比的是<strong>高低</strong>——只有"高低"对应"层次"。</p>
+<h3>第 2 步：易错点——为什么最容易误选 A</h3>
+<p>A 的迷惑性最强：直觉上"社会理想好像比个人理想更高级、更有层次"。但教材的分类逻辑里，个人理想与社会理想是<strong>两个并列的主体范畴</strong>（没有高低排序，而是强调二者的统一：社会理想规定指引个人理想，个人理想融汇于社会理想）；而"层次"专指境界高低序列。凭"感觉更高级"选 A，就是把"重要程度"误当"层次维度"。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：把"主体范围"当成"境界层次"——社会理想并非"更高层次"的分类名，它是对象维度的另一极。</li><li><strong>误选 B 或 C</strong>：把"内容领域"当成"层次"——不同领域之间没有高低之别，只有内容之别。</li></ul>
+<blockquote>记忆锚点：四个维度配四对词——<strong>性质＝科学/非科学，层次＝崇高/一般，对象＝个人/社会，内容＝生活·职业·道德·政治，时间＝长远/近期</strong>；问什么维度，就找比什么的词。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,121 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-06 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-06</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-06 · 公益文化事业：社会效益放首位</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 推理链：每一步的完整内容（引擎按步数截取显示；s.cls: key=关键/good=正确/bad=排除） */
+var STEPS = [
+  {
+    "cls": "key",
+    "tag": "审题眼",
+    "title": "审题眼：公益性文化事业 + “始终放到首位”",
+    "body": "<p>公益性文化事业是保障公民<b>基本文化权益</b>的重要途径。题问：大力发展公益文化事业，始终放到<b>首位</b>的是什么？</p><p>“首位”考的是价值排序，不是任务清单。</p>"
+  },
+  {
+    "cls": "key",
+    "tag": "立机制",
+    "title": "立机制：文化单位“两分法”",
+    "body": "<p><b>公益性文化事业</b>：政府主导，保障基本文化权益（图书馆、博物馆免费开放等）→ <b>社会效益放首位</b>。</p><p><b>经营性文化产业</b>：市场主导，繁荣文化市场 → 社会效益放首位 + 经济效益相统一。</p><p>机制：权益保障不以营利为尺度；“社会效益首位”是整个文化领域的通则。</p>"
+  },
+  {
+    "cls": "good",
+    "tag": "A 入选",
+    "title": "选项 A：社会效益",
+    "body": "<p><b>A 对</b>：公益事业姓“公”，使命就是保障基本文化权益——<b>社会效益永远第一</b>。</p>",
+    "ribbon": {"k": 1, "ok": true}
+  },
+  {
+    "cls": "bad",
+    "tag": "B 排除",
+    "title": "选项 B：经济效益",
+    "body": "<p><b>B 错</b>：这是经营性文化产业的追求维度之一，且即便产业也要服从社会效益首位。</p><p>公益事业不以营利为尺度，经济账不在它头上。</p>",
+    "ribbon": {"k": 2, "ok": false}
+  },
+  {
+    "cls": "bad",
+    "tag": "C 排除",
+    "title": "选项 C：繁荣文化市场",
+    "body": "<p><b>C 错</b>：这是<b>文化产业侧</b>的任务。</p><p>它是任务清单里的一项，回答不了“把什么放首位”。</p>",
+    "ribbon": {"k": 3, "ok": false}
+  },
+  {
+    "cls": "bad",
+    "tag": "D 排除",
+    "title": "选项 D：创新文化体制",
+    "body": "<p><b>D 错</b>：这是改革的<b>路径与手段</b>，回答“怎么改”。</p><p>手段不是价值排序——层级又错了。</p>",
+    "ribbon": {"k": 4, "ok": false}
+  },
+  {
+    "cls": "key",
+    "tag": "追问",
+    "title": "追问：为什么 C/D 也有迷惑性",
+    "body": "<p>“繁荣文化市场”“创新文化体制”都是文化政策语境里的高频词，看着眼熟。</p><p>判据：题问“首位”=价值排序；C 是任务、D 是手段，都不是排序对象。</p>"
+  },
+  {
+    "cls": "good",
+    "tag": "结论",
+    "title": "收束：答案 A",
+    "body": "<p>两分法：事业保权益 → <b>社会效益</b>首位；产业做市场 → 两个效益相统一、社会效益仍然首位。</p><p><b>答案 A。</b>算经济账的位置在产业端，且也要让位于社会效益。</p>"
+  }
+];
+
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.ribbon) nPick++;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '排除' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: "公益性文化事业：始终把社会效益放到首位",
+  subtitle: "考点：文化建设 · 文化事业与文化产业两分法 · 选项逐项推演",
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已对号选项',
+  snaps: snaps,
+  result: {"big": "答案 A", "html": "公益性文化事业保障基本文化权益，使命决定排序：<b>社会效益</b>放首位。<br>易错：B 经济效益是产业维度；C 繁荣市场是产业任务；D 创新体制是改革手段——都不回答“首位”。"}
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：公益文化事业把什么放首位——社会效益</h2>
+<p>答案：<strong>A（社会效益）</strong>。</p>
+<h3>第 0 步：先立机制——文化单位的"两分法"</h3>
+<p>文化体制改革把文化单位按性质分两类，政策导向各不相同：</p>
+<table><thead><tr><th>类型</th><th>谁主导</th><th>任务</th><th>效益排序</th></tr></thead><tbody><tr><td>公益性文化事业</td><td>政府主导</td><td>保障公民<strong>基本文化权益</strong>（公共图书馆、博物馆免费开放等）</td><td><strong>社会效益</strong>放首位</td></tr><tr><td>经营性文化产业</td><td>市场主导</td><td>满足多样化文化需求、繁荣文化市场</td><td>社会效益放首位 + 经济效益相统一</td></tr></tbody></table>
+<p>机制：公益性事业的<strong>使命</strong>就是保障基本文化权益——权益保障不以营利为尺度，所以社会效益永远第一。进一步说，"社会效益放首位"其实是整个文化领域的通则：即便做产业，也要求社会效益优先、两个效益相统一；对公益事业，这一条更是题中应有之义。</p>
+<h3>第 1 步：题眼翻译</h3>
+<p>"公益性文化事业"+"始终放到首位"→ 直指<strong>社会效益</strong>。其余三个选项都是干扰词：经济效益是市场尺度；繁荣文化市场是产业侧任务；创新文化体制是改革手段——它们回答的是"怎么运作"，不是"把什么放首位"。</p>
+<h3>第 2 步：逐项对号</h3>
+<ul><li><strong>A 社会效益</strong> ✅：公益事业姓"公"，以保障基本文化权益为使命，社会效益永远第一。</li><li><strong>B 经济效益</strong> ❌：这是经营性文化产业的追求维度之一（且也要服从社会效益首位）；公益事业不以此为标尺。</li><li><strong>C 繁荣文化市场</strong> ❌：文化产业侧的任务，不是公益事业的"首位"。</li><li><strong>D 创新文化体制</strong> ❌：改革路径与手段，回答"怎么改"，不回答"把什么放首位"。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：直觉把"事业"也当产业算账。记住两分法：事业保权益、产业做市场；算经济账的位置在产业端，且即便在产业端也要服从社会效益首位。</li><li><strong>误选 C/D</strong>：词都出现在文化政策语境里，看着"眼熟"，但"首位"考的是<strong>价值排序</strong>，不是任务清单——C 是任务，D 是手段。</li></ul>
+<blockquote>记忆锚点：公益=保基本文化权益 → <strong>社会效益</strong>首位；产业=两个效益相统一，且社会效益仍然首位。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

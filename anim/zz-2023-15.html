@@ -1,8 +1,98 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-15 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-15</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·15 北京冬奥精神是哪一句</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 概念/配对卡片（依据 anim_math_concept_template；政治站纯文本，无 KaTeX） */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：同一场赛事，四套说法',
+    cls: 'key',
+    body: '<p>题干点明出处："在冬奥申办、筹办、举办的过程中，共同<b>创造</b>了北京冬奥精神"。冬奥会语境里并存四套说法——<b>北京冬奥精神 / 奥林匹克格言 / 残奥价值观 / 主题口号</b>，先立归属表。</p>',
+    log: '四套说法各归各家' },
+  { title: '机制：归属表',
+    cls: 'key',
+    body: '<p><b>北京冬奥精神</b>（2022.4.8 总结表彰大会提出）：胸怀大局、自信开放、迎难而上、追求卓越、共创未来。<b>奥林匹克格言</b>：更快、更高、更强——更团结。<b>残奥价值观</b>：勇气、决心、激励、平等。<b>主题口号</b>：一起向未来。</p>',
+    log: '精神 / 格言 / 价值观 / 口号 四栏' },
+  { title: '选项 A：那是格言，还少了半句',
+    cls: 'bad',
+    body: '<p>"更快、更高、更强"是<b>奥林匹克格言</b>（国际奥委会的），且 2021 年后完整版还有"——更团结"。归属不在北京冬奥精神。A 错。</p>',
+    ribbon: {k: 1, ok: false},
+    log: 'A：奥林匹克格言' },
+  { title: '选项 B：表彰大会的正主',
+    cls: 'good',
+    body: '<p>"<b>胸怀大局、自信开放、迎难而上、追求卓越、共创未来</b>"——2022 年 4 月 8 日总结表彰大会提出的北京冬奥精神。B 对。</p>',
+    ribbon: {k: 2, ok: true},
+    log: 'B：北京冬奥精神五句' },
+  { title: '选项 C：那是残奥价值观',
+    cls: 'bad',
+    body: '<p>"勇气、决心、激励、平等"是<b>残奥价值观</b>（国际残奥委会的），冬残奥与冬奥同期办但归属不同。C 错。</p>',
+    ribbon: {k: 3, ok: false},
+    log: 'C：残奥价值观' },
+  { title: '选项 D：那是主题口号',
+    cls: 'bad',
+    body: '<p>"一起向未来"是北京冬奥会、冬残奥会的<b>主题口号</b>——宣传语，不是表彰大会提炼的精神内涵。D 错。</p>',
+    ribbon: {k: 4, ok: false},
+    log: 'D：主题口号' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>B</b>。五个词连背：胸怀大局、自信开放、迎难而上、追求卓越、共创未来。</p>',
+    log: '锁定 B：北京冬奥精神' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '北京冬奥精神：别和格言、口号、残奥价值观混',
+  subtitle: '考点：北京冬奥精神 · 方法：先立"精神/格言/价值观/口号"归属表，再逐项排查',
+  counterLabel: '推理步',
+  ribbonTitle: '选项带（✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链；序号带 1–4 对应选项 A–D。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '记忆锚点：北京冬奥精神五句 = <b>胸怀大局、自信开放、迎难而上、追求卓越、共创未来</b>；口号（一起向未来）、格言（更快更高更强更团结）、残奥价值观（勇气决心激励平等）各归各家。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：北京冬奥精神——与格言、口号、残奥价值观划清边界</h2>
+<p>答案：<strong>B（胸怀大局、自信开放、迎难而上、追求卓越、共创未来）</strong>。</p>
+<h3>第 0 步：先立机制——冬奥会语境里并存着四套"说法"</h3>
+<p>这道题考的不是"背一句"，而是把同一场赛事语境里<strong>四个易混的说法</strong>分清归属：</p>
+<table><thead><tr><th>说法</th><th>内容</th><th>归属</th></tr></thead><tbody><tr><td>北京冬奥精神</td><td><strong>胸怀大局、自信开放、迎难而上、追求卓越、共创未来</strong></td><td>2022 年 4 月 8 日总结表彰大会提出 ✅</td></tr><tr><td>奥林匹克格言</td><td>更快、更高、更强——更团结</td><td>国际奥委会格言（2021 年加入"更团结"）</td></tr><tr><td>残奥价值观</td><td>勇气、决心、激励、平等</td><td>国际残奥委会的价值观</td></tr><tr><td>北京冬奥（冬残奥）主题口号</td><td>一起向未来</td><td>赛事宣传口号</td></tr></tbody></table>
+<p>题干已把出处念明："在冬奥申办、筹办、举办的过程中，共同<strong>创造</strong>了北京冬奥精神"——问的就是这个新提法本身，查表即 B。</p>
+<h3>第 1 步：预判追问——A 为什么错得最隐蔽？</h3>
+<p>A（更快、更高、更强）是人人眼熟的短语，但它缺了 2021 年加入的"更团结"，而且归属是<strong>奥林匹克格言</strong>——属于国际奥林匹克运动的整体表述，不是中国创造的北京冬奥精神。眼熟 ≠ 归属正确；越是"好像见过"的选项越要核对出处。</p>
+<h3>第 2 步：易错点——每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：把奥林匹克格言当成"冬奥精神"。格言是国际奥委会的，且少了"更团结"。</li><li><strong>误选 C</strong>：残奥会与冬奥会同期举办，"勇气、决心、激励、平等"是<strong>残奥价值观</strong>，挂在残奥名下，不属于北京冬奥精神。</li><li><strong>误选 D</strong>："一起向未来"出现频率最高（开幕式、宣传画到处都是），但它是<strong>主题口号</strong>——口号是宣传语，精神是表彰大会提炼的价值内涵，两码事。</li></ul>
+<blockquote>记忆锚点：北京冬奥精神五句 = <strong>胸怀大局、自信开放、迎难而上、追求卓越、共创未来</strong>；口号（一起向未来）、格言（更快更高更强更团结）、残奥价值观（勇气决心激励平等）各归各家。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

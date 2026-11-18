@@ -1,8 +1,92 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2012-19 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2012-19</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2012-19 · 价值的科学内涵（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：先立"对应表"机制，再逐项推演 A–D。
+   全中文、无外部请求；仅引用本地 ../assets 引擎（anim/ 位于站点根下一层）。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼：偏旁是"人"——价值在关系里',
+    body: '<p>「价」「值」二字的偏旁都是「人」——价值不在物里，而在<b>人与人的关系</b>里。考点锁定：劳动二重性、两条源泉线、价值实体与价值本质。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行：一张对应表 + 两条源泉线',
+    body: '<p>商品二因素 × 劳动二重性一一对应：</p><ul><li><b>具体劳动 → 使用价值（财富）</b>：财富的源泉＝<b>劳动＋自然物质</b>；</li><li><b>抽象劳动 → 价值</b>：价值的源泉＝<b>抽象劳动（唯一）</b>。</li></ul><p>为什么「唯一」只给价值？价值是纯社会范畴，只计量人类劳动的凝结；财富是「劳动加工于自然物质」的产物，离开土地矿藏变不出一粒米（配第：劳动是财富之父，土地是财富之母）。</p>' },
+  { cls: 'bad', tag: 'A 排除', ribbon: { k: 1, ok: false },
+    title: 'A：把价值的源泉越界搬到财富上',
+    body: '<p>「劳动是社会财富的唯一源泉」——<b>错</b>。</p><p>财富＝使用价值，其源泉是<b>劳动＋自然物质</b>两者。劳动是<b>价值</b>的唯一源泉，不是<b>财富</b>的唯一源泉——一字之差，两条源泉线。</p>' },
+  { cls: 'bad', tag: 'B 排除', ribbon: { k: 2, ok: false },
+    title: 'B：劳动二重性对调',
+    body: '<p>「具体劳动是商品价值的实体」——<b>错</b>。</p><p>具体劳动是纷繁各异的有用形式，<b>异质、量上不可通约</b>；能凝结成价值、按同一尺度比较的，只能是<b>同质、无差别</b>的一般人类劳动——抽象劳动。口诀：具体劳动出使用价值，抽象劳动出价值。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: 'C：价值实体＝无差别劳动的凝结',
+    body: '<p>「价值是凝结在商品中的一般人类劳动」——<b>对</b>。</p><p>商品生产都耗费人的体力和脑力，这种无差别的一般人类劳动的<b>凝结</b>就是价值——「凝结」二字点明价值实体。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true },
+    title: 'D：价值本质＝生产者间的社会关系',
+    body: '<p>「价值在本质上体现了生产者之间的社会关系」——<b>对</b>。</p><p>一斤米换二尺布，交换比例背后是两个生产者劳动的比较——价值不是物的自然属性，而是被物与物关系掩盖的<b>人与人的社会关系</b>，题干「价值在『人』」正指向这层。</p>' },
+  { cls: 'key', tag: '干扰项',
+    title: 'A、B 各对应一种"半懂"',
+    body: '<p>A、B 各对应一种典型误解：</p><ul><li><b>选 A</b>：记得「劳动创造价值」，越界成「创造一切财富」——混淆两条源泉线；</li><li><b>选 B</b>：知道「劳动形成价值」，忘了二重性——把具体劳动的「有用之质」安到价值头上。</li></ul>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 CD',
+    body: '<p>答案 <b>CD</b>：C 是价值<b>实体</b>的定义（无差别一般人类劳动的凝结），D 是价值<b>本质</b>的表述（生产者之间的社会关系）。</p><p>A 混淆两条源泉线，B 对调了劳动二重性。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    ribbon: s.ribbon
+  };
+});
+snaps[snaps.length - 1].done = true; // 最后一步必须 done:true，触发结论卡
+
+AW.init({
+  title: '【2012·19】马克思劳动价值论：价值的科学内涵（多选）',
+  subtitle: '考点：商品二因素 × 劳动二重性 · 两条源泉线 · 价值实体与价值本质',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 CD',
+    html: '两条源泉分两行：<b>财富＝劳动＋自然物质；价值＝抽象劳动（唯一）</b>。价值实体＝无差别一般人类劳动的凝结（C）；价值本质＝生产者之间的社会关系（D）。A 把价值源泉越界搬到财富上，B 对调了劳动二重性。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：价值的科学内涵——两条源泉线 + 实体与本质</h2>
+<p>答案：<strong>CD</strong>。</p>
+<h3>第 0 步：先立机制——商品二因素 × 劳动二重性的对应表</h3>
+<p>题干先给了一个提示："价""值"二字的偏旁都是"人"——马克思劳动价值论要揭示的，正是藏在物与物交换背后、<strong>人与人的关系</strong>。先把底层对应表立起来：</p>
+<table><thead><tr><th>商品二因素</th><th>来自哪种劳动</th><th>性质</th></tr></thead><tbody><tr><td>使用价值（财富）</td><td>具体劳动（有用形式各异）</td><td>自然属性·异质·不可比</td></tr><tr><td>价值</td><td>抽象劳动（无差别的一般人类劳动）</td><td>社会属性·同质·可比</td></tr></tbody></table>
+<p>这张表派生出<strong>两条源泉线</strong>：财富（使用价值）的源泉＝<strong>劳动＋自然物质</strong>；价值的源泉＝<strong>抽象劳动，唯一</strong>。四个选项全部要在这张表上对号入座。</p>
+<h3>预判追问：为什么"唯一源泉"只属于价值，不属于财富？</h3>
+<p>因为价值是纯粹的<strong>社会</strong>范畴——它只计量人类脑力与体力的凝结，不含任何物的原子；而财富（使用价值）天生是"劳动加工于自然物质"的产物：离开土地、矿藏、水这些自然物质，再多的劳动也变不出一粒米。所以威廉·配第说"劳动是财富之父，土地是财富之母"——财富要两个爹妈，价值只要抽象劳动这一个来源。A 项错就错在把价值那条线越界搬到了财富头上。</p>
+<p>再看价值自身的两层规定：<strong>实体</strong>——凝结在商品中的无差别的一般人类劳动，"凝结"二字点明它是物化在物中的；<strong>本质</strong>——价值不是物的自然属性，而是被物与物的关系掩盖着的<strong>商品生产者之间的社会关系</strong>（一斤米换二尺布，交换比例的背后是两个生产者劳动的比较）。题干"价值在'人'"正指向这一层。</p>
+<h3>逐项对号入座</h3>
+<ul><li><strong>A 错</strong>："劳动是社会财富的唯一源泉"——把<strong>价值的源泉</strong>错搬到<strong>财富</strong>上。财富＝使用价值，自然物质全程参与其形成。</li><li><strong>B 错</strong>："具体劳动是商品价值的实体"——<strong>劳动二重性对调</strong>。具体劳动是纷繁各异的有用形式，异质、量上不可通约；能凝结成价值、按同一尺度比较的，只能是同质无差别的抽象劳动。</li><li><strong>C 对</strong>："价值是凝结在商品中的一般人类劳动"——价值<strong>实体</strong>的准确定义。</li><li><strong>D 对</strong>："价值在本质上体现了生产者之间的社会关系"——价值<strong>本质</strong>的准确表述。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>选 A</strong>：记得"劳动创造价值"，越界成"劳动创造一切财富"——一字之差：价值的唯一源泉是抽象劳动，财富的源泉还有自然物质。</li><li><strong>选 B</strong>：知道"劳动形成价值"，忘了二重性——把具体劳动的"有用之质"安到价值头上；口诀：具体劳动出使用价值，抽象劳动出价值。</li></ul>
+<blockquote>记忆锚点：两条源泉分两行——财富＝劳动＋自然物质，价值＝抽象劳动（唯一）；价值实体＝无差别劳动的凝结，价值本质＝生产者间的社会关系。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

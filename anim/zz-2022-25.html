@@ -1,8 +1,117 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-25 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-25</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2022 · 云南象群北迁——「保护举措」清单 vs「开发利用」反向项</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 concept 推理链模板（政治站无 KaTeX 版）：只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：问的是「举措清单」",
+    "cls": "key",
+    "body": "<p>题眼：「中国政府一贯高度重视生物多样性保护，不断<b>加强和创新</b>保护举措」，问举措主要有哪些。象群 110 多天一路安全、全部安全南返——正是这些举措的成绩单。先立清单，再逐项挂靠。</p>",
+    "log": "题眼锁定：保护举措清单"
+  },
+  {
+    "title": "先立模型：保护打法三件套＋一个反向项",
+    "cls": "key",
+    "body": "<p>按「守住什么—用什么守—防什么风险」拆：<b>守住底线空间</b>（生态保护红线）、<b>搭体系</b>（以国家公园为主体的自然保护地体系）、<b>防风险</b>（生物安全风险防控和治理体系）；而「开发利用自然资源」是<b>另一件事</b>——合理适度才有，不在保护清单上。</p>",
+    "log": "模型立起：红线·公园体系·生物安全 vs 开发"
+  },
+  {
+    "title": "选项 A：划定生态保护红线",
+    "cls": "good",
+    "ribbon": {"k": 1, "ok": true},
+    "body": "<p>挂<b>守底线</b>：把最要紧的生态空间先圈起来不许碰——最严格的保护制度，清单第一条。<b>A 正确</b>。</p>",
+    "log": "守底线 → A 选"
+  },
+  {
+    "title": "选项 B：加大自然资源的开发利用",
+    "cls": "bad",
+    "ribbon": {"k": 2, "ok": false},
+    "body": "<p>方向反了：保护举措用力的方向是<b>守住空间</b>，B 用力的方向是<b>取用资源</b>。「两山」讲的是保护与利用<b>相协调</b>，协调的主语是「合理利用」——不是把「加大开发」列为保护举措。<b>B 排除</b>。</p>",
+    "log": "方向词替换，排除"
+  },
+  {
+    "title": "选项 C：建立生物安全风险防控和治理体系",
+    "cls": "good",
+    "ribbon": {"k": 3, "ok": true},
+    "body": "<p>挂<b>防风险</b>：外来物种入侵、疫病传播等风险的制度防线——官方明确列举的加强创新之举，较新表述别漏。<b>C 正确</b>。</p>",
+    "log": "防风险 → C 选"
+  },
+  {
+    "title": "选项 D：构建以国家公园为主体的自然保护地体系",
+    "cls": "good",
+    "ribbon": {"k": 4, "ok": true},
+    "body": "<p>挂<b>搭体系</b>：西双版纳国家级自然保护区就在这张网里——象群栖息地靠它保住，主体框架即国家公园体制。<b>D 正确</b>。</p>",
+    "log": "搭体系 → D 选"
+  },
+  {
+    "title": "结论：答案 ACD",
+    "cls": "good",
+    "body": "<p>清单挂靠完成：守底线→A，防风险→C，搭体系→D；B 把「协调」偷换成「加大」，方向词替换直接排除。</p>",
+    "log": "锁定 ACD"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  "title": "云南象群北迁——中国的生物多样性保护举措",
+  "subtitle": "2022 年第 25 题（多选）· 考点：人与自然和谐共生·生物多样性保护 · 方法：举措清单挂靠＋方向词排雷",
+  "counterLabel": "推理步",
+  "ribbonTitle": "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  "intro": "点击「▶ 播放」：先立保护举措清单，再逐项挂靠、排雷。",
+  "result": {
+    "big": "答案 ACD",
+    "html": "记忆锚点：保护举措三件套——<b>生态保护红线（A）＋以国家公园为主体的自然保护地体系（D）＋生物安全风险防控和治理体系（C）</b>；保护题里见「加大开发利用」直接排除。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：云南象群北迁——「保护举措」清单 vs「开发利用」反向项</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——保护逻辑的清单与利用的前提</h3>
+<p>题眼是「中国政府一贯高度重视生物多样性保护，不断<strong>加强和创新</strong>保护举措」，问的是<strong>举措清单</strong>。中国的生物多样性保护有一套固定打法，按「守住什么—用什么守—防什么风险」拆开：<strong>守住底线空间</strong>——划定并严守<strong>生态保护红线</strong>，把最要紧的生态空间先圈起来；<strong>搭体系</strong>——构建<strong>以国家公园为主体的自然保护地体系</strong>，西双版纳国家级自然保护区就在这张网里，象群栖息地靠它保住；<strong>防风险</strong>——建立<strong>生物安全风险防控和治理体系</strong>，挡住外来物种入侵、疫病传播等制度防线；再加濒危物种拯救工程、就地与迁地保护等具体手段。15 头象历时 110 多天一路安全、全部安全南返，正是清单上这些举措（栖息地保护＋沿途护航）的成绩单。而「开发利用自然资源」是<strong>另一件事</strong>：生态文明讲保护优先、合理利用，利用的前提是合理适度——它从来不在「保护举措」清单上，方向甚至相反。</p>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>对错</th><th>挂在清单哪一条</th></tr></thead><tbody><tr><td>A 划定生态保护红线</td><td>✅</td><td>守底线：最严格的保护制度</td></tr><tr><td>B 加大自然资源的开发利用</td><td>❌</td><td>方向反了：保护语境里「加大开发利用」恰是被约束的对象</td></tr><tr><td>C 建立生物安全风险防控和治理体系</td><td>✅</td><td>防风险：官方明确列举的加强创新之举</td></tr><tr><td>D 构建以国家公园为主体的自然保护地体系</td><td>✅</td><td>搭体系：象群栖息地所在的保护网络</td></tr></tbody></table>
+<h3>追问：为什么 B 不选——「协调」不等于「加大」</h3>
+<p>绿水青山就是金山银山，说的是<strong>保护与利用相协调</strong>——但协调的主语是「合理利用」，不是把「加大开发」本身列为保护举措。题干问的是往哪个方向用力：「保护举措」用力的方向是<strong>守住底线空间</strong>，B 用力的方向是<strong>取用资源</strong>，正好相反。把「协调」偷换成「加大」，是程度词加方向词的双重误导——这类「方向词替换」在生态题里是高频陷阱。</p>
+<h3>易错点</h3>
+<ul><li><strong>勾 B</strong>：被「两山」里的「金山银山」带偏——转化要在合理利用的轨道上完成，不等于把开发加码列为保护举措。</li><li><strong>漏 C</strong>：「生物安全风险防控和治理体系」是较新的表述，不熟就漏——它与红线、国家公园同属官方列举的举措，答案三缺一即错。</li></ul>
+<blockquote>记忆锚点：保护举措三件套——<strong>生态保护红线、以国家公园为主体的自然保护地体系、生物安全风险防控和治理体系</strong>；保护题里见「加大开发利用」直接排除。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

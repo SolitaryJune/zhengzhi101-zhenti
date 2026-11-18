@@ -1,8 +1,150 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-09 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-09</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2009·09 《实践论》《矛盾论》的矛头</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>1937 年延安，《实践论》《矛盾论》问世。题问：写作「主要是为了克服」党内严重的什么？——不是问「它们批评过谁」，而是问<b>主要矛头</b>。</p>",
+    "log": "找两篇哲学著作的主要矛头"
+  },
+  {
+    "title": "机制：先诊病，后开方",
+    "cls": "key",
+    "body": "<p>两篇著作是<b>对症下药的药方</b>：先有党内的「病」，才有针对这个病写出的哲学。所以先诊断 1937 年党内最重的病是什么，再看药理对不对得上。</p>",
+    "log": "解题顺序：诊病 → 验药 → 定答案"
+  },
+  {
+    "title": "诊病：病根是什么",
+    "cls": "key",
+    "body": "<p>土地革命战争时期，党内接连出现把马克思主义<b>教条化</b>、把共产国际决议和苏联经验<b>神圣化</b>的错误（王明「左」倾教条主义危害最烈），照本本指挥中国革命，损失惨重——这是贯穿全党的主要病根。</p>",
+    "log": "病根 = 教条化、神圣化"
+  },
+  {
+    "title": "药方一：《实践论》",
+    "cls": "good",
+    "body": "<p>认识论：实践→认识→再实践，知行统一——真理的标准是实践，不是本本。专打「<b>唯书、唯上</b>」、轻视实践的病。</p>",
+    "log": "《实践论》破「唯书」"
+  },
+  {
+    "title": "药方二：《矛盾论》",
+    "cls": "good",
+    "body": "<p>辩证法：<b>矛盾特殊性</b>，具体问题具体分析——一般原理不能脱离具体条件硬套。专打照搬公式、生吞活剥的病。</p>",
+    "log": "《矛盾论》破「照搬」"
+  },
+  {
+    "title": "两药合流：D 正确",
+    "cls": "good",
+    "body": "<p>两味药从认识论与辩证法两个根子上清算同一种病——把书本当教条。主要矛头 = <b>教条主义（本本主义）</b>，这也是「实事求是」思想路线的哲学奠基。<b>D 正确</b>。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": true
+    },
+    "log": "共同矛头 = 教条主义 → D"
+  },
+  {
+    "title": "A：次批评≠主矛头",
+    "cls": "bad",
+    "body": "<p>《实践论》确实批评了轻视理论的经验主义，但那是<b>次</b>要矛头；题问「主要是为了克服」的对象——当时危害最烈的是教条主义。<b>A 错误</b>。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "log": "A 是次批评，不是主矛头"
+  },
+  {
+    "title": "B：层面错位",
+    "cls": "bad",
+    "body": "<p>冒险主义是<b>军事路线</b>层面的错误。哲学著作对的是思想方法层面的病，对不上军事路线的症。<b>B 错误</b>。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    },
+    "log": "B 层面错位"
+  },
+  {
+    "title": "C：泛称太宽",
+    "cls": "bad",
+    "body": "<p>机会主义是对右倾/「左」倾<b>路线错误</b>的泛称，太宽泛，答不出「两篇哲学著作」的特定针对性。<b>C 错误</b>。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    },
+    "log": "C 泛称过宽"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>D</b>。先诊病后开方：病根 = 教条化、神圣化；《实践论》破「唯书」、《矛盾论》破「照搬」→ 主矛头 = <b>教条主义</b>。</p>",
+    "log": "锁定 D"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "《实践论》《矛盾论》的写作矛头",
+  subtitle: "考点：实事求是与反对教条主义 · 方法：先诊病，后开方",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 D（教条主义）",
+    html: "记忆锚点：先诊病后开方——病根 = <b>教条化、神圣化</b>；《实践论》破「唯书」、《矛盾论》破「照搬」→ <b>教条主义（本本主义）</b>。A 是次批评不是主矛头；B/C 是路线层面的病，层面错位。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：《实践论》《矛盾论》主要是克服什么——先诊病，再看药方</h2>
+<p>答案：<strong>D（教条主义）</strong>。</p>
+<h3>第 0 步：先把「著作怎么来的」这个机制立起来</h3>
+<p>两篇著作不是凭空写的教科书，而是<strong>对症下药的药方</strong>：先有党内的「病」，才有针对这个病写出的哲学。所以解这类题的正确顺序是——先诊断 1937 年党内<strong>最严重</strong>的思想病是什么，再看两篇文章的药理是否对着这个病，答案自然浮出，而不是在四个「主义」里凭印象挑。</p>
+<p>1937 年夏，延安，毛泽东在抗日军政大学讲授《辩证法唯物论（讲授提纲）》，《实践论》《矛盾论》是其中两节。此时土地革命战争时期接连出现的错误刚让革命付出惨重代价，病根是：把马克思主义<strong>教条化</strong>、把共产国际决议和苏联经验<strong>神圣化</strong>，照搬本本指挥中国革命（王明「左」倾教条主义危害最烈）。这就是当时贯穿全党的<strong>主要病根</strong>。</p>
+<h3>第 1 步：两味药分别治什么</h3>
+<table><thead><tr><th>药方</th><th>药理</th><th>治的是哪种病</th></tr></thead><tbody><tr><td>《实践论》</td><td>认识论：实践→认识→再实践，知行统一——真理的标准是实践，不是本本</td><td>破「唯书、唯上」、轻视实践的本本主义</td></tr><tr><td>《矛盾论》</td><td>辩证法：矛盾特殊性——具体问题具体分析，一般原理不能脱离具体条件硬套</td><td>破「照搬公式、生吞活剥」的套用</td></tr></tbody></table>
+<p>两味药从<strong>认识论</strong>（认识从哪来、检验标准是什么）和<strong>辩证法</strong>（原理怎么用）两个根子上清算同一种病：把书本、决议当教条——即<strong>教条主义（本本主义）</strong>。这也正是后来「实事求是」思想路线的哲学奠基。</p>
+<h3>第 2 步：四个选项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对应的误解</th></tr></thead><tbody><tr><td>A 经验主义</td><td>❌</td><td>「《实践论》批评过它」——确实批评（轻视理论、满足于一得之功），但那是<strong>次</strong>要矛头，不是「主要是为了克服」的对象</td></tr><tr><td>B 冒险主义</td><td>❌</td><td>「反对错误就行」——它是军事路线层面的错误，与哲学著作的针对性<strong>层面错位</strong></td></tr><tr><td>C 机会主义</td><td>❌</td><td>「挑个最泛的总没错」——它是对右倾/「左」倾路线错误的泛称，太宽，答不出两篇哲学著作的特定矛头</td></tr><tr><td>D 教条主义</td><td>✅</td><td>党内当时最严重、两篇著作集中克服的错误倾向</td></tr></tbody></table>
+<h3>易错点：每个干扰项的病因</h3>
+<ul><li><strong>误选 A 的根源</strong>：知道《实践论》点了经验主义的名，但没分清「也批评」与「主要是为了克服」——主语是危害更烈、贯穿全党的教条主义。经验主义与教条主义同属主观主义，但 1937 年前后<strong>主要危险</strong>是后者的祸害刚显形。</li><li><strong>误选 B/C 的根源</strong>：把「克服党内严重的错误」当成随便哪条路线错误都行。哲学著作对的是<strong>思想方法</strong>层面的病（教条主义）；冒险主义、机会主义是政治/军事路线层面的定性，层级对不上。</li></ul>
+<blockquote>记忆锚点：先诊病后开方——病根是<strong>教条化、神圣化</strong>；《实践论》破「唯书」、《矛盾论》破「照搬」→ 主要矛头 = <strong>教条主义（本本主义）</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

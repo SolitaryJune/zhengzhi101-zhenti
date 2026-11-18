@@ -1,8 +1,137 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-14 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-14</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2026·14 「扣扣子」比喻的落点</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版）：只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行要素格（比喻结构拆解）
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: "审题眼：比喻题先拆比喻结构",
+    cls: "key",
+    log: "题眼：第一粒扣错、剩余全错——比喻的落点在哪",
+    body: "<p>习近平：「青年的价值观取向决定未来整个社会价值取向，而青年又处在<b>价值观形成和确立的时期</b>……如果<b>第一粒扣子</b>扣错了，剩余的扣子都会扣错。人生的扣子从<b>一开始</b>就要扣好。」题问「强调了」什么——先拆结构，再找落点。</p>"
+  },
+  {
+    title: "拆结构：关键在「第一粒」「一开始」",
+    cls: "key",
+    log: "第一粒 → 形成确立期；扣好（不是扣上）→ 抓实",
+    body: cells([
+      { t: "第一粒扣子<br>扣错则全错", l: "抓早" },
+      { t: "一开始<br>就要扣好", l: "抓早" },
+      { t: "扣好 ≠ 扣上<br>要扣对、扣牢", l: "抓实" },
+      { t: "剩余扣子<br>跟着第一粒走", l: "窗口贵" }
+    ])
+  },
+  {
+    title: "补机制：为什么窗口期这么要紧",
+    cls: "key",
+    log: "价值观形成后稳定下来、影响终生选择——窗口期塑造事半功倍",
+    body: "<p>价值观一旦形成就会<b>稳定下来</b>，成为此后衡量是非、作出人生选择的标尺。窗口期内塑造事半功倍；错过窗口再纠正，等于把「第一粒扣错」的误差<b>放大到每一粒</b>——成本极高。所以落点不在「要不要价值观」，而在<b>「何时抓、怎么抓」</b>。</p>"
+  },
+  {
+    title: "B 对号：抓早抓实",
+    cls: "good",
+    log: "「一开始就要扣好」＝抓早，「扣好」＝抓实 → B 正确",
+    ribbon: { k: 2, ok: true },
+    body: "<p>「对青年的价值观教育<b>需抓早抓实</b>」——「从一开始就要扣好」对应<b>抓早</b>，「扣好（不是扣上就行）」对应<b>抓实</b>。两个字各有出处，与比喻结构完全对应。<b>B 正确</b>。</p>"
+  },
+  {
+    title: "A 排除：「关键」丢了时间维度",
+    cls: "bad",
+    log: "泛化表述，丢掉「第一粒／一开始」的落点 → A 排除",
+    ribbon: { k: 1, ok: false },
+    body: "<p>「核心价值观是青年成长中的<b>关键</b>」——单看没错，但「关键」谁都能当，比喻里却有明确指向：<b>第一粒、一开始</b>。丢掉时间维度、可套在任何教育话题上的泛化表述，都不贴题干问的「强调了」什么。<b>A 错误</b>。</p>"
+  },
+  {
+    title: "C 排除：必要性 ≠ 动作要求",
+    cls: "bad",
+    log: "「需要引领」讲要不要，不是何时抓、怎么抓 → C 排除",
+    ribbon: { k: 3, ok: false },
+    body: "<p>「青年健康成长<b>需要</b>价值观引领」——这是<b>必要性</b>表述（要不要引领），离比喻最远：题目问的是「强调了」什么动作要求（何时抓、怎么抓），不是「要不要」。<b>C 错误</b>。</p>"
+  },
+  {
+    title: "D 排除：立身之本是套话错位",
+    cls: "bad",
+    log: "「立身之本」讲地位根基，比喻讲教育时机 → D 排除",
+    ribbon: { k: 4, ok: false },
+    body: "<p>「核心价值观教育是青年的<b>立身之本</b>」——像标准结论，但「立身之本」落在<b>地位与根基</b>层面；「扣扣子」讲的是<b>教育时机</b>。套话错位，且同样丢掉时间维度。<b>D 错误</b>。</p>"
+  },
+  {
+    title: "结论",
+    cls: "good",
+    log: "锁定 B：对青年的价值观教育需抓早抓实",
+    body: "<p>答案 <b>B</b>。比喻题防坑要诀：选项可以比比喻更「正确」，但不比比喻更<b>准确</b>——丢掉「一开始」时间维度的一律不选。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+});
+
+AW.init({
+  title: "政治 2026·14 「扣扣子」比喻的落点",
+  subtitle: "考点：社会主义核心价值观（青年价值观教育） · 方法：拆比喻结构找落点",
+  counterLabel: "推理步",
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」逐步展开推理链。",
+  snaps: snaps,
+  result: {
+    big: "答案 B",
+    html: "第一粒扣子 = 价值观形成确立期 = <b>窗口期</b> → 抓<b>早</b>（一开始）抓<b>实</b>（扣好，不是扣上）（B）。记忆锚点：丢掉「一开始」时间维度的泛化选项——关键（A）、引领（C）、立身之本（D）——一律不选。选 <b>B</b>。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：「扣扣子」比喻强调的是什么</h2>
+<p>答案：<strong>B（对青年的价值观教育需抓早抓实）</strong>。</p>
+<h3>第 0 步：先立模型——比喻题先拆比喻结构</h3>
+<p>比喻类题目不能靠「感觉对」选，要把比喻拆成结构再找落点。「扣扣子」的结构是：<strong>第一粒扣错 → 剩余全错</strong>，所以关键在<strong>第一粒</strong>、在<strong>一开始</strong>；「扣好」不是「扣上就行」，而是要扣对、扣牢。题干本身已经交代了对应关系：青年处在<strong>价值观形成和确立的时期</strong>，抓好这一时期十分重要——即价值观的「第一粒扣子期」是一个<strong>时间窗口</strong>。</p>
+<p>再补一层「为什么窗口这么要紧」的机制：价值观一旦形成就会稳定下来，成为此后衡量是非、作出人生选择的标尺；窗口期内塑造事半功倍，错过窗口再纠正，等于把「第一粒扣错」的误差放大到每一粒扣子——纠正成本极高。所以比喻的落点不在「要不要价值观」（必要性层面），而在<strong>「何时抓、怎么抓」</strong>：要<strong>抓早</strong>（一开始），还要<strong>抓实</strong>（扣好、扣对，不是走过场）。</p>
+<h3>第 1 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因</th></tr></thead><tbody><tr><td>A 核心价值观是青年成长中的关键</td><td>❌</td><td>泛化：只说「关键」，丢掉了「第一粒／一开始」的时间窗落点</td></tr><tr><td>B 对青年的价值观教育需抓早抓实</td><td>✅</td><td>「从一开始就要扣好」＝抓早；「扣好（不是扣错重来）」＝抓实</td></tr><tr><td>C 青年健康成长需要价值观引领</td><td>❌</td><td>只讲必要性（要不要引领），未回应「何时抓、怎么抓」</td></tr><tr><td>D 核心价值观教育是青年的立身之本</td><td>❌</td><td>「立身之本」落在地位高低层面；同样丢掉时间维度</td></tr></tbody></table>
+<h3>第 2 步：预判「为什么」——两个追问提前答掉</h3>
+<ul><li><strong>为什么 A、C、D 这类「正确的话」反而不选？</strong> 它们单看都对，但<strong>都没有错</strong>在内容上，而是<strong>错在落点上</strong>：比喻给出了明确的方向指向——「第一粒」「一开始」。凡是丢掉时间维度、可以套在任何教育话题上的泛化表述，都不贴题干问的「强调了」什么。这是比喻题最常见的陷阱：选项比比喻更「正确」，却不比比喻更准确。</li><li><strong>为什么「抓实」也有依据？</strong> 比喻的后半句「剩余的扣子都会扣错」反衬出「扣好第一粒」必须扣<strong>对</strong>——教育不能停留在「讲过了」（扣上），而要真正确立起来（扣好）。所以 B 的「抓早抓实」两个字各有出处，不是拼凑。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>选 A（「关键」泛泛而谈）</strong>：「关键」谁都能当，比喻里却有明确指向——第一粒、一开始；丢掉时间维度的选项一律不贴。</li><li><strong>选 C（「引领」是大词）</strong>：必要性表述（要不要引领）离比喻最远——题目问的是「强调了」什么动作要求，不是「要不要」。</li><li><strong>选 D（「立身之本」像标准结论）</strong>：套话错位——「立身之本」讲地位与根基，比喻讲的是教育时机。</li></ul>
+<blockquote>记忆锚点：第一粒扣子 = 价值观形成确立期 = <strong>窗口期</strong> → 抓<strong>早</strong>抓<strong>实</strong>（B）；丢掉「一开始」时间维度的泛化选项（关键／引领／立身之本）一律不选。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,156 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-32 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-32</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2009-32 · 网络表达的“新”新在哪一层</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链动画（政治站无 KaTeX）：功能分析 + 层次判定（渠道之新≠体制之新），只写 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行可加宽的格子（引擎 cellRow 固定 44px 宽，放不下中文短语，这里自定义行）
+function boxRow(items, ptrMap){
+  var row = AW.el('div', 'aw-cells');
+  items.forEach(function(it, i){
+    var col = AW.el('div', 'aw-col');
+    col.style.width = it.w || '110px';
+    if(ptrMap && ptrMap[i + 1]) col.appendChild(AW.el('div', 'aw-ptr', ptrMap[i + 1]));
+    var box = AW.el('div', 'aw-box' + (it.c ? ' ' + it.c : ''), it.t);
+    box.style.width = it.w || '110px';
+    col.appendChild(box);
+    row.appendChild(col);
+  });
+  return row;
+}
+
+// 功能→新 对照行：三种功能各自新出的渠道（第二步卡片用）
+function funcRow(){
+  return boxRow([
+    { t: '直接表达', c: 'ok', w: '110px' },
+    { t: '舆论监督', c: 'ok', w: '110px' },
+    { t: '干部听民意', c: 'ok', w: '110px' }
+  ], { 1: '参与新途径（A）', 2: '反腐新通道（B）', 3: '干群新方式（D）' });
+}
+
+// 层次对照行：渠道层面 vs 体制层面（第三步卡片用）
+function layerRow(){
+  return boxRow([
+    { t: '参与渠道 / 手段', c: 'ok', w: '150px' },
+    { t: '制度体系清单', c: 'miss', w: '150px' }
+  ], { 1: '网络之新在这里 ✓', 2: '没有多出新形式 ✗' });
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：先问“网络表达承担什么功能”",
+    "cls": "key",
+    "body": "<p>胡锦涛在线交流、官员上网收集民意——这个动作在政治过程中承担三种功能，选项里的三个“新”就是这三条功能各自“新”出来的渠道：</p>" +
+      funcRow().outerHTML +
+      "<p>三条全落在<b>渠道／手段层面</b>——这是本题的判断基准。</p>",
+    "log": "三种功能 → 三个新渠道，全在手段层面"
+  },
+  {
+    "title": "立基准：“新”修饰的是渠道，不是体制",
+    "cls": "key",
+    "body": "<p>把两层分开：</p>" +
+      layerRow().outerHTML +
+      "<p>我国的民主政治制度体系有固定清单：人民代表大会制度（根本政治制度），多党合作和政治协商、民族区域自治、基层群众自治（基本政治制度）。网络表达在清单<b>之内</b>运行，清单本身没有因网络出现而变长。判断口令：<b>手段的新 ≠ 体制的新</b>。</p>",
+    "log": "渠道之新 ✓，体制层面无新形式 ✗"
+  },
+  {
+    "title": "选项 A：公民政治参与的新途径",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p>先破一个窄化理解：政治参与不只选举、决策等“大事”——公民向政府<b>表达意见本身就是参与</b>。网络让表达绕开层层中介、直达政府，参与有了新渠道 → <b>入选</b>。</p>",
+    "log": "A＝直接表达即参与的新途径，入选"
+  },
+  {
+    "title": "选项 B：反腐倡廉的新通道",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p>材料虽没写「反腐」二字，但<b>收集民意的内在含义就是接受公众监督</b>：网络让监督打破时间与层级限制，网络曝光与舆论监督已成为对权力的新约束通道。这是<b>合理延伸</b>而非超纲——判断标准是“由材料事实直接支撑其成立”，不是“逐字出现在材料里” → <b>入选</b>。</p>",
+    "log": "B＝收集民意内在含监督：合理延伸，入选"
+  },
+  {
+    "title": "选项 C：民主政治体制的新形式",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>网络表达是制度体系<b>之下运行的新的参与渠道</b>，体制框架清单并没有多出新形式。把“新通道”拔高成“新体制”，是干扰项惯用的<b>升格</b>手法——把手段层面的更新偷换成制度体系的更新 → <b>排除</b>。</p>",
+    "log": "C＝升格：渠道之新 ≠ 体制之新，排除"
+  },
+  {
+    "title": "选项 D：密切干群关系的新方式",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>官员上网<b>直接听民意、回应关切</b>——干部与群众的沟通绕过层层汇报，干群之间有了新的联结方式 → <b>入选</b>。</p>",
+    "log": "D＝干部直接听民意：干群新方式，入选"
+  },
+  {
+    "title": "结论：ABD",
+    "cls": "good",
+    "body": "<p>网络三新＝<b>参与（A）＋监督／反腐（B）＋干群（D）</b>——<b>答案 ABD</b>。C 败在升格：手段的新 ≠ 体制的新，制度体系清单是固定的，网络在清单之内运行。</p>",
+    "log": "锁定 ABD：三渠道皆新，体制未变"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  title: "网络表达的“新”新在哪一层",
+  subtitle: "2009 年第 32 题（多选）· 考点：网络参与与民主监督 · 方法：功能分析＋渠道之新 ≠ 体制之新",
+  counterLabel: '推理步',
+  ribbonTitle: '选项判定（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先做功能分析、分清两个层次，再逐项判定。',
+  result: {
+    big: "答案 ABD",
+    html: "记忆锚点：网络三新——<b>参与（A）、监督／反腐（B）、干群（D）</b>；判断口令：<b>手段的新 ≠ 体制的新</b>（C 升格排除）。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：官员上网收集民意——网络表达的“新”新在渠道，不在体制</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——顺着“网络表达承担什么功能”推选项</h3>
+<p>胡锦涛在线交流、官员上网收集民意，这个动作在政治过程中承担三种功能；选项里的三个“新”，就是这三条功能各自“新”出来的渠道——</p>
+<table><thead><tr><th>网络表达承担的功能</th><th>新出来的渠道</th><th>选项</th></tr></thead><tbody><tr><td>公民绕开层层中介，直接向政府表达意见</td><td>公民政治参与的新途径</td><td>A</td></tr><tr><td>网络曝光与舆论监督形成对权力的约束</td><td>反腐倡廉的新通道</td><td>B</td></tr><tr><td>官员直接听民意、回应关切</td><td>密切干群关系的新方式</td><td>D</td></tr></tbody></table>
+<p>三条功能全部落在<strong>渠道／手段层面</strong>——“新”修饰的是渠道，不是体制。这是本题的判断基准，也是 C 的排除依据。</p>
+<h3>第 1 步：先答掉两个必问的“为什么”</h3>
+<p><strong>材料没写“反腐”二字，为什么 B 能选？</strong> “收集民意”的内在含义就是接受公众表达、接受公众监督；网络让监督打破了时间与层级限制，网络曝光与舆论监督已成为对权力的新约束通道。这是<strong>合理延伸</strong>，不是超纲——判断标准是“选项是否由材料事实直接支撑其成立”，而非“选项是否逐字出现在材料里”。</p>
+<p><strong>为什么 C 不行——渠道之新 ≠ 体制之新？</strong> 我国的民主政治制度体系有明确清单：人民代表大会制度（根本政治制度），中国共产党领导的多党合作和政治协商制度、民族区域自治制度、基层群众自治制度（基本政治制度）。网络表达是这些体制<strong>之下运行的新的参与渠道</strong>——体制的框架清单并没有因为网络出现而多出新形式。把“新通道”拔高成“新体制”，是干扰项惯用的<strong>升格</strong>手法：把手段层面的更新，偷换成制度体系的更新。</p>
+<h3>第 2 步：逐项对号</h3>
+<ul><li><strong>A 公民政治参与的新途径</strong>：先破一个窄化理解——政治参与不只选举和决策，公民向政府表达意见本身就是参与；网络让参与绕开层层中介 ✅</li><li><strong>B 反腐倡廉的新通道</strong>：收集民意＝接受监督的网络化，舆论监督成为反腐新通道（合理延伸）✅</li><li><strong>C 民主政治体制的新形式</strong>：渠道之新不是体制之新，升格排除 ❌</li><li><strong>D 密切干群关系的新方式</strong>：干部与群众的沟通绕过层层汇报，干部直接听民意、回应关切 ✅</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 C——被“新”字带着升格</strong>：看到“新”就以为什么都新，没区分“参与手段的更新”与“政治体制的新形式”两个层次。制度体系有固定清单，网络在清单之内运行，不在清单之上另立。</li><li><strong>漏选 B——材料没写就不敢选</strong>：过度保守。合理延伸的判断标准是“由材料直接支撑”，收集民意内在包含监督之意。</li><li><strong>漏选 A——把政治参与窄化</strong>：以为参与只算选举、决策等“大事”，忽略了表达意见本身就是参与的一种形式。</li></ul>
+<blockquote>记忆锚点：网络三新——<strong>参与（A）、监督／反腐（B）、干群（D）</strong>；判断口令：<strong>手段的新 ≠ 体制的新</strong>（C 升格排除）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

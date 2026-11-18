@@ -1,8 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2021-15 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2021-15</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2021·15 北斗三号开通标志着什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），
+     模板复制自 408 tools/anim_concept_template.html，只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼',
+    cls: 'key',
+    body: '<p>2020-07-31，习近平宣布<b>北斗三号全球卫星导航系统</b>正式开通，问「标志着」。北斗题双工具：<b>三步走时间线</b>＋<b>全球坐标</b>，两条线一对，标志自然浮出。</p>',
+    log: '审题：时间线 ＋ 全球坐标双对号'
+  },
+  {
+    title: '先立模型：三步走时间线',
+    cls: 'key',
+    body: '<p>第一步（2000，北斗一号，双星定位）＝<b>零的突破</b>；第二步（2012，北斗二号）＝<b>亚太区域</b>服务；第三步（2020，北斗三号）＝<b>全球组网</b>建成开通。每步的「标志」互不通用。</p>',
+    log: '三步各有的标志：零的突破 / 亚太 / 全球'
+  },
+  {
+    title: '机制：为什么是「第三个国家」',
+    cls: 'step',
+    body: '<p>全球四大系统＝GPS（美）、GLONASS（俄）、Galileo（<b>欧盟</b>）、北斗（中）。Galileo 属国际组织，不算「国家」——独立拥有全球系统的<b>国家</b>此前只有美、俄，中国<b>第三</b>；「独立」指星上产品与地面控制全部自主研制。</p>',
+    log: 'Galileo 是组织不是国家 → 中国排第三'
+  },
+  {
+    title: 'B：全球坐标命中',
+    cls: 'good',
+    ribbon: { k: 2, ok: true },
+    body: '<p>时间线（第三步建成开通）＋全球坐标（美、俄之后第三国）<b>双重命中</b>：我国成为<b>世界上第三个独立拥有全球卫星导航系统的国家</b>。<b>B 正确</b>。</p>',
+    log: 'B 命中：第三个独立拥有的国家'
+  },
+  {
+    title: 'C：第一步的格子',
+    cls: 'bad',
+    ribbon: { k: 3, ok: false },
+    body: '<p>「零的突破」＝2000 年<b>北斗一号</b>第一步的标志——把它挪到 2020 年，是三步走记混的典型。<b>C 错误</b>。</p>',
+    log: 'C 占第一步的格子 → 排除'
+  },
+  {
+    title: 'D：第二步的格子',
+    cls: 'bad',
+    ribbon: { k: 4, ok: false },
+    body: '<p>「第二步目标」＝北斗二号<b>区域覆盖</b>（2012 年、服务亚太）；题干场景已是第三步全球组网。<b>D 错误</b>。</p>',
+    log: 'D 占第二步的格子 → 排除'
+  },
+  {
+    title: 'A：绝对化',
+    cls: 'bad',
+    ribbon: { k: 1, ok: false },
+    body: '<p>「世界<b>所有</b>国家都已使用」——开通服务是「面向全球提供」，不等于「全球都已使用」；「所有」类字眼几乎必错。<b>A 错误</b>。</p>',
+    log: 'A 「所有」绝对化 → 排除'
+  },
+  {
+    title: '结论',
+    cls: 'good',
+    body: '<p>答案 <b>B</b>。记忆锚点：北斗三步走——一号<b>零的突破</b>、二号<b>亚太</b>、三号<b>全球</b>；四大系统 GPS / GLONASS / Galileo / 北斗；「独立拥有全球系统的<b>国家</b>」：美、俄之后中国<b>第三</b>。</p>',
+    log: '锁定 B：世界上第三个独立拥有全球系统的国家'
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || (i === 0 ? '审题' : (last ? '结论' : '分析')),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '北斗三号建成开通标志着什么',
+  subtitle: '考点：北斗三号全球卫星导航系统 · 方法：三步走时间线 ＋ 全球坐标双重对号',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」沿三步走逐格定位。',
+  snaps: snaps,
+  result: {
+    big: '答案 B',
+    html: '北斗三号开通＝我国成为<b>世界上第三个独立拥有全球卫星导航系统的国家</b>（美、俄之后；Galileo 属欧盟，不计入「国家」）。记忆锚点：一号＝零的突破、二号＝亚太、三号＝全球；「所有国家都已使用」是绝对化陷阱。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：北斗三号开通「标志着」什么——三步走时间线 ＋ 全球坐标</h2>
+<p>答案：<strong>B（我国成为世界上第三个独立拥有全球卫星导航系统的国家）</strong>。</p>
+<h3>第 0 步：先立模型——北斗「三步走」，每步各有专属「标志」</h3>
+<p>问「标志着」，先摆时间线。北斗工程按三步走，每一步的「标志」互不通用——命题就爱把前两步的标志挪到第三步头上：</p>
+<table><thead><tr><th>步</th><th>时间</th><th>系统</th><th>专属标志</th></tr></thead><tbody><tr><td>第一步</td><td>2000 年</td><td>北斗一号（双星定位、区域试验系统）</td><td>我国卫星导航系统实现<strong>零的突破</strong>（C 的格子）</td></tr><tr><td>第二步</td><td>2012 年</td><td>北斗二号</td><td>覆盖亚太，提供区域导航服务——「第二步目标」（D 的格子）</td></tr><tr><td>第三步</td><td><strong>2020-07-31</strong></td><td>北斗三号</td><td>全球组网建成开通——标志见第 1 步</td></tr></tbody></table>
+<h3>第 1 步：为什么是「第三个国家」而不是第二个（预判追问）</h3>
+<p>北斗三号开通的「全球坐标」：全球四大卫星导航系统＝<strong>GPS（美国）、GLONASS（俄罗斯）、Galileo（欧盟）、北斗（中国）</strong>。此前<strong>独立拥有</strong>全球系统的只有美、俄两家——中国排第三。</p>
+<ul><li><strong>为什么不是第二？</strong> Galileo 虽然也是全球系统，但它属于<strong>欧盟这一国际组织</strong>，不是单一「国家」；题干问的是「国家」——「独立拥有全球卫星导航系统的国家」，中国是第三个。</li><li><strong>为什么强调「独立」？</strong> 北斗从星上产品到地面控制全部自主研制、不受制于人；「独立」是对这条技术路线的定性，也让 B 成为唯一能同时满足时间线（第三步建成）与全球坐标（美俄之后第三国）的选项。</li></ul>
+<h3>第 2 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>病根</th></tr></thead><tbody><tr><td>A 世界所有国家都已使用我国北斗导航系统</td><td>❌</td><td>「所有」绝对化；面向全球提供服务 ≠ 所有国家都已使用</td></tr><tr><td>B 我国成为世界上第三个独立拥有全球卫星导航系统的国家</td><td>✅</td><td>时间线（第三步）＋全球坐标（美、俄之后第三国）双重命中</td></tr><tr><td>C 我国卫星导航系统实现了零的突破</td><td>❌</td><td>那是 2000 年北斗一号<strong>第一步</strong>的标志</td></tr><tr><td>D 我国全球卫星导航系统建设实现了第二步目标</td><td>❌</td><td>第二步＝北斗二号<strong>区域覆盖</strong>（2012 年），题干场景是第三步</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 C / D（三步走记混，最常见）</strong>：把前两步的成果当成 2020 年的标志。三步各归各位：零的突破→一号；亚太区域→二号；全球、第三个国家→三号。</li><li><strong>误选 A（绝对化陷阱）</strong>：「所有」类字眼在政治选择题里几乎必错——开通服务是「面向全球提供」，不等于「全球都已使用」。</li></ul>
+<blockquote>记忆锚点：北斗三步走——一号<strong>零的突破</strong>、二号<strong>亚太</strong>、三号<strong>全球</strong>；四大系统 GPS / GLONASS / Galileo / 北斗；「独立拥有全球系统的<strong>国家</strong>」：美、俄之后中国<strong>第三</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

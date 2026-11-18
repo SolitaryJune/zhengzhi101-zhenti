@@ -1,8 +1,125 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-18 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-18</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2014·18 奶奶的星星：个人在历史中的作用</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼",
+    "cls": "key",
+    "body": "<p>题眼：史铁生《奶奶的星星》——「每一个活过的人，都能给后人的路途上<b>添些光亮</b>，也许是巨星，也许是火炬，也许只是一支含泪的烛光」。问：对理解<b>个人在社会历史中的作用</b>的启示。（多选）</p>",
+    "log": "文学表达 → 翻译成原理"
+  },
+  {
+    "title": "立机制：恩格斯的合力论",
+    "cls": "key",
+    "body": "<p>历史结果不是任何单个人意志的产物，而是无数相互交错的力量汇成的「<b>合力</b>」。推论：历史由无数个人的作用汇成；每个人的作用<b>有大小之分</b>，但没有人能单独<b>决定</b>历史走向，也没有人的作用是「零」。</p>",
+    "log": "合力论 = 本题底座"
+  },
+  {
+    "title": "分清两个身份：参与者 vs 创造者",
+    "cls": "key",
+    "body": "<p>人人都是历史的<b>参与者</b>；只有<b>推动历史前进</b>的力量（人民群众及顺应进步的力量）才是历史的<b>创造者</b>。参与者 ≠ 创造者——这是 C 的辨析点，先立好。</p>",
+    "log": "参与 ≠ 创造"
+  },
+  {
+    "title": "A ✅ 历史是无数个人相互作用的合力的结果",
+    "cls": "good",
+    "body": "<p>合力论原话。每个人添的光，汇成后人路途上的亮——历史正是无数个人相互作用的<b>合力</b>的结果。<b>A 正确</b>。</p>",
+    "ribbon": { "k": 1, "ok": true },
+    "log": "合力论 → 选 A"
+  },
+  {
+    "title": "D ✅ 每个人都有或大或小的作用",
+    "cls": "good",
+    "body": "<p>巨星、火炬、烛光——量级悬殊，但没有一个是「零」。「或大或小」正是分力有强弱的另一种说法。<b>D 正确</b>。</p>",
+    "ribbon": { "k": 4, "ok": true },
+    "log": "没有零分力 → 选 D"
+  },
+  {
+    "title": "B ❌「决定走向」夸大了个人",
+    "cls": "bad",
+    "body": "<p>杰出人物能<b>加速或延缓</b>历史进程、深刻影响时代面貌，但「决定走向」的是生产方式变革的要求与人民群众的实践——巨星再亮，也只是一股分力。<b>B 错误</b>。</p>",
+    "ribbon": { "k": 2, "ok": false },
+    "log": "影响 ≠ 决定 → B 不选"
+  },
+  {
+    "title": "C ❌ 人人参与 ≠ 人人创造",
+    "cls": "bad",
+    "body": "<p>人人都是历史的<b>参与者</b>，但「创造者」只指<b>推动历史前进</b>的力量。把参与者拔高成创造者，就抹掉了前进与倒退、推动与阻碍的区别。<b>C 错误</b>。</p>",
+    "ribbon": { "k": 3, "ok": false },
+    "log": "身份混同 → C 不选"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>AD</b>。记忆锚点：<b>合力（A）＋ 或大或小（D）</b>；杰出人物 = 影响而非决定；人人参与 ≠ 人人创造。</p>",
+    "log": "锁定 AD"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "奶奶的星星：个人在历史中的作用",
+  subtitle: "考点：马原·个人在历史中的作用（多选） · 方法：先立合力论，再裁决选项",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」沿合力论逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 AD",
+    html: "记忆锚点：<b>合力（A）＋ 或大或小（D）</b>。杰出人物能加速或延缓进程、影响时代面貌，但<b>不能决定</b>历史走向（B）；人人都是历史的<b>参与者</b>，只有推动历史前进的力量才是<b>创造者</b>（C）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：奶奶的星星——每个人在历史上的分量</h2>
+<p>答案：<strong>AD</strong>。</p>
+<h3>第 0 步：先立机制——恩格斯的合力论</h3>
+<p>历史唯物主义看个人作用，底座是恩格斯的<strong>合力论</strong>：历史结果不是任何单个人意志的产物，而是无数相互交错的力量汇成的"<strong>合力</strong>"。由此推出两个命题——</p>
+<ol><li>历史由无数个人的作用汇成，缺了谁都不完整，但谁也不能单独<strong>决定</strong>走向；</li><li>每个人的作用有大小之分（分力有强弱），但没有一个人的作用是"零"。</li></ol>
+<p>还要分清两个身份：人人都是历史的<strong>参与者</strong>；只有<strong>推动历史前进</strong>的力量（人民群众及顺应进步的力量）才是历史的<strong>创造者</strong>。</p>
+<h3>第 1 步：把文学表达翻译成原理</h3>
+<p>"也许是一颗巨星，也许是一把火炬，也许只是一支含泪的烛光"——量级悬殊、都在添光：这是"<strong>或大或小的作用</strong>"与"<strong>合力</strong>"的文学表达（D、A 的题面来源）。死者的精神给走夜道的人照亮，说的是个人生命有限，而<strong>精神贡献可以通过社会联系延续</strong>——个人与社会的统一。题问"对理解个人在社会历史中的作用的启示"，就是从这两条去找原理对应项。</p>
+<h3>第 2 步：四个选项逐个裁决</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>依据</th></tr></thead><tbody><tr><td>A 历史是无数个人相互作用的合力的结果</td><td>✅</td><td>合力论原话：每个人添的光汇成后人路途上的亮</td></tr><tr><td>B 杰出个人决定历史发展的走向</td><td>❌</td><td>杰出人物能<strong>加速或延缓</strong>历史进程、深刻影响时代面貌，但"决定走向"的是生产方式变革的要求与人民群众的实践——巨星再亮，也只是一股分力</td></tr><tr><td>C 人人都是历史的创造者</td><td>❌</td><td>人人都是历史的<strong>参与者</strong>；只有推动历史前进的人才是创造者。把"参与者"拔高成"创造者"，就抹掉了前进与倒退、推动与阻碍的区别</td></tr><tr><td>D 每个人对社会发展都有或大或小的作用</td><td>✅</td><td>巨星、火炬、烛光——量级悬殊但没有一个是"零"</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：觉得"星星是人变的，所以人人创造历史"。"添光"说的是<strong>作用</strong>，不是"创造历史"；对倒行逆施者，历史照样前进——把他们算作"创造者"等于取消命题的是非界限。</li><li><strong>误选 B</strong>：把"影响大"当成"决定"。合力的算术里，任何一项分力都不等于总和——影响可以很大，决定权不在任何单个人。</li></ul>
+<blockquote>记忆锚点：<strong>合力（A）＋ 或大或小（D）</strong>；杰出人物 = 影响而非决定；人人参与 ≠ 人人创造。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,155 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-33 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-33</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2010·33 中国—东盟自贸区《投资协议》· 意义三层 + 范围陷阱</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/记忆/推理链类模板（政治站无 KaTeX，纯文本推理链卡片），只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 迷你时间线（史实/进程类考点：自贸区三支柱逐根落地）
+function timeline(){
+  var rows = [
+    ['2002', '自贸区谈判启动', ''],
+    ['2004', '《货物贸易协议》', ''],
+    ['2007', '《服务贸易协议》', ''],
+    ['2009.8.15', '曼谷签署《投资协议》——最后一块拼图', 'key'],
+    ['2010', '自贸区全面建成', 'ok']
+  ];
+  var h = '<div style="margin:6px 0 2px">';
+  for(var i = 0; i < rows.length; i++){
+    var r = rows[i];
+    var bg = r[2] === 'key' ? '#fff7df' : (r[2] === 'ok' ? '#eefbf1' : '#f1f5f9');
+    var bd = r[2] === 'key' ? '#d9a514' : (r[2] === 'ok' ? '#2e9e5b' : '#cbd5e1');
+    h += '<div style="display:flex;align-items:center;gap:8px;margin:4px 0">' +
+         '<span style="flex:none;min-width:74px;text-align:center;font-size:12.5px;font-weight:700;' +
+         'color:#334155;background:' + bg + ';border:1px solid ' + bd + ';border-radius:6px;padding:2px 6px">' +
+         r[0] + '</span>' +
+         '<span style="font-size:13.5px;color:#334155">' + r[1] + '</span></div>';
+  }
+  return h + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: '审题眼：四要素拆题干',
+    cls: 'key',
+    log: '拆出时间、事件、标志、问法：意义题按"由近及远"铺正确项，再揪陷阱',
+    body: '<p><b>时间</b>：2009 年 8 月 15 日（国际金融危机蔓延之年）；<b>事件</b>：第八次中国—东盟经贸部长会议在曼谷签署《投资协议》；<b>标志</b>：历时 7 年的自贸区主要谈判任务完成；<b>问法</b>："重要意义在于"——多选，逐项找意义、揪陷阱。</p>'
+  },
+  {
+    title: '先立框架：三根支柱逐根立',
+    cls: 'key',
+    log: '货物、服务、投资三大领域协议逐个落地，《投资协议》是最后一块拼图',
+    body: timeline() +
+          '<p>"历时 7 年主要谈判任务已经完成" = 三大领域协议全部谈完，2010 年全面建成只差临门一脚。意义就从这条进程<b>由近及远</b>延伸出去：自贸区自身 → 双边关系 → 地区与全球。</p>'
+  },
+  {
+    title: 'A：自贸区建设层面 —— 对',
+    cls: 'good',
+    log: 'A 对：投资协议补齐最后一块，"确保 2010 年全面建成"成立',
+    body: '<p>中国对外建立的<b>第一个</b>自贸区。《投资协议》签署后，货物、服务、投资三大支柱齐备——<b>"确保"二字正来自题干"主要谈判任务已完成"这一事实</b>。<b>A 对</b>。</p>',
+    ribbon: { k: 1, ok: true }
+  },
+  {
+    title: 'B：双边关系层面 —— 对',
+    cls: 'good',
+    log: 'B 对：经贸是战略伙伴关系的支柱，协议把伙伴关系抬到更高水平',
+    body: '<p>自贸区是中国—东盟关系深化的标志性工程：货物、服务、投资全面自由化意味着<b>双边利益深度捆绑</b>，故协议<b>将中国—东盟战略伙伴关系提升到更高水平</b>。<b>B 对</b>。</p>',
+    ribbon: { k: 2, ok: true }
+  },
+  {
+    title: 'C：地区与全球层面 —— 对',
+    cls: 'good',
+    log: 'C 对：约 19 亿人口大市场建成在即，给危机中的世界经济注入信心',
+    body: '<p>2009 年正值<b>国际金融危机蔓延</b>，一个<b>约 19 亿人口</b>的大市场即将建成，是最有分量的稳定信号——<b>为地区和全球经济复苏与发展作出积极贡献</b>。漏看这层时政背景，最容易漏选 C。<b>C 对</b>。</p>',
+    ribbon: { k: 3, ok: true }
+  },
+  {
+    title: 'D：范围偷换 —— 中国—东盟 ≠ 东亚',
+    cls: 'bad',
+    log: 'D 错：自贸区只到"中国 + 东盟 10 国"，管不到范围更广的东亚自由贸易区',
+    body: '<p>中国—东盟自贸区 = 中国 + 东盟 10 国；<b>东亚自由贸易区 = 东盟与中、日、韩等共同建设的更广范围安排</b>，当时尚在构想与研究推进之中。协议的<b>效力范围 = 签署方范围</b>，到不了"东亚"那一级。<b>D 错</b>。</p>',
+    ribbon: { k: 4, ok: false }
+  },
+  {
+    title: '再验 D：保障对象不存在',
+    cls: 'bad',
+    log: 'D 复核："文件是真的，保障对象是错的"——东亚自贸区既未建立也非本协议覆盖',
+    body: '<p>"协议确实是法律文件"救不了 D：它保障的是<b>中国—东盟自贸区内的投资安排</b>，而"东亚自由贸易区"当时既没建立、也不是这份双边协议所要保障的东西——<b>文件是真的，保障对象是错的</b>。D 出局。</p>'
+  },
+  {
+    title: '结论：ABC',
+    cls: 'good',
+    log: '锁定答案 ABC：意义三层铺满，唯一排除点是范围偷换的 D',
+    body: '<p>答案 <b>ABC</b>。三层意义一句记：<b>建成自贸区（A）→ 升级伙伴关系（B）→ 助力全球复苏（C）</b>；陷阱一句防：<b>中国—东盟自贸区 ≠ 东亚自由贸易区</b>。</p>',
+    ribbon: { k: 5, ok: true }
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var locked = 0;
+  for(var j = 2; j <= i && j <= 4; j++){ locked++; }
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (STEPS[i].cls === 'bad' ? 'miss' : (STEPS[i].cls === 'good' ? 'ok' : 'step')),
+    tag: s.tag || (i === 0 ? '审题' : (i === 1 ? '框架' : '第 ' + i + ' 步')),
+    log: s.log,
+    count: locked,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2010·33】中国—东盟自贸区《投资协议》的重要意义（多选）',
+  subtitle: '考点：中国东盟自贸区 · 方法：先立三支柱进程，再由近及远铺意义',
+  counterLabel: '已锁定正确项',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D · 5=结论；✓ 是意义 / ✗ 不是）',
+  intro: '点击「▶ 播放」先看三支柱进程，再由近及远推意义。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABC',
+    html: '记忆锚点：中国对外<b>第一个</b>自贸区、<b>2010</b> 年全面建成；货物 → 服务 → 投资三支柱收口；意义看三层——<b>自贸区（A）、伙伴关系（B）、全球复苏（C）</b>；唯一排除点 D 是"范围偷换"：<b>中国—东盟自贸区 ≠ 东亚自由贸易区</b>，"提供法律保障"的对象当时并不存在。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：《投资协议》的重要意义——沿"三支柱"进程由近及远三层铺开</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第 0 步：先立机制——自贸区是"三根支柱"逐根立起来的</h3>
+<p>时政意义题不靠背句子，靠把事件放进它所在的<strong>建设进程</strong>里。中国—东盟自贸区是中国对外商建的<strong>第一个</strong>自贸区，按贸易领域分步谈判、逐个签协议落地：</p>
+<table><thead><tr><th>年份</th><th>里程碑</th></tr></thead><tbody><tr><td>2002</td><td>自贸区谈判启动</td></tr><tr><td>2004</td><td>《货物贸易协议》签署</td></tr><tr><td>2007</td><td>《服务贸易协议》签署</td></tr><tr><td>2009.8.15</td><td>曼谷第八次中国—东盟经贸部长会议签署《投资协议》——最后一块拼图</td></tr><tr><td>2010</td><td>自贸区全面建成</td></tr></tbody></table>
+<p>题干说"历时 7 年之久的自贸区<strong>主要谈判任务已经完成</strong>"，正是这条进程的收口：货物、服务、投资三大领域协议全部谈完，建成只差临门一脚。问"重要意义"，答案就从这条进程<strong>由近及远</strong>自然延伸：先看自贸区这条建设线本身（A），再看它对双边关系的抬升（B），最后看它对区域和世界的溢出（C）。</p>
+<h3>第 1 步：三层意义对号入座（A、B、C 为什么对）</h3>
+<table><thead><tr><th>选项</th><th>层面</th><th>理由</th></tr></thead><tbody><tr><td>A</td><td>自贸区建设本身</td><td>《投资协议》补齐最后一块，中国对外建立的<strong>第一个</strong>自贸区得以<strong>在 2010 年如期全面建成</strong>——"确保"二字正来自题干"主要谈判已完成"这一事实</td></tr><tr><td>B</td><td>双边关系</td><td>经贸合作是中国—东盟战略伙伴关系的重要支柱，货物、服务、投资全面自由化意味着双边利益深度捆绑，故协议将<strong>战略伙伴关系提升到更高水平</strong></td></tr><tr><td>C</td><td>地区与全球</td><td>2009 年正值国际金融危机蔓延，一个约 19 亿人口的大市场建成在即，是最有分量的稳定信号——<strong>为地区和全球经济复苏与发展作出积极贡献</strong></td></tr></tbody></table>
+<p>多选意义题通常就按"由近及远"铺满正确项——漏看"金融危机背景下"这层时政大背景，最容易漏掉 C。</p>
+<h3>第 2 步：D 错在哪——"范围偷换"是唯一排除点</h3>
+<p>中国—东盟自贸区 = 中国 + 东盟 10 国；<strong>东亚自由贸易区</strong> = 东盟与中、日、韩等共同建设的<strong>范围更广</strong>的区域安排，当时尚在构想与研究推进之中。把两者划等号，就中了"范围偷换"：</p>
+<ul><li><strong>范围错位</strong>：协议的效力范围 = 签署方的范围，只覆盖"中国—东盟"这一双边自贸区，到不了"东亚"那一级；</li><li><strong>保障对象不存在</strong>："提供法律保障"的对象必须是一个正在建设的事业——东亚自由贸易区当时既未建立，也不是这份双边协议所要保障的东西。"文件是真的，保障对象是错的"。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>误选 D</strong>：对应"看到'自贸区'就联想到更大的东亚自贸区"的联想——判断口径：协议效力只到签署方，中国—东盟 ≠ 东亚。</li><li><strong>"协议"诱发"法律保障"联想</strong>：协议确实是法律文件，但它保障的是中国—东盟自贸区<strong>内的投资安排</strong>，不是"东亚自由贸易区"的建立。</li><li><strong>漏选 C</strong>：忽略"国际金融危机蔓延"这一背景层——意义题要按由近及远铺满，少一层就漏一项。</li></ul>
+<blockquote>记忆锚点：中国对外<strong>第一个</strong>自贸区、<strong>2010</strong> 年全面建成；货物 → 服务 → 投资三支柱收口；意义看三层——自贸区（A）、伙伴关系（B）、全球复苏（C）；唯一排除点：<strong>中国—东盟自贸区 ≠ 东亚自由贸易区</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

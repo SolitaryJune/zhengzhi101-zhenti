@@ -1,8 +1,72 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-05 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-05</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2024·05 人民内部矛盾：政治生活主题的着眼点</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 anim_math_concept 模板（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [{"title": "审题眼", "cls": "key", "tag": "审题", "body": "<p>1957 年 2 月，毛泽东作《关于正确处理人民内部矛盾的问题》的报告，把正确处理人民内部矛盾作为<b>国家政治生活的主题</b>——问「<b>根本着眼点</b>」。着眼点 = 立这个主题的最终目的。</p>", "log": "问的是主题的最终目的"}, {"title": "先立背景：矛盾性质变了", "cls": "key", "tag": "立背景", "body": "<p>生产资料私有制社会主义改造基本完成 → 剥削制度消灭，大规模敌我对抗矛盾基本解决，国内大量矛盾转为<b>人民内部矛盾</b>（根本利益一致基础上的矛盾）。社会基本矛盾仍是生产力与生产关系、经济基础与上层建筑的矛盾——<b>非对抗性</b>。</p>", "log": "背景：矛盾转为人民内部"}, {"title": "A. 调动一切积极因素为建设服务——入选", "cls": "good", "tag": "A ✓", "ribbon": {"k": 1, "ok": true}, "body": "<p>立主题不是为了处理矛盾而处理矛盾，而是为了<b>为社会主义建设服务</b>：化消极因素为积极因素、团结一切可以团结的力量——与《论十大关系》「调动一切积极因素」一脉相承。</p>", "log": "着眼点=调动积极性搞建设 → A 正确"}, {"title": "B. 扩大民主、健全法制——手段", "cls": "bad", "tag": "B ✗", "ribbon": {"k": 2, "ok": false}, "body": "<p>民主法制是处理人民内部矛盾的<b>制度保障与方法</b>之一——回答「怎么处理」，回答不了「为什么立主题」。</p>", "log": "B 是手段不是着眼点"}, {"title": "C. 维护稳定、长治久安——效果", "cls": "bad", "tag": "C ✗", "ribbon": {"k": 3, "ok": false}, "body": "<p>稳定是正确处理矛盾带来的<b>效果</b>、结果层面的描述——着眼点在「调动积极性」，不在「保平稳」。</p>", "log": "C 是效果不是着眼点"}, {"title": "D. 消除社会矛盾——性质错", "cls": "bad", "tag": "D ✗", "ribbon": {"k": 4, "ok": false}, "body": "<p>矛盾是普遍的、贯穿社会主义社会全程——基本矛盾只能<b>正确处理、不断解决</b>，不能「消除」。「消除」二字直接判死刑。</p>", "log": "D 「消除矛盾」性质错误"}, {"title": "结论", "cls": "good", "tag": "完成", "body": "<p>答案 <b>A</b>。记忆锚点：人民内部矛盾成为主题 → 着眼点 = <b>调动一切积极因素为社会主义建设服务</b>；矛盾要正确处理，不能消除。</p>", "log": "锁定 A：调动积极性为建设服务"}];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "2024·05 人民内部矛盾：政治生活主题的着眼点",
+  subtitle: "考点：《关于正确处理人民内部矛盾的问题》· 方法：立背景 → 追问主题的目的",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」：先立 1956—1957 背景模型，再追问「为什么立这个主题」。",
+  snaps: snaps,
+  result: {
+    big: "答案 A",
+    html: "答案 <b>A</b>：根本着眼点是<b>调动一切积极因素为社会主义建设服务</b>（化消极为积极，与《论十大关系》一脉相承）。B 是处理手段、C 是处理效果，都答不了「为什么立主题」；D「消除社会矛盾」性质上就错——矛盾只能正确处理，不能消除。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：为什么把正确处理人民内部矛盾作为政治生活的主题</h2>
+<p>答案：<strong>A（调动一切积极因素为社会主义建设服务）</strong>。</p>
+<h3>第 0 步：先立背景——1956—1957 年国内矛盾变了</h3>
+<ul><li>生产资料私有制社会主义改造基本完成 → 剥削制度消灭，<strong>大规模的敌我对抗矛盾基本解决</strong>；</li><li>国内大量矛盾转为<strong>人民内部矛盾</strong>（人民内部在根本利益一致基础上的矛盾）；</li><li>毛泽东 1957 年 2 月作《关于正确处理人民内部矛盾的问题》的报告，提出把正确处理人民内部矛盾作为<strong>国家政治生活的主题</strong>。</li></ul>
+<p>为什么要立这个主题？根本着眼点必须接住「主题」背后的目的：主题不是为处理矛盾而处理矛盾，而是为了<strong>为社会主义建设服务</strong>——与《论十大关系》确立的「调动一切积极因素」的方针一脉相承。</p>
+<h3>第 1 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对应的误解</th></tr></thead><tbody><tr><td>A 调动一切积极因素为社会主义建设服务</td><td>✅</td><td>根本着眼点：化消极因素为积极因素，团结一切可以团结的力量搞建设</td></tr><tr><td>B 扩大社会主义民主、健全社会主义法制</td><td>❌</td><td>这是处理人民内部矛盾的<strong>制度保障与方法</strong>之一，不是「根本着眼点」</td></tr><tr><td>C 维护社会稳定、实现长治久安</td><td>❌</td><td>稳定是处理矛盾带来的<strong>效果</strong>，着眼点在「调动积极性」上</td></tr><tr><td>D 消除社会矛盾、实现民族大团结</td><td>❌</td><td>「消除矛盾」性质错：社会主义社会基本矛盾仍是生产力与生产关系等的矛盾，只能<strong>正确处理</strong>，不能消除</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 D 最危险</strong>：「消除社会矛盾」在性质上就错——矛盾是普遍的、贯穿社会主义社会全程的，能做的只是正确区分和处理两类不同性质的矛盾；「消除」二字直接判死刑。</li><li><strong>误选 B/C</strong>：把「手段」与「效果」当成了「着眼点」——着眼点回答的是「为什么立这个主题」，答案是「为了建设」。</li></ul>
+<blockquote>记忆锚点：人民内部矛盾成为主题 → 着眼点 = <strong>调动一切积极因素为社会主义建设服务</strong>；矛盾要正确处理，不能消除。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

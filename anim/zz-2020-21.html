@@ -1,8 +1,78 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-21 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-21</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2020-21 国际经济机构促进经济全球化的表现（多选） · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: "审题眼：问的是促进全球化的“表现”", cls: "key", sc: "step", tag: "审题", log: "设问锁定“表现”，警惕拔高“能力”的选项", body: "<p>机构清单：IMF（国际收支/汇率）、世界银行（长期资金）、WTO（贸易规则）。</p><p>设问：<b>促进经济全球化发展主要表现在哪</b>——找看得见的结果，警惕“有效应对危机”式拔高。</p>" },
+  { t: "机制先行：三条协调通道，通向三件表现", cls: "key", sc: "shift", tag: "机制", log: "立规则、搭平台、给协调——通道决定表现的样子", body: "<p><b>立规则</b>（贸易规则/汇率安排/贷款条件）→ 降低跨境交易成本 → <b>贸易扩张</b>；</p><p><b>搭平台</b>（谈判与争端解决）→ 各国绑进同一套制度 → <b>联系加强</b>；</p><p><b>给协调</b>（政策协商）→ 要素跨境更便利 → <b>资本技术流动加快</b>。</p>" },
+  { t: "选项 B：推动了商品和服务贸易的迅速增加 —— 对", cls: "good", sc: "ok", tag: "选项 B", ribbon: { k: 2, ok: true }, log: "表现一：规则降成本，贸易扩张", body: "<p>贸易规则与市场开放推动<b>商品和服务贸易迅速增加</b>——全球化最直观的表现。B 对。</p>" },
+  { t: "选项 C：加强了各国和各经济体之间的联系 —— 对", cls: "good", sc: "ok", tag: "选项 C", ribbon: { k: 3, ok: true }, log: "表现二：制度化平台把各国绑在一起", body: "<p>制度化的协调合作<b>加强了各国与各经济体之间的联系</b>——题干“协调和合作的基础上”直接对应。C 对。</p>" },
+  { t: "选项 D：加快了资本和技术等要素的国际流动 —— 对", cls: "good", sc: "ok", tag: "选项 D", ribbon: { k: 4, ok: true }, log: "表现三：投资贸易便利化，要素流动加速", body: "<p>投资与贸易便利化<b>加快资本、技术等要素的国际流动</b>。D 对。</p>" },
+  { t: "选项 A：有效应对全球性经济波动和经济危机 —— 错", cls: "bad", sc: "miss", tag: "选项 A", ribbon: { k: 1, ok: false }, log: "“表现”≠“治理能力”，2008 就是反例", body: "<p>A 答的不是“表现”，是“<b>治理能力</b>”——且“<b>有效应对</b>”是拔高性绝对化表述。</p><p>机构建立在<b>垄断资本利益协调</b>之上，触及不到资本主义基本矛盾，危机根源未除——2008 年国际金融危机即反例。<b>A 错</b>。</p>" },
+  { t: "结论：BCD", cls: "good", sc: "step", tag: "结论", log: "汇总：B、C、D 入选，A 排除", body: "<p>答案 <b>BCD</b>：贸易增（B）· 联系密（C）· 要素流动快（D）。</p><p>促进开放合作 ≠ 能治理危机——危机应对是国际经济机构的制度天花板。</p>" }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "【2020·21】国际经济机构促进经济全球化的表现（多选）",
+  subtitle: "考点：经济全球化 · 国际经济机构的协调作用与局限",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）",
+  intro: "点击「▶ 播放」：先看清“协调通道”通向哪三件表现，再看 A 为什么是拔高。",
+  snaps: snaps,
+  result: {
+    big: "答案 BCD",
+    html: "记忆锚点：国际经济机构的全球化功劳簿 = 贸易增（B）· 联系密（C）· 要素流动快（D）；危机应对是它的<b>制度天花板</b>（A 错）——协调触及不到资本主义基本矛盾。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：国际经济机构促进全球化——功劳簿与天花板</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——这些机构靠什么起作用</h3>
+<p>二战后国际垄断资本建立 IMF（管国际收支与汇率）、世界银行（管长期资金）、WTO（管贸易规则）等机构，本质是为各国垄断资本的协调与制约提供<strong>制度化平台</strong>，作用通道有三条：<strong>立规则</strong>（贸易规则、汇率安排、贷款条件）、<strong>搭平台</strong>（谈判与争端解决）、<strong>给协调</strong>（政策协商）。</p>
+<p>通道决定“表现”的样子：规则降低了跨境交易成本 → <strong>贸易扩张</strong>；平台把各国绑进同一套制度 → <strong>联系加强</strong>；协调便利了要素跨境 → <strong>资本、技术等流动加快</strong>。三件看得见的事，就是经济全球化“促进”的落点——B、C、D。</p>
+<h3>第 1 步：预判追问——“表现”和“能力”有什么区别，A 为什么错</h3>
+<p>设问问的是“促进全球化发展的<strong>表现</strong>”，A 答的是“<strong>有效应对</strong>全球性经济波动和经济危机”。表现 = 它确实推动了什么（贸易、联系、要素流动，量的扩张与联系的密度）；治理能力 = 它能否消除系统性危机的根源。</p>
+<p>这些机构建立在<strong>垄断资本利益协调</strong>之上，协调再顺畅也<strong>触及不到资本主义基本矛盾</strong>——危机的根源未除，“有效应对”无从谈起，2008 年国际金融危机就是反例。促进开放合作 ≠ 能治理危机，A 是把“功劳簿”拔高成了“治理书”。</p>
+<h3>第 2 步：A~D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>判定</th><th>归因</th></tr></thead><tbody><tr><td>A 有效应对全球性经济波动和经济危机</td><td>✗</td><td>拔高性绝对化表述：超出机构的制度能力，消除不了基本矛盾</td></tr><tr><td>B 推动了商品和服务贸易的迅速增加</td><td>✓</td><td>立规则、降成本的直接结果——表现一</td></tr><tr><td>C 加强了各国和各经济体之间的联系</td><td>✓</td><td>制度化协调合作的直接结果——表现二</td></tr><tr><td>D 加快了资本和技术等要素的国际流动</td><td>✓</td><td>投资贸易便利化的直接结果——表现三</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：把“促进全球化发展”顺理成章推成“还能应对危机”——混淆“表现”与“治理能力”；且“有效应对”这种绝对化字眼在政治选择题里多为陷阱信号。</li><li><strong>漏选 B/D</strong>：只盯住题干里“协调”“制约”的字眼，往抽象原理上想；忘记贸易扩大、要素流动才是全球化最直观的表现。</li></ul>
+<blockquote>记忆锚点：国际经济机构的全球化功劳簿 = 贸易增（B）· 联系密（C）· 要素流动快（D）；危机应对是它的<strong>制度天花板</strong>（A 错）——协调触及不到资本主义基本矛盾。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

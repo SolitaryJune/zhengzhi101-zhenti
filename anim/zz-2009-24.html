@@ -1,8 +1,100 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2009-24 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2009-24</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2009-24 · 效率与公平：三个落实层与一个错位项（2009 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：设问"就要……"——问的是怎么做',
+    cls: 'key',
+    body: '<p>题干三层：①初次分配和再分配<b>都要</b>处理好效率与公平的关系；②再分配<b>更加注重公平</b>；③逐步提高<b>两个比重</b>（居民收入在国民收入分配中的比重、劳动报酬在初次分配中的比重）。答案必须落在题干给的动作上。</p>' },
+  { title: '先立机制：两个环节都兼顾＝协调统一',
+    cls: '',
+    body: '<p>效率与公平不是"先效率、后公平"的先后关系，而是<b>两个分配环节都要兼顾</b>——初次分配讲效率也讲公平，再分配更加注重公平；落实靠<b>制度改革＋格局调整</b>两层动作。这是后面逐项判定的总框架。</p>' },
+  { title: '逐项分析 A：把效率和公平的矛盾协调统一起来',
+    cls: 'good',
+    ribbon: {k:1, ok:true},
+    body: '<p>"处理好……关系"的标准落点——既不牺牲公平换效率，也不搞平均主义伤效率；题干"初次分配和再分配<b>都要</b>处理好关系"正是"协调统一"的具体安排（理念层） → ✅ 选。</p>' },
+  { title: '逐项分析 B：充分发挥市场机制对收入分配的调节作用',
+    cls: 'bad',
+    ribbon: {k:2, ok:false},
+    body: '<p>单看是市场经济的一般常识，放进题干就错位：①<b>功能错位</b>——市场机制按要素贡献分配、天然偏向效率，任其"充分发挥作用"差距反而拉大，与"再分配<b>更加注重公平</b>"方向相反；②<b>答非所问</b>——题干措施（提高两个比重）全指向制度改革与政府调节，没有一项靠市场自动实现。背景 ≠ 对策 → ❌ 不选。</p>' },
+  { title: '逐项分析 C：改革收入分配制度，规范收入分配秩序',
+    cls: 'good',
+    ribbon: {k:3, ok:true},
+    body: '<p>制度层落点：要让"两个比重"提上去、再分配更公平，只能靠<b>改革分配制度</b>（劳动报酬机制＋税收—社保—转移支付）＋<b>规范秩序</b>（取缔非法收入、调节过高收入） → ✅ 选。</p>' },
+  { title: '逐项分析 D：合理调整国民收入分配格局，加大调节力度',
+    cls: 'good',
+    ribbon: {k:4, ok:true},
+    body: '<p>格局层落点：题干"提高居民收入在<b>国民收入分配</b>中的比重"本身就是调整国民收入分配格局；"再分配更加注重公平"必然要求<b>加大调节力度</b>——与题干照应最直接 → ✅ 选。</p>' },
+  { title: '对号入座汇总',
+    cls: '',
+    body: '<p>A ✅ 理念层·协调统一；B ❌ 功能错位＋答非所问；C ✅ 制度层·改革规范；D ✅ 格局层·调整力度。→ 答案 <b>ACD</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>ACD</b>。理念统一（A）＋制度规范（C）＋格局调整（D）；市场管效率、政府补公平，"仅靠市场"（B）背不动"更加注重公平"。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2009-24 处理好效率与公平的关系就要……',
+  subtitle: '考点：效率与公平 · 理念—制度—格局三个落实层 —— 选项逐项推演',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 ACD',
+    html: '<b>A</b> 理念层——"处理好关系"＝把效率与公平的矛盾<b>协调统一</b>起来，两个分配环节都兼顾。<br><b>C</b> 制度层——改革收入分配制度、规范分配秩序，"两个提高"的落地前提。<br><b>D</b> 格局层——"提高居民收入在国民收入分配中的比重"的原话对应，加大调节力度。<br><br><b>干扰项：</b>B"充分发挥市场机制调节收入分配"——市场机制天然<b>偏效率</b>，与题干"再分配更加注重公平"功能错位；题干措施全指向政府调节，<b>背景≠对策</b>。<br><br><b>记忆锚点：</b>理念统一＋制度规范＋格局调整；市场管效率、政府补公平。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：效率与公平——"处理好关系"的三个落实层与一个错位项</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立机制——题干给的"处理框架"是什么</h3>
+<p>题干给出十七大报告的分配口径：<strong>初次分配和再分配都要处理好效率和公平的关系，再分配更加注重公平</strong>，并配"逐步提高两个比重"（居民收入在国民收入分配中的比重、劳动报酬在初次分配中的比重）。拆开看有三层意思：</p>
+<ol><li>效率与公平不是"先效率、后公平"的先后关系，而是<strong>两个分配环节都要兼顾</strong>——这本身就是把二者的矛盾<strong>协调统一</strong>起来（A 的出处）；</li><li>"再分配<strong>更加注重公平</strong>"＋"提高两个比重"——意味着要<strong>动分配格局</strong>，靠的是制度改革与国家调节（C、D 的出处）；</li><li>设问是"这表明处理好效率与公平的关系，<strong>就要</strong>……"——问的是<strong>怎么做</strong>，答案必须落在题干给出的动作上。</li></ol>
+<h3>第 1 步：A、C、D 为什么对——三个落实层</h3>
+<p><strong>A 把效率和公平相互之间的矛盾协调统一起来</strong>："处理好……关系"的标准落点——既不牺牲公平换效率，也不搞平均主义伤效率；初次分配讲效率也讲公平、再分配更加注重公平，正是"协调统一"的具体安排。</p>
+<p><strong>C 改革现有的收入分配制度，规范收入分配秩序</strong>：要让"两个比重"提上去、让再分配更公平，靠什么落实？只能靠<strong>改革分配制度</strong>（初次分配的劳动报酬机制、再分配的税收—社保—转移支付）＋<strong>规范分配秩序</strong>（取缔非法收入、调节过高收入）——制度层落点。</p>
+<p><strong>D 合理调整国民收入分配格局，加大收入分配调节力度</strong>："提高居民收入在<strong>国民收入分配</strong>中的比重"这句话本身就是调整国民收入分配格局；"再分配更加注重公平"必然要求<strong>加大调节力度</strong>——格局层落点，与题干照应最直接。</p>
+<h3>第 2 步：B 为什么不选——市场机制管效率，背不动"更加注重公平"</h3>
+<p>B"充分发挥市场机制对收入分配的调节作用"。单看是市场经济的一般常识，放进题干就错位：</p>
+<ol><li><strong>功能错位</strong>：市场机制按要素贡献分配，天然<strong>偏向效率</strong>；任其"充分发挥作用"，收入差距反而拉大——题干要求的恰是"再分配<strong>更加注重公平</strong>"，方向相反；</li><li><strong>答非所问</strong>：题干列举的措施（提高两个比重）全部指向<strong>制度改革与政府调节</strong>，没有一项能靠"充分发挥市场机制"自动实现。</li></ol>
+<p>B 是把"初次分配由市场决定"这个背景性常识，冒充题干要的"处理效率与公平"的对策——背景 ≠ 对策。</p>
+<h3>第 3 步：对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归位</th></tr></thead><tbody><tr><td>A 把效率和公平的矛盾协调统一起来</td><td>✅</td><td>理念层："处理好关系"＝协调统一，两个环节都兼顾</td></tr><tr><td>B 充分发挥市场机制对收入分配的调节作用</td><td>❌</td><td>功能错位＋答非所问：市场偏效率，回应不了"更加注重公平"</td></tr><tr><td>C 改革收入分配制度，规范分配秩序</td><td>✅</td><td>制度层：两个提高的落地前提</td></tr><tr><td>D 合理调整国民收入分配格局，加大调节力度</td><td>✅</td><td>格局层："提高居民收入在国民收入分配中的比重"的原话对应</td></tr></tbody></table>
+<p>→ 选 <strong>ACD</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 B</strong>：觉得"市场调节收入分配"是标配、多选不选可惜——但题干措施全指向国家调节；把背景常识当对策是最典型的干扰方式。</li><li><strong>漏 A</strong>：把"处理好效率与公平的关系"当空话跳过——它恰好对应"协调统一"这个理念层的标准落点。</li><li><strong>漏 C 或 D</strong>：C、D 一层之差，分属<strong>制度层</strong>（改革制度、规范秩序）与<strong>格局层</strong>（调整格局、加大调节）——题干两层各需要一个选项，漏一个就丢分。</li></ul>
+<blockquote>记忆锚点：效率公平两手抓——<strong>理念统一（A）＋制度规范（C）＋格局调整（D）</strong>；市场管效率、政府补公平，"仅靠市场"（B）背不动"更加注重公平"。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,127 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2019-26 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2019-26</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2019·26 文化自信的底气：一条河记来源链</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理链卡片），
+     引用 ../assets/anim-engine.js，只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: "审题眼：底气从哪来",
+    cls: "key",
+    body: "<p>题干：坚定道路自信、理论自信、制度自信，<b>说到底</b>要坚定文化自信——文化是更基础、更广泛、更深厚的自信。问的是底气与理由的<b>来源结构</b>（十九大报告标准表述）。</p>",
+    log: "先审题：问中国特色社会主义文化的来源与根基"
+  },
+  {
+    title: "立机制：一条河记来源链",
+    cls: "key",
+    body: "<p>标准表述原文：中国特色社会主义文化，<b>源自于</b>中华优秀传统文化，<b>熔铸于</b>革命文化和社会主义先进文化，<b>植根于</b>中国特色社会主义伟大实践。</p><p>画成一条河：<b>上游</b>是传统文化，<b>中游</b>汇入革命文化与先进文化，<b>河床</b>是当代伟大实践。四个选项沿河各占一段，动词与宾语一一配对：源—铸—根。</p>",
+    log: "立河段：源（传统）→ 铸（革命/先进）→ 根（实践）"
+  },
+  {
+    title: "选项 C：源自于博大精深的中华优秀传统文化",
+    cls: "good",
+    ribbon: { k: 3, ok: true },
+    body: "<p>对应原文「源自于中华民族五千多年文明历史所孕育的中华优秀传统文化」——河流的<b>上游</b>，五千多年的历史源流。<b>C 入选</b>。</p>",
+    log: "C：源 → 上游传统文化 ✓"
+  },
+  {
+    title: "选项 B：承继于激昂向上的革命文化",
+    cls: "good",
+    ribbon: { k: 2, ok: true },
+    body: "<p>对应原文「熔铸于党领导人民在革命、建设、改革中创造的<b>革命文化</b>」——中游之一，革命年代淬炼出的精神谱系。<b>B 入选</b>。</p>",
+    log: "B：铸 → 中游革命文化 ✓"
+  },
+  {
+    title: "选项 A：熔铸于生机勃勃的社会主义先进文化",
+    cls: "good",
+    ribbon: { k: 1, ok: true },
+    body: "<p>对应原文「熔铸于……<b>社会主义先进文化</b>」——中游之二。注意：原文一个动词「熔铸」带<b>两个宾语</b>，A、B 各领其一，缺一不可。<b>A 入选</b>。</p>",
+    log: "A：铸 → 中游先进文化 ✓"
+  },
+  {
+    title: "选项 D：植根于中国特色社会主义伟大实践",
+    cls: "good",
+    ribbon: { k: 4, ok: true },
+    body: "<p>对应原文「植根于中国特色社会主义伟大实践」——<b>河床</b>：文化不只源于历史，更植根于当下正在进行的实践；缺了河床，河水无处流淌。<b>D 入选</b>。</p>",
+    log: "D：根 → 河床伟大实践 ✓（最易漏）"
+  },
+  {
+    title: "追问：四个选项会不会近义重复",
+    cls: "step",
+    body: "<p>不会。它们是<b>并列递进</b>，不是同义反复：时间上从五千年文明史到革命年代再到当下，空间上从历史源流到现实土壤；每个动词只配自己的宾语。判断全选题的经验法则：选项组<b>各管一段、互不重叠</b>时，大胆全选。</p>",
+    log: "源—铸—根一一配对 → 无重叠，全选"
+  },
+  {
+    title: "结论",
+    cls: "good",
+    body: "<p>答案 <b>ABCD</b>。记忆锚点：一条河记四个定位——<b>源</b>于传统文化（C）、铸入<b>革命</b>文化（B）、汇入<b>先进</b>文化（A）、根植<b>伟大实践</b>（D）——这就是文化自信的充足底气。</p>",
+    log: "锁定 ABCD：四段河段各就各位"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "文化自信的底气：中国特色社会主义文化的来源链",
+  subtitle: "考点：文化自信 · 方法：把十九大标准表述立成一条河，逐项对河段",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先把来源链立成一条河，再按河段逐项对号。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABCD",
+    html: "记忆锚点：一条河记四个定位——<b>源</b>于传统文化、<b>铸</b>入革命文化、汇入<b>先进</b>文化、<b>根</b>植伟大实践（ABCD 全选）；最易漏的是河床 D——伟大实践。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：文化自信的底气——用"一条河"记牢中国特色社会主义文化的来源链</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——底气从哪来？来自一条"来源链"</h3>
+<p>题干说坚定道路自信、理论自信、制度自信，<strong>说到底</strong>要坚定文化自信——为什么"说到底"？因为文化是更基础、更广泛、更深厚的自信。底气何来？先把十九大报告的标准表述立起来：</p>
+<blockquote>中国特色社会主义文化，<strong>源自于</strong>中华民族五千多年文明历史所孕育的<strong>中华优秀传统文化</strong>，<strong>熔铸于</strong>党领导人民在革命、建设、改革中创造的<strong>革命文化和社会主义先进文化</strong>，<strong>植根于</strong>中国特色社会主义伟大实践。</blockquote>
+<p>画成一条河：上游是传统文化，中游汇入革命文化与社会主义先进文化，河床是当代伟大实践。四个选项就是沿河各占一段，动词与宾语一一配对：<strong>源</strong>对传统文化、<strong>铸</strong>对革命文化与先进文化、<strong>根</strong>对伟大实践。</p>
+<h3>第 1 步：A~D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>动词</th><th>宾语</th><th>河段定位</th></tr></thead><tbody><tr><td>C 源自于博大精深的中华优秀传统文化</td><td>源</td><td>传统文化</td><td>上游：五千多年文明史孕育</td></tr><tr><td>B 承继于激昂向上的革命文化</td><td>铸（承继）</td><td>革命文化</td><td>中游之一：革命、建设、改革中创造</td></tr><tr><td>A 熔铸于生机勃勃的社会主义先进文化</td><td>铸</td><td>先进文化</td><td>中游之二：同一半句的后一项</td></tr><tr><td>D 植根于中国特色社会主义伟大实践</td><td>根</td><td>伟大实践</td><td>河床：当下正在进行的实践</td></tr></tbody></table>
+<p>→ 四项各占一段河段、无一带外假设，选 <strong>ABCD</strong>。</p>
+<h3>第 2 步：预判追问——四个选项会不会"近义重复"，全选是不是送分？</h3>
+<p>不会。它们不是同义反复，而是<strong>并列递进</strong>：时间上从五千年文明史到革命年代再到当下，空间上从历史源流到现实土壤；每个动词只配自己的宾语（源对传统、铸对革命/先进、根对实践）。判断全选题的经验法则：选项组<strong>各管一段、互不重叠</strong>时，大胆全选。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选 D</strong>：只背了"传统文化 + 革命文化 + 先进文化"三个文化来源，忘了<strong>伟大实践</strong>这个根基——文化自信不只来自历史，更来自当下正在做的事情；缺了河床，河水无处流淌。</li><li><strong>漏选 A 或 B</strong>：把"熔铸于革命文化和社会主义先进文化"这半句记丢一半——原文一个动词带两个宾语，A、B 各领其一，缺一不可。</li></ul>
+<blockquote>记忆锚点：一条河记四个定位——<strong>源</strong>于传统文化（C）、铸入<strong>革命</strong>文化（B）、汇入<strong>先进</strong>文化（A）、根植<strong>伟大实践</strong>（D）；源—铸—根对号入座，就是文化自信的底气（ABCD）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

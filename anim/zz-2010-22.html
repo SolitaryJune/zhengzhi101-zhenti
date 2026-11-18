@@ -1,8 +1,83 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-22 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-22</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-22 过渡时期总路线 · 时间线动画</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼：设想为什么改',
+    cls: 'key', sc: 'step', tag: '审题',
+    body: '<p>建国之初的设想：<b>先搞工业化建设，再一举过渡</b>；1952 年改为：<b>建设和改造同时并举，逐步过渡</b>。</p><p>题问改变的原因和条件——先卡时间轴，再拿 1952 年的真实家底逐项核对。</p>' },
+  { t: '时间线：1949 → 1952 → 1953',
+    cls: 'key', sc: 'shift', tag: '时间线',
+    log: '先卡时间轴：建国设想的由来与 1952 年的改变',
+    body: '<p><b>1949</b> 建国：设想先建设、再一举过渡（先打厚家底）；</p><p><b>1952</b> 国民经济恢复完成，民主革命遗留任务基本完成——设想改变为“同时并举、逐步过渡”；</p><p><b>1953</b> 过渡时期总路线正式提出（“一化三改”），同年“一五”计划才开始实施。</p>' },
+  { t: '选项 A：社会主义经济因素增长 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A',
+    body: '<p>国营经济不断壮大，对资本主义经济的限制利用已有经验——经济条件成熟。</p><p>“并举”有了物质基础。A 对。</p>' },
+  { t: '选项 B：确定工业化的社会主义方向 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 B',
+    body: '<p>“改造”与“建设”同时抓，正是为了保证工业化沿着社会主义方向走。</p><p>这是改设想的目的性考虑。B 对。</p>' },
+  { t: '选项 C：工业化已取得重大成就 —— 错',
+    cls: 'bad', sc: 'miss', tag: '选项 C',
+    body: '<p>时间点对不上：1952 年国民经济<b>刚刚恢复</b>，“一五”计划 1953 年才开始实施。</p><p>把 1957 年“一五”完成后的成绩单前移到 1952 年，时序错位。C 错。</p>' },
+  { t: '选项 D：民主革命遗留任务完成 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 D',
+    body: '<p>土地改革等民主革命遗留任务基本完成，政权稳固——政治条件成熟。</p><p>可以腾出手来搞改造了。D 对。</p>' },
+  { t: '结论：ABD',
+    cls: 'good', sc: 'done', tag: '结论',
+    body: '<p>答案 <b>ABD</b>：家底厚了（A）· 方向定了（B）· 敌人扫清了（D）。</p><p>排除的 C：1952 年“成绩单”还没发出来——工业化成就谈不上“重大”。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: '【2010·22】从“一举过渡”到“逐步过渡”（多选）',
+  subtitle: '考点：过渡时期总路线 · 时间线 + 逐项推演',
+  intro: '点击「▶ 播放」先看时间线，再逐项核对条件。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABD',
+    html: '记忆锚点：<b>1952 年敢改设想的底气——敌人扫清了（D）、家底厚了（A）、方向定了（B）；唯独“成绩单”还没发出来（C）</b>——“一五”计划 1953 年才起步。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：从"一举过渡"到"逐步过渡"改在哪、凭什么改</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立时间线——设想是怎么变的</h3>
+<table><thead><tr><th>时间</th><th>设想</th><th>依据</th></tr></thead><tbody><tr><td>建国之初</td><td>先搞一段工业化建设，再"一举过渡"</td><td>先把家底打厚</td></tr><tr><td>1952 年</td><td>建设和改造<strong>同时并举、逐步过渡</strong></td><td>条件变了，底气足了</td></tr></tbody></table>
+<p>题问这次"改设想"的原因和条件，拿 1952 年的真实家底逐项核对即可。</p>
+<h3>逐项对号入座</h3>
+<ul><li><strong>A 对</strong>：社会主义经济因素不断增长（国营经济壮大），对资本主义经济的限制利用已有经验——经济条件成熟，"并举"有了物质基础。</li><li><strong>B 对</strong>：为了确定我国工业化建设的社会主义方向——"改造"与"建设"同时抓，正是为了保证工业化沿着社会主义走，这是改设想的目的性考虑。</li><li><strong>D 对</strong>：民主革命的遗留任务（土改、肃清反动势力等）已经完成——政治条件成熟，可以腾出手来搞改造。</li><li><strong>C 错</strong>：时间点对不上。1952 年国民经济刚刚恢复，"一五"计划 1953 年才开始实施，工业化谈不上"取得重大成就"；把 1957 年"一五"完成后的成绩单前移到 1952 年，是时序错位。</li></ul>
+<h3>为什么 C 最有迷惑性</h3>
+<p>C 听起来最像"原因"——工业化有成就了，当然可以过渡？恰恰相反：正因为工业化还没搞起来，才要"建设和改造<strong>同时</strong>并举"抢时间；若成就已经"重大"，"同时并举"反而失去紧迫性。再用时间一卡（1952 年尚无"一五"），C 即出局。</p>
+<blockquote>记忆锚点：1952 年敢改设想的底气——敌人扫清了（D）、家底厚了（A）、方向定了（B）；唯独"成绩单"还没发出来（C）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

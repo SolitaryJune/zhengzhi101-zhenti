@@ -1,8 +1,157 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2025-13 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2025-13</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2025·13 1981 年《历史决议》强调什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版，纯文本推理卡片），只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行要素格（史实、会议、著作类用）
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：三件事里的第三件",
+    "cls": "key",
+    "log": "题眼：道路概括部分强调什么",
+    "body": "<p>题干引出《决议》的两件事（彻底否定文革、概括建设道路），问的是<b>「道路概括」强调什么</b>——先划范围，答案必须从这部分原文里找。</p>"
+  },
+  {
+    "title": "先立背景：为什么 1981 年要作这个决议",
+    "cls": "key",
+    "log": "背景：历史问题不清，路线定不下来",
+    "body": "<p>文革结束后，对建国以来历史的评价众说纷纭——历史问题不讲清楚，「今后往哪儿走」就定不下来。1981 年 6 月十一届六中全会通过《决议》，用一份文件完成<b>统一思想</b>的任务。</p>"
+  },
+  {
+    "title": "《决议》干了三件大事",
+    "cls": "key",
+    "log": "模型：评价 / 否定 / 立路",
+    "body": "<p>" + cells([
+      {"t": "评价毛泽东<br>功绩第一位", "l": "大事①", "c": "dim"},
+      {"t": "彻底否定<br>文化大革命", "l": "大事②", "c": "miss"},
+      {"t": "概括建设<br>社会主义道路", "l": "大事③", "c": "hit"}
+    ]) + "<p>前两件是背景，题问<b>大事③「立路」</b>里强调什么。</p>"
+  },
+  {
+    "title": "道路的核心：把重心钉回经济建设",
+    "cls": "key",
+    "log": "机理：文革搅乱重心，决议钉回中心",
+    "body": "<p>文革十年「以阶级斗争为纲」搅乱了重心；否定文革之后必须回答「今后干什么」——重点必须转移到<b>以经济建设为中心</b>的现代化建设上来，犯错误「归根到底，就是没有坚定不移地实现这个战略转移」。</p>"
+  },
+  {
+    "title": "B 对号入座：服从和服务于经济建设",
+    "cls": "good",
+    "log": "原文口径 → 选 B",
+    "ribbon": {
+      "k": 2,
+      "ok": true
+    },
+    "body": "<p>「党的各项工作都必须<b>服从和服务于经济建设</b>」——《决议》道路概括的原文口径，也是后来「一个中心、两个基本点」基本路线的思想前身。<b>B 正确</b>。</p>"
+  },
+  {
+    "title": "A 农村转向城市：1949 年的事",
+    "cls": "bad",
+    "log": "A 是七届二中全会的「重心转移」",
+    "ribbon": {
+      "k": 1,
+      "ok": false
+    },
+    "body": "<p>「工作重心从农村转向城市」＝1949 年<b>七届二中全会</b>——同叫「重心转移」，宾语不同：1949 年转的是<b>空间重心</b>（乡村→城市），1981 年转的是<b>任务重心</b>（转向经济建设）。<b>A 错误</b>。</p>"
+  },
+  {
+    "title": "C 优先发展重工业：一五的做法",
+    "cls": "bad",
+    "log": "C 是一五时期工业方针",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    },
+    "body": "<p>「优先发展重工业」是「一五」时期的策略安排；《决议》强调量力而行、按比例发展，恰是吸取盲目求快教训后的修正。<b>C 错误</b>。</p>"
+  },
+  {
+    "title": "D 克服教条主义经验主义：延安整风的题",
+    "cls": "bad",
+    "log": "D 答非所问：非道路概括部分",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    },
+    "body": "<p>反教条主义、经验主义（主观主义两种形式）是<b>延安整风</b>的主题；《决议》强调实事求是，但题干指向「道路概括」部分——「否定文革」是另一件事，不对应本题。<b>D 错误</b>。</p>"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "log": "锁定 B：各项工作服从和服务于经济建设",
+    "body": "<p>答案 <b>B</b>。记忆锚点：《历史决议》三件事——<b>评价毛泽东、否定文革、概括道路</b>；道路核心一句＝各项工作<b>服从和服务于经济建设</b>。区分两次「转移」认宾语：1949 年转空间（城市），1981 年转任务（经济建设）。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  "title": "政治 2025·13 1981 年《历史决议》强调什么",
+  "subtitle": "考点：十一届六中全会《历史决议》 · 方法：三件事定位＋认宾语",
+  "counterLabel": "推理步",
+  "ribbonTitle": "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  "intro": "点击「▶ 播放」逐步展开推理链。",
+  "snaps": snaps,
+  "result": {
+    "big": "答案 B",
+    "html": "记忆锚点：《历史决议》（1981.6 十一届六中全会）三件事——<b>评价毛泽东、否定文革、概括道路</b>；道路核心＝<b>各项工作服从和服务于经济建设</b>。A 是 1949 年七届二中全会的「重心转移」（空间），C 是一五方针，D 是延安整风主题——三次历史事件各归各位。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：1981 年《历史决议》对建设道路强调什么</h2>
+<p>答案：<strong>B（党的各项工作都必须服从和服务于经济建设）</strong>。</p>
+<h3>第 0 步：先立背景——为什么 1981 年要作这个决议</h3>
+<p>「文化大革命」结束后，党内对建国以来历史（尤其文革）的评价一时众说纷纭：历史问题不讲清楚，「今后往哪儿走、按什么路线走」就定不下来。于是 1981 年 6 月十一届六中全会通过《关于建国以来党的若干历史问题的决议》，用一份文件完成<strong>统一思想</strong>的任务。决议干了三件大事：</p>
+<table><thead><tr><th>大事</th><th>内容</th></tr></thead><tbody><tr><td>评价</td><td>科学评价毛泽东的历史地位，坚持和发展毛泽东思想（功绩第一位、错误第二位）</td></tr><tr><td>否定</td><td>彻底否定「文化大革命」</td></tr><tr><td>立路</td><td>概括适合中国情况的社会主义现代化建设道路</td></tr></tbody></table>
+<p>题干把前两件事当背景引出，问的是第三件「立路」部分<strong>强调</strong>什么——范围先划清，答案才有出处。</p>
+<h3>第 1 步：道路概括的核心——把重心钉回经济建设</h3>
+<p>文革十年「以阶级斗争为纲」把工作重心搅乱了。《决议》在否定文革之后必须回答「今后干什么」：党和国家工作的重点必须转移到<strong>以经济建设为中心</strong>的社会主义现代化建设上来——建国以来犯错误「归根到底，就是没有坚定不移地实现这个战略转移」；并明确除大规模外敌入侵外决不能再离开这个重点，<strong>党的各项工作都必须服从和服务于经济建设</strong>这个中心。这正是 B 的原文口径，也是后来「一个中心、两个基本点」基本路线的思想前身。</p>
+<h3>第 2 步：三个干扰项各是什么年代的事</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因</th></tr></thead><tbody><tr><td>A 工作重心从农村转向城市</td><td>❌</td><td><strong>1949 年七届二中全会</strong>的主题——同样叫「重心转移」，但 1949 年转的是「乡村→城市」，与 1981 年的「转向经济建设」是两次不同的转移</td></tr><tr><td>B 各项工作服从和服务于经济建设</td><td>✅</td><td>《决议》道路概括的原文口径</td></tr><tr><td>C 优先发展重工业</td><td>❌</td><td>「一五」时期的工业方针；《决议》讲量力而行、按比例发展，恰是吸取了盲目求快的教训</td></tr><tr><td>D 彻底克服教条主义和经验主义</td><td>❌</td><td>反教条主义、经验主义（主观主义的两种形式）是<strong>延安整风</strong>的主题；《决议》强调实事求是，但题干指向「道路概括」部分，此项答非所问</td></tr></tbody></table>
+<h3>第 3 步：预判追问——A 与 B 都讲「转移」，怎么区分</h3>
+<p>抓住<strong>宾语</strong>：转移到「哪儿」、什么「服从」什么。七届二中全会转移的宾语是「城市」（工作地点与立足点），《决议》转移的宾语是「经济建设」（工作内容与中心任务）；A 是空间重心，B 是任务重心。两句话都是党史原文，混排在一套选项里时，认宾语即可分辨。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 A（见「重心转移」就套）</strong>：党史上有过多次「转移」，认对象不认字面。</li><li><strong>选 C（把建设道路与具体工业方针混淆）</strong>：优先发展重工业是建国初期的策略安排，不是 1981 年道路概括的内容。</li><li><strong>选 D（觉得否定文革就该反教条）</strong>：「否定文革」是决议的另一件事，与题干问的「道路概括强调什么」不对应。</li></ul>
+<blockquote>记忆锚点：《历史决议》三件事——<strong>评价毛泽东、否定文革、概括道路</strong>；道路核心一句＝各项工作<strong>服从和服务于经济建设</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

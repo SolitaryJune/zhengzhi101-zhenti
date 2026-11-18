@@ -1,8 +1,140 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2025-07 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2025-07</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2025·07 新时代文化主体性「最有力的体现」是什么</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 概念/推理链类动画（政治站无 KaTeX 版）：逐步展开推理卡片，只改 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 一行链条格：两个结合 → 主体性 → 自信
+function cells(list){
+  return '<div class="aw-cells">' + list.map(function(x){
+    return '<div class="aw-col"><div class="aw-box ' + (x.c || '') + '" style="font-size:12px">' + x.t +
+           '</div><div class="aw-idx">' + (x.l || '') + '</div></div>';
+  }).join('') + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    title: "审题眼：题干引的是原文，考的是「生成链」",
+    cls: "key",
+    log: "题眼：文化自信来自文化主体性——往上游找「最有力的体现」",
+    body: "<p>题干给出 2023 年 6 月文化传承发展座谈会讲话：「任何文化要立得住、行得远……就必须有自己的主体性」「文化自信就来自我们的文化主体性」。自信在下游，主体性在中游——<b>主体性又从哪里来</b>？把生成链立起来，答案自然浮出。</p>"
+  },
+  {
+    title: "先立机制：主体性的生成链",
+    cls: "key",
+    log: "机制：「两个结合」巩固主体性 → 结合结出新文化生命体 → 自信",
+    body: "<p>原文：「<b>『结合』巩固了文化主体性</b>」。「结合」不是拼盘，是深刻的「化学反应」，造就了一个有机统一的<b>新的文化生命体</b>；这一结合结出的最大果实，就是<b>创立了习近平新时代中国特色社会主义思想</b>。</p>" + cells([
+      {t:"两个结合<br>同实际结合<br>同传统文化结合", c:"dim", l:"途径"},
+      {t:"新的文化生命体<br>最有力的果实<br>＝创立这一思想", c:"ok", l:"成果"},
+      {t:"文化主体性<br>立得住·行得远<br>有四种力", c:"", l:"确立"},
+      {t:"文化自信<br>来自主体性", c:"dim", l:"下游"}
+    ])
+  },
+  {
+    title: "追问：为什么「创立一个思想」算「体现」",
+    cls: "step",
+    log: "原创理论＝自己创造的、能回答四问的理论",
+    body: "<p>一种文化的主体性，最有力的证据是拿出<b>自己创立的原创理论</b>：中国人自己创造、能回答<b>中国之问、世界之问、人民之问、时代之问</b>，而不是从别处搬来的现成答案。「创立它」这个动作，就是「两个结合」最集中的完成——讲话原文：「创立习近平新时代中国特色社会主义思想就是这一主体性的<b>最有力体现</b>」。</p>"
+  },
+  {
+    title: "A 对号入座：创立习近平新时代中国特色社会主义思想",
+    cls: "good",
+    log: "原文表述正主 → 选 A",
+    ribbon: {k: 1, ok: true},
+    body: "<p>座谈会讲话的规范表述与选项 A 逐字对应。<b>A 正确</b>。</p>"
+  },
+  {
+    title: "B 「两创」：是途径，不是体现",
+    cls: "bad",
+    log: "B 回答「怎么对待传统文化」，是手段环节",
+    ribbon: {k: 2, ok: false},
+    body: "<p>创造性转化、创新性发展是对待中华优秀传统文化的<b>方针／途径</b>——链条上「怎么结合」的手段。手段不等于成果，出镜率再高也不是本题答案。<b>B 错误</b>。</p>"
+  },
+  {
+    title: "C 铸牢共同体意识：民族工作主线，不同轨",
+    cls: "bad",
+    log: "C 的关键词是「民族」，不在文化主体性链条上",
+    ribbon: {k: 3, ok: false},
+    body: "<p>铸牢中华民族共同体意识是<b>新时代党的民族工作的主线</b>，属于民族工作领域——词眼是「民族」不是「文化」，与文化主体性这条链不同轨。<b>C 错误</b>。</p>"
+  },
+  {
+    title: "D 把握文明发展规律：是意义，不是体现",
+    cls: "bad",
+    log: "D 是「第二个结合」的认识收获，主体性确立之后的结果",
+    ribbon: {k: 4, ok: false},
+    body: "<p>「把握中华文明发展规律」是「第二个结合」带来的<b>认识收获／意义</b>——「表明我们党对……的认识达到新高度」属于意义表述。意义在结果一端，「体现」要的是立得住的<b>实体性成果</b>。<b>D 错误</b>。</p>"
+  },
+  {
+    title: "结论",
+    cls: "good",
+    log: "锁定 A：创立习近平新时代中国特色社会主义思想",
+    body: "<p>答案 <b>A</b>。链条背熟：<b>两个结合 → 巩固主体性 → 支撑自信</b>，最有力的体现＝创立习近平新时代中国特色社会主义思想（原文）；「两创」是途径、共同体意识是民族主线、把握规律是意义。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var logCls = s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'));
+  return {
+    cls: last ? 'done' : logCls,
+    tag: s.tag || (last ? '完成' : '第 ' + i + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "政治 2025·07 新时代文化主体性「最有力的体现」是什么",
+  subtitle: "考点：文化主体性生成链 · 方法：从「两个结合」顺流而下找果实",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」沿推理链展开：审题 → 立生成链 → 说机制 → 对号 → 结论。",
+  snaps: snaps,
+  result: {
+    big: "答案 A",
+    html: "答案 <b>A（创立习近平新时代中国特色社会主义思想）</b>：原文「结合巩固了文化主体性，创立这一思想就是其最有力体现」。B 是途径（两创），C 是民族工作主线，D 是意义。记忆锚点：<b>两个结合 → 主体性 → 自信</b>。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：新时代文化主体性「最有力的体现」是什么</h2>
+<p>答案：<strong>A（创立习近平新时代中国特色社会主义思想）</strong>。</p>
+<h3>第 0 步：先立机制——文化主体性是怎么一步步生成的</h3>
+<p>这道题考的是 2023 年 6 月文化传承发展座谈会讲话里一条<strong>原文表述</strong>，硬背四个选项不如把「主体性」的<strong>生成链</strong>摆清楚。「主体性」说的是：一种文化自己立得住、不依附于人，能用自己的东西回答自己的问题。它不是喊出来的，而是「结合」干出来的：</p>
+<table><thead><tr><th>环节</th><th>在链条上干什么</th></tr></thead><tbody><tr><td>「两个结合」</td><td>把马克思主义基本原理同中国具体实际相结合、同中华优秀传统文化相结合——原文：<strong>「结合」巩固了文化主体性</strong></td></tr><tr><td>结合的成果</td><td>「结合」不是拼盘，是深刻的「化学反应」，造就了一个有机统一的<strong>新的文化生命体</strong></td></tr><tr><td>最有力的体现</td><td>原文表述：<strong>创立习近平新时代中国特色社会主义思想就是这一主体性的最有力体现</strong></td></tr><tr><td>文化自信</td><td><strong>来自</strong>文化主体性——题干引用的「文化自信就来自我们的文化主体性」正是这条链的下游</td></tr></tbody></table>
+<p>链条读法：<strong>「两个结合」→ 巩固主体性 → 主体性支撑自信</strong>。题干问「主体性最有力的体现」，就是顺着链条找「结合」结出的最大果实——<strong>创立习近平新时代中国特色社会主义思想</strong>，选 <strong>A</strong>。</p>
+<h3>第 1 步：预判追问——为什么「创立一个思想」能当「体现」</h3>
+<p>一种文化的主体性，最有力的证据是它<strong>拿出了自己创立的原创理论</strong>：这套理论是中国人自己创造的，能回答中国之问、世界之问、人民之问、时代之问，而不是从别处搬来的现成答案。「两个结合」把马克思主义真理力量落到中国实践、又让中华文明在真理之光下完成现代转型，两头结合最终凝结成的理论成果就是这一思想——所以「创立它」这个动作本身就是主体性最集中的展示。</p>
+<h3>第 2 步：其余三项在链条上的「岗位」</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>归因</th></tr></thead><tbody><tr><td>A 创立习近平新时代中国特色社会主义思想</td><td>✅</td><td>座谈会讲话原文：新时代文化主体性的最有力体现</td></tr><tr><td>B 创造性转化、创新性发展</td><td>❌</td><td>「两创」是对待中华优秀传统文化的<strong>方针／途径</strong>——链条上「怎么结合」的手段环节，不是主体性的体现</td></tr><tr><td>C 铸牢中华民族共同体意识</td><td>❌</td><td>是新时代党的民族工作的<strong>主线</strong>，属于民族工作领域，不在文化主体性这条链上</td></tr><tr><td>D 把握中华文明发展规律</td><td>❌</td><td>是「第二个结合」带来的<strong>认识收获／意义</strong>——主体性确立之后的结果，不是体现本身</td></tr></tbody></table>
+<h3>易错点</h3>
+<ul><li><strong>选 B（「两创」出镜率最高）</strong>：高频词不等于本题答案。「两创」回答「怎么对待传统文化」（途径），题干问「主体性体现在哪里」（成果）——一个是手段、一个是果实。</li><li><strong>选 D（把「意义」当「体现」）</strong>：「把握规律」是认识层面的收获，题目要的是一个看得见、立得住的<strong>实体性成果</strong>；讲话里「表明我们党对……认识达到新高度」这类话都是意义表述，不是体现表述。</li><li><strong>选 C（见「共同体」就往文化上靠）</strong>：C 的关键词是「民族」不是「文化」——先看词眼归属的领域，民族工作主线不在本题链条上。</li></ul>
+<blockquote>记忆锚点：文化自信 ← 文化主体性 ←「两个结合」；<strong>最有力的体现＝创立习近平新时代中国特色社会主义思想</strong>（原文表述）；「两创」是途径、共同体意识是民族工作主线、把握规律是意义。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

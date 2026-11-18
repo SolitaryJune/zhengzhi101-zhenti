@@ -1,8 +1,108 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2019-31 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2019-31</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2019-31 法治与德治为什么缺一不可 · 两套工具箱动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+/* 四个区别格子：[格内文字, 格下注, 颜色类 ok/miss/dim/''] */
+function cells(arr, w){
+  return '<div class="aw-cells" style="--cell:' + (w || 88) + 'px;--gap:10px">' +
+    arr.map(function(c){
+      return '<div class="aw-col"><div class="aw-box ' + (c[2] || '') + '">' + c[0] +
+             '</div><div class="aw-idx">' + c[1] + '</div></div>';
+    }).join('') + '</div>';
+}
+
+var STEPS = [
+  { t: '审题眼："不可或缺的两种方式"——问的是"为什么"',
+    cls: 'key', sc: 'step', tag: '审题',
+    body: '<p>题干：中国特色社会主义法治道路的鲜明特点之一，是<b>坚持依法治国和以德治国相结合</b>；法治与德治是治国理政不可或缺的两种方式。</p><p>考点：<b>法治与德治的区别（结合的理由）</b>。思路：为什么缺一不可？因为二者<b>处处不同、互不可替</b>——把"不同"的维度数出来，选项自然齐了。</p>' },
+  { t: '立机制："法安天下，德润人心"——两套工具箱',
+    cls: 'key', sc: 'shift', tag: '机制',
+    log: '立框架：一硬一软、一外一内，四个维度都不同',
+    body: '<p>法律是成文的道德，道德是内心的法律——都服务治国理政，但工具箱不同：</p>' +
+      cells([['方式异', '强制力 vs 教化', 'ok'], ['范围异', '行为 vs 内心', 'ok'],
+             ['地位异', '基本 vs 重要', 'ok'], ['途径异', '程序 vs 养成', 'ok']], 92) +
+      '<p style="margin-top:8px">四个维度<b>都不同</b>→谁也替代不了谁→必须结合。这四格恰好对应 A~D。</p>' },
+  { t: '选项 A：发挥作用方式不同 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 A', ribbon: {k: 1, ok: true},
+    body: '<p>法律靠国家<b>强制力</b>"他律"；道德靠善恶评价、内心信念与社会舆论"自律"。</p><p>一个用什么"劲"不同——<b>A 对</b>。</p>' },
+  { t: '选项 B：调整范围不同 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 B', ribbon: {k: 2, ok: true},
+    body: '<p>法律主要调整<b>外在行为</b>；道德深入<b>思想、情感、信念</b>等更广领域。</p><p>一个管到哪不同——法律管不到的内心，道德管得到——<b>B 对</b>。</p>' },
+  { t: '选项 C：所处地位不同 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 C', ribbon: {k: 3, ok: true},
+    body: '<p>法治是治国理政的<b>基本方式</b>，德治是治国理政的<b>重要方式</b>——主次定位不同，但不可偏废。</p><p>注意：这是<b>分工</b>之别，不是高低贵贱——<b>C 对</b>。</p>' },
+  { t: '选项 D：实现途径不同 —— 对',
+    cls: 'good', sc: 'ok', tag: '选项 D', ribbon: {k: 4, ok: true},
+    body: '<p>法律通过立法、执法、司法、守法等<b>制度程序</b>实现；道德通过教育涵养、实践养成、习俗示范实现。</p><p>一个走什么"路"不同——别与 A 混：A 是"用什么劲"，D 是"走什么路"——<b>D 对</b>。</p>' },
+  { t: '预判追问：地位不同（C）≠ 德治次要？全选底气在哪？',
+    cls: 'key', sc: 'shift', tag: '辨析',
+    log: '分工不同不是取舍之别；四维并列不重叠',
+    body: '<p><b>地位之辨</b>：法治长于定分止争、划行为底线；德治长于固本培元、解决"不想"的问题——法律实施要道德支撑，道德践行要法律约束，<b>互为支撑</b>。</p><p><b>全选底气</b>：四维从"怎么起作用—管到哪—排什么位—靠什么落地"四个侧面提问，并列不重叠，全是教材标准表述。</p>' },
+  { t: '结论：ABCD',
+    cls: 'good', sc: 'done', tag: '结论',
+    body: '<p>答案 <b>ABCD</b>：方式异（A）· 范围异（B）· 地位异（C）· 途径异（D）。</p><p>法安天下（他律、行为、基本方式、制度程序），德润人心（自律、内心、重要方式、教育养成）——一硬一软、一外一内，缺一不可，必须结合。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: '【2019·31】法治和德治不可或缺的原因（多选）',
+  subtitle: '考点：依法治国与以德治国相结合 · 方法：先立"两套工具箱"模型，四个维度对号入座',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先立"法安天下、德润人心"的两套工具箱，再逐维对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '记忆锚点：法德四异——<b>方式异、范围异、地位异、途径异</b>；法安天下（他律·行为），德润人心（自律·内心），一硬一软必须结合（ABCD）。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：法治与德治为什么缺一不可——先立"两套工具箱"模型，四个区别自然浮出</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——"法安天下，德润人心"</h3>
+<p>题干点明：法治和德治是治国理政<strong>不可或缺的两种方式</strong>，问的是"为什么"不可或缺。先立总框架：法律是成文的道德，道德是内心的法律——二者都在为国家和社会治理服务，但手里拿的是<strong>两套不同的工具箱</strong>：</p>
+<table><thead><tr><th>维度</th><th>法治（他律·硬）</th><th>德治（自律·软）</th></tr></thead><tbody><tr><td>发挥作用的方式</td><td>明确权利义务，靠国家<strong>强制力</strong>保证实施</td><td>靠善恶评价、<strong>内心信念、社会舆论</strong>引导</td></tr><tr><td>调整范围</td><td>主要调整人的<strong>外在行为</strong></td><td>深入思想、情感、信念等更广领域</td></tr><tr><td>所处地位</td><td>治国理政的<strong>基本方式</strong></td><td>治国理政的<strong>重要方式</strong></td></tr><tr><td>实现途径</td><td>立法、执法、司法、守法等<strong>制度程序</strong></td><td>教育、涵养、实践养成、习俗示范</td></tr></tbody></table>
+<p>正因为四个维度<strong>都不同</strong>，二者谁也替代不了谁：法律管得到行为、管不到内心；道德教化得了人心、却缺乏强制力兜底。一硬一软、一外一内，必须相结合——这四个"不同"恰好就是 A~D 四个选项。</p>
+<h3>第 1 步：A~D 对号入座</h3>
+<ul><li><strong>A 对</strong>：发挥作用方式不同——法律靠国家强制力"他律"，道德靠教化引导与舆论评价"自律"。</li><li><strong>B 对</strong>：调整范围不同——法律主要规范外在行为；在法律管得到的行为之外，道德还覆盖思想认识、情感信念等更宽的领域。</li><li><strong>C 对</strong>：所处地位不同——法治是治国理政的基本方式，德治是治国理政的重要方式，主次定位不同但不可偏废。</li><li><strong>D 对</strong>：实现途径不同——法律通过立法、执法、司法等制度程序实现，道德通过教育涵养、实践养成、社会舆论实现。</li></ul>
+<h3>预判追问：地位不同（C）会不会推出"德治是次要的、可以少管"？</h3>
+<p>不会。C 说的是<strong>分工定位</strong>不同，不是高低贵贱：法治长于定分止争、划清行为底线，德治长于固本培元、解决"不想"的问题。坚持依法治国和以德治国相结合，正是承认各有专长、互为支撑——法律有效实施要靠道德支撑，道德践行也要靠法律约束。所以"地位不同"恰恰是"缺一不可"的理由之一，而不是贬低德治。</p>
+<h3>预判追问：为什么四个选项没有重叠、可以放心全选？</h3>
+<p>四个维度是从"怎么起作用（方式）—管到哪（范围）—排什么位置（地位）—靠什么落地（途径）"四个不同侧面提问的，彼此并列不重叠，都是教材对法德区别的标准表述。题目又是"这是因为"式的找共性题，只要某项确实是二者<strong>区别</strong>的维度，就同时支持"二者不可或缺、必须结合"的结论——四项全部入选。</p>
+<h3>易错点</h3>
+<ul><li><strong>漏选 C</strong>：把"地位不同"误解为"地位有高下、德治不重要"而排除。其实基本方式与重要方式是分工之别，不是取舍之别。</li><li><strong>漏选 B</strong>：只记得"法律管行为"，忘了题问的是<strong>区别</strong>——道德管到行为之外的内心领域，恰恰是 B 成立的理由。</li><li><strong>错配维度</strong>：把 A 与 D 混为一谈——"方式"指靠强制力还是靠教化（性质），"途径"指靠制度程序还是靠教育养成（载体），一个是"用什么劲"，一个是"走什么路"。</li></ul>
+<blockquote>记忆锚点：法德四异——<strong>方式异、范围异、地位异、途径异</strong>；法安天下（他律、行为、基本方式、制度程序），德润人心（自律、内心、重要方式、教育养成），一硬一软、一外一内，必须结合（ABCD）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

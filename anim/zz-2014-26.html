@@ -1,8 +1,89 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2014-26 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2014-26</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2014-26 · "走出去"的四重账：企业、公司、资源、空间（全选）</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261117a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261117a"></script>
+<script>
+/* ================== 题目专属区域（依据 zz-2014-26 题干与 refAnalysis 编写） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：数据是钥匙——「对外直接投资」',
+    body: '<p>题眼：非金融类对外直接投资五年从 248 亿美元升至 772 亿美元、年均增长 25.5%，跻身对外投资大国行列。考点：<b>对外开放、「走出去」战略</b>。抓题眼——走出去是<b>资本、产能、经营一起出去</b>，不是商品出口。</p>' },
+  { tag: '机制·两层', cls: 'key', title: '机制：经营半径从国内扩到全球，沿两层展开',
+    body: '<p><b>企业层面</b>：在境外直接经营、参与国际竞争→能力；持续投资规模化→长出跨国公司。<b>国家层面</b>：投资直指境外能源矿产技术→资源；两个市场、两种资源打通→空间。四选项构成「企业→企业群体→资源→空间」递进链。</p>' },
+  { tag: 'A', cls: 'good', k: 1, pick: true, title: 'A 增强国际化经营能力 → 企业层面',
+    body: '<p>境外办厂、并购、工程承包——在真实国际市场竞争中练兵，能力是干出来的。<b>入选</b> ✅。</p>' },
+  { tag: 'B', cls: 'good', k: 2, pick: true, title: 'B 培育世界水平的跨国公司 → 企业群体层面',
+    body: '<p>对外投资大国与跨国公司互为因果：大投资养大企业，投资大国行列里必然长出世界级跨国公司。<b>入选</b> ✅。</p>' },
+  { tag: 'C', cls: 'good', k: 3, pick: true, title: 'C 充分利用国外资源 → 国家资源层面',
+    body: '<p>资源寻求是对外投资的经典动机——境外能源、矿产、技术、市场皆可通过投资合作获取。<b>入选</b> ✅。</p>' },
+  { tag: 'D', cls: 'good', k: 4, pick: true, title: 'D 拓展经济发展空间 → 国家战略层面',
+    body: '<p>两个市场、两种资源打通，发展空间由国内一维扩展到全球二维。<b>入选</b> ✅。</p>' },
+  { tag: '辨析', cls: 'key', title: '预判追问：为什么敢全选',
+    body: '<p>全选信号有二：①四选项<b>各占一个层次</b>（企业→企业群体→资源→空间），彼此不重复；②每项都<b>无原理硬伤</b>、可从「对外直接投资」直接推出，无需曲解题干。易错处是把「走出去」窄化为出口——那样 B、C 都会漏掉。</p>' },
+  { tag: '结论', cls: 'good', title: '收束：四重账，逐级放大',
+    body: '<p>能力（A）、公司（B）、资源（C）、空间（D）——从企业到国家逐级放大，全选。<b>答案 ABCD。</b></p>' },
+];
+
+var nJudge = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nJudge++;
+  var sn = {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag,
+    log: s.title,
+    count: nJudge,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, (x.tag ? x.tag + ' · ' : '') + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: !!s.pick };
+  return sn;
+});
+
+AW.init({
+  title: 'zz-2014-26 · 「走出去」的四重账',
+  subtitle: '2014 年第 26 题（多选·全选）· 考点：对外开放「走出去」战略 · 企业→公司→资源→空间',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 不选）',
+  intro: '点击「▶ 播放」：先抓「对外直接投资」题眼立机制，再按四层递进逐项对号。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '记忆锚点：「走出去」四得——<b>能力（A）、公司（B）、资源（C）、空间（D）</b>，从企业到国家逐级放大；全选题信号＝层次分明＋无硬伤。'
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解："走出去"的四重账——企业、公司、资源、空间</h2>
+<p>答案：<strong>ABCD（全选）</strong>。</p>
+<h3>第 0 步：先立机制——"走出去"改的是经营的空间半径</h3>
+<p>先扣题干数据：非金融类对外直接投资五年从 248 亿美元升至 772 亿美元、年均增长 25.5%，"跻身对外投资大国行列"。数据本身就是钥匙——"走出去"指企业<strong>到境外投资兴业</strong>（办厂、并购、工程承包、资源合作），不是商品出口的代名词：出口是"货出去"，走出去是"资本、产能、经营一起出去"。</p>
+<p>经营半径从国内扩到全球，沿两层展开：<strong>企业层面</strong>——在境外市场直接经营、参与国际竞争，国际化经营能力是"干出来的"（A）；当大批企业持续对外投资，其中就会长出具有世界水平的跨国公司（B）。<strong>国家层面</strong>——投资的重要动机就是获取境外能源、矿产、技术等资源（C）；两个市场、两种资源打通，发展空间从国内一维扩展到全球二维（D）。四个选项恰构成"企业→企业群体→资源→空间"的递进链条。</p>
+<h3>第 1 步：逐项对号</h3>
+<table><thead><tr><th>选项</th><th>层次</th><th>机制依据</th></tr></thead><tbody><tr><td>A 增强国际化经营能力</td><td>企业</td><td>境外直接经营＝在真实国际市场竞争中练兵</td></tr><tr><td>B 培育世界水平的跨国公司</td><td>企业群体</td><td>对外投资大国与跨国公司互为因果：大投资养大企业</td></tr><tr><td>C 充分利用国外资源</td><td>国家资源</td><td>资源寻求是对外投资的经典动机，直指境外能源、矿产、技术</td></tr><tr><td>D 拓展经济发展空间</td><td>国家战略</td><td>两个市场、两种资源，空间由一维变二维</td></tr></tbody></table>
+<h3>第 2 步：预判「为什么敢全选」</h3>
+<p>全选题的判定信号有二：一是四个选项<strong>各占一个层次</strong>（企业能力→企业群体→国家资源→国家空间），彼此不重复；二是每一项都<strong>无原理硬伤</strong>、可从"对外直接投资"直接推出——投资即在境外设点经营（→A），规模化持续投资催生跨国公司（→B），投资的重要动机就是获取资源（→C），投资打开境外市场与资源通道（→D）。没有任何一项需要曲解题干才能成立，也没有任何一项与基本原理冲突——"走出去"战略的意义本来就落在这四层上。</p>
+<h3>易错点</h3>
+<ul><li><strong>犹豫漏选 C</strong>：把"利用国外资源"想成国内资源管理问题而犹豫。恰恰相反，"走出去"获取的正是<strong>国外</strong>资源——资源寻求是对外投资的经典动机之一。</li><li><strong>把"走出去"窄化为出口</strong>：若按"商品出口"理解，B（跨国公司）、C（国外资源）都容易漏掉；抓住"对外直接投资"这个题眼，四项齐活。</li></ul>
+<blockquote>记忆锚点："走出去"四得——<strong>能力（A）、公司（B）、资源（C）、空间（D）</strong>，从企业到国家逐级放大；全选题信号＝层次分明＋无硬伤。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

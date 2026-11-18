@@ -1,8 +1,116 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2026-27 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2026-27</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2026-27 · 北大与马克思主义传播：三道筛子筛史事（2026 多选题）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（政治站无 KaTeX，纯文本推理链卡片；史实题用时间线格子） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 年份格子（时间线样式，复用引擎 aw-cells/aw-box 的 CSS 类）
+function strip(chars, classes){
+  var h = '<div class="aw-cells">';
+  for (var i = 0; i < chars.length; i++){
+    h += '<div class="aw-col"><div class="aw-ptr"></div>' +
+         '<div class="aw-box' + (classes && classes[i] ? ' ' + classes[i] : '') + '">' + chars[i] + '</div>' +
+         '<div class="aw-idx">' + 'ABCD'.charAt(i) + '</div>' +
+         '</div>';
+  }
+  return h + '</div>';
+}
+
+var STEPS = [
+  { title: '审题眼：限定语"北大工作或者学习期间"',
+    cls: 'key',
+    body: '<p>题干关键限定："党的主要创始人和早期著名活动家<b>正在北大工作或者学习期间</b>开始阅读马克思主义著作，传播马克思主义，并推动党的建立。"据此立三道筛：<b>人</b>（早期活动家）、<b>事</b>（传播马克思主义/推动建党）、<b>时地</b>（北大期间）。</p>' },
+  { title: '时间线总览：四件事的年份与地点',
+    cls: '',
+    body: '<p>' + strip(['1915', '1920', '1921', '1920'], ['', '', '', '']) + '</p>' +
+         '<p>A《青年杂志》1915·上海；B 马克思学说研究会 1920·北大；C 长辛店劳动补习学校 1921·北大生期间；D《共产党宣言》1920·浙江义乌。时地一筛见分晓。</p>' },
+  { title: '逐项分析 A：《青年杂志》在上海创刊',
+    cls: 'bad',
+    ribbon: {k:1, ok:false},
+    body: '<p>A：陈独秀创办《青年杂志》——<b>1915 年 9 月·上海</b>（次年更名《新青年》）。此时他尚未到北大（1917 年才任北大文科学长），创刊初期高举<b>民主与科学</b>，还不是传播马克思主义、推动建党。时地 + 事两筛不过。❌ 不选。</p>' },
+  { title: '逐项分析 B：李大钊组织马克思学说研究会',
+    cls: 'good',
+    ribbon: {k:2, ok:true},
+    body: '<p>B：李大钊组织成立马克思主义学说研究会——<b>1920 年·北京大学</b>（李大钊时任北大图书馆主任、教授；更早 1918 年起已在北大发表《庶民的胜利》《我的马克思主义观》）。人、事、时地三筛全过。✅ 选。</p>' },
+  { title: '逐项分析 C：邓中夏办长辛店劳动补习学校',
+    cls: 'good',
+    ribbon: {k:3, ok:true},
+    body: '<p>C：邓中夏在长辛店开办劳动补习学校——<b>1921 年·北大学习期间</b>（邓中夏 1917 年考入北京大学）。把马克思主义送到工人中间、为建党准备骨干；"工作<b>或者学习</b>期间"含在校学生在校期间的校外革命活动。✅ 选。</p>' },
+  { title: '逐项分析 D：陈望道在义乌译《宣言》',
+    cls: 'bad',
+    ribbon: {k:4, ok:false},
+    body: '<p>D：陈望道翻译《共产党宣言》——<b>1920 年·浙江义乌分水塘村</b>老家柴屋。事（传播马克思主义）虽合，但与北大无工作或学习关系，时地筛不过。事件是真大事，人物与"北大"限定对不上。❌ 不选。</p>' },
+  { title: '时间线对号入座',
+    cls: '',
+    body: '<p>' + strip(['1915', '1920', '1921', '1920'], ['miss', 'ok', 'ok', 'miss']) + '</p>' +
+         '<p>A 1915·上海 ❌；B 1920·北大 ✅；C 1921·北大生期间 ✅；D 1920·义乌 ❌。→ 答案 <b>BC</b>。</p>' },
+  { title: '结论',
+    cls: 'good',
+    body: '<p>答案选 <b>BC</b>。史实题三筛：人、事、时地——本题的胜负手全在"北大"这个时地筛上。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  return {
+    cls: i === STEPS.length - 1 ? 'done' : 'step',
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.title,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: i === STEPS.length - 1,
+  };
+});
+
+AW.init({
+  title: 'zz-2026-27 北大与马克思主义传播',
+  subtitle: '考点：马克思主义传播与建党 · 史实题的"人—事—时地"三筛法（时间线卡片）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  ribbonTitle: '选项（✓ 选 / ✗ 不选）',
+  snaps: snaps,
+  result: {
+    big: '答案 BC',
+    html: '<b>B</b> 李大钊组织成立马克思主义学说研究会（1920·北京大学，时任图书馆主任）；<b>C</b> 邓中夏在长辛店开办劳动补习学校（1921·北大学习期间，把马克思主义送到工人中间）。<br><br><b>干扰项：</b>A《青年杂志》1915 年创办于上海（民主与科学阶段，不在北大期间）；D 陈望道 1920 年在浙江义乌翻译《共产党宣言》（与北大无关）。<br><br><b>记忆锚点：</b>三筛法——人、事、时地；本题胜负手是"北大工作或者学习期间"。',
+  },
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：北大与马克思主义传播——三道筛子筛史事</h2>
+<p>答案：<strong>BC</strong>。</p>
+<h3>第 0 步：先立机制——设问的限定语就是筛子</h3>
+<p>习近平在北京大学考察时的话有一个关键限定："党的主要创始人和一些早期的著名活动家<strong>正在北大工作或者学习期间</strong>开始阅读马克思主义著作，传播马克思主义，并推动党的建立。"</p>
+<p>这句话给史事立了三道筛子：</p>
+<ol><li><strong>人</strong>：党的创始人或早期著名活动家；</li><li><strong>事</strong>：阅读/传播马克思主义、推动建党；</li><li><strong>时地</strong>：发生在<strong>北京大学</strong>工作或学习期间。</li></ol>
+<p>四个选项都要过这三道筛——尤其第三道，多数干扰项死在这里。</p>
+<h3>第 1 步：B 对——李大钊与马克思学说研究会</h3>
+<p>李大钊时任<strong>北京大学</strong>图书馆主任、教授，1920 年 3 月在北大组织成立马克思学说研究会（更早从 1918 年起，他已在北大发表《庶民的胜利》《我的马克思主义观》，系统传播马克思主义）。人（党的主要创始人之一）、事（传播马克思主义）、时地（北大工作期间）——三筛全过。</p>
+<h3>第 2 步：C 对——邓中夏与长辛店劳动补习学校</h3>
+<p>邓中夏 1917 年考入<strong>北京大学</strong>（在校期间投身五四运动，成为早期骨干），1921 年初参与在长辛店开办<strong>劳动补习学校</strong>，把马克思主义送到工人中间，为建党培养工人骨干。注意限定语是"工作<strong>或者学习</strong>期间"——在校学生在校期间于京郊开展的革命活动，同样落在筛子里。人、事、时地三筛全过。</p>
+<h3>第 3 步：A 为什么错——《青年杂志》诞生在上海</h3>
+<p>陈独秀创办《青年杂志》是 <strong>1915 年 9 月在上海</strong>（次年改名《新青年》），此时他尚未到北大（1917 年才任北大文科学长），且创刊初期高举的是新文化运动的<strong>民主与科学</strong>，马克思主义的系统传播在其后。A 两处不过筛：时地（不在北大期间）+ 事（创办动作本身不算传播马克思主义、推动建党）。</p>
+<h3>第 4 步：D 为什么错——翻译《宣言》在义乌</h3>
+<p>陈望道 1920 年翻译《共产党宣言》第一个中文全译本，地点是<strong>浙江义乌分水塘村</strong>老家的柴屋，与北大没有工作或学习的关系。事（传播马克思主义）虽合，时地筛不过——不在北大。干扰项的套路正在于此：事件本身是马克思主义传播史上的大事，帽子对，但人物与题干限定的"北大"对不上。</p>
+<h3>第 5 步：时间地点对号</h3>
+<table><thead><tr><th>选项</th><th>史事</th><th>时间 / 地点</th><th>判断</th></tr></thead><tbody><tr><td>A 创办《青年杂志》</td><td>新文化运动发端</td><td>1915 年 · 上海</td><td>❌ 不在北大期间</td></tr><tr><td>B 组织马克思学说研究会</td><td>传播马克思主义</td><td>1920 年 · 北京大学</td><td>✅</td></tr><tr><td>C 开办长辛店劳动补习学校</td><td>知识与工人结合、推动建党</td><td>1921 年 · 北大学习期间</td><td>✅</td></tr><tr><td>D 翻译《共产党宣言》</td><td>传播马克思主义</td><td>1920 年 · 浙江义乌</td><td>❌ 与北大无关</td></tr></tbody></table>
+<p>→ 选 <strong>BC</strong>。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A、D</strong>：两件事都属新文化运动与马克思主义传播的大叙事，"帽子"都对，但"人在哪、事在何时"不对——史实题惯用"时间平移 + 地点错置"。</li><li><strong>漏选 C</strong>：不清楚邓中夏的北大学生身份，或以为长辛店在京郊就不算"北大期间"。限定语是"工作<strong>或者学习</strong>期间"。</li><li><strong>把 A 当对</strong>：《新青年》后来确是传播马克思主义的重镇（1919 年后），但"创办《青年杂志》"这个动作定格在 1915 年的上海——考的是动作的时地，不是杂志后来的功绩。</li></ul>
+<blockquote>记忆锚点：北大传播马克思主义三筛——<strong>人（早期活动家）、事（传播/建党）、时地（北大工作或学习期间）</strong>；李大钊 1920 北大建研究会、邓中夏 1921 长辛店办学校 ✅；1915 上海创《青年杂志》、1920 义乌译《宣言》 ❌。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,123 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2023-27 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2023-27</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2023·27 革命派与改良派论战：性质、焦点与遗产</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 政治站（无 KaTeX）概念/推理链版：引擎 + 推理卡片累积展开，只改题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  {
+    "title": "审题眼：两个阵地，一场论战",
+    "cls": "key",
+    "body": "<p>1905—1907 年，围绕中国社会变革：革命派《民报》（孙中山等）对改良派《新民丛报》（梁启超等）。判断这场论战的性质、焦点、影响，先认<b>阵营</b>——这是全题的钥匙。</p>",
+    "log": "先认阵营，再看焦点与遗产"
+  },
+  {
+    "title": "先立机制：双方同属资产阶级阵营",
+    "cls": "key",
+    "body": "<p>革命派要<b>民主共和</b>，改良派要<b>君主立宪</b>——都是资本主义方案，争的是「革命与改良」两条道路。三个焦点：要不要以革命手段推翻清王朝（核心）、要不要推翻帝制建立共和、要不要改变封建土地制度。</p>",
+    "log": "阵营定性质：资产阶级内部两方案之争"
+  },
+  {
+    "title": "A：聚焦要不要以革命手段推翻清王朝 → 入选",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p>三个焦点之首，也是<b>根本分歧</b>：革命派要推翻清王朝，改良主张保皇改良——题干「中国社会变革问题」正落在这里。<b>入选</b>。</p>",
+    "log": "A 核心焦点 ✓"
+  },
+  {
+    "title": "C：传播民主革命思想、促进革命形势发展 → 入选",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p>论战把<b>革命与改良的界限</b>摆到了台面上，民主革命思想得到广泛传播，一批人从改良转向革命——促进了革命形势的发展。<b>入选</b>。</p>",
+    "log": "C 论战的正面遗产 ✓"
+  },
+  {
+    "title": "D：暴露了革命派思想理论的弱点 → 入选",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>革命派对「革命招致内乱、引起瓜分」的驳斥<b>软弱无力</b>：不敢正面触动帝国主义、对封建土地制度态度含糊——弱点正是在过招中暴露的。战绩与弱点并存。<b>入选</b>。</p>",
+    "log": "D 论战的另一面 ✓"
+  },
+  {
+    "title": "B：资产阶级思想对封建主义思想的交锋 → 不选",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>性质由<b>对阵双方的阶级立场</b>决定，不由「批判对象」决定。改良派虽维护皇位，方案却是君主立宪的资本主义——思想武器仍是资产阶级改良主义。<b>不选</b>：阵营没换人。</p>",
+    "log": "B 把阵营外推一层 ✗"
+  },
+  {
+    "title": "追问预答：替清廷说话＝封建主义思想？",
+    "cls": "key",
+    "body": "<p>尺子：看<b>方案的阶级属性</b>，不看辩护姿态。君主立宪仍是资本主义蓝图；真正「资产阶级思想 vs 封建主义思想」的全面交锋要到<b>新文化运动</b>才谈得上。1905—1907 的论战自始至终在资产阶级内部选方案。</p>",
+    "log": "维护的对象 ≠ 思想的属性"
+  },
+  {
+    "title": "结论",
+    "cls": "good",
+    "body": "<p>答案 <b>ACD</b>。记忆锚点：三问＝<b>要不要革命（核心）＋要不要共和＋要不要社会革命</b>；性质＝资产阶级内部之争（B 错在换阵营）；遗产＝传播思想（C）＋暴露弱点（D）。</p>",
+    "log": "锁定 ACD"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "革命派与改良派论战：性质、焦点与遗产",
+  subtitle: "考点：中国近现代史纲要 · 方法：先认阵营定性质，再核三焦点与两面遗产",
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）',
+  intro: '点击「▶ 播放」逐步展开推理链。',
+  snaps: snaps,
+  result: {
+    big: "答案 ACD",
+    html: "论战三焦点：要不要以革命手段推翻清王朝（核心）、要不要推翻帝制建立共和、要不要改变封建土地制度。双方同属资产阶级阵营——B「资产阶级思想对封建主义思想的交锋」错在把阵营外推一层，性质判断看对阵双方而非批判对象。遗产两面：传播民主革命思想（C），也暴露了革命派不敢反帝、土地问题含糊的弱点（D）。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：革命派与改良派论战——性质由阵营决定，焦点决定遗产</h2>
+<p>答案：<strong>ACD</strong>。</p>
+<h3>第 0 步：先立模型——谁和谁在争、争什么</h3>
+<p>1905—1907 年论战的基本盘：革命派以《民报》为阵地（孙中山等），改良派以《新民丛报》为阵地（梁启超等）。判断这场论战的一切属性，先抓住一个事实：<strong>双方同属资产阶级阵营</strong>——革命派要民主共和，改良派要君主立宪，是资产阶级内部「革命与改良」两条方案的之争。围绕中国变革的三个问题展开：</p>
+<table><thead><tr><th>焦点</th><th>革命派主张</th><th>改良派主张</th></tr></thead><tbody><tr><td>要不要以革命手段推翻清王朝（A，核心）</td><td>要</td><td>不要，改良保皇</td></tr><tr><td>要不要推翻帝制、建立共和</td><td>民主共和</td><td>君主立宪</td></tr><tr><td>要不要改变封建土地制度（平均地权/社会革命）</td><td>要</td><td>反对</td></tr></tbody></table>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>A 聚焦要不要以革命手段推翻清王朝</td><td>✅</td><td>三焦点之首、根本分歧所在</td></tr><tr><td>B 实际上是资产阶级思想和封建主义思想的交锋</td><td>❌</td><td>双方都是资产阶级思想（民主革命思想 vs 改良主义），阵营没换人——不是资产阶级对阵封建主义</td></tr><tr><td>C 传播了民主革命思想，促进了革命形势的发展</td><td>✅</td><td>论战划清革命与改良的界限，民主革命思想广泛传播</td></tr><tr><td>D 暴露了革命派思想理论方面的弱点</td><td>✅</td><td>革命派对「革命招致内乱、引起瓜分」的驳斥软弱，不敢正面触动帝国主义、对土地问题含糊</td></tr></tbody></table>
+<h3>第 2 步：B 为什么错——性质由「对阵双方」决定，不由「批判对象」决定</h3>
+<p>追问预答：改良派替清王朝说话、反对推翻帝制，为什么不算「封建主义思想」？尺子是<strong>看交锋双方各自的阶级立场，而不是看谁替谁辩护</strong>。改良派虽维护清朝皇位，但他们的方案是君主立宪的资本主义——思想武器仍是资产阶级改良主义，没有站到封建地主阶级立场上去。真正「资产阶级思想 vs 封建主义思想」的全面交锋要到新文化运动才谈得上；辛亥革命推翻的是清王朝这个政权，而 1905—1907 的论战自始至终是资产阶级内部选方案。</p>
+<p><strong>D 为什么敢选</strong>：「暴露弱点」看似贬义，其实是教材对论战的定性结论——革命派不敢正面反对帝国主义（怕「引起瓜分」）、对封建土地所有制态度含糊（怕「下层社会」），弱点正是在与改良派的过招中被暴露的。战绩（C）与弱点（D）并存，这正是这场论战的两面遗产。</p>
+<h3>易错点</h3>
+<ul><li><strong>选 B</strong>：把「改良派维护皇权」外推成「封建主义思想」——混淆了「维护的对象」与「思想的属性」，阵营外推了一层。</li><li><strong>漏选 D</strong>：以为暴露弱点是负面表述不敢勾——它恰是论战的史实定性：回应无力、反帝妥协。</li><li><strong>漏选 A</strong>：只记「三民主义 vs 保皇」的标签而看不出题干「中国社会变革问题」正落在「要不要革命」这个核心分歧上。</li></ul>
+<blockquote>记忆锚点：论战三问＝<strong>要不要革命（核心）＋要不要共和＋要不要社会革命</strong>；性质＝资产阶级内部两方案之争（B 错在换阵营）；遗产＝传播民主思想（C）＋暴露自身弱点（D）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

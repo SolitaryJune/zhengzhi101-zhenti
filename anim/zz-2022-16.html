@@ -1,8 +1,119 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-16 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-16</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>政治 2022 · 反外国制裁法——「专门法律」的指向判定</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 模板：纯文本推理链卡片（政治站无 KaTeX 版），只改下方题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：题干两个提示词就是判定标尺",
+    "cls": "key",
+    "body": "<p>题干提示：「<b>指向性、针对性颇强</b>」+「<b>专门法律</b>」（共 16 条）。翻译成解题指令：这部法只冲<b>一类具体行为</b>去——设问要的是<b>具体指向</b>，不是宏观背景；凡「泛化标签」选项都要警惕，凡给「具体行为形态」的选项才可靠。</p>",
+    "log": "要具体指向，不要氛围词"
+  },
+  {
+    "title": "先立模型：这部法为什么出台",
+    "cls": "key",
+    "body": "<p>立法背景：某些国家以<b>涉港、涉疆、涉台</b>等中国内政事务为<b>借口</b>，依据<b>其本国法律</b>（绕开多边框架）对中国机构、企业和个人采取<b>歧视性限制措施</b>——列入清单、冻结资产、交易禁入，这就是「单边制裁」（长臂管辖）。缺的是哪块法律空白，法的指向就是哪类行为。</p>",
+    "log": "反制对象=借内政问题搞的制裁行为"
+  },
+  {
+    "title": "选项 D：干涉内政的单边制裁",
+    "cls": "good",
+    "ribbon": { "k": 4, "ok": true },
+    "body": "<p>反外国制裁法主要针对的就是<b>外国干涉中国内政的所谓「单边制裁」</b>——内政借口＋依其国内法＋歧视性限制措施，<b>逐项命中</b>立法机制；本法为中国依法反制提供依据。<b>D 正确</b>。</p>",
+    "log": "D=具体行为形态，逐项命中"
+  },
+  {
+    "title": "选项 A：贸易战",
+    "cls": "bad",
+    "ribbon": { "k": 1, "ok": false },
+    "body": "<p>「贸易战」是<b>经贸摩擦</b>（关税壁垒、市场准入之争），应对走经贸谈判与世贸组织规则——经贸的归经贸；该法反制的「单边制裁」是依据对方国内法的<b>制裁清单</b>行为，形态完全不同，「专门」二字就是分水岭。<b>A 错误</b>。</p>",
+    "log": "A 经贸摩擦非本法指向，排除"
+  },
+  {
+    "title": "选项 B：货币战",
+    "cls": "bad",
+    "ribbon": { "k": 2, "ok": false },
+    "body": "<p>「货币战」并非常见的现实斗争形态，更无立法针对——属于凭空凑数的泛化项，直接排除。<b>B 错误</b>。</p>",
+    "log": "B 凑数项，排除"
+  },
+  {
+    "title": "选项 C：新冷战",
+    "cls": "bad",
+    "ribbon": { "k": 3, "ok": false },
+    "body": "<p>「新冷战」是媒体对宏观对抗氛围的<b>泛化标签</b>；题干强调「专门法律、指向性颇强」，恰是在提示不能选这种大而化之的背景描述。<b>C 错误</b>。</p>",
+    "log": "C 氛围标签，排除"
+  },
+  {
+    "title": "结论：答案 D",
+    "cls": "good",
+    "body": "<p>指向判定：专门法律→具体指向=干涉内政的<b>单边制裁</b>（内政借口+对方国内法+歧视性限制措施）；贸易战（经贸层）、货币战（无此说）、新冷战（氛围标签）皆非其指向。记忆锚点：<b>反外国制裁法=反制「单边制裁」</b>。</p>",
+    "log": "锁定 D：单边制裁"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : 'step',
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  snaps: snaps,
+  title: "《反外国制裁法》主要针对什么",
+  subtitle: "2022 年第 16 题（单选）· 考点：反外国制裁法 · 方法：立法背景+指向范围排除",
+  counterLabel: "推理步",
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 对 / ✗ 错）",
+  intro: "点击「▶ 播放」：先译题干提示词立起立法机制，再按具体指向锁定答案。",
+  result: {
+    big: "答案 D",
+    html: "记忆锚点：<b>反外国制裁法=反制「单边制裁」</b>——借口是内政（涉港涉疆涉台），依据是对方国内法；贸易战走经贸工具、货币战无此说、「新冷战」是氛围标签，皆非其指向。"
+  }
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：《反外国制裁法》的指向——从"专门法律"读出排除标尺</h2>
+<p>答案：<strong>D（外国干涉中国内政的所谓"单边制裁"）</strong>。</p>
+<h3>第 0 步：先立模型——题干两个提示词就是判定标尺</h3>
+<p>题干不是闲笔：「<strong>指向性、针对性颇强</strong>」＋「<strong>专门法律</strong>」（共 16 条）。翻译成解题指令：这部法只冲<strong>一类具体行为</strong>去，设问要的是<strong>具体指向</strong>，不是国际斗争的宏观背景。由此得到排除标尺——凡给<strong>泛化标签</strong>（大而化之的对抗氛围词）的选项高度可疑；凡给<strong>具体行为形态</strong>（以什么为借口、依据什么、干什么事）的选项才可靠。</p>
+<h3>第 1 步：机制——"单边制裁"长什么样</h3>
+<p>立法背景链条：近年来某些国家以<strong>涉港、涉疆、涉台</strong>等中国内政事务为<strong>借口</strong>，依据<strong>其本国法律</strong>（绕开联合国等多边框架）对中国机构、企业和个人采取<strong>歧视性限制措施</strong>——列入清单、冻结资产、交易禁入，这就是所谓"<strong>单边制裁</strong>"（长臂管辖）。此类行为过去缺乏反制的法律依据，2021.6.10 专门立法施行，第一条开宗明义"维护国家主权、安全、发展利益"——反制对象＝<strong>借内政问题搞的外来制裁行为</strong>。缺的是哪块法律空白，法的指向就是哪类行为。</p>
+<h3>第 2 步：四个选项对号入座</h3>
+<table><thead><tr><th>选项</th><th>对错</th><th>病灶</th></tr></thead><tbody><tr><td>A 西方某些大国的"贸易战"</td><td>❌</td><td><strong>经贸摩擦</strong>（关税、市场准入之争），应对走经贸谈判与世贸规则，不归本法</td></tr><tr><td>B 少数国家操纵国际组织挑起的"货币战"</td><td>❌</td><td>无此立法针对——凭空凑数的泛化项</td></tr><tr><td>C 资本主义国家对社会主义国家的"新冷战"</td><td>❌</td><td>媒体化的<strong>氛围标签</strong>，恰与"指向性颇强"的题干提示相反</td></tr><tr><td>D 外国干涉中国内政的所谓"单边制裁"</td><td>✅</td><td>具体行为形态：内政借口＋依其国内法＋歧视性限制措施，逐项命中</td></tr></tbody></table>
+<h3>为什么 A 这么诱人、却不能选（预判追问）</h3>
+<p>"贸易战"是 2018 年以来出现频率最高的冲突词，很多人把"反制外来打压"的印象直接绑在它身上。判定看<strong>行为形态与法律工具的对应</strong>：贸易战的武器是<strong>关税与经贸限制</strong>，反制走对等关税、经贸磋商与世贸争端解决——<strong>经贸的归经贸</strong>。而"单边制裁"形态完全不同：对方以<strong>内政为借口</strong>、按<strong>其国内法</strong>把中国实体和个人<strong>列入制裁清单</strong>——这是法律战/金融制裁层面，中国过去缺少反制法依据，才要"专门"立法。"专门"二字就是分水岭。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 A</strong>：把最高频的冲突词当法律指向——没做"经贸摩擦 vs 单边制裁"的形态区分。</li><li><strong>误选 C</strong>：觉得宏观背景"最大"总该沾边——与"指向性、针对性颇强"背道而驰，泛化标签恰是被排除的对象。</li><li><strong>误选 B</strong>：不敢排除没见过的说法——"货币战"既非现实斗争的主要形态，更无立法针对。</li></ul>
+<blockquote>记忆锚点：<strong>反外国制裁法＝反制"单边制裁"</strong>——借口是内政（涉港涉疆涉台），依据是对方国内法；贸易战走经贸工具，货币战无此说，"新冷战"是氛围标签。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

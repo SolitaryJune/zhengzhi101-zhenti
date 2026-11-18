@@ -1,8 +1,87 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-31 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-31</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2024-31 · 爱国主义教育法的四个维度</title>
+<link rel="stylesheet" href="../assets/anim.css?v=20261116a">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js?v=20261116a"></script>
+<script>
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+var STEPS = [
+  { title: '审题眼：先立机制——“教育促进法＋法律责任”的复合结构',
+    cls: 'key',
+    body: '<p>判断一部新法律“是什么、有什么用”，先看<b>结构</b>。这部法＝<b>促进型立法 ＋ 法律责任专章</b>，牵出两层关系：<b>价值→法</b>——把“爱国”这一核心价值观转化为法律规范（价值观入法）；<b>教育→法</b>——从教育内容、实施方式、保障措施上把爱国主义教育制度化（提供法治保障）。法律责任专章再衔接《国旗法》《国歌法》《英雄烈士保护法》，给惩处依据。既“促进”也“惩治”——这把尺子立好，四个选项就是把它量四遍。</p>' },
+  { title: '选项 A：社会主义核心价值观入法的具体体现',
+    cls: 'good', k: 1, pick: true,
+    body: '<p><b>价值层</b>：爱国是核心价值观的核心内容之一，立法即“入法”——价值观入法入规的典型样本。<b>成立 → 入选</b>。</p>' },
+  { title: '选项 B：有利于维护国家统一和民族团结',
+    cls: 'good', k: 2, pick: true,
+    body: '<p><b>政治功能层</b>：立法目的的直接落点——爱国主义凝心聚力，落点就是国家统一、民族团结。<b>成立 → 入选</b>。</p>' },
+  { title: '选项 C：惩治危害国家安全、荣誉和利益行为的法律武器',
+    cls: 'good', k: 3, pick: true,
+    body: '<p><b>惩戒功能层</b>：法律责任专章对侮辱国旗国歌国徽、歪曲丑化亵渎否定英烈事迹和精神等行为明确惩处依据。<b>成立 → 入选</b>。误判它的人只看到法名里的“教育”，没看到结构里的“法律责任”。</p>' },
+  { title: '选项 D：为加强新时代爱国主义教育提供了法治保障',
+    cls: 'good', k: 4, pick: true,
+    body: '<p><b>立法目的层</b>：内容、实施方式、保障措施三方面制度化——题干“必然要求”即此。<b>成立 → 入选</b>。</p>' },
+  { title: '易错点：三种误判对应三种误解',
+    cls: 'bad',
+    body: '<p><b>不敢全选</b>：把多选当“总有一两个凑数的”——其实 A 价值、B 政治、C 惩戒、D 目的四个维度互不冲突，同属一个结构的四个侧面；<b>误判 C</b>：以为“教育法”不能“惩治”——促进法配法律责任专章是常见立法技术；<b>漏 A</b>：只见“爱国”不见“价值观”，忘了命题背景是核心价值观入法入规。</p>' },
+  { title: '结论：ABCD 全选——四维互不冲突',
+    cls: 'good',
+    body: '<p>同一部法律的四个侧面：<b>A 价值观入法 · B 政治功能 · C 惩戒功能 · D 立法目的</b>。四项用语克制、无绝对化字眼、各站一维——典型的“全对型”多选。</p><p><b>答案 ABCD。</b></p>' },
+];
+var nPick = 0;
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  if (s.k) nPick++;
+  var sn = {
+    cls: s.cls === 'bad' ? 'miss' : (last ? 'done' : 'step'),
+    tag: last ? '结论' : (s.cls === 'bad' ? '易错' : (s.cls === 'key' ? '审题' : (s.pick ? '✓ 入选' : '辨析'))),
+    log: s.title,
+    count: nPick,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last
+  };
+  if (s.k) sn.ribbon = { k: s.k, ok: s.pick };
+  return sn;
+});
+AW.init({
+  title: 'zz-2024-31 · 爱国主义教育法的四个维度',
+  subtitle: '2024 年第 31 题（多选）· 考点：爱国主义教育法 · 先立“促进＋惩治”复合结构，再逐项对号',
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先立“教育促进＋法律责任”的复合结构，四个选项各站一个维度。',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD',
+    html: '记忆锚点：爱国主义教育法四维——<b>价值观入法（A）、维护统一团结（B）、惩治危害行为（C）、教育法治保障（D）</b>；“教育促进＋法律责任”的复合结构是理解本题的钥匙。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：爱国主义教育法——一部法律的四个维度</h2>
+<p>答案：<strong>ABCD</strong>（全选）。</p>
+<h3>第 0 步：先立机制——一部法律怎么同时"育人"与"惩恶"</h3>
+<p>判断一部新法律"是什么、有什么用"，不能背选项，先看它的<strong>结构</strong>。爱国主义教育法的结构是"<strong>促进型立法 ＋ 法律责任专章</strong>"的复合体，由此牵出两层关系：</p>
+<ol><li><strong>价值 → 法</strong>：新时代立法的明确要求是推动社会主义核心价值观<strong>入法入规</strong>。"爱国"是核心价值观的核心内容之一，把它转化为具体的法律规范，就是"价值观入法"的典型样本；</li><li><strong>教育 → 法</strong>：这部法从<strong>教育内容、实施方式、保障措施</strong>三个方面，把爱国主义教育从"靠倡导"变成"靠制度"——为新时代爱国主义教育提供<strong>法治保障</strong>。</li></ol>
+<p>再往下追问一层：光有"促进"够不够？不够。所以该法设了<strong>法律责任</strong>专章，对侮辱国旗国歌国徽、歪曲丑化亵渎否定英雄烈士事迹和精神等行为给出惩处依据，并与《国旗法》《国歌法》《英雄烈士保护法》相衔接。<strong>既"促进"，也"惩治"</strong>——这把"尺子"立好，四个选项不过是把它量四遍。</p>
+<h3>第 1 步：四个选项逐项对号（每个选项站在哪个维度）</h3>
+<table><thead><tr><th>选项</th><th>维度</th><th>对号依据</th></tr></thead><tbody><tr><td>A 价值观入法的具体体现</td><td>价值层</td><td>"爱国"属社会主义核心价值观，立法即"入法"</td></tr><tr><td>B 有利于维护国家统一和民族团结</td><td>政治功能</td><td>立法目的的直接落点：凝聚力就是统一与团结</td></tr><tr><td>C 惩治危害国家安全、荣誉和利益行为的法律武器</td><td>惩戒功能</td><td>法律责任专章提供惩处依据</td></tr><tr><td>D 为新时代爱国主义教育提供法治保障</td><td>立法目的</td><td>内容、实施、保障三方面制度化，题干"必然要求"即此</td></tr></tbody></table>
+<p>四个维度——价值、政治、惩戒、立法目的——<strong>互不冲突、互相补充</strong>，这正是"全对型"多选的识别特征：不是四个理由凑巧都对，而是同一个法律结构的四个侧面。</p>
+<h3>易错点：每种误判对应哪种误解</h3>
+<ul><li><strong>不敢全选 → 漏选</strong>：把多选当成"总有一两个凑数的"。本题四个选项各站一个维度，没有互斥关系；时政类"意义/表述正确"题，若四项各说一个侧面且用语克制（无"最终""彻底"等绝对化字眼），大概率全选。</li><li><strong>误判 C（以为"教育法"不能"惩治"）</strong>：误解在只看到法名里的"教育"二字，没看到结构里的<strong>法律责任专章</strong>。"促进法"配"法律责任"是常见立法技术（如家庭教育促进法亦有），"教育促进＋法律责任"的复合结构是理解本题的钥匙。</li><li><strong>漏 A（只见"爱国"不见"价值观"）</strong>：把题目当单纯的爱国主义教育话题，忘了命题背景是"核心价值观入法入规"——这部法是价值观入法的典型样本，A 的依据恰恰在这层。</li></ul>
+<blockquote>记忆锚点：爱国主义教育法四维——<strong>价值观入法（A）、维护统一团结（B）、惩治危害行为（C）、教育法治保障（D）</strong>；记住"教育促进＋法律责任"的复合结构，四选项就是这结构展开的四个侧面。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

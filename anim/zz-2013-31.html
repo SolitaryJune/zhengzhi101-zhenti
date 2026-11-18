@@ -1,8 +1,87 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2013-31 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2013-31</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2013-31 · 破窗定律与修养名言对号（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼',
+    title: '审题眼：先翻译定律，再筛名言',
+    body: '<p>破窗定律的链条：一处小破损无人修 → 暗示"秩序无人维护" → 人们加快它的破损速度。落到道德修养上：小恶不除招来更多恶，小善坚持带来更多善——核心是<b>量的积累与防微杜渐</b>。这就是筛选四句名言的唯一坐标。</p>' },
+  { cls: 'key', tag: '机制',
+    title: '机制先行：定律的两个要件',
+    body: '<ul><li><b>要件一</b>：小与大的因果放大——一点破损 → 加速恶化；</li><li><b>要件二</b>：对策是从小处着手——及时维护、防微杜渐。</li></ul><p>只有同时讲"小"与"积累"的句子才内涵相近；讲坚持、讲对照的句子即使同为修养名言也出圈。</p>' },
+  { cls: 'bad', tag: 'A 排除', ribbon: { k: 1, ok: false },
+    title: '选项 A：非知之难行之惟难，非行之难终之斯难 —— 错',
+    body: '<p>讲的是<b>知行关系与善始善终</b>：懂得道理不难，实行才难；实行不难，坚持到底才难。</p><p>主题是"知道要做、做要一贯"，不涉及小恶连锁放大——关键词是知、行、终，不是小与大的积累。A 错。</p>' },
+  { cls: 'good', tag: 'B 入选', ribbon: { k: 2, ok: true },
+    title: '选项 B：善不可谓小而无益，不善不可谓小而无伤 —— 对',
+    body: '<p>正面直译破窗定律：小善照样有益、小恶照样有伤，不能因为"小"就轻视——与"一处破损招来更多破损"的积累逻辑同构。</p><p>B 对。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true },
+    title: '选项 C：小善虽无大益不可不为，细恶虽无近祸不可不去 —— 对',
+    body: '<p>防微杜渐的标准表述：小善眼下看不到大益处也要坚持做，细恶眼下没有祸害也必须除去。</p><p>小善要做、小恶要除——与定律的对策层完全对应。C 对。</p>' },
+  { cls: 'bad', tag: 'D 排除', ribbon: { k: 4, ok: false },
+    title: '选项 D：见贤思齐焉，见不贤而内自省也 —— 错',
+    body: '<p>讲的是<b>榜样学习与自我反省</b>：见贤者看齐，见不贤者自省。</p><p>它处理"我与他人的对比"，不涉及"小破损 → 加速恶化"的机制——关键词是贤与省。D 错。</p>' },
+  { cls: 'key', tag: '陷阱拆解',
+    title: 'A、D 为什么"像而不似"',
+    body: '<p>A、D 都是道德修养名言，字面最容易误收。区分法是抓关键词：定律的关键词是"一点破损 → 加快破损"，即小与大的<b>因果放大</b>。</p><p>A 的关键词是知、行、终（坚持），D 的关键词是贤、省（对照）——一句话：破窗讲量的积累，A 讲行的坚持，D 讲人的对照。</p>' },
+  { cls: 'good', tag: '结论',
+    title: '收束：答案 BC',
+    body: '<p>答案 <b>BC</b>：小善有益、小恶有伤（B）与小善不可不为、细恶不可不去（C），讲的正是量的积累与防微杜渐；A 讲知行坚持，D 讲见贤自省——都不是"小→大"的放大机制。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2013·31】破窗定律的修养坐标（多选）',
+  subtitle: '考点：道德修养 · 防微杜渐 · 关键词比对法',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {
+    big: '答案 BC',
+    html: '<b>破窗讲量的积累，防微杜渐对号入座</b>：小善照样有益（B）、小善不可不为细恶不可不去（C）。<br>干扰项 A 讲知行与坚持、D 讲见贤与自省——都是修养名言，但都缺"小→大"的放大机制。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：破窗定律对应哪种修养观——防微杜渐，勿以善小而不为</h2>
+<p>答案：<strong>BC</strong>。</p>
+<h3>第 0 步：先立机制——破窗定律讲了什么</h3>
+<p>破窗定律的机制链条：一处小破损没有及时修补 → 传递出"秩序已无人维护"的暗示 → 人们有意无意地加快它的破损速度；反之，完好或及时维护的东西会得到精心护理。落到道德修养上，核心含义是两条：<strong>量变积累会改变局面</strong>（小恶不除会招来更多恶，小善坚持会带来更多善）以及<strong>防微杜渐、从小事做起</strong>。找"内涵相近"的名言，就要找同样讲"小与大的积累关系"的句子——这是筛选的唯一坐标。</p>
+<h3>逐项对号入座</h3>
+<ul><li><strong>B 对</strong>："善不可谓小而无益，不善不可谓小而无伤"——正面直译破窗定律：小善照样有益、小恶照样有伤，不能因为"小"就轻视——与"一处破损招来更多破损"的积累逻辑同构。</li><li><strong>C 对</strong>："小善虽无大益，而不可不为。细恶虽无近祸，而不可不去"——同样把"小善要做、小恶要防"讲透：小善眼下看不到大益处也要坚持做，细恶眼下没有祸害也必须除去——防微杜渐的标准表述。</li><li><strong>A 错</strong>："非知之难行之惟难，非行之难终之斯难"——这句讲的是<strong>知行关系与善始善终</strong>：懂得道理不难，实行才难；实行不难，坚持到底才难。它关心的是"知道了要做、做了一以贯之"，而破窗定律关心的是"小破损与小恶的连锁放大"——主题是量的积累，不是知行的难度次序。</li><li><strong>D 错</strong>："见贤思齐焉，见不贤而内自省也"——讲的是<strong>榜样学习与自我反省</strong>：见贤者向他看齐，见不贤者反躬自省。它处理的是"我与他人的对比"，不涉及"小恶招致恶化、小善累积成善"的机制。</li></ul>
+<h3>干扰项归因：A、D 为什么"像而不似"</h3>
+<p>A 与 D 都出自道德修养话题，字面都提到"行""贤"，最容易误收。区分法是抓关键词：破窗定律的关键词是"<strong>一点破损 → 加快破损</strong>"，即小与大的因果放大。A 的关键词是"知、行、终"（知行 + 坚持），D 的关键词是"贤、省"（榜样 + 自省）——都与"小→大"的放大机制无关。一句话：<strong>破窗讲量的积累，A 讲行的坚持，D 讲人的对照</strong>——坐标一立，A、D 自然出局。</p>
+<blockquote>记忆锚点：破窗定律 = 量的积累 + 防微杜渐——对应"<strong>小善不可不为（C）、小恶必去（B）</strong>"；A 是知行与坚持，D 是见贤与自省，谈的都不是"小→大"。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

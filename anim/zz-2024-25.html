@@ -1,8 +1,120 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2024-25 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2024-25</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2024-25 · 战略定位：三个侧面与一个副词陷阱</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（概念模板 · 逐项对号推演，含排除） ================== */
+
+// 一张推理卡片
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 推理链：每一步的完整内容（引擎按步数截取显示）
+var STEPS = [
+  {
+    "title": "审题眼：三个例子 = 三个侧面",
+    "cls": "key",
+    "body": "<p>浙江「以科技创新塑造发展新优势」＝<b>效率</b>；内蒙古「做大做强国家重要能源基地」＝<b>安全</b>；黑龙江「当好国家粮食安全『压舱石』」＝<b>安全</b>。把三个例子放在一起，再补一层：一组定位拼起来＝<b>全国布局</b>。三个侧面（效率／布局／安全）正好挂三个正确选项，剩下那个留给陷阱。</p>",
+    "log": "效率·布局·安全 三侧面"
+  },
+  {
+    "title": "机制：战略定位的两层逻辑",
+    "cls": "key",
+    "body": "<p>①<b>比较优势原理的空间应用</b>：各地禀赋不同（浙江科技强、内蒙古能源多、黑龙江粮食足），各干最擅长、对全国最有价值的事，总体效率最高——「因地制宜」的经济学内核；②<b>全国一盘棋</b>：创新高地＋能源基地＋粮食压舱石，拼出区域经济布局与多个动力源，不再单点依赖。</p>",
+    "log": "比较优势 ＋ 全国一盘棋"
+  },
+  {
+    "title": "A. 发挥各地比较优势，塑造发展新优势——入选",
+    "cls": "good",
+    "ribbon": { "k": 1, "ok": true },
+    "body": "<p>效率层：浙江「以科技创新塑造发展<b>新优势</b>」的题干原文直接对应——比较优势的发挥本身就是全国新优势的来源。<b>入选</b>。</p>",
+    "log": "浙江例子 → A ✓"
+  },
+  {
+    "title": "B. 优化区域经济布局，拓展发展动力源——入选",
+    "cls": "good",
+    "ribbon": { "k": 2, "ok": true },
+    "body": "<p>布局层：单个定位是地方的事，一组定位拼起来就是国家布局——创新、能源、粮食多个动力源支撑全国发展。<b>入选</b>。</p>",
+    "log": "一组定位 → 全国布局 → B ✓"
+  },
+  {
+    "title": "C. 统筹发展和安全，掌握发展主动权——入选",
+    "cls": "good",
+    "ribbon": { "k": 3, "ok": true },
+    "body": "<p>安全层：三个例子里两个（能源基地、粮食「压舱石」）本质是安全议题——饭碗和能源抓在自己手里，才有发展的主动权。只看「发展」看不到「安全」，就会漏掉它。<b>入选</b>。</p>",
+    "log": "能源＋粮食 = 安全议题 → C ✓"
+  },
+  {
+    "title": "D. “同步”实现共同富裕——副词陷阱",
+    "cls": "bad",
+    "ribbon": { "k": 4, "ok": false },
+    "body": "<p>前半句「共同富裕」方向正确，坏在「<b>同步</b>」：共同富裕是长期历史过程，允许有先有后、先富带后富，不是同步富裕、同等富裕。战略定位恰恰<b>承认地区差异</b>——各地各展所长正是「有先有后」的布局；要求「同步」反而与定位相矛盾。<b>不选</b>。</p>",
+    "log": "凡「同步」修饰共同富裕 → 必错 ✗"
+  },
+  {
+    "title": "结论：ABC",
+    "cls": "good",
+    "body": "<p><b>答案 ABC。</b>误选 D 的原因：被「共同富裕」的正确方向带进去，没盯住「同步」这个副词。记忆锚点：战略定位三好处——比较优势（效率，A）＋区域布局（动力源，B）＋统筹发展和安全（主动权，C）；共同富裕「逐步实现」，凡「同步」必错。</p>",
+    "log": "锁定 ABC，排除 D"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : (s.cls === 'key' ? 'shift' : 'step'))),
+    tag: '第 ' + (i + 1) + ' 步',
+    log: s.log || s.title,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "zz-2024-25 战略定位：三个侧面与一个副词陷阱",
+  subtitle: "考点：中国式现代化与因地制宜 · 方法：例子分侧面（效率／布局／安全）+ 抓副词排陷阱",
+  counterLabel: '已判定',
+  ribbonTitle: '选项判定（1=A · 2=B · 3=C · 4=D；✓ 入选 / ✗ 排除）',
+  intro: '点击「▶ 播放」：先把三个例子分到三个侧面，再逐项对号、抓「同步」排 D。',
+  snaps: snaps,
+  result: {
+    big: "答案 ABC",
+    html: "战略定位三好处——<b>比较优势（效率，A）＋区域布局（动力源，B）＋统筹发展和安全（主动权，C）</b>。D 错在「同步」：共同富裕是长期历史过程、有先有后，凡「同步／同等／同时」式修饰一律错。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<script>/* aw-ok */</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：战略定位——比较优势、区域布局与统筹发展和安全</h2>
+<p>答案：<strong>ABC</strong>。</p>
+<h3>第一步：先立机制——"战略定位"背后的两层逻辑</h3>
+<p>题干三个例子各有讲究：浙江被要求"在以科技创新塑造发展新优势上走在前列"，内蒙古的重中之重是"做大做强国家重要能源基地"，黑龙江要"当好国家粮食安全'压舱石'"。把三个例子放在一起看，"立足自身实际把握战略定位"实质是两层机制：</p>
+<ol><li><strong>比较优势原理的空间应用</strong>：各地资源禀赋不同（浙江科技强、内蒙古能源多、黑龙江粮食足），让每个地区干自己最擅长、对全国最有价值的事，总体效率最高——"因地制宜"四个字的经济学内核；</li><li><strong>全国一盘棋的布局逻辑</strong>：单个定位是地方的事，一组定位拼起来就是国家布局——创新高地＋能源基地＋粮食压舱石，拼出的是全国的区域经济布局和多个动力源。</li></ol>
+<p>再看安全维度：三个例子里有两个（能源、粮食）本质是<strong>安全议题</strong>——把饭碗、能源抓在自己手里，才有发展的主动权。这就是"统筹发展和安全"。</p>
+<h3>第二步：三个正确选项各对一层</h3>
+<ul><li><strong>A 发挥各地比较优势，塑造我国发展新优势</strong> ✅：效率层。浙江"以科技创新塑造发展<strong>新优势</strong>"的原文直接对应——比较优势的发挥本身就是全国新优势的来源。</li><li><strong>B 优化区域经济布局，拓展我国发展动力源</strong> ✅：布局层。定位体系整体上是区域经济布局的优化：多个动力源（创新、能源、粮食）支撑全国发展，不再单点依赖。</li><li><strong>C 统筹发展和安全，掌握我国发展主动权</strong> ✅：安全层。"国家重要能源基地""粮食安全'压舱石'"都是安全议题——能源与饭碗自主，才谈得上掌握主动权。</li></ul>
+<h3>第三步：D 为什么错——"同步"二字是陷阱</h3>
+<p><strong>D 同步实现共同富裕，推动我国发展迈上新台阶</strong> ❌：前半句"共同富裕"方向正确，坏在"<strong>同步</strong>"。共同富裕是全体人民的富裕，但它是一个<strong>长期历史过程</strong>，允许有先有后、先富带后富，不是同步富裕、同等富裕。战略定位恰恰<strong>承认地区差异</strong>——各地各展所长，正是"有先有后"的布局安排；若要求"同步"，反而与把握战略定位相矛盾。此句与题干的"有利于"链条也接不上：定位解决的是发展布局与安全问题，不是收入分配的时序问题。</p>
+<p>→ 选 <strong>ABC</strong>。</p>
+<h3>易错点：每个干扰项对应哪种误解</h3>
+<ul><li><strong>误选 D</strong>：被"共同富裕"的正确方向顺手带进去，没盯住"同步"这个副词。抓关键词：凡"同步""同等""同时""整齐划一"式修饰共同富裕的表述，一律错。</li><li><strong>漏 C</strong>：只看到"发展"看不到"安全"。题干三个例子里两个（能源基地、粮食压舱石）本质是安全议题，定位的深层意义正是统筹发展和安全。</li><li><strong>漏 B</strong>：把各地定位割裂着看，以为只是地方分工。站在"国家发展大局"看，定位体系的整体就是区域经济布局与动力源的拓展。</li></ul>
+<blockquote>记忆锚点：战略定位三好处——<strong>比较优势（效率，A）＋区域布局（动力源，B）＋统筹发展和安全（主动权，C）</strong>；共同富裕"逐步实现"，凡"同步"必错。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

@@ -1,8 +1,74 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2020-30 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2020-30</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2020-30 新时代公民道德建设的重点任务（多选） · 推理链动画</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ================== */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { t: "审题眼：设问锁死“重点任务”", cls: "key", sc: "step", tag: "审题", log: "2019 年 10 月《纲要》的任务条目", body: "<p>文件：2019 年 10 月印发<b>《新时代公民道德建设实施纲要》</b>。设问：<b>重点任务</b>——逐项核对是否为《纲要》任务条目。</p>" },
+  { t: "机制先行：从“魂”到“用”的四根柱子", cls: "key", sc: "shift", tag: "机制", log: "信念 → 价值观 → 传统美德 → 民族与时代精神", body: "<p>最底层<b>理想信念</b>（魂）→ <b>核心价值观</b>（纲）→ <b>传统美德</b>（源）+ <b>民族精神和时代精神</b>（翼）。</p><p>四项正好四根柱子，全部入选——排查方式是“每项确属任务条目”。</p>" },
+  { t: "选项 A：传承中华优秀传统美德 —— 对", cls: "good", sc: "ok", tag: "选项 A", ribbon: { k: 1, ok: true }, log: "传承之维", body: "<p>对传统美德<b>创造性转化、创新性发展</b>——传承之维。A 对。</p>" },
+  { t: "选项 B：培育和践行社会主义核心价值观 —— 对", cls: "good", sc: "ok", tag: "选项 B", ribbon: { k: 2, ok: true }, log: "价值之维", body: "<p>把核心价值观贯穿道德建设各方面——<b>价值之维</b>。B 对。</p>" },
+  { t: "选项 C：筑牢理想信念之基 —— 对", cls: "good", sc: "ok", tag: "选项 C", ribbon: { k: 3, ok: true }, log: "灵魂之维", body: "<p>理想信念教育是公民道德建设的“总开关”——<b>灵魂之维</b>。C 对。</p>" },
+  { t: "选项 D：弘扬民族精神和时代精神 —— 对", cls: "good", sc: "ok", tag: "选项 D", ribbon: { k: 4, ok: true }, log: "精神之维", body: "<p>以爱国主义为核心的民族精神、以改革创新为核心的时代精神——<b>精神之维</b>。D 对。</p>" },
+  { t: "结论：ABCD", cls: "good", sc: "step", tag: "结论", log: "四根柱子一个不少，全选", body: "<p>答案 <b>ABCD</b>：传统美德（A）· 核心价值观（B）· 理想信念（C）· 民族精神与时代精神（D）。</p><p>缺的第五项“深化道德领域突出问题治理”不在选项之列。</p>" }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.sc || 'step'),
+    tag: s.tag || ('第 ' + (i + 1) + ' 步'),
+    log: s.log || s.t,
+    count: i + 1,
+    ribbon: s.ribbon,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.t, x.body);
+    }).join(''),
+    done: last,
+  };
+});
+
+AW.init({
+  title: "【2020·30】新时代公民道德建设的重点任务（多选）",
+  subtitle: "考点：《新时代公民道德建设实施纲要》重点任务",
+  counterLabel: '推理步',
+  ribbonTitle: "选项对号（1=A · 2=B · 3=C · 4=D；✓ 选 / ✗ 不选）",
+  intro: "点击「▶ 播放」：搭出“从魂到用”的任务框架，把四项各放各位。",
+  snaps: snaps,
+  result: {
+    big: "答案 ABCD",
+    html: "记忆锚点：重点任务四柱——<b>理想信念为基（C）· 核心价值观为纲（B）· 传统美德为源（A）· 民族精神与时代精神为翼（D）</b>；全部出自《纲要》任务条目。",
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：《新时代公民道德建设实施纲要》重点任务的四根柱子</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——任务体系从“魂”到“用”怎么搭</h3>
+<p>《纲要》把新时代公民道德建设的重点任务搭成层次分明的体系：最底层是<strong>理想信念</strong>（魂），中间是<strong>社会主义核心价值观</strong>（纲，上承理想、下贯规范），再往外是两个精神来源——<strong>中华优秀传统美德</strong>（源）与<strong>民族精神和时代精神</strong>（魂之两翼），最后落到实践养成与问题治理。设问锁死在“重点任务”，四项正是四根柱子，全部入选。</p>
+<h3>第 1 步：A~D 对号入座</h3>
+<ul><li><strong>A 对</strong>：<strong>传承中华优秀传统美德</strong>——对传统美德创造性转化、创新性发展（传承之维）。</li><li><strong>B 对</strong>：<strong>培育和践行社会主义核心价值观</strong>——把核心价值观贯穿道德建设各方面（价值之维）。</li><li><strong>C 对</strong>：<strong>筑牢理想信念之基</strong>——理想信念教育是公民道德建设的“总开关”（灵魂之维）。</li><li><strong>D 对</strong>：<strong>弘扬民族精神和时代精神</strong>——以爱国主义为核心的民族精神、以改革创新为核心的时代精神（精神之维）。</li></ul>
+<h3>易错点</h3>
+<ul><li><strong>漏选某项</strong>：四项都是《纲要》“重点任务”部分的原文条目，全选成立。本题的排查方式是确认每项属于“任务”而非“背景/意义”——四根柱子（信念、价值观、传统美德、民族与时代精神）一个不少，缺的第五项“深化道德领域突出问题治理”不在选项之列。</li></ul>
+<blockquote>记忆锚点：重点任务四柱——<strong>理想信念为基（C）· 核心价值观为纲（B）· 传统美德为源（A）· 民族精神与时代精神为翼（D）</strong>。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

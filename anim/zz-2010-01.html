@@ -1,8 +1,122 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2010-01 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2010-01</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2010-01 · 马克思主义的根本价值目标</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+/* 推理链：每一步的完整内容（引擎按步数截取显示；s.cls: key=关键/good=正确/bad=排除） */
+var STEPS = [
+  {
+    "cls": "key",
+    "tag": "审题眼",
+    "title": "审题眼：两个限定词锁定考点",
+    "body": "<p>题眼一：\"要求用<b>简短字句</b>表述未来社会主义纪元的<b>基本思想</b>\"；题眼二：要与但丁\"一些人统治，另一些人受苦难\"的<b>旧纪元</b>界定相对照。</p><p>这指向考点：<b>马克思主义的根本价值目标</b>——它在《共产党宣言》里有标准答案。</p>"
+  },
+  {
+    "cls": "key",
+    "tag": "拆原文",
+    "title": "拆恩格斯引的原句",
+    "body": "<p>\"<b>代替</b>那存在着阶级和阶级对立的资产阶级旧社会的\"——道路：消灭阶级对立；</p><p>\"每个人的自由发展是<b>一切人的</b>自由发展的条件\"——目标：<b>自由人联合体</b>，个体发展与全体发展相统一。</p><p>一句话同时给了目标与条件，这正是科学社会主义区别于空想的地方。</p>"
+  },
+  {
+    "cls": "good",
+    "tag": "A 入选",
+    "title": "选项 A：人的自由而全面的发展",
+    "body": "<p><b>A 对</b>：\"实现人的自由而全面的发展\"是引文的同义转述——\"每个人的自由发展\"（个体）+\"一切人的自由发展\"（全体），合起来就是<b>自由而全面的发展</b>。</p><p>马克思主义不编乌托邦细节，只锁定这个根本价值方向。</p>",
+    "ribbon": {
+      "k": 1,
+      "ok": true
+    }
+  },
+  {
+    "cls": "bad",
+    "tag": "B 排除",
+    "title": "选项 B：永恒不变的普适价值",
+    "body": "<p><b>B 错</b>：马克思主义的价值目标建立在<b>现实社会发展条件</b>上，是历史的、具体的。</p><p>\"永恒不变\"\"普适\"是抽象人道主义/资产阶级价值观的帽子，恩格斯恰恰要与这种抽象许诺划清界限。</p>",
+    "ribbon": {
+      "k": 2,
+      "ok": false
+    }
+  },
+  {
+    "cls": "bad",
+    "tag": "C 排除",
+    "title": "选项 C：大同世界",
+    "body": "<p><b>C 错</b>：\"四海之内皆兄弟\"的大同世界是中国<b>传统空想理想</b>，有美好愿望、无阶级分析与实现路径。</p><p>科学社会主义主张通过现实的革命运动改造社会，不是描绘道德愿景。</p>",
+    "ribbon": {
+      "k": 3,
+      "ok": false
+    }
+  },
+  {
+    "cls": "bad",
+    "tag": "D 排除",
+    "title": "选项 D：理性王国",
+    "body": "<p><b>D 错</b>：\"自由、平等、博爱的理性王国\"是<b>启蒙运动</b>的旗帜、资产阶级革命的目标，空想社会主义也停留在这个层面。</p><p>它仍属\"旧纪元\"思想体系内的理想，不指明取代阶级对立社会的现实道路。</p>",
+    "ribbon": {
+      "k": 4,
+      "ok": false
+    }
+  },
+  {
+    "cls": "good",
+    "tag": "结论",
+    "title": "收束：答案 A",
+    "body": "<p>题干引文 =《共产党宣言》对共产主义价值目标的经典表述 → <b>实现人的自由而全面的发展</b>（A）。</p><p>记忆锚点：见\"普适价值 / 大同世界 / 理性王国\"一律排除——它们是抽象、空想、旧纪元的帽子。</p>"
+  }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || (s.cls === 'bad' ? '干扰项' : (s.cls === 'good' ? '正确项' : '分析')),
+    log: s.log || s.title,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: "马克思主义追求的根本价值目标",
+  subtitle: "考点：共产主义理想 · 人的自由而全面的发展 · 选项逐项推演",
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  snaps: snaps,
+  result: {"big": "答案 A", "html": "马克思主义根本价值目标 = <b>人的自由而全面的发展</b>（自由人联合体：每个人的自由发展是一切人的自由发展的条件）。<br>干扰项记忆：B 抽象\"普适价值\"、C 中国传统\"大同\"、D 启蒙\"理性王国\"——均非科学社会主义的目标。"}
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：马克思主义的根本价值目标——每个人自由而全面的发展</h2>
+<p>答案：<strong>A</strong>。</p>
+<h3>第 0 步：先立住背景——恩格斯这道"命题作文"的题眼</h3>
+<p>1884 年卡内帕请恩格斯用<strong>最简短的字句</strong>概括"未来社会主义纪元的基本思想"，并要求与但丁"一些人统治，另一些人受苦难"的旧纪元界定相对照。恩格斯从《共产党宣言》只挑出一句："代替那存在着阶级和阶级对立的资产阶级旧社会的，将是这样一个联合体，在那里，<strong>每个人的自由发展是一切人的自由发展的条件</strong>。"</p>
+<p>抓两个词："<strong>代替</strong>"——新社会取代阶级对立的旧社会；"<strong>联合体</strong>"——自由人联合体。这句话就是共产主义的价值目标：<strong>人的自由而全面的发展</strong>。</p>
+<h3>对号入座：为什么是 A</h3>
+<ul><li>马克思主义对未来社会的设想不描绘乌托邦式细节，而是锁定根本方向：消灭阶级对立之后，社会发展的落脚点是<strong>每个人</strong>（个体）与<strong>一切人</strong>（全体）的自由发展相统一。A 项正是题干引文的同义转述，且与"每个人的自由发展是一切人的自由发展的条件"逐字对应。</li></ul>
+<h3>为什么错：三个干扰项各对应什么误解</h3>
+<ul><li><strong>B（人类永恒不变的普适价值）</strong>：把马克思主义说成抽象"普适价值"是典型误解。马克思主义的价值目标<strong>建立在现实社会发展条件上</strong>，是历史的、具体的，不存在"永恒不变"的价值许诺——这正是它与抽象人道主义的分界线。</li><li><strong>C（四海之内皆兄弟的大同世界）</strong>：这是中国传统的<strong>大同理想</strong>，属于朴素、空想的愿景，没有阶级分析与实现路径，与科学社会主义不是一回事。</li><li><strong>D（自由、平等、博爱的理性王国）</strong>：这是<strong>启蒙运动</strong>的旗帜、资产阶级革命的目标；空想社会主义也停留在"理性王国"式的道德呼吁上。恩格斯特意不选这类表述，就是要同它们划清界限。</li></ul>
+<h3>预判追问</h3>
+<ul><li><strong>为什么恩格斯说"再也找不出合适的了"？</strong> 因为《共产党宣言》这句话同时点明了两件事：新社会的<strong>价值目标</strong>（自由发展）与<strong>实现条件</strong>（代替阶级对立的旧社会）——目标与道路在同一句话里，这是马克思主义区别于一切空想的地方。</li><li><strong>"每个人"与"一切人"什么关系？</strong> 个体发展与全体发展互为条件，不是先后割裂的两步；题干强调"每个人的自由发展是<strong>一切人的自由发展的条件</strong>"。</li></ul>
+<blockquote>记忆锚点：马克思主义根本价值目标 = <strong>人的自由而全面的发展</strong>（自由人联合体）；凡见"普适价值""大同世界""理性王国"，都是抽象/空想/旧纪元的帽子。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

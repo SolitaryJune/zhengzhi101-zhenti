@@ -1,8 +1,125 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><title>zz-2022-32 动画制作中</title>
-<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f5e6b8;color:#586e72}
-.box{text-align:center}.box .icon{font-size:44px;margin-bottom:10px}</style></head>
-<body><div class="box"><div class="icon">🎬</div>
-<p><strong>zz-2022-32</strong> 的交互动画正在由生成流水线制作</p>
-<p style="font-size:13px">完成后将自动替换本占位页</p></div></body></html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2022-32 天问一号着陆火星·意义四层面</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<!-- 复制自 tools/anim_math_concept_template.html（政治站无 KaTeX 版，纯文本推理链卡片），
+     只改下方 AW.init 题目专属区域 -->
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* ================== 题目专属区域（只改这里） ==================
+   形态：概念/推理链类——审题（事实锚点）→ 建模（意义四层面坐标系）
+   → 逐项 ABCD 挂靠 → 全选三查 → 结论。序号带点亮 A/B/C/D（全部 ✓）。 */
+
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+// 意义四层面坐标系：2×2 格（纯 CSS，不引入图片）
+function layers(){
+  function box(tag, ask, opt){
+    return '<div style="flex:1;background:#ecfdf5;border:1px solid #6ee7b7;border-radius:10px;padding:8px 6px;text-align:center">' +
+           '<div style="font-size:12px;color:#059669;font-weight:700">' + tag + '</div>' +
+           '<div style="font-size:13.5px;font-weight:700;color:#065f46;margin-top:2px">' + ask + '</div>' +
+           '<div style="font-size:12px;color:#334155;margin-top:2px">→ 选项 ' + opt + '</div></div>';
+  }
+  return '<div style="display:flex;gap:6px;margin:8px 0">' +
+         box('领域位次', '世界行星探测格局中的位置', 'A') +
+         box('自主能力', '是不是靠自己干成的"首次"', 'B') +
+         '</div>' +
+         '<div style="display:flex;gap:6px;margin:8px 0">' +
+         box('科学贡献', '对人类科学认知添了什么', 'C') +
+         box('事业进程', '航天事业年谱上的刻度', 'D') +
+         '</div>';
+}
+
+var STEPS = [
+  { tag: '审题', cls: 'key', title: '审题眼：抓住题干三个事实锚点',
+    body: '<p><b>2021 年 5 月 15 日 7 时 18 分</b>，天问一号探测器成功着陆<b>火星乌托邦平原南部预选着陆区</b>——题干最关键的定性是：<b>"我国首次火星探测任务着陆火星取得成功"</b>。</p>' +
+          '<p>设问："重要意义表现在"。意义题的选项通常是官方成套表述的整句复述，命题人不靠改词、靠<b>漏层</b>——先立坐标系再逐项挂靠。</p>' },
+  { tag: '建模', cls: 'key', title: '先立模型：意义落在四个互不重叠的层面',
+    body: layers() +
+          '<p>四个层面各管一头：<b>位次</b>看对外格局、<b>自主</b>看干没干成、<b>科学</b>看对人类认知的贡献、<b>进程</b>看对自己年谱的刻度。下面逐项挂靠（序号带 = 选项 A–D）。</p>' },
+  { tag: '选项A', cls: 'good', title: 'A 行星探测领域进入世界先进行列 —— ✅ 位次层',
+    body: '<p>首次火星探测即成功着陆，一次任务实现火星<b>环绕、着陆、巡视</b>——行星探测领域跻身世界先进行列。</p>' +
+          '<p>措辞核对：说的是"先进行列"，没升级成"确立领先地位"——克制、有据。<b>A 入选</b>。</p>' },
+  { tag: '选项B', cls: 'good', title: 'B 首次自主执行了火星探测任务 —— ✅ 自主层',
+    body: '<p>题干原话"我国<b>首次</b>火星探测任务"直接支撑：独立自主执行、此前无先例。</p>' +
+          '<p>别被"首次""自主"的满格措辞吓住——这里是事实的同义转述，不是越界。<b>B 入选</b>。</p>' },
+  { tag: '选项C', cls: 'good', title: 'C 为探索宇宙奥秘等作出中国贡献 —— ✅ 科学层',
+    body: '<p>科学层面的标准表述：<b>探索宇宙奥秘、增进对火星演化的认知、了解生命起源</b>——三层递进，正是火星科学目标的落点。</p>' +
+          '<p>"生命起源"不科幻、不越界，它是成套表述的原句。<b>C 入选</b>。</p>' },
+  { tag: '选项D', cls: 'good', title: 'D 航天事业发展又一里程碑 —— ✅ 进程层',
+    body: '<p>"首次着陆火星"在我国航天事业年谱上自成一个里程碑刻度——继载人航天、探月工程之后<b>"又一"</b>具有里程碑意义的进展。</p>' +
+          '<p>"又一"二字既克制又准确：续接前序里程碑，而非"最高峰"。<b>D 入选</b>。</p>' },
+  { tag: '全选三查', cls: 'step', title: '为什么可以放心全选：三道检查全过',
+    body: '<p>四个选项全部挂靠成功，再过三道例行检查：</p>' +
+          '<ul><li><b>查改动</b>：没有"决定、取代、彻底解决、确立领先"一类越界升级词；</li>' +
+          '<li><b>查重叠</b>：位次、自主、科学、进程四层互不重复，不是同义反复；</li>' +
+          '<li><b>查越界</b>：没有把意义推到题干事实之外（改变国际格局之类）。</li></ul>' +
+          '<p>三道全过 → 全选。意义题漏选多是被"总有一个错的"的惯性误伤。</p>' },
+  { tag: '结论', cls: 'good', title: '结论：四个层面各占一项 → 答案 ABCD',
+    body: '<p>A 位次（先进行列）、B 自主（首次自主探测）、C 科学（宇宙奥秘·火星演化·生命起源）、D 进程（又一里程碑）——四层互不重叠，全选。</p>' +
+          '<p>方法沉淀："重要意义表现在"题 → 先立层面坐标系 → 逐项挂靠 → 查改动、查重叠、查越界。</p>' },
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  var sn = {
+    cls: last ? 'done' : (s.cls === 'key' ? 'shift' : 'step'),
+    tag: s.tag,
+    log: s.title,
+    count: i + 1,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.tag + ' · ' + x.title, x.body);
+    }).join(''),
+    done: last,
+  };
+  if(i >= 2 && i <= 5){
+    sn.ribbon = { k: i - 1, ok: true };
+  }
+  return sn;
+});
+
+AW.init({
+  title: '天问一号着陆火星的重要意义：ABCD 四层面',
+  subtitle: '2022 年多选题第 32 题 · 考点：天问一号火星探测（意义坐标系 · 逐项挂靠）',
+  intro: '点击「▶ 播放」逐步展开推理链（序号带 = 选项 A–D 的挂靠结果）。',
+  counterLabel: '推理步',
+  ribbonTitle: '选项对号（1=A · 2=B · 3=C · 4=D；✓ = 挂靠成功）',
+  snaps: snaps,
+  result: {
+    big: '答案 ABCD：位次 · 自主 · 科学 · 进程',
+    html: '天问一号着陆火星的意义四层面：<b>世界先进行列（位次）＋首次自主探测（自主）＋宇宙奥秘·火星演化·生命起源（科学）＋又一里程碑（进程）</b>。<br>' +
+          '全选判别三查：<b>查改动</b>（无越界升级词）、<b>查重叠</b>（四层不重复）、<b>查越界</b>（不超题干事实）——三道全过放心全选。<br>' +
+          '记忆锚点：意义题先立层面坐标系、逐项挂靠，别被"总有一个错的"惯性误伤。',
+  },
+});
+/* ================== 题目专属区域结束 ================== */
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：天问一号着陆火星的意义——四层面坐标系逐项挂靠</h2>
+<p>答案：<strong>ABCD</strong>。</p>
+<h3>第 0 步：先立机制——"重要意义表现在"类题，先立意义坐标系再逐项挂靠</h3>
+<p>题干给了三个事实锚点：<strong>2021 年 5 月 15 日 7 时 18 分</strong>、<strong>着陆火星乌托邦平原南部预选着陆区</strong>、<strong>我国首次火星探测任务着陆火星取得成功</strong>。时政意义题的选项通常就是官方成套意义表述的整句复述，命题人不靠改词设误，而靠<strong>漏层</strong>——把四层意义拆开，让你误以为"总有一个该排掉"。所以先立坐标系：这次任务的意义互不重叠地落在四个层面，再把选项逐项挂上去。</p>
+<table><thead><tr><th>层面</th><th>回答什么</th><th>对应选项</th></tr></thead><tbody><tr><td>领域位次</td><td>我国在世界行星探测格局中站到了什么位置</td><td>A 进入世界先进行列</td></tr><tr><td>自主能力</td><td>这件事是不是靠自己干成的"首次"</td><td>B 首次自主执行火星探测任务</td></tr><tr><td>科学贡献</td><td>对人类的科学认知添了什么</td><td>C 探索宇宙奥秘、火星演化、生命起源</td></tr><tr><td>事业进程</td><td>在我国航天事业年谱上是什么刻度</td><td>D 又一具有里程碑意义的进展</td></tr></tbody></table>
+<h3>第 1 步：逐项对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>依据</th></tr></thead><tbody><tr><td>A 我国在行星探测领域进入世界先进行列</td><td>✅</td><td>首次火星探测即成功着陆，一次任务实现火星环绕、着陆、巡视，行星探测领域跻身世界先进行列</td></tr><tr><td>B 我国首次自主执行了火星探测任务</td><td>✅</td><td>题干原话"我国首次火星探测任务"——独立自主、此前无先例</td></tr><tr><td>C 为探索宇宙奥秘、增进对火星演化的认知、了解生命起源作出了中国贡献</td><td>✅</td><td>科学层面的标准表述：宇宙奥秘、火星演化、生命信息三层递进</td></tr><tr><td>D 我国航天事业发展取得了又一具有里程碑意义的进展</td><td>✅</td><td>"首次着陆火星"在我国航天事业年谱上自成一个里程碑刻度</td></tr></tbody></table>
+<h3>为什么可以放心全选（预判追问）</h3>
+<p>多选题敢不敢全选，过三道检查，本题三道全过：</p>
+<ol><li><strong>查改动</strong>：四个选项没有一个塞进"决定""取代""彻底解决""确立领先地位"一类越界升级词——A 说的是"先进行列"而非"领先地位"，D 说的是"<strong>又一</strong>里程碑"（续接载人航天、探月工程之后）而非"最高峰"，措辞克制；</li><li><strong>查重叠</strong>：位次（对外格局）、自主（干没干成）、科学（对人类认知）、进程（对自己年谱）四层互不重复，不构成同义反复；</li><li><strong>查越界</strong>：没有把意义推到题干事实之外（如"改变国际格局""确立霸主地位"之类）。</li></ol>
+<p>三道检查全过 → 全选。"意义表现"题的漏选大多不是被改词骗了，而是被"四选多总有一个错的"的做题惯性误伤。</p>
+<h3>易错点</h3>
+<ul><li><strong>惯性排除 B</strong>：觉得"首次""自主"措辞太满不敢勾——本题 B 恰是题干"我国首次火星探测任务"的同义转述，事实锚点直接支撑。</li><li><strong>漏 C</strong>：觉得"生命起源"科幻感太强不像标准答案——它正是火星科学目标的标准表述（火星演化、生命信息）。</li><li><strong>漏 D</strong>：把"里程碑"理解成只颁给航天史上的"第一次"级事件——首次着陆火星正是这种量级的刻度，且"又一"说明续接前序里程碑。</li></ul>
+<blockquote>记忆锚点：天问一号意义四层面——<strong>世界先进行列（位次）＋首次自主探测（自主）＋科学三问贡献（科学）＋又一里程碑（进程）</strong>；"意义表现"题先立坐标系、逐项挂靠，再查改动、查重叠、查越界。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>
