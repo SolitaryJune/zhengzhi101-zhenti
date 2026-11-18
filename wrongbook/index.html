@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>错题本 · 政治101真题档案</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261116a">
+</head>
+<body data-mode="" data-year="">
+<header class="site-header">
+  <a class="brand" href="../index.html">政治101<i>真题档案</i><small>自建复习站</small></a>
+  <nav class="site-nav">
+    <a href="../index.html">按年份</a>
+    <a href="../knowledge/">按知识点</a>
+    <a href="../search/">搜索</a>
+    <a href="../wrongbook/">错题本</a>
+    <select class="year-select" aria-label="跳转年份" onchange="if(this.value)location.href='../year/'+this.value+'/'">
+      <option value="">跳转年份</option><option value="2009">2009</option><option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option>
+    </select>
+  </nav>
+</header>
+<div class="toolbar-wrap"><div class="toolbar">
+  <div class="mode-switch" aria-label="浏览模式"><a href="../year/2026/">整张模式</a><a href="#" onclick="return false" style="opacity:.5">单题模式</a></div>
+</div></div>
+<div class="page-wrap">
+<h1>错题本</h1>
+<p class="lead">自动记录答错/零分自评的题目，保存在本浏览器中。</p>
+<div class="card" id="wrongbook-box"></div>
+<script>
+(function(){
+  var wrong = JSON.parse(localStorage.getItem('p101.wrong')||'{}');
+  var box = document.getElementById('wrongbook-box');
+  var ids = Object.keys(wrong).sort();
+  if(!ids.length){ box.innerHTML = '<p style="color:#586e72">还没有错题 —— 去刷几套卷吧 😉</p>'; return; }
+  var byYear = {};   // id 形如 zz-2022-01，第 4–7 位是年份
+  ids.forEach(function(id){ (byYear[id.slice(3,7)] = byYear[id.slice(3,7)] || []).push(id); });
+  var h = '<p style="font-size:13px;color:#586e72;margin-bottom:10px">共 ' + ids.length + ' 道错题</p>';
+  Object.keys(byYear).sort().forEach(function(y){
+    h += '<h3 style="margin:10px 0 6px;font-size:15px">' + y + ' 年（' + byYear[y].length + '）</h3>';
+    byYear[y].forEach(function(id){
+      var w = wrong[id];
+      h += '<a class="result-item" href="../question/' + id + '/"><b>' + id + '</b>' +
+        '<span class="tag">错 ' + w.n + ' 次</span></a>';
+    });
+  });
+  h += '<p style="margin-top:14px"><button class="btn danger" id="clear-wrong">清空错题本</button></p>';
+  box.innerHTML = h;
+  document.getElementById('clear-wrong').addEventListener('click', function(){
+    if(confirm('确定清空全部错题记录？')){ localStorage.removeItem('p101.wrong'); location.reload(); }
+  });
+})();
+</script>
+<footer><div class="wrap">本站为个人学习用途的自建考研政治真题复习站。题目内容来自全国硕士研究生统一考试思想政治理论（科目代码 101）历年公开真题，
+题库数据整理自公开网络资源（kaoyan-politics 项目）；文字讲解与 HTML 交互动画均为本站原创编写。
+站点不加载任何外部 CDN 资源。进度与错题保存在浏览器 localStorage 中，不上传任何数据。</div></footer>
+</div>
+<script src="../assets/app.js?v=20261116a"></script></body></html>

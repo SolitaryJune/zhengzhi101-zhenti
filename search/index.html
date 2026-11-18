@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>搜索真题 · 政治101真题档案</title>
+<link rel="stylesheet" href="../assets/style.css?v=20261116a">
+</head>
+<body data-mode="" data-year="">
+<header class="site-header">
+  <a class="brand" href="../index.html">政治101<i>真题档案</i><small>自建复习站</small></a>
+  <nav class="site-nav">
+    <a href="../index.html">按年份</a>
+    <a href="../knowledge/">按知识点</a>
+    <a href="../search/">搜索</a>
+    <a href="../wrongbook/">错题本</a>
+    <select class="year-select" aria-label="跳转年份" onchange="if(this.value)location.href='../year/'+this.value+'/'">
+      <option value="">跳转年份</option><option value="2009">2009</option><option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option>
+    </select>
+  </nav>
+</header>
+<div class="toolbar-wrap"><div class="toolbar">
+  <div class="mode-switch" aria-label="浏览模式"><a href="../year/2026/">整张模式</a><a href="#" onclick="return false" style="opacity:.5">单题模式</a></div>
+</div></div>
+<div class="page-wrap" id="search-page">
+<h1>搜索真题</h1>
+<p class="lead">支持题干全文与知识点标签匹配；首次搜索会加载全部题库。</p>
+<div class="card">
+  <div class="search-bar">
+    <input id="search-input" placeholder="试试：矛盾 / 实践与认识 / 剩余价值 / 两岸关系 / 新民主主义革命 …" autofocus>
+    <select id="search-subject"><option value="">全部题型</option><option value="单选题">单选题</option><option value="多选题">多选题</option><option value="分析题">分析题</option></select>
+  </div>
+  <p id="search-count" style="font-size:13px;color:#586e72;margin:6px 0 10px"></p>
+  <div id="search-results"></div>
+</div>
+<footer><div class="wrap">本站为个人学习用途的自建考研政治真题复习站。题目内容来自全国硕士研究生统一考试思想政治理论（科目代码 101）历年公开真题，
+题库数据整理自公开网络资源（kaoyan-politics 项目）；文字讲解与 HTML 交互动画均为本站原创编写。
+站点不加载任何外部 CDN 资源。进度与错题保存在浏览器 localStorage 中，不上传任何数据。</div></footer>
+</div>
+<script src="../assets/app.js?v=20261116a"></script></body></html>

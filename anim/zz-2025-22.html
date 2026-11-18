@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2025-22 · 中国化时代化理论成果：一脉相承又与时俱进（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼', count: 0,
+    title: '审题眼：五个成果，一条关系——"一脉相承又与时俱进"',
+    body: '<p>毛泽东思想 → 邓小平理论 → "三个代表" → 科学发展观 → 习近平新时代中国特色社会主义思想。</p><p>这句话本身就是拆题图：<b>相承</b>讲不变项，<b>与时俱进</b>讲变量。考点：<b>马克思主义中国化时代化理论成果的内在关系</b>。</p>' },
+  { cls: 'key', tag: '机制先行', count: 0,
+    title: '机制先行：两条坐标——魂不变，题常新',
+    body: '<ul><li><b>相承轴（不变项）</b>：马克思主义基本原理 + 立场观点方法——实事求是、群众路线、独立自主；</li><li><b>俱进轴（变量）</b>：各时代<b>不同的课题</b>与<b>不同的理论回答</b>——课题新，才有新理论。</li></ul><p>尺子立好：B 站相承轴，C、D 站俱进轴，A 把变量写成了常量。</p>' },
+  { cls: 'good', tag: 'B 入选', ribbon: { k: 2, ok: true }, count: 1,
+    title: '选项 B：贯穿实事求是、群众路线、独立自主的立场观点方法 —— 对',
+    body: '<p>毛泽东思想活的灵魂——实事求是、群众路线、独立自主，贯穿五大成果，是"一脉相承"的<b>实质内容</b>。</p><p>活的灵魂是血脉，不是毛泽东思想的专利。</p>' },
+  { cls: 'good', tag: 'C 入选', ribbon: { k: 3, ok: true }, count: 2,
+    title: '选项 C：都科学回答了时代提出的重大课题 —— 对',
+    body: '<p>俱进轴的回应面：各成果各自回答其时代课题——革命年代回答"革命怎么胜利"，改革开放回答"什么是社会主义、怎样建设社会主义"……</p><p>"各自回答"正说明课题不同——新理论因新课题而生。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true }, count: 3,
+    title: '选项 D：都以独创性理论成果丰富发展了马克思主义 —— 对',
+    body: '<p>俱进轴的产出面：回答时代课题形成的<b>独创性理论</b>，让马克思主义在中国每个阶段都向前发展。</p><p>C 与 D 一体两面：C 讲回应了什么，D 讲产出了什么。</p>' },
+  { cls: 'bad', tag: 'A 排除', ribbon: { k: 1, ok: false }, count: 3,
+    title: '选项 A：都面对共同的时代主题和历史任务 —— 错',
+    body: '<p>追问一句：时代课题若相同，还需要不断创立新理论吗？<b>不需要</b>——新理论正因为新课题才产生。</p><p>革命与战争、改革开放、新时代，主题任务各不相同，这正是"时代化"的含义。A 把"都回答时代课题"（对）偷换成"都面对同一个时代课题"（错）。</p>' },
+  { cls: 'key', tag: '陷阱对比', count: 3,
+    title: 'A 的病根：把"相承"泛化成"什么都相同"',
+    body: '<ul><li>判别法：看该要素<b>是否随时代变化</b>——立场方法不变（相承），时代课题、理论内容变（俱进）；</li><li>误选 A 的典型思路："都是马克思主义、都为中国，所以时代主题相同"——把血脉相同当成了题目相同；</li><li>漏选 B 的典型原因：以为"实事求是"只属毛泽东思想——立场观点方法是贯穿项。</li></ul>' },
+  { cls: 'good', tag: '结论', count: 3,
+    title: '收束：答案 BCD',
+    body: '<p>答案 <b>BCD</b>：相承 = 魂（立场观点方法 B），俱进 = 题（各自回答课题 C）+ 果（独创理论 D）。</p><p>一句话：魂不变、题常新——时代主题是变量不是常量（A 反）。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    count: s.count,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2025·22】一脉相承"承"什么，与时俱进"进"在哪（多选）',
+  subtitle: '考点：马克思主义中国化时代化理论成果的关系 · 相承轴与俱进轴 · 选项逐项推演',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已确认正确项',
+  snaps: snaps,
+  result: {
+    big: '答案 BCD',
+    html: '<b>魂不变，题常新</b>：相承轴——实事求是、群众路线、独立自主贯穿始终（B）；俱进轴——各自回答时代课题（C）、各自形成独创理论发展马克思主义（D）。<br>时代主题与历史任务是变量不是常量（A 反）——课题相同就不需要新理论了。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：一脉相承"承"什么，与时俱进"进"在哪</h2>
+<p>答案：<strong>BCD</strong>。</p>
+<h3>第 0 步：先立机制——把"一脉相承又与时俱进"拆成两个坐标</h3>
+<p>五大理论成果（毛泽东思想、邓小平理论、"三个代表"重要思想、科学发展观、习近平新时代中国特色社会主义思想）的关系，用两个坐标看：</p>
+<ol><li><strong>相承轴（不变项）</strong>：贯穿其中的马克思主义<strong>基本原理</strong>和<strong>立场观点方法</strong>——实事求是、群众路线、独立自主（毛泽东思想活的灵魂，也是后续成果共同坚持的血脉）；</li><li><strong>俱进轴（变量）</strong>：每个时代<strong>不同的时代课题</strong>与<strong>不同的理论回答</strong>——革命战争年代回答"中国革命怎么胜利"，改革开放初期回答"什么是社会主义、怎样建设社会主义"，新时代回答新时代的重大课题。</li></ol>
+<p>一句话：<strong>魂不变，题常新</strong>。用这把尺子量四个选项，B 站在相承轴，C、D 站在俱进轴，A 则把"俱进"错当成了"相承"。</p>
+<h3>第 1 步：B、C、D 对号入座</h3>
+<table><thead><tr><th>选项</th><th>判断</th><th>对号处</th></tr></thead><tbody><tr><td>B 贯穿实事求是、群众路线、独立自主的立场观点方法</td><td>✅</td><td>相承轴：毛泽东思想活的灵魂贯穿各成果，是"一脉相承"的实质内容</td></tr><tr><td>C 都科学回答了时代提出的重大理论和实践课题</td><td>✅</td><td>俱进轴：各成果各自回答其时代课题——"各自回答"正说明课题不同、成果不同</td></tr><tr><td>D 都以独创性的理论成果丰富和发展了马克思主义</td><td>✅</td><td>俱进轴的成果面：回答时代课题形成的独创性理论，让马克思主义在中国的每一阶段都向前发展</td></tr></tbody></table>
+<h3>第 2 步：为什么 A 错——时代主题和历史任务不是常量</h3>
+<p>A 说五大成果"都面对<strong>共同的</strong>时代主题和历史任务"。追问一句：如果时代课题相同，还需要不断创立新理论吗？不需要——新理论正是因为<strong>新课题</strong>才产生的。革命与战争年代、改革开放初期、新时代，主题与任务各不相同，这正是"<strong>时代化</strong>"三个字的含义。A 恰好把与时俱进轴上的变量写成了常量：把"都回答时代课题"（对）偷换成"都面对同一个时代课题"（错）。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 A</strong>：被"一脉相承"的情绪带偏，觉得五大成果"都是马克思主义、都为中国"就什么都相同。判别法：看该要素是否随时代变化——立场方法不变（相承），时代课题、理论内容变（俱进）。</li><li><strong>漏选 B</strong>：只记住了"实事求是"属于毛泽东思想，没想到它是贯穿全部成果的立场观点方法。"活的灵魂"是血脉不是专利。</li><li><strong>漏选 D</strong>：觉得"独创性成果"太具体。其实 D 与 C 是俱进轴的一体两面：C 讲<strong>回应</strong>（回答了什么课题），D 讲<strong>产出</strong>（形成了什么理论）。</li></ul>
+<blockquote>记忆锚点：<strong>相承 = 魂（实事求是、群众路线、独立自主——B），俱进 = 题（各自回答时代课题——C）+ 果（独创理论发展马克思主义——D）</strong>；时代主题是变量不是常量（A 反）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>

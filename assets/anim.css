@@ -1,0 +1,224 @@
+/* 408 真题 · 动画公共样式（所有 anim/{id}.html 共用，与 kmp demo 同一设计体系） */
+:root{
+  --cell: 44px;
+  --gap: 4px;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --card: #ffffff;
+  --page: #f8fafc;
+  --green: #16a34a;
+  --green-bg: #dcfce7;
+  --red: #dc2626;
+  --red-bg: #fee2e2;
+  --amber: #d97706;
+  --amber-bg: #fef3c7;
+  --blue: #2563eb;
+}
+*{ box-sizing: border-box; margin: 0; padding: 0; }
+body{
+  font-family: "PingFang SC", "Microsoft YaHei", -apple-system, "Segoe UI", sans-serif;
+  background: var(--page); color: var(--ink);
+  padding: 16px 14px 40px;
+}
+.aw{ max-width: 900px; margin: 0 auto; }
+.aw h1{ font-size: 21px; margin-bottom: 4px; }
+.aw .sub{ color: var(--muted); font-size: 13.5px; line-height: 1.7; margin-bottom: 14px; }
+.aw .sub code{
+  background:#e2e8f0; padding: 2px 7px; border-radius: 6px;
+  font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12.5px; color:#334155;
+}
+.aw-card{
+  background: var(--card); border-radius: 16px; padding: 16px;
+  box-shadow: 0 1px 3px rgba(15,23,42,.08), 0 8px 24px rgba(15,23,42,.05);
+  margin-bottom: 14px;
+}
+/* 舞台 */
+.aw-stage{ min-height: 120px; }
+.aw-scroll{ overflow-x: auto; padding-bottom: 4px; }
+.aw-row-label{ font-size: 13px; color: var(--muted); margin: 10px 0 4px; }
+.aw-row-label b{ color:#334155; }
+/* 字符格 */
+.aw-cells{ display: flex; gap: var(--gap); width: max-content; }
+.aw-col{ width: var(--cell); flex: 0 0 auto; display:flex; flex-direction:column; align-items:center; }
+.aw-ptr{ height: 22px; font-size: 12px; font-weight: 700; color: var(--blue); white-space: nowrap; }
+.aw-box{
+  width: var(--cell); height: var(--cell); border: 2px solid #cbd5e1; border-radius: 10px;
+  display:flex; align-items:center; justify-content:center;
+  font-family: "SF Mono", Menlo, Consolas, monospace; font-weight: 700; font-size: 19px;
+  background: #fff; color: var(--ink); transition: background .2s, border-color .2s, color .2s;
+}
+.aw-idx{ margin-top: 4px; font-size: 11px; color: #94a3b8; font-family: monospace; }
+.aw-box.ok{ background: var(--green-bg); border-color: var(--green); color:#14532d; }
+.aw-box.hit{ background: var(--green); border-color: var(--green); color:#fff; }
+.aw-box.miss{ background: var(--red-bg); border-color: var(--red); color:#b91c1c; }
+.aw-box.dim{ opacity: .45; }
+.aw-box.hit, .aw-box.miss{ animation: aw-pop .45s ease; }
+@keyframes aw-pop{ 0%{transform:scale(1)} 40%{transform:scale(1.22)} 100%{transform:scale(1)} }
+.aw-shifter{ transition: transform .5s cubic-bezier(.22,.8,.3,1); width: max-content; }
+.notrans .aw-shifter, .aw-shifter.notrans{ transition: none !important; }
+/* 状态栏 */
+.aw-status{
+  margin-top: 14px; background:#f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
+  padding: 11px 14px; font-size: 14px; line-height: 1.6; min-height: 44px;
+}
+.aw-status .tag{
+  display:inline-block; font-size: 12px; font-weight:700; padding: 2px 9px; border-radius: 999px; margin-right: 8px;
+}
+.tag.t-ok{ background: var(--green-bg); color:#15803d; }
+.tag.t-miss{ background: var(--red-bg); color:#b91c1c; }
+.tag.t-shift{ background: var(--amber-bg); color:#92400e; }
+.tag.t-done{ background: #dbeafe; color:#1d4ed8; }
+.tag.t-step{ background: #ede9fe; color:#6d28d9; }
+/* 控制条 */
+.aw-controls{ display:flex; align-items:center; gap: 8px; flex-wrap: wrap; }
+.aw-controls button{
+  border: none; border-radius: 10px; padding: 9px 14px; font-size: 13.5px; font-weight: 600;
+  cursor: pointer; background: #e2e8f0; color:#334155; transition: all .15s; font-family: inherit;
+}
+.aw-controls button:hover{ filter: brightness(.96); transform: translateY(-1px); }
+.aw-controls button.primary{ background: var(--blue); color:#fff; }
+.aw-controls button.warn{ background:#f1f5f9; color:#64748b; }
+.aw-counter{
+  margin-left: auto; background:#0f172a; color:#fff; border-radius: 12px; padding: 7px 14px;
+  font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.aw-counter span{ color:#fbbf24; font-size: 18px; }
+.aw-speed{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted); }
+.aw-speed input{ width: 80px; accent-color: var(--blue); }
+.aw-hint{ font-size: 11.5px; color:#94a3b8; margin-top: 8px; text-align:center; }
+/* 日志 + 序号带 */
+.aw-bottom{ display:grid; grid-template-columns: 1fr 240px; gap: 14px; }
+@media (max-width: 700px){ .aw-bottom{ grid-template-columns: 1fr; } }
+.aw-panel-title{ font-size: 13px; font-weight: 700; color:#334155; margin-bottom: 8px; }
+#awLog{ max-height: 200px; overflow-y: auto; display:flex; flex-direction:column; gap:5px; }
+.aw-log-line{
+  font-size: 12.5px; padding: 6px 9px; border-radius: 8px; background:#f8fafc; border:1px solid #eef2f7;
+  font-family: "SF Mono", Menlo, monospace; line-height: 1.5;
+}
+.aw-log-line.ok{ border-left: 3px solid var(--green); }
+.aw-log-line.miss{ border-left: 3px solid var(--red); background:#fff7f7; }
+.aw-log-line.shift{ border-left: 3px solid var(--amber); background:#fffbeb; }
+.aw-log-line.done{ border-left: 3px solid var(--blue); background:#eff6ff; font-weight: 700; }
+.aw-log-line.step{ border-left: 3px solid #8b5cf6; background:#faf5ff; }
+.aw-ribbon{ display:flex; flex-wrap: wrap; gap: 7px; align-content:flex-start; }
+.aw-chip{
+  width: 32px; height: 32px; border-radius: 50%; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; font-size: 10.5px; font-weight:700;
+  background:#f1f5f9; color:#94a3b8; border: 2px solid #e2e8f0;
+}
+.aw-chip em{ font-style:normal; font-size: 9px; font-weight:400; }
+.aw-chip.ok{ background: var(--green-bg); border-color: var(--green); color:#15803d; }
+.aw-chip.miss{ background: var(--red-bg); border-color: var(--red); color:#b91c1c; }
+.aw-chip.pop{ animation: aw-pop .45s ease; }
+/* 结果卡 */
+.aw-result{ display:none; border: 2px solid var(--green); border-radius: 16px; padding: 16px 20px;
+  background: linear-gradient(135deg,#f0fdf4,#ffffff 60%); margin-bottom: 14px; }
+.aw-result.show{ display:block; animation: aw-pop .5s ease; }
+.aw-result .big{ font-size: 34px; font-weight: 800; color: var(--green); font-variant-numeric: tabular-nums; }
+.aw-result .desc{ font-size: 14px; line-height: 1.8; color:#334155; margin-top: 4px; }
+.aw-result .desc b{ color: var(--green); }
+.aw-result .desc code{
+  background:#e2e8f0; padding:1px 6px; border-radius:6px; font-family: monospace; font-size: 12.5px;
+}
+/* 步进揭示（概念题） */
+.aw-stepcard{
+  border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px;
+  background: #fff; animation: aw-slidein .4s ease;
+}
+@keyframes aw-slidein{ from{ opacity:0; transform: translateY(10px);} to{ opacity:1; transform:none;} }
+.aw-stepcard h4{ font-size: 14.5px; margin-bottom: 6px; color:#0f172a; }
+.aw-stepcard h4 .n{
+  display:inline-flex; align-items:center; justify-content:center; width: 22px; height: 22px;
+  border-radius: 50%; background: var(--blue); color:#fff; font-size: 12px; margin-right: 8px;
+}
+.aw-stepcard p, .aw-stepcard li{ font-size: 14px; line-height: 1.75; color:#334155; }
+.aw-stepcard ul, .aw-stepcard ol{ margin: 4px 0 4px 20px; }
+.aw-stepcard code{
+  background:#e2e8f0; padding:1px 6px; border-radius:6px; font-family:Menlo,monospace; font-size:13px;
+}
+.aw-stepcard.good{ border-color: var(--green); background:#f6fef9; }
+.aw-stepcard.bad{ border-color: var(--red); background:#fff8f8; }
+.aw-stepcard.key{ border-color: var(--amber); background:#fffbeb; }
+
+/* 题目卡（引擎自动注入） */
+.aw-question{background:#fbf3da;border:1px solid #1b3a4b38;border-radius:12px;padding:10px 14px;margin-bottom:14px}
+.aw-question summary{cursor:pointer;font-weight:800;font-size:13.5px;color:#1b3a4b;user-select:none}
+.aw-question[open] summary{margin-bottom:8px}
+.aw-qstem{font-size:15px;line-height:1.75;color:#1b3a4b}
+.aw-qstem p{margin:0 0 8px}
+.aw-qstem img{max-width:100%;border-radius:8px;border:1px solid #5a7d8c66;margin:4px 0}
+/* 选项网格：宽屏下 A–D 自动多列铺满卡面，不再全部贴左堆成窄条 */
+.aw-qopts{margin-top:6px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:4px 28px}
+.aw-qopt{display:flex;gap:8px;margin:0;font-size:14.5px;color:#1b3a4b;align-items:flex-start}
+.aw-qletter{flex:none;width:24px;height:24px;border-radius:50%;background:#5a7d8c;color:#fff;
+  display:inline-flex;align-items:center;justify-content:center;font-family:JetBrains Mono,Menlo,monospace;font-size:13px;font-weight:700;margin-top:1px}
+.aw-qtext{min-width:0}
+.aw-qtext p{margin:0}
+.aw-qmeta{margin-top:8px;font-size:12.5px;color:#586e72;max-width:100%;overflow-x:auto}
+.aw-qmeta b{color:#e63946}
+.aw-img-missing{display:inline-block;background:#fff;border:1px dashed #e07a2f88;border-radius:8px;
+  padding:3px 10px;font-size:12px;color:#b45309;margin:2px 0}
+.aw-qtag{display:inline-block;background:#e07a2f1c;color:#e07a2f;border-radius:999px;padding:1px 8px;margin-left:4px;font-size:11px;font-weight:600}
+
+/* ===== 宽屏布局重设计（全屏/大屏利用率） ===== */
+.aw{max-width:96vw;padding-left:10px;padding-right:10px}
+.aw-grid{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:14px;align-items:start}
+.aw-side{display:flex;flex-direction:column;gap:12px;position:sticky;top:10px}
+.aw-side .aw-result{margin-bottom:0}
+.aw-side .aw-result .big{font-size:28px}
+.aw-side .aw-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.aw-side .aw-controls button{width:100%}
+.aw-side .aw-speed{grid-column:1/-1;justify-content:center}
+.aw-side .aw-counter{grid-column:1/-1;margin-left:0;text-align:center}
+.aw-sidecard #awLog{max-height:300px}
+.aw-sidecard .aw-ribbon{margin-bottom:10px}
+.aw-stage-card{min-height:420px;display:flex;flex-direction:column}
+.aw-stage-card .aw-stage{flex:1}
+@media (max-width:1080px){
+  .aw-grid{grid-template-columns:1fr}
+  .aw-side{position:static}
+}
+
+/* ===== v3：全屏高度利用率 ===== */
+@media (min-height: 860px) and (min-width: 1200px){
+  .aw-stage-card{height: calc(100vh - 200px); display:flex; flex-direction:column;}
+  .aw-stage-card .aw-stage{flex:1; overflow:auto;}
+  .aw-stage-card .aw-status{flex:none}
+  .aw-stage-card .aw-hint{flex:none}
+  .aw-sidecard{display:flex; flex-direction:column; max-height: calc(100vh - 200px); overflow:auto}
+  .aw-sidecard #awLog{max-height:none; flex:1; min-height:160px}
+}
+
+/* v3.1：侧栏超高时自身滚动，不撑破整页 */
+@media (min-height: 860px) and (min-width: 1200px){
+  .aw-side{max-height: calc(100vh - 200px); overflow-y: auto}
+}
+
+/* ===== 图片防拉伸（height:auto 保持宽高比） ===== */
+.question-body img, .answer-content img, .ref-answer img, .explain img,
+.qstem img, .aw-qstem img{max-width:100%; height:auto;}
+
+/* ===== 动画页内嵌文字讲解（构建期由 build_site.py 注入） ===== */
+.aw-explain{max-width:900px;margin:16px auto 0;background:#fbf3da;border:1px solid #1b3a4b26;
+  border-radius:16px;box-shadow:0 1px 3px rgba(15,23,42,.08),0 8px 24px rgba(15,23,42,.05);overflow:hidden}
+.aw-explain summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:14px 18px;font-weight:700;color:#1b3a4b;user-select:none}
+.aw-explain summary::-webkit-details-marker{display:none}
+.aw-explain summary::before{content:'▸';color:#5a7d8c;transition:transform .15s}
+.aw-explain[open] summary::before{transform:rotate(90deg)}
+.aw-explain-title{font-size:15px}
+.aw-explain-sub{font-size:12px;font-weight:500;color:#586e72}
+.aw-explain-body{padding:2px 18px 18px;font-size:14px;line-height:1.8;color:#1b3a4b;border-top:1px dashed #1b3a4b1a}
+.aw-explain-body h2,.aw-explain-body h3,.aw-explain-body h4{margin:14px 0 6px;font-size:15px;color:#213e48}
+.aw-explain-body h2{font-size:17px}
+.aw-explain-body p{margin:0 0 10px}
+.aw-explain-body ul,.aw-explain-body ol{margin:6px 0 8px 22px}
+.aw-explain-body blockquote{border-left:3px solid #e07a2f;background:#efa15c17;padding:8px 12px;
+  border-radius:8px;margin:8px 0;color:#213e48}
+.aw-explain-body code{background:#1b3a4b14;padding:1px 6px;border-radius:6px;
+  font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px}
+.aw-explain-body pre{background:#213e48;color:#f5e6b8;border-radius:10px;padding:12px;overflow-x:auto;margin:8px 0}
+.aw-explain-body pre code{background:none;color:inherit}
+.aw-explain-body table{border-collapse:collapse;margin:8px 0;width:100%}
+.aw-explain-body td,.aw-explain-body th{border:1px solid #1b3a4b26;padding:6px 9px;font-size:13px;text-align:left}
+.aw-explain-body th{background:#1b3a4b14;font-weight:700}

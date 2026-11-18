@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>zz-2025-23 · 民营经济迅速发展说明什么（多选）</title>
+<link rel="stylesheet" href="../assets/anim.css">
+</head>
+<body>
+<div class="aw"></div>
+<script src="../assets/anim-engine.js"></script>
+<script>
+/* 政治·概念/推理链动画：逐步展开推理链卡片（引擎默认渲染 stage.innerHTML）。
+   政治站不使用 KaTeX，全部为普通文本；仅引用本地 ../assets 引擎，无任何外部请求。 */
+function card(n, cls, title, body){
+  return '<div class="aw-stepcard ' + (cls || '') + '"><h4><span class="n">' + n +
+         '</span>' + title + '</h4>' + body + '</div>';
+}
+
+var STEPS = [
+  { cls: 'key', tag: '审题眼', count: 0,
+    title: '审题眼：三个数字要解释，座位表要先立',
+    body: '<p>数据：<b>1.8 亿户 · 占经营主体总量 96.37% · 十余年增长超四倍</b>。问"迅速发展充分说明"什么。</p><p>解题关键：数据说明什么能从基本经济制度的"座位表"推出，什么推不出。考点：<b>非公有制经济的地位与作用</b>。</p>' },
+  { cls: 'key', tag: '机制先行', count: 0,
+    title: '机制先行：基本经济制度的座位表',
+    body: '<table><tr><th>成分</th><th>定位</th></tr><tr><td>公有制经济</td><td>占<b>主体</b>地位</td></tr><tr><td>国有经济</td><td>起<b>主导</b>作用（控制力）</td></tr><tr><td>非公有制经济</td><td><b>重要组成部分</b> + 重要<b>力量</b></td></tr></table><p>数据能说明环境与活力；座位变没变，数据说了不算。</p>' },
+  { cls: 'good', tag: 'A 入选', ribbon: { k: 1, ok: true }, count: 1,
+    title: '选项 A：政策制度环境不断优化 —— 对',
+    body: '<p>"两个毫不动摇"坚持、市场准入放宽、产权保护加强、民营经济促进相关立法推进——制度供给持续改善。</p><p>没有政策空间，就没有十几年翻两番。<b>外部条件</b>这一环成立。</p>' },
+  { cls: 'good', tag: 'B 入选', ribbon: { k: 2, ok: true }, count: 2,
+    title: '选项 B：促进发展壮大的体制机制不断完善 —— 对',
+    body: '<p>融资支持、公平竞争、涉企服务的制度机制逐步健全——机制是增长的<b>轨道</b>。</p><p>环境（A）是外部条件，机制（B）是运转轨道，两条解释链互补，各管一头。</p>' },
+  { cls: 'good', tag: 'D 入选', ribbon: { k: 4, ok: true }, count: 3,
+    title: '选项 D：发展活力不断提升 —— 对',
+    body: '<p>增长超四倍、占比 96% 以上——这组数据本身就是活力的<b>直接证据</b>，材料原文直译，不需要绕。</p><p>内生活力 + 外部条件（A/B），共同解释了迅速发展。</p>' },
+  { cls: 'bad', tag: 'C 排除', ribbon: { k: 3, ok: false }, count: 3,
+    title: '选项 C：非公有制经济的主导作用不断强化 —— 错',
+    body: '<p>教科书级定位错误：国民经济<b>主导</b>作用属于<b>国有经济</b>——控制国民经济命脉。</p><p>体量 ≠ 主导：96.37% 是户数占比，主导看的是对命脉行业的控制力。C 把"重要组成部分/重要力量"升格成"主导"，座位表上没有这个座。</p>' },
+  { cls: 'key', tag: '陷阱对比', count: 3,
+    title: 'C 的诱惑：被 96.37% 震住',
+    body: '<ul><li>误选思路："体量这么大，当然是主导"——主导 ≠ 体量，是<b>控制力</b>概念；</li><li>三组关键词对号：主体 → 公有制；主导 → 国有经济；重要组成部分/重要力量 → 非公有制经济；</li><li>漏选 A/B：环境与机制是两回事——A 管政策空间，B 管运转轨道。</li></ul>' },
+  { cls: 'good', tag: '结论', count: 3,
+    title: '收束：答案 ABD',
+    body: '<p>答案 <b>ABD</b>：数据证明政策环境优化（A）、体制机制完善（B）、发展活力提升（D）。</p><p>一句话：数据证明"重要力量"长多大，证明不了"主导作用"换了人（C 反）。</p>' }
+];
+
+var snaps = STEPS.map(function(s, i){
+  var last = i === STEPS.length - 1;
+  return {
+    cls: last ? 'done' : (s.cls === 'good' ? 'ok' : (s.cls === 'bad' ? 'miss' : 'step')),
+    tag: s.tag || '分析',
+    log: s.log || s.title,
+    count: s.count,
+    html: STEPS.slice(0, i + 1).map(function(x, j){
+      return card(j + 1, x.cls, x.title, x.body);
+    }).join(''),
+    done: last,
+    ribbon: s.ribbon
+  };
+});
+
+AW.init({
+  title: '【2025·23】民营经济 1.8 亿户：数据证明了什么（多选）',
+  subtitle: '考点：基本经济制度中非公有制经济的定位 · 环境机制与活力 · 选项逐项推演',
+  intro: '点击「▶ 播放」或按 → 逐步展开推理链；右侧序号带逐个标记 A–D 的对错。',
+  ribbonTitle: '选项 A–D（✓ 正确项 / ✗ 干扰项）',
+  counterLabel: '已确认正确项',
+  snaps: snaps,
+  result: {
+    big: '答案 ABD',
+    html: '<b>公有制是主体，国有经济是主导，非公有制经济是重要组成部分 + 重要力量</b>。<br>数据证明环境（A）、机制（B）、活力（D）；体量再大也换不来"主导"（C 反）——主导看控制力，不看户数占比。'
+  }
+});
+</script>
+<!-- AW_EXPLAIN_START -->
+<details class="aw-explain" open>
+<summary><span class="aw-explain-title">📝 文字讲解</span><span class="aw-explain-sub">与动画配套的完整讲解 · 点击展开/收起</span></summary>
+<div class="aw-explain-body"><h2>本题讲解：民营经济的 1.8 亿户——数据证明了什么，证明不了什么</h2>
+<p>答案：<strong>ABD</strong>。</p>
+<h3>第 0 步：先立机制——先给基本经济制度"排座次"</h3>
+<p>看民营经济的数据之前，先把座位表立起来，否则数据会"说什么都像"：</p>
+<table><thead><tr><th>成分</th><th>座次（教材定位）</th></tr></thead><tbody><tr><td>公有制经济</td><td>在国民经济中占<strong>主体</strong>地位</td></tr><tr><td>国有经济</td><td>起<strong>主导</strong>作用（体现在对关系国民经济命脉的重要行业和关键领域的控制力）</td></tr><tr><td>非公有制经济</td><td>社会主义市场经济的<strong>重要组成部分</strong>，是推动发展的重要<strong>力量</strong></td></tr></tbody></table>
+<p>数据能直接说明的：环境与活力（政策制度、体制机制优化 → 主体量涨、占比高）。数据<strong>说明不了</strong>的：座次变了——1.8 亿户再多，"主导作用"四个字也轮不到非公有制经济。</p>
+<h3>第 1 步：数据与选项的对应链</h3>
+<p>题干给了三个数据：<strong>1.8 亿户、占经营主体总量 96.37%、十余年增长超四倍</strong>。解释这三个数字，只能从"外部条件 + 内生活力"两头找原因：</p>
+<ul><li><strong>A 政策制度环境不断优化</strong> ✅："两个毫不动摇"的坚持、市场准入放宽、产权保护加强、民营经济促进相关立法推进——制度供给持续改善，才有十几年翻两番的空间；</li><li><strong>B 促进发展壮大的体制机制不断完善</strong> ✅：融资支持、公平竞争、涉企服务的制度机制逐步健全——机制是增长的轨道；</li><li><strong>D 发展活力不断提升</strong> ✅：增长超四倍、占比 96% 以上，这组数据本身就是活力的<strong>直接证据</strong>——不用绕，材料直接给出。</li></ul>
+<h3>第 2 步：为什么 C 错——"重要力量"与"主导作用"一字之差</h3>
+<p>C 说非公有制经济"在国民经济中的<strong>主导</strong>作用不断强化"。这是教科书级定位错误：主导作用<strong>法定属于国有经济</strong>——国有经济控制国民经济命脉，对经济发展起主导作用；非公有制经济再庞大，定位也是"重要组成部分 + 重要力量"。记住两组词的区别：<strong>主体</strong>（公有制）、<strong>主导</strong>（国有经济）、<strong>重要组成部分/重要力量</strong>（非公有制经济）。C 把第三组的地位升格成了第二组的关键词。</p>
+<h3>易错点</h3>
+<ul><li><strong>误选 C</strong>：被 96.37% 的占比震住，觉得"体量这么大当然是主导"。体量 ≠ 主导——主导看的是对国民经济命脉的控制力，不是户数占比。</li><li><strong>漏选 A 或 B</strong>：把"环境优化"与"机制完善"当成一回事漏掉一个。二者分工：政策制度环境是<strong>外部条件</strong>（A），体制机制是<strong>运转轨道</strong>（B），两个都是数据增长的解释链。</li><li><strong>误判 D</strong>：以为"活力"是空话。D 恰是题干数据的直译——十余年增长超四倍就是活力本身。</li></ul>
+<blockquote>记忆锚点：<strong>公有制是主体，国有经济是主导，非公有制经济是重要组成部分 + 重要力量</strong>；数据证明环境（A）、机制（B）、活力（D），证明不了"主导"（C 反）。</blockquote></div>
+</details>
+<!-- AW_EXPLAIN_END -->
+</body>
+</html>
